@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Docker容器隔离的实现原理Namespace先认识Linux 提供的Namespace机制: Linux的 Namespace 提供了7种不同的命名空间:  PID namespace: 隔离进程ID,每个容器有自己的pid命名空间 UTS namespace: 隔离主机名 &amp;amp; 域名, ….有自己的主机名和NIS域名 IPC namespace: 隔离进程间通信, 相同IPC Ns的进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="容器化-Docker-02容器隔离实现原理">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/31.Backend/容器化-Docker-02容器隔离实现原理/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="Docker容器隔离的实现原理Namespace先认识Linux 提供的Namespace机制: Linux的 Namespace 提供了7种不同的命名空间:  PID namespace: 隔离进程ID,每个容器有自己的pid命名空间 UTS namespace: 隔离主机名 &amp;amp; 域名, ….有自己的主机名和NIS域名 IPC namespace: 隔离进程间通信, 相同IPC Ns的进">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/docker-container-process.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/docker-cgroup.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/docker-fs-layer.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:47.324Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="容器化-Docker-02容器隔离实现原理">
+<meta name="twitter:description" content="Docker容器隔离的实现原理Namespace先认识Linux 提供的Namespace机制: Linux的 Namespace 提供了7种不同的命名空间:  PID namespace: 隔离进程ID,每个容器有自己的pid命名空间 UTS namespace: 隔离主机名 &amp;amp; 域名, ….有自己的主机名和NIS域名 IPC namespace: 隔离进程间通信, 相同IPC Ns的进">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/docker-container-process.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/31.Backend/容器化-Docker-02容器隔离实现原理/"/>
+
+
+
+
+
+  <title>容器化-Docker-02容器隔离实现原理 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/31.Backend/容器化-Docker-02容器隔离实现原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">容器化-Docker-02容器隔离实现原理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,253
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Docker容器隔离的实现原理"><a href="#Docker容器隔离的实现原理" class="headerlink" title="Docker容器隔离的实现原理"></a>Docker容器隔离的实现原理</h1><h2 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h2><p>先认识Linux 提供的Namespace机制: Linux的 Namespace 提供了7种不同的命名空间:</p>
+<ul>
+<li>PID namespace: 隔离进程ID,每个容器有自己的pid命名空间</li>
+<li>UTS namespace: 隔离主机名 &amp; 域名, ….有自己的主机名和NIS域名</li>
+<li>IPC namespace: 隔离进程间通信, 相同IPC Ns的进程之间才可以使用(共享内存/信号量/消息队列)通讯</li>
+<li>MNT namespace: 隔离文件系统挂载点</li>
+<li>…</li>
+</ul>
+<p>Docker 如何实现进程隔离 (宿主机进程 &amp; 容器内进程的隔离) ?</p>
+<ul>
+<li>调用<code>clone</code>创建进程时传入 <code>CLONE_NEWPID</code>, 这样创建出的进程PID和宿主机是隔离的</li>
+<li>下图中, docker containterd 进程就是在clone时指定<code>CLONE_NEWPID</code>创建的, 所以其子进程和宿主机是隔离的: </li>
+</ul>
+<p><img src="/images/docker-container-process.png" alt="docker-container-process"></p>
+<blockquote>
+<p>Linux 两个重要进程: pid=1的init(使用命令<code>ps -p 1</code>可以看到) &amp; pid=2的 kthreadd进程, 前者用于执行一部分内核的初始化和系统配置, 后者负责管理和调度其他内核进程;</p>
+</blockquote>
+<ul>
+<li>Docker 的挂载点隔离的实现:<ul>
+<li>一个容器需要一个rootfs才可以正常启动 (rootfs, 包括/proc, /dev等等..)</li>
+<li>调用<code>clone</code>创建进程时传入 <code>CLONE_NEWNS</code>, 这样子进程就能得到父进程挂载点的拷贝, 如果不传入<code>CLONE_NEWNS</code>这个参数, 子进程对文件系统的读写都会同步回父进程以及整个主机的文件系统</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Docker 的网络隔离的实现:<ul>
+<li>Docker 提供了四种网络模式(Host、Container、None 和 Bridge)</li>
+<li>如果是网桥模式, 除了分配网络的Namespace, 还会给容器分配虚拟网卡, 在宿主机安装虚拟网桥, 虚拟网卡和网桥通过iptables连接;</li>
+<li>例如<code>docker run -d -p 6379:6379 redis</code>启动一个容器, 查看 iptables 的 NAT 配置就会看到在 DOCKER 的链中出现了一条新的规则</li>
+</ul>
+</li>
+</ul>
+<p>以上, Docker通过Linux 提供的 Namespace为新创建的进程隔离了 进程ID/网络/文件系统…</p>
+<p>@ref: </p>
+<ul>
+<li>Clone()函数: [[../21.Operating-System/Linux.31.Posix接口#clone]]</li>
+<li>Namespace: [[../21.Operating-System/Linux.31.Posix接口#Namespace]]</li>
+</ul>
+<h2 id="CGroup"><a href="#CGroup" class="headerlink" title="CGroup"></a>CGroup</h2><ul>
+<li><p>Docker 对容器的资源使用限额(CPU/RAM..)是通过 Controll Group (简称 CGroup)实现的:</p>
+<ul>
+<li>创建一个CGroup 并指定其(CPU/RAM等)限额, 实现不同CGroup 之间资源隔离</li>
+<li>进程可以随时加入一个CGroup or 退出</li>
+<li><p>查看当前系统中的CGroup: <code>lssubsys -m</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ lssubsys -m</span><br><span class="line">cpuset /sys/fs/cgroup/cpuset</span><br><span class="line">cpu /sys/fs/cgroup/cpu</span><br><span class="line">cpuacct /sys/fs/cgroup/cpuacct</span><br><span class="line">memory /sys/fs/cgroup/memory</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>继续查看 /sys/fs/cgroup/cpu/目录, 下面有个名为docker的文件夹, 再向下层是docker container id命名的目录 </p>
+</li>
+<li>创建一个Docker容器并指定配额: <code>docker run -it -d --cpu-quota=50000 image_tag</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/docker-cgroup.png" alt="docker-cgroup"></p>
+<h2 id="UnionFS"><a href="#UnionFS" class="headerlink" title="UnionFS"></a>UnionFS</h2><p>综上所述, Namespace解决了…, CGroup解决了… , 还有一个文件系统的隔离问题, 是通过UnionFS实现的 (是一种为 Linux 操作系统设计的用于把多个文件系统『联合』到同一个挂载点的文件系统服务)</p>
+<ul>
+<li>Dockerfile里每一个命令都会创建一个只读层, 当使用<code>docker run</code>命令启动一个容器时, 会在镜像最上层添加一个可写的层(也就是容器层), 容器运行时对容器的修改都是对这个层的修改; </li>
+<li>docker镜像的每一个层, 都对应宿主机/var/lib/docker/ 下面的一个目录</li>
+<li>通过AUFS(Advanced UnionFS) , 把多个文件目录”联合”到同一个挂载点;</li>
+<li>除了AUFS之外, Docker 还支持aufs、devicemapper、overlay2、zfs 和 vfs 等等不同驱动</li>
+<li>通过这种层(layer)    的设计, 不同tag的docker镜像, 可以公用同一个层, 减少了镜像的磁盘占用</li>
+</ul>
+<h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>Docker 的隔离技术实现的基础: Namespace/CGroup/UnionFS</p>
+<p><img src="/images/docker-fs-layer.png" alt="../_images/docker-fs-layer"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>@ref: </p>
+<ul>
+<li><a href="https://draveness.me/docker/" target="_blank" rel="noopener">Docker 核心技术与实现原理 - 面向信仰编程</a></li>
+</ul>
+<h1 id="Docker运行性能分析"><a href="#Docker运行性能分析" class="headerlink" title="Docker运行性能分析"></a>Docker运行性能分析</h1><ul>
+<li>与虚拟机技术不同, Docker使用Ns和CGroup实现隔离和资源配额控制, 不需要用额外的性能消耗运行vm</li>
+<li>Docker启动的进程和宿主机共享一个内核.</li>
+<li>对Docker容器内进程的优化(内核参数优化), 也可以在容器内执行<code>sysctl</code>命令更改, 或者在Docker启动时: <code>docker run --sysctl key=value IMAGE:TAG CMD</code></li>
+<li>Docker有一个白名单, 定义哪些sysctl参数可以在<code>docker run</code>时更改, 不在白名单内的参数, 在docker容器内<code>sysctl -a</code>也看不到</li>
+<li>有些参数可以在容器内使用sysctl更改(如kernel.pid_max), 但是容器内更改后会影响到主机, 原因是这类参数没有Namespace隔离(大部分kernel开头的), docker和宿主机共享内核. 这类参数也不建议通过容器更改</li>
+<li>所以针对docker的内核类优化:<ul>
+<li>最好是在宿主机内修改, 然后作用于docker进程;</li>
+<li>如果需要针对docker修改, 可以通过<code>docker run</code>传入参数, 并注意这些参数会不会影响到宿主机</li>
+</ul>
+</li>
+</ul>
+<p>@ref: </p>
+<ul>
+<li>[[../21.Operating-System/Linux.04.Sysctl]]</li>
+<li><a href="https://zhuanlan.zhihu.com/p/82488569" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/82488569</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/31.Backend/容器化-Docker-01基础/" rel="next" title="Docker">
+                <i class="fa fa-chevron-left"></i> Docker
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/31.Backend/容器编排-K8s/" rel="prev" title="容器编排-K8s">
+                容器编排-K8s <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker容器隔离的实现原理"><span class="nav-text">Docker容器隔离的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Namespace"><span class="nav-text">Namespace</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CGroup"><span class="nav-text">CGroup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UnionFS"><span class="nav-text">UnionFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#综述"><span class="nav-text">综述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker运行性能分析"><span class="nav-text">Docker运行性能分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/31.Backend/容器化-Docker-02容器隔离实现原理/';
+          this.page.identifier = '31.Backend/容器化-Docker-02容器隔离实现原理/';
+          this.page.title = '容器化-Docker-02容器隔离实现原理';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

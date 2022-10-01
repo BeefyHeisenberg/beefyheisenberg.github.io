@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="后端架构,数据库,MySQL,SQL语句," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="SQL基础MySQL官方文档中提供了一套示例数据库 Employees, MySQL官方文档中说明详见 http://dev.mysql.com/doc/employee/en/employee.html。里面详细介绍了此数据库，并提供了下载地址和导入方法。  mysql测试数据库employees一些sql语句_数据库_wepe12的博客-CSDN博客  插入INSERT INTO table_">
+<meta name="keywords" content="后端架构,数据库,MySQL,SQL语句">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL-01a-SQL语句-基础和优化">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/32.Database/MySQL-01a-SQL语句-基础和优化/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="SQL基础MySQL官方文档中提供了一套示例数据库 Employees, MySQL官方文档中说明详见 http://dev.mysql.com/doc/employee/en/employee.html。里面详细介绍了此数据库，并提供了下载地址和导入方法。  mysql测试数据库employees一些sql语句_数据库_wepe12的博客-CSDN博客  插入INSERT INTO table_">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-10-01T20:20:47.520Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL-01a-SQL语句-基础和优化">
+<meta name="twitter:description" content="SQL基础MySQL官方文档中提供了一套示例数据库 Employees, MySQL官方文档中说明详见 http://dev.mysql.com/doc/employee/en/employee.html。里面详细介绍了此数据库，并提供了下载地址和导入方法。  mysql测试数据库employees一些sql语句_数据库_wepe12的博客-CSDN博客  插入INSERT INTO table_">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/32.Database/MySQL-01a-SQL语句-基础和优化/"/>
+
+
+
+
+
+  <title>MySQL-01a-SQL语句-基础和优化 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/32.Database/MySQL-01a-SQL语句-基础和优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL-01a-SQL语句-基础和优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,344
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="SQL基础"><a href="#SQL基础" class="headerlink" title="SQL基础"></a>SQL基础</h1><p>MySQL官方文档中提供了一套示例数据库 Employees, MySQL官方文档中说明详见 <a href="http://dev.mysql.com/doc/employee/en/employee.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/employee/en/employee.html</a>。里面详细介绍了此数据库，并提供了下载地址和导入方法。</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/wepe12/article/details/53024400" target="_blank" rel="noopener">mysql测试数据库employees一些sql语句_数据库_wepe12的博客-CSDN博客</a></p>
+</blockquote>
+<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><pre><code><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> table_name ( field1, field2,...fieldN )</span><br><span class="line">                    <span class="keyword">VALUES</span></span><br><span class="line">                    ( value1, value2,...valueN ), // 插入多行</span><br><span class="line">                    ( value1, value2,...valueN );</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><pre><code><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> table_name [<span class="keyword">WHERE</span> Clause]</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><pre><code><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> table_name <span class="keyword">SET</span> field1=<span class="keyword">new</span>-value1, field2=<span class="keyword">new</span>-value2</span><br><span class="line">[<span class="keyword">WHERE</span> Clause]</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="单表查询"><a href="#单表查询" class="headerlink" title="单表查询"></a>单表查询</h2><pre><code><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> column_name,column_name</span><br><span class="line"><span class="keyword">FROM</span> table_name</span><br><span class="line">[<span class="keyword">WHERE</span> Clause]</span><br><span class="line">[<span class="keyword">LIMIT</span> N][ <span class="keyword">OFFSET</span> M]</span><br></pre></td></tr></table></figure>
+</code></pre><h3 id="子句-WHERE-HAVING-GROUP-BY-ORDER-BY-LIMIT"><a href="#子句-WHERE-HAVING-GROUP-BY-ORDER-BY-LIMIT" class="headerlink" title="子句: WHERE, HAVING, GROUP BY, ORDER BY, LIMIT"></a>子句: WHERE, HAVING, GROUP BY, ORDER BY, LIMIT</h3><p>按照被执行的顺序: from、where、group by、having、select、order by、limit</p>
+<ul>
+<li>WHERE: 是唯一一个是直接从磁盘获取数据的时候就开始判断的条件, 从磁盘取出一条记录, 开始进行where判断:判断的结果如果成立就保存到内存中, 如果失败则直接放弃</li>
+<li>GROUP BY: 根据一个或多个列, 对结果集进行分组, 在分组的列上我们可以使用 COUNT, SUM, AVG,等函数。<ul>
+<li>支持的聚集函数：<code>SUM()</code> 统计求和, <code>COUNT()</code> 统计分组后每一组有多少个记录, <code>AVG()</code> 统计平均值</li>
+<li>示例: 可以GROUP BY多个字段: <code>SELECT user_name, SUM(order_price) FROM ORDER_TAB GROUP BY user_name, order_data</code></li>
+<li>示例: GROUP BY的回溯统计<code>WITH ROLLUP</code> 可以实现在分组统计数据基础上再进行相同的统计: <code>SELECT user_name, SUM(order_price) FROM ORDER_TAB GROUP BY user_name WITH ROLLUP</code>, 返回的数据会多一行, 该行的SUM等于<code>GROUP</code>返回结果再做一次求和</li>
+</ul>
+</li>
+<li>HAVING: 对GROUP BY的结果进行条件筛选, HAVING子句一般跟在GROUP BY子句后面。在 SQL 中增加 HAVING 子句原因是，WHERE 关键字无法与合计函数一起使用。<ul>
+<li>HAVING与WHERE的区别: <code>WHERE</code>是直接从磁盘取数据, 查询出的数据放入内存, 然后可以用聚合函数+<code>GROUP BY</code>分组, 分组后的数据用<code>HAVING</code>再筛选</li>
+<li>示例: <code>SELECT user_name, SUM(order_price) FROM ORDERS_TAB GROUP BY user_name HAVING SUM(order_price)&gt;100</code></li>
+</ul>
+</li>
+<li>ORDER BY: 排序<ul>
+<li>示例: <code>SELECT order_id, order_price FROM ORDER_TAB ORDER BY order_data desc</code></li>
+</ul>
+</li>
+<li>LIMIT：限制<ul>
+<li>示例: <code>SELECT * FROM table LIMIT 10</code>   # 取出10条</li>
+<li>示例: <code>SELECT * FROM table LIMIT 95,-1;</code> # 检索记录行 96-last.</li>
+<li>示例: <code>SELECT * FROM table LIMIT 5,10;</code>  # 返回第6-15行数据</li>
+</ul>
+</li>
+</ul>
+<h3 id="列去重"><a href="#列去重" class="headerlink" title="列去重"></a>列去重</h3><ul>
+<li><code>DISTINCT 列名</code>: 根据该列名, 在结果中去重<ul>
+<li><code>SELECT  distinct(task_id), task_name from task</code>;  –带有distinct的列必须在第一个</li>
+<li>但是上面的语句要id和name都相同的情况下才能虑重, 所以用下面的方式: <code>SELECT task_id, count(DISTINCT task_name) FROM table</code> –与其他函数使用时候，没有位置限制</li>
+</ul>
+</li>
+</ul>
+<h3 id="WHERE的比较"><a href="#WHERE的比较" class="headerlink" title="WHERE的比较"></a>WHERE的比较</h3><p>WHERE查询支持的条件:</p>
+<ul>
+<li>逻辑运算符 与或非: <code>AND</code>, <code>OR</code>, <code>NOT</code></li>
+<li>运算符: <code>&gt;</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>=</code>, <code>like</code>, <code>between ... and</code>, <code>in</code>, <code>not in</code></li>
+</ul>
+<p>下面是例子:</p>
+<ul>
+<li>NULL:<ul>
+<li><code>SELECT * FROM 表名 WHERE 字段名 IS NULL</code>;</li>
+<li><code>SELECT * FROM 表名 WHERE 字段名 IS NOT NULL</code>;</li>
+</ul>
+</li>
+<li>LIKE:<ul>
+<li><code>SELECT * FROM 表名 WHERE 字段名 LIKE &#39;%COM&#39;</code> # <code>%</code>多个字符，<code>_</code>单个字符</li>
+</ul>
+</li>
+<li>IN：<ul>
+<li><code>WHERE column_name IN (value1,value2,...)</code></li>
+</ul>
+</li>
+<li>&lt;, &gt;, &gt;=, &lt;=, 可以用于比较时间：<ul>
+<li><code>select count(*) from sometable where datetimecolumn&gt;=&#39;2010-03-01 00:00:00&#39;</code></li>
+<li><code>select count(*) from sometable where datetimecolumn&gt;=UNIX_TIMESTAMP(&#39;2010-03-01 00:00:00&#39;)</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h2><p>多表查询包括: 隐性连接和显性连接,<br>WHERE子句中使用的连接语句，在数据库语言中被称为隐性连接。<br>JOIN……ON子句产生的连接称为显性连接。<br>WHERE 和INNER JOIN产生的连接关系，没有本质区别，结果也一样。<br>但是隐性连接随着数据库语言的规范和发展，已经逐渐被淘汰，比较新的数据库语言基本上已经抛弃了隐性连接，全部采用显性连接了。</p>
+<p>隐性连接: <code>SELECT T1.ID, T1.COLA, T2.COL2 FROM TABLE1 AS T1, TABLE2 AS T2 WHERE T1.ID=T2.ID</code></p>
+<h3 id="JOIN"><a href="#JOIN" class="headerlink" title="JOIN"></a>JOIN</h3><ul>
+<li><p>INNER JOIN（内连接,或等值连接）：获取两个表中字段匹配关系的记录。</p>
+  <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> T1.ID, T1.COLA, T2.COL2</span><br><span class="line"><span class="keyword">FROM</span> TABLE1 <span class="keyword">AS</span> T1 <span class="keyword">INNER</span> <span class="keyword">JOIN</span> TABLE2 <span class="keyword">AS</span> T2</span><br><span class="line"><span class="keyword">ON</span> T1.ID=T2.ID</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>LEFT JOIN（左连接）：获取左表所有记录，即使右表没有对应匹配的记录。</p>
+</li>
+<li><p>RIGHT JOIN（右连接）： 与 LEFT JOIN 相反，用于获取右表所有记录，即使左表没有对应匹配的记录。</p>
+</li>
+<li><p>多次JOIN:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> collum <span class="keyword">from</span> TABLE1</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> TABLE2 <span class="keyword">ON</span> condition2</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> TABLE3 <span class="keyword">ON</span> condition3</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Join 语句的优化 @ref [[MySQL-01-SQL语句-JOIN原理及优化]]</p>
+<h3 id="UNION"><a href="#UNION" class="headerlink" title="UNION"></a>UNION</h3><p>UNION： 操作符用于连接两个以上的 SELECT 语句的结果组合到一个结果集合中。UNION会去掉重复的行, 但UNION ALL不会。</p>
+  <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> columnA <span class="keyword">from</span> table1</span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"><span class="keyword">select</span> collumB <span class="keyword">from</span> table2</span><br></pre></td></tr></table></figure>
+<p>columnA和columnB必须是同类型</p>
+<h3 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h3><p>用括号<code>()</code>括起来的一个完整查询语句相当于一个Table, 子查询不包含 ORDER BY 子句。对一个 SELECT 语句只能用一个 ORDER BY 子句，并且如果指定了它就必须放在主 SELECT 语句的最后。</p>
+<ul>
+<li><p>子查询作为 查询条件:</p>
+<ul>
+<li><p>如果子查询返回单个结果, 可以用 例如 =，&gt;，&lt;等, 与子查询比较 :</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT customerNumber, checkNumber, amount FROM payments</span><br><span class="line">WHERE amount = (SELECT MAX(amount) FROM payments);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果子查询返回多个结果, 可以用 IN和 NOT IN:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT customerName FROM customers</span><br><span class="line">WHERE customerNumber NOT IN (</span><br><span class="line">    SELECT DISTINCT customerNumber FROM orders</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>FROM子句 + 子查询:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT MAX(items), MIN(items), FLOOR(AVG(items))</span><br><span class="line">FROM (</span><br><span class="line">    SELECT orderNumber, COUNT(orderNumber) AS items FROM orderdetails</span><br><span class="line">    GROUP BY orderNumber</span><br><span class="line">) AS lineitems;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>EXISTS 和 NOT EXISTS: 当子查询与 EXISTS或 NOT EXISTS运算符一起使用时，子查询返回一个布尔值为TRUE或FALSE的值。以下查询说明了与EXISTS运算符一起使用的子查询：</p>
+  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * FROM tb_students_info</span><br><span class="line">WHERE EXISTS (</span><br><span class="line">    SELECT dept_name FROM tb_departments WHERE dept_id=1</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="使用Explain分析SQL执行"><a href="#使用Explain分析SQL执行" class="headerlink" title="使用Explain分析SQL执行"></a>使用Explain分析SQL执行</h2><p><code>explain</code>显示了mysql如何使用索引来处理select语句以及连接表。可以帮助选择更好的索引和写出更优化的查询语句。使用方法，在select语句前加上<code>explain</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">EXPLAIN SELECT * FROM employees.titles</span><br><span class="line">WHERE emp_no=&apos;10001&apos;</span><br><span class="line">AND title IN (&apos;Senior Engineer&apos;, &apos;Staff&apos;, &apos;Engineer&apos;, &apos;Senior Staff&apos;, &apos;Assistant Engineer&apos;, &apos;Technique Leader&apos;, &apos;Manager&apos;)</span><br><span class="line">AND from_date=&apos;1986-06-26&apos;;</span><br><span class="line"></span><br><span class="line">+----+-------------+--------+-------+---------------+---------+---------+------+------+-------------+</span><br><span class="line">| id | select_type | table  | type  | possible_keys | key     | key_len | ref  | rows | Extra       |</span><br><span class="line">+----+-------------+--------+-------+---------------+---------+---------+------+------+-------------+</span><br><span class="line">|  1 | SIMPLE      | titles | range | PRIMARY       | PRIMARY | 59      | NULL |    7 | Using where |</span><br><span class="line">+----+-------------+--------+-------+---------------+---------+---------+------+------+-------------+</span><br></pre></td></tr></table></figure>
+<p>➤ 关注的列: possible_keys, key, type, 其中 <strong>type</strong>列表示查询类型, 改列可能的值:</p>
+<ul>
+<li>system: 表中只有一条数据. 这个类型是特殊的 const 类型.</li>
+<li>const: 针对主键或唯一索引的等值查询, 最多只返回一行数据. const 查询速度非常快, 因为它仅仅读取一次即可.</li>
+<li>eq_ref: 此类型通常出现在多表的查询(例如join), 表示对于前表的每一个结果, 都只能匹配到后表的一行结果. 并且查询条件通常是 =, 查询效率较高.</li>
+<li>ref:  All rows with matching index values are read from this table for each combination of rows from the previous tables.<ul>
+<li>1) 使用了非唯一或非主键索引, 可能匹配到多行(比较eq_ref)</li>
+<li>2) 使用到了 最左前缀 规则的查询.</li>
+<li>3) 以上两条对多表查询也适用</li>
+</ul>
+</li>
+<li>index_merge: 表示出现了索引合并优化(包括交集，并集以及交集之间的并集)，但不包括跨表和全文索引。这个比较复杂，目前的理解是合并单表的范围索引扫描（如果成本估算比普通的range要更优的话</li>
+<li>range: 表示使用索引范围查询, 通过索引字段范围获取表中部分数据记录. 这个类型通常出现在 =, &lt;&gt;, &gt;, &gt;=, &lt;, &lt;=, IS NULL, &lt;=&gt;, BETWEEN, IN() 操作中.</li>
+<li>index: 表示全索引扫描(full index scan), 和 ALL 类型类似, 只不过 ALL 类型是全表扫描, 而 index 类型则仅仅扫描所有的索引, 而不扫描数据. index 类型通常出现在: 所要查询的数据直接在索引树中就可以获取到(覆盖索引), 而不需要扫描数据. 当是这种情况时, Extra 字段 会显示 Using index.</li>
+<li>all: 表示全表扫描, 这个类型的查询是性能最差的查询之一</li>
+</ul>
+<p>➤ 性能排序: <code>all &lt; index &lt; range ~ index_merge &lt; ref &lt; eq_ref &lt; const &lt; system</code></p>
+<p>➤ @ref:</p>
+<ul>
+<li><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">MySQL 性能优化神器 Explain 使用分析 - 后台开发 - SegmentFault 思否</a></li>
+<li><a href="https://mengkang.net/1124.html" target="_blank" rel="noopener">最官方的 mysql explain type 字段解读</a></li>
+</ul>
+<h1 id="SQL优化"><a href="#SQL优化" class="headerlink" title="SQL优化"></a>SQL优化</h1><ul>
+<li><p>优化select: 优化查询也即”如何高效使用索引”→ [[MySQL-03索引-高效使用索引]]</p>
+</li>
+<li><p>优化count: → [[../00.Course/course.MySQL实战45讲]] 14节</p>
+<ul>
+<li>count的实现: 统计非null行个数,</li>
+<li>推荐使用<code>count(*)</code>, 最差的是<code>count(非索引列)</code></li>
+</ul>
+</li>
+<li><p>优化limit: <code>limit 10000 20</code></p>
+<ul>
+<li>方法1: 记录上次id <code>select * from film where id &gt; LAST_CURSOR limit 10</code></li>
+</ul>
+</li>
+<li><p>优化order by:  → [[../00.Course/course.MySQL实战45讲]] 第16节</p>
+<ul>
+<li><code>SELECT film_id,description FROM film ORDER BY title LIMIT 50,5</code></li>
+<li>Mysql执行这段语句, 会把符合条件的列放入 order buffer, 排序后再 limit, 如果表数据很多排序会很耗时, 优化思路就是减少排序规模(延迟关联):</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT film.film_id,film.description</span><br><span class="line">FROM film INNER JOIN (</span><br><span class="line">SELECT film_id FROM film ORDER BY title LIMIT 50,5</span><br><span class="line">) AS tmp USING(film_id);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>优化join: 外层表减小数据规模, 内层表尽量走索引 @ref: [[MySQL-01-SQL语句-JOIN原理及优化]]</p>
+</li>
+<li><p>优化union:</p>
+<ul>
+<li>原理: 创建临时表, union左右语句符合条件的行, 逐行填充到临时表, 如果用的是<code>union</code>而不是<code>union all</code>, mysql还需要用distinct做唯一过滤</li>
+<li>优化: 1 尽量使用<code>union all</code>, 如果一定需要去重, 建议在代码里做.  2 每个union子句里尽量用where/limit减小规模</li>
+</ul>
+</li>
+<li><p>优化in:</p>
+<ul>
+<li>原理: in可以使用索引, 优化器是转化成了n*m种组合方式来进行查询，最终将返回值合并，有点类似union但是更高效</li>
+<li>优化: @todo</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/后端架构/" rel="tag"># 后端架构</a>
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+            <a href="/tags/SQL语句/" rel="tag"># SQL语句</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/32.Database/MySQL-00基础概念/" rel="next" title="MySQL-00基础概念">
+                <i class="fa fa-chevron-left"></i> MySQL-00基础概念
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/32.Database/MySQL-01b-SQL语句-JOIN原理及优化/" rel="prev" title="MySQL-01b-SQL语句-JOIN原理及优化">
+                MySQL-01b-SQL语句-JOIN原理及优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL基础"><span class="nav-text">SQL基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#插入"><span class="nav-text">插入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除"><span class="nav-text">删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新"><span class="nav-text">更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单表查询"><span class="nav-text">单表查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#子句-WHERE-HAVING-GROUP-BY-ORDER-BY-LIMIT"><span class="nav-text">子句: WHERE, HAVING, GROUP BY, ORDER BY, LIMIT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列去重"><span class="nav-text">列去重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WHERE的比较"><span class="nav-text">WHERE的比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多表查询"><span class="nav-text">多表查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JOIN"><span class="nav-text">JOIN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UNION"><span class="nav-text">UNION</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子查询"><span class="nav-text">子查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Explain分析SQL执行"><span class="nav-text">使用Explain分析SQL执行</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL优化"><span class="nav-text">SQL优化</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/32.Database/MySQL-01a-SQL语句-基础和优化/';
+          this.page.identifier = '32.Database/MySQL-01a-SQL语句-基础和优化/';
+          this.page.title = 'MySQL-01a-SQL语句-基础和优化';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

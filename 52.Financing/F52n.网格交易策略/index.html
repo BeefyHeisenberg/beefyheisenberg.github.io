@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="ETF网格总结 网格的买入方式决定了只适合手里有一定存量资金的, 网格交易是价格碰到格子就触发交易, 如果短期变化很大(多次触格)会有多次资金投入, 定投只是每月发工资了就投; 网格的局限性: 只适合有幅度的震荡行情: 如果是长期熊市, 会很快用完资金, 并被套住; 如果是长期牛市, 网格又不能非常好的提高收益(单边上涨时, 每上升一格就卖出一部分, 相比按照PE分批止盈的方式盈利更差) 如果长期">
+<meta property="og:type" content="article">
+<meta property="og:title" content="F52n.ETF网格">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/52.Financing/F52n.网格交易策略/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="ETF网格总结 网格的买入方式决定了只适合手里有一定存量资金的, 网格交易是价格碰到格子就触发交易, 如果短期变化很大(多次触格)会有多次资金投入, 定投只是每月发工资了就投; 网格的局限性: 只适合有幅度的震荡行情: 如果是长期熊市, 会很快用完资金, 并被套住; 如果是长期牛市, 网格又不能非常好的提高收益(单边上涨时, 每上升一格就卖出一部分, 相比按照PE分批止盈的方式盈利更差) 如果长期">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220404231924.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220404230124.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220404230914.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220404232058.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220328031202.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:48.697Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="F52n.ETF网格">
+<meta name="twitter:description" content="ETF网格总结 网格的买入方式决定了只适合手里有一定存量资金的, 网格交易是价格碰到格子就触发交易, 如果短期变化很大(多次触格)会有多次资金投入, 定投只是每月发工资了就投; 网格的局限性: 只适合有幅度的震荡行情: 如果是长期熊市, 会很快用完资金, 并被套住; 如果是长期牛市, 网格又不能非常好的提高收益(单边上涨时, 每上升一格就卖出一部分, 相比按照PE分批止盈的方式盈利更差) 如果长期">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/20220404231924.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/52.Financing/F52n.网格交易策略/"/>
+
+
+
+
+
+  <title>F52n.ETF网格 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/52.Financing/F52n.网格交易策略/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">F52n.ETF网格</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
+                    <span itemprop="name">52.Financing</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,028
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="ETF网格总结"><a href="#ETF网格总结" class="headerlink" title="ETF网格总结"></a>ETF网格总结</h2><ul>
+<li>网格的买入方式决定了只适合手里有一定存量资金的, 网格交易是价格碰到格子就触发交易, 如果短期变化很大(多次触格)会有多次资金投入, 定投只是每月发工资了就投;</li>
+<li>网格的局限性: 只适合有幅度的震荡行情:<ul>
+<li>如果是长期熊市, 会很快用完资金, 并被套住;</li>
+<li>如果是长期牛市, 网格又不能非常好的提高收益(单边上涨时, 每上升一格就卖出一部分, 相比按照PE分批止盈的方式盈利更差)</li>
+<li>如果长期横盘(震荡幅度不大, 很少触到网格), 资金利用率会很低</li>
+<li>如果股价上or下穿破网格, 需要重新调整网格和数值</li>
+</ul>
+</li>
+</ul>
+<p>ETF网格构建工具 =&gt; <a href="https://hushicai.github.io/ETF/" target="_blank" rel="noopener">ETF网格计算器</a></p>
+<h2 id="网格交易法"><a href="#网格交易法" class="headerlink" title="网格交易法"></a>网格交易法</h2><p>➤ <a href="https://www.zhihu.com/question/39851961/answer/2369449424" target="_blank" rel="noopener">不知道哪位交易员可以解释下网格交易法？ - 秦KK的回答 - 知乎</a></p>
+<p><img src="/images/20220404231924.png" alt=""></p>
+<p>先看上涨情形:</p>
+<ul>
+<li>每次到达一个新格, 就开一个多单(绿)+一个空单(红)</li>
+<li>上涨到达B的格子时, 首先平掉A的盈利, 然后在B处开一个多单+一个空单</li>
+<li>上涨到达B的格子时, 首先平掉B的盈利, 然后在C处开一个多单+一个空单</li>
+<li>当股价达到定点C的时候, 如下图:<br><img src="/images/20220404230124.png" alt=""></li>
+</ul>
+<p>当股价下跌时:</p>
+<ul>
+<li>当从C跌回B, 把刚刚平掉的多单补回来, 同时卖掉C点的空单(红)</li>
+<li>…<br><img src="/images/20220404230914.png" alt=""></li>
+</ul>
+<p><img src="/images/20220404232058.png" alt=""></p>
+<p>➤ <a href="https://www.zhihu.com/question/39851961/answer/86308750" target="_blank" rel="noopener">不知道哪位交易员可以解释下网格交易法？ - 知乎</a><br>信息论之父申农在黑板上给大家演示：任何一个价位买进资金的50%，也就是说资金数量：股票市值=50%：50%。股票价格上涨一定幅度就卖出一部分股票，保持剩余的资金数量：剩余股票市值=50%：50%；反之股票价格下跌一定幅度，就用剩余资金买进一部分股票，始终保持剩余资金数量：剩余股票市值=50%：50%。用这个办法来对付股票价格的随机走势，长期交易是盈利的。他在十多年的交易生涯中，资金获得了29%的年复利增长。50岁后因为得了老年痴呆症，交易战绩没能延续。我在这里暂且称上面使用的交易数学模型为“等比例仓位模型”—-事实上，50%完全可以是其他的百分比数值。</p>
+<p>➤ <a href="https://h5.1234567.com.cn/app/news/?code=202111082173305075" target="_blank" rel="noopener">指数基金买卖网格交易 具体如何操作？ 天天基金</a></p>
+<ul>
+<li>哪些指数更适合网格交易？ 近2年来，年化波动率超过25%的行业指数和宽基指数，它们的年化波动率和收益率相对更优，对比观察发现，休闲服务、有色金属、电气设备、创业板指等主流行业表现突出，投资者可尝试进行网格交易。</li>
+</ul>
+<p>➤ <a href="https://xueqiu.com/3167081651/55785555" target="_blank" rel="noopener">关于网格交易（forcode原创）</a></p>
+<ul>
+<li>起始买入价，一般在公司陷入暂时危机、股价处在最近几年最低位、PE/PB极低的时候开始关注。</li>
+<li>起始买入量，我一般定在可投资总资产的1%以内，一般最低不少于1万元，这样手续费比较合算点；而每个交易间隔的递增交易量，尽量控制在总仓位的0.2%</li>
+<li>交易间隔，我现在倾向于股价波动4~8%触发一次交易，尽量取整数间隔，方便记忆。比如20元以内的标的，每下跌1元触发一次交易。</li>
+<li>起始卖出价，我现在一般定在反弹超过4个交易间隔（大约20%）开始分批卖出、下跌超过4个交易间隔开始分批买入。</li>
+<li>以及：网格交易闲置资金的问题？网格交易投资标的的选择？</li>
+</ul>
+<p>➤ <a href="https://zhuanlan.zhihu.com/p/159272273" target="_blank" rel="noopener">ETF 网格交易策略（全） - 尼基的梦 - 知乎</a></p>
+<ul>
+<li>用上证指数作为表格标的…  3680 ~ 2440</li>
+<li>如何估算网格上限, 用了GNP(证券化率)</li>
+</ul>
+<p><img src="/images/20220328031202.png" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/52.Financing/F52m.FOF策略/" rel="next" title="F52m.FOF策略">
+                <i class="fa fa-chevron-left"></i> F52m.FOF策略
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/52.Financing/F59.凯利公式/" rel="prev" title="F59.凯利公式">
+                F59.凯利公式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ETF网格总结"><span class="nav-text">ETF网格总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网格交易法"><span class="nav-text">网格交易法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/52.Financing/F52n.网格交易策略/';
+          this.page.identifier = '52.Financing/F52n.网格交易策略/';
+          this.page.title = 'F52n.ETF网格';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

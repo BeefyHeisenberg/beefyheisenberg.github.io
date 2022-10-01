@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="后端架构,反向代理,Nginx," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="概述Nginx是异步框架的网页服务器，也可以用作反向代理、负载平衡器和HTTP缓存。 与Apache相比Nginx 的编写有一个明确目标就是超越 Apache Web 服务器的性能。Nginx 提供开箱即用的静态文件，使用的内存比 Apache 少得多，每秒可以处理大约四倍于 Apache 的请求。低并发下性能与 Apache 相当，有时候还低于，但是在高并发下 Nginx 能保持低资源低消耗高">
+<meta name="keywords" content="后端架构,反向代理,Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="反向代理-Nginx">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/31.Backend/反向代理-Nginx/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="概述Nginx是异步框架的网页服务器，也可以用作反向代理、负载平衡器和HTTP缓存。 与Apache相比Nginx 的编写有一个明确目标就是超越 Apache Web 服务器的性能。Nginx 提供开箱即用的静态文件，使用的内存比 Apache 少得多，每秒可以处理大约四倍于 Apache 的请求。低并发下性能与 Apache 相当，有时候还低于，但是在高并发下 Nginx 能保持低资源低消耗高">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn-1.wp.nginx.com/wp-content/uploads/2015/04/NGINX_logo_rgb-01.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:47.362Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="反向代理-Nginx">
+<meta name="twitter:description" content="概述Nginx是异步框架的网页服务器，也可以用作反向代理、负载平衡器和HTTP缓存。 与Apache相比Nginx 的编写有一个明确目标就是超越 Apache Web 服务器的性能。Nginx 提供开箱即用的静态文件，使用的内存比 Apache 少得多，每秒可以处理大约四倍于 Apache 的请求。低并发下性能与 Apache 相当，有时候还低于，但是在高并发下 Nginx 能保持低资源低消耗高">
+<meta name="twitter:image" content="https://cdn-1.wp.nginx.com/wp-content/uploads/2015/04/NGINX_logo_rgb-01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/31.Backend/反向代理-Nginx/"/>
+
+
+
+
+
+  <title>反向代理-Nginx | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/31.Backend/反向代理-Nginx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">反向代理-Nginx</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,346
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://cdn-1.wp.nginx.com/wp-content/uploads/2015/04/NGINX_logo_rgb-01.png" alt=""></p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Nginx是异步框架的网页服务器，也可以用作反向代理、负载平衡器和HTTP缓存。</p>
+<h2 id="与Apache相比"><a href="#与Apache相比" class="headerlink" title="与Apache相比"></a>与Apache相比</h2><p>Nginx 的编写有一个明确目标就是超越 Apache Web 服务器的性能。Nginx 提供开箱即用的静态文件，使用的内存比 Apache 少得多，每秒可以处理大约四倍于 Apache 的请求。低并发下性能与 Apache 相当，有时候还低于，但是在高并发下 Nginx 能保持低资源低消耗高性能。还有高度模块化的设计，模块编写简单。配置文件简洁。</p>
+<h1 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 启动example: </span><br><span class="line">/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf</span><br><span class="line"></span><br><span class="line"># 测试配置文件</span><br><span class="line">nginx -t</span><br><span class="line"></span><br><span class="line"># 平滑重启</span><br><span class="line">nginx -s reload</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 如何shutdown</span><br><span class="line"># 查询 master process主进程号</span><br><span class="line">ps -ef | grep nginx</span><br><span class="line"></span><br><span class="line"># 从容停止</span><br><span class="line">kill -QUIT 3266</span><br></pre></td></tr></table></figure>
+<p>Nginx支持的几种信号: </p>
+<blockquote>
+<ul>
+<li>TERM,INT 快速关闭</li>
+<li>QUIT 从容关闭</li>
+<li>HUP 平滑重启，重新加载配置文件</li>
+<li>USR1 重新打开日志文件，在切割日志时用途较大</li>
+<li>USR2 平滑升级可执行程序</li>
+<li>WINCH 从容关闭工作进程</li>
+</ul>
+</blockquote>
+<h1 id="nginx-conf配置"><a href="#nginx-conf配置" class="headerlink" title="nginx.conf配置"></a>nginx.conf配置</h1><h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><p>@ref: </p>
+<ul>
+<li>Full Example Configuration | NGINX：<a href="https://www.nginx.com/resources/wiki/start/topics/examples/full/" target="_blank" rel="noopener">https://www.nginx.com/resources/wiki/start/topics/examples/full/</a> </li>
+</ul>
+<p>cat nginx.conf : </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">user       www www;  ## Default: nobody</span><br><span class="line">worker_processes  5;  ## Default: 1</span><br><span class="line">error_log  logs/error.log;</span><br><span class="line">pid        logs/nginx.pid;</span><br><span class="line">worker_rlimit_nofile 8192;</span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    use epoll;</span><br><span class="line">    multi_accept        on;</span><br><span class="line">    worker_connections  10240;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       /etc/nginx/mime.types; # 设定mime类型</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line">    access_log    /var/log/nginx/access.log; # 设定日志格式</span><br><span class="line">    include upstream-servers.conf; # 建议把upstream设置放在单独的文件</span><br><span class="line"></span><br><span class="line">    # 虚拟服务器, 可以有多个server</span><br><span class="line">    server&#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  s1.xxx.com;</span><br><span class="line">        index index.shtml index.html index.htm;</span><br><span class="line">        root /opt/xxx;</span><br><span class="line"></span><br><span class="line">        # upstream定义，下面会引用：</span><br><span class="line">        upstream resin-labs &#123;</span><br><span class="line">            server 192.168.1.100 weight=3;</span><br><span class="line">            server 192.168.1.101;</span><br><span class="line">        &#125;</span><br><span class="line">        upstream resin-admin &#123;</span><br><span class="line">            server 192.168.1.109;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # 一些rewrite：</span><br><span class="line">        rewrite ^/help$ /help/ redirect;</span><br><span class="line"></span><br><span class="line">        # location定义，建议顺序：精确匹配=, 前缀匹配^~, 正则匹配~, 普通匹配</span><br><span class="line">        location ~ ^/api/labs &#123;</span><br><span class="line">            access_log /opt/logs/nginx/labs_stat.log labs_stat;</span><br><span class="line">            # 反向代理到‘resin-labs’的 upstream</span><br><span class="line">            proxy_pass http://resin-labs;</span><br><span class="line">        &#125;</span><br><span class="line">        location /&#123;</span><br><span class="line">            # 反向代理到‘resin-admin’的 upstream</span><br><span class="line">            proxy_pass http://resin-admin;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="http"><a href="#http" class="headerlink" title="http"></a>http</h2><p>http下的Keepalive设置, 是Nginx与客户端（一般为浏览器、APP等）保持的长连接进行限制管理: </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">keepalive_timeout  120s 120s; // </span><br><span class="line">keepalive_requests 100; //</span><br></pre></td></tr></table></figure>
+<ul>
+<li>keepalive_timeout： 第一个参数：客户端连接在服务器端空闲状态下保持的超时值（默认75s）；值为0会禁用keep-alive，也就是说默认不启用长连接；第二个参数：响应的header域中设置“Keep-Alive: timeout=time”；告知浏览器对长连接的维持时间；官方文档：<a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#keepalive_timeout" target="_blank" rel="noopener">Module ngx_http_core_module</a></li>
+<li>keepalive_requests：默认100，某个长连接连续处理请求次数限制，超过次数则该长连接被关闭；如果需要释放某个连接占用的内存，必须关闭该链接，内存不大的情况下，不建议开大该配置；在QPS较高的场景，则有必要加大这个参数；官方文档：<a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#keepalive_requests" target="_blank" rel="noopener">Module ngx_http_core_module</a></li>
+</ul>
+<h2 id="http-server"><a href="#http-server" class="headerlink" title="http/server"></a>http/server</h2><p>一个<code>server{}</code> 对应一个port</p>
+<h2 id="server-location"><a href="#server-location" class="headerlink" title="server/location"></a>server/location</h2><p>参考 (<a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#location" target="_blank" rel="noopener">http://nginx.org/en/docs/http/ngx_http_core_module.html#location</a>)<br>优先级:</p>
+<ol>
+<li>精确匹配: <code>location = /xxx</code>  URL完全匹配”/xxx”</li>
+<li>前缀匹配: <code>location ^~ /xxx</code>  URL”/xxx”开头的前缀, 比如”a.com/xxx/1”</li>
+<li>正则匹配: <code>location ~ ^*.php$</code></li>
+<li>正则(不区分大小写): <code>location ~* ^*.php$</code></li>
+<li>普通匹配: <code>location /</code>  这样写一般用作其他条件都不符合, 最后的default行为</li>
+</ol>
+<p>for Example: </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 第一个必选规则</span><br><span class="line">#直接匹配网站根, 如果首页访问量很大, 应该首先匹配</span><br><span class="line">location = / &#123;</span><br><span class="line">    root /var/www/;</span><br><span class="line">    index index.htm index.html;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 第二个必选规则是处理静态文件请求</span><br><span class="line"># 前缀匹配&quot;^~&quot;优先级仅次于精确匹配&quot;=&quot;, 可以用来</span><br><span class="line">location ^~ /static/ &#123;</span><br><span class="line">    root /webroot/static/;</span><br><span class="line">&#125;</span><br><span class="line"># 如果使用memcached作为缓存, 也可以使用前缀匹配</span><br><span class="line">location ^~ /api/services/topic/load &#123;</span><br><span class="line">    memcached_pass memcached-cluster;</span><br><span class="line">&#125;</span><br><span class="line"># 前缀匹配^~也可以是转发到应用服务, 但不推荐, 应该让静态文件访问处于更高的优先级</span><br><span class="line"></span><br><span class="line"># 正则匹配也可以用来处理静态文件</span><br><span class="line">location ~* \.(gif|jpg|jpeg|png|css|js|ico)$ &#123;</span><br><span class="line">    root /webroot/res/;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 正则匹配用来转发到后端应用服务</span><br><span class="line">location ~ ^/api/v2 &#123;</span><br><span class="line">    proxy_pass http://tomcat:8080</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 最后普通字符匹配, 用来向后端应用转发</span><br><span class="line"># 毕竟目前的一些RESTFUL框架的流行, 带.php,.jsp后缀的情况很少了</span><br><span class="line">location / &#123;</span><br><span class="line">    proxy_pass http://tomcat:8080/</span><br></pre></td></tr></table></figure>
+<h2 id="location-proxy-pass"><a href="#location-proxy-pass" class="headerlink" title="location/proxy_pass"></a>location/proxy_pass</h2><blockquote>
+<p>注意区分 ngx_stream_proxy_module 模块的 proxy_pass指令:  指令只能在server段使用使用, 只需要提供域名或ip地址和端口。可以理解为端口转发，可以是tcp端口，也可以是udp端口</p>
+</blockquote>
+<p>这里介绍 ngx_http_proxy_module 模块的 proxy_pass指令, 只能出现在 server/location下, 可以理解为端口转发，可以是tcp端口，也可以是udp端口.<br>proxy_pass 把请求向下一个服务转发, 不影响用户浏览器地址栏的URL  // 比如遇到跨域问题，而且客户端无法支持 CORS 时, 最好的办法就是让服务器来做代理. </p>
+<p>格式 <code>proxy_pass URL</code>,  其中<code>URL</code>可以是另一个服务的Http地址, 也可以是定义的<code>upstream</code>,<br>需要注意<code>URL</code>后面是否带<code>/</code>, 表示的含义不同: </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># URL后面没有`/`</span><br><span class="line"># proxy_pass相对路径, 将会代理到(http://127.0.0.1:8080/api/**)</span><br><span class="line"></span><br><span class="line">location /api &#123;</span><br><span class="line">    proxy_pass http://127.0.0.1:8080  # 结尾没有/, 表示相对路径</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># URL后面有`/`</span><br><span class="line"># 将会跳转到(http://127.0.0.1:8080/**), 没有&quot;/api&quot;</span><br><span class="line"></span><br><span class="line">location /api &#123;</span><br><span class="line">    proxy_pass http://127.0.0.1:8080/ # 结尾有/, 表示绝对路径</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="location-allow-deny"><a href="#location-allow-deny" class="headerlink" title="location/allow,deny"></a>location/allow,deny</h2><p>allow,deny 是 ngx_http_access_module 模块提供的,<br>一般用在 <code>location</code>下, 允许/拒绝某些客户端访问location, 示例:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">allow 192.168.1.0/24</span><br><span class="line">deny all;</span><br></pre></td></tr></table></figure></p>
+<p>子网掩码的表示,  使用CIDR ( 参考 [[../22.Network-Protocol/网络协议-IP]] ) 表示法: </p>
+<ul>
+<li><code>/24</code>: 255.255.255.0</li>
+<li><code>/16</code>: 255.255.0.0</li>
+<li><code>/8</code>: 255.0.0.0</li>
+</ul>
+<p>deny 和 <code>return 403</code>的区别:<br><a href="https://stackoverflow.com/questions/38231423/nginx-difference-between-deny-all-and-return-403" target="_blank" rel="noopener">webserver - Nginx: Difference between deny all; and return 403; - Stack Overflow</a></p>
+<h2 id="server-rewrite"><a href="#server-rewrite" class="headerlink" title="server/rewrite"></a>server/rewrite</h2><p>rewrite用来更改location, 实现跳转到其他location.<br>rewrite只能放在<code>server{}</code>,<code>location{}</code>,<code>if{}</code>中, 语法为<code>rewrite regex replacement [flag];</code>, 例如:</p>
+<ul>
+<li><code>rewrite ^/help(.*) /static/help$1 last;</code></li>
+<li><code>rewrite (.*) http://a.changyan.com$1 last;</code></li>
+</ul>
+<h3 id="rewrite的flag标记"><a href="#rewrite的flag标记" class="headerlink" title="rewrite的flag标记"></a>rewrite的flag标记</h3><ul>
+<li>last : rewrite之后, 跳出当前location, 并重新走一遍当前server的流程, 浏览器地址栏看起来仍是rewrite之前的URL;</li>
+<li>break : 请求在这个location终结, 不再重新走server;</li>
+<li>redirect : 返回302临时重定向, 浏览器地址栏会显示跳转后的地址;</li>
+<li>permanent : 返回301永久重定向, 浏览器地址栏会显示跳转后的地址;</li>
+</ul>
+<p>如果rewrite在location之外, last和break不会有任何区别, 都会跳过后面的rewrite直接进入location:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    rewrite ^/AAA/.*  /BBB/$1  last; // 如果命中^AAA规则, 直接进入location, 下面的所有rewrite被跳过;</span><br><span class="line">    rewrite ^/XXX/.*  /ZZZ/$1  last;</span><br><span class="line">    location ~ /BBB &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="server-upstream"><a href="#server-upstream" class="headerlink" title="server/upstream"></a>server/upstream</h2><p>示例:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">proxy_pass http://webapp</span><br><span class="line">...</span><br><span class="line">upstream webapp &#123;</span><br><span class="line">    // [均衡方式]</span><br><span class="line">    server 192.168.1.9:8080;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="负载均衡方式"><a href="#负载均衡方式" class="headerlink" title="负载均衡方式"></a>负载均衡方式</h4><ul>
+<li>轮询(默认):</li>
+<li>带weight的轮询: 访问后端比例和weight成正比, 用于解决后端服务器性能不均衡</li>
+<li>ip_hash: 来访ip hash, 用于解决session问题</li>
+<li>url_hash: 后端服务器为缓存时</li>
+</ul>
+<p>参考 [[SystemDesign-负载均衡-Nginx]]</p>
+<h2 id="log-access-error"><a href="#log-access-error" class="headerlink" title="log(access,error)"></a>log(access,error)</h2><p>log 由 <code>ngx_http_log_module</code> 模块支持. </p>
+<p>示例:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># log_format 可以在任何位置定义?</span><br><span class="line">log_format  myLog  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</span><br><span class="line">                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</span><br><span class="line">                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; $host $request_time&apos;;</span><br><span class="line">                      </span><br><span class="line"># 可以出现在 http，server，location，limit_except 作用域</span><br><span class="line">access_log   /opt/logs/nginx/access.log  myLog; ## 使用上面定义的format</span><br><span class="line"></span><br><span class="line"># 可以出现在 main， http, mail, stream, server, location 作用域</span><br><span class="line">error_log   /opt/logs/nginx/error.log notice;</span><br></pre></td></tr></table></figure></p>
+<p>➤ access_log</p>
+<p>格式: <code>access_log path [format]</code></p>
+<ul>
+<li>path 指定日志的存放位置。</li>
+<li>format 指定日志的格式。格式可以用<code>log_format</code>自定义, 也可以不写, 不写则使用默认使用预定义的”combined”。</li>
+</ul>
+<p>access_log作用域:<br>access_log指令的作用域分别有http，server，location，limit_except。也就是说，在这几个作用域外使用该指令，Nginx会报错。</p>
+<p>➤ error_log</p>
+<p>格式: <code>error_log path [level]</code></p>
+<ul>
+<li>level: debug, info, notice, warn, error, crit, alert,emerg中的任意值</li>
+</ul>
+<p>error_log作用域: main, http, mail, stream, server, location</p>
+<p>@ref: <a href="https://segmentfault.com/a/1190000013377493" target="_blank" rel="noopener">Nginx日志配置详解 - SegmentFault 思否</a></p>
+<h2 id="include"><a href="#include" class="headerlink" title="include"></a>include</h2><p>include 其他配置文件: <code>include cache.conf;</code></p>
+<h2 id="module"><a href="#module" class="headerlink" title="module"></a>module</h2><p>Nginx模块一般分为三大类: filter, upstream, handler @todo</p>
+<h2 id="需要注意的"><a href="#需要注意的" class="headerlink" title="需要注意的"></a>需要注意的</h2><ul>
+<li>if判断字符串(注意是<code>=</code> 而不是<code>==</code>):<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if ($arg_client_id = &quot;cxsh9byIb&quot;) &#123;</span><br><span class="line">    return 200 &apos;:)&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="Nginx返回502-503-504"><a href="#Nginx返回502-503-504" class="headerlink" title="Nginx返回502, 503, 504"></a>Nginx返回502, 503, 504</h1><p><strong>502: Bad Gateway</strong><br>作为网关或者代理工作的服务器尝试执行请求时，从上游服务器接收到无效的响应。可能的原因：</p>
+<ul>
+<li>高并发, 后端服务线程池耗尽[?]</li>
+<li>后端服务(php-fpm/tomcat..)shutdown</li>
+<li>后端程序执行太久，后端服务终止了此次请求的Worker进程，Nginx发现自己与后端服务断开</li>
+</ul>
+<p><strong>503: Service Unavailable</strong><br>由于临时的服务器维护或者过载，服务器当前无法处理请求。这个状况是临时的，并且将在一段时间以后恢复。如果能够预计延迟时间，那么响应中可以包含一个 Retry-After 头用以标明这个延迟时间。如果没有给出这个 Retry-After 信息，那么客户端应当以处理500响应的方式处理它。可能的原因：</p>
+<ul>
+<li>后端服务器当前因为过载无法处理请求，主动拒绝响应，比较少见到</li>
+</ul>
+<p><strong>504: Gateway Timeoua</strong><br>作为网关或者代理工作的服务器尝试执行请求时，未能及时从后端服务器或者辅助服务器（例如DNS）收到响应。可能的原因：</p>
+<ul>
+<li>nginx发起请求，在最大等待时间内没有收到返回</li>
+<li>nginx的timeout是否设置的太短</li>
+<li>查询DNS超时也会504</li>
+</ul>
+<blockquote>
+<p>参考 <a href="https://juejin.im/entry/589148f92f301e00690e863d" target="_blank" rel="noopener">http 502 和 504 的区别 - 后端 - 掘金</a> @ref</p>
+</blockquote>
+<h1 id="代码解读"><a href="#代码解读" class="headerlink" title="代码解读"></a>代码解读</h1><p>施工中…</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/后端架构/" rel="tag"># 后端架构</a>
+          
+            <a href="/tags/反向代理/" rel="tag"># 反向代理</a>
+          
+            <a href="/tags/Nginx/" rel="tag"># Nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/31.Backend/消息队列-Kafka/" rel="next" title="消息队列-Kafka">
+                <i class="fa fa-chevron-left"></i> 消息队列-Kafka
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/31.Backend/资源调度-Yarn-Mesos-k8s/" rel="prev" title="资源调度 | YARN vs Mesos vs k8s">
+                资源调度 | YARN vs Mesos vs k8s <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#与Apache相比"><span class="nav-text">与Apache相比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令行"><span class="nav-text">命令行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx-conf配置"><span class="nav-text">nginx.conf配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example"><span class="nav-text">example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http"><span class="nav-text">http</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http-server"><span class="nav-text">http/server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-location"><span class="nav-text">server/location</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#location-proxy-pass"><span class="nav-text">location/proxy_pass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#location-allow-deny"><span class="nav-text">location/allow,deny</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-rewrite"><span class="nav-text">server/rewrite</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rewrite的flag标记"><span class="nav-text">rewrite的flag标记</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-upstream"><span class="nav-text">server/upstream</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#负载均衡方式"><span class="nav-text">负载均衡方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#log-access-error"><span class="nav-text">log(access,error)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#include"><span class="nav-text">include</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#module"><span class="nav-text">module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需要注意的"><span class="nav-text">需要注意的</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx返回502-503-504"><span class="nav-text">Nginx返回502, 503, 504</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码解读"><span class="nav-text">代码解读</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/31.Backend/反向代理-Nginx/';
+          this.page.identifier = '31.Backend/反向代理-Nginx/';
+          this.page.title = '反向代理-Nginx';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

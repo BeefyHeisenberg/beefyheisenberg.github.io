@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="加密算法,RSA,GPG," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="非对称加密算法RSA简介先来回顾一下”非对称加密算法”的概念, 以下引用自阮一峰的博客:   （1）乙方生成两把密钥（公钥和私钥）。公钥是公开的，任何人都可以获得，私钥则是保密的。（2）甲方获取乙方的公钥，然后用它对信息加密。（3）乙方得到加密后的信息，用私钥解密。 如果公钥加密的信息只有私钥解得开，那么只要私钥不泄漏，通信就是安全的。">
+<meta name="keywords" content="加密算法,RSA,GPG">
+<meta property="og:type" content="article">
+<meta property="og:title" content="非对称加密算法 RSA 简介以及 GPG 工具的使用">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/50.Farbox-Blog/非对称加密算法RSA简介以及GPG工具的使用/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="非对称加密算法RSA简介先来回顾一下”非对称加密算法”的概念, 以下引用自阮一峰的博客:   （1）乙方生成两把密钥（公钥和私钥）。公钥是公开的，任何人都可以获得，私钥则是保密的。（2）甲方获取乙方的公钥，然后用它对信息加密。（3）乙方得到加密后的信息，用私钥解密。 如果公钥加密的信息只有私钥解得开，那么只要私钥不泄漏，通信就是安全的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-10-01T20:20:48.036Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="非对称加密算法 RSA 简介以及 GPG 工具的使用">
+<meta name="twitter:description" content="非对称加密算法RSA简介先来回顾一下”非对称加密算法”的概念, 以下引用自阮一峰的博客:   （1）乙方生成两把密钥（公钥和私钥）。公钥是公开的，任何人都可以获得，私钥则是保密的。（2）甲方获取乙方的公钥，然后用它对信息加密。（3）乙方得到加密后的信息，用私钥解密。 如果公钥加密的信息只有私钥解得开，那么只要私钥不泄漏，通信就是安全的。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/50.Farbox-Blog/非对称加密算法RSA简介以及GPG工具的使用/"/>
+
+
+
+
+
+  <title>非对称加密算法 RSA 简介以及 GPG 工具的使用 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/50.Farbox-Blog/非对称加密算法RSA简介以及GPG工具的使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">非对称加密算法 RSA 简介以及 GPG 工具的使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,557
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="非对称加密算法RSA简介"><a href="#非对称加密算法RSA简介" class="headerlink" title="非对称加密算法RSA简介"></a>非对称加密算法RSA简介</h1><p>先来回顾一下”非对称加密算法”的概念, 以下引用自<a href="http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html" target="_blank" rel="noopener">阮一峰的博客</a>:</p>
+<blockquote>
+</blockquote>
+<p>（1）乙方生成两把密钥（公钥和私钥）。公钥是公开的，任何人都可以获得，私钥则是保密的。<br>（2）甲方获取乙方的公钥，然后用它对信息加密。<br>（3）乙方得到加密后的信息，用私钥解密。</p>
+<p>如果公钥加密的信息只有私钥解得开，那么只要私钥不泄漏，通信就是安全的。</p>
+<p>1977年，三位数学家Rivest、Shamir 和 Adleman 设计了一种算法，可以实现非对称加密。这种算法用他们三个人的名字命名，叫做RSA算法。从那时直到现在，RSA算法一直是最广为使用的”非对称加密算法”。毫不夸张地说，只要有计算机网络的地方，就有RSA算法。</p>
+<h2 id="一-使用GnuPG"><a href="#一-使用GnuPG" class="headerlink" title="一, 使用GnuPG"></a>一, 使用GnuPG</h2><p>GnuPG（英文：GNU Privacy Guard，简称：GPG）<br>GnuPG使用用户自行生成的非对称密钥对来加密信息，由此产生的公钥可以同其他用户以各种方式交换，如密钥服务器。GnuPG还可以向信息添加一个加密的数字签名，这样，收件人可以验证信息完整性和发件人。 (来自维基百科)</p>
+<p>下面介绍使用GnuPG 实现电子邮件加密和数字签名, 参考了<a href="http://www.ruanyifeng.com/blog/2013/07/gpg.html" target="_blank" rel="noopener">阮一峰的博客</a>, 注意下面关于gpg工具的介绍都是基于命令行的, 其实Gnome和KDE都自带了图形化的密钥管理工具(分别是Seahorse和Kgpg), 这样在新建/管理自己的密钥&amp;&amp; 使用他人的公钥会更加简单, 但是下面我们介绍的还是使用命令行的gpg.</p>
+<h3 id="1-1-安装GnuPG"><a href="#1-1-安装GnuPG" class="headerlink" title="1.1 安装GnuPG"></a>1.1 安装GnuPG</h3><p>在Fedora/CentOS上使用yum安装GnuPG: <code>sudo yum install gnupg</code><br>如果通过源码编译的方式, 可以在这里<a href="http://www.gnupg.org/download/index.en.html" target="_blank" rel="noopener">获取源码</a>. 编译方式三步:</p>
+<blockquote>
+</blockquote>
+<p>./configure<br>make<br>make install</p>
+<h3 id="1-2-生成密钥"><a href="#1-2-生成密钥" class="headerlink" title="1.2 生成密钥:"></a>1.2 生成密钥:</h3><p>输入<code>gpg --gen-key</code>命令生成密钥, 回车后会提示需要生成的密钥类型, 例如:</p>
+<blockquote>
+</blockquote>
+<p>(1) RSA and RSA (default)<br>(2) DSA and Elgamal<br>(3) DSA (仅用于签名)<br>(4) RSA (仅用于签名)</p>
+<p>选择第一个, 表示加密和签名都是RSA算法. 然后命令行提示所需密钥的长度(1024~4096位), 我们这里选择2048(默认值).</p>
+<p>接着是设定密钥有效期, 这里选择”0”, 表示永不过期.</p>
+<p>然后是提供个人信息, 包括 <em>姓名</em>, <em>邮箱</em>, <em>注释</em>, 其中前两项姓名 &amp;&amp; 邮箱是必要的, 注释可以不填写, 输入完成之后gpg会生成一个”用户ID”, 下面是一个生成ID的范例:</p>
+<blockquote>
+<p>“Heinrich Heine <a href="mailto:&#104;&#101;&#x69;&#110;&#114;&#105;&#99;&#x68;&#x68;&#x40;&#x64;&#x75;&#x65;&#115;&#115;&#101;&#x6c;&#100;&#x6f;&#114;&#x66;&#46;&#x64;&#x65;" target="_blank" rel="noopener">&#104;&#101;&#x69;&#110;&#114;&#105;&#99;&#x68;&#x68;&#x40;&#x64;&#x75;&#x65;&#115;&#115;&#101;&#x6c;&#100;&#x6f;&#114;&#x66;&#46;&#x64;&#x65;</a>“</p>
+</blockquote>
+<p>确认自己的”用户ID”之后, 系统还会要求输入一个私钥的密码, 防止他人使用自己的私钥.</p>
+<blockquote>
+</blockquote>
+<p>You need a Passphrase to protect your secret key.<br>Enter passphrase: </p>
+<p>最后系统开始生成密钥, 期间可能要求你产生一些”随机数”, 解释如下:</p>
+<blockquote>
+</blockquote>
+<p>  我们需要生成大量的随机字节。这个时候您可以多做些琐事(像是敲打键盘、移动鼠标、读写硬盘之类的)，这会让随机数字发生器有更好的机会获得足够的熵数。</p>
+<p>几分钟后密钥生成, 然后会提示如下:</p>
+<blockquote>
+</blockquote>
+<p>gpg: key 9A69C57C marked as ultimately trusted<br>public and secret key created and signed.</p>
+<p>注意上面的字符串”9A69C57C”，这是我的”用户ID”的Hash字符串，可以用来替代”用户ID”。</p>
+<h3 id="1-3-管理密钥"><a href="#1-3-管理密钥" class="headerlink" title="1.3 管理密钥"></a>1.3 管理密钥</h3><h4 id="1-3-1-查看-删除密钥"><a href="#1-3-1-查看-删除密钥" class="headerlink" title="1.3.1 查看/删除密钥"></a>1.3.1 查看/删除密钥</h4><p>列出系统中存储的密钥: <code>gpg --list-keys</code><br>删除某个密钥: <code>gpg --delete-key [用户ID]</code> , “用户ID”可以是邮件地址或者Hash字符串.</p>
+<h4 id="1-3-2-密钥的导出和存储"><a href="#1-3-2-密钥的导出和存储" class="headerlink" title="1.3.2 密钥的导出和存储"></a>1.3.2 密钥的导出和存储</h4><p>公钥的二进制文件存储在~/.gnupg/pubring.gpg<br>将公钥以ASCII码显示并存储到文本文件public-key.txt中: <code>gpg --armor --output public-key.txt --export [用户ID]</code></p>
+<p>备份自己的公钥: <code>gpg -o public-key --export [用户ID]</code> , 其中-o参数后面是导出的公钥文件名字.<br>备份自己的私钥 : <code>gpg -oa seckey.asc --export-secret-keys [用户ID]</code> ,其中-oa参数后面就是导出的私钥, 可以在其他机器上通过<code>gpg --import seckey.asc</code>导入.</p>
+<h4 id="1-3-3-发布公钥"><a href="#1-3-3-发布公钥" class="headerlink" title="1.3.3 发布公钥"></a>1.3.3 发布公钥</h4><p>因特网上有很多免费的公钥服务器, 你可以把自己的公钥发布到任意一个服务器, 这些服务器之间会互相同步. 命令<code>gpg --send-keys [用户ID] --keyserver hkp://subkeys.pgp.net</code></p>
+<h4 id="1-3-4-获取他人的公钥"><a href="#1-3-4-获取他人的公钥" class="headerlink" title="1.3.4 获取他人的公钥"></a>1.3.4 获取他人的公钥</h4><p>通过email地址获取他人的公钥, <code>gpg --keyserver hkp://subkeys.pgp.net --search-keys [用户ID]</code> .<br>由于公钥服务器没有审查机制, 也就是说任何人都能用你的email名义上传公钥, 获取到他人的公钥后, 还要验证下此公钥的指纹: <code>gpg --fingerprint [用户ID]</code>, 然后可以通过电话/短信/QQ向对方确认指纹, 如果指纹一致就能确认这个公钥是对方所分发的.</p>
+<h3 id="1-4-使用密钥"><a href="#1-4-使用密钥" class="headerlink" title="1.4 使用密钥"></a>1.4 使用密钥</h3><h4 id="1-4-1-使用公钥加密文件"><a href="#1-4-1-使用公钥加密文件" class="headerlink" title="1.4.1 使用公钥加密文件"></a>1.4.1 使用公钥加密文件</h4><p>使用对方的公钥加密文件:<br><code>gpg --recipient [用户ID] --output file.en.txt --encrypt file.txt</code> .<br>参数解释: recipient参数指定接收者的公钥，output参数指定加密后的文件名，encrypt参数指定源文件。</p>
+<h4 id="1-4-2-解密文件"><a href="#1-4-2-解密文件" class="headerlink" title="1.4.2 解密文件"></a>1.4.2 解密文件</h4><p>对方收到加密文件以后用自己的私钥解密:<br><code>gpg --decrypt file.en.txt --output file.de.txt</code><br>参数解释: decrypt参数指定需要解密的文件，output参数指定解密后生成的文件。</p>
+<h4 id="1-4-3-对文件进行签名"><a href="#1-4-3-对文件进行签名" class="headerlink" title="1.4.3  对文件进行签名"></a>1.4.3  对文件进行签名</h4><p>签名的意思就是”证明是公钥所有者分发的”, 命令为<code>gpg --sign file.txt</code> . 运行上面的命令后，当前目录下生成file.txt.gpg文件，这就是签名后的文件.</p>
+<h4 id="1-4-4-验证签名"><a href="#1-4-4-验证签名" class="headerlink" title="1.4.4 验证签名"></a>1.4.4 验证签名</h4><p><code>gpg --verify file.txt.asc file.txt</code></p>
+<h4 id="1-4-4-密钥和邮件客户端的使用"><a href="#1-4-4-密钥和邮件客户端的使用" class="headerlink" title="1.4.4 密钥和邮件客户端的使用"></a>1.4.4 密钥和邮件客户端的使用</h4><p>使用Gnome邮件客户端Evo对邮件进行加密和签名: 参考<a href="http://archboy.org/2013/04/18/gnupg-pgp-encrypt-decrypt-message-and-email-and-digital-signing-easy-tutorial/" target="_blank" rel="noopener">使用 GnuPG 实现电子邮件加密和数字签名——PGP 30分钟简明教程</a>第四部分.</p>
+<p>以及<a href="https://securityinabox.org/zh/thuderbird_encryption" target="_blank" rel="noopener">如何在Thunderbird使用GPG</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/加密算法/" rel="tag"># 加密算法</a>
+          
+            <a href="/tags/RSA/" rel="tag"># RSA</a>
+          
+            <a href="/tags/GPG/" rel="tag"># GPG</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/50.Farbox-Blog/【Raspberry】树莓派手动玩/" rel="next" title="树莓派手动玩(开启SSH,VNC)">
+                <i class="fa fa-chevron-left"></i> 树莓派手动玩(开启SSH,VNC)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/50.Farbox-Blog/SSH协议简介/" rel="prev" title="SSH 协议简介">
+                SSH 协议简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#非对称加密算法RSA简介"><span class="nav-text">非对称加密算法RSA简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-使用GnuPG"><span class="nav-text">一, 使用GnuPG</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-安装GnuPG"><span class="nav-text">1.1 安装GnuPG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-生成密钥"><span class="nav-text">1.2 生成密钥:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-管理密钥"><span class="nav-text">1.3 管理密钥</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1-查看-删除密钥"><span class="nav-text">1.3.1 查看/删除密钥</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-2-密钥的导出和存储"><span class="nav-text">1.3.2 密钥的导出和存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-3-发布公钥"><span class="nav-text">1.3.3 发布公钥</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-4-获取他人的公钥"><span class="nav-text">1.3.4 获取他人的公钥</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-使用密钥"><span class="nav-text">1.4 使用密钥</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-1-使用公钥加密文件"><span class="nav-text">1.4.1 使用公钥加密文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-2-解密文件"><span class="nav-text">1.4.2 解密文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-3-对文件进行签名"><span class="nav-text">1.4.3  对文件进行签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-4-验证签名"><span class="nav-text">1.4.4 验证签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-4-密钥和邮件客户端的使用"><span class="nav-text">1.4.4 密钥和邮件客户端的使用</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/50.Farbox-Blog/非对称加密算法RSA简介以及GPG工具的使用/';
+          this.page.identifier = '50.Farbox-Blog/非对称加密算法RSA简介以及GPG工具的使用/';
+          this.page.title = '非对称加密算法 RSA 简介以及 GPG 工具的使用';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

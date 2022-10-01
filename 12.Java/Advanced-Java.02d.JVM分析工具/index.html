@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="JDK提供的命令行 以下每个工具都可以 cmd --help的方式查看说明  jps查看当前用户启动jvm进程  jps -m: 显示传递给Main方法的参数 jps -l: 显示Java进程的完整包名 jps -v: 显示JVM的参数 jps -lvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Advanced Java-02d-JVM分析工具">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.02d.JVM分析工具/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="JDK提供的命令行 以下每个工具都可以 cmd --help的方式查看说明  jps查看当前用户启动jvm进程  jps -m: 显示传递给Main方法的参数 jps -l: 显示Java进程的完整包名 jps -v: 显示JVM的参数 jps -lvm">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/java/jmap-histo-live.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/java/JVisualVM.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:46.336Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Advanced Java-02d-JVM分析工具">
+<meta name="twitter:description" content="JDK提供的命令行 以下每个工具都可以 cmd --help的方式查看说明  jps查看当前用户启动jvm进程  jps -m: 显示传递给Main方法的参数 jps -l: 显示Java进程的完整包名 jps -v: 显示JVM的参数 jps -lvm">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/java/jmap-histo-live.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.02d.JVM分析工具/"/>
+
+
+
+
+
+  <title>Advanced Java-02d-JVM分析工具 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.02d.JVM分析工具/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Advanced Java-02d-JVM分析工具</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/Java进阶系列/" itemprop="url" rel="index">
+                    <span itemprop="name">Java进阶系列</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,909
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="JDK提供的命令行"><a href="#JDK提供的命令行" class="headerlink" title="JDK提供的命令行"></a>JDK提供的命令行</h2><blockquote>
+<p>以下每个工具都可以 <code>cmd --help</code>的方式查看说明</p>
+</blockquote>
+<h3 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h3><p>查看当前用户启动jvm进程</p>
+<ul>
+<li><code>jps -m</code>: 显示传递给Main方法的参数</li>
+<li><code>jps -l</code>: 显示Java进程的完整包名</li>
+<li><code>jps -v</code>: 显示JVM的参数</li>
+<li><code>jps -lvm</code></li>
+</ul>
+<blockquote>
+<p>jvm启动后会在<code>/tmp/hsperfdata_&lt;username&gt;/</code>目录下生成一个pid为名的文件, 这个目录由<code>-Djava.io.tmpdir</code>参数指定, 如果因为某些原因这个文件没有生成, jps也就不起作用<br>文件内容:?</p>
+</blockquote>
+<h3 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h3><p>查看每个分代的使用率和GC次数，在没有GUI图形的服务器上是运行期定位虚拟机性能问题的首选。</p>
+<p>注意jstat返回只有 YGC和 FGC，并不区分 Major GC和 Full GC；<br>jstat和<code>-XX:+PrintGCDetails</code>提供的结果有不同，在于：<br>jstat无法统计并行的任务，比如<code>UseConcMarkSweepGC</code>情况下，初始mark和remark阶段都会有 Stop the World的耗时，jstat的输出会把两个STW阶段视作两次 Full GC；<br>而在GC日志里可以清楚的看到 UseConcMarkSweepGC情况下，每个阶段的耗时。</p>
+<p>例如, 如果配置了CMS垃圾回收器，那么 jstat中的 FGC增加1并不表示就一定发生了 Full GC，很有可能是发生了老年代的 CMS GC，而且每发生一次老年代的 CMS GC，jstat中的 FGC就会+2</p>
+<p>常用jstat命令：</p>
+<ul>
+<li><code>jstat -gc pid</code>: 统计JVM内存（Young/Old/Method）的已使用/总空间大小，以及Young GC和Full GC发生次数和耗时；</li>
+<li><code>jstat -gcutil pid</code> : 统计JVM内存（Young/Old/Method）的占用百分比，以及Young GC和Full GC发生次数和耗时；</li>
+<li><code>jstat -class pid</code> : 类装载、卸载数量、总空间, 及类装载所耗费的时间</li>
+<li><code>jstat -gccapacity pid</code> : 查看三代（young,old,perm）对象的使用量大小(字节)</li>
+<li><code>jstat -gcnew pid</code>:  年轻代的容量和GC情况</li>
+<li><code>jstat -gcnewcapacity pid</code>:</li>
+<li><code>jstat -gcold pid</code>:  老年代的容量和GC情况</li>
+<li><code>jstat -gcoldcapacity pid</code>:</li>
+</ul>
+<blockquote>
+<p>如果用jstat查看远程机器上的jvm, 需要在远程主机启动jstatd(详见 <strong>jstatd</strong>)</p>
+<blockquote>
+<p>jstat -gc pid@remote_IP # 用jstat连接远端的jstatd</p>
+</blockquote>
+</blockquote>
+<h4 id="jstat-gc返回列解析"><a href="#jstat-gc返回列解析" class="headerlink" title="jstat -gc返回列解析"></a>jstat -gc返回列解析</h4><p><strong>示例1</strong>: attaches 到pid=14542的进程上, -h3表示每三行打印一次列名称, 采样间隔5s<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jstat -gc -h3 14542 5s</span><br><span class="line"></span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">10240.0 10752.0  0.0    0.0   133120.0 10215.4   87552.0     9225.3   27904.0 26661.4 3328.0 3007.2     20    0.305  13      1.410    1.715</span><br><span class="line">10240.0 10752.0  0.0    0.0   133120.0 10659.2   87552.0     9225.3   27904.0 26661.4 3328.0 3007.2     20    0.305  13      1.410    1.715</span><br><span class="line">10240.0 10752.0  0.0    0.0   133120.0 10659.2   87552.0     9225.3   27904.0 26661.4 3328.0 3007.2     20    0.305  13      1.410    1.715</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">10240.0 512.0   0.0    0.0   133120.0   79.2    87552.0     9224.0   27904.0 26662.1 3328.0 3007.2     21    0.318  14      1.522    1.840</span><br><span class="line">10240.0 512.0   0.0    0.0   133120.0  523.0    87552.0     9224.0   27904.0 26662.1 3328.0 3007.2     21    0.318  14      1.522    1.840</span><br><span class="line">10240.0 512.0   0.0    0.0   133120.0  523.0    87552.0     9224.0   27904.0 26662.1 3328.0 3007.2     21    0.318  14      1.522    1.840</span><br></pre></td></tr></table></figure></p>
+<p><strong>每列说明如下</strong>:</p>
+<ul>
+<li>S0C: S0 Capacity(KB)</li>
+<li>S0U: S0 Utilization(KB)</li>
+<li>EC: Current eden space capacity (kB).</li>
+<li>EU: Eden space utilization (kB).</li>
+<li>MC: Metaspace capacity (kB).</li>
+<li>MU: Metacspace utilization (kB).</li>
+<li>YGC:  从JVM进程启动到当前采样，发生young gen GC总次数</li>
+<li>YGCT: 从JVM进程启动到当前采样，young gen GC总消耗时间(秒)， 相邻两次相减就是该次耗时</li>
+<li>FGC: 从JVM进程启动到当前采样，发生full GC总次数</li>
+<li>FGCT: 从JVM进程启动到当前采样，full GC总消耗时间(秒)， 相邻两次相减就是该次耗时</li>
+</ul>
+<blockquote>
+<p>注: 上面是java 1.8的jstat的返回值, 可以看到有Metaspace(元空间), 如果是java 1.7或更老版本, 则没有MC/MU, 而是PC/PU:</p>
+<ul>
+<li>PC：Perm Capacity(KB)</li>
+<li>PU: Perm Utilization(KB)</li>
+</ul>
+</blockquote>
+<h4 id="jstat-gcutil返回列解析"><a href="#jstat-gcutil返回列解析" class="headerlink" title="jstat -gcutil返回列解析"></a>jstat -gcutil返回列解析</h4><p><strong>示例2</strong>: attaches 到pid=14542的进程上, -h3表示每三行打印一次列名称, 采样间隔250ms<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jstat -gcutil -h3 14542 3s</span><br><span class="line"></span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line"> 16.35   0.00  94.62  63.31  97.41  94.84   4522   83.661    32    0.931   84.592</span><br><span class="line"> 16.35   0.00  95.52  63.31  97.41  94.84   4522   83.661    32    0.931   84.592</span><br><span class="line"> 16.35   0.00  96.92  63.31  97.41  94.84   4522   83.661    32    0.931   84.592</span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">  0.00  14.90   1.43  63.31  97.41  94.84   4523   83.678    32    0.931   84.609</span><br><span class="line">  0.00  14.90   2.65  63.31  97.41  94.84   4523   83.678    32    0.931   84.609</span><br><span class="line">  0.00  14.90   3.68  63.31  97.41  94.84   4523   83.678    32    0.931   84.609</span><br></pre></td></tr></table></figure></p>
+<p>上面发生了一次Young GC, S0从16.35%降到0%, S1从0%增长到14.90%, Eden从96.92%降到1.43, 耗时0.017s</p>
+<p>以上参考Oracle Java 8 jstat手册：<br><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html" target="_blank" rel="noopener">jstat</a></p>
+<h4 id="jstatd"><a href="#jstatd" class="headerlink" title="jstatd"></a>jstatd</h4><p>jstatd是一个[[../@project/Java-RMI]]的server，它可以监控Hotspot的JVM的启动和结束，同时提供接口可以让远程机器连接到JVM。 比如 jstat / JVisualVM 都可以通过jstatd来远程观察JVM的运行情况。<br>在远程服务器上启动jstatd: <code>nohup jstatd -J-Djava.security.policy=/home/xxx/jstatd.all.policy -J-Djava.rmi.server.hostname=192.168.0.2 -p 1099 &amp;</code> , 1099是jstatd的默认端口</p>
+<p>jstatd.all.policy内容如下:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">grant codebase &quot;file:$&#123;java.home&#125;/../lib/tools.jar&quot; &#123;</span><br><span class="line">    permission java.security.AllPermission;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>查看jvm进程的线程状态, 也可以做线程的dump,<br><code>jstack pid</code> : 查看当前所有线程的运行栈, 包括线程当前状态(blocked, waitting), 线程占用了哪个对象锁, 线程在等待哪个对象锁;</p>
+<h3 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h3><p>查看堆内存的情况, 也可以生成堆内存的dump信息,<br>jmap dump会触发Full GC, 所以在生产环境要小心使用.</p>
+<ul>
+<li><code>jmap -heap pid</code>: 打印Heap(新生代/老年代/永久代等等..)的size参数和实际占用</li>
+<li><code>jmap -histo pid</code>: 打印出每个类的对象数量, 以及占用内存。如果出现jvm堆占用率过高，可以用<code>histo</code>查看哪个类的对象最多，猜测出哪里的代码有问题</li>
+<li><code>jmap -histo:live pid</code>: 只打印存活的</li>
+<li><code>jmap -dump:format=b,file=FileName 6900</code>: 把内存详细使用情况dump到文件(<strong>小心, 这个命令可能会暂停当前应用</strong>)<ul>
+<li><code>-dump:[live,]format=b,file=FileName</code>: live指只有活动的对象被转储到dump文件</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>如果程序内存不足或者频繁GC，很有可能存在内存泄露情况：</p>
+<blockquote>
+<ol>
+<li>可以先使用<code>jmap -heap</code>命令查看堆的使用情况，看一下各个堆空间的占用情况。</li>
+<li>使用<code>jmap -histo:[live]</code>查看堆内存中的对象的情况。如果有大量对象在持续被引用，并没有被释放掉，那就产生了内存泄露，就要结合代码，为什么没有被释放</li>
+<li>也可以使用 <code>jmap -dump:format=b,file=&lt;fileName&gt;</code>命令将堆信息保存到一个文件中，再借助jhat命令查看详细内容</li>
+<li>在内存出现泄露、溢出或者其它前提条件下，建议多dump几次内存，把内存文件进行编号归档，便于后续内存整理分析。</li>
+</ol>
+</blockquote>
+</blockquote>
+<p>图-使用<code>jmap -histo pid</code> 按类型统计存活类的个数:<br><img src="/images/java/jmap-histo-live.png" alt="jmap-histo-live"></p>
+<h3 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h3><p>查看jmap转储的二进制文件</p>
+<ul>
+<li><code>jhat -port 5000 FileName</code> : 在本地启动http服务显示jmap生成的dump文件信息, 在<a href="http://localhost:5000" target="_blank" rel="noopener">http://localhost:5000</a> 查看</li>
+</ul>
+<p><strong>总结:对Jvm进程进行堆栈Dump的方法</strong></p>
+<blockquote>
+<p>jstack可以生成Jvm线程的堆栈dump文件, jmap可以生成堆栈的dump文件,<br>让虚拟机在内存不足时自动生成dump文件: <code>-XX:+HeapDumpOnOutOfMemoryError</code><br>图形化的dump生成工具: Java VisualVM</p>
+</blockquote>
+<h3 id="jcmd"><a href="#jcmd" class="headerlink" title="jcmd"></a>jcmd</h3><p>1.7之后新增, 有多种功能的命令集合, 命令格式: <code>jcmd $PID $Command</code>, 查看可用的Command: <code>jcmd $PID help</code>,  “Oracle官方建议使用jcmd代替jmap”</p>
+<ul>
+<li><code>jcmd -l</code>: 类似<code>jps -m</code></li>
+<li><code>jcmd pid Thread.print</code> : 打印当前堆栈</li>
+<li><code>jcmd pid GC.heap_dump /tmp/dumpFile</code> : 导出dump文件</li>
+<li><code>jcmd pid VM.system_properties</code> : 打印出该进程所有-D参数</li>
+</ul>
+<h3 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h3><ul>
+<li><code>jinfo pid</code>, 获取jvm进程的所有参数, 后续版本可能会移除这个工具</li>
+</ul>
+<h3 id="jdb"><a href="#jdb" class="headerlink" title="jdb"></a>jdb</h3><ul>
+<li>被调试的java进程启动参数<code>-Xdebug -Xrunjdwp:transport=dt_socket,address=8787</code></li>
+<li>连接到上面的进程进行debug: <code>jdb -attach 192.168.1.79:8787 -sourcepath .</code></li>
+</ul>
+<h2 id="JConsole"><a href="#JConsole" class="headerlink" title="JConsole"></a>JConsole</h2><p>Java 5提供的JConsole</p>
+<h2 id="JProfiler"><a href="#JProfiler" class="headerlink" title="JProfiler"></a>JProfiler</h2><p>JProfiler是由ej-technologies GmbH开发的商业授权的性能分析工具.</p>
+<p>参考: <a href="https://yq.aliyun.com/articles/276" target="_blank" rel="noopener">深入浅出JProfiler-博客-云栖社区-阿里云</a> @ref</p>
+<h2 id="VisualVM"><a href="#VisualVM" class="headerlink" title="VisualVM"></a>VisualVM</h2><p>VisualVM 是一个性能分析工具，自从 JDK 6 Update 7 以后已经作为 Oracle JDK 的一部分，位于 JDK 根目录的 bin 文件夹下。<br>以下参考自: <a href="https://www.ibm.com/developerworks/cn/java/j-lo-visualvm/index.html" target="_blank" rel="noopener">使用 VisualVM 进行性能分析及调优</a> @ref</p>
+<p>使用VisualVM需要远程服务器上运行一个jstatd守护进程, 或者远程服务器上运行的Java Application启用了JMX, 应用程序添加如下参数来启动JMX:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-Dcom.sun.management.jmxremote=true</span><br><span class="line">-Dcom.sun.management.jmxremote.port=9090</span><br><span class="line">-Dcom.sun.management.jmxremote.ssl=false</span><br><span class="line">-Dcom.sun.management.jmxremote.authenticate=false</span><br></pre></td></tr></table></figure>
+<p><img src="/images/java/JVisualVM.png" alt="JVisualVM UI"></p>
+<p>JVisualVM连接到JVM线程使用了Attach API,  在本文档搜索<code>Attach API</code>.<br>启动命令: <code>jvisualvm</code></p>
+<h2 id="Btrace"><a href="#Btrace" class="headerlink" title="Btrace"></a>Btrace</h2><blockquote>
+<p>BTrace是SUN Kenai云计算开发平台下的一个开源项目，旨在为java提供安全可靠的动态跟踪分析工具。</p>
+</blockquote>
+<p>Btrace能用来做什么?<br>举例, 如果要对线上运行的Java程序进行调试, 可以通过在代码里加入debug打印信息来实现, 但缺点也很明显, 需要不断地修改代码，加入<code>System.out.println()</code>, 还需要不断重启应用程序. 对于线上服务这是不可接受的.</p>
+<p>Btrace可以改变上面低效的调试方式, Btrace可以使用类似AOP式的代码植入, 在我们关心的代码位置插入自定义代码, 比如:<br>  在每个方法结束都打印耗时, 统计最耗时的方法;<br>  在<code>ArrayList.add</code>里加入代码, 如果size过大则打印log, 找出超大的ArrayList;<br>  当<code>System.gc()</code>被调用时, 打印出调用堆栈, 找出是哪里在调用gc;</p>
+<p>并且最重要的是, 使用Btrace不需要重新编译项目代码, 也不需要重启进程, 所以Btrace非常适合在线上发生异常的环境上进行调试埋点.</p>
+<h3 id="Btrace的使用"><a href="#Btrace的使用" class="headerlink" title="Btrace的使用"></a>Btrace的使用</h3><p>Btrece的使用:</p>
+<ol>
+<li>启动Java程序</li>
+<li>编写Btrace代码, 用注解指定要切入的类和方法</li>
+<li>用btracec编译上面的代码</li>
+<li>用btrace命令把agent 动态attach到运行中的Java进程, 并由agent修改运行中Java程序的类</li>
+</ol>
+<p>更多BTrace使用例子:</p>
+<ul>
+<li><a href="https://github.com/btraceio/btrace/tree/master/samples" target="_blank" rel="noopener">btrace/samples at master · btraceio/btrace</a></li>
+</ul>
+<h3 id="Btrace用到的技术介绍"><a href="#Btrace用到的技术介绍" class="headerlink" title="Btrace用到的技术介绍"></a>Btrace用到的技术介绍</h3><p>Btrace使用 <strong>Java Complier API</strong> 编译切入代码,<br>再使用 <strong>Attach API</strong> 把agent.jar附加到目标JVM上。<br>并使用asm来重写被切入类的字节码（CGLIB代理也用到了asm）, 再使用 <strong>Instrumentation API</strong> 在不重启程序的情况下实现对原有类的替换。</p>
+<blockquote>
+<p><strong>Attach API</strong> 和 <strong>Instrumentation API</strong> 都是<strong>JVM Tool Interface</strong> (JVMTI)里提供的工具类;<br>有关JVMTI相关的链接:</p>
+<blockquote>
+<p><a href="http://docs.oracle.com/javase/7/docs/platform/jvmti/jvmti.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/7/docs/platform/jvmti/jvmti.html</a><br><a href="https://github.com/jon-bell/bytecode-examples" target="_blank" rel="noopener">https://github.com/jon-bell/bytecode-examples</a></p>
+</blockquote>
+</blockquote>
+<p>参考:</p>
+<ul>
+<li><a href="http://www.rowkey.me/blog/2016/09/20/btrace/" target="_blank" rel="noopener">BTrace原理浅析</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/views/java/libraryview.jsp?search_by=深入%20Java%20调试体系" target="_blank" rel="noopener">深入 Java 调试体系</a><ul>
+<li>第 1 部分，JPDA 体系概览</li>
+<li>第 2 部分: JVMTI 和 Agent 实现</li>
+<li>第 3 部分: JDWP 协议及实现</li>
+<li>第 4 部分: Java 调试接口（JDI）</li>
+</ul>
+</li>
+</ul>
+<h2 id="HouseMD"><a href="#HouseMD" class="headerlink" title="HouseMD"></a>HouseMD</h2><blockquote>
+<p>比BTrace更轻量级的Java进程运行时的诊断调式命令行工具，可以用来跟踪跟踪方法的耗时。</p>
+</blockquote>
+<ul>
+<li><a href="https://github.com/CSUG/HouseMD/wiki/UserGuideCN" target="_blank" rel="noopener">UserGuideCN · CSUG/HouseMD Wiki</a></li>
+</ul>
+<h2 id="Memory-Analyzer-MAT"><a href="#Memory-Analyzer-MAT" class="headerlink" title="Memory Analyzer (MAT)"></a>Memory Analyzer (MAT)</h2><blockquote>
+<p>Java Heap Dump 文件(通过<code>jmap -dump</code>转储的文件)分析工具，可以分析堆内存中每种对象的数量，还可以跟踪对象的引用链，排查内存泄漏问题。</p>
+</blockquote>
+<ul>
+<li><a href="http://www.eclipse.org/mat/" target="_blank" rel="noopener">Eclipse Memory Analyzer Open Source Project | The Eclipse Foundation</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-ecl-ma/index.html" target="_blank" rel="noopener">使用 Eclipse Memory Analyzer 进行堆转储文件分析</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Advanced-Java.02c.JVM参数和性能/" rel="next" title="Advanced Java-02c-JVM参数和性能">
+                <i class="fa fa-chevron-left"></i> Advanced Java-02c-JVM参数和性能
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Advanced-Java.03a.GC/" rel="prev" title="Advanced Java-03a-GC">
+                Advanced Java-03a-GC <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK提供的命令行"><span class="nav-text">JDK提供的命令行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jps"><span class="nav-text">jps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstat"><span class="nav-text">jstat</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jstat-gc返回列解析"><span class="nav-text">jstat -gc返回列解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jstat-gcutil返回列解析"><span class="nav-text">jstat -gcutil返回列解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jstatd"><span class="nav-text">jstatd</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstack"><span class="nav-text">jstack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jmap"><span class="nav-text">jmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jhat"><span class="nav-text">jhat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jcmd"><span class="nav-text">jcmd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jinfo"><span class="nav-text">jinfo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jdb"><span class="nav-text">jdb</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JConsole"><span class="nav-text">JConsole</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JProfiler"><span class="nav-text">JProfiler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VisualVM"><span class="nav-text">VisualVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Btrace"><span class="nav-text">Btrace</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Btrace的使用"><span class="nav-text">Btrace的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Btrace用到的技术介绍"><span class="nav-text">Btrace用到的技术介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HouseMD"><span class="nav-text">HouseMD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Memory-Analyzer-MAT"><span class="nav-text">Memory Analyzer (MAT)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.02d.JVM分析工具/';
+          this.page.identifier = '12.Java/Advanced-Java.02d.JVM分析工具/';
+          this.page.title = 'Advanced Java-02d-JVM分析工具';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="后端架构,数据库,MySQL,事务," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="基础概念参考:《深入浅出MySQL》 SCHEMAschema 为数据库对象的集合， schema里面包含了各种对象如tables, views, sequences, 可以视作”数据库”, show database可以看到schema.不同数据库产品的schema概念是不同的:">
+<meta name="keywords" content="后端架构,数据库,MySQL,事务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL-00基础概念">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/32.Database/MySQL-00基础概念/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="基础概念参考:《深入浅出MySQL》 SCHEMAschema 为数据库对象的集合， schema里面包含了各种对象如tables, views, sequences, 可以视作”数据库”, show database可以看到schema.不同数据库产品的schema概念是不同的:">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/database/Database-MySQL-Title.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:47.511Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL-00基础概念">
+<meta name="twitter:description" content="基础概念参考:《深入浅出MySQL》 SCHEMAschema 为数据库对象的集合， schema里面包含了各种对象如tables, views, sequences, 可以视作”数据库”, show database可以看到schema.不同数据库产品的schema概念是不同的:">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/database/Database-MySQL-Title.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/32.Database/MySQL-00基础概念/"/>
+
+
+
+
+
+  <title>MySQL-00基础概念 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/32.Database/MySQL-00基础概念/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL-00基础概念</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,425
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/images/database/Database-MySQL-Title.png" alt=""></p>
+<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><p>参考:《深入浅出MySQL》</p>
+<h2 id="SCHEMA"><a href="#SCHEMA" class="headerlink" title="SCHEMA"></a>SCHEMA</h2><p><strong>schema</strong> 为数据库对象的集合， schema里面包含了各种对象如tables, views, sequences, 可以视作”数据库”, <code>show database</code>可以看到schema.<br>不同数据库产品的schema概念是不同的:</p>
+<ul>
+<li>MySQL: Schema 等同于 Datebase</li>
+<li>SQL Server: schema中包含了数据库的表，字段，数据类型以及主键和外键的名称。</li>
+</ul>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><ul>
+<li>数字:<ul>
+<li>整数:<ul>
+<li>TINYINT 1, SMALLINT 2, INT 4, BIGINT 8</li>
+</ul>
+</li>
+<li>小数:<ul>
+<li>浮点数: float, double</li>
+<li>定点数: decimal, 常用来表示高精度数据, 比如货币</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>字符串:<ul>
+<li>CHAR 255, 定长</li>
+<li>VARCHAR 65535, 变长</li>
+<li>TEXT: 还分为TEXT(65535), MEDIUMTEXT, LONGTEXT</li>
+<li>BOLB: 还分为BOLB(65535), MEDIUMBOLB, LONGBOLB, 与TEXT的区别是, BOLB可以存储二进制数据, 比如图片</li>
+</ul>
+</li>
+<li>日期:<ul>
+<li>DATE: 2017-07-25</li>
+<li>DATETIME: 2017-07-25 21:57</li>
+<li>TIMESTAMP: 字符串的”2017-07-25 21:57”</li>
+</ul>
+</li>
+</ul>
+<p>DATETIME 和 TIMESTAMP类型的区别:</p>
+<ul>
+<li>DATETIM 和 TIMESTAMP类型所占的存储空间不同，前者8个字节，后者4个字节，这样造成的后果是两者能表示的时间范围不同。</li>
+<li>前者范围为 1000-01-01 00:00:00 ~ 9999-12-31 23:59:59，后者范围为 1970-01-01 08:00:01到2038-01-19 11:14:07。所以可以看到TIMESTAMP支持的范围比DATATIME要小,容易出现超出的情况.</li>
+<li>TIMESTAMP类型在默认情况下，insert、update 数据时，TIMESTAMP列会自动以当前时间（CURRENT_TIMESTAMP）填充/更新。@ref: <a href="https://www.jianshu.com/p/cb1560135d50" target="_blank" rel="noopener">MySQL timestamp自动更新时间分享</a></li>
+<li>TIMESTAMP比较受时区timezone的影响以及MYSQL版本和服务器的SQL MODE的影响</li>
+</ul>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">符号</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">=</td>
+<td style="text-align:left">等于</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">></td>
+<td style="text-align:left">大于</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">\&lt;</td>
+<td style="text-align:left">小于</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">!=</td>
+<td style="text-align:left">不等于</td>
+<td style="text-align:left">不可比较NULL, 例 1 != NULL也返回NULL</td>
+</tr>
+<tr>
+<td style="text-align:left">&lt;&gt;</td>
+<td style="text-align:left">不等于</td>
+<td style="text-align:left">同上</td>
+</tr>
+<tr>
+<td style="text-align:left">&lt;=&gt;</td>
+<td style="text-align:left">等于</td>
+<td style="text-align:left">NULL-Safe的比较, NULL&lt;=&gt;NULL为1, 1&lt;=&gt;NULL为0</td>
+</tr>
+<tr>
+<td style="text-align:left">IS NULL</td>
+<td style="text-align:left">等于NULL</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">IS NOT NULL</td>
+<td style="text-align:left">不等于NULL</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">BETWEEN</td>
+<td style="text-align:left">在两值之间</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">IN</td>
+<td style="text-align:left">在集合中</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">LIKE</td>
+<td style="text-align:left">模糊匹配</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><ul>
+<li>字符串拼接: CONCAT(s1, s2, …)</li>
+<li>LOWER(s1), UPPER(s1)</li>
+<li>FLOOR(a): 返回小于a的最大整数</li>
+<li>MOD(a,b): 返回x/y的模</li>
+</ul>
+<h2 id="字符集-编码"><a href="#字符集-编码" class="headerlink" title="字符集(编码)"></a>字符集(编码)</h2><p>查看数据库使用的字符集:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 方式1</span><br><span class="line">mysql&gt; status;</span><br><span class="line"></span><br><span class="line"># 方式2</span><br><span class="line">show variables like &apos;character%&apos;;</span><br></pre></td></tr></table></figure>
+<p><code>GBK</code> vs <code>UTF-8</code></p>
+<ul>
+<li>GBK: 扩展了GB2312标准, 无论英文还是汉字都是2字节</li>
+<li>UTF-8: 英文1字节, 汉字3字节, 同时也兼容ASCII码</li>
+<li>如果数据库只需要支持一般中文，数据量很大，性能要求也很高，那就应该选择双字节定长编码的中文字符集，比如 <strong>GBK</strong>。 相对于UTF-8而言，GBK比较“小”，每个汉字只占2个字节，而 UTF-8汉字编码需要3个字节，这样可以减少磁盘I/O、数据库Cache以及网络传输的时间，从而提高性能。</li>
+<li>如果应用主要处理英文字符，仅有少量汉字数据，那么选择 <strong>UTF-8</strong>更好，因为UTF-8的西文占1字节, 而GBK西文字符编码都是2个字节(汉字3字节)，会造成很多不必要的开销。</li>
+</ul>
+<p><code>utf8</code> vs <code>utf8mb4</code></p>
+<ul>
+<li>utf8 表示西文需2字节, 汉字需3字节, 如果在utf8编码上使用<code>vchar(100)</code>这种类型, Mysql会为该列保留 “一个utf8最大占用空间x100” 也即 300字节.</li>
+<li>utf8 存在的问题: uft8最大能编码的Unicode范围是3字节, 对于超过3字节的无能为力(包括一些汉字, 以及emoji表情)</li>
+<li>utf8mb4 (后缀mb4意思是”most bytes 4”), “4字节 UTF-8 Unicode 编码”, utf8mb4可以最多表示4字节Unicode编码, utf8是utf8mb4的一个子集, utf8mb4使用与utf8相同的编码值和长度, 此外utf8mb4还包括utf8没有的4字节编码, 因此从旧版本的MySQL UTF8 升级数据时 不用担心字符转换或丢失数据</li>
+</ul>
+<p>@ref <a href="https://my.oschina.net/xsh1208/blog/1052781" target="_blank" rel="noopener">全面了解mysql中utf8和utf8mb4的区别 - 谢思华blog - OSCHINA</a></p>
+<h2 id="主键-amp-外键"><a href="#主键-amp-外键" class="headerlink" title="主键 &amp; 外键"></a>主键 &amp; 外键</h2><ul>
+<li><p><strong>主键</strong>: 一个表只能有一个列作为主键, 主键的值不可重复, 不可为空(NULL)</p>
+<ul>
+<li>主键一定是唯一性索引，唯一性索引并不一定就是主键</li>
+</ul>
+</li>
+<li><p><strong>外键</strong>: 一个表中的FOREIGN KEY 指向另一个表中的 PRIMARY KEY。</p>
+<ul>
+<li>FOREIGN KEY 约束用于预防破坏表之间连接的动作。</li>
+<li>FOREIGN KEY 约束也能防止非法数据插入外键列，因为它必须是它指向的那个表中的值之一。</li>
+</ul>
+</li>
+<li><strong>外键约束</strong>：<ul>
+<li>(1)插入非空值时，如果主键值中没有这个值，则不能插入。</li>
+<li>(2)更新时，不能改为主键表中没有的值。</li>
+<li>(3)删除主键表记录时，可以在建外键时选定外键记录一起联删除还是拒绝删除。</li>
+<li>(4)更新主键记录时，同样有级联更新和拒绝执行的选择。</li>
+</ul>
+</li>
+</ul>
+<p>@ref: <a href="https://www.zhihu.com/question/19600081" target="_blank" rel="noopener">大家设计数据库时使用外键吗？ - 知乎</a></p>
+<blockquote>
+<p>互联网行业应用不推荐使用外键： 用户量大，并发度高，为此数据库服务器很容易成为性能瓶颈，尤其受IO能力限制，且不能轻易地水平扩展；若是把数据一致性的控制放到事务中，也即让应用服务器承担此部分的压力，而引用服务器一般都是可以做到轻松地水平的伸缩；<br>所以<code>Hibernate多对一（many-to-one）/一对多（one-to-many）关联</code>也就很少提及了。</p>
+<blockquote>
+<p><a href="https://www.ibm.com/developerworks/cn/java/j-lo-jparelated/" target="_blank" rel="noopener">Hibernate，JPA 对象关系映射之关联关系映射策略</a></p>
+</blockquote>
+</blockquote>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>① 按照索引的物理存储来分:</p>
+<ul>
+<li><strong>聚集索引</strong> (clustered index)：聚集索引决定数据在磁盘上的物理排序，一个表只能有一个聚集索引，一般用primary key来约束。主键索引对应的B+树, 叶子节点是一行的完整数据</li>
+<li><strong>非聚集索引</strong> (non-clustered index)：它并不决定数据在磁盘上的物理排序，其叶子节点的数据是主键的值。所以使用普通索引查询的时候，需要先找到对应的主键值，再回主键索引的B+树上找到行数据（回表）</li>
+</ul>
+<p>② 从逻辑角度, MySQL一共有五类索引:</p>
+<ul>
+<li>唯一索引(UNIQUE INDEX), 唯一索引是不允许其中任何两行具有相同索引值的索引。主键是一种唯一性索引，它必须指定为“PRIMARY KEY”</li>
+<li>主键索引：主键索引是一种特殊的唯一索引，不允许有空值, 主键索引也是聚簇索引</li>
+<li>普通索引：非主键索引, 最基本的索引类型，没有唯一性之类的限制。</li>
+<li>联合索引：指多个字段上创建的索引，只有在查询条件中使用了创建索引时的第一个字段，索引才会被使用。使用联合索引时遵循最左前缀集合<br>注意：建了一个(a,b,c)的联合索引，那么实际等于建了(a),(a,b),(a,b,c)三个索引，每多一个索引都会增加写操作的开销和磁盘空间的开销。</li>
+<li>候选索引：与主索引一样要求字段值的唯一性，并决定了处理记录的顺序。在数据库和自由表中，可以为每个表建立多个候选索引。</li>
+<li>空间索引：空间索引是对空间数据类型的字段建立的索引，MYSQL中的空间数据类型有4种，分别是GEOMETRY、POINT、LINESTRING、POLYGON。</li>
+</ul>
+<p>MYSQL使用SPATIAL关键字进行扩展，使得能够用于创建正规索引类型的语法创建空间索引。创建空间索引的列，必须将其声明为NOT NULL，空间索引只能在存储引擎为MYISAM的表中创建</p>
+<p>③ 从数据结构角度:</p>
+<ol>
+<li>BTREE索引: MyISAM和InnoDB存储引擎默认都是BTREE索引</li>
+<li>HASH索引：<ul>
+<li>仅仅能满足”=”,”IN”和”&lt;=&gt;”查询，不能使用范围查询</li>
+<li>其检索效率非常高，索引的检索可以一次定位，不像B-Tree 索引需要从根节点到枝节点，最后才能访问到页节点这样多次的IO访问，所以 Hash 索引的查询效率要远高于 B-Tree 索引</li>
+<li>只有Memory存储引擎显示支持hash索引</li>
+</ul>
+</li>
+<li>FULLTEXT索引: 全文索引，在 CHAR、VARCHAR ，TEXT 列上可以创建全文索引。FULLTEXT索引也是按照分词原理建立索引的。</li>
+<li>RTree索引（空间索引）：空间索引是MyISAM的一个特殊索引类型，主要用于地理空间数据类型，通常使用较少，不做特别介绍。</li>
+</ol>
+<h2 id="MySQL引擎"><a href="#MySQL引擎" class="headerlink" title="MySQL引擎"></a>MySQL引擎</h2><ul>
+<li><strong>InnoDB</strong><ul>
+<li>支持事务</li>
+<li>支持行级锁</li>
+</ul>
+</li>
+<li><strong>MyISAM</strong><ul>
+<li>不支持事务</li>
+<li>支持表锁, 不支持行级锁 // 并发性能差</li>
+<li>设计简单，某些场景下性能很好，例如获取整个表有多少条数据<code>count(*)</code>，性能很高。</li>
+</ul>
+</li>
+<li><strong>Memory</strong><ul>
+<li>不支持事务</li>
+<li>支持哈希索引</li>
+</ul>
+</li>
+</ul>
+<h1 id="MySQL-Commands"><a href="#MySQL-Commands" class="headerlink" title="MySQL Commands"></a>MySQL Commands</h1><h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql -h 127.0.0.1 -u xxx -pXXX -P 3306</span><br><span class="line"></span><br><span class="line"># --auto-rehash 启用自动补全(但我试了没用)</span><br><span class="line">mysql -h主机地址 -P端口 -u用户名 -p密码 -D数据库名 --auto-rehash</span><br><span class="line">#　Mysql的`schemas`和`数据库名`是等同的</span><br><span class="line"></span><br><span class="line"># 连接成功后可以输入以下命令, 分号是必须的:</span><br><span class="line">show databases;</span><br><span class="line">use db_name;</span><br><span class="line">show tables;</span><br><span class="line">desc table_name; # 查看表结构</span><br><span class="line">use table_name;</span><br><span class="line"></span><br><span class="line"># 如果输入了一半sql命令想要放弃, 加上&apos;\c&apos;即可</span><br><span class="line">select * from table_name \c</span><br><span class="line"></span><br><span class="line"># 如果忘记了table在那个database 或schema, 表占用大小以及行数:</span><br><span class="line">select * from  information_schema.tables where table_name = &apos;xxx&apos;</span><br></pre></td></tr></table></figure>
+<h2 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h2><ul>
+<li>导出数据库结构,不带数据: <code>mysqldump -h ip_addr -uxxx -pxxx -d DBName &gt; dump.sql</code></li>
+<li>如果要一并导出数据, 去掉<code>-d</code>参数.</li>
+<li>导出表, 不带数据: <code>mysqldump -h ip_addr -uxxx -pxxx -d DBName TableName &gt; dump.sql</code></li>
+</ul>
+<h2 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h2><ul>
+<li><code>mysql -u username -p -h localhost DATABASE-NAME &lt; data.sql</code></li>
+</ul>
+<h2 id="mycli"><a href="#mycli" class="headerlink" title="mycli"></a>mycli</h2><p>官网: <a href="https://www.mycli.net/" target="_blank" rel="noopener">https://www.mycli.net/</a></p>
+<p>安装:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip install mycli</span><br></pre></td></tr></table></figure>
+<p>或:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew update &amp;&amp; brew install mycli</span><br></pre></td></tr></table></figure>
+<p>Usage:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 获取帮助</span><br><span class="line">mycli --help</span><br><span class="line"></span><br><span class="line"># 连接数据库</span><br><span class="line">mycli -h 主机地址 -p 端口 -u 用户</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/后端架构/" rel="tag"># 后端架构</a>
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+            <a href="/tags/事务/" rel="tag"># 事务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/32.Database/MongoDB/" rel="next" title="MongoDB">
+                <i class="fa fa-chevron-left"></i> MongoDB
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/32.Database/MySQL-01a-SQL语句-基础和优化/" rel="prev" title="MySQL-01a-SQL语句-基础和优化">
+                MySQL-01a-SQL语句-基础和优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基础概念"><span class="nav-text">基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SCHEMA"><span class="nav-text">SCHEMA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据类型"><span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运算符"><span class="nav-text">运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数"><span class="nav-text">函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符集-编码"><span class="nav-text">字符集(编码)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主键-amp-外键"><span class="nav-text">主键 &amp; 外键</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL引擎"><span class="nav-text">MySQL引擎</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL-Commands"><span class="nav-text">MySQL Commands</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#连接"><span class="nav-text">连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导出"><span class="nav-text">导出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导入"><span class="nav-text">导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mycli"><span class="nav-text">mycli</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/32.Database/MySQL-00基础概念/';
+          this.page.identifier = '32.Database/MySQL-00基础概念/';
+          this.page.title = 'MySQL-00基础概念';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

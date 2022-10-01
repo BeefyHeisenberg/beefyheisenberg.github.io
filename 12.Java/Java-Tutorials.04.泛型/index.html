@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="泛型类和泛型方法泛型类public class Pair&amp;lt;T&amp;gt; &amp;#123;  private T first;  private T second;  public T getFirst() &amp;#123;...&amp;#125;  public T getSecond() &amp;#123;...&amp;#125;  public setFirst(T) &amp;#123;...&amp;#125;  public">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Tutorials-04-泛型">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.04.泛型/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="泛型类和泛型方法泛型类public class Pair&amp;lt;T&amp;gt; &amp;#123;  private T first;  private T second;  public T getFirst() &amp;#123;...&amp;#125;  public T getSecond() &amp;#123;...&amp;#125;  public setFirst(T) &amp;#123;...&amp;#125;  public">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-10-01T20:20:46.466Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Tutorials-04-泛型">
+<meta name="twitter:description" content="泛型类和泛型方法泛型类public class Pair&amp;lt;T&amp;gt; &amp;#123;  private T first;  private T second;  public T getFirst() &amp;#123;...&amp;#125;  public T getSecond() &amp;#123;...&amp;#125;  public setFirst(T) &amp;#123;...&amp;#125;  public">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.04.泛型/"/>
+
+
+
+
+
+  <title>Java Tutorials-04-泛型 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.04.泛型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java Tutorials-04-泛型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/Java基础教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Java基础教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  973
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="泛型类和泛型方法"><a href="#泛型类和泛型方法" class="headerlink" title="泛型类和泛型方法"></a>泛型类和泛型方法</h2><h3 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Pair</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> T first;</span><br><span class="line">  <span class="keyword">private</span> T second;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">getFirst</span><span class="params">()</span> </span>&#123;...&#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">getSecond</span><span class="params">()</span> </span>&#123;...&#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">setFirst</span><span class="params">(T)</span> </span>&#123;...&#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">setSecond</span><span class="params">(T)</span> </span>&#123;...&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Class ArrayAlg &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">T <span class="title">getMiddle</span> <span class="params">(T t)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> t[t.length / <span class="number">2</span>];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用泛型方法</span></span><br><span class="line">ArrayAlg.&lt;String&gt;getMiddle(<span class="string">"Hello"</span>);</span><br><span class="line"><span class="comment">// 或者不用指定泛型方法的T, 编译期自行推断也是可以的:</span></span><br><span class="line">ArrayAlg.getMiddle(<span class="string">"Hello"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="泛型的类型限定"><a href="#泛型的类型限定" class="headerlink" title="泛型的类型限定"></a>泛型的类型限定</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&gt; <span class="function">T <span class="title">min</span><span class="params">(T[] a)</span> </span>&#123;</span><br><span class="line">  T min = a[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; a.length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span>(a[i] &lt; min) min = a[i];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> min;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果T需要多个类型限定: <code>&lt;T extends Comparable &amp; Serializable&gt;</code></p>
+<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><ul>
+<li>JVM没有”泛型类”这种类型, java代码被编译后生成的字节代码, 这个过程中所有的泛型类型要被替换, 原则:<ul>
+<li>有类型限定的, 替换为第一个限定类型, <code>T extends Comparable &amp; Serializable</code>被替换为<code>Comparable</code></li>
+<li>无类型限定, 替换为Object, <code>T</code>被替换为<code>Object</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="对类型查询的影响"><a href="#对类型查询的影响" class="headerlink" title="对类型查询的影响"></a>对类型查询的影响</h3><h4 id="1-instanceof"><a href="#1-instanceof" class="headerlink" title="1. instanceof"></a>1. instanceof</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Pair&lt;String&gt; s = <span class="keyword">new</span> Pair&lt;String&gt;(); <span class="comment">// 擦除后为 Pair&lt;Object&gt; s</span></span><br><span class="line"><span class="keyword">if</span>(s <span class="keyword">instanceof</span> Pair&lt;T&gt;) &#123; <span class="comment">// Pair&lt;T&gt;擦除后为Pair&lt;Object&gt;</span></span><br><span class="line"> <span class="comment">// yes</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(s <span class="keyword">instanceof</span> Pair&lt;Double&gt;) &#123;</span><br><span class="line"> <span class="comment">// yes</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-getClass"><a href="#2-getClass" class="headerlink" title="2. getClass()"></a>2. getClass()</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Pair&lt;String&gt; s = <span class="keyword">new</span> Pair&lt;String&gt;();</span><br><span class="line">Pair&lt;Double&gt; d = <span class="keyword">new</span> Pair&lt;Double&gt;();</span><br><span class="line"><span class="keyword">if</span>(s.getClass() == d.getCLass()) &#123; <span class="comment">// getClass()总是返回Pair&lt;Object&gt;</span></span><br><span class="line">  <span class="comment">// yes</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="不能创建泛型类数组"><a href="#不能创建泛型类数组" class="headerlink" title="不能创建泛型类数组"></a>不能创建泛型类数组</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 试图创建泛型类型的数组会在编译期报错:</span></span><br><span class="line">Pair&lt;String&gt;[] arr = <span class="keyword">new</span> Pair&lt;String&gt;[<span class="number">1</span>]; <span class="comment">// error !</span></span><br><span class="line">Pair&lt;String&gt;[] arr = Array.newInstance(Pair&lt;String&gt;.getClass(),<span class="number">1</span>); <span class="comment">// error !</span></span><br></pre></td></tr></table></figure>
+<p>原因是数组一旦创建会记住元素的类型, 当试图向数组中存储不同的类型时会报错, <code>Pair&lt;String&gt;[]</code>这样声明的泛型数组, 擦除后变为<code>Pair&lt;Object&gt;[]</code>.</p>
+<h3 id="不能实例化泛型"><a href="#不能实例化泛型" class="headerlink" title="不能实例化泛型"></a>不能实例化泛型</h3><p>不能使用像<code>new T()</code>, <code>new T[N]</code>, <code>T.class</code>这样的表达式.</p>
+<h2 id="通配符-lt-gt"><a href="#通配符-lt-gt" class="headerlink" title="通配符&lt;?&gt;"></a>通配符&lt;?&gt;</h2><h3 id="无限定通配符"><a href="#无限定通配符" class="headerlink" title="无限定通配符"></a>无限定通配符</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">Foo</span><span class="params">(List&lt;?&gt; list)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> list.get(<span class="number">0</span>) != <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>List&lt;?&gt;</code>表示持有某种特定类型的List，但是不知道具体是哪种类型。那么我们可以向其中添加对象吗？当然不可以，因为并不知道实际是哪种类型，所以不能添加任何类型，这是不安全的。</p>
+<h3 id="上界通配符"><a href="#上界通配符" class="headerlink" title="上界通配符"></a>上界通配符</h3><p><code>? extends ClassType</code>表示ClassType的任何子类</p>
+<p>先看一段代码:<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;? extends Fruit&gt; list = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// Compile Error: can’t add any type of object:</span></span><br><span class="line"><span class="comment">// flist.add(new Apple());</span></span><br><span class="line"><span class="comment">// flist.add(new Fruit());</span></span><br><span class="line"><span class="comment">// flist.add(new Object());</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 只能向list里添加null</span></span><br><span class="line">list.add(<span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// get是可以编译通过的</span></span><br><span class="line">list.get(<span class="number">0</span>);</span><br></pre></td></tr></table></figure></p>
+<p>做了泛型的向上转型 (<code>List&lt;? extends Fruit&gt; flist = new ArrayList&lt;Apple&gt;()</code>)，那么我们也就失去了向这个<code>List</code>添加任何对象的能力，即使是<code>Object</code>也不行。<br>那么上界通配符有什么用呢?</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericTest</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">(List&lt;? extends Fruit&gt; list)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;list.size(); i++) &#123;</span><br><span class="line">        Fruit fruit = list.get(i);</span><br><span class="line">        System.out.println(fruit.getName());</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      list.add(<span class="keyword">new</span> Apple()); <span class="comment">// Compile Error!</span></span><br><span class="line">      list.add(<span class="keyword">new</span> Object()); <span class="comment">// Compile Error!</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>List&lt;? extends Fruit&gt; list</code> 表示一个List, 里面存储的类型是<code>Fruit</code>的派生类, 从list里get出来的类型至少是<code>Fruit</code>, 或者<code>Fruit</code>的派生类, 可以调用<code>Fruit</code>类的方法.<br>传递给<code>GenericTest.func()</code>的参数可以是<code>List&lt;Apple&gt;</code>, 也可以是<code>List&lt;Lemon&gt;</code>,<br>上界通配符<code>&lt;? extends Base&gt;</code>, 可以调用基类<code>Base</code>里定义的方法, 也可以get, 但是不可以set</p>
+<h3 id="下界通配符"><a href="#下界通配符" class="headerlink" title="下界通配符"></a>下界通配符</h3><p><code>? super Integer</code>表示Integer的超类, 只能用于<code>setter</code>.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setFirst</span><span class="params">(Pair&lt;? <span class="keyword">super</span> Integer&gt;)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="限定符和泛型的一些问题…"><a href="#限定符和泛型的一些问题…" class="headerlink" title="限定符和泛型的一些问题…"></a>限定符和泛型的一些问题…</h3><p><strong>泛型中无界通配符<code>&lt;?&gt;</code> 和<code>&lt;T&gt;</code>的区别?</strong></p>
+<ul>
+<li><code>&lt;T&gt;</code>用在类或方法的定义里: <code>public class ArrayList&lt;T&gt;</code></li>
+<li><code>&lt;?&gt;</code>通配符用在”调用”的地方, 通配符是拿来使用定义好的泛型的, 可以使用<code>?</code>的一般满足:<ol>
+<li>方法定义里只使用Object的方法，跟<code>?</code>类型无关;</li>
+<li>使用中不依赖于泛型, 最典型的是<code>Class&lt;?&gt; ...</code></li>
+</ol>
+</li>
+<li>无限定通配符表示匹配任意类。<code>ArrayList&lt;?&gt;</code> 和<code>ArrayList&lt;Object&gt;</code> 看上去有点类似，但实际却不一样。<ol>
+<li><code>ArrayList&lt;?&gt;</code>是任意 <code>ArrayList&lt;T&gt;</code> 的超类;</li>
+<li><code>List&lt;Apple&gt;</code>是<code>List&lt;? extends Fruit&gt;</code>的子类(假设Apple继承自Fruit)</li>
+<li><code>ArrayList&lt;Object&gt;</code> 并不是<code>ArrayList&lt;T&gt;</code> 的超类;</li>
+</ol>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Java-Tutorials.03.反射/" rel="next" title="Java Tutorials-03-反射">
+                <i class="fa fa-chevron-left"></i> Java Tutorials-03-反射
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Java-Tutorials.05.IO/" rel="prev" title="Java Tutorials-05-IO">
+                Java Tutorials-05-IO <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型类和泛型方法"><span class="nav-text">泛型类和泛型方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#泛型类"><span class="nav-text">泛型类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#泛型方法"><span class="nav-text">泛型方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型的类型限定"><span class="nav-text">泛型的类型限定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型擦除"><span class="nav-text">类型擦除</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对类型查询的影响"><span class="nav-text">对类型查询的影响</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-instanceof"><span class="nav-text">1. instanceof</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-getClass"><span class="nav-text">2. getClass()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不能创建泛型类数组"><span class="nav-text">不能创建泛型类数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不能实例化泛型"><span class="nav-text">不能实例化泛型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通配符-lt-gt"><span class="nav-text">通配符&lt;?&gt;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#无限定通配符"><span class="nav-text">无限定通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上界通配符"><span class="nav-text">上界通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下界通配符"><span class="nav-text">下界通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#限定符和泛型的一些问题…"><span class="nav-text">限定符和泛型的一些问题…</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.04.泛型/';
+          this.page.identifier = '12.Java/Java-Tutorials.04.泛型/';
+          this.page.title = 'Java Tutorials-04-泛型';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

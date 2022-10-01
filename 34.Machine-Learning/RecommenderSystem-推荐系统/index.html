@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="机器学习,Machine Learning,推荐系统,Recommend," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="系统架构 效果评估先了解一个概念: 混淆矩阵 混淆矩阵是用来总结一个分类器结果的矩阵。对于k元分类，其实它就是一个k x k的表格，用来记录分类器的预测结果。对于最常见的二元分类来说，它的混淆矩阵是2乘2的，如下">
+<meta name="keywords" content="机器学习,Machine Learning,推荐系统,Recommend">
+<meta property="og:type" content="article">
+<meta property="og:title" content="推荐系统">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/34.Machine-Learning/RecommenderSystem-推荐系统/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="系统架构 效果评估先了解一个概念: 混淆矩阵 混淆矩阵是用来总结一个分类器结果的矩阵。对于k元分类，其实它就是一个k x k的表格，用来记录分类器的预测结果。对于最常见的二元分类来说，它的混淆矩阵是2乘2的，如下">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/machine_learning/Recom-System-Arch.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/machine_learning/recom-confusion-matrix.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/machine_learning/recom-precision-recall.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/machine_learning/recom-f-score.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/machine_learning/recom-f-score2.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/machine_learning/Recom-System-Model.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/machine_learning/Recom-System-Knowledge-Based.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/machine_learning/AI-推荐系统技能树.jpg">
+<meta property="og:updated_time" content="2022-10-01T20:20:47.682Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="推荐系统">
+<meta name="twitter:description" content="系统架构 效果评估先了解一个概念: 混淆矩阵 混淆矩阵是用来总结一个分类器结果的矩阵。对于k元分类，其实它就是一个k x k的表格，用来记录分类器的预测结果。对于最常见的二元分类来说，它的混淆矩阵是2乘2的，如下">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/machine_learning/Recom-System-Arch.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/34.Machine-Learning/RecommenderSystem-推荐系统/"/>
+
+
+
+
+
+  <title>推荐系统 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/34.Machine-Learning/RecommenderSystem-推荐系统/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">推荐系统</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/34-Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">34.Machine-Learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,984
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h1><p><img src="/images/machine_learning/Recom-System-Arch.png" alt=""></p>
+<h1 id="效果评估"><a href="#效果评估" class="headerlink" title="效果评估"></a>效果评估</h1><p>先了解一个概念: <strong>混淆矩阵</strong></p>
+<p>混淆矩阵是用来总结一个分类器结果的矩阵。对于k元分类，其实它就是一个k x k的表格，用来记录分类器的预测结果。<br>对于最常见的二元分类来说，它的混淆矩阵是2乘2的，如下</p>
+<p><img src="/images/machine_learning/recom-confusion-matrix.png" alt=""></p>
+<p>TP = True Postive = 真阳性； FP = False Positive = 假阳性<br>FN = False Negative = 假阴性； TN = True Negative = 真阴性</p>
+<p><strong>一般来说, 推荐效果的指标有:</strong></p>
+<ul>
+<li>准确率（Precision）和召回率（Recall）<br>设R(u)是根据用户在训练集上的行为给用户作出的推荐列表，而T(u)是用户在测试集上的行为列表。<br>对用户u推荐N个物品（记为R(u)），令用户u在测试集上喜欢的物品集合为T(u)，然后可以通过准确率/召回率评测推荐算法的精度：<br><img src="/images/machine_learning/recom-precision-recall.png" alt=""></li>
+<li>F-score/F-measure<br>这是一种同时考虑准确率和召回率的指标。公式如下：<br><img src="/images/machine_learning/recom-f-score.png" alt=""><br>可以看出F的取值范围从0到1。另外还有一种F的变体如下所示：<br><img src="/images/machine_learning/recom-f-score2.png" alt=""><br>常用的两种设置是和，前者中recall重要程度是precision的两倍，后者则相反，precision重要程度是recall的两倍。</li>
+<li>CTR（点击率）: CTR（Click-Through-Rate）即点击通过率，是互联网广告常用的术语，指网络广告（图片广告/文字广告/关键词广告/排名广告/视频广告等）的点击到达率，即该广告的实际点击次数（严格的来说，可以是到达目标页面的数量）除以广告的展现量（Show content）。</li>
+<li>CVR（转化率）: CVR (Conversion Rate)即转化率。是一个衡量CPA广告效果的指标，简言之就是用户点击广告到成为一个有效激活或者注册甚至付费用户的转化率。<code>CVR=(转化量/点击量)*100%</code></li>
+<li>停留时间(Duration)</li>
+</ul>
+<blockquote>
+<p>@ref: <a href="https://www.cnblogs.com/shenxiaolin/p/9309749.html" target="_blank" rel="noopener">推荐系统排序（Ranking）评价指标 - CuriousZero - 博客园</a></p>
+</blockquote>
+<h1 id="推荐算法"><a href="#推荐算法" class="headerlink" title="推荐算法"></a>推荐算法</h1><p>推荐算法大致可以分为以下几类：</p>
+<ul>
+<li><p>①基于流行度的算法: 简单粗暴，类似于各大新闻、微博热榜等，根据PV、UV、日均PV或分享率等数据来按某种热度排序来推荐给用户。</p>
+</li>
+<li><p>②协同过滤算法(Collaborative Filtering, CF):</p>
+<ul>
+<li>Memory-based推荐：这两种方法都是将用户的所有数据读入到内存中进行运算的，因此成为Memory-based Collaborative Filtering。<br>Memory-based推荐方法通过执行最近邻搜索，把每一个Item或者User看成一个向量，计算其他所有Item或者User与它的相似度。有了Item或者User之间的两两相似度之后，就可以进行预测与推荐了。<br>CF算法简单原理是User喜欢那些具有相似兴趣的Users喜欢过的Items。包括：<ul>
+<li>Item-based方法：基于用户的协同过滤算法（user-based collaboratIve filtering）；</li>
+<li>User-based方法：基于Item的协同过滤算法（item-based collaborative filtering）；</li>
+</ul>
+</li>
+<li>Model-based推荐（Model-based collaborative filtering）包括Aspect Model，pLSA，LDA，聚类，SVD，Matrix Factorization等，这种方法训练过程比较长，但是训练完成后，推荐过程比较快。<ul>
+<li>Model-based推荐最常见的方法为Matrix factorization.</li>
+<li>矩阵分解通过把原始的评分矩阵R分解为两个矩阵相乘，并且只考虑有评分的值，训练时不考虑missing项的值。R矩阵分解成为U与V两个矩阵后，评分矩阵R中missing的值就可以通过U矩阵中的某列和V矩阵的某行相乘得到</li>
+<li>矩阵分解的目标函数: U矩阵与V矩阵的可以通过梯度下降(gradient descent)算法求得，通过交替更新u与v多次迭代收敛之后可求出U与V。</li>
+<li>矩阵分解背后的核心思想，找到两个矩阵，它们相乘之后得到的那个矩阵的值，与评分矩阵R中有值的位置中的值尽可能接近。这样一来，分解出来的两个矩阵相乘就尽可能还原了评分矩阵R，因为有值的地方，值都相差得尽可能地小，那么missing的值通过这样的方式计算得到，比较符合趋势。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>协同过滤中主要存在如下两个问题：稀疏性与冷启动问题。已有的方案通常会通过引入多个不同的数据源或者辅助信息(Side information)来解决这些问题，<br>用户的Side information可以是用户的基本个人信息、用户画像信息等，<br>而Item的Side information可以是物品的content信息等。</p>
+</blockquote>
+<ul>
+<li><p>③基于内容的算法: 推荐用户有兴趣的Item在内容上类似的Item。利用word2vec一类工具，可以将文本的关键词聚类，然后根据topic将文本向量化。<br>这种方法可以避免Item的冷启动问题（冷启动：如果一个Item从没有被关注过，其他推荐算法则很少会去推荐，但是基于内容的推荐算法可以分析Item之间的关系，实现推荐），<br>弊端在于推荐的Item可能会重复，典型的就是新闻推荐</p>
+</li>
+<li><p>④基于模型的算法: LR, FM, DNN, CNN, RNN</p>
+<ul>
+<li>逻辑回归（Logistic Regression）是机器学习中的一种分类模型，由于算法的简单和高效，在实际中应用非常广泛。</li>
+<li>因子分解机(Factorization Machine) 以下简称FM，是由Steffen Rendle在2010年提出的，模型主要通过特征组合来解决大规模稀疏数据的分类问题。</li>
+<li>基于卷积神经网络（CNN）的推荐系统：此种系统中的卷积神经网络大多是用于特征提取（feature extraction）的；</li>
+<li>基于循环神经网络（RNN）的推荐系统：循环神经网络特别适用于处理推荐系统中的评级和序列特征的时序动态；</li>
+<li>基于深度语义相似性模型（Deep Semantic Similarity Model）的推荐系统：深度语义相似性模型（DSSM）是一种广泛应用于信息检索领域的深度神经网络。它非常适用于排行榜（top-n）推荐。基础型DSSM由MLP组成，更高级的神经层比如卷积层和最大池化（max-pooling）层可以被很容易地添加进去；</li>
+</ul>
+<blockquote>
+<p>上面的FM, FFM, Deep FM都是基于CTR预估算法的</p>
+</blockquote>
+<p>下图总结了基于深度学习的推荐系统分类的二维体系，左侧部分对神经网络模型进行了说明，右侧部分则说明了整合模型。<br><img src="/images/machine_learning/Recom-System-Model.png" alt=""></p>
+</li>
+<li><p>⑤基于知识的推荐（Knowledge-based Recommendation）在某种程度是可以看成是一种推理（Inference）技术，它不是建立在用户需要和偏好基础上推荐的。<br>基于知识的方法因它们所用的功能知识不同而有明显区别。<br>效用知识（Functional Knowledge）是一种关于一个项目如何满足某一特定用户的知识，因此能解释需要和推荐的关系，<br>所以用户资料可以是任何能支持推理的知识结构，它可以是用户已经规范化的查询，也可以是一个更详细的用户需要的表示。<br><img src="/images/machine_learning/Recom-System-Knowledge-Based.png" alt=""></p>
+</li>
+</ul>
+<h1 id="召回"><a href="#召回" class="headerlink" title="召回"></a>召回</h1><p>召回(recall): 推荐系统往往只推荐有限个（如k个）物品给某个用户。真正相匹配的物品我们称之为 <em>相关物品</em> （也就是二元分类中的阳性）。</p>
+<ul>
+<li>召回率(recall) = 所推荐的k个物品中相关物品的个数 ÷ 所有相关物品的个数</li>
+<li>精度(precision) = 所推荐的k个物品中相关物品的个数 ÷ k<blockquote>
+<p>比如说，根据你的喜好我们推荐了10个商品，其中真正相关的是5个商品。在所有商品当中，相关的商品一共有20个，那么：<br>召回率 = 5 / 20<br>精度 = 5 / 10</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><p>推荐系统技能树:<br><img src="/images/machine_learning/AI-推荐系统技能树.jpg" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+          
+            <a href="/tags/推荐系统/" rel="tag"># 推荐系统</a>
+          
+            <a href="/tags/Recommend/" rel="tag"># Recommend</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/34.Machine-Learning/MachineLearning-机器学习/" rel="next" title="笔记：机器学习">
+                <i class="fa fa-chevron-left"></i> 笔记：机器学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/34.Machine-Learning/人工智能和神经网络101/" rel="prev" title="人工智能和神经网络101">
+                人工智能和神经网络101 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#系统架构"><span class="nav-text">系统架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#效果评估"><span class="nav-text">效果评估</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#推荐算法"><span class="nav-text">推荐算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#召回"><span class="nav-text">召回</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录"><span class="nav-text">附录</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/34.Machine-Learning/RecommenderSystem-推荐系统/';
+          this.page.identifier = '34.Machine-Learning/RecommenderSystem-推荐系统/';
+          this.page.title = '推荐系统';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

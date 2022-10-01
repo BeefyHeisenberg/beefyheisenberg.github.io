@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="JDK6时期 如上图, JDK6时代的JVM内存分为下面几个部分:  堆区(Heap Space): 这部分被所有线程共享, 包括: 年轻代: eden:s0:s1 的默认比例是8:1:1,  可见eden区大部分对象都是要被回收的; 老年代: 老年代:年轻代 的比例默认是2:1 , 也就是说默认情况下堆区的2/3都属于老年代,   栈区(Stack Space): 每个线程独有, 包括: PC,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Advanced Java-02b-JVM内存分代">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.02b.JVM内存分代/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="JDK6时期 如上图, JDK6时代的JVM内存分为下面几个部分:  堆区(Heap Space): 这部分被所有线程共享, 包括: 年轻代: eden:s0:s1 的默认比例是8:1:1,  可见eden区大部分对象都是要被回收的; 老年代: 老年代:年轻代 的比例默认是2:1 , 也就是说默认情况下堆区的2/3都属于老年代,   栈区(Stack Space): 每个线程独有, 包括: PC,">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/java/JVM-Memory-Model-Generation.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/java/JVM-HEAP-EDEN-TLAB.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/java/jvm-memory-heap-jdk8.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/java/jvm-gensize-experience-point.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:46.315Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Advanced Java-02b-JVM内存分代">
+<meta name="twitter:description" content="JDK6时期 如上图, JDK6时代的JVM内存分为下面几个部分:  堆区(Heap Space): 这部分被所有线程共享, 包括: 年轻代: eden:s0:s1 的默认比例是8:1:1,  可见eden区大部分对象都是要被回收的; 老年代: 老年代:年轻代 的比例默认是2:1 , 也就是说默认情况下堆区的2/3都属于老年代,   栈区(Stack Space): 每个线程独有, 包括: PC,">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/java/JVM-Memory-Model-Generation.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.02b.JVM内存分代/"/>
+
+
+
+
+
+  <title>Advanced Java-02b-JVM内存分代 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.02b.JVM内存分代/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Advanced Java-02b-JVM内存分代</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/Java进阶系列/" itemprop="url" rel="index">
+                    <span itemprop="name">Java进阶系列</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,284
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="JDK6时期"><a href="#JDK6时期" class="headerlink" title="JDK6时期"></a>JDK6时期</h1><p><img src="/images/java/JVM-Memory-Model-Generation.png" alt="JVM Runtime Memory Area"></p>
+<p>如上图, JDK6时代的JVM内存分为下面几个部分:</p>
+<ul>
+<li>堆区(Heap Space): 这部分被所有线程共享, 包括:<ul>
+<li>年轻代: <code>eden:s0:s1</code> 的默认比例是<code>8:1:1</code>,  可见eden区大部分对象都是要被回收的;</li>
+<li>老年代: <code>老年代:年轻代</code> 的比例默认是<code>2:1</code> , 也就是说默认情况下堆区的2/3都属于老年代,</li>
+</ul>
+</li>
+<li>栈区(Stack Space): 每个线程独有, 包括: PC, Stack, Native Stack</li>
+<li>方法区(Method Area)</li>
+</ul>
+<blockquote>
+<p>JVM标准定义的内存区域为Heap/Stack Space/Medhod Area; 分代的名称（年轻代/老年代/永久代）是HotSpot中定义的, 并不是JVM标准中定义的, 注意区分 @Uncertain</p>
+</blockquote>
+<h2 id="Heap"><a href="#Heap" class="headerlink" title="Heap"></a>Heap</h2><ul>
+<li>这块区域被同一JVM实例的所有线程共享, Java对象全都创建在堆上.</li>
+<li>堆的大小由<code>-Xms</code> ~ <code>-Xmx</code>指定: <code>-Xmx2048m -Xms2048m</code><ul>
+<li><code>-Xmx</code>堆的最大值默认是内存的1/4;</li>
+<li><code>-Xms</code>堆的最小值;</li>
+</ul>
+</li>
+</ul>
+<h3 id="YoungGen-新生代"><a href="#YoungGen-新生代" class="headerlink" title="YoungGen(新生代)"></a>YoungGen(新生代)</h3><p>大小由参数<code>-XX:NewSize</code> ~ <code>-XX:MaxNewSize</code> (jdk 1.3)指定, jdk1.4之后统一成一个参数 <code>-Xmn512m</code></p>
+<p>新生代又被分为三个区域:</p>
+<ul>
+<li>Eden: 新创建的对象被分配在这里;</li>
+<li>To Survivor &amp; From Survivor:  发生Young GC时, 有用的对象从 <code>Eden</code>区域 和 <code>From Survivor</code>区域 移动到 → <code>To Survivor</code> , Eden 和 From被清空, 同时From 和 To 交换角色 ;</li>
+</ul>
+<h4 id="Eden区的TLAB"><a href="#Eden区的TLAB" class="headerlink" title="Eden区的TLAB"></a>Eden区的TLAB</h4><p>在Eden区创建对象时, JVM为了保证Eden区数据的线程安全, 会对分配过程加锁, 对于频繁的对象分配, 加锁会引起额外的性能开销.<br>所以 Hotspot 1.6的实现中引入了TLAB技术, 每个线程在Eden都独占一块缓存区 – TLAB（Thread Local Allocation Buffer）, 每个线程创建的对象会被优先放入TLAB中, 因为在TLAB区域分配内存无需加锁, 可以提升对象创建效率.<br>当线程的”TLAB区”满了时, 会触发 “TLAB refill”: 线程把TLAB的所有权交回给共享的Eden, 然后重新从Eden里分配一块空间作为新的TLAB.</p>
+<p>图-Eden区的结构:<br><img src="/images/java/JVM-HEAP-EDEN-TLAB.png" alt=""></p>
+<p>参考列表:</p>
+<ul>
+<li>@ref <a href="https://www.zhihu.com/question/56538259" target="_blank" rel="noopener">在TLAB中创建的对象，如何被其他线程共享？ - 知乎</a></li>
+<li>@ref <a href="https://www.jianshu.com/p/cd85098cca39" target="_blank" rel="noopener">JVM源码分析之线程局部缓存TLAB - 简书</a></li>
+</ul>
+<h3 id="OldGen-老年代"><a href="#OldGen-老年代" class="headerlink" title="OldGen(老年代)"></a>OldGen(老年代)</h3><ul>
+<li>也叫Tenured(晋升代), 在GC里被称为老年代(Old Generation)</li>
+<li>没有参数可以指定大小, 但可以通过<code>Heap-新生代</code>计算出来</li>
+</ul>
+<h2 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h2><p>每个线程都在这里开辟一块内存栈, 每个线程栈的大小可以由<code>-Xss</code>指定, 这块区域是每个线程私有的, 该区域内存包括:</p>
+<ol>
+<li>Program Counter Register: 计数器, 记录当前线程执行Java字节码的行号 // JVM中唯一没有规定任何 OutOfMemoryError 的区域;</li>
+<li>Stack: 即每个线程执行时的 <em>栈帧</em>,  栈帧里存储了当前方法的临时变量/函数的返回地址和参数/函数调用的上下文. 线程中每次有方法调用时，会创建一个 Frame，方法调用结束时 Frame 销毁。; // 该区域会抛出 StackOverflowError 和 OutOfMemoryError</li>
+<li>Native Method Stack: 除了上面的栈, 每个线程都有自己的Native方法执行栈(前者是线程执行字节码的栈, 后者是线程执行Native代码的栈, Java代码可以和Native代码互相调用), // 该区域会抛出 StackOverflowError 和 OutOfMemoryError</li>
+</ol>
+<blockquote>
+<p>线程栈大小由参数<code>-Xss</code>指定, 默认1m, 在tomcat这种多线程web服务器上, 保持1m或者更小可以处理更多的并发请求<br>Stack 和 Native Stack 都会抛出StackOverFlowError 和 OutOfMemoryError两种错误,</p>
+<blockquote>
+<p>StackOverFlowError： 若Java虚拟机栈的内存大小不允许动态扩展，那么当线程请求栈的深度超过当前Java虚拟机栈的最大深度的时候，就抛出StackOverFlowError异常。<br>OutOfMemoryError： 若 Java 虚拟机栈的内存大小允许动态扩展，且当线程请求栈时内存用完了，无法再动态扩展了，此时抛出OutOfMemoryError异常。</p>
+</blockquote>
+</blockquote>
+<h2 id="Method-Area"><a href="#Method-Area" class="headerlink" title="Method Area"></a>Method Area</h2><ul>
+<li>方法区与堆一样，是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。虽然Java虚拟机规范把方法区描述为堆的一个逻辑部分，但是它却有一个别名叫做 <strong>Non-Heap（非堆）</strong>，目的应该是与 Java 堆区分开来。</li>
+<li>HotSpot 虚拟机中方法区也常被称为 “永久代”，本质上两者并不等价。仅仅是因为 HotSpot 虚拟机设计团队用永久代来实现方法区而已，这样 HotSpot 虚拟机的垃圾收集器就可以像管理 Java 堆一样管理这部分内存，能够省去专门为方法区编写内存管理代码的工作。对于其他的虚拟机（如Oracle JRockit、IBM J9等）来说是不存在永久代的概念的。</li>
+<li>所以在 HotSpot VM, <strong>永久代也是有GC的, GC时机与老年代相同（再次提醒永久代不属于堆）</strong></li>
+<li>HotSpot VM的永久代大小由<code>-XX:PermSize</code> ~ <code>-XX:MaxPermSize</code>指定, 一般服务器设置为:  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-XX:MaxPermSize=500m</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>JDK 1.6的HotSpot 的永久代包括:</p>
+<ol>
+<li>Runtime Constant Pool, 运行时常量池, 详见 [#Java中的常量池]</li>
+<li>String Pool: 字符串常量池, 以”Hello”字面量方式创建的字符串会存储在这里.</li>
+</ol>
+<p>如果运行时有大量的类产生，可能会导致方法区被填满，直至溢出。常见的应用场景如：</p>
+<ul>
+<li>Spring和ORM框架使用CGLib操纵字节码对类进行增强，增强的类越多，就需要越大的方法区来保证动态生成的Class可以加载入内存。</li>
+<li>大量JSP或动态产生JSP文件的应用（JSP第一次运行时需要编译为Java类）。</li>
+<li>基于OSGi的应用（即使是同一个类文件，被不同的类加载器加载也会视为不同的类）。<br>这些都会导致方法区溢出，报出java.lang.OutOfMemoryError: PermGen space</li>
+</ul>
+<h1 id="JDK7时期"><a href="#JDK7时期" class="headerlink" title="JDK7时期"></a>JDK7时期</h1><p>String Pool被从 PermGen里移除了, 放在了Heap里, 并且可以通过<code>-XX:StringTableSize</code>指定其大小;<br>Runtime Constant Pool 也在1.7之后放入了Heap里? @Uncertain<br>此外JDK7的内存模型基本和6一样;</p>
+<h1 id="JDK6-7的VM参数总结"><a href="#JDK6-7的VM参数总结" class="headerlink" title="JDK6~7的VM参数总结"></a>JDK6~7的VM参数总结</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">             &lt;JVM 6 &amp; 7 Memory options&gt;</span><br><span class="line">+-----------------+-----------------+--------------</span><br><span class="line">|     PC          |                 |</span><br><span class="line">|-----------------|-----------------+-------------</span><br><span class="line">|    Stack &amp;      |                 |</span><br><span class="line">|  Native Stack   |                 |  -Xss</span><br><span class="line">+-----------------+-----------------+---------------</span><br><span class="line">|   Method Area   |  String Pool &amp;  |</span><br><span class="line">|   (PermGen)     |    Runtime-     | -XX:MaxPermSize</span><br><span class="line">|                 |  Constant Pool  | -XX:PermSize</span><br><span class="line">+-----------------+-----------------+-------+-------+---</span><br><span class="line">|    OldGen       |                 |       |       |</span><br><span class="line">|  (TenuredGen)   |                 |       | -Xmx  |</span><br><span class="line">+-----------------+-----------------+-------+       |</span><br><span class="line">|                 |  To Survivor    |       |       | Heap</span><br><span class="line">|    YoungGen     |-----------------| -Xmn  |       |</span><br><span class="line">|                 |  From Survivor  |       | -Xms  |</span><br><span class="line">|                 |-----------------|       |       |</span><br><span class="line">|                 |     Eden        |       |       |</span><br><span class="line">+-----------------+-----------------+-------+-------+---</span><br></pre></td></tr></table></figure>
+<h1 id="JDK8时期"><a href="#JDK8时期" class="headerlink" title="JDK8时期"></a>JDK8时期</h1><p>在HotSpot JDK7以及更早的版本里, 永久代最大大小由<code>-XX:MaxPermSize</code>指定, 一旦超过这个大小就不能再扩展, 假如加载的类过多会导致Medhod Area过大而导致OOM,<br>HotSpot JDK8 <strong>移除</strong> 了JDK7的 PermGen(永久代), 类的元信息被移到了 Meta space(元空间), 这块内存放在 Native memory当中, 不再属于JVM线程内的内存区.</p>
+<blockquote>
+<p>JDK7 移除了PermGen 的 运行时常量池 &amp; 字符串常量池;<br>JDK8 移除了整个PermGen, 类的元信息被放在 MateSpace; // 运行时常量池呢?</p>
+</blockquote>
+<p>JDK8的堆空间变得更加简单:</p>
+<p><img src="/images/java/jvm-memory-heap-jdk8.png" alt="JVM-Memory-Heap-JDK8"></p>
+<p>JDK8 使用 <code>-XX:MetaspaceSize</code> 和 <code>-XX:MaxMetaspaceSize</code> 指定 Meta space(元空间)的大小:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m</span><br></pre></td></tr></table></figure>
+<p>以上设置的<code>MetaspaceSize</code> 并不是永久代初始大小, 这个JVM参数是指Metaspace扩容时触发FullGC的初始化阈值，也是最小的阈值。这里有几个要点需要明确：</p>
+<ul>
+<li>如果没有配置 <code>-XX:MetaspaceSize</code>，那么触发FGC的阈值是21807104（约20.8m），可以通过 <code>jinfo -flag MetaspaceSize pid</code> 命令得到这个值；</li>
+<li>如果配置了 <code>-XX:MetaspaceSize</code>，那么触发FGC的阈值就是配置的值；</li>
+<li>Metaspace由于使用不断扩容到 <code>-XX:MetaspaceSize</code>参数指定的量，就会发生FGC；且之后每次 Metaspace扩容都可能会发生FGC（至于什么时候会，比较复杂，跟几个参数有关）；</li>
+<li>如果 Old区配置 CMS垃圾回收，那么扩容引起的 FGC也会使用 CMS算法进行回收；</li>
+</ul>
+<blockquote>
+<p>对于一个64位的服务器端JVM来说,其默认的 –XX:MetaspaceSize值为21MB. 这就是初始的高水位线. 一旦触及到这个水位线, Full GC 将会被触发并卸载没有用的类（即这些类对应的类加载器不再存活）,然后这个高水位线将会重置. 新的高水位线的值取决于GC后释放了多少元空间. 如果释放的空间不足,这个高水位线则上升. 如果释放空间过多,则高水位线下降. 如果初始化的高水位线设置过低,上述高水位线调整情况会发生很多次. 通过垃圾回收器的日志我们可以观察到 Full GC 多次调用. 为了避免频繁的GC,建议将–XX:MetaspaceSize设置为一个相对较高的值.</p>
+</blockquote>
+<p>以上参考:  @ref <a href="http://www.infoq.com/cn/articles/Java-PERMGEN-Removed" target="_blank" rel="noopener">Java永久代去哪儿了</a></p>
+<h1 id="JVM分代设置大小-经验值"><a href="#JVM分代设置大小-经验值" class="headerlink" title="JVM分代设置大小(经验值)"></a>JVM分代设置大小(经验值)</h1><ul>
+<li>堆区的默认值最大size是256MB, 永久代默认最大size是64MB, <code>堆:永久代</code>大约是是<code>4:1</code> （Test @ JDK6 + Windows 32 bit）</li>
+<li>每个分代大小比例(经验值): <code>Eden : Survivor0 : Survivor1 : OldGen : PermGen = 8 : 1 : 1 : 20 : 5</code></li>
+<li>每个分代具体设置多大, 还可以根据 <strong>JVM活跃数据</strong> 的大小进行估算:</li>
+</ul>
+<blockquote>
+<p>活跃数据的大小是指，应用程序稳定运行时长期存活对象在堆中占用的空间大小，也就是Full GC后堆中老年代占用空间的大小。可以通过GC日志中Full GC之后老年代数据大小得出，比较准确的方法是在程序稳定后，多次获取GC数据，通过取平均值的方式计算活跃数据的大小。活跃数据和各分区之间的比例关系如下</p>
+</blockquote>
+<p><img src="/images/java/jvm-gensize-experience-point.png" alt="JVM_GenSize_Experience_Point"></p>
+<p>例如，根据GC日志获得老年代的活跃数据大小为300M，那么各分区大小可以设为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">总堆：1200MB = 300MB × 4</span><br><span class="line">新生代：450MB = 300MB × 1.5</span><br><span class="line">老年代： 750MB = 1200MB - 450MB</span><br></pre></td></tr></table></figure>
+<h1 id="内存分区可能抛出的错误"><a href="#内存分区可能抛出的错误" class="headerlink" title="内存分区可能抛出的错误"></a>内存分区可能抛出的错误</h1><ul>
+<li>Stack : <code>StackOverflowError</code> &amp; <code>OutOfMemoryError</code></li>
+<li>Heap: <code>OutOfMemoryError</code></li>
+<li>Method: <code>OutOfMemoryError: PermGen space</code>(1.8之前)</li>
+<li>MetaSpace(1.8+): @todo</li>
+</ul>
+<h1 id="Java中的常量池"><a href="#Java中的常量池" class="headerlink" title="Java中的常量池"></a>Java中的常量池</h1><ol>
+<li><code>Class Constant Pool</code>, 每个.class文件都包含的一块常量区, 存储了: 1 该类定义字面量(Literal, 字面量的字符串/final字段常量值/基本数据类型), 2 符号引用(Symbolic References, 类的完全限定名/方法名称和描述/字段名称和描述);</li>
+<li><code>Runtime Constant Pool</code>, 位于PermGen的 Method Area里, .class文件常量池在类被加载后存放在此区域. class文件常量池中存的是字面量和符号引用，也就是说他们存的并不是对象的实例，而是对象的符号引用值。而经过解析（resolve）之后，也就是把符号引用替换为直接引用;</li>
+<li><code>String Pool</code>(也叫String Literal Pool, 字符串常量池), 在JDK6~JDK7u40版本是在PermGen里, JDK7u40之后的版本被移到了Heap里;<ul>
+<li>String Pool中存的是字面量的字符串,比如<code>String s = &quot;Hello&quot;</code>之后字面量”Hello”就存储在这里 // pool中是保存的引用还是对象?</li>
+<li>String Pool可以动态增长, 典型的是<code>String.intern</code>方法;</li>
+<li>在HotSpot VM里实现的string pool功能的是一个<code>StringTable</code>类,它是一个哈希表,里面存的是驻留字符串(也就是我们常说的用双引号括起来的);</li>
+</ul>
+</li>
+</ol>
+<h1 id="对象在内存中的存储"><a href="#对象在内存中的存储" class="headerlink" title="对象在内存中的存储"></a>对象在内存中的存储</h1><ul>
+<li><strong>堆区</strong>(年轻代/老年代):<ol>
+<li>每个类在被ClassLoader载入时会创建该类的<code>Class对象</code>, 存放在堆区;</li>
+<li>类的<code>static members</code>:<ul>
+<li>如果是基本类型(int,float等)的static members, 在方法区跟类型信息在一起;</li>
+<li>如果类类型的static members, 被new创建的对象本身在堆区, 引用(内存地址)还是在方法区;</li>
+</ul>
+</li>
+<li>字符串常量(字面量): JDK7之后移到了堆区;</li>
+</ol>
+</li>
+<li><strong>方法区</strong>(永久代): JDK8之后方法区被移动到了Native Memory中的 <strong>Meta space(元空间)</strong><ol>
+<li>类的元信息:<ul>
+<li>类的完整有效名, 类的直接父类的完整有效名, 方法的形参类型以及返回类型,</li>
+<li>类的方法字节码(bytecodes)</li>
+<li>类的加载器的引用(ClassLoader)</li>
+</ul>
+</li>
+<li>运行时常量池 <code>Runtime Constant Pool</code></li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>类信息在方法区的内存布局有些类似<code>.class</code>文件结构, 参考后面的 “class文件结构”一节</p>
+</blockquote>
+<h1 id="字符串在内存中的存储"><a href="#字符串在内存中的存储" class="headerlink" title="字符串在内存中的存储"></a>字符串在内存中的存储</h1><blockquote>
+<p>String pool: 全局字符串池里的内容是在类加载完成，经过验证，准备阶段之后在堆中生成字符串对象实例，然后将该字符串对象实例的引用值存到string pool中（记住：string pool中存的是引用值而不是具体的实例对象，具体的实例对象是在堆中开辟的一块空间存放的。）。 在HotSpot VM里实现的string pool功能的是一个StringTable类，它是一个哈希表，里面存的是驻留字符串(也就是我们常说的用双引号括起来的)的引用（而不是驻留字符串实例本身），也就是说在堆中的某些字符串实例被这个StringTable引用之后就等同被赋予了”驻留字符串”的身份。这个StringTable在每个HotSpot VM的实例只有一份，被所有的类共享。</p>
+</blockquote>
+<h2 id="String-Pool与String-intern"><a href="#String-Pool与String-intern" class="headerlink" title="String Pool与String.intern()"></a>String Pool与String.intern()</h2><p>Java并不要求常量只在编译期产生, 并非只有class文件常量池的内容才能进入方法区的”运行时常量池”,<br>运行期间可以添加常量进入常量池, 比如<code>String.intern()</code>方法;<br>运行<code>str.intern()</code>后, “首先在String Pool里查找是否有equals的字符串, 如果没有则在String Pool创建一个字面量字符串, 并返回其引用”<br>JDK6和JDK7的intern方法实现有差异, 具体看下面.</p>
+<h2 id="JDK6-7-8的String-Pool"><a href="#JDK6-7-8的String-Pool" class="headerlink" title="JDK6,7,8的String Pool"></a>JDK6,7,8的String Pool</h2><ol>
+<li>JDK6: GermGen的大小在64位机器上一般为96MB, 由<code>-XX:MaxPermSize</code>指定, String Pool(主要是个C++描述的StringTable)的大小默认是1009(StringTable “桶”的大小), 且这个大小不能扩展, StringTable的实现原理类似HashMap, hash值相同的会放进同一个桶的链表里. 如果太多调用了<code>String.intern()</code>, 会导致这个StringTable性能下降.</li>
+<li>JDK7: String Pool从PermGen移到Heap, 并且增加了<code>-XX:StringTableSize</code>参数可以配置String Pool的大小, <code>-XX:StringTableSize=1000003</code>.</li>
+<li>JDK8: String Pool与7相比没有太大变化, <code>-XX:StringTableSize</code>默认是60013, 可以用-XX:+PrintFlagsFinal获取当前你使用的值是多少.</li>
+</ol>
+<blockquote>
+<p>以上参考自<a href="http://java-performance.info/string-intern-in-java-6-7-8/" target="_blank" rel="noopener">String.intern in Java 6, 7 and 8 - string pooling  - Java Performance Tuning Guide</a> @ref</p>
+</blockquote>
+<p>下面代码运行结果是 ?</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s = <span class="keyword">new</span> String(<span class="string">"1"</span>); <span class="comment">// 两个对象, 一个存储于String Pool, 一个在Heap</span></span><br><span class="line">s.intern();</span><br><span class="line">String s2 = <span class="string">"1"</span>;</span><br><span class="line">System.out.println(s == s2);</span><br><span class="line"></span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"1"</span>) + <span class="keyword">new</span> String(<span class="string">"1"</span>); <span class="comment">// 一个对象, 在Heap</span></span><br><span class="line">s3.intern();</span><br><span class="line">String s4 = <span class="string">"11"</span>;</span><br><span class="line"><span class="comment">//s3.intern();</span></span><br><span class="line">System.out.println(s3 == s4);</span><br></pre></td></tr></table></figure>
+<p>先说答案: 在JDK6 下结果是 “false false”, 在JDK8下是 “false, true”.</p>
+<p>没有在JDK8上验证, 但我觉得 7和8在 String Pool 上改动不大, 8仅仅是把 Method Area 移动到了 Native Memory 中 –被叫做 Metespace(元空间)的区域.<br>因为看不到 HotSpot的 native层源码, 所以只能看 OpenJDK的, 但是不保证 OpenJDK 与 HotSpot 实现一样 @todo 有时间一定要看了才能解惑.</p>
+<p>从JDK6 到 JDK7 的 String Pool 和 <code>intern</code>方法的改变都比较大(String Pool从 PermGen移动到了 Heap, <code>String.intern()</code>改变见下面的分析)</p>
+<p><strong>in JDK6:</strong></p>
+<ul>
+<li><code>String s = new String(&quot;Hello&quot;)</code>会创建两个字符串对象, 一个在 String Pool里的字面值, 一个是 Heap里的对象.</li>
+<li><code>intern()</code>方法首先在String Pool里查找是否有 equals的字符串, 如果没有则在 String Pool创建一个字面量字符串, 并返回其引用. 已经存在的话返回在String Pool里的引用.</li>
+</ul>
+<blockquote>
+<p><code>String s = new String(&quot;1&quot;)</code>, s创建后, String Pool 和 Heap各创建一个”1”, s指向的是Heap里的对象;<br><code>String s2 = &quot;1&quot;</code>, s2指向的是 String Pool里的字面值;<br><code>String s3 = new String(&quot;1&quot;) + new String(&quot;1&quot;)</code>  这时”11”在内存里只有 Heap里的一个, s3指向这个 Heap里的对象,<br><code>s3.intern</code>之后 String Pool里也创建一个”11”;<br><code>String s4 = &quot;11&quot;</code> s4指向的是 String Pool里的对象</p>
+</blockquote>
+<p><strong>in JDK7:</strong></p>
+<ul>
+<li><code>String s = new String(&quot;Hello&quot;)</code>的行为跟6一样;</li>
+<li><code>str.intern()</code>执行后, 如果再 String Pool里没有到 equals的字符串, 就不再在 String Pool里创建对象了, 而是直接把 Heap里的对象引用放进来. // 这也是6-&gt;7的 String的一个重要改变, 减少重复的字符串创建, 也更节省内存.</li>
+</ul>
+<blockquote>
+<p><code>String s = new String(&quot;1&quot;)</code>, s创建后, String Pool 和 Heap各创建一个”1”, s指向的是Heap里的对象;<br><code>s.intern()</code> 检查 String Pool里已经存在”1”的字面值了, 什么都不做;<br><code>String s2 = &quot;1&quot;</code>, s2指向的是 String Pool里的字面值;<br><code>String s3 = new String(&quot;1&quot;) + new String(&quot;1&quot;)</code>  这时”11”在内存里只有 Heap里的一个, s3指向这个 Heap里的对象,<br><code>s3.intern()</code> 在String Pool里找不到”11”, 但是不再创建新的, 而是直接把s3的引用复制进 String Pool,<br><code>String s4 = &quot;11&quot;</code> 这种方式创建是指明在 String Pool里创建, 但是 String Pool里已经存在一个”11”的引用了, 那么s4直接指向这个引用. 所以s3和s4指向的都是 Heap里的”11”;</p>
+</blockquote>
+<blockquote>
+<p>以上参考自<a href="http://www.importnew.com/14142.html" target="_blank" rel="noopener">深入解析String#intern - ImportNew</a> @ref</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Advanced-Java.02a.JVM简介/" rel="next" title="Advanced Java-02a-JVM简介">
+                <i class="fa fa-chevron-left"></i> Advanced Java-02a-JVM简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Advanced-Java.02c.JVM参数和性能/" rel="prev" title="Advanced Java-02c-JVM参数和性能">
+                Advanced Java-02c-JVM参数和性能 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK6时期"><span class="nav-text">JDK6时期</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Heap"><span class="nav-text">Heap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#YoungGen-新生代"><span class="nav-text">YoungGen(新生代)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Eden区的TLAB"><span class="nav-text">Eden区的TLAB</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OldGen-老年代"><span class="nav-text">OldGen(老年代)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stack"><span class="nav-text">Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Method-Area"><span class="nav-text">Method Area</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK7时期"><span class="nav-text">JDK7时期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK6-7的VM参数总结"><span class="nav-text">JDK6~7的VM参数总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK8时期"><span class="nav-text">JDK8时期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM分代设置大小-经验值"><span class="nav-text">JVM分代设置大小(经验值)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存分区可能抛出的错误"><span class="nav-text">内存分区可能抛出的错误</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java中的常量池"><span class="nav-text">Java中的常量池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象在内存中的存储"><span class="nav-text">对象在内存中的存储</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串在内存中的存储"><span class="nav-text">字符串在内存中的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String-Pool与String-intern"><span class="nav-text">String Pool与String.intern()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK6-7-8的String-Pool"><span class="nav-text">JDK6,7,8的String Pool</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.02b.JVM内存分代/';
+          this.page.identifier = '12.Java/Advanced-Java.02b.JVM内存分代/';
+          this.page.title = 'Advanced Java-02b-JVM内存分代';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

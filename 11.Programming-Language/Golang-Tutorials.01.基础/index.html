@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Golang," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Learn Go in Y Minutes  Golang中的约定大于配置Golang遵循”约定大于配置”(convention over configuratio)的理念:  小写开头的标识(变量/函数/结构体类型等等)是package内可见, 大写开头的标识包外可见(类似public) import as _ 和 . 的包: import _ &amp;quot;packageXXX&amp;quot; :">
+<meta name="keywords" content="Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang Tutorials-01基础">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/11.Programming-Language/Golang-Tutorials.01.基础/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="Learn Go in Y Minutes  Golang中的约定大于配置Golang遵循”约定大于配置”(convention over configuratio)的理念:  小写开头的标识(变量/函数/结构体类型等等)是package内可见, 大写开头的标识包外可见(类似public) import as _ 和 . 的包: import _ &amp;quot;packageXXX&amp;quot; :">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/golang-slice.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/golang-make-vs-new.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:46.271Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang Tutorials-01基础">
+<meta name="twitter:description" content="Learn Go in Y Minutes  Golang中的约定大于配置Golang遵循”约定大于配置”(convention over configuratio)的理念:  小写开头的标识(变量/函数/结构体类型等等)是package内可见, 大写开头的标识包外可见(类似public) import as _ 和 . 的包: import _ &amp;quot;packageXXX&amp;quot; :">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/golang-slice.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/11.Programming-Language/Golang-Tutorials.01.基础/"/>
+
+
+
+
+
+  <title>Golang Tutorials-01基础 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/11.Programming-Language/Golang-Tutorials.01.基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Golang Tutorials-01基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
+                    <span itemprop="name">11.Programming-Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,474
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p><a href="https://learnxinyminutes.com/docs/zh-cn/go-cn/" target="_blank" rel="noopener">Learn Go in Y Minutes</a></p>
+</blockquote>
+<h1 id="Golang中的约定大于配置"><a href="#Golang中的约定大于配置" class="headerlink" title="Golang中的约定大于配置"></a>Golang中的约定大于配置</h1><p>Golang遵循”约定大于配置”(convention over configuratio)的理念:</p>
+<ul>
+<li>小写开头的标识(变量/函数/结构体类型等等)是package内可见, 大写开头的标识包外可见(类似public)</li>
+<li>import as <code>_</code> 和 <code>.</code> 的包:<ul>
+<li><code>import _ &quot;packageXXX&quot;</code> : 调用包内的<code>init()</code>方法</li>
+<li><code>import . &quot;packageXXX&quot;</code> : 调用包内的函数,不需要再加<code>packageXXX.</code></li>
+</ul>
+</li>
+<li>单元测试:<ul>
+<li>文件名: <code>源文件名_test.go</code></li>
+<li>函数名: <code>func Test源函数名()</code></li>
+</ul>
+</li>
+<li>结构体中的”小写开头的成员”, 在用<code>json.Marshal</code>序列化时会被忽略</li>
+</ul>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><ul>
+<li><p>声明 + 初始化</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var i int = 1</span><br><span class="line"></span><br><span class="line">// 更方便的写法</span><br><span class="line">j := 1</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h1><p>@todo</p>
+<h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><ul>
+<li>uint8/int8: 平台无关, 都是8位</li>
+<li>uint16/int16: ..</li>
+<li>uint32/int32: ..</li>
+<li>uint64/int64: ..</li>
+<li>float32</li>
+<li>float64</li>
+<li>uint/int: 与上面的不同, uint/int可能是32 or 64 bits(视机器平台而定)</li>
+<li>complex64: 复数, 由float32的实部 + float32的虚部构成</li>
+</ul>
+<p>@ref: <a href="https://golang.google.cn/ref/spec#Numeric_types" target="_blank" rel="noopener">The Go Programming Language Specification - The Go Programming Language</a></p>
+<h1 id="string"><a href="#string" class="headerlink" title="string"></a>string</h1><ul>
+<li>判断字符串empty: <code>len(str) == 0</code></li>
+<li>字符串是”只读的”, 意味着无法直接修改字符串的内存空间</li>
+<li><p>字符串的实现:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type StringHeader struct &#123;</span><br><span class="line">  Data uintptr</span><br><span class="line"> Len  int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h1><ul>
+<li><p>Golang的类型转换: <code>T(var)</code></p>
+</li>
+<li><p>字符串 → any 都可以用<code>strconv</code>:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">i, err := strconv.ParseInt(&quot;1287089&quot;,10,32)</span><br><span class="line">result := int(i)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><ul>
+<li><p>多个返回值:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 多个返回</span><br><span class="line">func foo1(x, y int) (sum, prod int) &#123;</span><br><span class="line">  return x+y, x*y</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可变参数:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 可变参数</span><br><span class="line">func foo1(params ...type) &#123;</span><br><span class="line">  for _, param := range params &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Golang是值传递还是引用传递?</p>
+<ul>
+<li>Golang 是值传递, 函数内得到一份形参的拷贝</li>
+<li>对于 slice, map, chan,  因为其结构内包含指针, 所以仍可以在函数内改变其存储的值</li>
+<li>数组也是值传递，因为数组的类型是<code>[N]Type</code>，所以数组作为形参是有局限性的，推荐用slice</li>
+</ul>
+</li>
+</ul>
+<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><p>闭包 先看几个例子:</p>
+<p>例子1:<br>  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">x := 1</span><br><span class="line">f := func() bool &#123;</span><br><span class="line">  return x &gt; 100</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f()</span><br></pre></td></tr></table></figure></p>
+<p>例子2:<br>  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">func foo2(x int) func() &#123;</span><br><span class="line">  return func() &#123;</span><br><span class="line">      x = x + 1</span><br><span class="line">      fmt.Printf(&quot;foo1 val = %d\n&quot;, x)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f = foo2(133)</span><br><span class="line">f()</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>什么是闭包(closure)? 一个函数, 并且此函数依赖函数外声明的变量, 那么闭包的定义是: 此函数+依赖的外部变量</li>
+<li>实际上, Golang实现闭包, 实际是把 函数和它依赖的外部变量都放在了一个struct里, 用这个struct保存了函数和它依赖的外部变量</li>
+<li>另外, 闭包的实现依赖Golang的逃逸分析, 对于闭包的环境变量, 是在堆上分配的, 这是闭包实现的基础</li>
+<li>闭包另一个特性是延迟绑定, 意思是, 上面的闭包(也即struct)里保存的变量, 不是在编译期确定的, 而是在<strong>闭包的运行时才确定</strong>,  在闭包的外部寻找依赖变量的最新值, 并赋值进去</li>
+</ul>
+<p>下面输出什么?</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">func foo7(x int) []func() &#123;</span><br><span class="line">    var fs []func()</span><br><span class="line">    values := []int&#123;1, 2, 3, 5&#125;</span><br><span class="line">    for _, val := range values &#123;</span><br><span class="line">        fs = append(fs, func() &#123;</span><br><span class="line">            fmt.Printf(&quot;foo7 val = %d\n&quot;, x+val)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    return fs</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f7s := foo7(11)</span><br><span class="line">for _, f7 := range f7s &#123;</span><br><span class="line">    f7()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分析:</p>
+<ul>
+<li>foo7返回了一个数组, 数组内是x个闭包函数, 闭包函数依赖2个外部变量: x 和 val</li>
+<li>foo7返回 f7s的时候, 仅仅是返回了一个闭包的定义, 闭包内依赖的x 和 val并没有绑定值</li>
+<li>第一次执行<code>f7()</code>, 寻找 x 和 val的最新值并绑定到闭包, 也即11 和 5</li>
+</ul>
+<p>@ref:</p>
+<ul>
+<li>闭包的实现 · 深入解析Go：<a href="https://tiancaiamao.gitbooks.io/go-internals/content/zh/03.6.html" target="_blank" rel="noopener">https://tiancaiamao.gitbooks.io/go-internals/content/zh/03.6.html</a></li>
+<li>Golang：“闭包（closure）”到底包了什么？ - 知乎：<a href="https://zhuanlan.zhihu.com/p/92634505" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/92634505</a></li>
+</ul>
+<h1 id="控制语句"><a href="#控制语句" class="headerlink" title="控制语句"></a>控制语句</h1><ul>
+<li><p>if可以先赋值再判断</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if x:=computerValue(); x&gt;y &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>按次数循环</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 循环1</span><br><span class="line">for x:=0; x&lt;10; x++ &#123;</span><br><span class="line">  fmt.Println(x)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 一直循环</span><br><span class="line">for &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>遍历map/slice, 使用关键字<code>range</code>:  <code>index, elem : = range slice</code> or <code>k, v := range map</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 循环遍历 map</span><br><span class="line">for k,v := range map[string]int &#123;&quot;one&quot;:1, &quot;two&quot;:2&#125; &#123;</span><br><span class="line">  fmt.Println(&quot;%s %d\n&quot;, k,v)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 循环遍历 slice</span><br><span class="line">for i,s := range []string &#123;&quot;one&quot;,&quot;two&quot;&#125; &#123;</span><br><span class="line">  fmt.Println(&quot;%d %s\n&quot;, i,s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>switch</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">switch x &#123;</span><br><span class="line">case 1:</span><br><span class="line">  // 隐式break, 匹配到一个即停止</span><br><span class="line">default:</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="type"><a href="#type" class="headerlink" title="type"></a>type</h1><blockquote>
+<p>@ref: <a href="https://colobu.com/2017/06/26/learn-go-type-aliases/" target="_blank" rel="noopener">https://colobu.com/2017/06/26/learn-go-type-aliases/</a></p>
+</blockquote>
+<p>golang中type的用法:</p>
+<ul>
+<li>定义新类型: <code>type newType oldType</code> // C++中的typedef用法是<code>typedef oldType newType</code> …</li>
+<li>定义结构体: <code>type STypeName struct{}</code></li>
+<li><p>类型别名:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type rune = int32</span><br><span class="line">type byte = uint8</span><br><span class="line">type FloatType float32</span><br><span class="line"></span><br><span class="line">// 类型别名2:</span><br><span class="line">type S = string</span><br><span class="line">var str S = &quot;hello world&quot;</span><br><span class="line"></span><br><span class="line">// 函数别名:</span><br><span class="line">type F = func()</span><br><span class="line">var foo F = func() &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="struct"><a href="#struct" class="headerlink" title="struct"></a>struct</h1><ul>
+<li><p>定义</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type YourFirstStruct struct &#123;</span><br><span class="line">  member1 string</span><br><span class="line">  member2 string</span><br><span class="line">  // 每个成员没有分号</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建实例</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">s := YourFirstStruct &#123;</span><br><span class="line">  member1: &quot;member1&quot;,</span><br><span class="line">  member2: &quot;member2&quot;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>golang只有值传递, struct在函数内/外传递 or 直接<code>=</code>赋值给另一struct变量, 都会有一次拷贝, 与Java中Object是引用操作为主不同:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">s1 := YourFirstStruct &#123;</span><br><span class="line">  member1: &quot;&quot;</span><br><span class="line">  member2: &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line">s2 := s1 // 赋值导致一次拷贝</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 避免拷贝的做法:</span><br><span class="line">ptr1 := &amp;YourFirstStruct &#123;</span><br><span class="line">&#125;</span><br><span class="line">ptr2 := ptr1 // 指针传递</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>给Struct添加方法, 无需C++那样的头文件声明, 直接定义方法:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// s被叫做“接收器”</span><br><span class="line">func (s *YourFirstStruct) foo() &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="interface"><a href="#interface" class="headerlink" title="interface"></a>interface</h1><ul>
+<li><p>interface是一种类型, 包括0个或多个方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type I interface &#123;</span><br><span class="line">  Get() int</span><br><span class="line">  Set(int)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>空interface: <code>interface{}</code> 没有方法的interface, 可以认为任何类型都实现了该interface,</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">func foo(any interface&#123;&#125;) &#123;</span><br><span class="line">  // foo可以接受任何类型的参数</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Golang里没有extends这样的关键字来表名 某struct 实现了 某Interface, 只是在 <em>赋值</em>, <em>入参</em>, <em>返回值</em> 时被动检查</p>
+</li>
+</ul>
+<h1 id="array"><a href="#array" class="headerlink" title="array"></a>array</h1><ul>
+<li><p>数组在编译期即指定大小</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 数组在用var声明时即分配了空间并给初始值</span><br><span class="line">var arr0 [4]string</span><br><span class="line"></span><br><span class="line">// 声明, 同时赋值</span><br><span class="line">arr1 := [3]string &#123;&quot;a&quot;, &quot;b&quot;, &quot;c&quot;&#125;</span><br><span class="line">arr2 := [...]string &#123;&quot;a&quot;, &quot;b&quot;, &quot;c&quot;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>golang在创建<strong>字面量数组</strong>时, 会根据数组长度进行不同的处理</p>
+<ul>
+<li>数组len&lt;=4, 直接在栈上分配数组</li>
+<li>数组len&gt;4, 会在静态区分配数组(编译期), 并在运行时取出来</li>
+<li>上述没有考虑逃逸</li>
+</ul>
+</li>
+<li>数组的类型是: <code>[N]ElemType</code>, 长度也算类型的一部分, 例如 <code>[10]int</code> 和 <code>[3]int</code> 是不同的类型</li>
+<li>在golang中，数组也是值传递</li>
+</ul>
+<h1 id="slice"><a href="#slice" class="headerlink" title="slice"></a>slice</h1><ul>
+<li>切片: Golang内置类型, 即”动态数组” // 数组的长度不可改变</li>
+<li><p>比较 slice 和 array 的声明方式  // 注意<code>s2 := []int{1,2,3}</code>这种字面量声明方式, 如果用<code>[N]</code> or <code>[...]</code> 创建出来的就不是slice而是array了:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 数组: 声明即分配空间</span><br><span class="line">var arr0 [4]string</span><br><span class="line"></span><br><span class="line">// 切片: 声明时没有分配空间</span><br><span class="line">var slice0 []string</span><br><span class="line">slice0[0] = 1 // panic: runtime error: index out of range</span><br><span class="line"></span><br><span class="line">// 创建切片1, 通过数组</span><br><span class="line">s1 := arr0[0:1]</span><br><span class="line"></span><br><span class="line">// 创建切片2, 创建时给初值</span><br><span class="line">s2 := []int&#123;1,2,3&#125;</span><br><span class="line"></span><br><span class="line">// 创建切片3, len=cap=0</span><br><span class="line">s3 := make([]int, 0)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>切片作为函数的参数<code>func([]int sli)</code>, 如果在函数内进行append操作…</p>
+</li>
+<li><p>切片的扩容: 向切片add元素, 如果 len 大于 cap, 将创建新数组, 大小为原切面cap的两倍, 然后所有元素复制到新数组中</p>
+</li>
+<li><p>切片由两部分组成: Header + 数组实际存储空间, 其中 Header的结构表述如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type SliceHeader struct &#123;</span><br><span class="line">array unsafe.Pointer // 指针, 指向连续的内存</span><br><span class="line">len   int</span><br><span class="line">cap   int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/golang-slice.png" alt="../_images/golang-slice.png"></p>
+</li>
+<li><p>从数组创建切片: <code>slice := array[startIndex:endIndex]</code> , 切片将包含 array[startIndex] …array[endIdex-1], 这种方式创建的新数组, 只是新建了一个slice结构, data指针指向的是同一块内存地址, 故修改新slice的数据也会影响旧slice:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">array := [5]int&#123;1, 2, 3, 4, 5&#125;</span><br><span class="line">slice := array3[1:3]  // 此时slice包括 [2,3], len=2, 但slice指向的数组是[2,3,4,5], 故cap=4</span><br><span class="line">slice[0] = 7 // 对切片的修改也会影响数组, 但当切片发生一次扩容之后, 切片会指向一个新申请的数组空间</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>➤ 比较数组和切片:</p>
+<ul>
+<li>数组声明即分配空间, 且不可改变长度</li>
+<li>切片声明不分配空间, 需要通过<code>make()</code> or <code>arr[start:end]</code></li>
+<li>切片的类型是 <code>[]type</code>, 数组的类型是<code>[N]type</code></li>
+<li>Slice 和 Arr内存存储位置有何不同? stack vs heap ? @todo</li>
+</ul>
+<h1 id="map"><a href="#map" class="headerlink" title="map"></a>map</h1><ul>
+<li><p>声明和初始化, 赋值, 访问</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 声明</span><br><span class="line">var mmap1 map[string]int</span><br><span class="line"></span><br><span class="line">// 初始化</span><br><span class="line">mmap1 = make(map[string]int)</span><br><span class="line"></span><br><span class="line">// 赋值</span><br><span class="line">mmap1[&quot;One&quot;] = 1</span><br><span class="line"></span><br><span class="line">// 访问</span><br><span class="line">if v, exist := mmap1[&quot;One&quot;]; exist &#123;</span><br><span class="line">  delete(mmap1, &quot;One&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 声明+定义</span><br><span class="line">mmap2 := map[string]string &#123;&quot;One&quot;:1, &quot;Two&quot;:2&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>与slice一样, <code>make(map[K]V)</code> 返回的实际是指针类型</p>
+</li>
+<li>How to range map:</li>
+</ul>
+<h1 id="内置函数-len-append-copy-panic"><a href="#内置函数-len-append-copy-panic" class="headerlink" title="内置函数(len/append/copy/panic..)"></a>内置函数(len/append/copy/panic..)</h1><p>@ref: <a href="https://pkg.go.dev/builtin#pkg-functions" target="_blank" rel="noopener">https://pkg.go.dev/builtin#pkg-functions</a></p>
+<ul>
+<li>len/cap: 返回数组, slice, map, string, chan ..的长度&amp;容量</li>
+<li>append/copy: 切片拼接&amp;复制<ul>
+<li>原型: <code>func append(slice []Type, elems ...Type) []Type</code></li>
+<li>原型: <code>func copy(dst, src []Type) int</code></li>
+</ul>
+</li>
+<li>print/println: 输出到std err // 区分<code>fmt.Print()</code><ul>
+<li>原型: <code>func print(args ...Type)</code></li>
+<li>原型: <code>func println(args ...Type)</code></li>
+</ul>
+</li>
+<li>delete: 用于删除map里的key, 原型: <code>func delete(m map[Type]Type1, key Type)</code></li>
+<li>new:  → 本页[[#new]]</li>
+<li>make:  → 本页[[#make]]</li>
+</ul>
+<h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">func make(t Type, size ...IntegerType) Type</span><br></pre></td></tr></table></figure>
+<ul>
+<li>slice:<ul>
+<li>make([]T)</li>
+<li>make([]T, len)</li>
+<li>make([]T, len, cap)</li>
+</ul>
+</li>
+<li>map:<ul>
+<li>make(map[K]V)</li>
+<li>make(map[K]V, cap)</li>
+</ul>
+</li>
+<li>chan:<ul>
+<li>make(chan int, 5)</li>
+</ul>
+</li>
+</ul>
+<h2 id="new"><a href="#new" class="headerlink" title="new"></a>new</h2><ul>
+<li>原型: <code>func new(Type) *Type</code></li>
+<li>作用: 返回为指定类型分配的内存地址</li>
+<li><p>example:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type YourStruct struct &#123;</span><br><span class="line">  member1 int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 创建struct方式1</span><br><span class="line">p1 := new(YourStruct)</span><br><span class="line">p1.member1 = 2</span><br><span class="line"></span><br><span class="line">// 创建struct方式2</span><br><span class="line">p2 := &amp;YourStruct&#123; ... &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Golang中new 和var ，一个返回指针一个返回变量，二者的实现没有本质区别， 都是要通过逃逸分析判断是在栈上/堆上分配变量，（如果没有逃逸，new创建的变量也可能在栈上创建）// 逃逸分析在编译期？ or 运行期？</p>
+</li>
+</ul>
+<h2 id="make-vs-new"><a href="#make-vs-new" class="headerlink" title="make vs new"></a>make vs new</h2><p>make vs new</p>
+<ul>
+<li>new(T)：<ul>
+<li>分配一块内存，内存置零，返回其指针（并未初始化）</li>
+<li>根据new(T)的T创建内存，返回<code>*T</code>类型，<code>p := new(Type)</code> 等同于<code>p := &amp; Type{}</code></li>
+</ul>
+</li>
+<li>make(T)：<ul>
+<li>分配一块内存，并初始化，返回地址</li>
+<li>make只能用于初始化slice/map/chan</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/golang-make-vs-new.png" alt="../_images/golang-make-vs-new.png"></p>
+<p>比较： new([]int) 只分配了一片内存（指向[]int类型，也就是slice的头）但是这块内存的ptr并未初始化，make([]int) 为slice的prt做了初始化</p>
+<p>@ref</p>
+<ul>
+<li>Go 语言中的 make 和 new | Go 语言设计与实现：<a href="https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-make-and-new/" target="_blank" rel="noopener">https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-make-and-new/</a></li>
+</ul>
+<h2 id="panic-amp-recovery"><a href="#panic-amp-recovery" class="headerlink" title="panic &amp; recovery"></a>panic &amp; recovery</h2><p>举例:</p>
+<ul>
+<li>G调用了F;</li>
+<li>F调用panic</li>
+</ul>
+<p>行为:</p>
+<ul>
+<li>调用<code>panic</code>的函数 F被立刻停止, 不再向下执行</li>
+<li>调用函数F中的defer, 然后F返回到它的Caller, G</li>
+<li>G后面的代码不再执行, 执行所有的defer</li>
+<li>程序以非0值退出</li>
+<li>以上 @ref: <a href="https://pkg.go.dev/builtin#panic" target="_blank" rel="noopener">https://pkg.go.dev/builtin#panic</a></li>
+</ul>
+<ul>
+<li>defer 可以嵌套： <code>defer func() { defer xxx }</code></li>
+<li>panic 函数调用后，会终止“调用panic”的Goroutine的执行流程：直接去执行该Goroutine的defer链表中所有函数</li>
+<li>panic 可以嵌套： 可以在defer中再调用panic</li>
+<li>recovery 只能在defer 函数中被调用， 用来终止程序的崩溃</li>
+<li>编译器负责对defer关键字进行转换，在调用 defer 的函数末尾调用 runtime.deferreturn 函数 // 函数退出时一定执行defer</li>
+<li>编译器把recovery关键字转换为<code>runtime.gorecover()</code>函数的调用，实现如下，当前Goroutine没有panic的时候，该函数直接返回，当有panic的时候</li>
+</ul>
+<p>@ref：</p>
+<ul>
+<li>Go 语言 panic 和 recover 的原理 | Go 语言设计与实现：<a href="https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-panic-recover/" target="_blank" rel="noopener">https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-panic-recover/</a></li>
+</ul>
+<p>问题：下面的输出顺序（嵌套崩溃）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">func main() &#123;</span><br><span class="line">	defer fmt.Println(&quot;in main&quot;)</span><br><span class="line">	defer func() &#123;</span><br><span class="line">		defer func() &#123;</span><br><span class="line">			panic(&quot;panic again and again&quot;)</span><br><span class="line">		&#125;()</span><br><span class="line">		panic(&quot;panic again&quot;)</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	panic(&quot;panic once&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="error"><a href="#error" class="headerlink" title="error"></a>error</h1><ul>
+<li><p><code>error</code>是一个Interface:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type error interface &#123;</span><br><span class="line">  // 接口只有一个函数,返回字符串</span><br><span class="line">  Error() string</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>errors</code>创建一个错误: <code>err := errors.New(&quot;Error occured!&quot;)</code>, 返回的是一个<code>type errorString struct</code>类型的错误</p>
+</li>
+<li>定义自己的error类型: 定义自己的错误Struct类型, 然后实现<code>Error() string</code>方法即可</li>
+</ul>
+<h1 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h1><ul>
+<li>defer 后面的表达式在函数退出前执行</li>
+<li>一个func可以有多个 defer语句, 函数退出时执行顺序与定义顺序相反</li>
+</ul>
+<ul>
+<li>每个Gorounite 都定义了一个defer struct链表，新增defer结构是在链表头，函数return之前会调用（从链表头到尾）链表里所有的</li>
+<li>在加入链表时，就需要先计算出传入defer 函数的参数，参数也存储在defer struct中（？不确定），所以…</li>
+<li>如果defer 中对（调用defer的函数的）返回值做了修改，也会影响到返回值（因为<code>return ret</code>不是原子操作，是先赋值再return）</li>
+</ul>
+<p>@ref</p>
+<ul>
+<li>理解 Go 语言 defer 关键字的原理 | Go 语言设计与实现：<a href="https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-defer/" target="_blank" rel="noopener">https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-defer/</a></li>
+<li>defer关键字 · 深入解析Go：<a href="https://tiancaiamao.gitbooks.io/go-internals/content/zh/03.4.html" target="_blank" rel="noopener">https://tiancaiamao.gitbooks.io/go-internals/content/zh/03.4.html</a></li>
+</ul>
+<h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><ul>
+<li>小写开头的成员默认不被序列化</li>
+<li>struct tag: <code>json:&quot;var_name&quot;</code> 指定序列化后的变量名</li>
+<li>struct tag: <code>json:&quot;var_name,omitempty&quot;</code> 如果成员值为”zero-value”, 序列化将不包括此字段</li>
+<li><p>struct tag: <code>json:&quot;-&quot;</code> 序列化时跳过此字段</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type YourFirstStruct struct &#123;</span><br><span class="line">  Mem1 string  `json:&quot;variable1&quot;`</span><br><span class="line">  Mem2 string  `json:&quot;variable2,omitempty&quot;`</span><br><span class="line">  Mem3 string  `json:&quot;-&quot;`</span><br><span class="line">  // 每个成员没有分号</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Type(struct/map等) → byte[]</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">slice_of_byte, err := json.Marshal(obj)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>byte[] → Type</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">obj := interface&#123;&#125;</span><br><span class="line">json_str := `&#123;&quot;Name&quot;:&quot;X&quot;, &quot;Age&quot;: 101&#125;`</span><br><span class="line">err := json.Unmarshal([]byte(json_str), &amp;obj)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="时间-API"><a href="#时间-API" class="headerlink" title="时间 API"></a>时间 API</h1><ul>
+<li>获取int64时间戳: <code>var timestampSec int32 = time.Now().Unix()</code></li>
+</ul>
+<h1 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h1><p><a href="https://geektutu.com/post/quick-go-test.html" target="_blank" rel="noopener">https://geektutu.com/post/quick-go-test.html</a></p>
+<h1 id="init"><a href="#init" class="headerlink" title="init"></a>init</h1><p>init()函数特性:</p>
+<ul>
+<li>在main之前, 由runtime调用</li>
+<li>init的调用顺序同import package的顺序</li>
+<li>同一个go文件下, 可以有多个init, 调用顺序同定义顺序</li>
+<li>同一个package下, 可以有多个init, 调用顺序似乎是go文件字典顺序, 但不要依赖此顺序做初始化</li>
+<li>用户无法自己调用<code>init()</code>, 会报错undefined</li>
+</ul>
+<p>使用场景:</p>
+<ul>
+<li>做初始化</li>
+<li>实现sync.Once功能呢</li>
+<li>无法用初始化表达式初始的变量</li>
+</ul>
+<h1 id="go-命令行"><a href="#go-命令行" class="headerlink" title="go-命令行"></a>go-命令行</h1><ul>
+<li><a href="https://studygolang.com/articles/10912" target="_blank" rel="noopener">Golang 基本命令及使用 - Go语言中文网 - Golang中文社区</a><blockquote>
+<ul>
+<li>go get -v github.com/rogpeppe/godef</li>
+<li>go get -u -v -f all  下载所有</li>
+<li>有错误: go install git.code.xx.com/trpcprotocol/h323ep/agent_h323ep_go_agent //  go install 后面是git地址?</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Usage:</span><br><span class="line"></span><br><span class="line">	go &lt;command&gt; [arguments]</span><br><span class="line"></span><br><span class="line">The commands are:</span><br><span class="line"></span><br><span class="line">	bug         start a bug report</span><br><span class="line">	build       compile packages and dependencies</span><br><span class="line">	clean       remove object files and cached files</span><br><span class="line">	doc         show documentation for package or symbol</span><br><span class="line">	env         print Go environment information</span><br><span class="line">	fix         update packages to use new APIs</span><br><span class="line">	fmt         gofmt (reformat) package sources</span><br><span class="line">	generate    generate Go files by processing source</span><br><span class="line">	get         add dependencies to current module and install them</span><br><span class="line">	install     compile and install packages and dependencies</span><br><span class="line">	list        list packages or modules</span><br><span class="line">	mod         module maintenance</span><br><span class="line">	run         compile and run Go program</span><br><span class="line">	test        test packages</span><br><span class="line">	tool        run specified go tool</span><br><span class="line">	version     print Go version</span><br><span class="line">	vet         report likely mistakes in packages</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Golang/" rel="tag"># Golang</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/11.Programming-Language/Cpp-Tutorials.04.Debug-and-Perf/" rel="next" title="Cpp Tutorials-04-Debug & Perf">
+                <i class="fa fa-chevron-left"></i> Cpp Tutorials-04-Debug & Perf
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/11.Programming-Language/Golang-Tutorials.02.并发/" rel="prev" title="Golang Tutorials-02并发">
+                Golang Tutorials-02并发 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Golang中的约定大于配置"><span class="nav-text">Golang中的约定大于配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量"><span class="nav-text">变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#全局变量"><span class="nav-text">全局变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本数据类型"><span class="nav-text">基本数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#string"><span class="nav-text">string</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型转换"><span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数"><span class="nav-text">函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#闭包"><span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#控制语句"><span class="nav-text">控制语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#type"><span class="nav-text">type</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#struct"><span class="nav-text">struct</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#interface"><span class="nav-text">interface</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#array"><span class="nav-text">array</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#slice"><span class="nav-text">slice</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map"><span class="nav-text">map</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内置函数-len-append-copy-panic"><span class="nav-text">内置函数(len/append/copy/panic..)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#make"><span class="nav-text">make</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new"><span class="nav-text">new</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#make-vs-new"><span class="nav-text">make vs new</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#panic-amp-recovery"><span class="nav-text">panic &amp; recovery</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#error"><span class="nav-text">error</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#defer"><span class="nav-text">defer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列化"><span class="nav-text">序列化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#时间-API"><span class="nav-text">时间 API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单元测试"><span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#init"><span class="nav-text">init</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#go-命令行"><span class="nav-text">go-命令行</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/11.Programming-Language/Golang-Tutorials.01.基础/';
+          this.page.identifier = '11.Programming-Language/Golang-Tutorials.01.基础/';
+          this.page.title = 'Golang Tutorials-01基础';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

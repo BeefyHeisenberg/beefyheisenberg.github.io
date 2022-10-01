@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="后端技术,大数据,流式计算,Storm," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="概述  Storm是一个开源的分布式实时计算系统，可以简单、可靠的处理大量的数据流。被称作“实时的hadoop”。  Storm有很多使用场景：如实时分析，在线机器学习，持续计算， 分布式RPC，ETL等等。  Storm支持水平扩展，具有高容错性，保证每个消息都会得到处理，而且处理速度很快。  Storm的部署和运维都很便捷，而且更为重要的是可以使用任意编程语言来开发应用。 Storm的特点">
+<meta name="keywords" content="后端技术,大数据,流式计算,Storm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Storm">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/33.Bigdata/Storm/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="概述  Storm是一个开源的分布式实时计算系统，可以简单、可靠的处理大量的数据流。被称作“实时的hadoop”。  Storm有很多使用场景：如实时分析，在线机器学习，持续计算， 分布式RPC，ETL等等。  Storm支持水平扩展，具有高容错性，保证每个消息都会得到处理，而且处理速度很快。  Storm的部署和运维都很便捷，而且更为重要的是可以使用任意编程语言来开发应用。 Storm的特点">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://storm.apache.org/images/logo.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/storm/storm_topology.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/storm/storm_nimbus_zk.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/storm/storm_grouping.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/storm/Storm_Worker_Executor_Task.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:47.651Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Storm">
+<meta name="twitter:description" content="概述  Storm是一个开源的分布式实时计算系统，可以简单、可靠的处理大量的数据流。被称作“实时的hadoop”。  Storm有很多使用场景：如实时分析，在线机器学习，持续计算， 分布式RPC，ETL等等。  Storm支持水平扩展，具有高容错性，保证每个消息都会得到处理，而且处理速度很快。  Storm的部署和运维都很便捷，而且更为重要的是可以使用任意编程语言来开发应用。 Storm的特点">
+<meta name="twitter:image" content="http://storm.apache.org/images/logo.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/33.Bigdata/Storm/"/>
+
+
+
+
+
+  <title>Storm | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/33.Bigdata/Storm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Storm</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/33-Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">33.Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,316
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://storm.apache.org/images/logo.png" alt="Storm"></p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>  Storm是一个开源的分布式实时计算系统，可以简单、可靠的处理大量的数据流。被称作“实时的hadoop”。<br>  Storm有很多使用场景：如实时分析，在线机器学习，持续计算， 分布式RPC，ETL等等。<br>  Storm支持水平扩展，具有高容错性，保证每个消息都会得到处理，而且处理速度很快。<br>  Storm的部署和运维都很便捷，而且更为重要的是可以使用任意编程语言来开发应用。</p>
+<h2 id="Storm的特点"><a href="#Storm的特点" class="headerlink" title="Storm的特点"></a>Storm的特点</h2><ul>
+<li>简单的编程模型:<br>在大数据处理方面相信大家对 hadoop已经耳熟能详，基于 Google Map/Reduce来实现的 Hadoop为开发者提供了map、reduce原语，使并行批处理程序变得非常地简单。<br>同样，Storm也为大数据 的实时计算提供了一些简单优美的原语，这大大降低了开发并行实时处理的任务的复杂性，帮助你快速、高效的开发应用。</li>
+<li>水平扩展:<br>在 Storm集群中真正运行 topology的主要有三个实体：工作进程、线程和任务。Storm集群中的每台机器上都可以运行多个工作进程，每个工作进程又可创建多个线程，每个线程可以执行多个任务，任务是真正进行数据处理的实体，我们开发的 spout、bolt就是作为一个或者多个任务的方式执行的。<br>计算任务在多个线程、进程和服务器之间并行进行，支持灵活的水平扩展。</li>
+<li>支持多种编程语言:<br>你可以在Storm之上使用各种编程语言。默认支持 Clojure、Java、Ruby和 Python。要增加对其他语言的支持，只需实现一个简单的 Storm通信协议即可。</li>
+<li>高可靠性:<br>Storm保证每个消息至少能得到一次完整处理。任务失败时，它会负责从消息源重试消息。<br>spout发出的消息后续可能会触发产生成千上万条消息，可以形象的理解为一棵消息树，其中 spout发出的消息为树根，Storm会跟踪这棵消息树的处理情况，只有当这棵消息树中的所有消息都被处理了，Storm才会认为 spout发出的这个消息已经被“完全处理”。如果这棵消息树中的任何一个消息处理失败了，或者整棵消息树在限定的时间内没有“完全处理”，那么 spout发出的消息就会重发。</li>
+<li>高容错性:<br>Storm会管理工作进程和节点的故障。<br>如果在消息处理过程中出了一些异常，Storm会重新安排这个出问题的处理单元。Storm保证一个处理单元永远运行（除非你显式杀掉这个处理单元）。<br>当然，如果处理单元中存储了中间状态，那么当处理单元重新被Storm启动的时候，需要应用自己处理中间状态的恢复。</li>
+<li>本地模式:<br>Storm有一个“本地模式”，可以在处理过程中完全模拟Storm集群。这让你可以快速进行开发和单元测试。</li>
+</ul>
+<h2 id="Storm是如何工作的"><a href="#Storm是如何工作的" class="headerlink" title="Storm是如何工作的"></a>Storm是如何工作的</h2><p>对于一个Storm集群，有两类节点：主节点master node和工作节点worker nodes。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">Master Node    ZK Cluster       Worker Node           Topology</span><br><span class="line">    v             v                  v                   v</span><br><span class="line">               +-----+       +---------------------+</span><br><span class="line">               | ZK1 |       |Supervisor |Worker*N | --&gt; Spout -&gt; Bolt</span><br><span class="line">               |     |       +---------------------+</span><br><span class="line">+------+       +-----+ ---&gt;</span><br><span class="line">|Nimbus| ---&gt;  | ZK2 |       +---------------------+</span><br><span class="line">+------+       |     |       |Supervisor |Worker*N |</span><br><span class="line">               +-----+       +---------------------+</span><br><span class="line">               | ZK..| ---&gt;</span><br><span class="line">               |     |       +---------------------+</span><br><span class="line">               +-----+       |Supervisor |Worker*N |</span><br><span class="line">                             +---------------------+</span><br></pre></td></tr></table></figure>
+<ul>
+<li>主节点(master node)运行着一个叫做 Nimbus的守护进程。这个守护进程负责在集群中分发代码，为工作节点分配任务，并监控故障。</li>
+<li>每个工作节(worker nodes)点都运行着一个 Supervisor守护进程, Supervisor作为拓扑的一部分运行在工作节点上。一个 Storm拓扑结构在不同的机器上运行着众多的工作节点。</li>
+<li>每个 Supervisor中运行着多个 Workers进程，每个 Worker进程中运行着多个 Executor线程。每个 Executor线程会循环调用 Task实例(Task是Spout/Bolt的实例)的<code>nextTuple</code>或<code>execute</code>方法。Storm默认是1个(Spout/Bolt)只生成1个 Task。</li>
+<li>数据的分发和处理分别是 Spout和 Bolt, Spout和 Bolt由 Stream Grouping连接起来的节点网络被称为: Topology(拓扑)。</li>
+</ul>
+<p><img src="/images/storm/storm_topology.png" alt="Storm拓扑结构"></p>
+<p>下图是Storm各组件之间的数据交互图，可以看出Nimbus和Supervisor之间没有直接交互。Storm所有元数据信息/状态都是保存在Zookeeper上，<br>Nimbus在Zookeeper上保存所有的集群状态，单个守护进程可以是无状态的而且失效或重启时不会影响整个系统的健康。 如果Supervisor因故障出现问题而无法运行Topology，Nimbus会第一时间感知到，并重新分配Topology到其它可用的Supervisor上运行<br>Worker之间则通过Netty传送数据。</p>
+<p><img src="/images/storm/storm_nimbus_zk.png" alt="Nimbus_Supervisor"></p>
+<h1 id="Storm主要概念"><a href="#Storm主要概念" class="headerlink" title="Storm主要概念"></a>Storm主要概念</h1><p>这些术语的字面意义翻译如下，由于这个工具的名字叫Storm，这些术语一律按照气象名词解释</p>
+<blockquote>
+<p>nimbus 雨云，主节点的守护进程，负责为工作节点分发任务。<br>spout 龙卷，读取原始数据为bolt提供数据<br>bolt 雷电，从spout或其它bolt接收数据，并处理数据，处理结果可作为其它bolt的数据源或最终结果</p>
+</blockquote>
+<p>下面的术语跟气象就没有关系了</p>
+<blockquote>
+<p>topology 拓扑结构，Storm的一个任务单元<br>define field(s) 定义域，由spout或bolt提供，被bolt接收</p>
+</blockquote>
+<p>在服务架构上来看, Storm分为 Master Node(即Nimbus), Zookeeper, Worker Node(Supervisor+Worker)</p>
+<p>在编程逻辑上来看, Storm分为 Spout(分发Tuple流), Bolt(处理Tupe数据), Stream Grouping(前两者的数据分发规则), 以及Topology</p>
+<h2 id="Nimbus-amp-Supervisor"><a href="#Nimbus-amp-Supervisor" class="headerlink" title="Nimbus &amp; Supervisor"></a>Nimbus &amp; Supervisor</h2><p>  Storm集群由一个主节点和多个工作节点组成。主节点运行了一个名为“Nimbus”的守护进程，用于分配代码、布置任务及故障检测。每个工作节点都运行了一个名为“Supervisor”的守护进程，用于监听工作，开始并终止工作进程。Nimbus和Supervisor都能快速失败，而且是无状态的，这样一来它们就变得十分健壮，两者的协调工作是由Apache ZooKeeper来完成的。</p>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p>Stream是一个数据流的抽象。这是一个没有边界的 Tuple序列,而这些Tuple序列会以一种分布式的方式并行地创建和处理。</p>
+<p>对消息流的定义主要就是对消息流里面的tuple 进行定义，为了更好地使用tuple，需要给tuple 里的每个字段取一个名字，并且不同的tuple 字段对应的类型要相同，即两个tuple 的第一个字段类型相同，第二个字段类型相同。<br>默认情况下，tuple 的字段类型可以为integer、long、short、byte、string、double、float、boolean 和byte array 等基本类型，也可以自定义类型，只需要实现相应的序列化接口。</p>
+<p>每一个消息流在定义的时候需要被分配一个id，最常见的消息流是单向的消息流，在Storm 中OutputFieldsDeclarer 定义了一些方法，让你可以定义一个Stream 而不用指定这个id。在这种情况下，这个Stream 会有个默认的id: 1。</p>
+<h2 id="Topologies"><a href="#Topologies" class="headerlink" title="Topologies"></a>Topologies</h2><p>Topology是由Stream Grouping连接起来的Spout和Bolt节点网络。<br>在 Storm 中，一个实时计算应用程序的逻辑被封装在一个称为Topology 的对象中，也称为计算拓扑。<br>Topology 有点类似于Hadoop 中的MapReduce Job，但是它们之间的关键区别在于，一个MapReduce Job 最终总是会结束的，然而一个Storm 的Topology 会一直运行。<br>在逻辑上，一个Topology 是由一些Spout（消息的发送者）和Bolt（消息的处理者）组成图状结构，而链接Spouts 和Bolts 的则是Stream Groupings。</p>
+<p><img src="/images/storm/storm_grouping.png" alt=""></p>
+<h2 id="Spouts"><a href="#Spouts" class="headerlink" title="Spouts"></a>Spouts</h2><p>Spout 是一个 topology（拓扑）中 streams 的源头. 通常 Spout 会从外部数据源读取 Tuple，然后把他们发送到拓扑中（如 Kestel 队列, 或者 Twitter API）. Spout 可以是 可靠的 或 不可靠的. 可靠的 Spout 在 Storm 处理失败的时候能够重新发送(emit)失败的 Tuple, 不可靠的 Spout 一旦把一个 Tuple 发送出去就撒手不管了.</p>
+<p>Spout 可以发送多个流. 可以使用 OutputFieldsDeclarer 的 declareStream 方法定义多个流,<br>在 SpoutOutputCollector 对象的 emit 方法中指定要发送到的 stream .</p>
+<p>Spout 中的最主要的方法是 <code>nextTuple()</code>:<br>nextTuple 要么向 topology（拓扑）中发送一个新的 Tuple,<br>要么在没有 Tuple 需要发送的情况下直接返回.<br>对于任何 Spout 实现, nextTuple 方法都必须非阻塞的, 因为 Storm 在一个线程中调用所有的 Spout 方法.</p>
+<p>Spout 的另外几个重要的方法是 <code>ack()</code> 和 <code>fail()</code>.<br>这些方法在 Storm 检测到 Spout 发送出去的 Tuple 被成功处理或者处理失败的时候调用.</p>
+<h2 id="Bolts"><a href="#Bolts" class="headerlink" title="Bolts"></a>Bolts</h2><p>所有消息处理的逻辑都在Bolt 中完成，在Bolt 中可以完成如过滤、分类、聚集、计算、查询数据库等操作。<br>Bolt 可以做简单的消息处理操作，例如，Bolt 可以不做任何操作，只是将接收到的消息转发给其他的Bolt。<br>Bolt 也可以做复杂的消息流的处理，这需要很多个Bolt。<br>在实际使用中，一条消息往往需要经过多个处理步骤，例如，计算一个点击数在前十的广告，首先需要对所有同学的成绩进行排序，然后在排序过的成绩中选出前十名的<br>成绩的同学。所以在一个Topology 中，往往有很多个Bolt，从而形成了复杂的流处理网络。</p>
+<ul>
+<li>使用<code>OutputFieldsDeclarer.declareStream</code>定义Stream。</li>
+<li>使用<code>OutputCollector.emit</code>来选择要发射的Stream。</li>
+</ul>
+<p>Bolts的主要方法是<code>execute()</code>。在该方法里，Bolts以Tuple作为输入, 使用OutputCollector来发送Tuple, 通过调用<code>OutputCollector.ack()</code>通知这个Tuple的发射者Spout。<br>Bolts可以发射多条消息流。</p>
+<h2 id="Stream-Groupings"><a href="#Stream-Groupings" class="headerlink" title="Stream Groupings"></a>Stream Groupings</h2><p>Stream Grouping 就是用来定义一个Stream 应该如何分配给 Bolts  上面的多个Tasks。Storm里有7种类型的Stream Grouping：</p>
+<ul>
+<li>Shuffle Grouping 随机分组,随机派发Stream里面的 Tuple ,保证每个Bolt接收到的 Tuple 数量大致相同。</li>
+<li>Fields Grouping 按字段分组,以id举例。具有相同id的 Tuple 会被分到相同的Bolt中的一个Task,而不同id的 Tuple 会被分到不同的Bolt中的Task。</li>
+<li>Direct Grouping 直接分组,这是一种比较特别的分组方法,用这种分组意味着消息的发送者指定由消息接收者的哪个Task处理这个消息。<br>只有被声明为Direct Stream的消息流可以声明这种分组方法。而且这种消息 Tuple 必须使用emitDirect方法来发射。消息处理者可以通过TopologyContext来获取处理它的消息的Task的id(OutputCollector.emit方法也会返回Task的id)。</li>
+<li>All Grouping 广播,对于每一个 Tuple ,所有的 Bolts 都会收到。</li>
+<li>Global Grouping 全局分组,这个 Tuple 被分配到Storm中的一个Bolt的其中一个 Task。具体一点就是分配给id值最低的那个 Task。</li>
+<li>Non Grouping 不分组,Stream不关心到底谁会收到它的 Tuple 。目前这种分组和Shuffle Grouping是一样的效果,有一点不同的是Storm会把这个Bolt放到这个Bolt的订阅者同一个线程中去执行。</li>
+<li>Local or Shuffle Grouping 如果目标Bolt有一个或者多个Task在同一个工作进程中, Tuple 将会被随机发射给这些Tasks。否则,和普通的Shuffle Grouping行为一致。</li>
+</ul>
+<p>上面几种Streaming Group的内置实现中，最常用的应该是 Shuffle Grouping、Fields Grouping、Direct Grouping这三种，<br>使用其它的也能满足特定的应用需求。</p>
+<p>另外，Storm还提供了用户自定义 Streaming Grouping 接口，如果上述 Streaming Grouping 都无法满足实际业务需求，也可以自己实现，只需要实现<code>backtype.storm.grouping.CustomStreamGrouping</code>接口，该接口定义了如下方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">List&lt;Integer&gt; <span class="title">chooseTasks</span><span class="params">(<span class="keyword">int</span> taskId, List&lt;Object&gt; values)</span></span></span><br></pre></td></tr></table></figure>
+<h1 id="API"><a href="#API" class="headerlink" title="API"></a>API</h1><h2 id="Spout"><a href="#Spout" class="headerlink" title="Spout"></a>Spout</h2><p>WordReader类实现了IRichSpout接口。我们将在第四章看到更多细节。<br>WordReader负责从文件按行读取文本，并把文本行提供给第一个bolt。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordReader</span> <span class="keyword">implements</span> <span class="title">IRichSpout</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SpoutOutputCollector collector;</span><br><span class="line">    <span class="keyword">private</span> FileReader fileReader;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> completed = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">private</span> TopologyContext context;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isDistributed</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> <span class="keyword">false</span>;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 成功会调用ack</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ack</span><span class="params">(Object msgId)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"OK:"</span>+msgId);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 失败会调用fail</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fail</span><span class="params">(Object msgId)</span> </span>&#123;</span><br><span class="line">         System.out.println(<span class="string">"FAIL:"</span>+msgId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     <span class="comment">/* open是第一个被调用的spout方法</span></span><br><span class="line"><span class="comment">      * TopologyContext context: 拓扑的上下文</span></span><br><span class="line"><span class="comment">      * SpoutOutputCollector collector: 向Bolt发布数据</span></span><br><span class="line"><span class="comment">      * 在这里我们创建了一个FileReader对象，用来读取文件</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">(Map conf, TopologyContext context, SpoutOutputCollector collector)</span> </span>&#123;</span><br><span class="line">             <span class="keyword">try</span> &#123;</span><br><span class="line">                 <span class="keyword">this</span>.context = context;</span><br><span class="line">                 <span class="keyword">this</span>.fileReader = <span class="keyword">new</span> FileReader(conf.get(<span class="string">"wordsFile"</span>).toString());</span><br><span class="line">             &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">                 <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Error reading file ["</span>+conf.get(<span class="string">"wordFile"</span>)+<span class="string">"]"</span>);</span><br><span class="line">             &#125;</span><br><span class="line">             <span class="keyword">this</span>.collector = collector;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* nextTuple()会在同一个循环内被ack()和fail()周期性的调用。没有任务时它必须释放对线程的控制，其它方法才有机会得以执行。</span></span><br><span class="line"><span class="comment">     * 读取文件每一行, 调用collector.emit() 向bolts发布待处理的数据</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nextTuple</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 这个方法会不断的被调用，直到整个文件都读完了，我们将等待并返回。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">         <span class="keyword">if</span>(completed)&#123;</span><br><span class="line">             <span class="keyword">try</span> &#123;</span><br><span class="line">                 Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">             &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                 <span class="comment">//什么也不做</span></span><br><span class="line">             &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">         &#125;</span><br><span class="line">         String str;</span><br><span class="line">         <span class="comment">//创建reader</span></span><br><span class="line">         BufferedReader reader = <span class="keyword">new</span> BufferedReader(fileReader);</span><br><span class="line">         <span class="keyword">try</span>&#123;</span><br><span class="line">             <span class="comment">//读所有文本行</span></span><br><span class="line">            <span class="keyword">while</span>((str = reader.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">                 <span class="comment">// 按行发布一个新值</span></span><br><span class="line">                 <span class="keyword">this</span>.collector.emit(<span class="keyword">new</span> Values(str),str);</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">             <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Error reading tuple"</span>,e);</span><br><span class="line">         &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">             completed = <span class="keyword">true</span>;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">      * 声明输入域"word"</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">declareOutputFields</span><span class="params">(OutputFieldsDeclarer declarer)</span> </span>&#123;</span><br><span class="line">         declarer.declare(<span class="keyword">new</span> Fields(<span class="string">"line"</span>));</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Bolt"><a href="#Bolt" class="headerlink" title="Bolt"></a>Bolt</h2><p>下面的WordNormalizer实现了接口backtype.storm.topology.IRichBolt，该Bolt负责得到并标准化每行文本。<br>它把文本行切分成单词，大写转化成小写，去掉头尾空白符。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordNormalizer</span> <span class="keyword">implements</span> <span class="title">IRichBolt</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> OutputCollector collector;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 这个spout结束时（集群关闭的时候）,调用此方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cleanup</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">      * 声明: 这个bolt只会发布“word”域</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">declareOutputFields</span><span class="params">(OutputFieldsDeclarer declarer)</span> </span>&#123;</span><br><span class="line">        declarer.declare(<span class="keyword">new</span> Fields(<span class="string">"word"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * collector用来向Bolt发布数据</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">(Map stormConf, TopologyContext context, OutputCollector collector)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.collector=collector;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/** 具体的处理方法</span></span><br><span class="line"><span class="comment">      * bolt从单词文件接收到文本行，全部转化成小写，并切分它，从中得到所有单词。</span></span><br><span class="line"><span class="comment">      * 最后，每次都调用collector.ack()确认已经处理</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Tuple input)</span></span>&#123;</span><br><span class="line">        String sentence = input.getString(<span class="number">0</span>);</span><br><span class="line">        String[] words = sentence.split(<span class="string">" "</span>);</span><br><span class="line">        <span class="keyword">for</span>(String word : words)&#123;</span><br><span class="line">            word = word.trim();</span><br><span class="line">            <span class="keyword">if</span>(!word.isEmpty())&#123;</span><br><span class="line">                word=word.toLowerCase();</span><br><span class="line">                <span class="comment">//发布这个单词</span></span><br><span class="line">                List a = <span class="keyword">new</span> ArrayList();</span><br><span class="line">                a.add(input);</span><br><span class="line">                collector.emit(a,<span class="keyword">new</span> Values(word));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//对collector做出应答</span></span><br><span class="line">        collector.ack(input);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Topology"><a href="#Topology" class="headerlink" title="Topology"></a>Topology</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TopologyMain</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Topology definition</span></span><br><span class="line">		TopologyBuilder builder = <span class="keyword">new</span> TopologyBuilder();</span><br><span class="line">		builder.setSpout(<span class="string">"word-reader"</span>,<span class="keyword">new</span> WordReader());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在spout和bolts之间通过shuffleGrouping方法连接:</span></span><br><span class="line">		builder.setBolt(<span class="string">"word-normalizer"</span>, <span class="keyword">new</span> WordNormalizer())</span><br><span class="line">			.shuffleGrouping(<span class="string">"word-reader"</span>);</span><br><span class="line">		builder.setBolt(<span class="string">"word-counter"</span>, <span class="keyword">new</span> WordCounter(),<span class="number">1</span>)</span><br><span class="line">			.fieldsGrouping(<span class="string">"word-normalizer"</span>, <span class="keyword">new</span> Fields(<span class="string">"word"</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Configuration</span></span><br><span class="line">		Config conf = <span class="keyword">new</span> Config();</span><br><span class="line">		conf.put(<span class="string">"wordsFile"</span>, args[<span class="number">0</span>]);</span><br><span class="line">		conf.setDebug(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Topology run</span></span><br><span class="line"><span class="comment">         * 在生产环境中，拓扑会持续运行，</span></span><br><span class="line"><span class="comment">         * 这里用LocalCluster创建本地调试运行</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">		conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, <span class="number">1</span>);</span><br><span class="line">		LocalCluster cluster = <span class="keyword">new</span> LocalCluster();</span><br><span class="line">        <span class="comment">// create and submit:</span></span><br><span class="line">		cluster.submitTopology(<span class="string">"Getting-Started-Toplogie"</span>, conf, builder.createTopology());</span><br><span class="line">		Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">		cluster.shutdown();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Worker-amp-Executor-amp-Task"><a href="#Worker-amp-Executor-amp-Task" class="headerlink" title="Worker &amp; Executor &amp; Task"></a>Worker &amp; Executor &amp; Task</h2><ul>
+<li>每个 Worker Node 有一个 Supervisor, Supervisor 管理着N个 Worker 进程, 每个 Worker 进程是一个JVM进程, 有自己的端口号。</li>
+<li>一个 Topology 可能会在一个或者多个 Worker 进程里面执行，每个工作进程执行整个 Topology 的一部分</li>
+<li>每个 Worker进程中运行着多个 Executor 线程。</li>
+<li>每个 Executor线程中运行着若干个相同的 Task (可以理解为Spout/Bolt), Executor线程会执行Task 。</li>
+</ul>
+<p>用代码说明:<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建 Topology的配置</span></span><br><span class="line">Config conf = <span class="keyword">new</span> Config();</span><br><span class="line">conf.setNumWorkers(<span class="number">2</span>); <span class="comment">// 改Topology使用2个worker进程</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置Spout/Bolt的并行度(parallelism), 也即每个Spout/Bolt需要几个Executor线程来跑</span></span><br><span class="line">topologyBuilder.setSpout(“blue-spout”, <span class="keyword">new</span> BlueSpout(), <span class="number">2</span>); <span class="comment">// parallelism hint为2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这个 Bolt除了设置并行度=2, 还设置了Task数量=4 (这个Bolt生成4个Task对象)</span></span><br><span class="line">topologyBuilder.setBolt(“green-bolt”, <span class="keyword">new</span> GreenBolt(), <span class="number">2</span>) .setNumTasks(<span class="number">4</span>) .shuffleGrouping(“blue-spout”);</span><br><span class="line"></span><br><span class="line">topologyBuilder.setBolt(“yellow-bolt”, <span class="keyword">new</span> YellowBolt(), <span class="number">6</span>) .shuffleGrouping(“green-bolt”);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 提交配置</span></span><br><span class="line">StormSubmitter.submitTopology( “mytopology”, conf, topologyBuilder.createTopology() );</span><br></pre></td></tr></table></figure></p>
+<p>说明:</p>
+<ul>
+<li>上面定义了一个 拥有两个Worker进程的 Topology</li>
+<li>上面定义了3个Component: 1个spout叫做<code>BlueSpout</code>，2个bolt分别叫 <code>GreenBolt</code>和<code>YellowBolt</code>。<code>BlueSpout</code>发送它的输出到<code>GreenBolt</code>，<code>GreenBolt</code>又把它的输出发到 <code>YellowBolt</code>。</li>
+<li>上面3个Component的并行度(线程数)分别是 2 + 2 + 6 = 10, 每个worker进程产生10 / 2 = 5条线程。</li>
+<li><code>GreenBolt</code>特别指定了生成4个Task</li>
+</ul>
+<blockquote>
+<p>下图中可以看到Topology的两个Worker进程平均分配任务;<br>黄/绿/蓝色Task的数量分别是6, 4, 2, 也就是总共12个Task对象;<br>Task外面灰色轮廓是Executor线程, 注意2个绿色Task由一个Executor执行;</p>
+</blockquote>
+<p><img src="/images/storm/Storm_Worker_Executor_Task.png" alt=""></p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ul>
+<li>准备jdk, zookeeper集群</li>
+<li>修改storm.yaml配置文件<ul>
+<li><code>storm.zookeeper.servers</code>: Storm集群使用的Zookeeper集群地址。</li>
+<li>如果Zookeeper没有使用默认端口,那么还需要修改<code>storm.zookeeper.port</code>。</li>
+<li><code>storm.local.dir</code>: Nimbus和Supervisor进程用于存储少量状态,如jars、confs等的本地磁盘目录,需要提前创建该目录并给予足够的访问权限。</li>
+</ul>
+</li>
+</ul>
+<h1 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h1><ul>
+<li>启动Nimbus: <code>storm nimbus</code></li>
+<li>启动Supervisor: <code>storm supervisor</code></li>
+<li>启动UI: <code>storm ui</code></li>
+<li>提交Topologies: <code>storm jar [jar路径] [拓扑包名.拓扑类名] [storm IP地址] [storm端口] [拓扑名称] [参数]</code></li>
+<li>停止Topologies: <code>storm kill [拓扑名称]</code></li>
+</ul>
+<hr>
+<p>参考:</p>
+<ul>
+<li><a href="https://github.com/weyo/Storm-Documents" target="_blank" rel="noopener">weyo/Storm-Documents: Apache Storm 官方文档翻译</a> @ref</li>
+<li><a href="https://www.kancloud.cn/kancloud/getting-started-with-storm/66495" target="_blank" rel="noopener">https://www.kancloud.cn/kancloud/getting-started-with-storm/66495</a> @ref</li>
+<li><a href="https://sylvanassun.github.io/2016/07/19/2016-07-19-Hadoop06-Storm/" target="_blank" rel="noopener">https://sylvanassun.github.io/2016/07/19/2016-07-19-Hadoop06-Storm/</a> @ref</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/后端技术/" rel="tag"># 后端技术</a>
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+            <a href="/tags/流式计算/" rel="tag"># 流式计算</a>
+          
+            <a href="/tags/Storm/" rel="tag"># Storm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/33.Bigdata/Spark/" rel="next" title="Spark">
+                <i class="fa fa-chevron-left"></i> Spark
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/34.Machine-Learning/DeepLearning-深度学习/" rel="prev" title="笔记：深度学习">
+                笔记：深度学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Storm的特点"><span class="nav-text">Storm的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Storm是如何工作的"><span class="nav-text">Storm是如何工作的</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Storm主要概念"><span class="nav-text">Storm主要概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Nimbus-amp-Supervisor"><span class="nav-text">Nimbus &amp; Supervisor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream"><span class="nav-text">Stream</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topologies"><span class="nav-text">Topologies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spouts"><span class="nav-text">Spouts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bolts"><span class="nav-text">Bolts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream-Groupings"><span class="nav-text">Stream Groupings</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#API"><span class="nav-text">API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spout"><span class="nav-text">Spout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bolt"><span class="nav-text">Bolt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topology"><span class="nav-text">Topology</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Worker-amp-Executor-amp-Task"><span class="nav-text">Worker &amp; Executor &amp; Task</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令行"><span class="nav-text">命令行</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/33.Bigdata/Storm/';
+          this.page.identifier = '33.Bigdata/Storm/';
+          this.page.title = 'Storm';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

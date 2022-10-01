@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Java,JavaEE,Servlet,JSP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Java Web应用Java Web 应用是一个 servlets, HTML 页面,类,和其他资源的集合，用于一个在 Web 服务器的完成的应用。Web 应用可以捆绑和运行来自多个供应商的在多个容器。servlet 容器必须强制 Web 应用程序和 ServletContext 之间一对一对应的关系。ServletContext 对象提供了一个 servlet 和它的应用程序视图。 目录结构可以">
+<meta name="keywords" content="Java,JavaEE,Servlet,JSP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Servelt &amp; JSP">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/13.JavaEE-Framework/JavaEE.Servlet/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="Java Web应用Java Web 应用是一个 servlets, HTML 页面,类,和其他资源的集合，用于一个在 Web 服务器的完成的应用。Web 应用可以捆绑和运行来自多个供应商的在多个容器。servlet 容器必须强制 Web 应用程序和 ServletContext 之间一对一对应的关系。ServletContext 对象提供了一个 servlet 和它的应用程序视图。 目录结构可以">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/javaee/javaee_servlet_async.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/javaee/javaee_servlet_non_block_io.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:46.694Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Servelt &amp; JSP">
+<meta name="twitter:description" content="Java Web应用Java Web 应用是一个 servlets, HTML 页面,类,和其他资源的集合，用于一个在 Web 服务器的完成的应用。Web 应用可以捆绑和运行来自多个供应商的在多个容器。servlet 容器必须强制 Web 应用程序和 ServletContext 之间一对一对应的关系。ServletContext 对象提供了一个 servlet 和它的应用程序视图。 目录结构可以">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/javaee/javaee_servlet_async.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/13.JavaEE-Framework/JavaEE.Servlet/"/>
+
+
+
+
+
+  <title>Servelt & JSP | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/13.JavaEE-Framework/JavaEE.Servlet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Servelt & JSP</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/JavaEE/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaEE</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  6,364
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Java-Web应用"><a href="#Java-Web应用" class="headerlink" title="Java Web应用"></a>Java Web应用</h1><p>Java Web 应用是一个 servlets, HTML 页面,类,和其他资源的集合，用于一个在 Web 服务器的完成的应用。Web 应用可以捆绑和运行来自多个供应商的在多个容器。<br>servlet 容器必须强制 Web 应用程序和 ServletContext 之间一对一对应的关系。ServletContext 对象提供了一个 servlet 和它的应用程序视图。</p>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p>可以使用标准的 Java 归档工具把 Web 应用程序打包并签名到一个 Web 存档格式（WAR）文件中。例如，一个关于“issue tracking”的应用程序可以分布在一个称为 issuetrack.war 的归档文件中。</p>
+<p>当打包成这种形式时，将生成一个 META-INF 目录，其中包含了对 java归档工具有用的信息。尽管这个目录的内容可以通过 servlet 代码调用ServletContext 的 getResource 和 getResourceAsStream 方法来访问，容器也不能把这个目录当作内容来响应客户端请求。此外，任何请求访问 META-INF 目录中的资源必须返回一个 SC_NOT_FOUND（404）的响应。常见的归档格式war 和 ear格式对比：</p>
+<ul>
+<li><p>war: Web Archive file, 结构如下:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">webapp.war</span><br><span class="line">  |-index.jsp</span><br><span class="line">  |— META-INF</span><br><span class="line">    |-Manifest.mf</span><br><span class="line">  |— WEB-INF</span><br><span class="line">       |- web.xml</span><br><span class="line">       |— classes</span><br><span class="line">       |— lib  // 依赖的jar包</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ear: Enterprise ARchieve, 用于在Java EE中将一个或者多个模块封装到一个文件中, 这样, 多个不同模块在应用服务器上的部署就可以同时并持续的进行. 结构如下:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">app.ear</span><br><span class="line">   |- ejb.jar    // ejb-jar包</span><br><span class="line">   |- other.jar  // 普通jar包</span><br><span class="line">   |- webapp.war  // war包</span><br><span class="line">   |—META-INF</span><br><span class="line">        application.xml  // EAR描述文件</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Web-xml"><a href="#Web-xml" class="headerlink" title="Web.xml"></a>Web.xml</h2><blockquote>
+<p>servlet3.*的规范已经支持不使用 web.xml了</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"ISO-8859-1"</span> <span class="meta">?&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">version</span>=<span class="string">"2.4"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">display-name</span>&gt;</span>HelloWorld Application<span class="tag">&lt;/<span class="name">display-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">        This is a simple web application with a source code organization</span><br><span class="line">        based on the recommendations of the Application Developer's Guide.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">listener</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span>org.web.listener.MyServletRequestListener<span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">listener</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">listener</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span>org.web.listener.MyServletContextListener<span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">listener</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>ResponseFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>org.web.filter.ResponseFilter<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>ResponseFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>HelloServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>HelloServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>org.web.Servlet.Hello<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>HelloServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/hello<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="Servlet（Server-Applet）"><a href="#Servlet（Server-Applet）" class="headerlink" title="Servlet（Server Applet）"></a>Servlet（Server Applet）</h1><p>本节参考自: <a href="https://www.gitbook.com/book/waylau/servlet-3-1-specification/details" target="_blank" rel="noopener">Java Servlet 3.1 Specification《Java Servlet 3.1 规范》中文翻译及示例</a> @ref</p>
+<h2 id="什么是-Servlet"><a href="#什么是-Servlet" class="headerlink" title="什么是 Servlet"></a>什么是 Servlet</h2><p>servlet 是基于 Java 的 Web 组件，由容器进行管理，来生成动态内容。像其他基于 Java 的组件技术一样，servlet 也是基于平台无关的 Java 类格式，被编译为平台无关的字节码，可以被基于 Java 技术的 Web 服务器动态加载并运行。容器（Container），有时候也叫做 servlet 引擎，是 Web 服务器为支持 servlet 功能扩展的部分。客户端通过 servlet 容器实现的 request/response paradigm（请求/应答模式） 与 Servlet 进行交互。</p>
+<h2 id="什么是-Servlet-容器"><a href="#什么是-Servlet-容器" class="headerlink" title="什么是 Servlet 容器"></a>什么是 Servlet 容器</h2><p>Servlet Container（Servlet 容器） 是 Web 服务器或者应用服务器的一部分，用于提供基于请求/响应发送模式的网络服务，解码基于 MIME 的请求，并且格式化基于 MIME 的响应。Servlet 容器同时也包含和管理他们的生命周期里 Servlet。<br>Servlet 容器可以嵌入到宿主的 Web 服务器中，或者通过 Web 服务器的本地扩展 API 单独作为附加组件安装。Servelt 容器也可能内嵌或安装到启用 Web 功能的应用服务器中。<br>所有的 Servlet 容器必须支持 HTTP 协议用于请求和响应，但额外的基于 请求/响应 的协议，如 HTTPS (HTTP over SSL)的支持是可选的。对于 HTTP 规范需要版本，容器必须支持 HTTP/1.0 和 HTTP/1.1。因为容器或许支持 RFC2616 (HTTP/1.1)描述的缓存机制，缓存机制可能在将客户端请求交给 Servlet 处理之前修改它们，也可能在将 Servlet 生成的响应发送给客户端之前修改它们，或者可能根据 RFC2616 规范直接对请求作出响应而不交给 Servlet 进行处理。<br>Servlet 容器应该使 Servlet 执行在一个安全限制的环境中。在 Java 平台标准版（J2SE, v.1.3 或更高） 或者 Java平台企业版(Java EE, v.1.3 或更高) 的环境下，这些限制应该被放置在 Java 平台定义的安全许可架构中。比如，高端的应用服务器为了保证容器的其他组件不受到负面影响可能会限制 Thread 对象的创建。</p>
+<h2 id="Servlet-与其他技术的对比"><a href="#Servlet-与其他技术的对比" class="headerlink" title="Servlet 与其他技术的对比"></a>Servlet 与其他技术的对比</h2><p>从功能上看，servlet 位于 Common Gateway Interface（公共网关接口，简称 CGI）程序和私有的服务器扩展如 Netscape Server API（NSAPI）或 Apache Modules 这两者之间。<br>相对于其他服务器扩展机制 Servlet 有如下优势：</p>
+<ul>
+<li>它们通常比 CGI 脚本更快，因为采用不同的处理模型。</li>
+<li>它们采用标准的 API 从而支持更多的Web 服务器。</li>
+<li>它们拥有 Java 编程语言的所有优势，包括容易开发和平台无关。</li>
+<li>它们可以访问 Java 平台提供的大量的 API。</li>
+</ul>
+<h2 id="与-Java-EE-的关系"><a href="#与-Java-EE-的关系" class="headerlink" title="与 Java EE 的关系"></a>与 Java EE 的关系</h2><p>Java Servlet API 3.1 版本是 Java 平台企业版 7 版本必须的 API。Servlet 容器和 servlet 被部署到平台中时，为了能在 Java EE 环境中执行，必须满足 JavaEE 规范中描述的额外的一些要求。</p>
+<h2 id="与-Servlet-2-5-规范的兼容性"><a href="#与-Servlet-2-5-规范的兼容性" class="headerlink" title="与 Servlet 2.5 规范的兼容性"></a>与 Servlet 2.5 规范的兼容性</h2><p>在 Servlet 2.5 中, metadata-complete 只影响在部署时的注释扫描。 web-fragments 的概念在 servlet 2.5 并不存在。然而在 servlet 3.0 和之后,metadata-complete 影响扫描所有的在部署时指定部署信息和 web-fragments 注释。注释的版本的描述符必须不影响你扫描在一个web应用程序。除非 metadata-complete 指定，规范的一个特定版本的实现必须扫描所有配置的支持的注解。</p>
+<h2 id="HttpServletRequest-–-请求"><a href="#HttpServletRequest-–-请求" class="headerlink" title="HttpServletRequest – 请求"></a>HttpServletRequest – 请求</h2><p>本节参考 <a href="https://waylau.gitbooks.io/servlet-3-1-specification/content/docs/The%20Request/3.%20The%20Request.html" target="_blank" rel="noopener">请求 · Java Servlet 3.1 Specification《Java Servlet 3.1 规范》中文翻译及示例</a> @ref</p>
+<h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><p>每个请求对象只在一个 servlet 的 service 方法的作用域内，或过滤器的 doFilter 方法的作用域内有效，除非该组件启用了异步处理并且调用了请求对象的 startAsync 方法。<br>在发生异步处理的情况下，请求对象一直有效，直到调用 AsyncContext 的 complete 方法。容器通常会重复利用请求对象，以避免创建请求对象而产生的性能开销。<br>开发人员必须注意的是，不建议在上述范围之外保持 startAsync 方法还没有被调用的请求对象的引用，因为这样可能产生不确定的结果。</p>
+<h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><p>ServletRequest 接口提供方法:</p>
+<ul>
+<li>getParameter</li>
+<li>getParameterNames</li>
+<li>getParameterValues</li>
+<li>getParts</li>
+<li>getPart</li>
+<li>getAttribute</li>
+<li>getHeader/getHeaders</li>
+<li>getContextPath</li>
+<li>…</li>
+</ul>
+<h3 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h3><p>当数据以multipart/form-data的格式发送时，servlet 容器支持文件上传。</p>
+<h3 id="头"><a href="#头" class="headerlink" title="头"></a>头</h3><ul>
+<li>getAttribute</li>
+<li>getAttributeNames</li>
+<li>setAttribute</li>
+</ul>
+<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><ul>
+<li>getAttribute</li>
+<li>getAttributeNames</li>
+<li>setAttribute</li>
+</ul>
+<h3 id="请求路径"><a href="#请求路径" class="headerlink" title="请求路径"></a>请求路径</h3><ul>
+<li>getContextPath</li>
+<li>getServletPath</li>
+<li>getPathInfo</li>
+</ul>
+<p>requestURI = contextPath + servletPath + pathInfo</p>
+<h3 id="非阻塞-IO"><a href="#非阻塞-IO" class="headerlink" title="非阻塞 IO"></a>非阻塞 IO</h3><p><a href="https://waylau.gitbooks.io/servlet-3-1-specification/content/docs/The%20Request/3.7%20Non%20Blocking%20IO.html" target="_blank" rel="noopener">非阻塞 IO · Java Servlet 3.1 Specification《Java Servlet 3.1 规范》中文翻译及示例</a></p>
+<h2 id="ServletResponse-–-响应"><a href="#ServletResponse-–-响应" class="headerlink" title="ServletResponse – 响应"></a>ServletResponse – 响应</h2><p><a href="https://waylau.gitbooks.io/servlet-3-1-specification/content/docs/The%20Response/5%20The%20Response.html" target="_blank" rel="noopener">响应 · Java Servlet 3.1 Specification《Java Servlet 3.1 规范》中文翻译及示例</a></p>
+<h2 id="ServletContext-–-上下文"><a href="#ServletContext-–-上下文" class="headerlink" title="ServletContext – 上下文"></a>ServletContext – 上下文</h2><p>ServletContext 接口定义了 servlet 运行在的 Web 应用的视图。容器供应商负责提供 servlet 容器的 ServletContext 接口的实现。servlet 可以使用 ServletContext 对象记录事件，获取 URL 引用的资源，存取当前上下文的其他 servlet 可以访问的属性。<br>ServletContext 是 Web 服务器中已知路径的根。例如，servlet 上下文可以从 <a href="http://www.mycorp.com/catalog" target="_blank" rel="noopener">http://www.mycorp.com/catalog</a> 找出，/catalog 请求路径称为上下文路径，所有以它开头的请求都会被路由到与 ServletContext 相关联的 Web 应用。</p>
+<h2 id="Filter-–-过滤器"><a href="#Filter-–-过滤器" class="headerlink" title="Filter – 过滤器"></a>Filter – 过滤器</h2><p>过滤器是一种代码重用的技术，它可以转换 HTTP 请求的内容，响应，及头信息。过滤器通常不产生响应或像 servlet 那样对请求作出响应，而是修改或调整到资源的请求，修改或调整来自资源的响应。</p>
+<p>在web.xml中声明的每个<code>&lt;filter&gt;</code>在每个 JVM 的容器中仅实例化一个实例。容器提供了声明在过滤器的部署描述符的过滤器config（译者注：FilterConfig），对 Web 应用的 ServletContext 的引用，和一组初始化参数。<br>当容器接收到传入的请求时，它将获取列表中的第一个过滤器并调用<code>doFilter</code> 方法，传入 ServletRequest 和 ServletResponse，和一个它将使用的 FilterChain 对象的引用。</p>
+<h3 id="过滤器组件示例"><a href="#过滤器组件示例" class="headerlink" title="过滤器组件示例"></a>过滤器组件示例</h3><ul>
+<li>Authentication filters //用户身份验证过滤器</li>
+<li>Logging and auditing filters //日志记录与审计过滤器</li>
+<li>Image conversion filters //图片转换过滤器</li>
+<li>Data compression filters //数据压缩过滤器</li>
+<li>Encryption filters //加密过滤器</li>
+<li>Tokenizing filters //分词过滤</li>
+<li>Filters that trigger resource access events //触发资源访问事件过滤</li>
+<li>XSL/T filters that transform XML content</li>
+<li>MIME-type chain filters //MIME-TYPE 链过滤器</li>
+<li>Caching filters //缓存过滤器</li>
+</ul>
+<h2 id="Listener-–-监听器"><a href="#Listener-–-监听器" class="headerlink" title="Listener – 监听器"></a>Listener – 监听器</h2><p>Listener 用于监听 java web程序中的事件，例如创建、修改、删除Session、request、context等，并触发响应的事件。<br>Listener 对应观察者模式，事件发生的时候会自动触发该事件对应的Listeer。 Listener 主要用于对 Session、Request、Context 进行监控。servlet2.5 规范中共有 8 种Listener 。</p>
+<p>不同功能的Listener 需要实现不同的 Listener  接口，一个Listener也可以实现多个接口，这样就可以多种功能的监听器一起工作。监听器接口可以分为三类：</p>
+<ul>
+<li>1）监听 Session、Request、Context 的创建于销毁，分别为  <code>HttpSessionLister</code>、<code>ServletContextListener</code>、<code>ServletRequestListener</code></li>
+<li>2）监听对象属性变化，分别为：<code>HttpSessionAttributeLister</code>、<code>ServletContextAttributeListener</code>、<code>ServletRequestAttributeListener</code></li>
+<li>3）监听Session 内的对象，分别为<code>HttpSessionBindingListener</code> 和 <code>HttpSessionActivationListener</code>。与上面六类不同，这两类 Listener 监听的是Session 内的对象，而非 Session 本身，不需要在 <code>web.xml</code>中配置。</li>
+</ul>
+<h3 id="实现一个Listener"><a href="#实现一个Listener" class="headerlink" title="实现一个Listener"></a>实现一个Listener</h3><p>web.xml的Listener配置： <code>&lt;listener&gt;</code>标签与 <code>&lt;listener-class&gt;</code></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">listener</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">listener-class</span>&gt;</span>servlet.listener.MyListener<span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">listener</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>创建 MyListener, 实现监听对Session, Context, Request对象的创建与销毁:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyListener</span> <span class="keyword">implements</span> <span class="title">HttpSessionListener</span>, <span class="title">ServletContextListener</span>, <span class="title">ServletRequestListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	Log log = LogFactory.getLog(getClass());</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 创建 session</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sessionCreated</span><span class="params">(HttpSessionEvent se)</span> </span>&#123;</span><br><span class="line">		HttpSession session = se.getSession();</span><br><span class="line">		log.info(<span class="string">"新创建一个session, ID为: "</span> + session.getId());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 销毁 session</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sessionDestroyed</span><span class="params">(HttpSessionEvent se)</span> </span>&#123;</span><br><span class="line">		HttpSession session = se.getSession();</span><br><span class="line">		log.info(<span class="string">"销毁一个session, ID为: "</span> + session.getId());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 加载 context</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextInitialized</span><span class="params">(ServletContextEvent sce)</span> </span>&#123;</span><br><span class="line">		ServletContext servletContext = sce.getServletContext();</span><br><span class="line">		log.info(<span class="string">"即将启动"</span> + servletContext.getContextPath());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 卸载 context</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextDestroyed</span><span class="params">(ServletContextEvent sce)</span> </span>&#123;</span><br><span class="line">		ServletContext servletContext = sce.getServletContext();</span><br><span class="line">		log.info(<span class="string">"即将关闭"</span> + servletContext.getContextPath());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="HttpSession-–-会话"><a href="#HttpSession-–-会话" class="headerlink" title="HttpSession – 会话"></a>HttpSession – 会话</h2><p>会话跟踪机制:</p>
+<ul>
+<li>Cookie: 通过 HTTP cookie 的会话跟踪是最常用的会话跟踪机制，且所有 servlet 容器都应该支持。所有 servlet 容器必须提供能够配置容器是否标记会话跟踪 cookie 为HttpOnly的能力。</li>
+<li>SSL会话: 安全套接字层(Secure Sockets Layer)，在 HTTPS 使用的加密技术，有一种内置机制允许多个来自客户端的请求被明确识别为同一会话。Servlet容器可以很容易地使用该数据来定义会话。</li>
+<li>URL 重写: URL 重写是会话跟踪的最低标准。当客户端不接受 cookie 时，服务器可使用 URL 重写作为会话跟踪的基础。URL 重写涉及添加数据、会话 ID、容器解析 URL 路径从而请求与会话相关联。</li>
+</ul>
+<h2 id="Dispatcher-–-分发器"><a href="#Dispatcher-–-分发器" class="headerlink" title="Dispatcher – 分发器"></a>Dispatcher – 分发器</h2><p>RequestDispatcher 接口负责把请求转发给一个 servlet 处理；<br>当请求启用异步处理时，AsyncContext 允许用户将这个请求转发到servlet 容器。</p>
+<p>可以通过<code>ServletContext.getRequestDispatcher()</code>获取 RequestDispatcher.</p>
+<p>使用请求调度器:</p>
+<ul>
+<li><code>include</code> 方法: include 方法的目标 servlet 能够访问请求对象的各个方法（all aspects），但是使用响应对象的方法会受到更多限制。</li>
+<li><code>forward</code> 方法: RequestDispatcher 接口的 <code>forward()</code> 方法，只有在没有输出提交到向客户端时，通过正在被调用的 servlet 调用。如果响应缓冲区中存在尚未提交的输出数据，这些数据内容必须在目标 servlet 的 <code>service()</code> 方法调用前清除。如果响应已经提交，必须抛出一个 <code>IllegalStateException</code> 异常。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String path = “/raisins.jsp”;</span><br><span class="line">RequestDispatcher rd = context.getRequestDispatcher(path);</span><br><span class="line">rd.include(request, response);</span><br></pre></td></tr></table></figure>
+<h2 id="生命周期-1"><a href="#生命周期-1" class="headerlink" title="生命周期"></a>生命周期</h2><h3 id="Servlet-生命周期"><a href="#Servlet-生命周期" class="headerlink" title="Servlet 生命周期"></a>Servlet 生命周期</h3><p>当容器启动后, 容器会判断内存中是否存在指定的 Servlet对象, 如果没有则创建它, 当容器停止或者重新启动, Servlet容器调用 Servlet对象的 destroy方法来释放资源;<br>Servlet生命周期分几个步骤: Servlet类加载 -&gt; 实例化 -&gt; 服务 -&gt; 销毁:</p>
+<ul>
+<li>Servlet容器 负责加载 Servlet类</li>
+<li>Servlet容器 使用开始实例化 Servlet, 创建对象并调用 init()方法</li>
+<li>响应客户请求阶段调用 service()方法</li>
+<li>销毁阶段调用 destroy()方法</li>
+</ul>
+<h3 id="Request-生命周期"><a href="#Request-生命周期" class="headerlink" title="Request 生命周期"></a>Request 生命周期</h3><p>接收到HTTP请求后, 容器会创建 HttpServletRequest对象, 并传递给 Servlet, 在这次请求结束后, Request对象也被销毁;<br>每个请求对象只在一个 servlet 的 <code>service()</code> 方法的作用域内, 或过滤器的 <code>doFilter()</code> 方法的作用域内有效,<br>除非该组件启用了异步处理并且调用了请求对象的 <code>startAsync()</code> 方法. 在发生异步处理的情况下, 请求对象一直有效, 直到调用 AsyncContext 的 <code>complete()</code> 方法.</p>
+<h2 id="并发-amp-多线程问题"><a href="#并发-amp-多线程问题" class="headerlink" title="并发 &amp; 多线程问题"></a>并发 &amp; 多线程问题</h2><p>Servlet采用多线程来处理多个请求同时访问，Servlet容器维护了一个线程池来服务请求。<br>线程池实际上是等待执行代码的一组线程叫做工作者线程(WorkerThread)，Servlet容器使用一个调度线程来管理工作者线程(DispatcherThread)。<br>当容器收到一个访问Servlet的请求，调度者线程从线程池中选出一个工作者线程，将请求传递给该线程，然后由该线程来执行Servlet的<code>service()</code>方法。<br>当这个线程正在执行的时候，容器收到另外一个请求，调度者线程将从池中选出另外一个工作者线程来服务新的请求，容器并不关心这个请求是否访问的是同一个Servlet还是另外一个Servlet。当容器同时收到对同一Servlet的多个请求，那这个Servlet的<code>service()</code>方法将在多线程中并发的执行。</p>
+<p>同步<code>service()</code>的两种方式:</p>
+<ul>
+<li>Servlet实现<code>SingleThreadModel</code>接口: 开发人员实现 SingleThreadModel 接口，由容器保证一个 <code>service()</code> 方法在同一个时间点仅被一个请求线程调用，但是此方案是不推荐的。servlet 容器可以通过串行化访问 servlet的请求，或者维护一个 servlet 实例池完成该需求。如果 Web 应用中的 servlet 被标注为分布式的，容器应该为每一个分布式应用程序的 JVM 维护一个 servlet 实例池。</li>
+<li>synchronized同步<code>service()</code>方法, 不建议使用: 对于那些没有实现 <code>SingleThreadModel</code> 接口的 servlet，但是它的<code>service()</code> 方法（或者是那些 HttpServlet 中通过 service 方法分派的doGet、doPost 等分派方法）是通过 synchronized 关键词定义的，servlet 容器不能使用实例池方案，并且只能使用序列化请求进行处理。强烈推荐开发人员不要去同步 <code>service()</code> 方法（或者那些由 <code>service()</code> 分派的方法），因为这将严重影响性能。</li>
+</ul>
+<h3 id="线程不安全"><a href="#线程不安全" class="headerlink" title="线程不安全"></a>线程不安全</h3><p>这就导致了Servlet里的实例变量是线程不安全的,多个线程（多个客户端的请求）共享这些实例变量，一个线程对这些实例变量的改变会影响其它线程的取值，Servlet规范已经声明Servlet不是线程安全的,包括jsp,Servlet,javabean等。</p>
+<blockquote>
+<p>ServletContext：（线程不安全）</p>
+</blockquote>
+<p>ServletContext是可以多线程同时读/写属性的，线程是不安全的。要对属性的读写进行同步处理或者进行深度Clon。所以在Servlet上下文中尽可能少量保存会被修改（写）的数据，可以采取其他方式在多个Servlet中共享，比方我们可以使用单例模式来处理共享数据。</p>
+<blockquote>
+<p>HttpSession：（线程不安全）</p>
+</blockquote>
+<p>HttpSession对象在用户会话期间存在，只能在处理属于同一个Session的请求的线程中被访问，因此Session对象的属性访问理论上是线程安全的。当用户打开多个同属于一个进程的浏览器窗口，在这些窗口的访问属于同一个Session，会出现多次请求，需要多个工作线程来处理请求，可能造成同时多线程读写属性。这时我们需要对属性的读写进行同步处理：使用同步块Synchronized和使用读/写器来解决。</p>
+<blockquote>
+<p>ServletRequest：（线程安全）</p>
+</blockquote>
+<p>对于每一个请求，由一个工作线程来执行，都会创建有一个新的ServletRequest对象，所以ServletRequest对象只能在一个线程中被访问。ServletRequest是线程安全的。ServletRequest对 象在service方法的范围内是有效的，不要试图在service方法结束后仍然保存请求对象的引用。</p>
+<p><a href="http://wenboo.site/2016/11/14/Servlet-%E5%B9%B6%E5%8F%91%E5%B0%8F%E7%BB%93/" target="_blank" rel="noopener">http://wenboo.site/2016/11/14/Servlet-%E5%B9%B6%E5%8F%91%E5%B0%8F%E7%BB%93/</a></p>
+<h2 id="异步-amp-AsyncContext"><a href="#异步-amp-AsyncContext" class="headerlink" title="异步 &amp; AsyncContext"></a>异步 &amp; AsyncContext</h2><p>@ref <a href="https://www.cnblogs.com/davenkin/p/async-servlet.html" target="_blank" rel="noopener">Servlet 3.0/3.1 中的异步处理</a></p>
+<blockquote>
+<p>在Servlet 3.0之前，Servlet采用Thread-Per-Request的方式处理请求，即每一次Http请求都由某一个线程从头到尾负责处理。如果一个请求需要进行IO操作，比如访问数据库、调用第三方服务接口等，那么其所对应的线程将同步地等待IO操作完成， 而IO操作是非常慢的，所以此时的线程并不能及时地释放回线程池以供后续使用，在并发量越来越大的情况下，这将带来严重的性能问题。<br>为了解决这样的问题，Servlet 3.0引入了异步处理，然后在Servlet 3.1中又引入了非阻塞IO来进一步增强异步处理的性能。</p>
+</blockquote>
+<p>在Servlet 3.0中，<code>@WebServlet</code> 和 <code>@WebFilter</code> 注解有一个属性——<code>asyncSupported</code>，boolean 类型默认值为 false。<br>当 <code>asyncSupported</code> 设置为 true，我们可以从HttpServletRequest对象中通过<code>startAsync()</code>获得一个AsyncContext对象，AsyncContext对象构成了异步处理的上下文，Request和Response对象都可从中获取。<br>AsyncContext 可以从当前线程传给另外的线程，并在新的线程中完成对请求的处理并返回结果给客户端，当前请求的线程便可以还回给容器线程池以处理更多的请求。</p>
+<p>一个有较长耗时操作的Servlet可以这样写：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebServlet</span>(value = <span class="string">"/simpleAsync"</span>, asyncSupported = <span class="keyword">true</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleAsyncHelloServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        AsyncContext asyncContext = request.startAsync();</span><br><span class="line">        asyncContext.start(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">new</span> LongRunningProcess().run();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                asyncContext.getResponse().getWriter().write(<span class="string">"Hello World!"</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            asyncContext.complete();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先通过<code>request.startAsync()</code>获取到该请求对应的<code>AsyncContext</code>，然后调用<code>AsyncContext</code>的<code>start()</code>方法进行异步处理，处理完毕后需要调用<code>AsyncContext.complete()</code>方法告知Servlet容器。<br><code>AsyncContext.start()</code>方法会向Servlet容器另外申请一个新的线程（可以是从Servlet容器中已有的主线程池获取，也可以另外维护一个线程池，不同容器实现可能不一样），然后在这个新的线程中继续处理请求，而原先的线程将被回收到主线程池中。<br>事实上，这种方式对性能的改进不大，因为如果新的线程和初始线程共享同一个线程池的话，相当于闲置下了一个线程，但同时又占用了另一个线程。</p>
+<p>这里有一篇文章<a href="https://dzone.com/articles/limited-usefulness" target="_blank" rel="noopener">The Limited Usefulness of AsyncContext.start() - DZone Java</a>,<br>对该方法做了性能测试, 结论如下 :</p>
+<ul>
+<li>Tomcat的 <code>AsyncContext.start</code>实现是, 把处理Request的线程返回线程池, 再从 Http work threadpool里取出线程</li>
+<li>相比不使用异步的情况, 在 Tomcat中使用 Servlet3.0 的 <code>AsyncContext.start</code> 不会带来任何 Tomcat并发性能改进</li>
+<li>正确的办法是另外维护一个线程池，这个线程池不同于Servlet容器的主线程池（请求线程池），如下图：</li>
+</ul>
+<p><img src="/images/javaee/javaee_servlet_async.png" alt=""></p>
+<p>在上图中，用户发起的请求首先交由Servlet容器主线程池（请求线程池）中的线程处理，在该线程中，我们获取到AsyncContext，然后将其交给异步处理线程池。<br>请求线程可以被归还回主线程池，这样主线程池用来处理 Http请求的线程没有被长时间占用。<br>但是需要注意的是，这种做法可以及时归还主线程池，但在仍旧占用另一个线程，所以 JVM的线程总数没有减少，系统瓶颈仍旧在 JVM进程的最大线程数上（单个线程的栈大小默认是<code>-Xss1M</code>）</p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebServlet</span>(value = <span class="string">"/threadPoolAsync"</span>, asyncSupported = <span class="keyword">true</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPoolAsyncHelloServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> ThreadPoolExecutor executor = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">100</span>, <span class="number">200</span>, <span class="number">50000L</span>, TimeUnit.MILLISECONDS, <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">100</span>));</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        AsyncContext asyncContext = request.startAsync();</span><br><span class="line">        executor.execute(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">new</span> LongRunningProcess().run();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                asyncContext.getResponse().getWriter().write(<span class="string">"Hello World!"</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            asyncContext.complete();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Requet-和-Response的非阻塞IO"><a href="#Requet-和-Response的非阻塞IO" class="headerlink" title="Requet 和 Response的非阻塞IO"></a>Requet 和 Response的非阻塞IO</h3><p>Servlet 3.0对请求的处理虽然是异步的，但是对<code>InputStream</code>和<code>OutputStream</code>的IO操作却依然是阻塞的，对于数据量大的请求体或者返回体，阻塞IO也将导致不必要的等待。因此在Servlet 3.1中引入了非阻塞IO（参考下图红框内容），通过在<code>HttpServletRequest</code>和<code>HttpServletResponse</code>中分别添加<code>ReadListener</code>和<code>WriterListener</code>方式，只有在IO数据满足一定条件时（比如数据准备好时），才进行后续的操作。</p>
+<p><img src="/images/javaee/javaee_servlet_non_block_io.png" alt=""></p>
+<p>对应的代码示例子:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebServlet</span>(value = <span class="string">"/nonBlockingThreadPoolAsync"</span>, asyncSupported = <span class="keyword">true</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NonBlockingAsyncHelloServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> ThreadPoolExecutor executor = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">100</span>, <span class="number">200</span>, <span class="number">50000L</span>, TimeUnit.MILLISECONDS, <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">100</span>));</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        AsyncContext asyncContext = request.startAsync();</span><br><span class="line">        ServletInputStream inputStream = request.getInputStream();</span><br><span class="line">        inputStream.setReadListener(<span class="keyword">new</span> ReadListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDataAvailable</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAllDataRead</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">                executor.execute(() -&gt; &#123;</span><br><span class="line">                    <span class="keyword">new</span> LongRunningProcess().run();</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        asyncContext.getResponse().getWriter().write(<span class="string">"Hello World!"</span>);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                    asyncContext.complete();</span><br><span class="line"></span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable t)</span> </span>&#123;</span><br><span class="line">                asyncContext.complete();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上例中，我们为<code>ServletInputStream</code>添加了一个<code>ReadListener</code>，并在<code>ReadListener</code>的<code>onAllDataRead()</code>方法中完成了长时处理过程。</p>
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>servlet 在处理一个请求时可能抛出 <code>ServletException</code> 或<code>UnavailableException</code> 异常。</p>
+<ul>
+<li><code>ServletException</code> 表示在处理请求时出现了一些错误，容器应该采取适当的措施清理掉这个请求。</li>
+<li><code>UnavailableException</code> 表示 servlet 目前无法处理请求，或者临时性的或者永久性的：<ul>
+<li>如果 <code>UnavailableException</code> 表示的是一个永久性的不可用，servlet 容器必须从服务中移除这个 servlet，调用它的 destroy 方法，并释放servlet 实例。所有被容器拒绝的请求，都会返回一个 <code>SC_NOT_FOUND</code> (404) 响应。</li>
+<li>如果 <code>UnavailableException</code> 表示的是一个临时性的不可用，容器可以选择在临时不可用的这段时间内路由任何请求到 Servlet。所以在这段时间内被容器拒绝的请求，都会返回一个 <code>SC_SERVICE_UNAVAILABLE</code> (503) 响应状态码，且同时会返回一个 Retry-After 头指示此 servlet 什么时候可用。容器可以选择忽略永久性和临时性不可用的区别，并把<code>UnavailableException</code> 视为永久性的，从而 servlet 抛出<code>UnavailableException</code> 后需要把它从服务中移除。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Servlet-API"><a href="#Servlet-API" class="headerlink" title="Servlet API"></a>Servlet API</h2><p>@ref:</p>
+<ul>
+<li><a href="http://docs.oracle.com/javaee/6/api" target="_blank" rel="noopener">JavaTM Platform, Enterprise Edition 6 API Specificatio</a></li>
+<li><a href="https://waylau.gitbooks.io/servlet-3-1-specification" target="_blank" rel="noopener">https://waylau.gitbooks.io/servlet-3-1-specification</a></li>
+</ul>
+<h3 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h3><ol>
+<li>Servlet[I]: 属于<code>javax.servlet</code>包<ul>
+<li><code>init()</code></li>
+<li><code>destroy()</code></li>
+<li><code>service(ServletRequest, ServletResponse)</code></li>
+</ul>
+</li>
+<li>HttpServlet: 属于<code>javax.servlet.http</code>包<ul>
+<li><code>service()</code>: 根据method调用: <code>doHead()</code>, <code>doGet()</code>, <code>doPost()</code> …</li>
+</ul>
+</li>
+<li>DispatcherServlet : 属于<code>org.springframework.web.servlet</code>包<ul>
+<li><code>doService()</code> : 调用了<code>doDispatch()</code></li>
+<li><code>doDispatch()</code> : 从这里调用进<code>@Controller</code>中相关的方法</li>
+</ul>
+</li>
+</ol>
+<h3 id="ServletConfig"><a href="#ServletConfig" class="headerlink" title="ServletConfig"></a>ServletConfig</h3><p>对应web.xml的<code>&lt;servlet&gt;</code>, ServletConfig对象中维护了ServletContext对象的引用，开发人员在编写servlet时，可以通过<code>ServletConfig.getServletContext</code>方法获得<code>ServletContext</code>对象<br>常用方法:</p>
+<ul>
+<li><code>getServletName</code>：</li>
+<li><code>getServletContext</code>：</li>
+</ul>
+<h3 id="ServletContext"><a href="#ServletContext" class="headerlink" title="ServletContext"></a>ServletContext</h3><p>对应web.xml的<code>&lt;context-param&gt;</code>, 容器中部署的每一个web应用都有一个ServletContext接口的实例对象与之关联<br>常用方法:</p>
+<ul>
+<li><code>getInitParameter</code> / <code>getInitParameterNames</code></li>
+<li><code>addFilter</code></li>
+<li><code>addListener</code></li>
+<li><code>addServlet</code></li>
+</ul>
+<p>在任何Servlet实现类中可以使用<code>this.getServletContext</code>获取Context</p>
+<h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><ul>
+<li><code>init</code> / <code>destroy</code></li>
+<li><code>doFilter</code></li>
+<li><code>FilterChain</code></li>
+</ul>
+<h3 id="Response"><a href="#Response" class="headerlink" title="Response:"></a>Response:</h3><ol>
+<li>ServletResponse[I]<ul>
+<li><code>getOutputStream()</code> / <code>getWriter()</code></li>
+<li><code>flushBuffer()</code></li>
+</ul>
+</li>
+<li>HttpServletResponse[I]<ul>
+<li><code>addCookie</code></li>
+<li><code>setHeader</code></li>
+</ul>
+</li>
+<li>HttpServletResponseWrapper</li>
+</ol>
+<h3 id="Request"><a href="#Request" class="headerlink" title="Request:"></a>Request:</h3><ol>
+<li>ServletRequest[I]<ul>
+<li><code>getInputStream()</code> / <code>getReader()</code></li>
+<li><code>getParameter</code> / <code>getAttribute</code></li>
+<li><code>startAsync()</code></li>
+</ul>
+</li>
+<li>HttpServletRequest[I]<ul>
+<li><code>getContextPath()</code>, <code>getServletPath()</code>, <code>getPathInfo()</code></li>
+<li><code>getRequestURI()</code> / <code>getRequestURL()</code></li>
+</ul>
+</li>
+<li>HttpServletRequestWrapper</li>
+</ol>
+<h3 id="IO-Stream"><a href="#IO-Stream" class="headerlink" title="IO Stream"></a>IO Stream</h3><ol>
+<li>ServletInputStream:<ul>
+<li><code>readLine</code></li>
+</ul>
+</li>
+<li>ServletOutputStream:<ul>
+<li><code>print</code> / <code>println</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="RequestDispatcher"><a href="#RequestDispatcher" class="headerlink" title="RequestDispatcher"></a>RequestDispatcher</h3><p>RequestDispatcher对象由Servlet容器来创建, 封装一个由路径所标识的服务器资源.<br>在Servlet实现类中获取dispatcher对象: <code>this.getServletContext().getRequestDispatcher(&quot;/api/v2/topic/load&quot;)</code></p>
+<ol>
+<li>获取RequestDispatcher对象<ol>
+<li>ServletRequest的<code>getRequestDispatcher(String  path)</code>方法</li>
+<li>ServletContext的<code>getNamedDispatcher(String  path)</code>和<code>getRequestDispatcher(String  path)</code>方法</li>
+</ol>
+</li>
+<li>RequestDispatcher.forward(ServletRequest, ServletResponse) : 类似php里的inclde, 在返回页面中包括其他资源</li>
+<li>RequestDispatcher.include(ServletRequest, ServletResponse) : 转发</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">request.getRequestDispatcher(&quot;/2.html&quot;).include(request, response); // 在当前页面包含2.html</span><br><span class="line">requset.getRequestDisPatcher(&quot;/servlet2&quot;).dispatcher.forward(request, response);  // 转发到servlet2</span><br></pre></td></tr></table></figure>
+<h1 id="JSP（JavaServer-Pages）"><a href="#JSP（JavaServer-Pages）" class="headerlink" title="JSP（JavaServer Pages）"></a>JSP（JavaServer Pages）</h1><h2 id="Servlet-amp-JSP-区别与联系"><a href="#Servlet-amp-JSP-区别与联系" class="headerlink" title="Servlet &amp; JSP 区别与联系"></a>Servlet &amp; JSP 区别与联系</h2><ul>
+<li>Servlet在Java代码中通过HttpServletResponse对象动态输出HTML内容</li>
+<li>JSP在静态HTML内容中嵌入Java代码, Java代码被动态执行后生成HTML内容,</li>
+<li>JSP的本质仍是Servlet, JSP编译之后生成的<code>*.java</code>文件和<code>*.class</code>里有什么?</li>
+<li>Servlet是被Context的类加载器加载的, 所以重写Servlet需要重新部署Context, JSP有自己的加载器, JSP文件在修改之后不需要”重新加载”</li>
+</ul>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><ul>
+<li>代码段 <code>&lt;% ... %&gt;</code></li>
+<li><p>声明: <code>&lt;%! ... &gt;</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;%! int i = 0; %&gt;</span><br><span class="line">&lt;%! int a, b, c; %&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>表达式:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;p&gt;</span><br><span class="line">   今天的日期是: &lt;%= (new java.util.Date()).toLocaleString()%&gt;</span><br><span class="line">&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="动作元素"><a href="#动作元素" class="headerlink" title="动作元素"></a>动作元素</h2><ul>
+<li><code>jsp:include</code> :     在页面被请求的时候引入一个文件。</li>
+<li><code>jsp:useBean</code> : 寻找或者实例化一个JavaBean。<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;jsp:useBean id=<span class="string">"myName"</span> ... &gt;</span><br><span class="line">   &lt;jsp:setProperty name=<span class="string">"myName"</span> property=<span class="string">"someProperty"</span> .../&gt;</span><br><span class="line">&lt;/jsp:useBean&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/JavaEE/" rel="tag"># JavaEE</a>
+          
+            <a href="/tags/Servlet/" rel="tag"># Servlet</a>
+          
+            <a href="/tags/JSP/" rel="tag"># JSP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/13.JavaEE-Framework/JavaEE.ORM/" rel="next" title="Java ORM框架">
+                <i class="fa fa-chevron-left"></i> Java ORM框架
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/13.JavaEE-Framework/JavaEE.SpringBoot/" rel="prev" title="Spring Boot">
+                Spring Boot <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Web应用"><span class="nav-text">Java Web应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录结构"><span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-xml"><span class="nav-text">Web.xml</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Servlet（Server-Applet）"><span class="nav-text">Servlet（Server Applet）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-Servlet"><span class="nav-text">什么是 Servlet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-Servlet-容器"><span class="nav-text">什么是 Servlet 容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Servlet-与其他技术的对比"><span class="nav-text">Servlet 与其他技术的对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与-Java-EE-的关系"><span class="nav-text">与 Java EE 的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与-Servlet-2-5-规范的兼容性"><span class="nav-text">与 Servlet 2.5 规范的兼容性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HttpServletRequest-–-请求"><span class="nav-text">HttpServletRequest – 请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生命周期"><span class="nav-text">生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-text">API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件上传"><span class="nav-text">文件上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#头"><span class="nav-text">头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#属性"><span class="nav-text">属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求路径"><span class="nav-text">请求路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非阻塞-IO"><span class="nav-text">非阻塞 IO</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ServletResponse-–-响应"><span class="nav-text">ServletResponse – 响应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ServletContext-–-上下文"><span class="nav-text">ServletContext – 上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Filter-–-过滤器"><span class="nav-text">Filter – 过滤器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤器组件示例"><span class="nav-text">过滤器组件示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Listener-–-监听器"><span class="nav-text">Listener – 监听器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实现一个Listener"><span class="nav-text">实现一个Listener</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HttpSession-–-会话"><span class="nav-text">HttpSession – 会话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dispatcher-–-分发器"><span class="nav-text">Dispatcher – 分发器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期-1"><span class="nav-text">生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet-生命周期"><span class="nav-text">Servlet 生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Request-生命周期"><span class="nav-text">Request 生命周期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发-amp-多线程问题"><span class="nav-text">并发 &amp; 多线程问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线程不安全"><span class="nav-text">线程不安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步-amp-AsyncContext"><span class="nav-text">异步 &amp; AsyncContext</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Requet-和-Response的非阻塞IO"><span class="nav-text">Requet 和 Response的非阻塞IO</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异常处理"><span class="nav-text">异常处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Servlet-API"><span class="nav-text">Servlet API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet"><span class="nav-text">Servlet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServletConfig"><span class="nav-text">ServletConfig</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServletContext"><span class="nav-text">ServletContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Filter"><span class="nav-text">Filter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Response"><span class="nav-text">Response:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Request"><span class="nav-text">Request:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO-Stream"><span class="nav-text">IO Stream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RequestDispatcher"><span class="nav-text">RequestDispatcher</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JSP（JavaServer-Pages）"><span class="nav-text">JSP（JavaServer Pages）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Servlet-amp-JSP-区别与联系"><span class="nav-text">Servlet &amp; JSP 区别与联系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动作元素"><span class="nav-text">动作元素</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/13.JavaEE-Framework/JavaEE.Servlet/';
+          this.page.identifier = '13.JavaEE-Framework/JavaEE.Servlet/';
+          this.page.title = 'Servelt & JSP';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

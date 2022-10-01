@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="概述Java 的 I/O 操作类在包 java.io 下，大概有将近 80 个类，但是这些类大概可以分成四组，分别是：  基于字节操作的 I/O 流接口：InputStream 和 OutputStream 基于字符操作的 I/O 流接口： Writer 和 Reader 基于磁盘操作的 I/O 文件接口： File  参考: 深入分析 Java I/O 的工作机制 @ref 流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Tutorials-05-IO">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.05.IO/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="概述Java 的 I/O 操作类在包 java.io 下，大概有将近 80 个类，但是这些类大概可以分成四组，分别是：  基于字节操作的 I/O 流接口：InputStream 和 OutputStream 基于字符操作的 I/O 流接口： Writer 和 Reader 基于磁盘操作的 I/O 文件接口： File  参考: 深入分析 Java I/O 的工作机制 @ref 流">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/java/Node_Stream_Filter_Stream.gif">
+<meta property="og:updated_time" content="2022-10-01T20:20:46.474Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Tutorials-05-IO">
+<meta name="twitter:description" content="概述Java 的 I/O 操作类在包 java.io 下，大概有将近 80 个类，但是这些类大概可以分成四组，分别是：  基于字节操作的 I/O 流接口：InputStream 和 OutputStream 基于字符操作的 I/O 流接口： Writer 和 Reader 基于磁盘操作的 I/O 文件接口： File  参考: 深入分析 Java I/O 的工作机制 @ref 流">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/java/Node_Stream_Filter_Stream.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.05.IO/"/>
+
+
+
+
+
+  <title>Java Tutorials-05-IO | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.05.IO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java Tutorials-05-IO</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/Java基础教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Java基础教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,868
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Java 的 I/O 操作类在包 java.io 下，大概有将近 80 个类，但是这些类大概可以分成四组，分别是：</p>
+<ul>
+<li>基于字节操作的 I/O 流接口：<code>InputStream</code> 和 <code>OutputStream</code></li>
+<li>基于字符操作的 I/O 流接口： <code>Writer</code> 和 <code>Reader</code></li>
+<li>基于磁盘操作的 I/O 文件接口： <code>File</code></li>
+</ul>
+<p>参考: <a href="https://www.ibm.com/developerworks/cn/java/j-lo-javaio/index.html" target="_blank" rel="noopener">深入分析 Java I/O 的工作机制</a> @ref</p>
+<h2 id="流"><a href="#流" class="headerlink" title="流"></a>流</h2><p>按照流操作对象的类型是字节还是字符, 分为字节流和字符流</p>
+<ol>
+<li>字节流的父类是 <code>InputStream</code>/<code>OutputStream</code>, 读写单个字节/字节数组,</li>
+<li>字符流的父类是 <code>Reader</code>/<code>Writer</code> 用于读写被编码(GBK/UTF8)的字符串, 读写Char/Char数组;</li>
+</ol>
+<p>按照功能分为节点流(node stream)和过滤流(filter stream, 或者叫装饰流)</p>
+<ol>
+<li>节点流用来处理从基本位置获取字节(文件, 内存, 管道), <code>FileInputStream</code>, <code>ByteArrayInputStream</code>, <code>PipedInputStream</code>, 这些类提供基本的读写方法;</li>
+<li>过滤流用于包装节点流, 提供了新的方法, 可以更方便的读写高级类型的数据(类序列化, 压缩文件, Java基本类型) <code>ObjectInputStream</code>, <code>ZipInputStream</code>,  <code>DataInputStream</code>.</li>
+</ol>
+<h3 id="节点流-amp-过滤流"><a href="#节点流-amp-过滤流" class="headerlink" title="节点流 &amp; 过滤流"></a>节点流 &amp; 过滤流</h3><p>图-外层的DataInputStream（过滤流）提供了额外的方法：<br><img src="/images/java/Node_Stream_Filter_Stream.gif" alt="Node Stream &amp; Filter Stream"></p>
+<h3 id="字节流-amp-字符流"><a href="#字节流-amp-字符流" class="headerlink" title="字节流 &amp; 字符流"></a>字节流 &amp; 字符流</h3><p><strong>字符流</strong>相关类以及继承关系:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">字符流</span><br><span class="line">  |-InputStream</span><br><span class="line">  |   |-FileInputStream [node流] 文件流</span><br><span class="line">  |   |-ByteArrayInputStream [node流] 内存字符流</span><br><span class="line">  |   |-PipedInputStream [node流] 管道流</span><br><span class="line">  |   |-ObjectInputStream</span><br><span class="line">  |   |-SequenceInputStream</span><br><span class="line">  |   |-FilterInputStream</span><br><span class="line">  |       |-DataInputStream</span><br><span class="line">  |       |-BufferedInputStream</span><br><span class="line">  |</span><br><span class="line">  |-OutputStream</span><br></pre></td></tr></table></figure>
+<p><strong>字节流</strong>相关类以及继承关系:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">字节流</span><br><span class="line">  |-Reader</span><br><span class="line">  |   |-InputStreamReader</span><br><span class="line">  |       |-FileReader</span><br><span class="line">  |   |-PipedReader</span><br><span class="line">  |   |-BufferedReader</span><br><span class="line">  |   |-CharArrayReader</span><br><span class="line">  |   |-StringReader</span><br><span class="line">  |</span><br><span class="line">  |-Writer</span><br><span class="line">      |-PrintWriter 没有对应的Reader, 可以使用java.io.Scaner</span><br></pre></td></tr></table></figure>
+<h4 id="字节流-常用类和方法"><a href="#字节流-常用类和方法" class="headerlink" title="字节流 常用类和方法"></a>字节流 常用类和方法</h4><ul>
+<li><code>InputStream</code>/<code>OutputStream</code> 提供基本的字符/字符数组读写<ul>
+<li><code>InputStream.available()</code> : 返回可读的字节数</li>
+<li><code>read()</code>, <code>read(byte[])</code>: 阻塞的, read返回读取的一个字节(int)</li>
+<li><code>write(int b)</code>, <code>write(byte[])</code>: 阻塞的</li>
+<li><code>close()</code></li>
+</ul>
+</li>
+<li><code>FileInputStream</code>/<code>FileOutputStream</code></li>
+<li><code>ByteArrayInputStream</code>/<code>ByteArrayOutputStream</code>: 包含一个内部缓冲区(字节数组), 该缓冲区包含从流中读取的字节</li>
+<li><code>PipedInputStream</code>/<code>PipedOutputStream</code> 同上</li>
+<li><code>BufferedInputStream</code>/<code>BufferedOutputStream</code>: 为另一个流提供缓冲</li>
+<li><code>ObjectInputStream</code>/<code>ObjectOutputStream</code><ul>
+<li><code>Object readObject()</code></li>
+<li><code>void writeObject(Object)</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="字符流-常用类和方法"><a href="#字符流-常用类和方法" class="headerlink" title="字符流 常用类和方法"></a>字符流 常用类和方法</h4><ul>
+<li><strong>Reader</strong>: 提供对char,char[],String类型数据的基本操作<ul>
+<li><code>read()</code>: 返回字符的Unicode编码(0-65535,双字节范围), 到达流末尾返回-1;</li>
+<li><code>read(char[])</code>: 读取字符到数组并返回已读取的字符个数;</li>
+<li><code>skip(long n)</code>: 跳过n个char</li>
+<li><code>mark(int limit)</code>: 为流的当前位置增加标记, 下次调用reset可以返回这个标记, 如果调用mark()后读取字符数超过limit, 下次调用reset会失败.</li>
+<li><code>reset()</code>:</li>
+<li><code>close()</code>:</li>
+</ul>
+</li>
+<li><strong>InputStreamReader</strong><ul>
+<li><code>getEncoding()</code>: 获取输入流的编码</li>
+<li><code>ready()</code>: 如果有数据可读, 返回true</li>
+</ul>
+</li>
+<li><strong>FileReader</strong>: 继承自 InputStreamReader<ul>
+<li>构造器: <code>FileReader(String)</code>, <code>FileReader(java.io.File)</code></li>
+</ul>
+</li>
+<li><strong>BufferedReader</strong>:<ul>
+<li><code>readLine()</code> : 读取一行并返回字符串(不包括换行符), 如果流已经读尽则返回null</li>
+</ul>
+</li>
+<li><strong>Scanner</strong>: 不是继承自Reader</li>
+<li><strong>Writer</strong> : 提供对char,char[],String类型数据的基本操作<ul>
+<li><code>write(char c)</code>, <code>write(char[])</code>, <code>write(String)</code></li>
+<li><code>append(char)</code>, <code>append(CharSequence)</code></li>
+<li><code>flush()</code>: 让缓冲区的内容立刻写入</li>
+<li><code>close()</code> :</li>
+</ul>
+</li>
+<li><strong>PrintWriter</strong>:</li>
+</ul>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><p>本章主要介绍文件操作类: <code>java.io.File</code> 和 <code>java.io.RandomAccessFile</code></p>
+<h3 id="java-io-File"><a href="#java-io-File" class="headerlink" title="java.io.File"></a>java.io.File</h3><p>File 是“文件”和“目录路径名”的抽象表示形式。File 直接继承于Object，实现了Serializable接口和Comparable接口。<br>实现Serializable接口，意味着File对象支持序列化操作。<br>实现Comparable接口，意味着File对象之间可以比较大小；File能直接被存储在有序集合(如TreeSet、TreeMap中)。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testFileDirAPIS</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 新建目录</span></span><br><span class="line">    File dir = <span class="keyword">new</span> File(<span class="string">"dir"</span>);</span><br><span class="line">    dir.mkdir();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 新建文件</span></span><br><span class="line">    File file1 = <span class="keyword">new</span> File(dir, <span class="string">"file1.txt"</span>);</span><br><span class="line">    file1.createNewFile();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 列出目录下的文件</span></span><br><span class="line">    File[] fs = dir.listFiles();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="java-io-RandomAccessFile"><a href="#java-io-RandomAccessFile" class="headerlink" title="java.io.RandomAccessFile"></a>java.io.RandomAccessFile</h3><p><code>java.io.RandomAccessFile</code>是随机访问文件(包括读/写)的类。它支持对文件随机访问的读取和写入，即我们可以从指定的位置读取/写入文件数据。<br>需要注意的是，RandomAccessFile 虽然属于java.io包，但它不是InputStream或者OutputStream的子类；<br>它也不同于FileInputStream和FileOutputStream。 FileInputStream 只能对文件进行读操作，而FileOutputStream 只能对文件进行写操作；<br>RandomAccessFile 同时支持文件的读和写，并且它支持随机访问。</p>
+<blockquote>
+<p><code>RandomAccessFile</code> 大部分功能被JDK1.4中NIO的内存映射文件替代了</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">RandomAccessFile raf = <span class="keyword">new</span> RandomAccessFile(args[<span class="number">0</span>], <span class="string">"r"</span>);</span><br><span class="line"><span class="keyword">long</span> position = raf.length();</span><br><span class="line"><span class="keyword">while</span> (position &gt; <span class="number">0</span>) &#123;</span><br><span class="line">  position -= <span class="number">1</span>;</span><br><span class="line">  raf.seek(position);</span><br><span class="line">  <span class="keyword">byte</span> b = raf.readByte();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="try-with-resources"><a href="#try-with-resources" class="headerlink" title="try-with-resources"></a>try-with-resources</h2><p>旧风格的I/O操作的异常捕获:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printFile</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    InputStream input = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        input = <span class="keyword">new</span> FileInputStream(<span class="string">"file.txt"</span>); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> data = input.read(); <span class="comment">// 2</span></span><br><span class="line">        <span class="keyword">while</span>(data != -<span class="number">1</span>)&#123;</span><br><span class="line">            System.out.print((<span class="keyword">char</span>) data);</span><br><span class="line">            data = input.read(); <span class="comment">//3</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(input != <span class="keyword">null</span>)&#123;</span><br><span class="line">            input.close(); <span class="comment">// 4</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面代码中可能会抛出异常. try语句块中有3个地方能抛出异常, finally语句块中有一个地方会能出异常.<br>不论try语句块中是否有异常抛出, finally语句块始终会被执行.这意味着, 不论try语句块中发生什么, InputStream 都会被关闭, 或者说都会试图被关闭.如果关闭失败, InputStream’s close()方法也可能会抛出异常.<br>Q: 假设try语句块抛出一个异常, 然后finally语句块被执行.同样假设finally语句块也抛出了一个异常.那么哪个异常会根据调用栈往外传播？<br>A: 即使try语句块中抛出的异常与异常传播更相关, 最终还是finally语句块中抛出的异常会根据调用栈向外传播.</p>
+</blockquote>
+<p>在JDK7中, <strong>try-with-resources</strong> 风格的IO异常捕获:<br>try-with-resources语句会确保在try语句结束时关闭所有资源. 实现了<code>java.lang.AutoCloseable</code>或<code>java.io.Closeable</code>的对象都可以做为在<code>try()</code>代码块内打开的资源, 并且可以在退出<code>try()</code>语句块时被自动关闭.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// try()代码块内打开多个资源:</span></span><br><span class="line"><span class="keyword">try</span> (</span><br><span class="line">  java.util.zip.ZipFile zf = <span class="keyword">new</span> java.util.zip.ZipFile(zipFileName);</span><br><span class="line">  InputStream ins = <span class="keyword">new</span> FileInputStream(<span class="string">"/a.txt"</span>);</span><br><span class="line">  java.io.BufferedWriter writer = java.nio.file.Files.newBufferedWriter(outputFilePath, charset)</span><br><span class="line">  <span class="comment">// 这里没有分号</span></span><br><span class="line">)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// Enumerate each entry</span></span><br><span class="line">  <span class="keyword">for</span> (java.util.Enumeration entries = zf.entries(); entries.hasMoreElements();) &#123;</span><br><span class="line">      <span class="comment">// Get the entry name and write it to the output file</span></span><br><span class="line">      String newLine = System.getProperty(<span class="string">"line.separator"</span>);</span><br><span class="line">      String zipEntryName =</span><br><span class="line">           ((java.util.zip.ZipEntry) entries.nextElement()).getName() + newLine;</span><br><span class="line">      writer.write(zipEntryName, <span class="number">0</span>, zipEntryName.length());</span><br><span class="line">  &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span>(Exception1 | Exception2 e) &#123; <span class="comment">// 新风格的catch</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>当try-with-resources结构中抛出一个异常, 同时资源调用close方法时也抛出一个异常, try-with-resources结构中抛出的异常会向外传播, 而资源被关闭时抛出的异常被抑制了. 这与旧风格代码的例子相反.</p>
+</blockquote>
+<h2 id="API-Example"><a href="#API-Example" class="headerlink" title="API Example"></a>API Example</h2><h3 id="字节流-API-Example"><a href="#字节流-API-Example" class="headerlink" title="字节流 API Example"></a>字节流 API Example</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 基本字节流 InputStream/OutputStream 接口测试: */</span></span><br><span class="line"><span class="keyword">byte</span>[] bytes = &#123;<span class="number">72</span>, <span class="number">101</span>, <span class="number">108</span>, <span class="number">108</span>, <span class="number">111</span>&#125;;</span><br><span class="line">OutputStream os = <span class="keyword">new</span> FileOutputStream(<span class="string">"~/testFile"</span>);</span><br><span class="line">os.write(bytes); <span class="comment">// 1</span></span><br><span class="line">os.close();</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> size; <span class="keyword">byte</span>[] readbuf;</span><br><span class="line">InputStream is = <span class="keyword">new</span> FileInputStream(<span class="string">"~/testFile"</span>);</span><br><span class="line"><span class="keyword">if</span>((size= is.available()) &gt; <span class="number">0</span>) &#123; <span class="comment">// 2</span></span><br><span class="line">  is.read(readbuf= <span class="keyword">new</span> <span class="keyword">byte</span>[size]); <span class="comment">// 3</span></span><br><span class="line">  System.out.println(<span class="keyword">new</span> String(readbuf));</span><br><span class="line">&#125;</span><br><span class="line">in.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Filter Streams Layered onto Node Stream */</span></span><br><span class="line">FileOutputStream fileOutputStream = <span class="keyword">new</span> FileOutputStream(<span class="string">"A.txt"</span>); <span class="comment">// Node Stream</span></span><br><span class="line">BufferedOutputStream bufferedOutputStream = <span class="keyword">new</span> BufferedOutputStream(fileOutputStream); <span class="comment">// Filter Stream</span></span><br><span class="line">DataOutputStream out = <span class="keyword">new</span> DataOutputStream(bufferedOutputStream);</span><br><span class="line">out.writeInt(<span class="number">3</span>);</span><br><span class="line">out.writeBoolean(<span class="keyword">true</span>);</span><br><span class="line">out.flush();</span><br><span class="line">out.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">DataInputStream in = <span class="keyword">new</span> DataInputStream(</span><br><span class="line">  <span class="keyword">new</span> BufferedInputStream(</span><br><span class="line">    <span class="keyword">new</span> FileInputStream(<span class="string">"A.txt"</span>)));</span><br><span class="line"><span class="comment">// DataInputStream Methods:</span></span><br><span class="line">in.readInt();</span><br><span class="line">in.readBoolean();</span><br><span class="line">in.close();</span><br></pre></td></tr></table></figure>
+<h3 id="字符流-API-Example"><a href="#字符流-API-Example" class="headerlink" title="字符流 API Example"></a>字符流 API Example</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* PrintWriter and Scanner */</span></span><br><span class="line">PrintWriter out = <span class="keyword">new</span> PrintWriter(<span class="string">"A.txt"</span>, <span class="string">"UTF-8"</span>);</span><br><span class="line">out.println(<span class="string">"Hello"</span>);</span><br><span class="line">out.close();</span><br><span class="line"></span><br><span class="line">Scanner scanner = <span class="keyword">new</span> Scanner(<span class="keyword">new</span> FileInputStream(<span class="string">"A.txt"</span>), <span class="string">"UTF-8"</span>);</span><br><span class="line"><span class="keyword">while</span> (scanner.hasNextLine()) &#123;</span><br><span class="line">  String line = scanner.nextLine();</span><br><span class="line">&#125;</span><br><span class="line">scanner.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* FileReader -&gt; BufferedReader */</span></span><br><span class="line">FileReader fr=<span class="keyword">new</span> FileReader(<span class="string">"~/testout.txt"</span>);</span><br><span class="line">BufferedReader br=<span class="keyword">new</span> BufferedReader(fr);</span><br><span class="line"><span class="keyword">int</span> i;</span><br><span class="line"><span class="keyword">while</span>((i=br.read())!=-<span class="number">1</span>)&#123;</span><br><span class="line">  System.out.print((<span class="keyword">char</span>)i);</span><br><span class="line">&#125;</span><br><span class="line">br.close();</span><br><span class="line">fr.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* BufferedReader 逐行读取 */</span></span><br><span class="line">String line;</span><br><span class="line">InputStream fis = <span class="keyword">new</span> FileInputStream(ReadFile);</span><br><span class="line">InputStreamReader isr = <span class="keyword">new</span> InputStreamReader(fis, <span class="string">"UTF-8"</span>);</span><br><span class="line">BufferedReader br = <span class="keyword">new</span> BufferedReader(isr);</span><br><span class="line"><span class="keyword">while</span>((line = br.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">    System.out.println(line);</span><br><span class="line">&#125;</span><br><span class="line">br.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 文件字节流 -&gt; 文件字符流 */</span></span><br><span class="line">FileOutputStream os = <span class="keyword">new</span> FileOutputStream(WriteFile);</span><br><span class="line">OutputStreamWriter writer = <span class="keyword">new</span> OutputStreamWriter(os,<span class="string">"UTF-8"</span>);</span><br><span class="line">writer.append(<span class="string">"Hello\r\n"</span>);</span><br><span class="line">writer.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 字符流处理Socket */</span></span><br><span class="line">Socket socket = <span class="keyword">new</span> Socket(<span class="string">"127.0.0.1"</span>, <span class="number">8080</span>);</span><br><span class="line">Writer writer = <span class="keyword">new</span> PrintWriter(socket.getOutputStream());</span><br><span class="line">write.write(<span class="string">"Hello"</span>);</span><br><span class="line"><span class="comment">// close writer and socket</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Java-Tutorials.04.泛型/" rel="next" title="Java Tutorials-04-泛型">
+                <i class="fa fa-chevron-left"></i> Java Tutorials-04-泛型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Java-Tutorials.06.序列化/" rel="prev" title="Java Tutorials-06-序列化">
+                Java Tutorials-06-序列化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流"><span class="nav-text">流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#节点流-amp-过滤流"><span class="nav-text">节点流 &amp; 过滤流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字节流-amp-字符流"><span class="nav-text">字节流 &amp; 字符流</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字节流-常用类和方法"><span class="nav-text">字节流 常用类和方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符流-常用类和方法"><span class="nav-text">字符流 常用类和方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件"><span class="nav-text">文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java-io-File"><span class="nav-text">java.io.File</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java-io-RandomAccessFile"><span class="nav-text">java.io.RandomAccessFile</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#try-with-resources"><span class="nav-text">try-with-resources</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-Example"><span class="nav-text">API Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字节流-API-Example"><span class="nav-text">字节流 API Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符流-API-Example"><span class="nav-text">字符流 API Example</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.05.IO/';
+          this.page.identifier = '12.Java/Java-Tutorials.05.IO/';
+          this.page.title = 'Java Tutorials-05-IO';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

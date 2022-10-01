@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="前端,Html,Javascript," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Todo Javascript绝对简明教程 http://wiki.woodpecker.org.cn/moin/jsInAWord 对Web标准的理解, 浏览器差异 HTML / CSS / JavaScript(基础, JS面向对象实现原理/闭包机制/作用域) AngularJS / Ember.js / jQuery Jade / Swig / Handlebars / Mustache 或">
+<meta name="keywords" content="前端,Html,Javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端笔记">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/41.Uncategorized/前端笔记/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="Todo Javascript绝对简明教程 http://wiki.woodpecker.org.cn/moin/jsInAWord 对Web标准的理解, 浏览器差异 HTML / CSS / JavaScript(基础, JS面向对象实现原理/闭包机制/作用域) AngularJS / Ember.js / jQuery Jade / Swig / Handlebars / Mustache 或">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-10-01T20:20:47.745Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端笔记">
+<meta name="twitter:description" content="Todo Javascript绝对简明教程 http://wiki.woodpecker.org.cn/moin/jsInAWord 对Web标准的理解, 浏览器差异 HTML / CSS / JavaScript(基础, JS面向对象实现原理/闭包机制/作用域) AngularJS / Ember.js / jQuery Jade / Swig / Handlebars / Mustache 或">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/41.Uncategorized/前端笔记/"/>
+
+
+
+
+
+  <title>前端笔记 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/41.Uncategorized/前端笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
+                    <span itemprop="name">41.Uncategorized</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,554
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Todo"><a href="#Todo" class="headerlink" title="Todo"></a>Todo</h1><ul>
+<li>Javascript绝对简明教程 <a href="http://wiki.woodpecker.org.cn/moin/jsInAWord" target="_blank" rel="noopener">http://wiki.woodpecker.org.cn/moin/jsInAWord</a></li>
+<li>对Web标准的理解, 浏览器差异</li>
+<li>HTML / CSS / JavaScript(基础, JS面向对象实现原理/闭包机制/作用域)</li>
+<li>AngularJS / Ember.js / jQuery</li>
+<li>Jade / Swig / Handlebars / Mustache 或者其它模板引擎</li>
+<li>SASS 或者其它 CSS 预处理器</li>
+<li>Js代码混淆 grunt/uglify</li>
+</ul>
+<h1 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type"></a>Content-Type</h1><ul>
+<li>各浏览器对常用或者错误的 Content-Type 类型处理方式 <a href="http://w3help.org/zh-cn/causes/CH9001" target="_blank" rel="noopener">http://w3help.org/zh-cn/causes/CH9001</a> or <a href="http://www.w3help.org/zh-cn/causes/CH9002" target="_blank" rel="noopener">http://www.w3help.org/zh-cn/causes/CH9002</a></li>
+</ul>
+<h1 id="P3P-Cookie"><a href="#P3P-Cookie" class="headerlink" title="P3P Cookie"></a>P3P Cookie</h1><p>假设这样的情况, 访问网页 a.com, 网页 a.com 通过 jsonp或 iframe访问了 &lt;b.com/set-cookie.php&gt;, 这个php里会set &lt;b.com&gt; 的 cookie.<br>如果 &lt;b.com/set-cookie.php&gt;里没有把 response设置 P3P头, 那么&lt;b.com/set-cookie.php&gt; 种cookie将会不成功 @ref <a href="http://www.lovelucy.info/ie-accept-third-party-cookie.html" target="_blank" rel="noopener">http://www.lovelucy.info/ie-accept-third-party-cookie.html</a></p>
+<p>正确的做法, 如果&lt;b.com/set-cookie.php&gt;是一个(为第三方页面)种cookie的页面, 那么&lt;set-cookie.php&gt;要增加P3P头:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">header(<span class="string">'P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"'</span>);</span><br></pre></td></tr></table></figure>
+<p>Java版本的:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">response.setHeader(<span class="string">"P3P"</span>,<span class="string">"CP='IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA'"</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="CSP-Content-Security-Policy"><a href="#CSP-Content-Security-Policy" class="headerlink" title="CSP(Content Security Policy)"></a>CSP(Content Security Policy)</h1><ul>
+<li>CSP可以防止什么: XSS(跨域脚本攻击)</li>
+<li><p>如何启用CSP:</p>
+<ul>
+<li><p>返回的resp里带header “Content-Security-Policy”</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Content-Security-Policy: script-src &apos;self&apos;; object-src &apos;none&apos;;</span><br><span class="line">style-src cdn.example.org third-party.org; child-src https:</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>网页的meta标签:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;script-src &apos;self&apos;; object-src &apos;none&apos;; style-src cdn.example.org third-party.org; child-src https:&quot;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>@ref: Content Security Policy 入门教程 - 阮一峰的网络日志：<a href="http://www.ruanyifeng.com/blog/2016/09/csp.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2016/09/csp.html</a></p>
+<h1 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h1><p>浏览器的同源策略 <a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy</a></p>
+<ul>
+<li>a.com/1/xx.html | a.com/2/xx.html 同源</li>
+<li><a href="https://a.com" target="_blank" rel="noopener">https://a.com</a>   | <a href="http://a.com" target="_blank" rel="noopener">http://a.com</a>    不同源(协议不同)</li>
+<li><a href="http://www.a.com" target="_blank" rel="noopener">www.a.com</a>       | cdn.a.com       不同源(子域不同)</li>
+<li><a href="http://www.a.com:8080" target="_blank" rel="noopener">www.a.com:8080</a>  | <a href="http://www.a.com:80" target="_blank" rel="noopener">www.a.com:80</a>    不同源(端口不同)</li>
+</ul>
+<p>跨域资源共享 CORS 详解 - 阮一峰的网络日志：<a href="https://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="noopener">https://www.ruanyifeng.com/blog/2016/04/cors.html</a></p>
+<h2 id="资源加载跨域"><a href="#资源加载跨域" class="headerlink" title="资源加载跨域"></a>资源加载跨域</h2><p>原理：所有具有src属性的HTML标签都是可以跨域的<br>限制：需要创建一个DOM对象，只能用于GET方法</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 常用的可以跨域的标签 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"..."</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"..."</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"..."</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="document-domain-iframe跨域"><a href="#document-domain-iframe跨域" class="headerlink" title="document.domain + iframe跨域"></a>document.domain + iframe跨域</h2><p>这种方式只针对相同主域名不同子域名下的页面才有效,<br>以(<a href="http://a.com/foo.html)和(http://cdn.a.com/bar.html)为例" target="_blank" rel="noopener">http://a.com/foo.html)和(http://cdn.a.com/bar.html)为例</a>:</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// URL http://a.com/foo.html</span></span><br><span class="line"><span class="keyword">var</span> ifr = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);</span><br><span class="line">ifr.src = <span class="string">'http://cdn.a.com/bar.html'</span>;  <span class="comment">// 这里跨域访问了cdn.a.com/bar</span></span><br><span class="line">ifr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ifrdoc = ifr.contentDocument || ifr.contentWindow.document;</span><br><span class="line">    ifrdoc.getElementsById(<span class="string">"foo"</span>).innerHTML);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">ifr.style.display = <span class="string">'none'</span>;</span><br><span class="line"><span class="built_in">document</span>.body.appendChild(ifr);</span><br></pre></td></tr></table></figure>
+<p>只要在(<a href="http://cdn.a.com/bar.html)里加入声明" target="_blank" rel="noopener">http://cdn.a.com/bar.html)里加入声明</a>:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">document.domain = &apos;a.com&apos; // 往上提了一级域名</span><br></pre></td></tr></table></figure></p>
+<h2 id="ajax使用jsonp跨域"><a href="#ajax使用jsonp跨域" class="headerlink" title="ajax使用jsonp跨域"></a>ajax使用jsonp跨域</h2><p>jsonp 全称是JSON with Padding, 原理是客户端依靠<code>&lt;script src=&quot;...&quot;\&gt;</code>标签的src发起跨域请求, 远端服务器返回给客户端一段js代码, 这段js代码自动调用客户端的函数</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getBooks</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            $.ajax(&#123;</span><br><span class="line">                type:<span class="string">'get'</span>,</span><br><span class="line">                url:<span class="string">'http://test.com/bookservice.php'</span>,</span><br><span class="line">                dataType:<span class="string">'jsonp'</span>,</span><br><span class="line">                jsonp:<span class="string">'callback'</span>,</span><br><span class="line">                jsonpCallback:<span class="string">'displayBooks'</span></span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>参考: <a href="http://www.cnblogs.com/2050/p/3191744.html" target="_blank" rel="noopener">js中几种实用的跨域方法原理详解</a></p>
+<h1 id="HTML简明参考"><a href="#HTML简明参考" class="headerlink" title="HTML简明参考"></a>HTML简明参考</h1><h2 id="按钮"><a href="#按钮" class="headerlink" title="按钮"></a>按钮</h2><p>在一个页面上画一个按钮，有四种办法：</p>
+<ul>
+<li><code>&lt;input type=&quot;button&quot; /&gt;</code> 这就是一个按钮。如果你不写javascript 的话，按下去什么也不会发生。</li>
+<li><code>&lt;input type=&quot;submit&quot; /&gt;</code> 这样的按钮用户点击之后会自动提交 form，除非你写了javascript 阻止它。</li>
+<li><code>&lt;button&gt;</code> 这个按钮放在 form 中也会点击自动提交，比前两个的优点是按钮的内容不光可以有文字，还可以有图片等多媒体内容。（当然，前两个用图片背景也可以做到）。它的缺点是不同的浏览器得到的 value 值不同；可能还有其他的浏览器兼容问题。请始终为<code>&lt;button&gt;</code>规定 <code>type</code> 属性。Internet Explorer 的默认类型是 “button”，而其他浏览器中（包括 W3C 规范）的默认值是 “submit”。</li>
+<li>其他标签，例如 a, img, span, div，然后用图片把它伪装成一个按钮。</li>
+<li>参考<code>&lt;button&gt;和&lt;input type=&quot;button&quot;</code>的区别 (<a href="http://www.cnblogs.com/purediy/archive/2012/06/10/2544184.html" target="_blank" rel="noopener">http://www.cnblogs.com/purediy/archive/2012/06/10/2544184.html</a>)</li>
+</ul>
+<h1 id="JavaScript简明参考"><a href="#JavaScript简明参考" class="headerlink" title="JavaScript简明参考"></a>JavaScript简明参考</h1><p>参考: <a href="">JavaScript权威指南(第6版)</a></p>
+<h2 id="匿名"><a href="#匿名" class="headerlink" title="匿名"></a>匿名</h2><ul>
+<li>定义并执行 <code>(function(){})()</code>, function的小括号是必须的</li>
+<li>定义: <code>var fnB = function(){ }</code></li>
+</ul>
+<h2 id="JavaScript事件"><a href="#JavaScript事件" class="headerlink" title="JavaScript事件"></a>JavaScript事件</h2><p>点击事件: <code>onclick</code></p>
+<p>当用户进入或离开页面时，会触发 <code>onload</code> 和 <code>onunload</code> 事件.</p>
+<ul>
+<li>onload 事件可用于检查访客的浏览器类型和版本，以便基于这些信息来加载不同版本的网页。</li>
+<li>onload 和 onunload 事件可用于处理 cookies。</li>
+</ul>
+<p>下面的例子展示了如何使用 onchange。当用户改变输入字段的内容时，将调用 upperCase() 函数。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;input type=&quot;text&quot; id=&quot;fname&quot; onchange=&quot;upperCase()&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<p><code>onmouseover</code> 和 <code>onmouseout</code> 事件可用于在鼠标指针移动到或离开元素时触发函数。</p>
+<h1 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h1><h2 id="CSS的「空格」和「-gt-」"><a href="#CSS的「空格」和「-gt-」" class="headerlink" title="CSS的「空格」和「&gt;」"></a>CSS的「空格」和「&gt;」</h2><ul>
+<li>「&gt;」代表的是css3特有的子元素选择器（element&gt;element ）,「&gt;」是直接子元素</li>
+<li>「空格」空格隔开表示从属包含关系，是当前的元素子元素,「空格」是所有子元素</li>
+<li>「逗号」逗号隔开表示两个不同类的样式类名用同一个样式,</li>
+</ul>
+<h2 id="CSS的「点」和「-」"><a href="#CSS的「点」和「-」" class="headerlink" title="CSS的「点」和「#」"></a>CSS的「点」和「#」</h2><ul>
+<li><p>「点」对应class</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.card &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>「井号」对应id :</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#Kard &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不加 对应html标签比如 ul,img,p</p>
+</li>
+</ul>
+<p>Class与ID的区别:</p>
+<ul>
+<li>Class: Class是用来根据用户定义的标准对一个或多个元素进行定义的</li>
+<li>ID: ID是定义页面上一个仅出现一次的标记</li>
+</ul>
+<h1 id="AJAX（Asynchronous-JavaScript-And-XML）"><a href="#AJAX（Asynchronous-JavaScript-And-XML）" class="headerlink" title="AJAX（Asynchronous JavaScript And XML）"></a>AJAX（Asynchronous JavaScript And XML）</h1><h2 id="chrome-dev-tool"><a href="#chrome-dev-tool" class="headerlink" title="chrome dev tool:"></a>chrome dev tool:</h2><ul>
+<li>console : 输入<code>$</code> 判断是否有jquery (prototype)</li>
+<li>console : 输入<code>$(&#39;#user_name&#39;)</code> 判断</li>
+<li><code>$(&#39;#ABC #list_&#39;)</code> 寻找id=ABC, 再在子节点寻找id=list_</li>
+<li><code>$(&#39;.ABC .list_&#39;)</code> 寻找class=ABC</li>
+</ul>
+<h1 id="前端调试"><a href="#前端调试" class="headerlink" title="前端调试"></a>前端调试</h1><ul>
+<li><p>chrome调试工具:</p>
+<ul>
+<li>c-p：打开资源</li>
+<li>fiddler替代chrome调试</li>
+<li>通过chrome审核元素找div</li>
+<li>chrome的console交互命令，找jQuery，找各种资源</li>
+<li>把js保存位chrome书签</li>
+</ul>
+</li>
+<li><p>conslole:</p>
+<ol>
+<li>console : 输入<code>$</code> 判断是否有jquery</li>
+<li>console : 输入<code>$(&#39;#user_name&#39;)</code> 判断</li>
+</ol>
+</li>
+<li><p>js断点：</p>
+<ol>
+<li>在chrome设置断点，要求这个js是可以缓存的</li>
+<li>debugger</li>
+<li>console.log(123)</li>
+</ol>
+</li>
+<li><p>对于压缩的js如何处理</p>
+</li>
+<li><p>用finddle让浏览器解析本地js</p>
+</li>
+<li><p>补充: 五个你必须知道的javascript和web-debug技术</p>
+</li>
+</ul>
+<h1 id="自动化"><a href="#自动化" class="headerlink" title="自动化"></a>自动化</h1><ul>
+<li><a href="http://www.zhihu.com/question/20790576" target="_blank" rel="noopener">如何用工程手段解决前端开发和部署优化的综合问题</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/Html/" rel="tag"># Html</a>
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/41.Uncategorized/使用NVM管理Node/" rel="next" title="使用NVM管理Node">
+                <i class="fa fa-chevron-left"></i> 使用NVM管理Node
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/41.Uncategorized/安全笔记/" rel="prev" title="安全笔记">
+                安全笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Todo"><span class="nav-text">Todo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Content-Type"><span class="nav-text">Content-Type</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P3P-Cookie"><span class="nav-text">P3P Cookie</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CSP-Content-Security-Policy"><span class="nav-text">CSP(Content Security Policy)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#跨域"><span class="nav-text">跨域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#资源加载跨域"><span class="nav-text">资源加载跨域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#document-domain-iframe跨域"><span class="nav-text">document.domain + iframe跨域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ajax使用jsonp跨域"><span class="nav-text">ajax使用jsonp跨域</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTML简明参考"><span class="nav-text">HTML简明参考</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#按钮"><span class="nav-text">按钮</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JavaScript简明参考"><span class="nav-text">JavaScript简明参考</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#匿名"><span class="nav-text">匿名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript事件"><span class="nav-text">JavaScript事件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CSS"><span class="nav-text">CSS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS的「空格」和「-gt-」"><span class="nav-text">CSS的「空格」和「&gt;」</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS的「点」和「-」"><span class="nav-text">CSS的「点」和「#」</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AJAX（Asynchronous-JavaScript-And-XML）"><span class="nav-text">AJAX（Asynchronous JavaScript And XML）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#chrome-dev-tool"><span class="nav-text">chrome dev tool:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前端调试"><span class="nav-text">前端调试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自动化"><span class="nav-text">自动化</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/41.Uncategorized/前端笔记/';
+          this.page.identifier = '41.Uncategorized/前端笔记/';
+          this.page.title = '前端笔记';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

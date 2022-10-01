@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="网络协议,TCP&IP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="OSI七层模型回顾参考: [[网络协议-OSI七层模型]] TCP报头  Source Port，Destination Port：TCP的包是没有IP地址的，那是IP层上的事。但是有源端口和目标端口。 Sequence Number是包的序号，用来解决网络包乱序（reordering）问题。 Acknowledgement Number就是ACK——用于确认收到，用来解决不丢包的问题。 TCP">
+<meta name="keywords" content="网络协议,TCP&amp;IP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络协议：TCP&#x2F;IP">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/22.Network-Protocol/网络协议-TCP/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="OSI七层模型回顾参考: [[网络协议-OSI七层模型]] TCP报头  Source Port，Destination Port：TCP的包是没有IP地址的，那是IP层上的事。但是有源端口和目标端口。 Sequence Number是包的序号，用来解决网络包乱序（reordering）问题。 Acknowledgement Number就是ACK——用于确认收到，用来解决不丢包的问题。 TCP">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/network_protocol/tcp_header.jpg">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/network_protocol/tcp_state_machine.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/network_protocol/tcp_open_close.jpg">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/network_protocol/tcp_sack_example.jpg">
+<meta property="og:updated_time" content="2022-10-01T20:20:46.966Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络协议：TCP&#x2F;IP">
+<meta name="twitter:description" content="OSI七层模型回顾参考: [[网络协议-OSI七层模型]] TCP报头  Source Port，Destination Port：TCP的包是没有IP地址的，那是IP层上的事。但是有源端口和目标端口。 Sequence Number是包的序号，用来解决网络包乱序（reordering）问题。 Acknowledgement Number就是ACK——用于确认收到，用来解决不丢包的问题。 TCP">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/network_protocol/tcp_header.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/22.Network-Protocol/网络协议-TCP/"/>
+
+
+
+
+
+  <title>网络协议：TCP/IP | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/22.Network-Protocol/网络协议-TCP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络协议：TCP/IP</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/22-Network-Protocol/" itemprop="url" rel="index">
+                    <span itemprop="name">22.Network-Protocol</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,709
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="OSI七层模型回顾"><a href="#OSI七层模型回顾" class="headerlink" title="OSI七层模型回顾"></a>OSI七层模型回顾</h2><p>参考: [[网络协议-OSI七层模型]]</p>
+<h2 id="TCP报头"><a href="#TCP报头" class="headerlink" title="TCP报头"></a>TCP报头</h2><p><img src="/images/network_protocol/tcp_header.jpg" alt="TCP头"></p>
+<ul>
+<li>Source Port，Destination Port：TCP的包是没有IP地址的，那是IP层上的事。但是有源端口和目标端口。</li>
+<li>Sequence Number是包的序号，用来解决网络包乱序（reordering）问题。</li>
+<li>Acknowledgement Number就是ACK——用于确认收到，用来解决不丢包的问题。</li>
+<li>TCP Flag ，也就是包的类型，主要是用于操控TCP的状态机的，Flag共6个，即URG、ACK、PSH、RST、SYN、FIN等，具体含义如下：<ul>
+<li>URG：紧急指针（urgent pointer）有效。</li>
+<li>ACK：Acknowledgement，确认收到。</li>
+<li>PSH：接收方应该尽快将这个报文交给应用层。</li>
+<li>RST：RESET，重置连接；</li>
+<li>SYN：Synchronize Sequence Numbers，一般在发起一个新连接的时候才会同步Seq Num；</li>
+<li>FIN：FINISH，释放一个连接。</li>
+</ul>
+</li>
+<li>Window又叫Advertised-Window，也就是著名的滑动窗口（Sliding Window），用于解决流控的。</li>
+</ul>
+<h2 id="TCP状态机，以及三次握手、四次挥手"><a href="#TCP状态机，以及三次握手、四次挥手" class="headerlink" title="TCP状态机，以及三次握手、四次挥手"></a>TCP状态机，以及三次握手、四次挥手</h2><p>网络上的传输是没有连接的，包括TCP也是一样的。而TCP所谓的“连接”，其实只不过是在通讯的双方维护一个“连接状态”，让它看上去好像有连接一样。所以，TCP的状态变换是非常重要的。</p>
+<p>下图是“TCP协议的状态机” 和 “TCP建链接”、“传数据” 、“TCP断链接”的对照图：<br><img src="/images/network_protocol/tcp_state_machine.png" alt="state machie"></p>
+<p>第二张图描述了TCP建立链接，收发数据，关闭链接三个步骤里TCP状态机的状态改变和发送的报文：<br><img src="/images/network_protocol/tcp_open_close.jpg" alt="open and close"></p>
+<h3 id="三次握手、四次挥手"><a href="#三次握手、四次挥手" class="headerlink" title="三次握手、四次挥手"></a>三次握手、四次挥手</h3><ul>
+<li>创建链接：双方交换Sequence Number的过程，服务端初始状态是<code>LISTEN</code><ul>
+<li>客户端 -&gt; 服务端： SYN seq=x，自身状态变为<code>SYN_SENT</code>（这一步是客户端发起的，调用<code>connect()</code>）；</li>
+<li>服务端 -&gt; 客户端： SYN seq=y, ACK=x+1，自身状态变为<code>SYN_RECEIVED</code>，此时TCP连接称为半连接（half-open connect）状态；</li>
+<li>客户端 -&gt; 服务端： ACK=y+1，自身状态<code>ESTABLISHED</code>，服务端收到后状态也变为<code>ESTABLISHED</code>;</li>
+</ul>
+</li>
+<li>收发数据：<ul>
+<li>客户端发送数据： seq=j</li>
+<li>服务端收到后回复：ACK=j+1</li>
+</ul>
+</li>
+<li>关闭链接：由于TCP连接时全双工的，因此，每个方向都必须要单独进行关闭。当一方完成数据发送任务后，发送一个FIN来终止这一方向的连接，收到一个FIN只是意味着这一方向上不会再收到数据了，但是在这个TCP连接上仍然能够发送数据，直到这一方向也发送了FIN。首先进行关闭的一方将执行主动关闭，而另一方则执行被动关闭：<ul>
+<li>客户端 -&gt; 服务端： FIN seq=m，表示客户端-服务端方向不再有数据流动，并进入<code>FIN_WAIT_1</code>状态，</li>
+<li>服务端 -&gt; 客户端： ACK=m+1，进入<code>CLOSE_WAIT</code>状态</li>
+<li>服务端 -&gt; 客户端： FIN seq=n，表示服务端-客户端方向不再有数据流动，进入<code>LAST_ACK</code>状态；</li>
+<li>客户端 -&gt; 服务端： ACK=n+1，客户端进入<code>TIME_WAIT</code>状态，服务端收到这个ACK进入<code>CLOSED</code>状态；</li>
+</ul>
+</li>
+</ul>
+<h3 id="SYN攻击"><a href="#SYN攻击" class="headerlink" title="SYN攻击"></a>SYN攻击</h3><p>SYN攻击： Client在短时间内伪造大量不存在的IP地址，并向Server不断地发送SYN包（或者发送完SYN包就立刻下线），正常情况Server回复SYN-ACK，并等待Client的ACK。</p>
+<p>但如果Server端如果在一定时间内没有收到Client的ACK则会重发SYN-ACK。由于CLient源地址是不存在的（或者已经下线），因此Server需要不断重发SYN-ACK，这些无效的SYN-ACK包将长时间占用Server机器的SYN队列，导致正常的SYN请求因为队列满而被丢弃，从而引起网络堵塞甚至系统瘫痪。</p>
+<p>SYN攻击时一种典型的DDOS攻击，检测SYN攻击的方式非常简单，即当Server上有大量半连接状态且源IP地址是随机的，则可以断定遭到SYN攻击了 ： <code>netstat -nat | grep</code></p>
+<p>Linux下给了一个叫<code>tcp_syncookies</code>的参数来应对这个问题 —— 当SYN队列满了后，TCP会通过源地址端口、目标地址端口和时间戳打造出一个特别的Sequence Number发回去（又叫cookie），如果是攻击者则不会有响应，如果是正常连接，则会把这个 SYN Cookie发回来，然后服务端可以通过cookie建连接（即使Client不在SYN队列中）。请注意，请先千万别用<code>tcp_syncookies</code>来处理正常的大负载的连接的情况。因为，<code>synccookies</code>是妥协版的TCP协议，并不严谨。</p>
+<p>一般情况下为了防范SYN攻击，有三个TCP参数可供你选择，第一个是：<code>tcp_synack_retries</code>来减少重试次数；第二个是：<code>tcp_max_syn_backlog</code>可以增大SYN连接数；第三个是：<code>tcp_abort_on_overflow</code> 处理不过来干脆就直接拒绝连接了。</p>
+<blockquote>
+<p>在Linux下，默认情况下Server重发SYN-ACK的次数为5次，重试的间隔时间从1s开始每次都翻倍，5次的重试时间间隔为1s, 2s, 4s, 8s, 16s，总共31s，第5次发出后还要等32s才能知道第5次也超时了，<br>所以，总共需要 1s + 2s + 4s+ 8s+ 16s + 32s = 63s 才会断开这个连接。</p>
+</blockquote>
+<h3 id="Sequence-Number"><a href="#Sequence-Number" class="headerlink" title="Sequence Number"></a>Sequence Number</h3><p>对于建链接的3次握手，主要是要初始化Sequence Number 的初始值。通信的双方要互相通知对方自己的初始化的Sequence Number（缩写为ISN：Inital Sequence Number）</p>
+<p>RFC793中说，SN会和一个假的时钟绑在一起，这个时钟会在每4微秒对SN做加一操作，直到超过2^32又从0开始。这样，一个连接的Sequence Number重复周期大约是4.55个小时。因为，我们假设我们的TCP Segment在网络上的存活时间不会超过<code>Maximum Segment Lifetime</code>。所以，只要MSL的值小于4.55小时，那么，我们就不会重用到Sequence Number。<br>没发送一个数据包，Seq Num就增加该次发包的长度，比如三次握手后，来了两个Len:1440的包，第二个包的SeqNum就成了1441。接收端第一个ACK回的是1441，表示第一个1440收到了。</p>
+<h3 id="关闭连接时发起方的TIME-WAIT状态"><a href="#关闭连接时发起方的TIME-WAIT状态" class="headerlink" title="关闭连接时发起方的TIME_WAIT状态"></a>关闭连接时发起方的TIME_WAIT状态</h3><p>根据TCP状态机的图可知，主动发起断开连接的一端，收到对端的FIN+ACK后，会进入TIME_WAIT状态，从TIME_WAIT状态到CLOSED状态，有一个超时设置，这个超时设置是 <strong>两个MSL</strong>。为什么要这有TIME_WAIT？为什么不直接给转成CLOSED状态呢？主要有两个原因：</p>
+<ul>
+<li>TIME_WAIT 确保有足够的时间让对端收到了ACK，如果被动关闭的那方没有收到 ACK，就会触发被动端重发 FIN。如果主动关闭方在 TIME_WAIT 状态不等待一段时间就直接释放连接并进入 CLOSED 状态，那么主动关闭方无法收到来自被动关闭方重发的 FIN+ACK 报文段，也就不会再发送一次确认 ACK 报文段，因此被动关闭方就无法正常进入CLOSED 状态。</li>
+<li>有足够的时间让这个连接不会跟后面的连接混在一起，在连接处于 <code>2*MSL</code> 等待时，任何迟到的报文段将被丢弃，这样就可以使下一个新的连接中不会出现这种旧的连接之前延迟的报文段。（你要知道，有些自做主张的路由器会缓存IP数据包，如果连接被重用了，那么这些延迟收到的包就有可能会跟新连接混在一起）。你可以看看这篇文章《<a href="http://www.serverframework.com/asynchronousevents/2011/01/time-wait-and-its-design-implications-for-protocols-and-scalable-servers.html" target="_blank" rel="noopener">TIME_WAIT and its design implications for protocols and scalable client server systems</a>》</li>
+</ul>
+<blockquote>
+<p>MSL = Maximum Segment Lifetime，最长段生存时间，RFC793定义了MSL为2分钟，Linux设置成了30s</p>
+</blockquote>
+<h4 id="TIME-WAIT会占用多少资源？"><a href="#TIME-WAIT会占用多少资源？" class="headerlink" title="TIME_WAIT会占用多少资源？"></a>TIME_WAIT会占用多少资源？</h4><p>入站连接(服务器端)很少会被TIME_WAIT影响。虽然与客户端一样，服务器端主动关闭的连接会进入TIME_WAIT状态，但是服务端监听的端口并不会防止新建的入站连接请求的建立。</p>
+<p>由于本地端口的缺乏，TIME_WAIT的存在影响的是出站连接(客户端)的建立，这些本地端口由操作系统进行自动的分配，因此，优化的方法是增加本地端口的范围。</p>
+<p>但是服务端被占用的资源只有一个“连接描述”，由5个元素组成：（协议，本地IP，本地端口，远程IP，远程端口）所以当同一客户端向服务器建立了大量连接之后，会耗尽可用的五元组导致问题。参考： <a href="https://stackoverflow.com/questions/1803566/what-is-the-cost-of-many-time-wait-on-the-server-side/" target="_blank" rel="noopener">tcp - What is the cost of many TIME_WAIT on the server side? - Stack Overflow</a>,<br>尽管如此, 一个连接占用的资源多少, 对于服务端来说, 还是要比客户端小很多.</p>
+<h2 id="重传机制"><a href="#重传机制" class="headerlink" title="重传机制"></a>重传机制</h2><h3 id="Fast-Retransmit"><a href="#Fast-Retransmit" class="headerlink" title="Fast Retransmit"></a>Fast Retransmit</h3><p>快速重传机制： TCP引入了一种叫<code>Fast Retransmit</code>的算法，不以时间驱动，而以数据驱动重传。也就是说，如果包没有连续到达，就ack最后那个可能被丢了的包，如果发送方连续收到3次相同的ack，就重传。Fast Retransmit的好处是不用等timeout了再重传。</p>
+<p>比如：如果发送方发出了1，2，3，4，5份数据，<br>数据1先到送了，于是就接收方ack回2，但数据2因为某些原因没收到，3却到达了，于是接收方还是ack回2，<br>后面的4和5都收到了，接收方还是ack回2，因为数据2仍旧没有收到，于是发送端收到了三个ack=2的确认。<br>发送方便知道2有可能丢了，于是就发送方重发送2。然后接收端收到了2，此时因为3，4，5都收到了，于是ack回6。</p>
+<p>Fast Retransmit只解决了一个问题，就是timeout的问题，它依然面临一个艰难的选择：是重传之前的一个还是重传所有的问题。对于上面的示例来说，因为发送端并不清楚这连续的3个ack(2)是哪次传回来的？ 这样，发送端很有可能要重传从2到20的这堆数据（这就是某些TCP的实际的实现）。</p>
+<h3 id="SACK"><a href="#SACK" class="headerlink" title="SACK"></a>SACK</h3><p>另外一种更好的方式叫：Selective Acknowledgment (SACK)（参看RFC 2018），这种方式需要在TCP头里加一个SACK的东西，ACK还是Fast Retransmit的ACK，SACK则是汇报收到的数据碎版。<br>比如发送三分数据：100-299，300-499，500-699，中间一份数据丢失，接收方收到500-699之后，会回复<code>ACK=300，SACK=500-700</code>，<br>这样发送端从SACK就知道500前面的一段数据需要重发。</p>
+<p><img src="/images/network_protocol/tcp_sack_example.jpg" alt="ack_example"></p>
+<h3 id="Duplicate-SACK"><a href="#Duplicate-SACK" class="headerlink" title="Duplicate SACK"></a>Duplicate SACK</h3><p>施工中</p>
+<hr>
+<h2 id="总结-KeepAlive"><a href="#总结-KeepAlive" class="headerlink" title="总结: KeepAlive"></a>总结: KeepAlive</h2><p>KeepAlive并不是TCP协议规范的一部分，但在几乎所有的TCP/IP协议栈（不管是Linux还是Windows）中，都实现了KeepAlive功能。<br>参考 [RFC1122 #TCP Keep-Alives] @ref</p>
+<p>TCP协议栈与KeepAlive相关的参数有:</p>
+<ul>
+<li>tcp_keepalive_time: KeepAlive的空闲时长，或者说每次正常发送心跳的周期，默认值为7200s（2小时）@Uncertain</li>
+<li>tcp_keepalive_intvl: KeepAlive探测包的发送间隔，默认值为75s</li>
+<li>tcp_keepalive_probes: 在tcp_keepalive_time之后，没有接收到对方确认，继续发送保活探测包次数，默认值为9（次）</li>
+</ul>
+<blockquote>
+<p>以上参数都可以通过sysctl命令修改内核参数实现修改:  <code>sysctl -w net.ipv4.tcp_keepalive_time = 7500</code>,<br>更多sysctl使用参考 [[../21.Operating-System/Linux.04.Sysctl]]</p>
+</blockquote>
+<p>KeepAlive默认情况下是关闭的，可以被上层应用开启和关闭, 下面介绍在Java、C语言和Nginx中如何设置KeepAlive</p>
+<h3 id="Java-Netty-设置KeepAlive"><a href="#Java-Netty-设置KeepAlive" class="headerlink" title="Java(Netty)设置KeepAlive"></a>Java(Netty)设置KeepAlive</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ServerBootstrap b = <span class="keyword">new</span> ServerBootstrap();</span><br><span class="line">    b.group(bossGroup, workerGroup)</span><br><span class="line">            .channel(NioServerSocketChannel.class)</span><br><span class="line">            .option(ChannelOption.SO_BACKLOG, <span class="number">100</span>)</span><br><span class="line">            .childOption(ChannelOption.SO_KEEPALIVE, <span class="keyword">true</span>)</span><br><span class="line">            .handler(<span class="keyword">new</span> LoggingHandler(LogLevel.INFO));</span><br></pre></td></tr></table></figure>
+<p>Java程序只能做到设置<code>SO_KEEPALIVE</code>选项，其他配置项只能依赖于sysctl配置，系统进行读取。</p>
+<h3 id="C语言设置KeepAlive"><a href="#C语言设置KeepAlive" class="headerlink" title="C语言设置KeepAlive"></a>C语言设置KeepAlive</h3><p>setsockopt函数原型:<br><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setsockopt</span><span class="params">(<span class="keyword">int</span> socket, <span class="keyword">int</span> level, <span class="keyword">int</span> option_name,</span></span></span><br><span class="line"><span class="function"><span class="params">      <span class="keyword">const</span> <span class="keyword">void</span> *option_value, <span class="keyword">socklen_t</span> option_len)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>How to use:<br><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> domain, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> (*libc_socket)(<span class="keyword">int</span>, <span class="keyword">int</span>, <span class="keyword">int</span>);</span><br><span class="line">  <span class="keyword">int</span> s, optval;</span><br><span class="line">  <span class="keyword">char</span> *env;</span><br><span class="line"></span><br><span class="line">  *(<span class="keyword">void</span> **)(&amp;libc_socket) = dlsym(RTLD_NEXT, <span class="string">"socket"</span>);</span><br><span class="line">  <span class="keyword">if</span>(dlerror()) &#123;</span><br><span class="line">    errno = EACCES;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>((s = (*libc_socket)(domain, type, protocol)) != <span class="number">-1</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span>((domain == PF_INET) &amp;&amp; (type == SOCK_STREAM)) &#123;</span><br><span class="line">      <span class="keyword">if</span>(!(env = getenv(<span class="string">"KEEPALIVE"</span>)) || strcasecmp(env, <span class="string">"off"</span>)) &#123;</span><br><span class="line">        optval = <span class="number">1</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        optval = <span class="number">0</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span>(!(env = getenv(<span class="string">"KEEPALIVE"</span>)) || strcasecmp(env, <span class="string">"skip"</span>)) &#123;</span><br><span class="line">        setsockopt(s, SOL_SOCKET, SO_KEEPALIVE, &amp;optval, <span class="keyword">sizeof</span>(optval));</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>代码摘取自libkeepalive源码，C语言可以设置更为详细的TCP内核参数</p>
+<h3 id="Nginx配置KeepAlive"><a href="#Nginx配置KeepAlive" class="headerlink" title="Nginx配置KeepAlive"></a>Nginx配置KeepAlive</h3><p>Nginx配置里有两处KeepAlive, 含义不同:</p>
+<ul>
+<li>listen下的<code>so_keepalive=30m::10</code>: 设置<code>TCP_KEEPIDLE</code>为30分钟, <code>TCP_KEEPINTVL</code>默认值, <code>TCP_KEEPCNT</code>设为10 probes</li>
+<li>upstream下的<code>keepalive N</code> 这里的N指的是每个Worker与upstream服务器可缓存的最大连接数,</li>
+</ul>
+<p>常见的几种使用场景：</p>
+<ul>
+<li>检测挂掉的连接（导致连接挂掉的原因很多，如服务停止、网络波动、宕机、应用重启等）</li>
+<li>防止因为网络不活动而断连（使用NAT代理或者防火墙的时候，经常会出现这种问题）</li>
+<li>TCP层面的心跳检测</li>
+</ul>
+<p>通常很多应用程序也有类似KeepAlive的心跳检测, 区别在于:</p>
+<ul>
+<li>TCP的KeepAlive发送的数据包相比应用层心跳检测包更小，仅提供检测连接功能</li>
+<li>应用层心跳包不依赖于传输层协议，无论传输层协议是TCP还是UDP都可以用</li>
+<li>应用层心跳包可以定制，可以应对更复杂的情况或传输一些额外信息</li>
+<li>KeepAlive仅代表TCP层连接仍保持着，而心跳包往往还代表客户端可正常工作</li>
+</ul>
+<h4 id="比较Http协议头中Keep-Alive"><a href="#比较Http协议头中Keep-Alive" class="headerlink" title="比较Http协议头中Keep-Alive"></a>比较Http协议头中Keep-Alive</h4><p>在Http Response的http头可以看到下面的字段:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: text/html; charset=utf-8</span><br><span class="line">Content-Length: 40026</span><br><span class="line">Connection: keep-alive</span><br></pre></td></tr></table></figure></p>
+<p>HTTP协议采用“请求-应答”模式，当使用普通模式，即非KeepAlive模式时，每个请求/应答客户和服务器都要新建一个连接，完成 之后立即断开连接（HTTP协议为无连接的协议）；当使用Keep-Alive模式（又称持久连接、连接重用）时，Keep-Alive功能使客户端到服 务器端的连接持续有效，当出现对服务器的后继请求时，Keep-Alive功能避免了建立或者重新建立连接。</p>
+<blockquote>
+<p>http 1.0中默认是关闭的, http 1.1中默认启用Keep-Alive</p>
+</blockquote>
+<p>@ref: <a href="https://blog.biezhi.me/2017/08/talk-tcp-keepalive.html" target="_blank" rel="noopener">https://blog.biezhi.me/2017/08/talk-tcp-keepalive.html</a></p>
+<h2 id="总结-TCP中的Timeout"><a href="#总结-TCP中的Timeout" class="headerlink" title="总结: TCP中的Timeout"></a>总结: TCP中的Timeout</h2><p>在TCP所有状态中大约有7个超时, 分别是:</p>
+<h3 id="Connection-Establishment-Timer"><a href="#Connection-Establishment-Timer" class="headerlink" title="Connection-Establishment Timer"></a>Connection-Establishment Timer</h3><p>在TCP三次握手创建一个连接时，以下两种情况会发生超时：</p>
+<p>client发送SYN后，进入SYN_SENT状态，等待server的SYN+ACK。<br>server收到连接创建的SYN，回应SYN+ACK后，进入SYN_RECD状态，等待client的ACK。<br>当超时发生时，就会重传，一直到75s还没有收到任何回应，便会放弃，终止连接的创建。但是在Linux实现中，并不是依靠超时总时间来判断是否终止连接。而是依赖重传次数：</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>tcp_syn_retries (integer; default: 5; since Linux 2.2)<br>The maximum number of times initial SYNs for an active TCP connection attempt will be retransmitted. This value should not be higher than 255. The default value is 5, which corresponds to approximately 180 seconds.</li>
+<li>tcp_synack_retries (integer; default: 5; since Linux 2.2)<br>The maximum number of times a SYN/ACK segment for a passive TCP connection will be retransmitted. This number should not be higher than 255.</li>
+</ul>
+<h3 id="Retransmission-Timer"><a href="#Retransmission-Timer" class="headerlink" title="Retransmission Timer"></a>Retransmission Timer</h3><p>当三次握手成功，连接建立，发送TCP segment，等待ACK确认。如果在指定时间内，没有得到ACK，就会重传，一直重传到放弃为止。Linux中也有相关变量来设置这里的重传次数的：</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>tcp_retries1 (integer; default: 3; since Linux 2.2)<br>The number of times TCP will attempt to retransmit a packet on an established connection normally, without the extra effort of getting the network layers involved. Once we exceed this number of retransmits, we first have the network layer update the route if possible before each new retransmit. The default is the RFC specified minimum of 3.</li>
+<li>tcp_retries2 (integer; default: 15; since Linux 2.2)<br>The maximum number of times a TCP packet is retransmitted in established state before giving up. The default value is 15, which corresponds to a duration of approxi‐mately between 13 to 30 minutes, depending on the retransmission timeout. The RFC 1122 specified minimum limit of 100 seconds is typically deemed too short.</li>
+</ul>
+<h3 id="Delayed-ACK-Timer"><a href="#Delayed-ACK-Timer" class="headerlink" title="Delayed ACK Timer"></a>Delayed ACK Timer</h3><p>当一方接受到TCP segment，需要回应ACK。但是不需要 立即 发送，而是等上一段时间，看看是否有其他数据可以 捎带 一起发送。这段时间便是 Delayed ACK Timer ，一般为200ms。</p>
+<h3 id="Persist-Timer"><a href="#Persist-Timer" class="headerlink" title="Persist Timer"></a>Persist Timer</h3><p>如果某一时刻，一方发现自己的 socket read buffer 满了，无法接受更多的TCP data，此时就是在接下来的发送包中指定通告窗口的大小为0，这样对方就不能接着发送TCP data了。<br>如果socket read buffer有了空间，可以重设通告窗口的大小在接下来的 TCP segment 中告知对方。<br>可是万一这个 TCP segment 不附带任何data，所以即使这个segment丢失也不会知晓（ACKs are not acknowledged, only data is acknowledged）。对方没有接受到，便不知通告窗口的大小发生了变化，也不会发送TCP data。这样双方便会一直僵持下去。</p>
+<p>TCP协议采用这个机制避免这种问题：对方即使知道当前不能发送TCP data，当有data发送时，过一段时间后，也应该尝试发送一个字节。这段时间便是 Persist Timer 。</p>
+<h3 id="Keepalive-Timer"><a href="#Keepalive-Timer" class="headerlink" title="Keepalive Timer"></a>Keepalive Timer</h3><p>TCP socket 的 SO_KEEPALIVE option，主要适用于这种场景：连接的双方一般情况下没有数据要发送，仅仅就想尝试确认对方是否依然在线。<br>具体实现方法：TCP每隔一段时间（tcp_keepalive_intvl）会发送一个特殊的 Probe Segment，强制对方回应，如果没有在指定的时间内回应，便会重传，一直到重传次数达到 tcp_keepalive_probes 便认为对方已经crash了。</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>tcp_keepalive_intvl (integer; default: 75; since Linux 2.4)<br>The number of seconds between TCP keep-alive probes.<br>tcp_keepalive_probes (integer; default: 9; since Linux 2.2)<br>The maximum number of TCP keep-alive probes to send before giving up and killing the connection if no response is obtained from the other end.</li>
+<li>tcp_keepalive_time (integer; default: 7200; since Linux 2.2)<br>The number of seconds a connection needs to be idle before TCP begins sending out keep-alive probes. Keep-alives are only sent when the SO_KEEPALIVE socket option is enabled. The default value is 7200 seconds (2 hours). An idle connection is terminated after approximately an additional 11 minutes (9 probes an interval of 75 sec‐onds apart) when keep-alive is enabled.<br>Note that underlying connection tracking mechanisms and application timeouts may be much shorter.</li>
+</ul>
+<h3 id="FIN-WAIT-2-Timer"><a href="#FIN-WAIT-2-Timer" class="headerlink" title="FIN_WAIT_2 Timer"></a>FIN_WAIT_2 Timer</h3><p>当主动关闭方想关闭TCP connection，发送FIN并且得到相应ACK，从FIN_WAIT_1状态进入FIN_WAIT_2状态，此时不能发送任何data了，只等待对方发送FIN。可以万一对方一直不发送FIN呢？这样连接就一直处于FIN_WAIT_2状态，也是很经典的一个DoS。因此需要一个Timer，超过这个时间，就放弃这个TCP connection了。</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>tcp_fin_timeout (integer; default: 60; since Linux 2.2)<br>This specifies how many seconds to wait for a final FIN packet before the socket is forcibly closed. This is strictly a violation of the TCP specification, but required to prevent denial-of-service attacks. In Linux 2.2, the default value was 180.</li>
+</ul>
+<h3 id="TIME-WAIT-Timer"><a href="#TIME-WAIT-Timer" class="headerlink" title="TIME_WAIT Timer"></a>TIME_WAIT Timer</h3><p>主动关闭连接的一方收到对方的FIN 和ACK之后会进入TIME_WAIT状态, TIME_WAIT持续两个MSL之后才会进入CLOSED</p>
+<p>@ref: <a href="http://blog.qiusuo.im/blog/2014/03/19/tcp-timeout/" target="_blank" rel="noopener">TCP协议的那些超时 - On the road</a></p>
+<h2 id="参考-ref"><a href="#参考-ref" class="headerlink" title="参考 @ref"></a>参考 @ref</h2><ul>
+<li><a href="https://coolshell.cn/articles/11564.html" target="_blank" rel="noopener">TCP 的那些事儿（上） | | 酷 壳 - CoolShell</a></li>
+<li><a href="https://coolshell.cn/articles/11609.html" target="_blank" rel="noopener">TCP 的那些事儿（下） | | 酷 壳 - CoolShell</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/网络协议/" rel="tag"># 网络协议</a>
+          
+            <a href="/tags/TCP-IP/" rel="tag"># TCP&IP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/22.Network-Protocol/网络协议-OSI七层模型/" rel="next" title="网络协议-OSI七层模型">
+                <i class="fa fa-chevron-left"></i> 网络协议-OSI七层模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/31.Backend/RPC.01-从SOA到微服务/" rel="prev" title="RPC.01-从SOA到微服务">
+                RPC.01-从SOA到微服务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#OSI七层模型回顾"><span class="nav-text">OSI七层模型回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP报头"><span class="nav-text">TCP报头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP状态机，以及三次握手、四次挥手"><span class="nav-text">TCP状态机，以及三次握手、四次挥手</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三次握手、四次挥手"><span class="nav-text">三次握手、四次挥手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SYN攻击"><span class="nav-text">SYN攻击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sequence-Number"><span class="nav-text">Sequence Number</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭连接时发起方的TIME-WAIT状态"><span class="nav-text">关闭连接时发起方的TIME_WAIT状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TIME-WAIT会占用多少资源？"><span class="nav-text">TIME_WAIT会占用多少资源？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重传机制"><span class="nav-text">重传机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fast-Retransmit"><span class="nav-text">Fast Retransmit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SACK"><span class="nav-text">SACK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Duplicate-SACK"><span class="nav-text">Duplicate SACK</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-KeepAlive"><span class="nav-text">总结: KeepAlive</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-Netty-设置KeepAlive"><span class="nav-text">Java(Netty)设置KeepAlive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C语言设置KeepAlive"><span class="nav-text">C语言设置KeepAlive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx配置KeepAlive"><span class="nav-text">Nginx配置KeepAlive</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#比较Http协议头中Keep-Alive"><span class="nav-text">比较Http协议头中Keep-Alive</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-TCP中的Timeout"><span class="nav-text">总结: TCP中的Timeout</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Connection-Establishment-Timer"><span class="nav-text">Connection-Establishment Timer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Retransmission-Timer"><span class="nav-text">Retransmission Timer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Delayed-ACK-Timer"><span class="nav-text">Delayed ACK Timer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Persist-Timer"><span class="nav-text">Persist Timer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Keepalive-Timer"><span class="nav-text">Keepalive Timer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FIN-WAIT-2-Timer"><span class="nav-text">FIN_WAIT_2 Timer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIME-WAIT-Timer"><span class="nav-text">TIME_WAIT Timer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考-ref"><span class="nav-text">参考 @ref</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/22.Network-Protocol/网络协议-TCP/';
+          this.page.identifier = '22.Network-Protocol/网络协议-TCP/';
+          this.page.title = '网络协议：TCP/IP';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

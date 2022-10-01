@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="@ref: 机器能像人一样思考吗？人工智能（一）机器学习和神经网络 - YouTube  人工智能发展史 1950：图灵测试提出（直到2014年才出现第一台通过图灵测试的程序） 1956：马文丶明斯基，约翰丶麦卡锡，香农 =&amp;gt; 达特茅斯会议，第一次提出“AI” 1997：IBM深蓝战胜卡斯帕罗夫 辛顿（BP反向传播算法），杨立昆（CNN卷积神经网络），本吉奥获得2018年图灵奖">
+<meta property="og:type" content="article">
+<meta property="og:title" content="人工智能和神经网络101">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/34.Machine-Learning/人工智能和神经网络101/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="@ref: 机器能像人一样思考吗？人工智能（一）机器学习和神经网络 - YouTube  人工智能发展史 1950：图灵测试提出（直到2014年才出现第一台通过图灵测试的程序） 1956：马文丶明斯基，约翰丶麦卡锡，香农 =&amp;gt; 达特茅斯会议，第一次提出“AI” 1997：IBM深蓝战胜卡斯帕罗夫 辛顿（BP反向传播算法），杨立昆（CNN卷积神经网络），本吉奥获得2018年图灵奖">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220419220023.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220419231717.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220419231828.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220419221501.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220423220706.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220419231401.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220423221008.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220423221116.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220423222115.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220423222150.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220423222254.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220423222308.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220423222329.png">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/20220423222344.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:47.692Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="人工智能和神经网络101">
+<meta name="twitter:description" content="@ref: 机器能像人一样思考吗？人工智能（一）机器学习和神经网络 - YouTube  人工智能发展史 1950：图灵测试提出（直到2014年才出现第一台通过图灵测试的程序） 1956：马文丶明斯基，约翰丶麦卡锡，香农 =&amp;gt; 达特茅斯会议，第一次提出“AI” 1997：IBM深蓝战胜卡斯帕罗夫 辛顿（BP反向传播算法），杨立昆（CNN卷积神经网络），本吉奥获得2018年图灵奖">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/20220419220023.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/34.Machine-Learning/人工智能和神经网络101/"/>
+
+
+
+
+
+  <title>人工智能和神经网络101 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/34.Machine-Learning/人工智能和神经网络101/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">人工智能和神经网络101</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/34-Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">34.Machine-Learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  957
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>@ref: <a href="https://www.youtube.com/watch?v=5A9bmW1qTpk" target="_blank" rel="noopener">机器能像人一样思考吗？人工智能（一）机器学习和神经网络 - YouTube</a></p>
+<p><img src="/images/20220419220023.png" alt=""></p>
+<h3 id="人工智能发展史"><a href="#人工智能发展史" class="headerlink" title="人工智能发展史"></a>人工智能发展史</h3><ul>
+<li>1950：图灵测试提出（直到2014年才出现第一台通过图灵测试的程序）</li>
+<li>1956：马文丶明斯基，约翰丶麦卡锡，香农 =&gt; 达特茅斯会议，第一次提出“AI”</li>
+<li>1997：IBM深蓝战胜卡斯帕罗夫</li>
+<li>辛顿（BP反向传播算法），杨立昆（CNN卷积神经网络），本吉奥获得2018年图灵奖</li>
+</ul>
+<p><img src="/images/20220419231717.png" alt=""></p>
+<h3 id="线性拟合-amp-梯度下降算法"><a href="#线性拟合-amp-梯度下降算法" class="headerlink" title="线性拟合 &amp; 梯度下降算法"></a>线性拟合 &amp; 梯度下降算法</h3><p>先看一个例子：  给出m组数据（x1,y1）~（xm,ym）, 需要预测出y和x的函数关系.</p>
+<p>线性拟合：「曲线拟合就是通过x,y的观测值来寻求参数b的最佳估计值，及寻求最佳的理论曲线y=f(x; b)。当函数y=f(x; b)为关于b的i线性函数时，称这种曲线拟合为线性拟合」<br>$$ y = wx +b $$</p>
+<p><img src="/images/20220419231828.png" alt=""></p>
+<p>拟合曲线和实际的y的差值是Δy_i，由此给出损失函数J（m是样本个数）：<br>$$ J = 1/2m ∑(Δy_i^2) = 1/2m ∑[y_i - (wx_i + b)]^2 $$</p>
+<p>线性拟合的最优解, 即找到w（这里暂不考虑参数b）使J最小 ，<br>上例中只有2个参数，最小二乘可以解决，但是参数非常多就不适合了，这里需要<em>梯度下降算法</em></p>
+<p>求偏导数:  $$  ∂y/∂w =&gt; w_{n+1} = w_n - η ∂y/∂w $$</p>
+<p>通过多次迭代（从w0 →w1 →w2），找到到J最小时的w， 即<em>梯度下降是算法</em><br><img src="/images/20220419221501.png" alt=""><br>寻找参数最优值，使这也是模型训练的过程</p>
+<blockquote>
+<ul>
+<li><a href="https://baike.baidu.com/item/%E7%BA%BF%E6%80%A7%E6%8B%9F%E5%90%88/5511930" target="_blank" rel="noopener">线性拟合_百度百科</a></li>
+<li><a href="https://zh.wikipedia.org/zh-hans/%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95" target="_blank" rel="noopener">最小二乘法 - 维基百科，自由的百科全书</a><br><a href="https://www.zhihu.com/question/22470793" target="_blank" rel="noopener">微积分中，符号 d 与符号 ∂ 的区别是什么？ - 知乎</a></li>
+</ul>
+</blockquote>
+<h3 id="神经网络-Neural-Network"><a href="#神经网络-Neural-Network" class="headerlink" title="神经网络(Neural Network)"></a>神经网络(Neural Network)</h3><p>典型神经元结构<br><img src="/images/20220423220706.png" alt=""></p>
+<p>M-P模型：每个神经元都有多个输入端（X1~Xn），W1j~Wnj是每个输入的参数，一个输出端Oj（但可以输出给多个刺激）<br><img src="/images/20220419231401.png" alt=""></p>
+<p>上图f即为激活函数（Sigmoid），决定是否向下一层输出，常用的如下：<br><img src="/images/20220423221008.png" alt=""></p>
+<p>多个M-P模型的神经元组合为简单神经网络, 以及包含有更多隐层的多层神经网络(DNN):<br><img src="/images/20220423221116.png" alt=""></p>
+<p>为了解决DNN调参复杂度(每层的链接对应的参数都需要调), 辛顿提出的反向传播(BP)算法:<br>从最后一层参数开始调, 然后调前一层的参数</p>
+<blockquote>
+<ul>
+<li><a href="https://finance.sina.com.cn/tech/2021-02-24/doc-ikftssap8455930.shtml" target="_blank" rel="noopener">深度学习领域最常用的10个激活函数，一文详解数学原理及优缺点</a></li>
+<li><a href="https://zh.m.wikipedia.org/zh-hans/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C" target="_blank" rel="noopener">卷积神经网络 - 维基百科，自由的百科全书</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">反向传播算法 - 维基百科，自由的百科全书</a></li>
+<li><a href="https://www.zhihu.com/question/27239198" target="_blank" rel="noopener">如何直观地解释 backpropagation 算法？ - 知乎</a></li>
+</ul>
+</blockquote>
+<h3 id="卷积神经网络如何识别简单字母"><a href="#卷积神经网络如何识别简单字母" class="headerlink" title="卷积神经网络如何识别简单字母"></a>卷积神经网络如何识别简单字母</h3><p>卷积神经网络Convolutional Neural Networks</p>
+<p>步骤1：卷积<br>    • 卷积核：通常是3x3 or 5x5<br>    • 原图像，对卷积核做卷积运算（每个位置相乘再相加，得到一个数）<br>    • 最终得到“特征图”</p>
+<p><img src="/images/20220423222115.png" alt=""></p>
+<p>步骤2：池化、激活<br>这里用最大池化法，四个为一组（左上角2-0-0-3），选出最大的3，作为新的特征图的一个点：<br><img src="/images/20220423222150.png" alt=""></p>
+<p>对池化后的特征图，做激活处理：<br><img src="/images/20220423222254.png" alt=""></p>
+<p><img src="/images/20220423222308.png" alt=""><br>    • 如果第一次卷积运算用了3个卷积核，那么会得到3个特征图（X-Y-Z）<br>    • 3个特征图做池化处理，进一步减少数据量<br>    • 3个特征图再次卷积运算(这次用了4个卷积核)，那么得到4个特征图</p>
+<p>下图是第二次卷积 （输入=3个特征图，4个卷积核，每个核都是3维，输出=4个特征图）<br><img src="/images/20220423222329.png" alt=""></p>
+<p>经过多次卷积，可以找到多种特征（线条、颜色等），输入到全连接网络进行训练<br><img src="/images/20220423222344.png" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/34.Machine-Learning/RecommenderSystem-推荐系统/" rel="next" title="推荐系统">
+                <i class="fa fa-chevron-left"></i> 推荐系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/41.Uncategorized/Github-Repo-Starred/" rel="prev" title="Github-Repo-Starred">
+                Github-Repo-Starred <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#人工智能发展史"><span class="nav-text">人工智能发展史</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线性拟合-amp-梯度下降算法"><span class="nav-text">线性拟合 &amp; 梯度下降算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#神经网络-Neural-Network"><span class="nav-text">神经网络(Neural Network)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#卷积神经网络如何识别简单字母"><span class="nav-text">卷积神经网络如何识别简单字母</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/34.Machine-Learning/人工智能和神经网络101/';
+          this.page.identifier = '34.Machine-Learning/人工智能和神经网络101/';
+          this.page.title = '人工智能和神经网络101';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

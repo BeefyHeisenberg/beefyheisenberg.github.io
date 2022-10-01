@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Java Development Kit（JDK），包括一个完整的Java运行环境（Java Runtime Environment，JRE），还包括一系列用于Java开发的组件和工具（javac、jar、javap、javadoc、jdb、jps、jhat、jstack ……） JDK 组件java, javac, jar 编译Java源码： javac -classpath PATH;PATH">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Advanced Java-01-JDK">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.01.JDK/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="Java Development Kit（JDK），包括一个完整的Java运行环境（Java Runtime Environment，JRE），还包括一系列用于Java开发的组件和工具（javac、jar、javap、javadoc、jdb、jps、jhat、jstack ……） JDK 组件java, javac, jar 编译Java源码： javac -classpath PATH;PATH">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.gitee.io/images/java/Azul_JDK_LTS_Version.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:46.289Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Advanced Java-01-JDK">
+<meta name="twitter:description" content="Java Development Kit（JDK），包括一个完整的Java运行环境（Java Runtime Environment，JRE），还包括一系列用于Java开发的组件和工具（javac、jar、javap、javadoc、jdb、jps、jhat、jstack ……） JDK 组件java, javac, jar 编译Java源码： javac -classpath PATH;PATH">
+<meta name="twitter:image" content="https://beefyheisenberg.gitee.io/images/java/Azul_JDK_LTS_Version.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.01.JDK/"/>
+
+
+
+
+
+  <title>Advanced Java-01-JDK | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.01.JDK/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Advanced Java-01-JDK</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/Java进阶系列/" itemprop="url" rel="index">
+                    <span itemprop="name">Java进阶系列</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,176
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Java Development Kit（JDK），包括一个完整的Java运行环境（Java Runtime Environment，JRE），还包括一系列用于Java开发的组件和工具（javac、jar、javap、javadoc、jdb、jps、jhat、jstack ……）</p>
+<h2 id="JDK-组件"><a href="#JDK-组件" class="headerlink" title="JDK 组件"></a>JDK 组件</h2><h3 id="java-javac-jar"><a href="#java-javac-jar" class="headerlink" title="java, javac, jar"></a>java, javac, jar</h3><ul>
+<li>编译Java源码： <code>javac -classpath PATH;PATH/xx.jar -sourcepath SOURCE_DIR -d OUTPUT_DIR</code></li>
+<li>把.class文件打成Jar包： <code>jar cvf JAR_FILE_NAME CLASS_FILE_NAMES</code></li>
+<li>运行executable的Jar包（Jar包指定了Main-Class）： <code>java -jar JAR_FILE_NAME</code></li>
+<li>执行Jar包里的类（该类有main方法）： <code>java -cp JAR_FILE_NAME CLASS_FULL_NAME</code></li>
+<li>执行Jar包里的类的指定方法： <code>java -cp JAR_FILE_NAME CLASS_FULL_NAME METHOD_NAME</code>, 例如Tomcat 的启动脚本最终是执行了 Bootstrap这个主类中的start方法：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java</span><br><span class="line">-Djava.util.logging.config.file=/data0/tomcat/tomcat_8080/conf/logging.properties</span><br><span class="line">-Xms2048m -Xmx2048m -XX:MaxPermSize=256m</span><br><span class="line">-classpath /data0/tomcat/tomcat_8080/bin/bootstrap.jar:/data0/tomcat/tomcat_8080/bin/tomcat-juli.jar -Dcatalina.base=/data0/tomcat/tomcat_8080 -Dcatalina.home=/data0/tomcat/tomcat_8080 -Djava.io.tmpdir=/data0/tomcat/tomcat_8080/temp</span><br><span class="line">org.apache.catalina.startup.Bootstrap start</span><br></pre></td></tr></table></figure>
+<h3 id="javap-javah"><a href="#javap-javah" class="headerlink" title="javap, javah"></a>javap, javah</h3><ul>
+<li>javah：根据class文件生成h头文件<code>javah -jni ClassFileName</code></li>
+<li>javap：反编译class文件成字节码<code>javap -c ClassFileName</code></li>
+</ul>
+<h3 id="jdb"><a href="#jdb" class="headerlink" title="jdb"></a>jdb</h3><p>@todo</p>
+<h3 id="javadoc"><a href="#javadoc" class="headerlink" title="javadoc"></a>javadoc</h3><p>@todo</p>
+<h3 id="jps-jstack-jhat-jmap"><a href="#jps-jstack-jhat-jmap" class="headerlink" title="jps, jstack, jhat, jmap"></a>jps, jstack, jhat, jmap</h3><p>@ref: [[Advanced-Java.02d.JVM分析工具]]</p>
+<h3 id="rt-jar-tools-jar-dt-jar"><a href="#rt-jar-tools-jar-dt-jar" class="headerlink" title="rt.jar, tools.jar, dt.jar"></a>rt.jar, tools.jar, dt.jar</h3><p>rt.jar, tools.jar, dt.jar 都包含于JRE（除此之外还JRE包括Java虚拟机）：</p>
+<ul>
+<li>rt.jar: rt = runtime, 包括了Java核心类库, <code>java.*</code>包下的类；</li>
+<li>tools.jar: Jar包工具类, 我们执行的诸如<code>javac</code>等命令实际上是通过<code>java</code>命令调用了tools.jar, 比如 <code>javac ClassName.java</code> 相当于 <code>java -cp tools.jar xx.Main ClassName.java</code>；</li>
+<li>dt.jar: 主要是Swing类库；</li>
+</ul>
+<h4 id="jar文件结构"><a href="#jar文件结构" class="headerlink" title="jar文件结构"></a>jar文件结构</h4><ul>
+<li>jar包中的 META-INFO/MANIFEST.MF:<ul>
+<li><code>Main-Class: com.xxx.Test</code> // 指定该选项可以更简单执行jar: <code>java -jar JAR_FILE_NAME</code></li>
+<li><code>Class-Path: libXX.jar</code> // libXX.jar在相同目录下?</li>
+</ul>
+</li>
+</ul>
+<h2 id="Oracle-JDK-vs-Open-JDK"><a href="#Oracle-JDK-vs-Open-JDK" class="headerlink" title="Oracle JDK vs Open JDK"></a>Oracle JDK vs Open JDK</h2><h3 id="区别与联系"><a href="#区别与联系" class="headerlink" title="区别与联系"></a>区别与联系</h3><p><a href="https://juejin.im/post/5ca1c747e51d45761c7441fa" target="_blank" rel="noopener">Oracle与OpenJDK之间的区别 - 掘金</a></p>
+<h3 id="免费-vs-付费"><a href="#免费-vs-付费" class="headerlink" title="免费 vs 付费"></a>免费 vs 付费</h3><ul>
+<li>OpenJDK 每6个月发布一个新版本，不过每次新的版本发布后，旧的就不维护了，比如OpenJDK 12发布之后，11版本便停止更新，停留在11.0.2版本，没有LTS版本；</li>
+<li>Oracle JDK同样每6个月发布一个新版本，其中9、10、12是 non-LTS版本，Oracle提供的免费更新只有6个月；</li>
+<li>Oracle JDK 8、11是 LTS版本，提供6个月免费更新，但在这之后的更新不再免费（仅针对商业用户）。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Java 版本</th>
+<th>发布日期</th>
+<th>Oracle 提供的免费更新</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Java 8(LTS)</td>
+<td>2014.3</td>
+<td>2019.1</td>
+</tr>
+<tr>
+<td>Java 9</td>
+<td>2017.9</td>
+<td>2018.3</td>
+</tr>
+<tr>
+<td>Java 10</td>
+<td>2018.3</td>
+<td>2018.9</td>
+</tr>
+<tr>
+<td>Java 11(LTS)</td>
+<td>2018.9</td>
+<td>2019.3</td>
+</tr>
+<tr>
+<td>Java 12</td>
+<td>2019.3</td>
+<td>2019.9</td>
+</tr>
+</tbody>
+</table>
+<p>使用 Oracle JDK的解决方案：</p>
+<ul>
+<li>Oracle Java 8 （LTS）:<ul>
+<li>免费：用 8u192以及更早版本（有安全隐患）</li>
+<li>交钱使用 Oracle提供的更新（8u211之后的更新）</li>
+</ul>
+</li>
+<li>Oracle Java 11 （LTS）:<ul>
+<li>交钱</li>
+</ul>
+</li>
+<li>Oracle Java 10、12、13 non-LTS<ul>
+<li>每6个月都升级到下一个版本的JDK</li>
+</ul>
+</li>
+</ul>
+<p>使用其他 OpenJDK的方案：</p>
+<ul>
+<li>Alibaba JDK, <a href="https://www.infoq.cn/article/SK7fJE1ZT0ykjc0_gecs" target="_blank" rel="noopener">阿里开源自用OpenJDK版本，Java社区迎来中国力量-InfoQ</a></li>
+<li>Azul Systems发布的Zulu产品线中的Java SE产品, <a href="https://www.zhihu.com/question/53791269/answer/136575323" target="_blank" rel="noopener">链接</a>, 下图是Azul JDK的 LTS维护周期:</li>
+</ul>
+<p><img src="/images/java/Azul_JDK_LTS_Version.png" alt=""></p>
+<p>关于 Oracle的许可协议：</p>
+<ul>
+<li>Oracle JDK 的许可协议有两种:<ul>
+<li>BCL(Oracle Binary Code License Agreement): 个人/开发使用免费，商用免费（但商用免费仅限于”通用计算”设备, 移动设备/嵌入式设备不包括在免费领域）。JDK中的某些商业特性（使用<code>-XX:+UnlockCommercialVMOptions</code>打开的特性）仍是需要付费才可以使用的；</li>
+<li>OTN(Oracle Technology Network License Agreement): 个人/开发使用免费，商用收费；</li>
+</ul>
+</li>
+<li>Oracle 9/10是 BCL, 11/12变成了OTN，Oracle Java SE 11开始，按照OTN（Oracle Technology Network License Agreement）协议规定，只有在开发、测试及原型证明的场景下提供有限的授权。关于授权政策的一些具体问题可以参考下面网页： <a href="https://www.java.com/zh_CN/download/faq/distribution.xml" target="_blank" rel="noopener">https://www.java.com/zh_CN/download/faq/distribution.xml</a> @ref</li>
+<li>Oracle JDK 8 在 8u211 和 8u212之后, 许可协议也变成了 OTN（因为 Oracle JDK 8 u192 是2019年1月前发布的最新版本，所以只要一直使用 JDK 8 u192 以及更早的版本，就不需付费）</li>
+</ul>
+<p>本节参考:</p>
+<ul>
+<li>@ref <a href="https://zhuanlan.zhihu.com/p/64731331" target="_blank" rel="noopener">Oracle如何对JDK收费 - 知乎</a></li>
+<li>@ref <a href="https://www.zhihu.com/question/53791269" target="_blank" rel="noopener">Oracle 终于要向 Java 的非付费用户开枪了-怎么看？ - 知乎</a></li>
+</ul>
+<h3 id="JDK-版本历史"><a href="#JDK-版本历史" class="headerlink" title="JDK 版本历史"></a>JDK 版本历史</h3><p>→ <a href="https://en.wikipedia.org/wiki/Java_version_history" target="_blank" rel="noopener">Java version history - Wikipedia</a></p>
+<p>JDK LTS版本:</p>
+<ul>
+<li>Java SE8: 2014.3~2030.12 (Oracle于2019.1停止商用更新)</li>
+<li>Java SE11: 2018.9~2026.9</li>
+<li>Java SE17: 2021.9~2029.9</li>
+</ul>
+<h3 id="JSR-JCP-…"><a href="#JSR-JCP-…" class="headerlink" title="JSR, JCP …"></a>JSR, JCP …</h3><ul>
+<li><strong>JSR</strong> 是Java Specification Requests的缩写，意思是Java 规范提案。是指向JCP(Java Community Process)提出新增一个标准化技术规范的正式请求。任何人都可以提交JSR，以向Java平台增添新的API和服务。JSR已成为Java界的一个重要标准。</li>
+<li><strong>JCP</strong>, Java Community Process，Java 社区进程，JCP维护的规范包括J2ME、J2SE、J2EE，XML，OSS，JAIN等。组织成员可以提交JCR（Java Specification Requests），通过特定程序以后，进入到下一版本的规范里面。</li>
+</ul>
+<blockquote>
+<p><a href="https://www.infoq.cn/article/2018/01/no-jcp-for-javaee" target="_blank" rel="noopener">Java EE跟JCP说再见-InfoQ</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/11.Programming-Language/Golang-Tutorials.02.并发/" rel="next" title="Golang Tutorials-02并发">
+                <i class="fa fa-chevron-left"></i> Golang Tutorials-02并发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Advanced-Java.02a.JVM简介/" rel="prev" title="Advanced Java-02a-JVM简介">
+                Advanced Java-02a-JVM简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK-组件"><span class="nav-text">JDK 组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java-javac-jar"><span class="nav-text">java, javac, jar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javap-javah"><span class="nav-text">javap, javah</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jdb"><span class="nav-text">jdb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javadoc"><span class="nav-text">javadoc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jps-jstack-jhat-jmap"><span class="nav-text">jps, jstack, jhat, jmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rt-jar-tools-jar-dt-jar"><span class="nav-text">rt.jar, tools.jar, dt.jar</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jar文件结构"><span class="nav-text">jar文件结构</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Oracle-JDK-vs-Open-JDK"><span class="nav-text">Oracle JDK vs Open JDK</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区别与联系"><span class="nav-text">区别与联系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#免费-vs-付费"><span class="nav-text">免费 vs 付费</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK-版本历史"><span class="nav-text">JDK 版本历史</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSR-JCP-…"><span class="nav-text">JSR, JCP …</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/12.Java/Advanced-Java.01.JDK/';
+          this.page.identifier = '12.Java/Advanced-Java.01.JDK/';
+          this.page.title = 'Advanced Java-01-JDK';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="4种引用对比 强引用: 只要强引用还在就不会被 GC，JVM宁愿抛出 OutOfMemoryError错误也不会回收； 软引用(SoftReference): 用来描述非必需对象, GC时发现内存不够时（Heap内存超阈值）将会被回收。当垃圾回收器决定对其回收时，会先清空它的 SoftReference，也就是说 SoftReference 的 get()方法将会返回 null，然后再调用对象的f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Tutorials-13-引用">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.13.引用/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="4种引用对比 强引用: 只要强引用还在就不会被 GC，JVM宁愿抛出 OutOfMemoryError错误也不会回收； 软引用(SoftReference): 用来描述非必需对象, GC时发现内存不够时（Heap内存超阈值）将会被回收。当垃圾回收器决定对其回收时，会先清空它的 SoftReference，也就是说 SoftReference 的 get()方法将会返回 null，然后再调用对象的f">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-10-01T20:20:46.646Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Tutorials-13-引用">
+<meta name="twitter:description" content="4种引用对比 强引用: 只要强引用还在就不会被 GC，JVM宁愿抛出 OutOfMemoryError错误也不会回收； 软引用(SoftReference): 用来描述非必需对象, GC时发现内存不够时（Heap内存超阈值）将会被回收。当垃圾回收器决定对其回收时，会先清空它的 SoftReference，也就是说 SoftReference 的 get()方法将会返回 null，然后再调用对象的f">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.13.引用/"/>
+
+
+
+
+
+  <title>Java Tutorials-13-引用 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.13.引用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java Tutorials-13-引用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/Java基础教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Java基础教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  944
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="4种引用对比"><a href="#4种引用对比" class="headerlink" title="4种引用对比"></a>4种引用对比</h1><ul>
+<li>强引用: 只要强引用还在就不会被 GC，JVM宁愿抛出 OutOfMemoryError错误也不会回收；</li>
+<li>软引用(SoftReference): 用来描述非必需对象, GC时发现内存不够时（Heap内存超阈值）将会被回收。当垃圾回收器决定对其回收时，会先清空它的 SoftReference，也就是说 SoftReference 的 <code>get()</code>方法将会返回 null，然后再调用对象的<code>finalize()</code> 方法，并在下一轮 GC 中对其真正进行回收。</li>
+<li>弱引用(WeakReference): 也是用来描述非需对象的, 无论内存够不够，下次GC时一定都被回收；</li>
+<li>虚引用(PhantomReference): PhantomReference的get方法永远返回null，为一个对象设置虚引用关联的唯一目的是跟踪对象被垃圾回收的状态，通过查看引用队列中是否包含对象所对应的虚引用来判断它是否即将被垃圾回收，当<code>PhantomReference</code>被放入队列时，说明referent的<code>finalize()</code>方法已经调用，并且垃圾收集器准备回收它的内存了。</li>
+<li>FinalReference 以及 Finzlizer：@todo</li>
+</ul>
+<p><strong>How to Use:</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ReferenceQueue&lt;String&gt; queue = <span class="keyword">new</span> ReferenceQueue&lt;&gt;(); <span class="comment">// 对象被回收后, 被放入q里</span></span><br><span class="line"></span><br><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"hello"</span>);</span><br><span class="line">WeakReference&lt;String&gt; softRef = <span class="keyword">new</span> WeakReference&lt;String&gt;(str, queue); <span class="comment">// 这一步后, 有两个引用指向"Hello"</span></span><br><span class="line">str = <span class="keyword">null</span>; <span class="comment">// 当String对象只有一个软引用指向它时, 才有可能被回收</span></span><br><span class="line">System.out.print(softRef.get()); <span class="comment">// 通过软引用调用对象用get方法</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 假设这里因内存不足发生了GC，被回收的软引用会被放入队列queue</span></span><br><span class="line"><span class="comment">// 从队列取出第一个:</span></span><br><span class="line">Reference&lt;? extends String&gt; ref = queue.poll();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(ref != <span class="keyword">null</span>) &#123;  <span class="comment">// 从队列里取出的ref是个引用地址，非空</span></span><br><span class="line">  <span class="keyword">if</span>(ref.get() != <span class="keyword">null</span>) &#123; <span class="comment">// 对ref再次get，肯定返回null</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="WeakHashMap"><a href="#WeakHashMap" class="headerlink" title="WeakHashMap"></a>WeakHashMap</h1><p><strong>How to Use:</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">weakHashMapTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Map&lt;Key, Project&gt; map = <span class="keyword">new</span> WeakHashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        Key key1 = <span class="keyword">new</span> Key();</span><br><span class="line">        <span class="keyword">final</span> Key key2 = <span class="keyword">new</span> Key();</span><br><span class="line"></span><br><span class="line">        map.put(k1, <span class="keyword">new</span> Object());</span><br><span class="line">        map.put(k2, <span class="keyword">new</span> Object());</span><br><span class="line"></span><br><span class="line">        System.gc();</span><br><span class="line">        <span class="keyword">for</span> (Entry&lt;Key, Project&gt; entry : map.entrySet()) &#123;</span><br><span class="line">            System.out.println(entry.getKey().getKey() + <span class="string">"   "</span> + entry.getValue());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        key1 = <span class="keyword">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">        <span class="keyword">for</span> (Entry&lt;Key, Project&gt; entry : map.entrySet()) &#123;</span><br><span class="line">            System.out.println(entry.getKey().getKey() + <span class="string">"   "</span> + entry.getValue());</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>WeakHashMap 自动回收的特性可以作为缓存来用, 例如 tomcat的ConcurrentCache</p>
+<p><strong>源码解析:</strong><br>WeakHashMap 的主要属性:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class WeakHashMap&lt;K,V&gt;</span><br><span class="line">    extends AbstractMap&lt;K,V&gt; implements Map&lt;K,V&gt; &#123;</span><br><span class="line"></span><br><span class="line">        // 桶数组</span><br><span class="line">        Entry&lt;K,V&gt;[] table;</span><br><span class="line"></span><br><span class="line">        // 回收队列</span><br><span class="line">        private final ReferenceQueue&lt;Object&gt; queue = new ReferenceQueue&lt;&gt;();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>同时, <code>WeakHashMap</code> 的内部类<code>Entry</code>（也就是实际存储数据的节点）继承自<code>WeakReference&lt;T&gt;</code>，看一下Entry的构造：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Entry(Object key, V value,</span><br><span class="line">    ReferenceQueue&lt;Object&gt; queue,</span><br><span class="line">    <span class="keyword">int</span> hash, Entry&lt;K,V&gt; next) &#123;</span><br><span class="line">  <span class="keyword">super</span>(key, queue); <span class="comment">// 调用了WeakReference(T, Queue)</span></span><br><span class="line">  <span class="keyword">this</span>.value = value;</span><br><span class="line">  <span class="keyword">this</span>.hash  = hash;</span><br><span class="line">  <span class="keyword">this</span>.next  = next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用WeakHashMap 的 put(k,v), 首先创建Entry对象, Entry构造里首先调用了<code>WeakReference(K, Queue)</code>,<br>用一个WeakReference指向key，key会在下次GC被回收(null)，value被一个强引用指向了，不会被回收，可以通过queue.poll取出所有被释放的Key，</p>
+<p>A: 那么WeakHashMap 是如何回收value的?</p>
+<p>Q: 在<code>get</code>, <code>put</code>, <code>size</code> 方法里都会先调用一个<code>expungeStaleEntries()</code>方法,<br>遍历ReferenceQueue 取出每个Entry(即被回收的Key), 找到Entry 对应的<code>table[i]</code>,<br><code>table[i]</code>是 Entry组成的链表(当hash冲突的时候), 遍历这个链表, 取出每一个Entry, 如果ReferenceQueue 取出的那个Entry,<br>把这个 Entry.value置为null, 帮助回收;</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private void expungeStaleEntries() &#123;</span><br><span class="line">     for (Object x; (x = queue.poll()) != null; ) &#123;</span><br><span class="line">         synchronized (queue) &#123;</span><br><span class="line">             @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">                 Entry&lt;K,V&gt; e = (Entry&lt;K,V&gt;) x; // @Uncertain</span><br><span class="line">             int i = indexFor(e.hash, table.length);</span><br><span class="line"></span><br><span class="line">             Entry&lt;K,V&gt; prev = table[i];</span><br><span class="line">             Entry&lt;K,V&gt; p = prev;</span><br><span class="line">             while (p != null) &#123;</span><br><span class="line">                 Entry&lt;K,V&gt; next = p.next;</span><br><span class="line">                 if (p == e) &#123;</span><br><span class="line">                     if (prev == e)</span><br><span class="line">                         table[i] = next;</span><br><span class="line">                     else</span><br><span class="line">                         prev.next = next;</span><br><span class="line">                     // Must not null out e.next;</span><br><span class="line">                     // stale entries may be in use by a HashIterator</span><br><span class="line">                     e.value = null; // Help GC</span><br><span class="line">                     size--;</span><br><span class="line">                     break;</span><br><span class="line">                 &#125;</span><br><span class="line">                 prev = p;</span><br><span class="line">                 p = next;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>// 疑问, 只有Key是WeakReference, GC发生时, 应该只有Key 被放入ReferenceQueue, 而不是Entry对象<br>// 解释, queue 里存储的是 <code>Reference&lt;K&gt;</code> 类型, 而Entry 是Reference的子类, 所以可以转换<br>// <a href="https://www.zhihu.com/question/63932795" target="_blank" rel="noopener">WeakHashMap中关于queue的疑惑 ？ - 知乎</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Java-Tutorials.12.新特性/" rel="next" title="Java Tutorials-12-新特性">
+                <i class="fa fa-chevron-left"></i> Java Tutorials-12-新特性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Java-Tutorials.14.代理/" rel="prev" title="Java Tutorials-14-代理">
+                Java Tutorials-14-代理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#4种引用对比"><span class="nav-text">4种引用对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#WeakHashMap"><span class="nav-text">WeakHashMap</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/12.Java/Java-Tutorials.13.引用/';
+          this.page.identifier = '12.Java/Java-Tutorials.13.引用/';
+          this.page.title = 'Java Tutorials-13-引用';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

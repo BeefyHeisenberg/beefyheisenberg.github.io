@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="后端技术,Apache,大数据,批处理计算,Hadoop,HDFS,MapReduce," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Hadoop 安装 &amp;amp; 配置Hadoop &amp;amp; Yarn安装步骤参考: Apache Hadoop 2.9.2 – Hadoop Cluster Setup  /etc/hosts, ssh登录 // 使slave可以ssh到master /etc/hosts: 所有slave可互相ping hostname authorized_keys : master可以ssh任意slave">
+<meta name="keywords" content="后端技术,Apache,大数据,批处理计算,Hadoop,HDFS,MapReduce">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop">
+<meta property="og:url" content="https://beefyheisenberg.gitee.io/33.Bigdata/Hadoop/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="Hadoop 安装 &amp;amp; 配置Hadoop &amp;amp; Yarn安装步骤参考: Apache Hadoop 2.9.2 – Hadoop Cluster Setup  /etc/hosts, ssh登录 // 使slave可以ssh到master /etc/hosts: 所有slave可互相ping hostname authorized_keys : master可以ssh任意slave">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Hadoop_logo.svg/2000px-Hadoop_logo.svg.png">
+<meta property="og:updated_time" content="2022-10-01T20:20:47.612Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop">
+<meta name="twitter:description" content="Hadoop 安装 &amp;amp; 配置Hadoop &amp;amp; Yarn安装步骤参考: Apache Hadoop 2.9.2 – Hadoop Cluster Setup  /etc/hosts, ssh登录 // 使slave可以ssh到master /etc/hosts: 所有slave可互相ping hostname authorized_keys : master可以ssh任意slave">
+<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Hadoop_logo.svg/2000px-Hadoop_logo.svg.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.gitee.io/33.Bigdata/Hadoop/"/>
+
+
+
+
+
+  <title>Hadoop | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.gitee.io/33.Bigdata/Hadoop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hadoop</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/33-Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">33.Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  828
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Hadoop_logo.svg/2000px-Hadoop_logo.svg.png" alt="Hadoop"></p>
+<h1 id="Hadoop-安装-amp-配置"><a href="#Hadoop-安装-amp-配置" class="headerlink" title="Hadoop 安装 &amp; 配置"></a>Hadoop 安装 &amp; 配置</h1><h2 id="Hadoop-amp-Yarn安装步骤"><a href="#Hadoop-amp-Yarn安装步骤" class="headerlink" title="Hadoop &amp; Yarn安装步骤"></a>Hadoop &amp; Yarn安装步骤</h2><p>参考: <a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="noopener">Apache Hadoop 2.9.2 – Hadoop Cluster Setup</a></p>
+<ol>
+<li>/etc/hosts, ssh登录 // 使slave可以ssh到master<ul>
+<li>/etc/hosts: 所有slave可互相ping hostname</li>
+<li>authorized_keys : master可以ssh任意slave</li>
+</ul>
+</li>
+<li>hadoop配置文件<ul>
+<li>hadoop-env.sh : <code>HADOOP_CONF_DIR</code> 指定加载哪个目录下的配置文件</li>
+<li>slaves: 只有namenode需配置</li>
+<li>core-site.xml:(<a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-common/core-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-common/core-default.xml</a>)<ul>
+<li>fs.defaultFS : hdfs://namenode:9000 ## hdfs文件端口</li>
+<li>hadoop.tmp.dir : /opt/data/hadoop/tmp 其它目录会基于此路径</li>
+</ul>
+</li>
+<li>hdfs-site.xml:(<a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml</a>)<ul>
+<li>dfs.namenode.secondary.http-address :  第二NameNode web管理端口</li>
+<li>dfs.replication : 3 ## 数据需要备份的数量, 默认是3, 如果此数大于集群的机器数会出错</li>
+<li>dfs.namenode.name.dir : /opt/data/hadoop/namenode ## NameNode持久存储名字空间及事务日志的本地文件系统路径</li>
+<li>dfs.datanode.data.dir : /opt/data/hadoop/datenode ## DataNode存放块数据的本地文件系统路径</li>
+<li>dfs.namenode.http-address : namenode:50070  ## 浏览器可访问管理页面</li>
+<li>dfs.webhdfs.enabled : 开启WebHDFS (REST API)功能</li>
+</ul>
+</li>
+<li>mapred-site.xml:<ul>
+<li>mapreduce.framework.name: yarn</li>
+<li>mapreduce.jobhistory.address: 10020</li>
+<li>mapreduce.jobhistory.webapp.address: 19888</li>
+</ul>
+</li>
+<li>yarn-site.xml<ul>
+<li>yarn.resourcemanager.webapp.address: 8088 ## yarn框架中各个 task 的资源调度及运行状况通过通过该web界面访问</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>格式化namenode: <code>hdfs namenode -format</code></li>
+<li>启动HDFS NameNode: <code>sbin/hadoop-daemon.sh start namenode</code></li>
+<li>启动HDFS DateNode: <code>sbin/hadoop-daemons.sh start datanode</code><ul>
+<li><strong>或者在namenode上直接一个脚本启动: <code>sbin/start-dfs.sh</code> namenode和datanode的所有hdfs</strong></li>
+</ul>
+</li>
+<li>启动yarn: <code>sbin/start-yarn.sh</code>脚本一次启动ResourceManager和NodeManager, 如果要分别启动:<ul>
+<li><code>yarn-daemon.sh --config /opt/conf/hadoop start nodemanager</code></li>
+<li><code>yarn-daemon.sh --config /opt/conf/hadoop start resourcemanager</code></li>
+</ul>
+</li>
+<li>查看集群状态: <code>bin/hdfs dfsadmin -report</code></li>
+<li>测试hdfs写: <code>echo &quot;hello world&quot; | hadoop fs -put - /dir/hadoop/hello_world.txt &amp;&amp; hadoop fs -cat  /dir/hadoop/hello_world.txt</code></li>
+<li>一些web ui:<ul>
+<li>查看nameNode: <a href="http://namenode:50070/" target="_blank" rel="noopener">http://namenode:50070/</a></li>
+<li>查看yarn resourcemanager: <a href="http://namenode:8088/" target="_blank" rel="noopener">http://namenode:8088/</a></li>
+<li>MapReduce JobHistory: <a href="http://namenode:19888" target="_blank" rel="noopener">http://namenode:19888</a></li>
+</ul>
+</li>
+</ol>
+<h2 id="一些重要参数"><a href="#一些重要参数" class="headerlink" title="一些重要参数"></a>一些重要参数</h2><p>@todo</p>
+<h1 id="客户端-API-amp-命令行"><a href="#客户端-API-amp-命令行" class="headerlink" title="客户端 API &amp; 命令行"></a>客户端 API &amp; 命令行</h1><h2 id="Hadoop命令"><a href="#Hadoop命令" class="headerlink" title="Hadoop命令"></a>Hadoop命令</h2><ul>
+<li>参考: <a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-common/CommandsManual.html" target="_blank" rel="noopener">Apache Hadoop 2.7.3 – Hadoop Commands Guide</a></li>
+<li>hadoop dfs: 针对dfs的命令, 已经Deprecated, 推荐使用<code>hdfs dfs</code></li>
+<li>hadoop fs: 本地与dfs交互的命令<ul>
+<li>hadoop fs -cat file:///file3 /user/hadoop/file4</li>
+<li>hadoop fs -cp /user/hadoop/file1 /user/hadoop/file2</li>
+<li>hadoop dfs -df /user/hadoop/dir1</li>
+<li>hadoop fs -du -h /user/hadoop/dir1 hdfs://nn.example.com/user/hadoop/dir1</li>
+<li>hadoop fs -put <localsrc> … <dst></dst></localsrc></li>
+</ul>
+</li>
+<li>hadoop version</li>
+<li>hadoop jar <jar> [mainClass] arg</jar></li>
+</ul>
+<h2 id="HDFS命令"><a href="#HDFS命令" class="headerlink" title="HDFS命令"></a>HDFS命令</h2><ul>
+<li>参考: <a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/HDFSCommands.html" target="_blank" rel="noopener">Apache Hadoop 2.7.3 – HDFS Commands Guide</a></li>
+</ul>
+<h2 id="Yarn命令"><a href="#Yarn命令" class="headerlink" title="Yarn命令"></a>Yarn命令</h2><p>*　参考: <a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-yarn/hadoop-yarn-site/YarnCommands.html" target="_blank" rel="noopener">Apache Hadoop 2.7.3 – YARN Commands</a></p>
+<h1 id="HDFS文件系统解析"><a href="#HDFS文件系统解析" class="headerlink" title="HDFS文件系统解析"></a>HDFS文件系统解析</h1><ul>
+<li><a href="http://flyingdutchman.iteye.com/blog/1874518" target="_blank" rel="noopener">Hadoop深入学习：HDFS分布式文件系统的体系结构</a></li>
+</ul>
+<blockquote>
+<p>NameNode的FSImage和Edit log工作方式: FSImage中保存着某一时刻的HDFS文件目录树、元数据和数据块索引等信息，而后续的对这信息系的修改则保存在Edit log中<br>Secondary NameNode和NameNode的区别在于他不接受或记录HDFS的任何实时变化，只是根据集群配置的时间间隔不停的获取HDFS的某一个时间节点的FSImage和编辑日志，合并得到一个新的命名空间镜像FSImage，然后该镜像会上传到NameNode，替换原有的镜像文件，并清空编辑日志。<br>DataNode: 客户端操作文件块Block时，先由NameNode节点告知客户端诗句块所在的节点的位置，然后客户端直接与DataNode节点通信，处理与数据块对应的Linux上的本地文件。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/后端技术/" rel="tag"># 后端技术</a>
+          
+            <a href="/tags/Apache/" rel="tag"># Apache</a>
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+            <a href="/tags/批处理计算/" rel="tag"># 批处理计算</a>
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+            <a href="/tags/HDFS/" rel="tag"># HDFS</a>
+          
+            <a href="/tags/MapReduce/" rel="tag"># MapReduce</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/32.Database/MySQL-05架构-高性能和高可用/" rel="next" title="MySQL-05架构-高性能和高可用">
+                <i class="fa fa-chevron-left"></i> MySQL-05架构-高性能和高可用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/33.Bigdata/Hive/" rel="prev" title="Hive">
+                Hive <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop-安装-amp-配置"><span class="nav-text">Hadoop 安装 &amp; 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop-amp-Yarn安装步骤"><span class="nav-text">Hadoop &amp; Yarn安装步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些重要参数"><span class="nav-text">一些重要参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端-API-amp-命令行"><span class="nav-text">客户端 API &amp; 命令行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop命令"><span class="nav-text">Hadoop命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS命令"><span class="nav-text">HDFS命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yarn命令"><span class="nav-text">Yarn命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS文件系统解析"><span class="nav-text">HDFS文件系统解析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.gitee.io/33.Bigdata/Hadoop/';
+          this.page.identifier = '33.Bigdata/Hadoop/';
+          this.page.title = 'Hadoop';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>
