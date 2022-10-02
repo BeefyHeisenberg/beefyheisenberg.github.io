@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="后端架构,缓存,架构,System Design,高可用,高性能,负载均衡,限流,分库分表,消息队列," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="一些概念和测试基准本章内容包括: 系统可用性的概念和指标, 系统性能的概念和指标, 如何严谨地做性能测试. 系统可用性的概念和指标高可用性（high availability，缩写为 HA），IT术语，指系统无中断地执行其功能的能力，代表系统的可用性程度。是进行系统设计时的准则之一。高可用性系统与构成该系统的各个组件相比可以更长时间运行其度量方式，是根据系统损害、无法使用的时间，以及由无法运作恢复">
+<meta name="keywords" content="后端架构,缓存,架构,System Design,高可用,高性能,负载均衡,限流,分库分表,消息队列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后端架构：System Design">
+<meta property="og:url" content="https://beefyheisenberg.github.io/31.Backend/SystemDesign-01-亿级流量网站架构/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="一些概念和测试基准本章内容包括: 系统可用性的概念和指标, 系统性能的概念和指标, 如何严谨地做性能测试. 系统可用性的概念和指标高可用性（high availability，缩写为 HA），IT术语，指系统无中断地执行其功能的能力，代表系统的可用性程度。是进行系统设计时的准则之一。高可用性系统与构成该系统的各个组件相比可以更长时间运行其度量方式，是根据系统损害、无法使用的时间，以及由无法运作恢复">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/system_design/Arch-HA-Exp.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/system_design/consistent-hash.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/system_design/consistnet-hash-add-node.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/system_design/亿级流量网站架构核心技术.png">
+<meta property="og:updated_time" content="2022-10-02T15:13:43.517Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="后端架构：System Design">
+<meta name="twitter:description" content="一些概念和测试基准本章内容包括: 系统可用性的概念和指标, 系统性能的概念和指标, 如何严谨地做性能测试. 系统可用性的概念和指标高可用性（high availability，缩写为 HA），IT术语，指系统无中断地执行其功能的能力，代表系统的可用性程度。是进行系统设计时的准则之一。高可用性系统与构成该系统的各个组件相比可以更长时间运行其度量方式，是根据系统损害、无法使用的时间，以及由无法运作恢复">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/system_design/Arch-HA-Exp.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-01-亿级流量网站架构/"/>
+
+
+
+
+
+  <title>后端架构：System Design | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-01-亿级流量网站架构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">后端架构：System Design</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  7,076
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一些概念和测试基准"><a href="#一些概念和测试基准" class="headerlink" title="一些概念和测试基准"></a>一些概念和测试基准</h1><p>本章内容包括: 系统可用性的概念和指标, 系统性能的概念和指标, 如何严谨地做性能测试.</p>
+<h2 id="系统可用性的概念和指标"><a href="#系统可用性的概念和指标" class="headerlink" title="系统可用性的概念和指标"></a>系统可用性的概念和指标</h2><p><strong>高可用性</strong>（high availability，缩写为 HA），IT术语，指系统无中断地执行其功能的能力，代表系统的可用性程度。是进行系统设计时的准则之一。高可用性系统与构成该系统的各个组件相比可以更长时间运行<br>其度量方式，是根据系统损害、无法使用的时间，以及由无法运作恢复到可运作状况的时间，与系统总运作时间的比较。计算公式为:<br><img src="/images/system_design/Arch-HA-Exp.png" alt=""></p>
+<p>A（可用性），MTBF(平均故障间隔)，MDT(平均修复时间)<br>在线系统和执行关键任务的系统通常要求其可用性要达到5个9标准(99.999%)。</p>
+<ul>
+<li>3个9：(1-99.9%) x 365 x 24 =8.76小时，表示该软件系统在连续运行1年时间里最多可能的业务中断时间是8.76小时。</li>
+<li>4个9：(1-99.99%) x 365 x 24 =0.876小时=52.6分钟，表示该软件系统在连续运行1年时间里最多可能的业务中断时间是52.6分钟。</li>
+<li>5个9：(1-99.999%) x 365 x 24 x 60 =5.26分钟，表示该软件系统在连续运行1年时间里最多可能的业务中断时间是5.26分钟。</li>
+</ul>
+<p>那么X个9里的X只代表数字3~5，为什么没有1~2，也没有大于6的呢？我们接着往下计算：</p>
+<ul>
+<li>1个9：(1-90%)x365=36.5天</li>
+<li>2个9：(1-99%)x365=3.65天</li>
+<li>6个9：(1-99.9999%)x365x24x60x60=31秒</li>
+</ul>
+<p>可以看到1个9和、2个9分别表示一年时间内业务可能中断的时间是36.5天、3.65天，这种级别的可靠性或许还不配使用“可靠性”这个词；而6个9则表示一年内业务中断时间最多是31秒，那么这个级别的可靠性并非实现不了，而是要做到从5个9》6个9的可靠性提升的话，后者需要付出比前者几倍的成本，所以在企业里大家都只谈（3~5）个9。</p>
+<h2 id="系统性能的概念和指标"><a href="#系统性能的概念和指标" class="headerlink" title="系统性能的概念和指标"></a>系统性能的概念和指标</h2><p>① 系统延迟(Latency): 系统在处理一个请求或一个任务时的延迟, 有平均值, 中位数, TP 三种衡量指标:</p>
+<ol>
+<li>平均值(Avg): 延迟的评测性能指标原则: <strong>不要用平均值!</strong>  例如测试了10次，有9次是1ms，而有1次是1s，那么平均数据就是100ms，很明显，这完全不能反应性能测试的情况</li>
+<li>中位数（Mean）: 可能会比平均数要稍微靠谱一些，所谓中位数的意就是把将一组数据按大小顺序排列，处在最中间位置的一个数叫做这组数据的中位数 ，这意味着至少有50%的数据低于或高于这个中位数。</li>
+<li>TP指标(Top Percentile): <strong>这是最为正确的统计做法</strong> ，也就是英文中的 Top Percentile ，Top百分数，是一个统计学里的术语，与平均数、中位数都是一类。<ul>
+<li>TP50：指在一个时间段内（如5分钟），统计该方法每次调用所消耗的时间，并将这些时间按从小到大的顺序进行排序，取第50%的那个值作为TP50 值；正确使用TP50做监控: 配置此监控指标对应的报警阀值后，需要保证在这个时间段内该方法所有调用的消耗时间至少有50%的值要小于此阀值，否则系统将会报警。</li>
+<li>TP90: 通过上面的定义, 90%的请求中最长耗时; TP90也即要求 比这个耗时还长的请求次数 比例应该在总次数的10%以下</li>
+<li>TP99: 与TP50/90值计算方式一致，它们分别代表着对方法的不同性能要求，TP50相对较低，TP90则比较高，TP99，TP999则对方法性能要求很高</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>Amazon AWS 定义的 P99: <a href="https://docs.aws.amazon.com/zh_cn/elasticbeanstalk/latest/dg/health-enhanced-metrics.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/zh_cn/elasticbeanstalk/latest/dg/health-enhanced-metrics.html</a></p>
+</blockquote>
+<p>② 吞吐量(Throughput): 每秒可处理的请求数/事务数, 等于<code>并发数/平均响应时间</code></p>
+<ul>
+<li><strong>QPS</strong>: Queries Per Second意思是“每秒查询率”，是一台服务器每秒能够响应的查询次数，是对一个特定的查询服务器在规定时间内所处理流量多少的衡量标准。可用由PV粗略计算QPS的两种方法:<ul>
+<li>按照每天80%的请求集中在20%的时间, <code>峰值QPS= (PV*80%) / (24*3600*20%)</code></li>
+<li>按照峰值QPS是评价QPS的三倍计算, <code>峰值QPS= (PV*3) / (24*3600)</code></li>
+</ul>
+</li>
+<li><strong>TPS</strong>: Transactions Per Second, 也就是事务数/秒。它是软件测试结果的测量单位。一个事务是指一个客户机向服务器发送请求然后服务器做出反应的过程。客户机在发送请求时开始计时，收到服务器响应后结束计时，以此来计算使用的时间和完成的事务个数，最终利用这些信息来估计得分。</li>
+</ul>
+<blockquote>
+<p>Java GC回收器的评估指标里也有吞吐量的概念: 系统总运行时间 = 应用程序耗时 + 总GC耗时。</p>
+</blockquote>
+<p>③ 除了 Latency 和 Throughtput , 其他的性能衡量指标还有:</p>
+<ul>
+<li>PV: page view</li>
+<li>UV: user view;</li>
+<li>VU: 并发用户数, 也叫虚拟用户数(VU), 同时请求系统的用户数. 一般情况下, 大型系统（业务量大、机器多）做性能测试 5000 个并发用户就够了, 中小型系统做性能测试 1000 个并发用户就足够了;</li>
+</ul>
+<h2 id="如何严谨地做性能测试"><a href="#如何严谨地做性能测试" class="headerlink" title="如何严谨地做性能测试"></a>如何严谨地做性能测试</h2><p>一般来说，性能测试要统一考虑这么几个因素：Thoughput吞吐量，Latency响应时间，资源利用（CPU/MEM/IO/Bandwidth…），成功率，系统稳定性。</p>
+<ul>
+<li>一，你得定义一个系统的响应时间latency，建议是TP99，以及成功率。比如路透的定义：99.9%的响应时间必需在1ms之内，平均响应时间在1ms以内，100%的请求成功。</li>
+<li>二，在这个响应时间的限制下，找到最高的吞吐量。测试用的数据，需要有大中小各种尺寸的数据，并可以混合。最好使用生产线上的测试数据。</li>
+<li>三，在这个吞吐量做Soak Test，比如：使用第二步测试得到的吞吐量连续7天的不间断的压测系统。然后收集CPU，内存，硬盘/网络IO，等指标，查看系统是否稳定，比如，CPU是平稳的，内存使用也是平稳的。那么，这个值就是系统的性能</li>
+<li>四，找到系统的极限值。比如：在成功率100%的情况下（不考虑响应时间的长短），系统能坚持10分钟的吞吐量。</li>
+<li>五，做Burst Test。用第二步得到的吞吐量执行5分钟，然后在第四步得到的极限值执行1分钟，再回到第二步的吞吐量执行5钟，再到第四步的权限值执行1分钟，如此往复个一段时间，比如2天。收集系统数据：CPU、内存、硬盘/网络IO等，观察他们的曲线，以及相应的响应时间，确保系统是稳定的。</li>
+<li>六、低吞吐量和网络小包的测试。有时候，在低吞吐量的时候，可能会导致latency上升，比如TCP_NODELAY的参数没有开启会导致latency上升（详见TCP的那些事），而网络小包会导致带宽用不满也会导致性能上不去，所以，性能测试还需要根据实际情况有选择的测试一下这两咱场景。</li>
+</ul>
+<blockquote>
+<p>@ref  <a href="https://coolshell.cn/articles/17381.html" target="_blank" rel="noopener">性能测试应该怎么做？ | | 酷 壳 - CoolShell</a></p>
+</blockquote>
+<h1 id="高可用方案"><a href="#高可用方案" class="headerlink" title="高可用方案"></a>高可用方案</h1><p>本章内容包括: 负载均衡, 限流, 隔离, 降级, 超时与重试, 回滚, 压测与预案.</p>
+<h2 id="负载均衡与反向代理-Nginx"><a href="#负载均衡与反向代理-Nginx" class="headerlink" title="负载均衡与反向代理(Nginx)"></a>负载均衡与反向代理(Nginx)</h2><p>这里不再介绍Nginx的具体配置</p>
+<h3 id="负载均衡-loadbalance"><a href="#负载均衡-loadbalance" class="headerlink" title="负载均衡(loadbalance)"></a>负载均衡(loadbalance)</h3><p>Nginx目前提供了HTTP七层负载均衡(ngx_http_upstream_module), 意思是在OSI第七层应用层的负载均衡, 1.9版本也开始提供TCP四层负载均衡(ngx_stream_upstream_module)</p>
+<h4 id="upstream服务器配置"><a href="#upstream服务器配置" class="headerlink" title="upstream服务器配置"></a>upstream服务器配置</h4><p>略</p>
+<h4 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h4><p>几种负载均衡算法:</p>
+<ul>
+<li>轮询（Round Robin）</li>
+<li>加权轮询（Weight Round Robin）</li>
+<li>随机（Random）</li>
+<li>加权随机（Weight Random）</li>
+<li>源地址哈希（Hash）</li>
+<li>一致性哈希（ConsistentHash）</li>
+<li>最小连接数（Least Connections）</li>
+<li>低并发优先（Active Weight）</li>
+</ul>
+<p>Nginx配置中常用的负载均衡:</p>
+<ul>
+<li>round robin(轮询): 默认的</li>
+<li>ip哈希:<code>ip_hash</code>, 根据客户端ip</li>
+<li>哈希:<ul>
+<li><code>hash $uri</code>:根据uri进行哈希</li>
+<li><code>hash $key consistent</code>:一致性哈希</li>
+</ul>
+</li>
+</ul>
+<p><strong>一致性哈希(consistent hashing)</strong>:<br>在使用一致哈希算法后，哈希表槽位数（大小）的改变平均只需要对K/n个关键字重新映射，其中K是哈希关键字的数量(也就是Key)，n是槽位数量(槽位指的是Node的槽位)。<br>然而在传统的哈希表中，添加或删除一个槽位的几乎需要对所有关键字进行重新映射。</p>
+<p>一致性哈希vs传统哈希的优势:</p>
+<ul>
+<li>新增/减少节点, 传统哈希需要对全部Key做rehash, 一致性哈希只需…</li>
+<li>新增/减少节点, rehash影响的节点少, 理论上只影响相邻的节点</li>
+</ul>
+<p>一致性哈希过程: </p>
+<ol>
+<li>首先求出服务器（节点）的哈希值，并将其配置到0～2^32的圆（continuum）上。// 为什么哈希范围是2^32?  当服务节点太少时，容易因为节点分部不均匀而造成数据倾斜。这种一般通过增加虚拟节点的方式解决</li>
+<li>然后采用同样的方法求出存储数据的键的哈希值，并映射到相同的圆上。</li>
+<li>然后从数据映射到的位置开始顺时针查找，将数据保存到找到的第一个服务器上。如果超过2^32仍然找不到服务器，就会保存到第一台memcached服务器上。</li>
+</ol>
+<p><img src="/images/system_design/consistent-hash.png" alt="consistent-hash"></p>
+<ol start="4">
+<li>如果增加一个服务器节点, 如下图, 新增 node5 节点, 只有在圆（continuum）上增加服务器的地点逆时针方向的第一台服务器上的键会受到影响</li>
+</ol>
+<p><img src="/images/system_design/consistnet-hash-add-node.png" alt="consistnet-hash-add-node"></p>
+<h4 id="失败重试机制"><a href="#失败重试机制" class="headerlink" title="失败重试机制"></a>失败重试机制</h4><p>主要针对在Nginx的<code>upstream</code>和<code>proxy_pass</code>进行配置, 作用是实现”多少时间内失败多少次, 则从upstream列表里摘除”</p>
+<h4 id="upstream心跳检查"><a href="#upstream心跳检查" class="headerlink" title="upstream心跳检查"></a>upstream心跳检查</h4><p>失败重试是被动的去摘除upstream无效机器, 心跳检测可以认为是一种主动的检查并摘除无效机器, 主要在<code>upstream</code>的<code>check</code>里, 有http和tcp两种</p>
+<h3 id="长连接-keepalive"><a href="#长连接-keepalive" class="headerlink" title="长连接(keepalive)"></a>长连接(keepalive)</h3><ol>
+<li>client 与 nginx之间的长连接: <code>http</code>里的<code>keepalive_timeout 300s 300s;</code><ul>
+<li>第一个参数: client和nginx建立的长连接, 如果在此时间内没有实际消息发送, nginx将主动关闭此连接（默认是75秒)</li>
+<li>第二个参数: nginx向client发送response的http头, 其中的<code>Keep-Alive: timeout=xx</code></li>
+</ul>
+</li>
+<li>nginx 与 upstream之间的长连接: <code>upstream</code>里的<code>keepalive 100</code>这里的100指的是”每个Worker与upstream服务器可缓存的最大连接数”</li>
+</ol>
+<p>参考: <a href="/31.Backend/反向代理-Nginx/" title="反向代理-Nginx">反向代理-Nginx</a></p>
+<h2 id="降级"><a href="#降级" class="headerlink" title="降级"></a>降级</h2><p>服务降级，当服务器压力剧增的情况下，根据当前业务情况及流量对一些服务和页面有策略的降级，以此释放服务器资源以保证核心任务的正常运行。</p>
+<h3 id="降级预案"><a href="#降级预案" class="headerlink" title="降级预案"></a>降级预案</h3><p>即可以降级的功能点, 降级服务需要从服务端链路考虑, 根据用户访问的服务调用链路决定哪里可以降级. 一般情况下可以考虑降级的点有:</p>
+<ul>
+<li>页面降级(整个页面or页面片段):非核心业务的页面, 在紧急情况下可以降级, 可以利用nginx把该页面直接跳转一个静态页</li>
+<li>页面异步请求:比如异步加载的信息, 在紧急情况下可以降级</li>
+<li>非核心功能降级:比如商品详情页的推荐/热销</li>
+<li>读降级:紧急情况下只读缓存, 适用于一致性要求不高的情况</li>
+<li>写降级:在高并发抢购这种情景下, 可以先更新cache, 然后异步写回数据库</li>
+<li>风控降级:识别机器人, 根据用户画像和用户风控等级降级, 需要提前做好用户风控等级的功能</li>
+</ul>
+<blockquote>
+<p>降级后的处理方式一般有:返回默认值, 返回静态页面, 从缓存读数据而不是数据库</p>
+</blockquote>
+<h3 id="自动降级"><a href="#自动降级" class="headerlink" title="自动降级"></a>自动降级</h3><ul>
+<li>超时降级: 访问数据库 或 非本地接口(RPC, HTTP)超时, 需要提前设置合理的超时时间/重试机制/重试次数</li>
+<li>故障降级: 远程调用的接口RPC抛异常, HTTP服务500错误等,</li>
+<li>流量降级: 超过限流阈值时..</li>
+</ul>
+<h3 id="手动开关降级"><a href="#手动开关降级" class="headerlink" title="手动开关降级"></a>手动开关降级</h3><p>开关可以放在Redis, Zookeeper上.</p>
+<h3 id="读写服务降级"><a href="#读写服务降级" class="headerlink" title="读写服务降级"></a>读写服务降级</h3><ul>
+<li>库存扣减案例: 正常情况下扣减Redis, 同步扣减DB, 当流量过大时, 降级为发送一条扣减消息, 然后异步写入DB实现最终一致性</li>
+</ul>
+<h3 id="多级降级"><a href="#多级降级" class="headerlink" title="多级降级"></a>多级降级</h3><p>从用户到系统, 降级离用户越近, 最终落到后端系统的QPS越低, 对后端系统的保护就越好</p>
+<ul>
+<li>页面JS降级开关</li>
+<li>接入层降级开关, 一般是Nginx</li>
+<li>后端应用降级开关</li>
+</ul>
+<h3 id="通过-Hystrix实现熔断降级"><a href="#通过-Hystrix实现熔断降级" class="headerlink" title="通过 Hystrix实现熔断降级"></a>通过 Hystrix实现熔断降级</h3><p>@todo</p>
+<h3 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h3><p>@todo</p>
+<h2 id="集群容错"><a href="#集群容错" class="headerlink" title="集群容错"></a>集群容错</h2><p>几种常用<strong>容错策略</strong>：</p>
+<ul>
+<li>失效转移（failover）: 当出现失败，重试其他服务器，通常用于读操作等幂等行为(保证调用 1 次与 N 次效果相同)，重试会带来更长延迟。</li>
+<li>快速失败（failfast）: 只发起一次调用，失败立即报错，通常用于非幂等性的写操作。</li>
+<li>失效安全（failsafe）: 出现异常时忽略，但记录这一次失败，存入日志中。// 失败安全策略的核心是即使失败了也不会影响整个调用流程。通常情况下用于旁路系统或流程中，它的失败不影响核心业务的正确性。在实现上，当出现调用失败时，会忽略此错误，并记录一条日志，同时返回一个空结果，在上游看来调用是成功的。</li>
+<li>失败通知（failback）: 客户端需要能够获取到服务调用失败的具体信息，通过对失败错误码等异常信息的判断，决定后续的执行策略，例如非幂等性的服务调用。// Dubbo中的Failback策略中，如果调用失败，则此次失败相当于Failsafe，将返回一个空结果。而与Failsafe不同的是，Failback策略会将这次调用加入内存中的失败列表中，对于这个列表中的失败调用，会在另一个线程中进行异步重试，重试如果再发生失败，则会忽略，即使重试调用成功，原来的调用方也感知不到了。因此它通常适合于，对于实时性要求不高，且不需要返回值的一些异步操作。</li>
+</ul>
+<h2 id="超时与重试"><a href="#超时与重试" class="headerlink" title="超时与重试"></a>超时与重试</h2><p>在实际开发过程中，笔者见过太多故障是因为没有设置超时或者设置得不对而造成的。而这些故障都是因为没有意识到超时设置的重要性而造成的。如果应用不设置超时，则可能会导致请求响应慢，慢请求累积导致连锁反应，甚至造成应用雪崩。<br>而有些中间件或者框架在超时后会进行重试（如设置超时重试两次），读服务天然适合重试，但写服务大多不能重试（如写订单，如果写服务是幂等的，则重试是允许的），重试次数太多会导致多倍请求流量，即模拟了DDoS攻击，后果可能是灾难，因此，务必设置合理的重试机制，并且应该和熔断、快速失败机制配合。</p>
+<h3 id="Nginx超时设置"><a href="#Nginx超时设置" class="headerlink" title="Nginx超时设置"></a>Nginx超时设置</h3><ol>
+<li>客户端超时设置: 对于客户端超时主要设置有读取请求头超时时间、读取请求体超时时间、发送响应超时时间、长连接超时时间。<ul>
+<li><code>keepalive_timeout time [header_timeout]</code>：<ul>
+<li>time默认是75s,  表示长连接的超时时间(客户端在75s期间没有任何请求,  Nginx将会主动发送FIN关闭连接);</li>
+<li>header_timeout会通过HTTP头<code>Keep-Alive: timeout=xx</code>告知客户端长连接超时时间,</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>上游服务器(upstream)超时:<ul>
+<li>超时设置:<code>proxy_connect_timeout time</code>：与后端/上游服务器建立连接的超时时间，默认为60s，此时间不超过75s。</li>
+<li>重试设置:<ul>
+<li><code>proxy_next_upstream_tries number</code>：设置重试次数，默认0表示不限制，注意此重试次数指的是所有请求次数（包括第一次和之后的重试次数之和）。</li>
+<li><code>proxy_next_upstream_timeout time</code>：设置重试最大超时时间，默认0表示不限制。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DNS解析超时:  @todo</li>
+</ol>
+<h3 id="Web容器超时设置"><a href="#Web容器超时设置" class="headerlink" title="Web容器超时设置"></a>Web容器超时设置</h3><p>以Tomcat为例:</p>
+<ul>
+<li><code>connectionTimeout</code>: 当client与tomcat建立连接之后, 在”connectionTimeout”时间之内, 仍然没有得到client的请求数据, 此时连接将会被断开, connectionTimeout只会在链接建立之后, 得到client发送http-request信息前有效.</li>
+<li><code>socket.soTimeout</code>: 从收到client请求后,  到返回数据, 这段超时时间  @Uncertain</li>
+<li><code>keepAliveTimeout</code>: 当无实际数据交互时，连接被保持的时间，单位：毫秒。在未指定此属性时，将使用connectionTimeout作为keepAliveTimeout。</li>
+</ul>
+<blockquote>
+<p>不过我们通常在tomcat前面还有nginx等代理服务器，我们通常希望链接keepAlive的机制由代理服务器控制，比如nginx来决定链接是否需要“保持活性”（注意，与keep_alive不同），当然nginx服务器只会保留极少的长连接，几乎所有的链接都会在使用结束后主动close；有nginx与client保持，而不再是tomcat与client保持。</p>
+</blockquote>
+<h3 id="Apache-HttpClient-客户端-超时设置"><a href="#Apache-HttpClient-客户端-超时设置" class="headerlink" title="Apache HttpClient(客户端)超时设置"></a>Apache HttpClient(客户端)超时设置</h3><ul>
+<li>connectionTimeout: 建立连接超时时间,  指Client发出请求后,  到建立连接这段超时时间,  如果在该时间仍没有完成连接的建立会抛出connectionTimeout异常;</li>
+<li>socketTimeout: 等待响应超时时间,  指Client对Url发起请求(连接已经建立),  到收到服务端的Response这段超时时间</li>
+</ul>
+<h3 id="数据库客户端连接超时设置"><a href="#数据库客户端连接超时设置" class="headerlink" title="数据库客户端连接超时设置"></a>数据库客户端连接超时设置</h3><p>@todo</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本章主要介绍了如何在Web应用访问的整个链路上进行超时时间设置。通过配置合理的超时时间，防止出现某服务的依赖服务超时时间太长且响应慢，以致自己响应慢甚至崩溃。<br>客户端和服务器端都应该设置超时时间，而且客户端根据场景可以设置比服务器端更长的超时时间。如果存在多级依赖关系，如A调用B，B调用C，则超时设置应该是A&gt;B&gt;C，否则可能会一直重试，引起DDoS攻击效果。不过最终如何选择还是要看场景，有时候客户端设置的超时时间就是要比服务器端的短，可以通过在服务器端实施限流/降级等手段防止DDoS攻击。</p>
+<p>超时之后应该有相应的策略来处理，常见的策略有重试（等一会儿再试、尝试其他分组服务、尝试其他机房服务，重试算法可考虑使用如指数退避算法）、摘掉不存活节点（负载均衡/分布式缓存场景下）、托底（返回历史数据/静态数据/缓存数据）、等待页或者错误页。对于非幂等写服务应避免重试，或者可以考虑提前生成唯一流水号来保证写服务操作通过判断流水号来实现幂等操作。<br>在进行数据库/缓存服务器操作时，记得经常检查慢查询，慢查询通常是引起服务出问题的罪魁祸首。也要考虑在超时严重时，直接将该服务降级，待该服务修复后再取消降级。</p>
+<p>对于有负载均衡的中间件，请考虑配置心跳/存活检查，而不是惰性检查。<br>超时重试必然导致请求响应时间增加，最坏情况下的响应时间=重试次数×单次超时时间，这很可能严重影响用户体验，导致用户不断刷新页面来重复请求，最后导致服务接收的请求太多而挂掉，因此除了控制单次超时时间，也要控制好用户能忍受的最长超时时间。<br>超时时间太短会导致服务调用成功率降低，超时时间太长又会导致本应成功的调用却失败了，这也要根据实际场景来选择最适合当前业务的超时时间，甚至是程序动态自动计算超时时间。<br>比如商品详情页的库存状态服务，可以设置较短的超时时间，当超时时降级返回有货，而结算页服务就需要设置稍微长一些的超时时间保证确实有货。在实际开发中，不要轻视超时时间，很多重大事故都是因为超时时间不合理导致的，设置超时时间一定是只有好处没有坏处的，请立即Review你的代码吧。</p>
+<blockquote>
+<p>回顾: TCP协议里的重试机制:<br>Client发给Server端SYN包后, Server端要返给Client一个SYN-ACK, 然后Server要等待Client发过来的ACK,<br>Server发送SYN-ACK并等待ACK的过程是有重试机制的, 重试的间隔时间从1s开始每次都翻倍，5次的重试时间间隔为1s, 2s, 4s, 8s, 16s。</p>
+</blockquote>
+<h2 id="隔离"><a href="#隔离" class="headerlink" title="隔离"></a>隔离</h2><ul>
+<li>进线程隔离</li>
+<li>集群隔离</li>
+<li>机房隔离</li>
+<li>读写隔离</li>
+<li>动静隔离: 静态资源放CDN</li>
+<li>爬虫隔离</li>
+<li>热点隔离: 诸如秒杀, 抢购做成独立系统</li>
+<li>资源隔离</li>
+</ul>
+<h2 id="限流"><a href="#限流" class="headerlink" title="限流"></a>限流</h2><h3 id="限流算法"><a href="#限流算法" class="headerlink" title="限流算法"></a>限流算法</h3><ul>
+<li>令牌桶:</li>
+<li>漏桶:</li>
+</ul>
+<h3 id="应用级限流"><a href="#应用级限流" class="headerlink" title="应用级限流"></a>应用级限流</h3><ul>
+<li>限制总并发数/连接数: Tomcat的几个参数 acceptCount, maxConnections, maxThreads</li>
+<li>限制单个接口的请求数:<ul>
+<li>限制某个时间窗口的请求数:用Guava的Cache, 时间戳做Key, 访问次数AtomicLong做Value. . . 缺点是无法应对突发流量, 瞬时请求可能都被允许</li>
+<li>平滑限流:Guava的RateLimiter提供的令牌桶算法可以对请求进行速率平均化, 比如5request/秒, 每隔200ms处理一个请求</li>
+</ul>
+</li>
+</ul>
+<h3 id="Nginx层限流"><a href="#Nginx层限流" class="headerlink" title="Nginx层限流"></a>Nginx层限流</h3><p>Nginx提供了两个限流模块:</p>
+<ul>
+<li>限制总并发数的<code>ngx_http_limit_conn_module</code></li>
+<li>漏桶算法的<code>ngx_http_limit_req_module</code></li>
+</ul>
+<h1 id="高性能方案"><a href="#高性能方案" class="headerlink" title="高性能方案"></a>高性能方案</h1><p>本章内容: 缓存, 连接池, 异步并发, 数据库拆分, 任务系统拆分, 队列.</p>
+<p>有关C10K、C100K单机系统，参考： <a href="https://whatsrtos.github.io/基础架构/Arch-架构-并发系统-C100K/" target="_blank" rel="noopener">架构-并发系统-C100K</a></p>
+<h2 id="应用级缓存"><a href="#应用级缓存" class="headerlink" title="应用级缓存"></a>应用级缓存</h2><p>本章以Java应用缓存为例.</p>
+<h3 id="缓存回收策略"><a href="#缓存回收策略" class="headerlink" title="缓存回收策略"></a>缓存回收策略</h3><ul>
+<li>基于空间和容量: 超过xx时回收</li>
+<li>基于存活时间(TTL): 缓存数据从创建开始计算, 过期则清除</li>
+<li>基于Java GC:<ul>
+<li>软引用</li>
+<li>弱引用</li>
+</ul>
+</li>
+<li>基于回收算法:<ul>
+<li>FIFO</li>
+<li>LRU: Least Recently Used, 最近最不常访问的被淘汰, 访问时间距离现在最久远的被淘汰(较常用)</li>
+<li>LFU: Least Frequently Used, 在一段时间内访问次数最少的被淘汰, 访问频率最少的被淘汰(可能需要预热)</li>
+</ul>
+</li>
+</ul>
+<h3 id="Java应用级缓存的类型"><a href="#Java应用级缓存的类型" class="headerlink" title="Java应用级缓存的类型"></a>Java应用级缓存的类型</h3><ul>
+<li>堆内缓存: 用Java软引用/弱引用对象作为缓存, 不需要序列化. Guava的Cache, Ehcache3.x</li>
+<li>堆外缓存: 缓存在JVM内存之外, 减少GC次数, 但是需要序列化的时间开销, Ehcache3.x, MapDB</li>
+</ul>
+<h3 id="缓存的设计模式"><a href="#缓存的设计模式" class="headerlink" title="缓存的设计模式"></a>缓存的设计模式</h3><p>首先介绍三个名词:</p>
+<ul>
+<li><strong>SoR</strong>(SystemofRecord): 记录系统, 一般是DB;</li>
+<li><strong>Cache</strong>: Cache的访问速度比SoR要快, 数据放在Cache中可以提升访问速度, 减少回源次数;</li>
+<li><strong>回源</strong>: 缓存没有命中, 需要去SoR取数据, 这叫做回源;</li>
+</ul>
+<h4 id="Cache-Aside"><a href="#Cache-Aside" class="headerlink" title="Cache Aside"></a>Cache Aside</h4><p>即代码围绕着缓存写, 由业务层的代码读取/更新缓存.</p>
+<ul>
+<li>读:先读Cache, 没有读到再读SoR, 并更新Cache</li>
+<li>写(更新):<ul>
+<li>方案1: 先更新SoR, 再更新Cache</li>
+<li>方案2: 先更新SoR, 再失效Cache, 读取的时候再把SoR的数据写入Cache</li>
+</ul>
+</li>
+</ul>
+<p>CacheAside存在的问题:<br>如果并发更新Cache, 会出现Cache和SoR数据不一致的情况(A更新了SoR, 还没来得及更新Cache, B线程插入进来更新SoR并更新Cache, 之后A线程更新Cache), 这种有两种解决方式:</p>
+<ol>
+<li>用canal订阅数据库(SoR)的 binlog, 增量更新Cache, 缓存的更新会有延迟;</li>
+<li>通过对请求合理的hash, 让同一个读服务落到同一个实例;</li>
+</ol>
+<h4 id="Cache-as-SoR"><a href="#Cache-as-SoR" class="headerlink" title="Cache as SoR"></a>Cache as SoR</h4><p>即Cache和SoR是一个整体, 业务层代码只对Cache进行读写, 然后Cache再委托给SoR进行真实的读写. 有三种实现模式: Read-Throught, Write-Throught, Write-Behind:</p>
+<ul>
+<li>Read-Throught: 读cache, 如果没有读到, 由cache把SoR的数据更新到缓存里. GuavaCache提供了此模式, 创建Cache时需要指定一个CacheLoader, 从Cache未能读到数据时, GuavaCache委托CacheLoader从SoR读取, 用户代码只需要调用<code>cache.get()</code></li>
+<li>Write-Throught: 用户调用<code>cache.set()</code>, 缓存更新后, 同步写到SoR, 不需要用户代码干预</li>
+<li>Write-Behind: 与上面的区别是, Write-Behind是异步批量写SoR</li>
+</ul>
+<h4 id="Copy-Pattern"><a href="#Copy-Pattern" class="headerlink" title="Copy Pattern"></a>Copy Pattern</h4><ul>
+<li>Copy-On-Read: 读时复制</li>
+<li>Copy-On-Write: 写时复制</li>
+</ul>
+<h2 id="数据库拆分-分库分表"><a href="#数据库拆分-分库分表" class="headerlink" title="数据库拆分(分库分表)"></a>数据库拆分(分库分表)</h2><ul>
+<li>垂直切分: 一般根据业务来<ul>
+<li>垂直分表: 通俗的说法叫做“大表拆小表”，拆分是基于关系型数据库中的“列”（字段）进行的。通常情况，某个表中的字段比较多，可以新建立一张“扩展表”，将不经常使用或者长度较大的字段拆分出去放到“扩展表”中</li>
+<li>垂直分库: 按照业务模块来划分出不同的数据库，而不是像早期一样将所有的数据表都放到同一个数据库中。</li>
+</ul>
+</li>
+<li>水平切分:<ul>
+<li>哈希分库: 比如根据自增主键对库的总数取余操作, 可以多次哈希, 第一次哈希分库, 第二次分表:<ul>
+<li>例子: UserId后四位mod32分到32个库中，同时再将UserId后四位Div32Mod32将每个库分为32个表，共计分为1024张表。</li>
+</ul>
+</li>
+<li>范围分库: 比如根据自增主键范围切分,<ul>
+<li>优点: 单表大小可控，天然水平扩展。</li>
+<li>缺点: 无法解决集中写入瓶颈的问题。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="分库分表带来的问题"><a href="#分库分表带来的问题" class="headerlink" title="分库分表带来的问题"></a>分库分表带来的问题</h3><ul>
+<li>跨库join的问题解决方案:<ul>
+<li>字段冗余</li>
+<li>Redis存储索引</li>
+</ul>
+</li>
+<li>夸库事务: @todo</li>
+</ul>
+<h2 id="唯一ID"><a href="#唯一ID" class="headerlink" title="唯一ID"></a>唯一ID</h2><ul>
+<li>利用数据库自增ID:<ul>
+<li>优点：最简单。</li>
+<li>缺点：单点风险、单机性能瓶颈。</li>
+</ul>
+</li>
+<li>TwitterSnowflake<ul>
+<li>优点：高性能高可用、易拓展。</li>
+<li>缺点：需要独立的集群以及ZK。</li>
+</ul>
+</li>
+<li>UUID, GUID</li>
+</ul>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><p>这里是一些”一句话解决方案”.</p>
+<h2 id="最佳实践list"><a href="#最佳实践list" class="headerlink" title="最佳实践list"></a>最佳实践list</h2><ul>
+<li>LVS/F5/HAProxy负载均衡 -&gt; Nginx/Apache -&gt; Redis/Memcached</li>
+<li>Kafka，ActiveMQ负责解耦的消息队列</li>
+<li>RPC框架Thrift, 序列化Protobuf</li>
+<li>分布式框架Zookeeper</li>
+<li>Mysql分表分库的Cobar</li>
+<li>通用搜索引擎ElasticSearch</li>
+</ul>
+<h2 id="如何存储密码"><a href="#如何存储密码" class="headerlink" title="如何存储密码"></a>如何存储密码</h2><ul>
+<li>bcrypt:带盐的散列算法, 可以指定costfactor, 10表示2^10次方次运算, 返回的散列值包括盐和加密后的文本</li>
+<li><a href="http://www.infoq.com/cn/news/2016/12/How-Dropbox-securely-passwords" target="_blank" rel="noopener">Dropbox是如何安全地存储用户密码的</a> : <code>AES256(bcrypt(SHA512(pwd), salt(10)))</code></li>
+<li><a href="https://www.zhihu.com/question/20299384" target="_blank" rel="noopener">加盐密码保存的最通用方法是？ - 知乎</a> @todo</li>
+</ul>
+<hr>
+<h1 id="附录-名词解释"><a href="#附录-名词解释" class="headerlink" title="附录:名词解释"></a>附录:名词解释</h1><ul>
+<li>高可用High-Availability、高可扩展性(高可伸缩性)High-Scalability</li>
+<li>解耦LooselyCoupled</li>
+<li>吞吐量Throughput（QPS/TPS)、并发量C10K</li>
+<li>冗余Redundancy、分区Partitions、缓存Caches、代理Proxies、索引Indexes、队列Queues</li>
+<li>集群Cluster、主从Master-Slave、水平/垂直切分Sharding</li>
+<li>请求负载均衡LoadBalancing、请求路由Route、状态复制Replication</li>
+<li>故障转移Failover、故障回复Failback、心跳检测Healthcheck/Heartbeat</li>
+<li>纵向扩展Scale-up、横向扩展Scale-out</li>
+<li>自动升降级Auto-upgrade/downgrade</li>
+<li>scaleup:纵向扩展, 指提高单台机器的存储(RAM, HD)上限</li>
+<li>scaleout:横向扩展, 多台主机</li>
+</ul>
+<hr>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://coolshell.cn/" target="_blank" rel="noopener">酷壳</a></li>
+<li><a href="https://book.douban.com/subject/26999243/" target="_blank" rel="noopener">《亿级流量网站架构核心技术》</a></li>
+</ul>
+<p><img src="/images/system_design/亿级流量网站架构核心技术.png" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/后端架构/" rel="tag"># 后端架构</a>
+          
+            <a href="/tags/缓存/" rel="tag"># 缓存</a>
+          
+            <a href="/tags/架构/" rel="tag"># 架构</a>
+          
+            <a href="/tags/System-Design/" rel="tag"># System Design</a>
+          
+            <a href="/tags/高可用/" rel="tag"># 高可用</a>
+          
+            <a href="/tags/高性能/" rel="tag"># 高性能</a>
+          
+            <a href="/tags/负载均衡/" rel="tag"># 负载均衡</a>
+          
+            <a href="/tags/限流/" rel="tag"># 限流</a>
+          
+            <a href="/tags/分库分表/" rel="tag"># 分库分表</a>
+          
+            <a href="/tags/消息队列/" rel="tag"># 消息队列</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/31.Backend/Serverless/" rel="next" title="Serverless">
+                <i class="fa fa-chevron-left"></i> Serverless
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/31.Backend/SystemDesign-C100K/" rel="prev" title="C100K系统设计">
+                C100K系统设计 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一些概念和测试基准"><span class="nav-text">一些概念和测试基准</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#系统可用性的概念和指标"><span class="nav-text">系统可用性的概念和指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统性能的概念和指标"><span class="nav-text">系统性能的概念和指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何严谨地做性能测试"><span class="nav-text">如何严谨地做性能测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高可用方案"><span class="nav-text">高可用方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#负载均衡与反向代理-Nginx"><span class="nav-text">负载均衡与反向代理(Nginx)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#负载均衡-loadbalance"><span class="nav-text">负载均衡(loadbalance)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#upstream服务器配置"><span class="nav-text">upstream服务器配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#负载均衡算法"><span class="nav-text">负载均衡算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#失败重试机制"><span class="nav-text">失败重试机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#upstream心跳检查"><span class="nav-text">upstream心跳检查</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#长连接-keepalive"><span class="nav-text">长连接(keepalive)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#降级"><span class="nav-text">降级</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#降级预案"><span class="nav-text">降级预案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动降级"><span class="nav-text">自动降级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#手动开关降级"><span class="nav-text">手动开关降级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读写服务降级"><span class="nav-text">读写服务降级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多级降级"><span class="nav-text">多级降级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-Hystrix实现熔断降级"><span class="nav-text">通过 Hystrix实现熔断降级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dubbo"><span class="nav-text">Dubbo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群容错"><span class="nav-text">集群容错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#超时与重试"><span class="nav-text">超时与重试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx超时设置"><span class="nav-text">Nginx超时设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Web容器超时设置"><span class="nav-text">Web容器超时设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Apache-HttpClient-客户端-超时设置"><span class="nav-text">Apache HttpClient(客户端)超时设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库客户端连接超时设置"><span class="nav-text">数据库客户端连接超时设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隔离"><span class="nav-text">隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#限流"><span class="nav-text">限流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#限流算法"><span class="nav-text">限流算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用级限流"><span class="nav-text">应用级限流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx层限流"><span class="nav-text">Nginx层限流</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高性能方案"><span class="nav-text">高性能方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用级缓存"><span class="nav-text">应用级缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存回收策略"><span class="nav-text">缓存回收策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java应用级缓存的类型"><span class="nav-text">Java应用级缓存的类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存的设计模式"><span class="nav-text">缓存的设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cache-Aside"><span class="nav-text">Cache Aside</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cache-as-SoR"><span class="nav-text">Cache as SoR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Copy-Pattern"><span class="nav-text">Copy Pattern</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库拆分-分库分表"><span class="nav-text">数据库拆分(分库分表)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分库分表带来的问题"><span class="nav-text">分库分表带来的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#唯一ID"><span class="nav-text">唯一ID</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例"><span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#最佳实践list"><span class="nav-text">最佳实践list</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何存储密码"><span class="nav-text">如何存储密码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录-名词解释"><span class="nav-text">附录:名词解释</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/31.Backend/SystemDesign-01-亿级流量网站架构/';
+          this.page.identifier = '31.Backend/SystemDesign-01-亿级流量网站架构/';
+          this.page.title = '后端架构：System Design';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

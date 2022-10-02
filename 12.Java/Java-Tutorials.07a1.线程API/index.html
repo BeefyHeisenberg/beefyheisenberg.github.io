@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="线程6种状态 New, 创建Thread实例之后; Runnable, 执行thread.start()之后; Blocked, 线程试图获取ReentrantLock失败, 或进入synchronize代码块, 或调用Block IO; Waiting, 调用object.wait()或thread.join()之后; 调用object.wait(), condition.await()方法都会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Tutorials-07a1-线程API">
+<meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07a1.线程API/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="线程6种状态 New, 创建Thread实例之后; Runnable, 执行thread.start()之后; Blocked, 线程试图获取ReentrantLock失败, 或进入synchronize代码块, 或调用Block IO; Waiting, 调用object.wait()或thread.join()之后; 调用object.wait(), condition.await()方法都会">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/java_thread_states_all.png">
+<meta property="og:updated_time" content="2022-10-02T15:13:43.009Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Tutorials-07a1-线程API">
+<meta name="twitter:description" content="线程6种状态 New, 创建Thread实例之后; Runnable, 执行thread.start()之后; Blocked, 线程试图获取ReentrantLock失败, 或进入synchronize代码块, 或调用Block IO; Waiting, 调用object.wait()或thread.join()之后; 调用object.wait(), condition.await()方法都会">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/java/java_thread_states_all.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07a1.线程API/"/>
+
+
+
+
+
+  <title>Java Tutorials-07a1-线程API | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07a1.线程API/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java Tutorials-07a1-线程API</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/Java基础教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Java基础教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,525
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="线程6种状态"><a href="#线程6种状态" class="headerlink" title="线程6种状态"></a>线程6种状态</h1><ol>
+<li>New, 创建Thread实例之后;</li>
+<li>Runnable, 执行<code>thread.start()</code>之后;</li>
+<li>Blocked, 线程试图获取ReentrantLock失败, 或进入synchronize代码块, 或调用Block IO;</li>
+<li>Waiting, 调用<code>object.wait()</code>或<code>thread.join()</code>之后;<ul>
+<li>调用<code>object.wait()</code>, <code>condition.await()</code>方法都会产生WAITING状态;</li>
+<li>调用<code>thread.join()</code>后, 调用者会Waiting一直到thread线程退出;</li>
+</ul>
+</li>
+<li>Time-Waitting, 调用<code>Object.wait(long)</code>或<code>thread.join(long)</code>, <code>lock.tryLock(long)</code>时;</li>
+<li>Terminated: 线程的<code>run()</code>方法正常退出或者<code>run()</code>方法抛出未捕获异常时;</li>
+</ol>
+<blockquote>
+<p>上面的状态来自Oracle JDK 8 <code>java.lang.Thread.State</code>, 并不等同于unix下的原生线程状态,<br><a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/Thread.State.html" target="_blank" rel="noopener">Thread.State (Java Platform SE 8 )</a></p>
+</blockquote>
+<p>图-线程6种状态的转换:<br><img src="/images/java/java_thread_states_all.png" alt="Thread States"></p>
+<h1 id="线程控制API"><a href="#线程控制API" class="headerlink" title="线程控制API"></a>线程控制API</h1><h2 id="start"><a href="#start" class="headerlink" title="start"></a>start</h2>  <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 第一种Runnable接口</span></span><br><span class="line">Thread t = <span class="keyword">new</span> Thread(<span class="keyword">new</span> runnable() &#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// new之后线程处于"New"状态</span></span><br><span class="line">t.start(); <span class="comment">// start之后线程处于"Runnable"状态</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二种</span></span><br><span class="line">Class MyThread extends Thread &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="comment">// doSomething</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">new</span> Mythread().start();</span><br></pre></td></tr></table></figure>
+<h2 id="interrupt"><a href="#interrupt" class="headerlink" title="interrupt"></a>interrupt</h2><ul>
+<li>调用<code>t.interrupt()</code>方法时, 线程<code>t</code>会收到中断信号, Java并没有要求线程一定响应中断. 线程应该根据情况决定是否响应中断, 循环调用<code>t.isInterrupted()</code>可以检测线程的中断标志位.</li>
+<li>如果线程内调用了<code>sleep()</code>或者<code>wait()</code>方法让线程进入等待状态, 当调用<code>t.interrupt()</code>, 线程会抛出<code>InterruptException</code>, 如果你的线程里调用了可能抛出该异常的阻塞方法, 那么就不必每次调用<code>isInterrupt()</code>检测中断状态了, 在catch里捕获该异常即可.</li>
+<li>如果线程已经被中断的情况下再调用<code>sleep()</code>, <code>sleep()</code>方法会清除中断状态并且抛出上述异常, 并不会进入sleep状态, 所以线程循环中有<code>sleep()</code> 的也不必用<code>isInterrupt</code>检查中断状态</li>
+<li>可抛出中断异常的: 线程内调用<code>wait()</code>, 或者调用<code>thread.join()</code>和<code>thread.sleep()</code><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Thread t = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">while</span>(!Thread.currentThread().isInterrupted() <span class="comment">/* &amp;&amp; */</span>) &#123;</span><br><span class="line">          Thread.sleep(<span class="number">5000</span>); <span class="comment">// 如果有sleep, 上面的isInterrupted不必要</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">t.start(); <span class="comment">// sub-thread now is "runnnable"</span></span><br><span class="line"></span><br><span class="line">t.interrupt(); <span class="comment">// main thread interrupt sub-thread</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="join"><a href="#join" class="headerlink" title="join"></a>join</h2><p>执行<code>thread.join()</code>的线程会进入waiting状态, 直到<code>thread</code>线程终止或自然退出, 继续执行后面的代码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">MyThread thread = <span class="keyword">new</span> MyThread();</span><br><span class="line">thread.start();</span><br><span class="line">thread.join(); <span class="comment">// 在这里waiting</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上面的thread退出后, 才会进行到这里</span></span><br></pre></td></tr></table></figure>
+<h2 id="sleep"><a href="#sleep" class="headerlink" title="sleep"></a>sleep</h2><p>执行<code>thread.sleep(m)</code>的线程会进入timed_waitting状态m毫秒(注意, 并没有sleep这种状态),<br><code>Thread.sleep()</code>与线程调度器交互，它将当前线程设置为等待一段时间的状态。一旦等待时间结束，线程状态就会被改为可运行（runnable），并开始等待CPU来执行后续的任务。因此，当前线程的实际休眠时间取决于线程调度器，而线程调度器则是由操作系统来进行管理的。</p>
+<p>比较<code>thread.sleep(long millis)</code>和<code>object.wait()</code>:</p>
+<ul>
+<li>对于<code>sleep()</code>方法，我们首先要知道该方法是属于Thread类中的。而<code>wait()</code>方法，则是属于Object类中的。</li>
+<li><code>sleep()</code>方法导致了程序暂停执行指定的时间，让出cpu该其他线程，但是cpu对线程的监控状态依然保持者，当指定的时间到了又会自动恢复runnable。</li>
+<li>在调用<code>sleep()</code>方法后, 线程进入timed_waiting状态, 并且线程不会释放对象锁。</li>
+<li>当调用线程里调用<code>obj.wait()</code>方法的时候，线程进入等待此对象的等待队列，放弃对象锁并进入waiting状态，只有针对此对象调用<code>notify()</code>方法后, 线程才会从对象锁的等待队列中被取出。</li>
+</ul>
+<h2 id="sleep和wait的区别"><a href="#sleep和wait的区别" class="headerlink" title="sleep和wait的区别?"></a>sleep和wait的区别?</h2><ul>
+<li><code>Thread.sleep()</code>方法是一个静态方法，作用在当前线程上；</li>
+<li><code>obj.wait()</code>方法是一个实例方法，并且只能在其他线程调用本实例的<code>obj.notify()</code>方法时被唤醒。</li>
+<li>调用<code>wait()</code>方法时，线程在等待的时候会释放掉它所获得的monitor，但是调用<code>Thread.sleep()</code>方法时，线程在等待的时候仍然会持有monitor或者锁。</li>
+<li>Java中的<code>wait()</code>方法应在同步代码块中调用(已经获得了对象锁的情况下, 调用对象.wait()会放弃锁)</li>
+<li>使用<code>sleep()</code>方法时，被暂停的线程(是处于timed_wait状态?) 在被唤醒之后会立即进入就绪态（Runnable state)</li>
+<li>从<code>wait()</code>方法被唤醒的时候(通常是其他线程调用了<code>obj.notify()</code>)，被暂停的线程要首先获得锁，然后再进入Runnable。</li>
+<li>如果你需要暂定线程一段特定的时间就使用<code>sleep()</code>方法，如果你想要实现线程间通信就使用<code>wait()</code>方法。</li>
+</ul>
+<h2 id="如何终止线程"><a href="#如何终止线程" class="headerlink" title="如何终止线程?"></a>如何终止线程?</h2><p>几个问题:</p>
+<ol>
+<li>被调用了<code>sleep()</code>的线程(timed_waiting状态)可以被<code>interrupt()</code>抛出异常吗?</li>
+<li>调用了<code>thread.join()</code>的线程(waiting状态)可以被<code>interrupt()</code>抛出异常吗?</li>
+<li>调用了<code>object.wait()</code>的线程(waiting状态)可以被<code>interrupt()</code>抛出异常吗?</li>
+<li>调用阻塞IO方法被阻塞住的线程可以被<code>interrupt()</code>抛出异常吗?</li>
+<li>试图抢占锁(synchronized或ReentrantLock)但失败的线程(blocked状态)可以被<code>interrupt()</code>抛出异常吗?</li>
+</ol>
+<p>答案: 可以, 可以, 可以, 否, 否</p>
+<p><strong>所以</strong> 只有处于waiting或timed_waiting状态的线程才可以抛出<code>InterruptException</code>异常被中断, block状态的线程不可以;</p>
+<p>如何终止waiting或timed_waiting状态的线程呢? 有两种方式:</p>
+<ul>
+<li>用Volatile的标志位控制线程的循环逻辑;</li>
+<li>使用interrupt()方法中断当前线程, 线程的循环里应该try-catch <code>InterruptException</code></li>
+</ul>
+<p>但是对于进入blocked状态的线程, 是无法被<code>interrupt()</code>中断的, 所以可能的做法是: 关闭阻塞的资源</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IOBlocked</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> InputStream in;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">IOBlocked</span><span class="params">(InputStream is)</span> </span>&#123;</span><br><span class="line">        in = is;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            in.read();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptException e1) &#123;</span><br><span class="line">            <span class="comment">// 事实永远无法到达这, 因为read不抛InterruptException</span></span><br><span class="line">            <span class="comment">// InterruptException是受检异常</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HowToInterruptIOBlockedThreads</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建线程池</span></span><br><span class="line">        ExecutorService service = Executors.newCachedThreadPool();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 打开网络流</span></span><br><span class="line">        ServerSocket server = <span class="keyword">new</span> ServerSocket(<span class="number">8080</span>);</span><br><span class="line">        InputStream stream = <span class="keyword">new</span> Socket(<span class="string">"localhost"</span>, <span class="number">8080</span>).getInputStream();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行会导致IO Blocked的线程</span></span><br><span class="line">        service.execute(<span class="keyword">new</span> IOBlocked(stream));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 主线程sleep</span></span><br><span class="line">        TimeUnit.MILLISECONDS.sleep(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//尝试停止所有正在执行的任务, shutdownNow会尝试调用所有线程的interrupt</span></span><br><span class="line">        service.shutdownNow();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//通过关闭线程操作的资源来释放阻塞的线程</span></span><br><span class="line">        stream.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="唤醒线程"><a href="#唤醒线程" class="headerlink" title="唤醒线程"></a>唤醒线程</h2><p>如何唤醒sleep或者wait的线程?</p>
+<ul>
+<li>对于因为IO阻塞而进入的blocked状态的线程, 没有办法唤醒;</li>
+<li>对于因为调用<code>waiting()</code>, <code>t.sleep()</code>, <code>t.join()</code>而进入waiting或timed_waiting状态的线程, 调用<code>t.interrupt()</code>可以让上面的”阻塞操作”抛出<code>InterruptedException</code>来打到”唤醒”的效果;</li>
+</ul>
+<h2 id="被弃用的方法"><a href="#被弃用的方法" class="headerlink" title="被弃用的方法"></a>被弃用的方法</h2><p>Thread类不再推荐被使用的方法: <del>~yield,stop,suspend,resume</del>~</p>
+<h3 id="yield"><a href="#yield" class="headerlink" title="yield"></a>yield</h3><p>yield方法会临时暂停当前正在执行的线程，来让有同样优先级的正在等待的线程有机会执行。<br>如果没有正在等待的线程，或者所有正在等待的线程的优先级都比较低，那么该线程会继续运行。<br>执行了yield方法的线程什么时候会继续运行由线程调度器来决定。<br>yield方法不保证当前的线程会暂停或者停止，但是可以保证当前线程在调用yield方法时会放弃CPU。</p>
+<p>yield()应该做的是让当前运行线程回到可运行状态，以允许具有相同优先级的其他线程获得运行机会。<br>因此，使用yield()的目的是让相同优先级的线程之间能适当的轮转执行。<br>但是，实际中无法保证yield()达到让步目的，因为让步的线程还有可能被线程调度程序再次选中。</p>
+<h3 id="stop"><a href="#stop" class="headerlink" title="stop"></a>stop</h3><blockquote>
+<p>该方法天生是不安全的。使用thread.stop()停止一个线程，导致释放（解锁）所有该线程已经锁定的监视器（因沿堆栈向上传播的未检查ERROR <code>ThreadDeath</code>而解锁）。 // → 非受检异常<br>如果之前受这些监视器保护的任何对象处于不一致状态，则不一致状态的对象（受损对象）将对其他线程可见，这可能导致任意的行为。<br>ThreadDeath是java.lang.Error，不是java.lang.Exception。不受检异常意味着我们不会有意识在代码里写Try-Catch去处理异常, 比如在finally里释放锁</p>
+</blockquote>
+<p>上面的意思是:<br>线程当前可能持有一个监视器(或锁)，执行 <code>thread.stop()</code> 将会产生一个 ThreadDeath 错误(不受检ERROR)，线程向上抛出错误，导致监视器被解锁。<br>可能导致的问题: 以银行转账的例子,如果在”减扣A余额, 增加B余额”的过程中, 线程被stop, 将产生业务数据的不一致.</p>
+<p><strong>建议</strong> 用interrupt替代stop, 在线程中循环检测<code>thread.isInterrupted()</code> 或者 捕获<code>InterruptException</code> 然后由业务代码进行收尾处理.</p>
+<p>ThreadDeath 和 InterruptException 的区别是:<br>  前者不受检, 意味着业务代码没有机会捕获并处理, 会向上层堆栈抛出错误, 线程状态变为 “Terminated”;<br>  后者是受检异常, 可以被捕获并由业务代码处理;</p>
+<h3 id="suspend-amp-resume"><a href="#suspend-amp-resume" class="headerlink" title="suspend &amp; resume"></a>suspend &amp; resume</h3><ul>
+<li>当某个线程的suspend()方法被调用时，该线程会被挂起。如果该线程占有了锁，则它不会释放锁。线程在挂起的状态下还持有锁，这导致其他线程将不能访问该资源直到目标线程恢复工作。</li>
+<li>线程的<code>resume()方法</code>会恢复 因<code>suspend()</code>方法挂起的线程，使之重新能够获得CPU执行。</li>
+</ul>
+<p>建议使用 <code>object.wait</code> 和 <code>object.notify</code>方法代替 <code>suspend</code> &amp; <code>resume</code></p>
+<h1 id="线程属性"><a href="#线程属性" class="headerlink" title="线程属性"></a>线程属性</h1><h2 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h2><ul>
+<li>java中线程优先级范围 <code>MIN_PRIORITY</code>~<code>MAX_PRIORITY</code> (其值1~10), <code>NORMAL_PRIORITY</code>(其值=5);</li>
+<li>线程默认情况下继承父线程的优先级;</li>
+</ul>
+<h2 id="daemon"><a href="#daemon" class="headerlink" title="daemon"></a>daemon</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">thread.setDaemon(<span class="keyword">true</span>);</span><br><span class="line">thread.start();</span><br></pre></td></tr></table></figure>
+<p>当JVM还存在一个非守护线程, JVM就不会退出, 当存活的线程仅剩下守护线程时, JVM才会退出.<br>守护线程最典型的应用就是GC</p>
+<h2 id="异常处理器"><a href="#异常处理器" class="headerlink" title="异常处理器"></a>异常处理器</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">thread.setUncaughtExceptionHandler(<span class="keyword">new</span> Thread.UncaughtExceptionHandler() &#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread t, Throwable e)</span> </span>&#123;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">thread.start();</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Java-Tutorials.06.序列化/" rel="next" title="Java Tutorials-06-序列化">
+                <i class="fa fa-chevron-left"></i> Java Tutorials-06-序列化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Java-Tutorials.07a2.ThreadLocal/" rel="prev" title="Java Tutorials-07a2-ThreadLocal">
+                Java Tutorials-07a2-ThreadLocal <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程6种状态"><span class="nav-text">线程6种状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程控制API"><span class="nav-text">线程控制API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#start"><span class="nav-text">start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#interrupt"><span class="nav-text">interrupt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#join"><span class="nav-text">join</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sleep"><span class="nav-text">sleep</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sleep和wait的区别"><span class="nav-text">sleep和wait的区别?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何终止线程"><span class="nav-text">如何终止线程?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#唤醒线程"><span class="nav-text">唤醒线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#被弃用的方法"><span class="nav-text">被弃用的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#yield"><span class="nav-text">yield</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stop"><span class="nav-text">stop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#suspend-amp-resume"><span class="nav-text">suspend &amp; resume</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程属性"><span class="nav-text">线程属性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#优先级"><span class="nav-text">优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#daemon"><span class="nav-text">daemon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异常处理器"><span class="nav-text">异常处理器</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07a1.线程API/';
+          this.page.identifier = '12.Java/Java-Tutorials.07a1.线程API/';
+          this.page.title = 'Java Tutorials-07a1-线程API';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

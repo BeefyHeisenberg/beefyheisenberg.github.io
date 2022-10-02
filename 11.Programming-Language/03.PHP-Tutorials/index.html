@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="编程语言快速入门,PHP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="变量引用 $ref =&amp;amp; $a : $ref是一个引用, ‘ref’会被增加到符号表, 但不会新建一个zval, 而是$ref和$a指向同一个zval, zval::is_ref变为1, zval::refcount变为2 在函数内引用全局变量:  $var1 = &quot;hello world&quot;;$var2 = &quot;&quot;;function f()&amp;#123;    // 相当于$var1 =&amp;am">
+<meta name="keywords" content="编程语言快速入门,PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP Tutorials">
+<meta property="og:url" content="https://beefyheisenberg.github.io/11.Programming-Language/03.PHP-Tutorials/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="变量引用 $ref =&amp;amp; $a : $ref是一个引用, ‘ref’会被增加到符号表, 但不会新建一个zval, 而是$ref和$a指向同一个zval, zval::is_ref变为1, zval::refcount变为2 在函数内引用全局变量:  $var1 = &quot;hello world&quot;;$var2 = &quot;&quot;;function f()&amp;#123;    // 相当于$var1 =&amp;am">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-10-02T15:13:42.812Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP Tutorials">
+<meta name="twitter:description" content="变量引用 $ref =&amp;amp; $a : $ref是一个引用, ‘ref’会被增加到符号表, 但不会新建一个zval, 而是$ref和$a指向同一个zval, zval::is_ref变为1, zval::refcount变为2 在函数内引用全局变量:  $var1 = &quot;hello world&quot;;$var2 = &quot;&quot;;function f()&amp;#123;    // 相当于$var1 =&amp;am">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/11.Programming-Language/03.PHP-Tutorials/"/>
+
+
+
+
+
+  <title>PHP Tutorials | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/03.PHP-Tutorials/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PHP Tutorials</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
+                    <span itemprop="name">11.Programming-Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  5,365
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="变量引用"><a href="#变量引用" class="headerlink" title="变量引用"></a>变量引用</h1><ul>
+<li><code>$ref =&amp; $a</code> : <code>$ref</code>是一个引用, ‘ref’会被增加到符号表, 但不会新建一个zval, 而是<code>$ref</code>和<code>$a</code>指向同一个zval, <code>zval::is_ref</code>变为1, <code>zval::refcount</code>变为2</li>
+<li>在函数内引用全局变量:</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$var1 = <span class="string">"hello world"</span>;</span><br><span class="line">$var2 = <span class="string">""</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 相当于$var1 =&amp; GLOBALS['var1'], 函数内新建一个本地的引用$var1指向全局变量</span></span><br><span class="line">    <span class="keyword">global</span> $var1,$var2;</span><br><span class="line">    $var2 =&amp; var1; <span class="comment">// 本地的引用$var2重新被指向</span></span><br><span class="line">&#125;</span><br><span class="line">f();</span><br><span class="line">var_dump($var2); <span class="comment">// var2仍然是空字串</span></span><br></pre></td></tr></table></figure>
+<p>下面的代码不会改变$bar的值:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span><span class="params">(&amp;ref)</span> </span>&#123; <span class="comment">// 新建本地引用变量$ref, 指向$bar</span></span><br><span class="line">    $ref =&amp; GLOBALS[<span class="string">'xxx'</span>]; <span class="comment">// $ref被重新指向</span></span><br><span class="line">&#125;</span><br><span class="line">f($bar);</span><br></pre></td></tr></table></figure>
+<p>unset一个引用, 只是断开了引用和实际变量的连接(php manual原话, 实际做了两件事情: 1从符号表删除这个引用变量的名字,2引用指向的zval的引用计数-1,当引用计数变为0时, zbal::is_ref也变为0), 引用指向的实际变量并不被销毁:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">global</span> $var; <span class="comment">// 相当于$var &amp; = $GLOBALS['var']</span></span><br><span class="line">    <span class="keyword">unset</span> $var;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这里的$var不受影响</span></span><br></pre></td></tr></table></figure>
+<p>引用计数: <a href="http://php.net/manual/zh/features.gc.refcounting-basics.php" target="_blank" rel="noopener">zval结构和引用计数</a> 对一个变量$a使用unset, refcount会减1,</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$a = <span class="string">"old string"</span>; <span class="comment">// 符号表里新增一个'a', 内存新建一个zval结构, 此时zal::is_ref是0,引用计数是1</span></span><br><span class="line">$c = $b = $a; <span class="comment">// 符号表新增b和c, 但为了效率没有给b和c新建zval, 而是指向同一个zval</span></span><br><span class="line">xdebug_debug_zval( <span class="string">'a'</span> ); <span class="comment">// a符号对应的zval的引用计数=3, is_ref变成1</span></span><br><span class="line">$c = <span class="string">"new string"</span>;  <span class="comment">// 发生写时复制, 这时候才给c新建一个zval</span></span><br><span class="line">xdebug_debug_zval( <span class="string">'a'</span> ); <span class="comment">// a引用计数=2</span></span><br><span class="line">xdebug_debug_zval( <span class="string">'c'</span> ); <span class="comment">// c是一个新的zval,c引用计数为1</span></span><br><span class="line"><span class="keyword">unset</span>( $b, $c ); <span class="comment">// 从符号表删除b和c, b和c指向的zval各自引用计数-1, 当引用计数减为1时is_ref变为0, 当引用计数减为0时被gc</span></span><br><span class="line">xdebug_debug_zval( <span class="string">'a'</span> ); <span class="comment">// 计数=1</span></span><br><span class="line">xdebug_debug_zval( <span class="string">'c'</span> ); <span class="comment">// 已从符号表删除</span></span><br></pre></td></tr></table></figure>
+<h1 id="变量与常量"><a href="#变量与常量" class="headerlink" title="变量与常量"></a>变量与常量</h1><ul>
+<li>在函数内调用全局变量时需要用global关键字声明: <code>global $x,$y;</code> , 注意这里的<code>global</code>是声明而不是定义.</li>
+<li>全局变量: 在函数内<code>global $a</code> 和<code>$GLOBALS[&#39;a&#39;]</code>的区别:  <code>global $var;</code> 是 <code>$var = $GLOBALS[&#39;var&#39;];</code>的简写。所以<code>unset($var)</code>不会影响外面的global. 如果想要在函数中销毁全局变量可以用<code>unset($GLABOL[&#39;var&#39;])</code></li>
+<li>Wordpress的全局变量$wpdb的定义: <code>require_wp_db()</code></li>
+<li><p>常量定义:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">define(&quot;CONST_STRING1&quot;, &quot;Hello world.&quot;);</span><br><span class="line">const CONST_STRING2 = &apos;Hi world&apos;; // 在PHP5.3之后可以用这种方法.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果常量名是动态的, 也可以用函数 <code>constant(&quot;常量名&quot;)</code>来获取常量的值.</p>
+</li>
+<li>用 <code>get_defined_constants()</code> 可以获得所有已定义的常量列表.</li>
+<li>empty, isset, is_null ,is_object, is_array, is_string, is_resource, <a href="http://php.net/manual/en/types.comparisons.php" target="_blank" rel="noopener">参考PHP type comparison tables</a><ul>
+<li><code>empty()</code> : 大致相当于<code>!isset($var) || is_null($var) || !$var</code>, 详见 empty函数说明和 (<a href="http://stackoverflow.com/questions/4559925/why-check-both-isset-and-empty" target="_blank" rel="noopener">http://stackoverflow.com/questions/4559925/why-check-both-isset-and-empty</a>)</li>
+<li><code>isset($a)</code> : 当变量a被赋值, 并且不是null, 那么<code>isset($a)</code>为真.</li>
+<li>如果在函数中<code>unset</code>一个全局变量, 那么仅仅在这个函数中全局变量被销毁了, 在此函数外面仍旧可以使用这个全局变量. 如果想要在函数中销毁全局变量, 需要用<code>unset(GLOBALS[&#39;ha&#39;])</code>来销毁;</li>
+<li><code>is_resource()</code>可以判断<code>fopen</code>返回的文件句柄;</li>
+</ul>
+</li>
+</ul>
+<h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><ul>
+<li>PHP的基本类型有6种: boolean, integer, float, string, 复合类型: array, object;</li>
+<li>在PHP中, 数组和字符串都属于”基本类型”, 基本类型的赋值/函数传递都是传值的;</li>
+<li>(1) boolean: 整数(0)/浮点数(0.0)/对象(NULL)都被视作false, 可以使用<code>boolean is_bool($x)</code>判断是否是boolean型;</li>
+<li>(2) integer: 类似C/C++, 0900, 0x900分别用来表示八进制, 十六进制.</li>
+<li>(3) float: PHP的浮点数和C/C++中的双精度浮点数范围一样, 都是8字节.</li>
+<li>(4) string: 可以使用<code>==</code>号比较两个字符串是否相同, 用<code>boolean is_string($x)</code>判断变量是否是字符串. PHP使用<code>[ ]</code> 或大括号访问字符串的单个字符, 例如<code>$str{0}</code>或<code>$str{$i}</code></li>
+<li>除了单引号和双引号的字符串, PHP还支持nowdoc和heredoc来支持长字符串, nowdoc类似单引号, heredoc类似双引号:</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$nowdoc = &lt;&lt;&lt; <span class="string">'END'</span> <span class="comment">//结束符可以自定义</span></span><br><span class="line">...</span><br><span class="line">END;  <span class="comment">// 遇到结束符表示一段结束, 不要忘记分号</span></span><br><span class="line"></span><br><span class="line">$heredoc = &lt;&lt;&lt; END <span class="comment">// 结束符不带单引号</span></span><br><span class="line">...</span><br><span class="line">END; <span class="comment">// heredoc无法解析$</span></span><br></pre></td></tr></table></figure>
+<h1 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h1><h2 id="字符串处理函数"><a href="#字符串处理函数" class="headerlink" title="字符串处理函数"></a>字符串处理函数</h2><ul>
+<li>参考: (<a href="https://php.net/ref.strings" target="_blank" rel="noopener">https://php.net/ref.strings</a>)</li>
+<li>字符串空格、大小写：<code>trim</code>, <code>ltrim</code>, <code>rtrim</code>, <code>strtolower</code>, <code>strtoupper</code>;</li>
+<li>字符串截取: <code>string substr($str,$start,$len)</code>,</li>
+<li>查找字符串的首次出现: <code>string strstr(string,search)</code>, 如果只是想测试a是b的子串，请使用速度更快耗费内存更少的 strpos() 函数。</li>
+<li>字符串分解: <code>list($a,$b,$c) = explode(&#39;,&#39;, $str)</code>;</li>
+<li>字符串合并: <code>$str_imp = implode(&#39;,&#39;, $array)</code> 将数组的元素合并成一个字符串;</li>
+</ul>
+<h2 id="Web相关字符串处理函数"><a href="#Web相关字符串处理函数" class="headerlink" title="Web相关字符串处理函数"></a>Web相关字符串处理函数</h2><ul>
+<li>HTML实体: <code>htmlentities</code> 区别<code>htmlspecialchars</code>, (<a href="http://www.w3school.com.cn/php/func_string_htmlentities.aspx" target="_blank" rel="noopener">http://www.w3school.com.cn/php/func_string_htmlentities.aspx</a>)</li>
+<li>去除html标签 <code>string strip_tags($htmstr)</code>, 去除<code>&lt;p&gt;,&lt;i&gt;</code>等</li>
+<li>获取HTML mate属性: <code>$arr = get_meta_tags($htmstr)</code></li>
+<li>获取HTTP头: <code>array get_headers($url)</code></li>
+<li>将当前的 QUERY_STRING解析到数组: <code>void parse_str(string,array)</code>, 将url的get参数解析到array,<ul>
+<li>这个函数的输出受到<code>magic_quotes_gpc</code>的影响.</li>
+</ul>
+</li>
+<li>与上面的<code>parse_str()</code>相反, 将array组装为get查询字符串<code>http_build_query($array)</code></li>
+<li>解析URL的要素: <code>array parse_url($url)</code>, 返回包含host,port,user 等</li>
+<li>对URL进行编码:  <code>urlencode($url)</code>: 将非字母字符转换为”%数字”, 空格编码为”+”, 对应解码为<code>urldecode($url)</code></li>
+<li>对URL进行编码:  <code>rawurlencode($url)</code>: 与上面的区别是空格编码为”%20”, 对应解码是<code>rawurldecode($url)</code></li>
+<li>问题: 为什么要对URL进行编码? 哪些需要编码? (<a href="http://www.blogjava.net/donghang73/archive/2011/08/10/356208.html" target="_blank" rel="noopener">http://www.blogjava.net/donghang73/archive/2011/08/10/356208.html</a>)</li>
+<li>更多URL函数参考(<a href="http://php.net/manual/zh/book.url.php" target="_blank" rel="noopener">http://php.net/manual/zh/book.url.php</a>)</li>
+<li>[注1] addslashes() / stripslashes() : (<a href="http://php.net/manual/zh/function.addslashes.php" target="_blank" rel="noopener">http://php.net/manual/zh/function.addslashes.php</a>)</li>
+</ul>
+<h2 id="比较字符串"><a href="#比较字符串" class="headerlink" title="比较字符串"></a>比较字符串</h2><ul>
+<li>在PHP中字符串是基本类型, 所以<code>==</code>是比较值, 而不是像Java比较字符串引用的指向, 另外int类型的1和”1”用<code>==</code>比较是相等的;</li>
+<li>如果想严格比较字符串, 包括类型比较, 则使用<code>===</code>;</li>
+<li><code>strcmp($1,$2)</code>, <code>strcasecmp($1,$2)</code></li>
+</ul>
+<h2 id="Perl风格正则"><a href="#Perl风格正则" class="headerlink" title="Perl风格正则"></a>Perl风格正则</h2><ul>
+<li><code>boolean preg_match($pattern, $string, $array_match)</code>: 第三参数match也可以没有, match[0]存储完整的$string, match[1]存储…<br>正则表达式快速参考(<a href="https://msdn.microsoft.com/zh-cn/library/az24scfc(v=vs.110).aspx" target="_blank" rel="noopener">https://msdn.microsoft.com/zh-cn/library/az24scfc(v=vs.110).aspx</a>)</li>
+</ul>
+<h2 id="格式化输出"><a href="#格式化输出" class="headerlink" title="格式化输出"></a>格式化输出</h2><p>echo, print(), printf(), print_r(), var_dump():</p>
+<ul>
+<li><code>echo</code>和<code>print</code>都是语言结构, 有无括号均可使用, echo和print都不是函数所以没有返回值, 所以不要把echo当作if的判断条件;</li>
+<li><code>echo</code>后面可以是一般的变量(包括类的成员), 但不能是array和object;</li>
+<li><code>printf</code>是函数所以有返回值, 和C语言的printf基本一样.</li>
+<li><code>print_r()</code>和<code>var_dump()</code>可以更详细的打印出类型和值;</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">echo &quot;1&quot;, &quot;2&quot;, &quot;3&quot;; // echo可以一次输出多个字符</span><br><span class="line">echo (&quot;$var&quot;); // echo 也可以带括号</span><br><span class="line">echo (&quot;1&quot;, &quot;2&quot;, &quot;3&quot;); // error! echo不是函数</span><br><span class="line">echo &quot;$_GET[&apos;action&apos;]&quot;; // error!</span><br><span class="line">echo &quot;$&#123;_GET[&apos;action&apos;]&#125;&quot;; // $符号后加个大括号就正确了</span><br></pre></td></tr></table></figure>
+<h1 id="PHP的数组"><a href="#PHP的数组" class="headerlink" title="PHP的数组"></a>PHP的数组</h1><ul>
+<li>测试一个对象是否是数组: <code>is_array($x)</code></li>
+<li>获取数组大小: <code>sizeof($arr)</code>和 <code>count($arr)</code>;</li>
+<li>生成连续数组: <code>range()</code> 例如: <code>$arr = range(1,100)</code> 或者<code>$arr = range(&#39;a&#39;, &#39;z&#39;)</code>;</li>
+<li>为数组元素赋值: <code>array_pad($arr,n,val)</code>, 注意<code>array_pad()</code>返回的是一个新数组, 在原数组$arr基础上,生成一个带有n个初值为val的数组;</li>
+<li><p>从数组中析取多个值:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$arr = <span class="keyword">array</span>(<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">list</span>($a,$b,$c) = $arr; <span class="comment">// 变量a,b,c的值分别为1,2,null</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取子数组:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">// array_slice()返回是一个新数组, 当然也可以可以用list析取值:</span></span><br><span class="line"><span class="keyword">list</span>($a,$b) = array_slice($arr, <span class="number">1</span>, <span class="number">3</span>); <span class="comment">//返回从$arr[1]开始, 包括arr[1]的3个元素</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>检查数组里是否存在Key: <code>if(array_key_exists(&#39;name&#39;, $array))</code>, 能否用<code>if($array[&#39;name&#39;])</code>判断?</p>
+</li>
+<li>检查数组里是否存在Value: <code>if(in_array(&quot;abc&quot;,$array))</code>, 第三个参数可选,true或false表示是否判断类型;</li>
+<li>迭代器(iterator), PHP有一些函数来移动迭代器, 并返回元素: <code>current()</code>, <code>reset()</code>, <code>next()</code>, <code>prev()</code>, <code>key()</code>,<ul>
+<li>迭代器<code>each()</code>返回当前的k和v, 并指向下一个元素: <code>while(list($k, $v) = each($array))</code>;</li>
+</ul>
+</li>
+<li>数组排序: <code>sort()</code>, <code>rsort()</code>,</li>
+<li>翻转数组: <code>array_reverse($arr)</code>,</li>
+<li>合并数组: <code>array_merge($arr1,$arr2)</code>: 对于数字索引的数组, 如果第二个数组有 <em>Key</em> 重复的元素, 这个元素会被分配一个新的索引; 对于字符串索引的数组则覆盖前面的值;<ul>
+<li>思考: 如果两个数组一个是”数字索引”另一个是”字符串索引”, merge的结果是怎样的?</li>
+</ul>
+</li>
+<li>数组相加: <code>$arr1 + $arr2</code>: 相同索引的元素会合并, 和merge的区别是, 如果有索引相同的元素, 加号是保留第一个数组的元素;</li>
+<li>比较数组: <code>$arr_diff = array_diff($arr1,$arr2)</code>, 返回值是<code>$arr1</code>和<code>$arr2</code>的交集, 并且对于数组的value是用<code>===</code>比较的,所以<code>$arr1</code>和<code>$arr2</code>分别有int(1)和”1”也要被算作不同;</li>
+<li>数组作为LIFO堆栈后进先出 : <code>array_push($arr,$elem)</code>和<code>array_pop()</code></li>
+<li><p>更多数组函数参考(<a href="http://php.net/manual/zh/ref.array.php" target="_blank" rel="noopener">http://php.net/manual/zh/ref.array.php</a>)</p>
+</li>
+<li><p>PHP数组的key可以为integer(甚至是负数)和string, value可以为任意类型; key有如下几个转换规则:</p>
+<ol>
+<li>如果key是可以转换成integer的(例如字符型的”8”,布尔型的true), 那么key会被转换为integer;</li>
+<li>当key是float型, 其小数部分会被舍去, 自动转换为integer;</li>
+<li>定义数组时, 多个元素使用同一个key, 这些元素的值会被最后一个覆盖, 比如<code>arr = array(3.1 =&gt; &#39;3.1&#39;, &#39;3&#39; =&gt; &#39;three&#39;);</code>, 最终数组只有一个元素<code>k,v = 3,&#39;three&#39;</code>;</li>
+<li>使用[]符号访问数组成员时, 也符合以上的转换规则, 例如arr[3.1]和arr[‘3’]都会被默认转换为arr[3];</li>
+</ol>
+</li>
+</ul>
+<h2 id="数组引用-references"><a href="#数组引用-references" class="headerlink" title="数组引用(references)"></a>数组引用(references)</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$worker = <span class="keyword">array</span>(<span class="string">"Fred"</span>,<span class="string">"Willma"</span>);</span><br><span class="line">$Clone = $worker; <span class="comment">// worker的一份拷贝</span></span><br><span class="line">$Ref =&amp; $worker;  <span class="comment">// 不产生新的拷贝, 仅指向同一个对象</span></span><br><span class="line"></span><br><span class="line">$worker[<span class="number">1</span>] = <span class="number">37</span>;  <span class="comment">// $Clone发生写时复制</span></span><br><span class="line">var_dump($Clone); <span class="comment">// 值没有改变</span></span><br><span class="line">var_dump($Ref);  <span class="comment">// 值改变了</span></span><br></pre></td></tr></table></figure>
+<p>原数组赋值null:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$worker = <span class="keyword">null</span>;</span><br><span class="line">var_dump($Clone); <span class="comment">// 正常访问</span></span><br><span class="line">var_dump($Ref);  <span class="comment">// NULL</span></span><br></pre></td></tr></table></figure>
+<p>删除原数组:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">unset</span>($worker); <span class="comment">// 删除原来的数组</span></span><br><span class="line">var_dump($Clone); <span class="comment">// 正常访问</span></span><br><span class="line">var_dump($Ref);  <span class="comment">// 正常访问</span></span><br></pre></td></tr></table></figure>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><ul>
+<li>Obj无论用<code>=</code> 还是<code>=&amp;</code>, 修改其中一个都会影响另一个, 因为Obj的赋值是按引用传递的.</li>
+<li>但是Array和String属于基本类型, 使用<code>=</code>的时候是值传递, 改变一个另一个不受影响, 只有<code>=&amp;</code>按引用传递时才会改变另一个.</li>
+<li><code>unset</code>一个引用只会断开引用和实际变量的连接, 并不会影响实际变量</li>
+</ul>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ul>
+<li>使用<code>unset</code>和<code>$a=null</code>的区别是? (<a href="http://stackoverflow.com/questions/584960/whats-better-at-freeing-memory-with-php-unset-or-var-null" target="_blank" rel="noopener">http://stackoverflow.com/questions/584960/whats-better-at-freeing-memory-with-php-unset-or-var-null</a>)<ul>
+<li><code>$a=null</code> 立即释放内存, 但没有把<code>$a</code>从符号表里删除;</li>
+<li><code>unset($a)</code> 不会立即释放而是在适当时候释放内存(类似Java), 但会立即把<code>$a</code>从符号表删除, 此时再用<code>if($a==null)</code> 会得到一个”未定义变量”的错误.</li>
+<li><code>array_key_exists(&#39;var_name&#39;, $var)</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="引用计数和写时复制"><a href="#引用计数和写时复制" class="headerlink" title="引用计数和写时复制"></a>引用计数和写时复制</h3><ul>
+<li>引用计数 : (<a href="http://php.net/manual/zh/features.gc.refcounting-basics.php" target="_blank" rel="noopener">http://php.net/manual/zh/features.gc.refcounting-basics.php</a>)</li>
+<li>写时复制 : (<a href="http://www.php-internals.com/book/?p=chapt06/06-06-copy-on-write" target="_blank" rel="noopener">http://www.php-internals.com/book/?p=chapt06/06-06-copy-on-write</a>)</li>
+</ul>
+<h1 id="PHP的类型转换"><a href="#PHP的类型转换" class="headerlink" title="PHP的类型转换"></a>PHP的类型转换</h1><p>php中的强制转换和c的语法类似, 强转为string类型还可以使用strval()函数;</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$fst = (string) $foo; <span class="comment">// c风格转换</span></span><br><span class="line"><span class="keyword">echo</span> strval(pow(<span class="number">2</span>,<span class="number">50</span>)); <span class="comment">// 利用函数转换</span></span><br></pre></td></tr></table></figure>
+<h2 id="转换为对象"><a href="#转换为对象" class="headerlink" title="转换为对象"></a>转换为对象</h2><ul>
+<li>如果将一个对象转换成对象, 它将不会有任何变化.</li>
+<li>数组转换成对象将使键名成为属性名并具有相对应的值.</li>
+<li>如果基本类型的值被转换成对象, 将会创建一个内置类 <code>stdClass</code> 的实例. 如果该值为 NULL, 则新的实例为空. 名为 <code>scalar</code> 的成员变量将包含该值</li>
+</ul>
+<ol>
+<li>基本类型转化为对象</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$obj = (object) <span class="string">'abc'</span>;  <span class="comment">// 字符串转化为对象</span></span><br><span class="line"><span class="keyword">echo</span> $obj-&gt;scalar;  <span class="comment">// outputs 'abc'</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>数组转换为对象:</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$arr = <span class="keyword">array</span>(<span class="string">"One"</span> =&gt; <span class="number">1</span>, <span class="string">"Two"</span> =&gt; <span class="number">2</span>);</span><br><span class="line">$obj = (object)$arr;</span><br><span class="line"><span class="keyword">echo</span> $obj-&gt;One;</span><br><span class="line"><span class="keyword">echo</span> $obj-&gt;Two;</span><br></pre></td></tr></table></figure>
+<h2 id="转换为数组"><a href="#转换为数组" class="headerlink" title="转换为数组"></a>转换为数组</h2><p>对于任意 integer, float, string, boolean 和 resource 类型, 如果将一个值转换为数组, 将得到一个仅有一个元素的数组, 其下标为 0, 该元素即为此标量的值.<br>如果一个 object 类型转换为 array, 结果为一个数组, 其单元为该对象的属性. 键名将为成员变量名, 不过有几点例外：</p>
+<ol>
+<li>整数属性不可访问；私有变量前会加上类名作前缀；</li>
+<li>保护变量前会加上一个 <code>*</code> 做前缀. 这些前缀的前后都各有一个 NULL 字符. 这会导致一些不可预知的行为：</li>
+</ol>
+<h1 id="PHP各种类型的比较"><a href="#PHP各种类型的比较" class="headerlink" title="PHP各种类型的比较"></a>PHP各种类型的比较</h1><p>PHP里的比较运算符<code>==</code>,<code>&gt;</code>,<code>&lt;</code>不区分类型, 只比较”值”, 如果比较符号两边不是同一类型(但是能转换为同一类型)也可以比较. 比如(int)1和(string)”1”用<code>==</code>比较是相等的;<br>如果要做严格的类型比较, 需要用全等于<code>===</code>, 当类型和值都相同时表达式才是true.</p>
+<ul>
+<li><p>PHP的<code>==</code> 和<code>===</code> :</p>
+<ol>
+<li>字符串: 作为PHP的基本类型, 字符串<code>==</code>是比较值而非引用, 所以<code>==</code>和<code>===</code>以及<code>strcmp()</code>都可以用来比较字符串;</li>
+<li>数组<code>==</code>比较: 两个数组的key和value都相等则为true, 顺序可以不同, 类型不必严格相等;</li>
+<li>数组<code>===</code>比较: 两个数组必须顺序一致, 并且key和value的类型也严格相等, 也可以使用<code>array_diff()</code>函数;</li>
+<li>对象<code>==</code>比较: 成员的值相等, 并且两个对象是同一个class类型;</li>
+<li>对象<code>===</code>比较: 必须指向同一个对象</li>
+</ol>
+</li>
+<li><p>不同类型间的比较 :</p>
+<ul>
+<li>上面的情况1要注意: 当其中一个变量不确定类型时(来自用户的输入), 用<code>==</code>比较是危险的, 比如<code>if(0==&#39;pwd123&#39;)</code>是真, 所以strcmp和===才是妥当的字符串比较.</li>
+<li>int/string/array/obj 同boolean比较?  # int(非0), 非空的string(‘false’和’true’), 非空array, 同true做<code>==</code>比较都是真</li>
+<li>int/string/array/obj 同null比较? # int(0),空字符串string(‘’),空数组array() 与null做<code>==</code>比较都是真, if(‘’ == null)是真</li>
+<li>空字符串<code>$b=&#39;&#39;</code>和null用<code>==</code>比较返回真, 用<code>===</code>比较返回假; 只有<code>$b=null</code>之后, <code>if($b === null)</code>才是真</li>
+</ul>
+</li>
+</ul>
+<h1 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h1><ul>
+<li>if-else嵌入到html: (<a href="http://stackoverflow.com/questions/722379/can-html-be-embedded-inside-php-if-statement" target="_blank" rel="noopener">http://stackoverflow.com/questions/722379/can-html-be-embedded-inside-php-if-statement</a>)</li>
+</ul>
+<h1 id="函数-方法"><a href="#函数-方法" class="headerlink" title="函数(方法)"></a>函数(方法)</h1><ul>
+<li>类对象作为参数/返回值: 都是按照引用的方式传递参数.</li>
+<li>函数返回引用:</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> &amp;<span class="title">returns_reference</span><span class="params">()</span> // 函数名前要带一个&amp;符号</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> $someref; <span class="comment">// 没有&amp;</span></span><br><span class="line">&#125;</span><br><span class="line">$newref =&amp; returns_reference(); <span class="comment">// 注意这里也需要&amp;符号</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>函数按引用传参:</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span><span class="params">(&amp;$var)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $var++;</span><br><span class="line">&#125;</span><br><span class="line">$a=<span class="number">5</span>;</span><br><span class="line">foo($a); <span class="comment">// $a is 6 here</span></span><br></pre></td></tr></table></figure>
+<h1 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h1><ul>
+<li>“魔术方法” : <code>__sleep()</code>, <code>__wakeup()</code>, <code>__invoke()</code>, 这个函数实际是如何使用的?</li>
+<li>“后期静态绑定”: 在继承中使用<code>self::</code>或者<code>__CLASS__</code>, 取决于函数的定义是由基类or派生类, 如果用<code>static::</code>代替<code>self::</code></li>
+<li>C++具有abstract方法和类, 但没有interface; Java有abstract方法, 但没有抽象类, Java用interface替代抽象类; 但PHP同时具有以上;</li>
+<li>C++用const可以修饰方法和属性, Java没有const关键字而用final修饰常量, 同时final还可以修饰属性(常量),方法和类(不可继承), 形参(同C++的const);</li>
+<li>PHP同时拥有<code>const</code>和<code>final</code>关键字, <code>const</code>修饰常量和类成员常量, <code>final</code>和<code>abstract</code>都可以修饰抽象类和函数</li>
+</ul>
+<p>上代码: 参考(<a href="http://learnxinyminutes.com/docs/zh-cn/php-cn/" target="_blank" rel="noopener">http://learnxinyminutes.com/docs/zh-cn/php-cn/</a>)</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> <span class="keyword">extends</span> <span class="title">MyAbstractClass</span> <span class="keyword">implements</span> <span class="title">InterfaceTwo</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> MY_CONST      = <span class="string">'value'</span>; <span class="comment">// 常量</span></span><br><span class="line">    <span class="keyword">static</span> $staticVar   = <span class="string">'static'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> $property    = <span class="string">'public'</span>; <span class="comment">// 在这里可以初始化</span></span><br><span class="line">    <span class="keyword">public</span> $instanceProp; <span class="comment">// 类成员要在构造函数里初始化</span></span><br><span class="line">    <span class="keyword">protected</span> $prot = <span class="string">'protected'</span>; <span class="comment">// 当前类和子类可访问</span></span><br><span class="line">    <span class="keyword">private</span> $priv   = <span class="string">'private'</span>;   <span class="comment">// 仅当前类可访问</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造可以有不同的参数列表, 类似于C++的构造函数重载</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($instanceProp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">parent</span>::__construct(); <span class="comment">// 要手动调用父类的构造</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;instanceProp = $instanceProp;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 不可被改写的方法</span></span><br><span class="line">    <span class="keyword">final</span> <span class="function"><span class="keyword">function</span> <span class="title">youCannotOverrideMe</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 命名空间:</span></span><br><span class="line"><span class="comment">// 类会被默认的放在全局命名空间中，可以被一个\来显式调用</span></span><br><span class="line">$cls = <span class="keyword">new</span> \MyClass();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为一个文件设置一个命名空间</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">My</span>\<span class="title">Namespace</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span></span></span><br><span class="line"><span class="class"></span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 你也可以为命名空间起一个别名</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">My</span>\<span class="title">Other</span>\<span class="title">Namespace</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">My</span>\<span class="title">Namespace</span> <span class="title">as</span> <span class="title">SomeOtherNamespace</span>;</span><br><span class="line">$cls = <span class="keyword">new</span> SomeOtherNamespace\MyClass();</span><br></pre></td></tr></table></figure>
+<h2 id="类自省"><a href="#类自省" class="headerlink" title="类自省"></a>类自省</h2><ul>
+<li>类检验: <code>class_exists(&#39;className&#39;)</code>, <code>get_class_methods(&#39;className&#39;)</code>, <code>get_class_vars(&#39;className&#39;)</code>, <code>get_parent_class(&#39;className&#39;)</code>, for example:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$methods_arr = get_class_methods(&apos;ChangyanHandler&apos;); // 返回数组</span><br><span class="line">if(!count($methods_arr)) &#123; ... &#125;</span><br><span class="line">$vars_arr = get_class_vars(&apos;Class&apos;); // 注意只返回有默认值的属性, 数组</span><br><span class="line">// 用foreach(...)遍历类的属性</span><br></pre></td></tr></table></figure>
+<ul>
+<li>对象检验: <code>is_object($obj)</code>, <code>get_class($obj)</code>, <code>bool method_exists(obj, method_name)</code>, <code>get_object_vars($obj)</code>, for example:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$class_name = get_class($obj); // 由类实例获取类名</span><br><span class="line">$vars_arr = get_object_vars($obj); // 只返回有默认值的属性, 数组</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>if($obj instanceof ChangyanHandler)</code></li>
+</ul>
+<h1 id="串行化"><a href="#串行化" class="headerlink" title="串行化"></a>串行化</h1><p><code>$str = serialize($mixed)</code>串行化对象或者数组, <code>$mixed = unserialize($str)</code>从字符串恢复对象或者数组, 在串行化和反串行化操作一个object时, 有两个钩子函数:</p>
+<ul>
+<li><code>__sleep()</code> : 在<code>serialize()</code>之前调用, 在这个函数里你需要关闭已达开的资源, 并返回array, 包含需要串行化的成员名字;</li>
+<li><code>__wakeup()</code> : 在<code>unserialize()</code>之后调用, 在这个函数里你需要重新打开资源;</li>
+</ul>
+<h1 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h1><p>引用其他文件：</p>
+<ul>
+<li><code>include &#39;globals.php&#39;</code> :</li>
+<li><code>require &#39;globals.php&#39;</code> : 如果不能被导入时，会抛出错误</li>
+</ul>
+<h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><p>@todo</p>
+<h1 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h1><ul>
+<li><p>[注1] 对输入进行安全处理: <code>addslashes()</code>函数对<code>_COOKIE[]</code>, <code>_GET[]</code>, <code>_POST[]</code>的输入进行去引号以及斜线进行转义处理, 注意, <code>magic_quotes_gpc</code>设置为On的时候默认对上面的输入自动进行<code>addslashes()</code>, 不要在该值为On的时候重复调用<code>addslashes</code>, 稳妥的做法是:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if (get_magic_quotes_gpc()) &#123;</span><br><span class="line">    $lastname = stripslashes($_POST[&apos;lastname&apos;]); //得到原始的输入</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>属性<code>magic_quotes_gpc</code>自从5.4起被移除, 不再推荐使用</p>
+</li>
+<li><p>对于5.4之前的版本也要注意, magic_quotes_gpc只对GET/SET/COOKIE有效, 但没有转义<code>$_SERVER[]</code></p>
+</li>
+<li><p>建议使用 DBMS 指定的转义函数（比如 MySQLi 是 <code>mysqli_real_escape_string()</code>, 但是如果你使用的 DBMS 没有一个转义函数才选择使用使用<code>addslashes()</code>;</p>
+</li>
+<li>Mysqli和PDO都提供了预处理语句<code>prepare()</code>和<code>bind_param()</code>, 使用预处理语句的优点? PDO参数化查询</li>
+<li>对于非array或obj的输入, 可以用<code>intval()</code>转换.</li>
+<li><a href="http://blog.csdn.net/treesky/article/details/7286098" target="_blank" rel="noopener">PDO vs. MySQLi 选择哪一个？</a></li>
+</ul>
+<h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><ul>
+<li>全局数组: <code>_COOKIE[]</code>, <code>_GET[]</code>, <code>_POST[]</code>, <code>_FILES</code>, <code>_SERVER[]</code>, <code>_ENV[]</code>:</li>
+<li>数组<code>$_SERVER[]</code>包括的全局变量有:<ul>
+<li>REQUEST_METHOD: 访问页面时的请求方法.例如: “GET”. “HEAD”. “POST”. “PUT”.</li>
+<li>REQUEST_TIME: 请求开始时的时间戳.</li>
+<li>QUERY_STRING: 查询（query）的字符串（URL中第一个问号？之后的内容）.</li>
+<li>DOCUMENT_ROOT: 当前运行脚本所在的文档根目录.在服务器配置文件中定义.</li>
+<li>HTTP_ACCEPT: 当前请求的Accept头信息的内容.</li>
+<li>HTTP_ACCEPT_CHARSET: 当前请求的Accept-Charset头信息的内容.</li>
+<li>SERVER_PROTOCOL: 请求页面时通信协议的和版本, 例如:Http/1.0;</li>
+<li>REQUEST_METHOD: 访问页面时的请求方法.例如:”GET”. “HEAD”. “POST”. “PUT”.</li>
+<li>获取SSL状态 <code>if($_SERVER[&#39;HTTPS&#39;] != &#39;on&#39;) { .. }</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="Http-Header"><a href="#Http-Header" class="headerlink" title="Http Header"></a>Http Header</h2><ul>
+<li>HTTP响应头的设置: 在用<code>header()</code>前不能有任何html输出<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">header(&apos;Location: http://segmentfault.com/&apos;); // 重定向</span><br><span class="line">header(&quot;HTTP/1.0 404 Not Found&quot;); // 返回404</span><br><span class="line">header(&apos;Content-type: application/pdf&apos;); // 页面将输出pdf</span><br><span class="line">header(&apos;Content-Type: text/html; charset=utf-8&apos;); // 设置输出html和编码</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在任何输出之前, 应该使用<code>header()</code></p>
+<h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie:"></a>Cookie:</h2><p>跨域种Cookie<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 文件a.com/setcookie.php</span><br><span class="line">header(&apos;P3P: CP=&quot;CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR&quot;&apos;);</span><br><span class="line">setcookie(&quot;TestCookie&quot;, $value, time()+3600, &quot;/rasmus/&quot;, &quot;example.com&quot;, 1); // 1小时, &quot;example.com/rasmus&quot;及其子目录有效, Https Only</span><br><span class="line"></span><br><span class="line">// 文件b.com/b_setcookie.php</span><br><span class="line">&lt;script src=&quot;http://a.com/setcookie.php&quot;&gt;&lt;/script&gt;</span><br><span class="line">//访问b.com/b_setcookie.php 能设置a.com的cookie</span><br></pre></td></tr></table></figure></p>
+<h2 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h2><ul>
+<li>session的实现: 在当前域下种”PHPSESSIONID”的cookie, 这个cookie的值就是服务器端对应session的文件名, 可以使用<code>session_save_path()</code>获取设置session存储路径.</li>
+<li>session_start()都做了什么?</li>
+<li>session的同步: NFS, Memcached</li>
+<li><a href="www.infoq.com/cn/news/2015/01/php-session-concurrency-problems">PHP Session可能会引起并发问题</a></li>
+</ul>
+<h2 id="发送Http请求"><a href="#发送Http请求" class="headerlink" title="发送Http请求"></a>发送Http请求</h2><ul>
+<li>Wordpress 支持两种, stream和curl方式, 分别使用<code>stream_context_create</code>和<code>curl_exec</code>实现 具体参考代码<code>WP_Http_Streams::request()</code> 和<code>WP_Http_Curl::request()</code></li>
+<li>安全问题: <code>fsockopen</code>和<code>pfsockopen</code>, 后者是打开一个持续的连接, 在php.ini的选项<code>disable_functions</code>增加”fsockopen” 和<code>allow_url_fopen=Off</code></li>
+<li><a href="http://www.webcrafter.org/2015/01/IDC为什么禁用fsockopen、pfsockopen函数/" target="_blank" rel="noopener">IDC为什么禁用fsockopen、pfsockopen函数</a></li>
+<li>异步请求: <code>curl_multi</code></li>
+</ul>
+<h1 id="php-ini配置"><a href="#php-ini配置" class="headerlink" title="php.ini配置"></a>php.ini配置</h1><ul>
+<li>获取php.ini的设置: <code>$val = ini_get(&#39;magic_quotes_gpc&#39;)</code>;</li>
+<li>php.ini 配置选项列表: (<a href="http://php.net/manual/zh/ini.list.php" target="_blank" rel="noopener">http://php.net/manual/zh/ini.list.php</a>)</li>
+<li>php.ini 安全最佳实践: expose_php, display_errors, log_errors/error_log (<a href="http://www.cyberciti.biz/tips/php-security-best-practices-tutorial.html" target="_blank" rel="noopener">http://www.cyberciti.biz/tips/php-security-best-practices-tutorial.html</a>)</li>
+</ul>
+<h2 id="错误捕获"><a href="#错误捕获" class="headerlink" title="错误捕获"></a>错误捕获</h2><ul>
+<li><code>error_reporting=E_ALL &amp; ~E_DEPRECATED &amp; ~E_STRICT</code> :</li>
+<li><code>display_errors=On</code> : 是否将错误信息作为输出的一部分显示到屏幕</li>
+<li><code>error_log=&quot;D:\xampp\php\logs\php_error_log&quot;</code> : 设置脚本错误将被记录到的文件</li>
+</ul>
+<h1 id="文件编码"><a href="#文件编码" class="headerlink" title="文件编码"></a>文件编码</h1><p>参考<a href="http://www.ruanyifeng.com/notes/2007/10/php_utf8.html" target="_blank" rel="noopener">十步解决Php Utf-8编码</a>:</p>
+<ol>
+<li>php文件本身必须是UTF-8编码. 不像Java会生成class文件, 避免这个问题</li>
+<li>php要输出头：<code>header(&quot;Content-Type: text/html; charset=UTF-8&quot;)</code></li>
+<li>meta标签无所谓, 有header所有浏览器就会按header来解析</li>
+<li>所有外围都得用UTF8, 包括数据库. *.js, *.css(CSS影响倒不大)</li>
+<li>php本身不是Unicode的, 所有substr之类的函数需改为<code>mb_substr</code>（需要装mbstring扩展）；或者用 <a href="https://www.php.net/manual/en/ref.iconv.php" target="_blank" rel="noopener">iconv functions</a>转码</li>
+</ol>
+<h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>参考 (<a href="http://www.imooc.com/video/4169" target="_blank" rel="noopener">http://www.imooc.com/video/4169</a>)</p>
+<ul>
+<li>apache benchmark</li>
+<li>php解析-&gt; 解释器</li>
+<li>内置函数的性能, 实现</li>
+<li>少用魔法函数</li>
+<li>禁用@错误抑制, @是如何实现的?</li>
+<li>及时<code>unset()</code>不使用的, Google: unset会有无法注销变量的情况</li>
+<li>正则对性能的影响</li>
+<li>数组的查找, map</li>
+<li>IO: 磁盘, 数据库, 内存, 网络</li>
+<li>网络请求并行: <code>curl_multi_*</code>,</li>
+</ul>
+<h1 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h1><ol>
+<li>使用<code>echo</code>,<code>print</code>,<code>var_dump</code>等在页面上显示错误, 需要修改php.ini的<code>display_errors</code>等选项,  <a href="http://www.ibm.com/developerworks/cn/opensource/os-debug/" target="_blank" rel="noopener">参考</a>, 额外的:<a href="http://www.w3school.com.cn/php/func_error_debug_backtrace.asp" target="_blank" rel="noopener">debug_backtrace()</a></li>
+<li>输出到文件: <code>file_put_contents(&#39;debug.log&#39;,&quot;msg...&quot;,FILE_APPEND)</code> , 或者<code>error_log($str, 3, &#39;errors.log&#39;)</code>, 用法<a href="http://www.webkaka.com/tutorial/php/2013/061837/" target="_blank" rel="noopener">参考</a></li>
+<li>线上环境调试: phpstrom+xdebug + chrome（debug helper） or firefox (easy xdebug)</li>
+<li>zend studio + zend debugger , 或者<a href="https://netbeans.org/kb/docs/php/debugging_zh_CN.html" target="_blank" rel="noopener">在 NetBeans IDE PHP 编辑器中调试 PHP 源代码</a></li>
+</ol>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="http://php.net/manual/zh/index.php" target="_blank" rel="noopener">PHP: PHP 手册 - Manual</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程语言快速入门/" rel="tag"># 编程语言快速入门</a>
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/01.Algorithm/Alg.LeetcodePattern/" rel="next" title="Alg.LeetcodePattern">
+                <i class="fa fa-chevron-left"></i> Alg.LeetcodePattern
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/11.Programming-Language/04.Shell-Tutorials/" rel="prev" title="Shell Script Tutorials">
+                Shell Script Tutorials <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#变量引用"><span class="nav-text">变量引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量与常量"><span class="nav-text">变量与常量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本数据类型"><span class="nav-text">基本数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串"><span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串处理函数"><span class="nav-text">字符串处理函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web相关字符串处理函数"><span class="nav-text">Web相关字符串处理函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比较字符串"><span class="nav-text">比较字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Perl风格正则"><span class="nav-text">Perl风格正则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式化输出"><span class="nav-text">格式化输出</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP的数组"><span class="nav-text">PHP的数组</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数组引用-references"><span class="nav-text">数组引用(references)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#结论"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用计数和写时复制"><span class="nav-text">引用计数和写时复制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP的类型转换"><span class="nav-text">PHP的类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#转换为对象"><span class="nav-text">转换为对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转换为数组"><span class="nav-text">转换为数组</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP各种类型的比较"><span class="nav-text">PHP各种类型的比较</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#流程控制"><span class="nav-text">流程控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数-方法"><span class="nav-text">函数(方法)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象"><span class="nav-text">面向对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类自省"><span class="nav-text">类自省</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#串行化"><span class="nav-text">串行化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模块化"><span class="nav-text">模块化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异常"><span class="nav-text">异常</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL"><span class="nav-text">MySQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Web"><span class="nav-text">Web</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Http-Header"><span class="nav-text">Http Header</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie"><span class="nav-text">Cookie:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session"><span class="nav-text">Session</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发送Http请求"><span class="nav-text">发送Http请求</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#php-ini配置"><span class="nav-text">php.ini配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#错误捕获"><span class="nav-text">错误捕获</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件编码"><span class="nav-text">文件编码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#性能"><span class="nav-text">性能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调试"><span class="nav-text">调试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/11.Programming-Language/03.PHP-Tutorials/';
+          this.page.identifier = '11.Programming-Language/03.PHP-Tutorials/';
+          this.page.title = 'PHP Tutorials';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="旧的线程安全的集合: 任何集合类都可以通过使用同步包装器变成线程安全的： List&amp;lt;E&amp;gt; synchArrayList = Collections.synchronizedList(new ArrayList&amp;lt;E&amp;gt;());Map&amp;lt;K,V&amp;gt; synchMap = Collections.synchronizedList(new HasMap&amp;lt;K,V&amp;gt;(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Tutorials-07d3-JUC-线程安全的集合">
+<meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07d3.线程安全的集合/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="旧的线程安全的集合: 任何集合类都可以通过使用同步包装器变成线程安全的： List&amp;lt;E&amp;gt; synchArrayList = Collections.synchronizedList(new ArrayList&amp;lt;E&amp;gt;());Map&amp;lt;K,V&amp;gt; synchMap = Collections.synchronizedList(new HasMap&amp;lt;K,V&amp;gt;(">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-10-02T15:13:43.075Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Tutorials-07d3-JUC-线程安全的集合">
+<meta name="twitter:description" content="旧的线程安全的集合: 任何集合类都可以通过使用同步包装器变成线程安全的： List&amp;lt;E&amp;gt; synchArrayList = Collections.synchronizedList(new ArrayList&amp;lt;E&amp;gt;());Map&amp;lt;K,V&amp;gt; synchMap = Collections.synchronizedList(new HasMap&amp;lt;K,V&amp;gt;(">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07d3.线程安全的集合/"/>
+
+
+
+
+
+  <title>Java Tutorials-07d3-JUC-线程安全的集合 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07d3.线程安全的集合/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java Tutorials-07d3-JUC-线程安全的集合</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/Java基础教程/" itemprop="url" rel="index">
+                    <span itemprop="name">Java基础教程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,259
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>旧的线程安全的集合: 任何集合类都可以通过使用同步包装器变成线程安全的：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;E&gt; synchArrayList = Collections.synchronizedList(<span class="keyword">new</span> ArrayList&lt;E&gt;());</span><br><span class="line">Map&lt;K,V&gt; synchMap = Collections.synchronizedList(<span class="keyword">new</span> HasMap&lt;K,V&gt;());</span><br></pre></td></tr></table></figure>
+<p><code>java.util.concurrent</code>包提供了线程安全的集合, 继承关系如下:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">阻塞队列</span><br><span class="line">  |- BlockingQueue（单向队列）</span><br><span class="line">       |- ArrayBlockingQueue: 一个由数组结构组成的有界阻塞队列</span><br><span class="line">       |- LinkedBlockingQueue: 一个由链表结构组成的有界阻塞队列</span><br><span class="line">       |- PriorityBlockingQueue: 一个支持优先级排序的无界阻塞队列</span><br><span class="line">       |- LinkedBlockingDeque: 一个由链表结构组成的双向阻塞队列</span><br><span class="line">  |- BlockingDeque（双向队列）</span><br><span class="line">       |- LinkedBlockingDeque: 一个由链表结构组成的双向阻塞队列</span><br><span class="line"></span><br><span class="line">非阻塞队列</span><br><span class="line">  |- ConcurrentLinkedQueue</span><br><span class="line">  |- ConcurrentLinkedDeque</span><br><span class="line"></span><br><span class="line">Map</span><br><span class="line">  |- ConcurrentHashMap</span><br><span class="line">  |- ConcurrentSkipListMap</span><br><span class="line"></span><br><span class="line">Set</span><br><span class="line">  |- ConcurrentSkipListSet</span><br></pre></td></tr></table></figure>
+<h1 id="Queue-amp-Deque"><a href="#Queue-amp-Deque" class="headerlink" title="Queue &amp; Deque"></a>Queue &amp; Deque</h1><table>
+<thead>
+<tr>
+<th style="text-align:left">Name</th>
+<th style="text-align:center">是否阻塞</th>
+<th style="text-align:center">是否有界</th>
+<th style="text-align:center">队列长度</th>
+<th style="text-align:center">内部实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">ArrayBlockingQueue</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">有界</td>
+<td style="text-align:center">构造器指定</td>
+<td style="text-align:center">循环数组,FIFO</td>
+</tr>
+<tr>
+<td style="text-align:left">LinkedBlockingQueue</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">有界</td>
+<td style="text-align:center">构造器指定, 默认Int.Max</td>
+<td style="text-align:center">链表,FIFO</td>
+</tr>
+<tr>
+<td style="text-align:left">LinkedBlockingDeque</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">有界</td>
+<td style="text-align:center">构造器指定, 默认Int.Max</td>
+<td style="text-align:center">双向链表,FIFO</td>
+</tr>
+<tr>
+<td style="text-align:left">SynchronousQueue</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">有界</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">PriorityBlockingQueue</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">无界</td>
+<td style="text-align:center">构造器指定, 默认11, 无限扩容</td>
+<td style="text-align:center">二叉堆</td>
+</tr>
+<tr>
+<td style="text-align:left">DelayQueue</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">无界</td>
+<td style="text-align:center">初始empty, 无限扩容</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">ConcurrentLinkedQueue</td>
+<td style="text-align:center">非阻塞</td>
+<td style="text-align:center">无界</td>
+<td style="text-align:center">初始empty, 无限扩容</td>
+<td style="text-align:center">单向链表</td>
+</tr>
+<tr>
+<td style="text-align:left">ConcurrentLinkedDeque</td>
+<td style="text-align:center">非阻塞</td>
+<td style="text-align:center">无界</td>
+<td style="text-align:center">初始empty, 无限扩容</td>
+<td style="text-align:center">双向链表</td>
+</tr>
+</tbody>
+</table>
+<p>线程安全的队列可以分为 <strong>阻塞队列</strong> , <strong>非阻塞队列</strong>, 按照是否可无限扩容分为 <strong>有界队列</strong> , <strong>无界队列</strong> :</p>
+<ul>
+<li>阻塞队列是指: 当队列是空的时，从队列中获取元素的操作将会被阻塞，或者当队列是满时，往队列里添加元素的操作会被阻塞。<br>阻塞队列一般是用锁(例如<code>BlockingQueue</code>)来实现,<br>阻塞队列继承自接口<code>BlockingQueue</code>, 常用的有: <code>ArrayBlockingQueue</code>, <code>LinkedBlockingQueue</code>, <code>PriorityBlockingQueue</code>, <code>LinkedBlockingDeque</code>;</li>
+<li>非阻塞队列是指:<br>非阻塞队列一般是用<code>CAS</code>实现的”Lock-Free”方法,<br>非阻塞队列主要有: <code>ConcurrentLinkedQueue</code>, <code>ConcurrentLinkedDeque</code>;</li>
+<li>有界/无界: 无界队列可以无限扩容</li>
+</ul>
+<h2 id="阻塞队列"><a href="#阻塞队列" class="headerlink" title="阻塞队列"></a>阻塞队列</h2><p>阻塞队列一般使用condition实现消费者和生产者的”通讯”。<br>比如当生产者往满的队列里添加元素时会阻塞住，当消费者消费了队列中的元素后，会通过condition通知生产者当前队列可用。</p>
+<p>BlockingQueue接口方法有put/take：</p>
+<p><strong>阻塞方法：</strong></p>
+<ul>
+<li>put(E o)：将元素添加到此队列尾，如果队列满将一直阻塞，可以响应中断。</li>
+<li>take()：检索并移除此队列的头部，如果队列为空则一直阻塞，可以响应中断。</li>
+</ul>
+<p><strong>不阻塞且抛异常的方法：</strong></p>
+<ul>
+<li>add(E o)：将元素添加到此队列中，如果队列已满不会阻塞，直接抛出 IllegalStateException</li>
+<li>remove()： 移除队列头部的元素，如果队列为空不会阻塞，直接抛出 IllegalStateException</li>
+</ul>
+<p><strong>不阻塞且带返回值的方法：</strong></p>
+<ul>
+<li>offer(E o)： 将元素添加到队列，不阻塞，成功返回true，失败返回false；</li>
+<li>offer(E o, long timeout, TimeUnit unit)： 带等待时间的offer方法，如果队列已满，将等待指定的时间；</li>
+<li>poll(long timeout, TimeUnit unit)： 返回队列的头部并移除，如果队列为空，则等待指定等待的时间。如果取不到返回null；</li>
+</ul>
+<p>其他方法：</p>
+<ul>
+<li>drainTo(Collection&lt;? super E&gt; c)： 移除此队列中所有可用的元素，并将它们添加到给定 collection 中。</li>
+<li>drainTo(Collection&lt;? super E&gt; c,int maxElements)： 最多从此队列中移除给定数量的可用元素，并将这些元素添加到给定 collection 中</li>
+<li>remainingCapacity()： 返回在无阻塞的理想情况下（不存在内存或资源约束）此队列能接受的元素数量；如果没有内部限制，则返回 Integer.MAX_VALUE。</li>
+</ul>
+<h3 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h3><ul>
+<li>ArrayBlockingQueue是一个用数组实现的有界阻塞队列。此队列按照先进先出（FIFO）的原则对元素进行排序</li>
+<li>ArrayBlockingQueue内部由 一个公共的读写锁，两个Condition(notFull、notEmpty) 管理队列满或空时的阻塞状态。<br>因为在生产者放入数据和消费者获取数据，都是共用同一个锁对象，由此也意味着两者无法真正并行运行，这点尤其不同于LinkedBlockingQueue。</li>
+<li>构造器<code>ArrayBlockingQueue(int)</code>都要指定数组初始大小，并且大小不再扩展。</li>
+<li>默认情况下ArrayBlockingQueue不保证访问者公平的访问队列，所谓“公平访问队列”是指：当队列可用时，可以按照阻塞的先后顺序访问队列。即：<br>先阻塞的生产者线程，可以先往队列里插入元素；<br>先阻塞的消费者线程，可以先从队列里获取元素。<br>我们可以使用以下代码创建一个“公平的”阻塞队列：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ArrayBlockingQueue fairQueue = new  ArrayBlockingQueue(1000,true);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h3><ul>
+<li>LinkedBlockingQueue是链表实现的“有界”的阻塞队列。构造函数可以指定最大长度，队列的默认和最大长度为<code>Integer.MAX_VALUE</code></li>
+<li>内部基于链表实现，由两个锁（takeLock与putLock），以及 两个Condition(notFull、notEmpty) 管理队列满或空时的阻塞状态。<br>由于生产者端和消费者端分别采用了独立的锁来控制数据同步，这也意味着在高并发的情况下生产者和消费者可以并行地操作队列中的数据，以此来提高整个队列的并发性能。</li>
+</ul>
+<h3 id="LinkedBlockingDeque"><a href="#LinkedBlockingDeque" class="headerlink" title="LinkedBlockingDeque"></a>LinkedBlockingDeque</h3><ul>
+<li>LinkedBlockingDeque是一个由链表结构组成的双向阻塞队列。构造函数可以指定最大长度，队列的默认和最大长度为<code>Integer.MAX_VALUE</code></li>
+<li>相比其他的阻塞单向队列，LinkedBlockingDeque多了addFirst，addLast，offerFirst，offerLast，peekFirst，peekLast等方法</li>
+</ul>
+<h3 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h3><p>SynchronousQueue是无界的，是一种无缓冲的等待队列，<br>但是由于该Queue本身的特性，在某次添加元素后必须等待其他线程取走后才能继续添加，可以认为SynchronousQueue是一个缓存值为1的阻塞队列，<br>但是 isEmpty()方法永远返回是true，remainingCapacity() 方法永远返回是0，remove()和removeAll() 方法永远返回是false，iterator()方法永远返回空，peek()方法永远返回null。</p>
+<p>声明一个SynchronousQueue有两种不同的方式，它们之间有着不太一样的行为。公平模式和非公平模式的区别：如果采用公平模式：SynchronousQueue会采用公平锁，并配合一个FIFO队列来阻塞多余的生产者和消费者，从而体系整体的公平策略；但如果是非公平模式（SynchronousQueue默认）：SynchronousQueue采用非公平锁，同时配合一个LIFO队列来管理多余的生产者和消费者，而后一种模式，如果生产者和消费者的处理速度有差距，则很容易出现饥渴的情况，即可能有某些生产者或者是消费者的数据永远都得不到处理。</p>
+<h3 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h3><ul>
+<li>DelayQueue是一个支持延时获取元素的无界阻塞队列。队列使用PriorityQueue来实现。<br>队列中的元素必须实现Delayed接口，在创建元素时可以指定多久才能从队列中获取当前元素。只有在延迟期满时才能从队列中提取元素。我们可以将DelayQueue运用在以下应用场景：<ul>
+<li>缓存系统的设计：可以用DelayQueue保存缓存元素的有效期，使用一个线程循环查询DelayQueue，一旦能从DelayQueue中获取元素时，表示缓存有效期到了。</li>
+<li>定时任务调度。使用DelayQueue保存当天将会执行的任务和执行时间，一旦从DelayQueue中获取到任务就开始执行，从比如TimerQueue就是使用DelayQueue实现的。</li>
+</ul>
+</li>
+<li>队列中的Delayed必须实现compareTo来指定元素的顺序。</li>
+</ul>
+<h3 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h3><ul>
+<li>PriorityBlockingQueue是一个支持优先级的无界队列。默认情况下元素采取自然顺序排列，也可以通过比较器comparator来指定元素的排序规则。元素按照升序排列。</li>
+<li>内部基于二叉堆。使用一把公共的读写锁。虽然实现了BlockingQueue接口，其实没有任何阻塞队列的特征，空间不够时会自动扩容。</li>
+<li>构造器：<ul>
+<li><code>PriorityBlockingQueue()</code>：默认数组初始大小11，不指定Comparator，存入的对象需要实现<code>Comparable</code>接口；</li>
+<li><code>PriorityBlockingQueue(int initialCapacity, Comparator&lt;? super E&gt; comparator)</code>；</li>
+</ul>
+</li>
+</ul>
+<h2 id="非阻塞队列"><a href="#非阻塞队列" class="headerlink" title="非阻塞队列"></a>非阻塞队列</h2><h3 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h3><ul>
+<li>ConcurrentLinkedQueue是一个基于链接节点的无边界的线程安全队列，它采用FIFO原则对元素进行排序。采用“wait-free”算法（即CAS）来实现的。</li>
+<li>ConcurrentLinkedQueue的结构是单向链表和head/tail两个指针，因为入队时需要修改队尾元素的next指针，以及修改tail指向新入队的元素两个CAS动作无法原子，所以需要的特殊的算法，见：<br><a href="https：//www.ibm.com/developerworks/cn/java/j-jtp04186/">Java 理论与实践： 非阻塞算法简介</a></li>
+</ul>
+<h3 id="ConcurrentLinkedDeque"><a href="#ConcurrentLinkedDeque" class="headerlink" title="ConcurrentLinkedDeque"></a>ConcurrentLinkedDeque</h3><ul>
+<li>ConcurrentLinkedDeque是一种基于双向链表的无界链表。</li>
+<li>与大多数集合类型不同，其size方法不是一个常量操作。因为链表的异步性质，确定当前元素的数量需要遍历所有的元素，所以如果在遍历期间有其他线程修改了这个集合，size方法就可能会报告不准确的结果。</li>
+<li>批量的操作：包括添加、删除或检查多个元素，比如addAll()、removeIf()或者removeIf() 或forEach()方法，这个类型并不保证以原子方式执行。由此可见如果想保证原子访问，不得使用批量操作的方法。</li>
+</ul>
+<h1 id="List"><a href="#List" class="headerlink" title="List"></a>List</h1><h2 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h2><p>➤ 特性: 适用于读多写少, 读出来的数据不满足一致性</p>
+<p>➤ 实现:</p>
+<ul>
+<li>get():</li>
+<li>add(): ReentrantLock加锁, copy新数组, 向新数组add值, 新数组替换旧数组 // array 数组设定为 volitile 的, 数组中的元素不是volatile, 数组引用才是</li>
+</ul>
+<p>@ref:</p>
+<ul>
+<li><a href="https://juejin.im/post/5aeeb55f5188256715478c21" target="_blank" rel="noopener">并发容器之CopyOnWriteArrayList - 掘金</a></li>
+<li><a href="https://blog.csdn.net/h525483481/article/details/80347485" target="_blank" rel="noopener">实现一个简单的阻塞队列_Java_h525483481的专栏-CSDN博客</a></li>
+</ul>
+<h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><h2 id="ConcurrentSkipListSet"><a href="#ConcurrentSkipListSet" class="headerlink" title="ConcurrentSkipListSet"></a>ConcurrentSkipListSet</h2><p>ConcurrentSkipListSet的实现非常简单，其内部引用了一个ConcurrentSkipListMap对象，所有API方法都是调用了ConcurrentSkipListMap。<br>ConcurrentSkipListSet和TreeSet，它们虽然都是有序的集。但是：<br>第一，它们的线程安全机制不同，TreeSet是非线程安全的，而ConcurrentSkipListSet是线程安全的；<br>第二，ConcurrentSkipListSet是通过ConcurrentSkipListMap实现的，而TreeSet是通过TreeMap实现的；</p>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><ul>
+<li>数据分段存储，每个段有一个写锁，当一个线程占用某个段的锁时，其他段也可以正常访问，有效分散了阻塞的概率，而且没有读锁；</li>
+<li>没有读锁是因为put/remove动作是个原子动作(比如put是一个对数组元素/Entry 指针的赋值操作)，读操作不会看到一个更新动作的中间状态；</li>
+<li>每次扩容为原来容量的2倍，ConcurrentHashMap不会对整个容器进行扩容，而只对某个segment进行扩容；</li>
+<li>在获取size操作的时候，不是直接把所有segment的count相加就可以可到整个ConcurrentHashMap大小，也不是在统计size的时候把所有的segment的put、remove、clean方法全部锁住，这种方法太低效。<br>在累加count操作过程中，之前累加过的count发生变化的几率非常小，所有ConcurrentHashMap的做法是先尝试2（RETRIES_BEFORE_LOCK）次通过不锁住Segment的方式统计各个Segment大小，如果统计的过程中，容器的count发生了变化，再采用加锁的方式来统计所有的Segment的大小。</li>
+<li>putIfAbsent(k,v)：当k已经存在时返回已存在的v。</li>
+</ul>
+<p>➤ 内部实现:</p>
+<ul>
+<li>实例化ConcurrentHashMap时带参数时，会根据参数调整table的大小，假设参数为100，最终会调整成256，确保table的大小总是2的幂次方, 为什么?</li>
+<li>put操作:<br>  计算桶位置:  i = (table.size-1) &amp; hash<br>  如果table[i] == null : 用自旋+CAS 改变table[i] 的值<br>  如果 f = table[i] != null : Synchronized(f)锁住f节点</li>
+<li>size的实现: 类似 LongAdder</li>
+</ul>
+<p>➤ 1.7和1.8中的实现有何不同?</p>
+<ul>
+<li>1.7 : Segment[], 每个Segment继承自ReentrantLock, 每个Segment对象持有<code>HashEntry&lt;K,V&gt;[] table</code></li>
+<li>1.8 : 放弃分段锁, 对每个table[]桶进行加锁</li>
+</ul>
+<blockquote>
+<p>@ref <a href="https://segmentfault.com/a/1190000016096542" target="_blank" rel="noopener">Java多线程进阶（二三）—— J.U.C之collections框架：ConcurrentHashMap(1) 原理 - 透彻理解Java并发编程 - SegmentFault 思否</a><br>@ref <a href="https://segmentfault.com/a/1190000016124883" target="_blank" rel="noopener">Java多线程进阶（二四）—— J.U.C之collections框架：ConcurrentHashMap(2) 扩容 - 透彻理解Java并发编程 - SegmentFault 思否</a></p>
+</blockquote>
+<h2 id="ConcurrentSkipListMap"><a href="#ConcurrentSkipListMap" class="headerlink" title="ConcurrentSkipListMap"></a>ConcurrentSkipListMap</h2><ul>
+<li>JDK6新增的并发优化的SortedMap，以SkipList实现。SkipList是红黑树的一种简化替代方案，是个流行的有序集合算法。Concurrent包选用它是因为它支持基于CAS的无锁算法，而红黑树则没有好的无锁算法。</li>
+<li>ConcurrentSkipListMap 的key是有序的；</li>
+<li>与ConcurrentHashMap相比，ConcurrentSkipListMap 支持更高的并发。ConcurrentSkipListMap 的存取时间是log(n)，和线程数几乎无关。也就是说在数据量一定的情况下，并发的线程越多，ConcurrentSkipListMap越能体现出优势。</li>
+<li>它的size()比较特殊，需要遍历所有元素；</li>
+</ul>
+<h1 id="Deprecated-Vector-amp-HashTable"><a href="#Deprecated-Vector-amp-HashTable" class="headerlink" title="Deprecated: Vector &amp; HashTable"></a>Deprecated: Vector &amp; HashTable</h1><p>Vector和HashTable已经被弃用，取而代之的是ArrayList和HashMap，如果要使用线程安全的容器，可以用Collections转换：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;E&gt; syncList = Collections.synchronzedList(<span class="keyword">new</span> ArrayList&lt;E&gt;());</span><br><span class="line">Map&lt;K,V&gt; syncMap = Collections.synchronizedMap(<span class="keyword">new</span> HashMap&lt;K,V&gt;());</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Java-Tutorials.07d2.JUC-ReentrantLock/" rel="next" title="Java Tutorials-07d2-JUC-ReentrantLock">
+                <i class="fa fa-chevron-left"></i> Java Tutorials-07d2-JUC-ReentrantLock
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Java-Tutorials.07d4.JUC-线程池/" rel="prev" title="Java Tutorials-07d4-JUC-线程池">
+                Java Tutorials-07d4-JUC-线程池 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Queue-amp-Deque"><span class="nav-text">Queue &amp; Deque</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#阻塞队列"><span class="nav-text">阻塞队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayBlockingQueue"><span class="nav-text">ArrayBlockingQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedBlockingQueue"><span class="nav-text">LinkedBlockingQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedBlockingDeque"><span class="nav-text">LinkedBlockingDeque</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SynchronousQueue"><span class="nav-text">SynchronousQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DelayQueue"><span class="nav-text">DelayQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PriorityBlockingQueue"><span class="nav-text">PriorityBlockingQueue</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞队列"><span class="nav-text">非阻塞队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentLinkedQueue"><span class="nav-text">ConcurrentLinkedQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentLinkedDeque"><span class="nav-text">ConcurrentLinkedDeque</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#List"><span class="nav-text">List</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CopyOnWriteArrayList"><span class="nav-text">CopyOnWriteArrayList</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set"><span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentSkipListSet"><span class="nav-text">ConcurrentSkipListSet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Map"><span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-text">ConcurrentHashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentSkipListMap"><span class="nav-text">ConcurrentSkipListMap</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Deprecated-Vector-amp-HashTable"><span class="nav-text">Deprecated: Vector &amp; HashTable</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07d3.线程安全的集合/';
+          this.page.identifier = '12.Java/Java-Tutorials.07d3.线程安全的集合/';
+          this.page.title = 'Java Tutorials-07d3-JUC-线程安全的集合';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="数据结构与算法,动态规划,二分查找,优先队列,平衡树,线段树,并查集,BFS,DFS,欧几里得算法,拓扑排序,最小生成树," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="基本思想（时空复杂度，规约，枚举，贪心，分治，递推与递归，构造，模拟） 排序（冒泡，选择，插入，归并，堆，快速，桶，基数，希尔，Timsort）（Top K） 经典数据结构（栈，队列，链表，哈希，单调队列，优先队列，平衡树，线段树，并查集） 搜索（BFS，DFS，A*搜索) 基础数学算法（二分查找算法，欧几里得算法，快速幂算法） 图论基础算法（拓扑排序，最小生成树算法，最短路径算法） 动态规划算">
+<meta name="keywords" content="数据结构与算法,动态规划,二分查找,优先队列,平衡树,线段树,并查集,BFS,DFS,欧几里得算法,拓扑排序,最小生成树">
+<meta property="og:type" content="article">
+<meta property="og:title" content="影响程序员发展的十类算法（zz）">
+<meta property="og:url" content="https://beefyheisenberg.github.io/01.Algorithm/Alg.IntroductionToAlgorithm/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="基本思想（时空复杂度，规约，枚举，贪心，分治，递推与递归，构造，模拟） 排序（冒泡，选择，插入，归并，堆，快速，桶，基数，希尔，Timsort）（Top K） 经典数据结构（栈，队列，链表，哈希，单调队列，优先队列，平衡树，线段树，并查集） 搜索（BFS，DFS，A*搜索) 基础数学算法（二分查找算法，欧几里得算法，快速幂算法） 图论基础算法（拓扑排序，最小生成树算法，最短路径算法） 动态规划算">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://lh3.googleusercontent.com/8_ey6ghEP-ijKNZ4rqIYMpRF8h586T0Ar6BAWliK4TrzD-CpbO1VfgI_2xCxMIVj_C0oEfaS2k3Z=s0">
+<meta property="og:image" content="https://lh3.googleusercontent.com/v0GunSGbRGIZDR9-FFxsEmhcivH6LD8RsF61TA1szPDGypY27x-1XMY9YT-6G9vOvA-_LqQitZqL=s0">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/divide-and-conquer.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/sorting-algorithm-timsort.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/monotone-queue-notes.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/priority-queue.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/segment-tree.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/union-find-set.png">
+<meta property="og:image" content="http://ourjs.github.io/static/images/path.png">
+<meta property="og:image" content="https://pic1.zhimg.com/50/d900e0509f9d056286ff9455e7706f90_hd.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/50/c564ec78cf8008541bc1bbcfd4a70dea_hd.jpg">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/dag.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/floyd-warshall.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/dp1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/dp2.png">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201211/05/1352080679_6613.jpg">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201211/05/1352080779_4529.jpg">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/cross-product.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/向量积（叉积、外积）的坐标表达式.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/convex-hull.png">
+<meta property="og:image" content="http://dl2.iteye.com/upload/attachment/0078/0473/e4911d9e-ad3d-306c-8d58-8ae34c9ceb7c.jpg">
+<meta property="og:image" content="https://lh3.googleusercontent.com/--RRz9U4CNjg/Wg5ObvdXO1I/AAAAAAAAHZc/rhufTVQwzGkhiCRbrvad6xwyHF5sKzktACLcBGAs/s0/kmpexample.jpg">
+<meta property="og:image" content="https://i.stack.imgur.com/EyFvY.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/trie-tree.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/maximum-flow-problem.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/残留网络.png">
+<meta property="og:image" content="http://i.imgur.com/hkRDu4q.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/IntroductionToAlgorithm/minimumcostmaximums-tflow.png">
+<meta property="og:image" content="http://img.voidcn.com/vcimg/000/006/386/599_c3b_0d5.png">
+<meta property="og:image" content="https://lh3.googleusercontent.com/-ZjQ1MZnRLKo/Wg50x9HRElI/AAAAAAAAHZw/Nm2BrtXMRnEBplAv_ymfoNc_aSQoAzBywCLcBGAs/s0/67607011hafbade7b1dd9%2526690.jpeg">
+<meta property="og:updated_time" content="2022-10-02T15:13:42.797Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="影响程序员发展的十类算法（zz）">
+<meta name="twitter:description" content="基本思想（时空复杂度，规约，枚举，贪心，分治，递推与递归，构造，模拟） 排序（冒泡，选择，插入，归并，堆，快速，桶，基数，希尔，Timsort）（Top K） 经典数据结构（栈，队列，链表，哈希，单调队列，优先队列，平衡树，线段树，并查集） 搜索（BFS，DFS，A*搜索) 基础数学算法（二分查找算法，欧几里得算法，快速幂算法） 图论基础算法（拓扑排序，最小生成树算法，最短路径算法） 动态规划算">
+<meta name="twitter:image" content="https://lh3.googleusercontent.com/8_ey6ghEP-ijKNZ4rqIYMpRF8h586T0Ar6BAWliK4TrzD-CpbO1VfgI_2xCxMIVj_C0oEfaS2k3Z=s0">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/01.Algorithm/Alg.IntroductionToAlgorithm/"/>
+
+
+
+
+
+  <title>影响程序员发展的十类算法（zz） | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/01.Algorithm/Alg.IntroductionToAlgorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">影响程序员发展的十类算法（zz）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/01-Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">01.Algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  5,990
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ol>
+<li><strong>基本思想</strong>（时空复杂度，规约，枚举，贪心，分治，递推与递归，构造，模拟）</li>
+<li><strong>排序</strong>（冒泡，选择，插入，归并，堆，快速，桶，基数，希尔，Timsort）（Top K）</li>
+<li><strong>经典数据结构</strong>（栈，队列，链表，哈希，单调队列，优先队列，平衡树，线段树，并查集）</li>
+<li><strong>搜索</strong>（BFS，DFS，A*搜索)</li>
+<li><strong>基础数学算法</strong>（二分查找算法，欧几里得算法，快速幂算法）</li>
+<li><strong>图论基础算法</strong>（拓扑排序，最小生成树算法，最短路径算法）</li>
+<li><strong>动态规划算法</strong>（最长上升子序列，最长公共子序列，最大连续子段和，背包问题）</li>
+<li><strong>计算几何算法</strong>（线段交，凸包，平面最近点对）</li>
+<li><strong>字符串匹配算法</strong>（KMP算法，Trie树）</li>
+<li><strong>网络流算法</strong>（最大流算法，最小费用最大流算法）</li>
+</ol>
+<hr>
+<h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><h3 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><h3 id="归约"><a href="#归约" class="headerlink" title="归约"></a>归约</h3><p>问题：如果某个问题已经找到了一种解法，如何证明这个问题可解决的时间下界。<br>解法：用归约，从已知证未知。<br><img src="https://lh3.googleusercontent.com/8_ey6ghEP-ijKNZ4rqIYMpRF8h586T0Ar6BAWliK4TrzD-CpbO1VfgI_2xCxMIVj_C0oEfaS2k3Z=s0" alt="enter image description here" title="Linear-time Reduction"><br>A问题可以线性归约到B问题的转化是单向的，是<strong>从已知问题到未知问题</strong>，从难度更低的问题转化为难度更高的问题。如：一元一次方程可以归约到一元二次方程。<br>题目：使用排序算法对求凸包下界进行评估：<br><img src="https://lh3.googleusercontent.com/v0GunSGbRGIZDR9-FFxsEmhcivH6LD8RsF61TA1szPDGypY27x-1XMY9YT-6G9vOvA-_LqQitZqL=s0" alt="Sorting reduct to 2dCH" title="Sorting reduct to 2dCH.png"></p>
+<h3 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h3><h3 id="贪心"><a href="#贪心" class="headerlink" title="贪心"></a>贪心</h3><h3 id="分治"><a href="#分治" class="headerlink" title="分治"></a>分治</h3><p><img src="/images/alg/IntroductionToAlgorithm/divide-and-conquer.png" alt="Divide_and_Conquer"></p>
+<h3 id="递推与递归"><a href="#递推与递归" class="headerlink" title="递推与递归"></a>递推与递归</h3><p>题目：求第$n$个斐波那契数<br>$$ f(n)=f(n-1)+f(n-2), f(1)=1, f(2)=1 $$</p>
+<h3 id="构造"><a href="#构造" class="headerlink" title="构造"></a>构造</h3><p>题目：各阶幻方的构造算法</p>
+<h3 id="模拟"><a href="#模拟" class="headerlink" title="模拟"></a>模拟</h3><p>题目：给定麻将规则，问至少还需几轮能够胡牌</p>
+<hr>
+<h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><ul>
+<li>冒泡排序</li>
+<li>选择排序</li>
+<li>插入排序</li>
+<li>归并排序</li>
+<li>堆排序</li>
+<li>快速排序</li>
+<li>桶排序：将数组分到有限数量的桶里，每个桶再个别排序。题目：小学生成绩排名</li>
+<li>基数排序：将整数按位数切割成不同的数字，然后按每个位数分别比较。可以看做是从低位到高位进行的桶排序。</li>
+<li>希尔排序：也称递减增量排序算法，是插入排序的一种更高效的改进版本。</li>
+<li>Timsort：一种混合的稳定的排序算法，派生自归并排序和插入排序。<ul>
+<li>Pyhton自从2.3版以来一直采用Timsort算法排序，Java SE7，Android，GNU Octave也采用Timsort算法对数组排序。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/alg/IntroductionToAlgorithm/sorting-algorithm-timsort.png" alt="Sorting_algorithm_Timsort"></p>
+<p>题目：从$n$个数中找到前$k$大的数</p>
+<hr>
+<h2 id="经典数据结构"><a href="#经典数据结构" class="headerlink" title="经典数据结构"></a>经典数据结构</h2><h3 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h3><h3 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h3><h3 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h3><h3 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h3><p>题目：存在一个系数和变量都是整数的等式:<br>$$ a_1 x_1^3 + a_2 x_2^3 + a_3 x_3^3 + a_4 x_4^3 + a_5 x_5^3 = 0  $$<br>$\forall i∈{1,2,3,4,5}, x_i∈[-50,50], a_i∈[-50,50]$，问有多少组解。<br>解法：将变量分成两部分，先hash一部分的结果，另一部分计算出结果再去查找。</p>
+<h3 id="单调队列"><a href="#单调队列" class="headerlink" title="单调队列"></a>单调队列</h3><p>题目：长度为$n$的数组上有个长度为$k$的滑窗从左向右移动，求每次移动后滑窗区间的最小值和最大值。输出两行，第一行所有最小值，第二行所有最大值。</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/monotone-queue-notes.png" alt="monotone-queue-notes"></p>
+<p>解法：可以用线段树来做，复杂度O(nlogn)，但是使用单调队列更简单，复杂度是O(n)。</p>
+<h3 id="优先队列"><a href="#优先队列" class="headerlink" title="优先队列"></a>优先队列</h3><p>堆的核心操作函数，维护堆:</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/priority-queue.png" alt="Priority_Queue"></p>
+<p>BUILD: O(n), for (i=n/2; i&gt;0; i–) max_heap(i);<br>UPDATE: O(logn)<br>INSERT: 先插入到堆的最后一个元素，然后不断和其父亲(/2)比较大小，一个for循环维护堆<br>DELETE: O(logn) 删除堆顶元素，把最后一个元素拿到堆顶，然后维护堆</p>
+<h3 id="平衡树"><a href="#平衡树" class="headerlink" title="平衡树"></a>平衡树</h3><h4 id="AVL"><a href="#AVL" class="headerlink" title="AVL"></a>AVL</h4><p>一种典型适度平衡的二叉搜索树。<br>需要为其中的每一个节点引入一个名为平衡因子的指标，节点的平衡因子是它的左子树的高度减去它的右子树的高度。带有平衡因子1、0或 -1的节点被认为是平衡的。带有平衡因子 -2或2的节点被认为是不平衡的，并需要重新平衡这个树。</p>
+<blockquote>
+<p><strong>高度为$h$的AVL树，至少包含$S(h)=fib(h+3)-1$个节点</strong></p>
+</blockquote>
+<p>INSERT: O(1)<br>DELETE: O(logn)<br>优点: 无论查找、插入或删除，最坏情况下的复杂度均为O(logn)时间复杂度,O(n)的存储空间。<br>缺点:</p>
+<ul>
+<li>借助高度或平衡因子，为此需改造元素结构，或额外封装；</li>
+<li>实测复杂度与理论值尚有差距；</li>
+<li>单次动态调整后，全数拓扑结构的变化量可能高达O(logn) 。</li>
+</ul>
+<h4 id="RB-Tree（红黑树，即是B-树-2-4-）"><a href="#RB-Tree（红黑树，即是B-树-2-4-）" class="headerlink" title="RB-Tree（红黑树，即是B-树(2,4)）"></a>RB-Tree（红黑树，即是B-树(2,4)）</h4><p>引入“颜色”的目的在于使得红黑树的平衡条件得以简化，与B树对应。<br>INSERT: O(logn)<br>DELETE: O(logn)<br>优点:</p>
+<ul>
+<li>任何一次动态操作引发的结构变化量不超过O(1)，特别适合用来实现持久化的搜索树，作为可持久化数据结构比较好；</li>
+<li>红黑树每个节点只需要1-bit附加空间。</li>
+</ul>
+<p>缺点:</p>
+<ul>
+<li>太复杂，插入有5种情况，删除有6种情况，代码量大，编写容易出错。</li>
+<li>红黑树并不是真正的平衡二叉树，但在实际应用中，红黑树的统计性能要高于平衡二叉树，但极端性能略差。</li>
+</ul>
+<h4 id="Splay"><a href="#Splay" class="headerlink" title="Splay"></a>Splay</h4><p>节点$V$一旦被访问，随即转移至树根，“一步一步往上爬”。<br>效率取决于：树的初始形态以及节点访问次序。可以做到单趟伸展操作，分摊O(logn)时间！<br>INSERT:O(logn)<br>DELETE:O(logn)<br>优点:</p>
+<ul>
+<li>无需记录节点高度或平衡因子；</li>
+<li>编程实现简单易行–优于AVL树，分摊复杂度O(logn)。</li>
+<li>局部性强、缓存命中率极高时，效率更好。</li>
+</ul>
+<p>缺点: 仍不能杜绝单次最坏情况的出现，不适用于对效率敏感的场合。</p>
+<h3 id="线段树"><a href="#线段树" class="headerlink" title="线段树"></a>线段树</h3><p>也叫区间树，是一棵二叉树，适用于和区间统计有关的问题。</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/segment-tree.png" alt="Segment_Tree"></p>
+<p>经典的问题模型：</p>
+<ul>
+<li>单点修改，区间查询</li>
+<li>区间修改，单点查询</li>
+<li>区间修改，区间查询</li>
+</ul>
+<p>题目：给定原始数组$a[]={2,5,3,4,1}, a[i] &lt;= n$，求$b[i]$=位置$i$左边小于等于$a[i]$的数的个数。如样例中$b[]={0,1,1,2,0}$。</p>
+<p>解法：初始化线段树$1..n$位置上的数都为$0$，然后从左到右遍历数组，对于每个位置的数$a[i]$，$b[i]=sum(1, a[i]-1)$，然后在$a[i]$值所在的位置增加1。</p>
+<h3 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h3><p>并查集是一种树型的数据结构，用于处理一些不相交集合（Disjoint Sets）的合并及查询问题。<br>经典应用：Kruskal算法求最小生成树中判断新加入的边是否在同一棵树内部。</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/union-find-set.png" alt="union_find_set"></p>
+<hr>
+<h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2><h3 id="BFS"><a href="#BFS" class="headerlink" title="BFS"></a>BFS</h3><h3 id="DFS"><a href="#DFS" class="headerlink" title="DFS"></a>DFS</h3><h3 id="A-搜索"><a href="#A-搜索" class="headerlink" title="A*搜索"></a>A*搜索</h3><p>In the standard terminology used when talking about A<em>, $g(n)$ represents the exact cost of the path from the starting point to any vertex $n$, and $h(n)$ represents the heuristic estimated cost from vertex $n$ to the goal.<br>A</em> balances the two as it moves from the starting point to the goal. Each time through the main loop, it examines the vertex $n$ that has the lowest $f(n) = g(n) + h(n)$.<br><img src="http://ourjs.github.io/static/images/path.png" alt="enter image description here"><br>A*算法和DFS、BFS有着较深关系，其中的$g(n)$和$h(n)$作为两个不同的代价:</p>
+<ol>
+<li>在DFS的搜索中，其关注的主要是邻居节点与当前节点的距离开销，此时可将$g(n)$认为是0；</li>
+<li>在BFS中进行分层搜索时，以层次距离为主，此时可将$h(n)$认为是0。而且，当$h(n)$认为是0，则转换为单源最短路径计算。</li>
+</ol>
+<p>题目：八数码问题</p>
+<hr>
+<h2 id="基础数学算法"><a href="#基础数学算法" class="headerlink" title="基础数学算法"></a>基础数学算法</h2><h3 id="二分查找算法"><a href="#二分查找算法" class="headerlink" title="二分查找算法"></a>二分查找算法</h3><p>问题：在一个给定的升序数组array中，找到第一个大于或者等于x的数的位置，没有则返回-1。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int search(int[] array, int low, int high, int x) &#123;</span><br><span class="line">  int ans = -1;</span><br><span class="line">  while (low &lt;= high) &#123;</span><br><span class="line">    int mid = low + (high - low) / 2;</span><br><span class="line">    if (judge(mid)) &#123;</span><br><span class="line">      ans = mid;</span><br><span class="line">      high = mid - 1;</span><br><span class="line">    &#125; else low = mid + 1;</span><br><span class="line">  &#125;</span><br><span class="line">  return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>问题变形：</p>
+<ul>
+<li>求第一个大于x的数的位置</li>
+<li>求最后一个小于x的数的位置</li>
+<li>求最后一个小于或者等于x的数的位置</li>
+<li>如果当前数组不是升序而是降序的话</li>
+</ul>
+<p>题目：给定$n$个木棍，每个木棍有一个长度（精确到两位小数），需要把他们截成$k$个长度相同的小木棍，求小木棍的最大长度。</p>
+<p>解答：把最大长度的小木棍的值作为二分变量，进行浮点数的二分。</p>
+<p>题目：一条长为L（1~1,000,000,000）的河中，有$n$(1~50,000)块可垫脚的石头，<br>给出它们与起始点的距离$rock[i]$，移除其中的$m$块使得具有最小间距的相邻两块石头之间的距离最大。</p>
+<p>解答：二分最终的结果，用上述整数二分的写法进行处理，每一次判断使用贪心策略，记录每次符合条件的策略，二分最后得到的就是最终的答案。</p>
+<blockquote>
+<p>二分经典应用：求上（下）界的最小（大）值</p>
+</blockquote>
+<h3 id="欧几里得算法"><a href="#欧几里得算法" class="headerlink" title="欧几里得算法"></a>欧几里得算法</h3><p>求两个整数的最大公约数－－辗转相除法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int gcd(int a, int b) &#123;</span><br><span class="line">	if (a == 0) return b;</span><br><span class="line">	return gcd(b, a % b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="快速幂算法"><a href="#快速幂算法" class="headerlink" title="快速幂算法"></a>快速幂算法</h3><p>问题：$a, b$都是整数，如何快速求$a^b$</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int fpow(int a, int b)&#123;</span><br><span class="line">    int result = 1;</span><br><span class="line">    for (; b; b &gt;&gt;= 1) &#123;</span><br><span class="line">	    if (b &amp; 1) result = result * a;</span><br><span class="line">	    a = a * a;</span><br><span class="line">	｝</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>题目：快速求第$n$个斐波那契数。</p>
+<p>解法：<br>经典的矩阵快速幂，下面这个式子是成立的：<img src="https://pic1.zhimg.com/50/d900e0509f9d056286ff9455e7706f90_hd.jpg" alt="enter image description here"><br>不停地利用这个式子迭代右边的列向量，会得到下面的式子：<img src="https://pic3.zhimg.com/50/c564ec78cf8008541bc1bbcfd4a70dea_hd.jpg" alt="enter image description here"><br>这样，问题就转化为如何计算这个矩阵的$n$ 次方了。</p>
+<hr>
+<h2 id="图论基础算法"><a href="#图论基础算法" class="headerlink" title="图论基础算法"></a>图论基础算法</h2><h3 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h3><p>在图论中，如果一个有向图从任意顶点出发无法经过若干条边回到该点，则这个图是一个有向无环图（DAG图）。</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/dag.png" alt="DAG"></p>
+<h3 id="最小生成树算法"><a href="#最小生成树算法" class="headerlink" title="最小生成树算法"></a>最小生成树算法</h3><h4 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h4><table>
+<thead>
+<tr>
+<th>最小边、权的数据结构</th>
+<th>时间复杂度（总计）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>邻接矩阵、搜索</td>
+<td>$O(V^2)$</td>
+</tr>
+<tr>
+<td>二叉堆（后文伪代码中使用的数据结构）、邻接表</td>
+<td>$O((V + E) log(V)) = O(E log(V))$</td>
+</tr>
+<tr>
+<td>斐波那契堆、邻接表</td>
+<td>$O(E + V log(V))$</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Kruskal算法"><a href="#Kruskal算法" class="headerlink" title="Kruskal算法"></a>Kruskal算法</h4><p>kruskal算法的基本思想（使用到了并查集）：</p>
+<ol>
+<li>首先将$G$的$n$个顶点看成$n$个孤立的连通分支（$n$个孤立点）并将所有的边按权从小大排序。</li>
+<li>按照边权值递增顺序，如果加入边后存在圈则这条边不加，直到形成连通图</li>
+</ol>
+<p>时间复杂度：$\mathrm {O} (Elog_{2}E) E$为图中的边数</p>
+<h3 id="最短路径算法"><a href="#最短路径算法" class="headerlink" title="最短路径算法"></a>最短路径算法</h3><h4 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h4><p>对于不含负权的有向图，这是目前已知的最快的单源最短路径算法。<br>不采用最小优先级队列，时间复杂度是 ${\displaystyle O(|V|^{2})} )$(其中 $\displaystyle |V|$为图的顶点个数)。<br>用邻接表+二叉堆或者斐波纳契堆用作优先队列来查找最小的顶点时，时间复杂度是$O(|E|+|V|\log |V|) $(其中$\displaystyle |E|$是边数)</p>
+<h4 id="Floyd-Warshall算法"><a href="#Floyd-Warshall算法" class="headerlink" title="Floyd-Warshall算法"></a>Floyd-Warshall算法</h4><p>任意两点间的最短路径的一种算法，可以正确处理有向图或负权（但不可存在负权回路）的最短路径问题，同时也被用于计算有向图的传递闭包。<br>Floyd-Warshall算法的时间复杂度为 $\displaystyle O(N^{3})$，空间复杂度为 $\displaystyle O(N^{2})$。</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/floyd-warshall.png" alt="Floyd_Warshall"></p>
+<p><strong>核心思想是动态规划算法</strong>，其中$dist[i][j]$表示由点 $\displaystyle i$到点 $\displaystyle j$的代价，∞ 表示两点之间没有任何连接。</p>
+<hr>
+<h2 id="动态规划算法"><a href="#动态规划算法" class="headerlink" title="动态规划算法"></a>动态规划算法</h2><h3 id="数字三角形-IOI-1994"><a href="#数字三角形-IOI-1994" class="headerlink" title="数字三角形[IOI 1994]"></a>数字三角形[IOI 1994]</h3><p>题目：有一个数字三角形，从最顶层出发，每一步只能向左下或右下方向走。编程求从最顶层到最底层的一条路所经过位置上的数字之和的最大值。</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/dp1.png" alt="DP1"></p>
+<p><strong>动态规划核心思想：</strong></p>
+<ul>
+<li><strong>最优子结构</strong>：如果问题的最优解所包含的子问题的解也是最优的，我们就称该问题具有最优子结构性质（即满足最优化原理）。</li>
+<li><strong>重叠子问题</strong>：子问题重叠性质是指在用递归算法自顶向下对问题进行求解时，每次产生的子问题并不总是新问题，有些子问题会被重复计算多次。动态规划算法正是利用了这种子问题的重叠性质，对每一个子问题只计算一次，然后将其计算结果保存起来，当再次需要计算已经计算过的子问题时，从保存的记录中查看一下结果，从而获得较高的效率。</li>
+</ul>
+<p><img src="/images/alg/IntroductionToAlgorithm/dp2.png" alt="DP2"></p>
+<h3 id="最长上升子序列"><a href="#最长上升子序列" class="headerlink" title="最长上升子序列"></a>最长上升子序列</h3><h3 id="最长公共子序列"><a href="#最长公共子序列" class="headerlink" title="最长公共子序列"></a>最长公共子序列</h3><h3 id="最大连续子段和"><a href="#最大连续子段和" class="headerlink" title="最大连续子段和"></a>最大连续子段和</h3><h3 id="背包问题"><a href="#背包问题" class="headerlink" title="背包问题"></a>背包问题</h3><ul>
+<li>01背包</li>
+<li>完全背包</li>
+<li>多重背包</li>
+<li>混合三种背包</li>
+<li>二维费用背包</li>
+<li>分组背包</li>
+</ul>
+<hr>
+<h2 id="计算几何算法"><a href="#计算几何算法" class="headerlink" title="计算几何算法"></a>计算几何算法</h2><h3 id="向量性质"><a href="#向量性质" class="headerlink" title="向量性质"></a>向量性质</h3><h4 id="向量点积"><a href="#向量点积" class="headerlink" title="向量点积"></a>向量点积</h4><p>向量的点积结果跟两个向量之间的角度有关<br><img src="http://img.my.csdn.net/uploads/201211/05/1352080679_6613.jpg" alt="enter image description here"><br><img src="http://img.my.csdn.net/uploads/201211/05/1352080779_4529.jpg" alt="enter image description here"></p>
+<h4 id="向量叉积"><a href="#向量叉积" class="headerlink" title="向量叉积"></a>向量叉积</h4><p>向量积可以被定义为：$a \times b = absin\theta$（在这里$θ$表示两向量之间的夹角(共起点的前提下)（$0° ≤ θ ≤ 180°$）</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/cross-product.png" alt="Cross_Product"></p>
+<p><img src="/images/alg/IntroductionToAlgorithm/向量积（叉积、外积）的坐标表达式.png" alt="向量积（叉积、外积）的坐标表达式"></p>
+<blockquote>
+<p>$c$的长度在数值上等于以$a$，$b$，夹角为$θ$组成的平行四边形的面积。</p>
+</blockquote>
+<h4 id="To-Left-Test"><a href="#To-Left-Test" class="headerlink" title="To-Left Test"></a>To-Left Test</h4><p>问题：给定三个二维平面的点，$p,q,r$，问$\overrightarrow{pr}$向量是否在$\overrightarrow{pq}$向量的左侧</p>
+<p>解答：使用叉乘，结果大于0时在左侧，等于0时共线，小于0时在右侧。</p>
+<p>问题：如何判断一个点是否在一个三角形内部</p>
+<p>解答：$InTriangle(p,q,r,k)$当且仅当<br>$$ToLeft(p,q,k) == ToLeft(q,r,k) == ToLeft(r,p,k)$$<br>问题：如何判断一个点是否在一个凸多边形内部</p>
+<p>解答：看所有的ToLeft值是否都大于0<br>问题：求给定多边形的面积</p>
+<p>解答：把多边形分成若干个三角形，按照逆时针依次求每个三角形的有向面积。对用 $\displaystyle (x_{1},y_{1}),(x_{2},y_{2}),\dots ,(x_{n},y_{n})$（按逆时针排列）描述的多边形，其面积为：<br>$$\displaystyle A={\frac {1}{2}}\left({\begin{vmatrix}x_{1}&amp;y_{1}\x_{2}&amp;y_{2}\end{vmatrix}}+{\begin{vmatrix}x_{2}&amp;y_{2}\x_{3}&amp;y_{3}\end{vmatrix}}+\dots +{\begin{vmatrix}x_{n}&amp;y_{n}\x_{1}&amp;y_{1}\end{vmatrix}}\right)$$</p>
+<h3 id="凸包"><a href="#凸包" class="headerlink" title="凸包"></a>凸包</h3><p>点集Q的凸包（convex hull）是指一个最小凸多面体，满足Q中的点或者在多面体边上或者在其内。</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/convex-hull.png" alt="Convex_Hull"></p>
+<p>经典算法：</p>
+<ul>
+<li>增量式算法：逐次将点加入，然后检查之前的点是否在新的凸包上，时间复杂度为 $\displaystyle O(n^{2})$。</li>
+<li>包裹法（Jarvis步进法）。时间复杂度为 $\displaystyle O(kn)$，$k$表示输出的面的数量，$n$表示点集的个数，复杂度与输出凸包的面相关。</li>
+<li><strong>葛立恒（Graham）扫描法</strong>，算法的整体时间复杂度是 $\displaystyle O(n\log {n})$，缺点是只能处理二维情况。<img src="http://dl2.iteye.com/upload/attachment/0078/0473/e4911d9e-ad3d-306c-8d58-8ae34c9ceb7c.jpg" alt="enter image description here"></li>
+<li>分治法：将点集$X$分成两个不相交子集。求得两者的凸包后，计算这两个凸包的凸包，该凸包就是$X$的凸包。时间复杂度是$\displaystyle O(n\log {n})$。<blockquote>
+<p>解决三维凸包问题，主要有包裹法、分治法、随机增量算法、快速凸包算法。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="平面最近点对"><a href="#平面最近点对" class="headerlink" title="平面最近点对"></a>平面最近点对</h3><p>给定平面上$n$个点，找其中的一对点，使得在$n$个点的所有点对中，该点对的距离最小。<br>经典算法：</p>
+<ul>
+<li>分治法，时间复杂度O(nlogn)</li>
+<li>随机增量法，时间复杂度O(n)，且向高维扩展容易</li>
+</ul>
+<hr>
+<h2 id="字符串匹配算法"><a href="#字符串匹配算法" class="headerlink" title="字符串匹配算法"></a>字符串匹配算法</h2><h3 id="KMP算法"><a href="#KMP算法" class="headerlink" title="KMP算法"></a>KMP算法</h3><p>问题：在一个主文本字符串S内查找一个词W的出现位置。<br>思想：通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始的发现，从而避免重新检查先前匹配的字符。<br><img src="https://lh3.googleusercontent.com/--RRz9U4CNjg/Wg5ObvdXO1I/AAAAAAAAHZc/rhufTVQwzGkhiCRbrvad6xwyHF5sKzktACLcBGAs/s0/kmpexample.jpg" alt="enter image description here" title="kmpexample.jpg"><br>next[j]取决于模式串中T[0 ~ j-1]中前缀和后缀相等部分的长度，并且next[j]恰好等于这个最大长度；此外在j位匹配出错，刚好是从next[j]位开始重新匹配；next[j]在j-1处产生。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void getnxt(char *t,int *f)&#123; //字符串长度至少为1，求nxt数组</span><br><span class="line">	int i,j,len=strlen(t);</span><br><span class="line">	f[0]=f[1]=0;</span><br><span class="line">	for (i=1; i&lt;len; i++)&#123;</span><br><span class="line">		j=f[i];</span><br><span class="line">		while (j &amp;&amp; t[i]!=t[j]) j=f[j];</span><br><span class="line">		f[i+1]= t[i]==t[j] ? j+1 : 0;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int kmp(char *s,char *t,int *f)&#123; //这里肯定是O(n+m)的</span><br><span class="line">	int i,j,tem,n=strlen(s),m=strlen(t);</span><br><span class="line">	getnxt(t,f);</span><br><span class="line">	for (i=j=0; i&lt;n; i++)&#123;</span><br><span class="line">		while (j &amp;&amp; s[i]!=t[j]) j=f[j];</span><br><span class="line">		if (s[i]==t[j]) j++;</span><br><span class="line">		if (j==m) return i-m+1;</span><br><span class="line">		//if (j==m) num++,j=f[j]; //若统计有多少个</span><br><span class="line">	&#125;</span><br><span class="line">	return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>时间复杂度分析：在kmp函数中，每一次while 循环$j$的值都会减小（至少为1），然而每一次j++都伴随一次i++，所以总的复杂度是O(n)。在getnxt函数中过程类似。</p>
+</blockquote>
+<p>题目：找出第一个字符串在第二个字符串中出现次数。</p>
+<p>题目：求既是前缀串儿又是后缀串儿的不同子串的长度，长度从小到大输出。</p>
+<p>解答：next数组的性质是，该字符之前的字符串的最大相同前缀后缀。既然知道了最大的，即next[len]，递归一次next[ next[len] ]，就能求得更小的前缀。不断的递归把所有所有可能的长度找出来，然后递归输出即可。</p>
+<p>题目：给出一个字符串，求出这个字符串最多能够由多少个子串首尾连接而成。比如“ababab”就是由3个“ab”相连而成，所以输出3，“abcdef”只能看作一个“abcdef”所以输出1。</p>
+<p>解答：KMP中next数组的巧妙运用。在这里我们假设这个字符串的长度是len，那么如果len可以被len-next[len]整除的话，我们就可以说len-next[len]就是那个最短子串的长度。</p>
+<h3 id="Trie树"><a href="#Trie树" class="headerlink" title="Trie树"></a>Trie树</h3><p>问题：给你100000个长度不超过10的单词。对于每一个单词，我们要判断他出没出现过，如果出现了，求第一次出现在第几个位置。<br>又称前缀树或字典树，是一种有序树，用于保存关联数组，其中的键通常是字符串。<br><img src="https://i.stack.imgur.com/EyFvY.png" alt="enter image description here"><br>题目：设计一个算法可以自动列出以输入字符串为前缀的单词中最频繁查找的前10个单词。</p>
+<blockquote>
+<p>注：类似google搜索框中输入要查找的单词，输入前缀google会自动列出同一前缀的所有查找单词中top 10的</p>
+</blockquote>
+<p>解答：</p>
+<ol>
+<li>节点上记录每个单词被查找的次数</li>
+<li>对于给定的输入词，找到其在Trie中的位置，设为节点K</li>
+<li>搜索以节点K为根的子树，用一个最小堆记录top10</li>
+</ol>
+<h3 id="Trie树＋KMP"><a href="#Trie树＋KMP" class="headerlink" title="Trie树＋KMP"></a>Trie树＋KMP</h3><p>问题：在输入的一串字符串中匹配有限组“字典”中的子串。<br>AC自动机算法算是比较简单直观的字符串匹配自动机，它其实就是在一颗Trie树上建一些失配指针，当失配时只要顺着失配指针走，就能避免一些重复的计算。算法均摊情况下具有近似于线性的时间复杂度。</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/trie-tree.png" alt="Trie_Tree"></p>
+<p>应用：多模式串匹配问题。当一个字典串集合是已知的(例如一个计算机病毒库), 就可以以离线方式先将自动机求出并储存以供日后使用。</p>
+<ul>
+<li>UNIX系统中的一个命令fgrep就是以AC自动机算法作为基础实现的。</li>
+<li>nginx模块用于判断User-Agent（用户的浏览器信息）的核心算法就是AC自动机</li>
+</ul>
+<hr>
+<h2 id="网络流算法"><a href="#网络流算法" class="headerlink" title="网络流算法"></a>网络流算法</h2><h3 id="最大流算法"><a href="#最大流算法" class="headerlink" title="最大流算法"></a>最大流算法</h3><p>在优化理论中,最大流问题涉及到在一个单源点、单汇点的网络流中找到一条最大的流。</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/maximum-flow-problem.png" alt="Maximum_flow_problem"></p>
+<h4 id="经典算法"><a href="#经典算法" class="headerlink" title="经典算法"></a>经典算法</h4><p>核心是将一条边的单向残留容量的减少看做反向残留流量的增加，然后每次寻找增广路径（就是新的流量），直到无法找到增广路径为止。</p>
+<p><img src="/images/alg/IntroductionToAlgorithm/残留网络.png" alt="残留网络"></p>
+<ul>
+<li>Edmonds–Karp算法：使用广度优先搜索寻找增广路径。</li>
+<li>Dinic算法</li>
+<li>SAP算法</li>
+</ul>
+<p>题目：有N个牛，F个食物，D个饮料，每个牛喜欢一些食物和饮料，现在要给牛分发食物和饮料，当一个牛得到一个喜欢的食物和一个喜欢的饮料的时候，就说这个牛被满足了。求最多可以满足多少个牛。每个饮料和食物只能被分给一个牛，每个牛也只能拿到一个饮料和食物。</p>
+<p><img src="http://i.imgur.com/hkRDu4q.png" alt="enter image description here"><br>解法：一头牛贡献一单位的流量，所以把牛拆了，中间加一个1容量的边，然后起点到所有饮料连1容量边，饮料到喜欢自己的牛连1容量边，牛到他喜欢的食物连1容量的边，所有食物向终点连1容量的边。</p>
+<p>题意：有N个农场，P条无向路连接。要从1到N不重复走一条路地走T次，求所经过的直接连接两个区域的道路中最长道路的最小值。</p>
+<p>解法：源点向1连容量T的边。二分最小长度，长度超过mid的边容量为0，否则为1，用最大流判可行性。</p>
+<h3 id="最小费用最大流算法"><a href="#最小费用最大流算法" class="headerlink" title="最小费用最大流算法"></a>最小费用最大流算法</h3><p>最小费用最大流问题是经济学和管理学中的一类典型问题。<br>在一个网络中每段路径都有“容量”和“费用”两个限制的条件下，此类问题的研究试图寻找出：流量从A到B，如何选择路径、分配经过路径的流量，可以达到所用的费用最小的要求。<br>在实际中：$n$辆卡车要运送物品，从A地到B地。由于每条路段都有不同的路费要缴纳，每条路能容纳的车的数量有限制，如何分配卡车的出发路径可以达到费用最低，物品又能全部送到。</p>
+<blockquote>
+<p>最小费用最大流与一般增广路的区别在于，每次寻找的增广路都是代价最小的路径。以代价为边的权重，求单源最短路径。</p>
+</blockquote>
+<p><img src="/images/alg/IntroductionToAlgorithm/minimumcostmaximums-tflow.png" alt="MinimumCostMaximums-tFlow"></p>
+<p>题目：给出一个无向图，求从1到N走两次的最短路，每条路不能重复走。</p>
+<p>解法：S向1连容量2，费用0的边，N向T连容量2，费用0的边，节点间连容量1，费用为边权的边。一次费用流。</p>
+<p>题目：给出一个n*n的矩阵,每一格有一个非负整数Aij,(Aij &lt;= 1000)现在从(1,1)出发,可以往右或者往下走,最后到达(n,n),每达到一格,把该格子的数取出来,该格子的数就变成0,这样一共走K次,现在要求K次所达到的方格的数的和最大</p>
+<p>解法：$k$为１或者２时可以动态规划<br><img src="http://img.voidcn.com/vcimg/000/006/386/599_c3b_0d5.png" alt="enter image description here"></p>
+<p>$k$为２时：</p>
+<ul>
+<li>四维dp，$dp[x_1][y_1][x_2][y_2]$表示从起点（1，1）开始到点$（x_1，y_1）（x_2，y_2）$的最优路线</li>
+<li>三维dp，因为$x_1+y_1=x_2+y_2=k$(当前走的步数)，所以$dp[k][x_1][x_2]$表示走了$k$步第一个人停留在$x_1$位置，第二个人停留在$x_2$的位置（对应的$y$值可以算出来）。</li>
+</ul>
+<p>解法：用最小费用最大流来解<br>对于每一个格子，我们拆成两个点（因为要限制流量）；每一个格子可以取一次，但是每一个格子是可以走多次的，那么我们在两个点中建两种边：</p>
+<ol>
+<li>费用为权值，流量为１</li>
+<li><p>费用为0，流量为$\infty$（或$k-1$, $k$都行）</p>
+<p><img src="https://lh3.googleusercontent.com/-ZjQ1MZnRLKo/Wg50x9HRElI/AAAAAAAAHZw/Nm2BrtXMRnEBplAv_ymfoNc_aSQoAzBywCLcBGAs/s0/67607011hafbade7b1dd9%2526690.jpeg" alt="enter image description here" title="67607011hafbade7b1dd9&amp;690.jpeg"></p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据结构与算法/" rel="tag"># 数据结构与算法</a>
+          
+            <a href="/tags/动态规划/" rel="tag"># 动态规划</a>
+          
+            <a href="/tags/二分查找/" rel="tag"># 二分查找</a>
+          
+            <a href="/tags/优先队列/" rel="tag"># 优先队列</a>
+          
+            <a href="/tags/平衡树/" rel="tag"># 平衡树</a>
+          
+            <a href="/tags/线段树/" rel="tag"># 线段树</a>
+          
+            <a href="/tags/并查集/" rel="tag"># 并查集</a>
+          
+            <a href="/tags/BFS/" rel="tag"># BFS</a>
+          
+            <a href="/tags/DFS/" rel="tag"># DFS</a>
+          
+            <a href="/tags/欧几里得算法/" rel="tag"># 欧几里得算法</a>
+          
+            <a href="/tags/拓扑排序/" rel="tag"># 拓扑排序</a>
+          
+            <a href="/tags/最小生成树/" rel="tag"># 最小生成树</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/01.Algorithm/Alg.03.排序算法/" rel="next" title="常用排序算法">
+                <i class="fa fa-chevron-left"></i> 常用排序算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/01.Algorithm/Alg.LeetcodeEtudes/" rel="prev" title="Alg.LeetcodeEtudes">
+                Alg.LeetcodeEtudes <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本思想"><span class="nav-text">基本思想</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时空复杂度"><span class="nav-text">时空复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#归约"><span class="nav-text">归约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#枚举"><span class="nav-text">枚举</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#贪心"><span class="nav-text">贪心</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分治"><span class="nav-text">分治</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#递推与递归"><span class="nav-text">递推与递归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造"><span class="nav-text">构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模拟"><span class="nav-text">模拟</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序"><span class="nav-text">排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#经典数据结构"><span class="nav-text">经典数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#栈"><span class="nav-text">栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#队列"><span class="nav-text">队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链表"><span class="nav-text">链表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哈希"><span class="nav-text">哈希</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单调队列"><span class="nav-text">单调队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优先队列"><span class="nav-text">优先队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平衡树"><span class="nav-text">平衡树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AVL"><span class="nav-text">AVL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RB-Tree（红黑树，即是B-树-2-4-）"><span class="nav-text">RB-Tree（红黑树，即是B-树(2,4)）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Splay"><span class="nav-text">Splay</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线段树"><span class="nav-text">线段树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并查集"><span class="nav-text">并查集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索"><span class="nav-text">搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BFS"><span class="nav-text">BFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DFS"><span class="nav-text">DFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-搜索"><span class="nav-text">A*搜索</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础数学算法"><span class="nav-text">基础数学算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二分查找算法"><span class="nav-text">二分查找算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#欧几里得算法"><span class="nav-text">欧几里得算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快速幂算法"><span class="nav-text">快速幂算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图论基础算法"><span class="nav-text">图论基础算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#拓扑排序"><span class="nav-text">拓扑排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最小生成树算法"><span class="nav-text">最小生成树算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Prim算法"><span class="nav-text">Prim算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Kruskal算法"><span class="nav-text">Kruskal算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最短路径算法"><span class="nav-text">最短路径算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Dijkstra算法"><span class="nav-text">Dijkstra算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Floyd-Warshall算法"><span class="nav-text">Floyd-Warshall算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态规划算法"><span class="nav-text">动态规划算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数字三角形-IOI-1994"><span class="nav-text">数字三角形[IOI 1994]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最长上升子序列"><span class="nav-text">最长上升子序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最长公共子序列"><span class="nav-text">最长公共子序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最大连续子段和"><span class="nav-text">最大连续子段和</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#背包问题"><span class="nav-text">背包问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算几何算法"><span class="nav-text">计算几何算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#向量性质"><span class="nav-text">向量性质</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#向量点积"><span class="nav-text">向量点积</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向量叉积"><span class="nav-text">向量叉积</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#To-Left-Test"><span class="nav-text">To-Left Test</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#凸包"><span class="nav-text">凸包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平面最近点对"><span class="nav-text">平面最近点对</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串匹配算法"><span class="nav-text">字符串匹配算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#KMP算法"><span class="nav-text">KMP算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Trie树"><span class="nav-text">Trie树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Trie树＋KMP"><span class="nav-text">Trie树＋KMP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络流算法"><span class="nav-text">网络流算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最大流算法"><span class="nav-text">最大流算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#经典算法"><span class="nav-text">经典算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最小费用最大流算法"><span class="nav-text">最小费用最大流算法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/01.Algorithm/Alg.IntroductionToAlgorithm/';
+          this.page.identifier = '01.Algorithm/Alg.IntroductionToAlgorithm/';
+          this.page.title = '影响程序员发展的十类算法（zz）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

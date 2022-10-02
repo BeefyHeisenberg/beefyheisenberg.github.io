@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Vim," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="plugin @2020 C++补全: 仍然是YCM 自动生成tag: vim-gutentags 或  gen_tags.vim 动态检查: ale(替代syntastic) 函数列表: LeaderF(替代 tagbar) 快速打开文件: LeaderF  一些基本概念 operator（操作符）: 例如命令d, y, c等; motion（移动）: 例如移动光标的命令h j k l, w,">
+<meta name="keywords" content="Vim">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vim入门指北">
+<meta property="og:url" content="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】Vim入门指北/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="plugin @2020 C++补全: 仍然是YCM 自动生成tag: vim-gutentags 或  gen_tags.vim 动态检查: ale(替代syntastic) 函数列表: LeaderF(替代 tagbar) 快速打开文件: LeaderF  一些基本概念 operator（操作符）: 例如命令d, y, c等; motion（移动）: 例如移动光标的命令h j k l, w,">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/vi-vim-cheat-sheet-sch1.gif">
+<meta property="og:updated_time" content="2022-10-02T15:13:44.115Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vim入门指北">
+<meta name="twitter:description" content="plugin @2020 C++补全: 仍然是YCM 自动生成tag: vim-gutentags 或  gen_tags.vim 动态检查: ale(替代syntastic) 函数列表: LeaderF(替代 tagbar) 快速打开文件: LeaderF  一些基本概念 operator（操作符）: 例如命令d, y, c等; motion（移动）: 例如移动光标的命令h j k l, w,">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/vi-vim-cheat-sheet-sch1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】Vim入门指北/"/>
+
+
+
+
+
+  <title>Vim入门指北 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】Vim入门指北/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Vim入门指北</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,888
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/images/vi-vim-cheat-sheet-sch1.gif" alt="vim cheat sheet"></p>
+<h1 id="plugin-2020"><a href="#plugin-2020" class="headerlink" title="plugin @2020"></a>plugin @2020</h1><ul>
+<li>C++补全: 仍然是YCM</li>
+<li>自动生成tag: vim-gutentags 或  gen_tags.vim</li>
+<li>动态检查: ale(替代syntastic)</li>
+<li>函数列表: LeaderF(替代 tagbar)</li>
+<li>快速打开文件: LeaderF</li>
+</ul>
+<h1 id="一些基本概念"><a href="#一些基本概念" class="headerlink" title="一些基本概念"></a>一些基本概念</h1><ul>
+<li>operator（操作符）: 例如命令<code>d</code>, <code>y</code>, <code>c</code>等;</li>
+<li>motion（移动）: 例如移动光标的命令<code>h j k l</code>, <code>w</code>, <code>e</code>, <code>b</code>等;</li>
+<li>text-objects（文本对象）: 例如<code>s</code>(表示句子sentence)， <code>w</code>表示单词，<code>p</code>表示段落（Paragraphs）等等。</li>
+</ul>
+<blockquote>
+<p>除了hjkl这些基本命令之外， 你还要知道“更高级的”组合命令： “operator + motion” 组合的方式，例如：</p>
+</blockquote>
+<ul>
+<li><code>ct.</code> 将字符’.’前面的所有都删除.</li>
+<li><code>y^</code>  复制到行首.</li>
+</ul>
+<blockquote>
+<p>“operator + text-objects” 的命令组合方式, 例如:</p>
+</blockquote>
+<ul>
+<li><code>ciw</code> : 剪切光标处单词, 不包括空格</li>
+<li><code>caw</code> : 剪切光标处单词, 包括空格</li>
+<li><code>dip</code> : 删除一段</li>
+</ul>
+<h1 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h1><p>下上左右：<code>ＪＫＨＬ</code><br>移动到上一个单词首<code>b</code><br>移动到下一个单词首<code>w</code>，移动3个单词<code>3w</code><br>    <----b w----=""></----b></p>
+<p><code>w</code> / <code>b</code>是在单词首部移动，在单词尾部移动为<code>ge</code> / <code>e</code><br>    <----ge e----=""></----ge></p>
+<p>如果是大写的<code>B</code>，<code>W</code>，<code>gE</code>，<code>E</code>，则只将“空格”作为单词分隔符，例如’gloal.member’被当作一个完整的词。</p>
+<p><code>^</code> 光标移动到行开头<br><code>$</code> 光标移动到行结尾<br><code>fx</code> 光标移动到下一个x处，3fx移动到第三个x处<br><code>Fx</code> 光标移动到前面的x处<br><code>tx</code>，<code>Tx</code>类似，移动到x之前<br><code>ma</code> 标记当前行， 标签可以是a-z任意字符<br><code>~a</code> 跳转到a标签</p>
+<p>跳转到上次编辑位置: <code>C-O</code><br>跳转到匹配的括号<code>%</code><br>移动到文件首<code>gg</code><br>有趣的命令: <code>9999k</code>作用也是移动到文件首<br>移动到文件尾<code>G</code><br>跳转到第33行<code>33G</code><br>或者输入 <code>:33</code> 也可以跳转<br>如移动到文档1/3处 ，直接输入<code>33%</code><br>将当前光标所在的行移到屏幕中间 <code>zz</code><br>当前光标所在的行移到屏幕顶，<code>zt</code> 助记t=top 。<br>当前光标所在的行移到屏幕底，<code>zb</code> 助记b=bottom 。<br>分别为移动到文档的head, middle, last的位置 <code>H, M, L</code>。<br> 向前向后翻页 <code>C-F</code> , <code>C-B</code></p>
+<blockquote>
+<p>Linux 终端( Terminal)中常用的快捷键</p>
+<blockquote>
+<p>ctrl+f 向前移动一个字符<br>ctrl+b 向后移动一个字符<br>alt+f 向前移动一个单词<br>alt+b 向后移动一个单词<br>ctrl+a 移动到当前行首<br>ctrl+e 移动到当前行尾</p>
+</blockquote>
+</blockquote>
+<h2 id="vim-whith-ctags"><a href="#vim-whith-ctags" class="headerlink" title="vim whith ctags"></a>vim whith ctags</h2><ul>
+<li>基于tags定义跳转: <code>C-]</code></li>
+<li>在新 Window 打开tag的定义: <code>C-W-]</code></li>
+<li>在新的预览 Window 里打开tag的定义:  <code>C-W-}</code></li>
+<li>如果tags找到多个定义, 用 <code>g-]</code> 可以列出所有找到的tag;</li>
+<li>跳转回 <code>C-O</code> 或 <code>C-T</code> 或按两下 <code>～</code></li>
+<li><code>Ctrl + 左/右键</code> 也可以跳转/返回</li>
+</ul>
+<blockquote>
+<p><code>CTRL-T</code> is working with tags stack<br><code>CTRL-O</code> is working with jumplist<br>Tag stack and jumplist are different list in vim, but they might have same items when you jumping through tags (eg. using <code>CTRL-]</code> )</p>
+</blockquote>
+<h1 id="编辑"><a href="#编辑" class="headerlink" title="编辑"></a>编辑</h1><p>使用<code>c</code>，<code>d</code>和<code>x</code>删除的字符仍然存在寄存器中，用<code>p</code>可以粘贴出来。</p>
+<ul>
+<li><code>c</code> = 替换（change），删除文本并进入插入模式，</li>
+<li><code>d</code> =删除（delete），一般组合使用，</li>
+<li><code>y</code> =复制（yank），</li>
+<li><code>p</code> = 粘贴（paste），</li>
+<li><code>x</code> = 删除字符；</li>
+</ul>
+<p>删除,剪切, 复制一行= <code>ｃｃ</code>，<code>ｄｄ</code>，<code>ｙｙ</code><br>删除,剪切, 复制多行= <code>３ｃｃ</code>，<code>４ｄｄ</code>，<code>５ｙｙ</code><br>删除,剪切, 复制到行尾= <code>ｃ＄</code>，<code>ｄ＄</code>，<code>ｙ＄</code><br>或者大写C, D, Y, 也是到行尾<br>删除,剪切,复制到行开头= <code>ｃ＾</code>，<code>ｄ＾</code>，<code>ｙ＾</code> 或者<code>ｃ０</code>，<code>ｄ０</code>，<code>ｙ０</code></p>
+<p>从光标开始, 删除,剪切,复制到单词尾＝<code>cw</code>，<code>dw</code>，<code>yw</code><br>删除,剪切,复制整个单词= <code>daw</code>, <code>caw</code>, <code>yaw</code><br>注意区别<code>yw</code>和<code>yaw</code>, 例如光标在＂test＂ 的e位置, <code>yaw</code>复制整个单词, <code>yw</code>只复制est。</p>
+<blockquote>
+<p>tips: 重复操作的快捷键是”.”, 比如daw删除一个单词后想继续删除下一个单词，就可以按”.”</p>
+</blockquote>
+<p>删除换行符（两行合并为一行）： <code>J</code><br>撤销上次操作（还原）： <code>u</code><br>反撤销（重做）： <code>Ctrl+r</code><br>撤销对一行的所有操作（还原一行）： <code>U</code>，第二次按U会撤销上一次Ｕ的操作。<br>只用u和C-R即可回到任何一个操作状态。<br>可视模式下的U/u是大小写转换。</p>
+<ul>
+<li>光标前插入 = <code>i</code></li>
+<li>光标后插入 = <code>a</code></li>
+<li>行首插入 = <code>I</code></li>
+<li>行尾插入 = <code>A</code></li>
+</ul>
+<p>在当前行的下面另起一行，并进入插入状态<code>o</code><br>在当前行的前面另起一行，并进入插入状态<code>O</code></p>
+<h2 id="外部程序的粘贴-amp-复制"><a href="#外部程序的粘贴-amp-复制" class="headerlink" title="外部程序的粘贴&amp;复制"></a>外部程序的粘贴&amp;复制</h2><p>GVIM的“+号寄存器”可以与外部程序复制/粘贴:</p>
+<ul>
+<li>复制<code>&quot;+y</code></li>
+<li>粘贴<code>&quot;+p</code></li>
+<li>剪切<code>&quot;+x</code><br>注: 以上快捷键在命令可视模式/模式有效，先按双引号进入寄存器模式,再按加号,然后按<code>y/p/x</code><br>如果在插入模式, 先按<code>ctrl+R</code>进入寄存器模式（会出现<code>&quot;</code>号）, 再按对应的寄存器编号，系统共享寄存器编号是+号.<br>在VIM正常模式下,<code>ctrl+r</code> 是重做。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot; 加入到_vimrc文件中:</span><br><span class="line">map &lt;C-c&gt; &quot;+y &quot;加号寄存器-复制</span><br><span class="line">map &lt;C-v&gt; &quot;+p &quot;加号寄存器-复制</span><br><span class="line">map &lt;CTRL-X&gt; &quot;+x &quot;加号寄存器-复制</span><br><span class="line">map &lt;C-s&gt; :w&lt;cr&gt; &quot; 保存</span><br></pre></td></tr></table></figure>
+<h1 id="多窗口"><a href="#多窗口" class="headerlink" title="多窗口"></a>多窗口</h1><ul>
+<li>关闭分屏窗口: <code>Ctrl+W c</code> 或 <code>Ctrl+W q</code></li>
+<li>上下分割窗口: <code>Ctrl+W s</code></li>
+<li>左右分割窗口: <code>Ctrl+W v</code><br><code>Ctrl+w Ctrl+]</code> 在新窗口打开定义</li>
+</ul>
+<h1 id="多文件buff操作"><a href="#多文件buff操作" class="headerlink" title="多文件buff操作"></a>多文件buff操作</h1><p><code>:E</code> 或者<code>:Explore</code> 浏览目录<br><code>:edit filename</code> 编辑文件；<br><code>:ls</code> 列出所有buffer；<br><code>:b 2</code>或<code>:buffer 2</code>将切换到相关的buffer<br><code>:b2</code> 关闭buff=2的文件；<br><code>:bn</code> 删除文件缓冲(关闭文件)。<br><code>zz</code> 将当前编辑的行置于屏幕中间。<br><code>ZZ</code> 保存退出。<br><code>:q!</code> 不保存退出, <code>:qa!</code>表示退出所有buff并不保存<br><code>:wq</code> 保存退出</p>
+<h1 id="搜索和替换"><a href="#搜索和替换" class="headerlink" title="搜索和替换"></a>搜索和替换</h1><h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2><p><code>/include</code> 正向搜索，n下一个，N上一个<br><code>?include</code> 反向搜索<br><code>/\&lt;the\&gt;</code> 全词匹配搜索单词＂the＂，助记开头\&lt;，结尾><br><code>#</code>号是向后搜索匹配单词，<code>*</code>向前搜索匹配单词, <code>gd</code>类似*号的功能.</p>
+<h2 id="正则搜索"><a href="#正则搜索" class="headerlink" title="正则搜索"></a>正则搜索</h2><p><code>/^the</code> 搜索the开头的行（针对行，而非单词）<br><code>/here$</code> 搜索here结尾的行<br>点号匹配任何单字符，如果要搜索的内容本身包含点号，则用.代替，比如：<br><code>/the.</code> 搜索＂the＂匹配的内容<br><code>/the\.</code> 搜索＂the.＂匹配的内容</p>
+<p>正则表达式教程参考： [[../41.Uncategorized/正则表达式-RegExp]]</p>
+<h2 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h2><p>最常用的替换命令就是<code>:%s/1/2/g</code>了, 其中%符号表示范围整个文件, s表示搜索, 最后的g表示全局替换.<br>如果要制定范围内替换, 比如在31~文件尾范围内替换: <code>:31,$s/hello/world/gc</code>, 最后的c参数表示替换过程中需要确认(confirm).</p>
+<h1 id="可视模式"><a href="#可视模式" class="headerlink" title="可视模式"></a>可视模式</h1><p><code>shift + v</code>: 行选择模式<br>大写<code>V</code>同上<br>所选择区域转换为大写<code>U</code>，转换为小写<code>u</code><br><code>x</code>和<code>d</code>在可视模式都是删除<br><code>&gt;</code>和<code>&lt;</code>在可视模式为右移,左移</p>
+<h1 id="列模式"><a href="#列模式" class="headerlink" title="列模式"></a>列模式</h1><p><code>Ctrl+v</code> (Windows上是<code>Ctrl+Q</code>)进入列模式,<br>使用方向键或<code>H J K L</code>选择行, 用<code>c</code>或<code>d</code>删除, shift+i插入(大写I键),<br>插入完成后, 按esc后生效.</p>
+<h1 id="代码折叠"><a href="#代码折叠" class="headerlink" title="代码折叠"></a>代码折叠</h1><p>可以<code>zf</code>进行折叠, 用<code>zo</code>打开折叠,也可以方向键向右打开折叠,<code>zc</code> 关闭折叠.</p>
+<h1 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h1><p>Session可以保存此次编辑的状态, 比如已经打开的文件, 当前编辑位置等.</p>
+<ul>
+<li>保存Session: <code>mksession session.vim</code></li>
+<li>载入Session: <code>source session.vim</code></li>
+</ul>
+<h1 id="补全"><a href="#补全" class="headerlink" title="补全"></a>补全</h1><ul>
+<li><code>CTRL-X CTRL-N</code>和<code>CTRL-X CTRL-P</code> : 关键字补全</li>
+<li><code>CTRL-X CTRL-K</code> : 字典补全</li>
+<li><code>CTRL-X CTRL-L</code> : 整行补全</li>
+<li><code>CTRL-X CTRL-F</code> : 文件名补全</li>
+<li><code>CTRL-X CTRL-O</code> : OmniComplete</li>
+</ul>
+<p>[Evernote]<a href="https://www.evernote.com/shard/s120/sh/4e8424bf-6c54-4f2e-a9a5-d4641127c615/ed07f657e1eccd05e81947e2e008c8a9" target="_blank" rel="noopener">https://www.evernote.com/shard/s120/sh/4e8424bf-6c54-4f2e-a9a5-d4641127c615/ed07f657e1eccd05e81947e2e008c8a9</a></p>
+<h1 id="配置文件-vimrc"><a href="#配置文件-vimrc" class="headerlink" title="配置文件.vimrc"></a>配置文件.vimrc</h1><p>=&gt; <a href="/50.Farbox-Blog/【Vim】我的Vim配置文件/" title="【Vim】我的Vim配置文件">【Vim】我的Vim配置文件</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Vim/" rel="tag"># Vim</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/50.Farbox-Blog/【Vim】我的Vim配置文件/" rel="next" title="我的 Vim 配置文件">
+                <i class="fa fa-chevron-left"></i> 我的 Vim 配置文件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/50.Farbox-Blog/【C & Cpp】C语言里面的一些陷阱/" rel="prev" title="C语言里面的一些陷阱">
+                C语言里面的一些陷阱 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#plugin-2020"><span class="nav-text">plugin @2020</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些基本概念"><span class="nav-text">一些基本概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#移动光标"><span class="nav-text">移动光标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#vim-whith-ctags"><span class="nav-text">vim whith ctags</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编辑"><span class="nav-text">编辑</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#外部程序的粘贴-amp-复制"><span class="nav-text">外部程序的粘贴&amp;复制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多窗口"><span class="nav-text">多窗口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多文件buff操作"><span class="nav-text">多文件buff操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搜索和替换"><span class="nav-text">搜索和替换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索"><span class="nav-text">搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正则搜索"><span class="nav-text">正则搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#替换"><span class="nav-text">替换</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可视模式"><span class="nav-text">可视模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#列模式"><span class="nav-text">列模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码折叠"><span class="nav-text">代码折叠</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Session"><span class="nav-text">Session</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#补全"><span class="nav-text">补全</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置文件-vimrc"><span class="nav-text">配置文件.vimrc</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】Vim入门指北/';
+          this.page.identifier = '50.Farbox-Blog/【Vim】Vim入门指北/';
+          this.page.title = 'Vim入门指北';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

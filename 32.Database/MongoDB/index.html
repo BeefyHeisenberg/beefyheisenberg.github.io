@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="后端架构,数据库,NoSQL,Mongo," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="MongoDB是高性能(得益于内存缓存)、无模式的文档型数据库，支持二级索引，类json格式存储(bson)，非常适合文档化格式的存储及查询。适合用来存放评论等半结构化数据;MongoDB的官方定位是通用数据库，与MySQ类似，但跟传统关系型数据库比较，Mongo在事务、join、复杂查询应用下仍旧无法取代关系型数据库。 mongo shellquery ObjectId: db.getColl">
+<meta name="keywords" content="后端架构,数据库,NoSQL,Mongo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB">
+<meta property="og:url" content="https://beefyheisenberg.github.io/32.Database/MongoDB/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="MongoDB是高性能(得益于内存缓存)、无模式的文档型数据库，支持二级索引，类json格式存储(bson)，非常适合文档化格式的存储及查询。适合用来存放评论等半结构化数据;MongoDB的官方定位是通用数据库，与MySQ类似，但跟传统关系型数据库比较，Mongo在事务、join、复杂查询应用下仍旧无法取代关系型数据库。 mongo shellquery ObjectId: db.getColl">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://webassets.mongodb.com/_com_assets/cms/MongoDB-Logo-5c3a7405a85675366beb3a5ec4c032348c390b3f142f5e6dddf1d78e2df5cb5c.png">
+<meta property="og:updated_time" content="2022-10-02T15:13:43.809Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDB">
+<meta name="twitter:description" content="MongoDB是高性能(得益于内存缓存)、无模式的文档型数据库，支持二级索引，类json格式存储(bson)，非常适合文档化格式的存储及查询。适合用来存放评论等半结构化数据;MongoDB的官方定位是通用数据库，与MySQ类似，但跟传统关系型数据库比较，Mongo在事务、join、复杂查询应用下仍旧无法取代关系型数据库。 mongo shellquery ObjectId: db.getColl">
+<meta name="twitter:image" content="https://webassets.mongodb.com/_com_assets/cms/MongoDB-Logo-5c3a7405a85675366beb3a5ec4c032348c390b3f142f5e6dddf1d78e2df5cb5c.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/32.Database/MongoDB/"/>
+
+
+
+
+
+  <title>MongoDB | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MongoDB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MongoDB</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  815
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://webassets.mongodb.com/_com_assets/cms/MongoDB-Logo-5c3a7405a85675366beb3a5ec4c032348c390b3f142f5e6dddf1d78e2df5cb5c.png" alt="MongoDB"></p>
+<p>MongoDB是高性能(得益于内存缓存)、无模式的文档型数据库，支持二级索引，类json格式存储(bson)，非常适合文档化格式的存储及查询。适合用来存放评论等半结构化数据;<br>MongoDB的官方定位是通用数据库，与MySQ类似，但跟传统关系型数据库比较，Mongo在事务、join、复杂查询应用下仍旧无法取代关系型数据库。</p>
+<h1 id="mongo-shell"><a href="#mongo-shell" class="headerlink" title="mongo shell"></a>mongo shell</h1><h2 id="query"><a href="#query" class="headerlink" title="query"></a>query</h2><ul>
+<li>ObjectId: <code>db.getCollection(&#39;activities&#39;).find(ObjectId(&#39;5a9f5e7137c65800015df8d0&#39;))</code></li>
+<li>AND: <code>db.collection.find({ &quot;key&quot; : &quot;value&quot;, &quot;key1&quot; : &quot;value1&quot;})</code> </li>
+<li>OR: </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">db.collection.find(&#123;    </span><br><span class="line">    $or : [</span><br><span class="line">        &#123;k1:v1&#125;,</span><br><span class="line">        &#123;k2:v2&#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="条件"><a href="#条件" class="headerlink" title="条件"></a>条件</h3><ul>
+<li>lt, lte, gt, gte: </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">db.collection.find(&#123;</span><br><span class="line">    &quot;key&quot; : &#123; $gte : 59&#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>not null : <code>db.collection.find({&quot;key&quot;: {$exists:true}})</code></li>
+</ul>
+<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><ul>
+<li>升序: <code>db.collection.find({}).sort({&quot;key&quot;: 1})</code></li>
+<li>降序: <code>db.collection.find({}).sort({&quot;key&quot;: -1})</code></li>
+</ul>
+<h2 id="update"><a href="#update" class="headerlink" title="update"></a>update</h2><p>格式:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">db.collection.update(</span><br><span class="line">   &#123;query&#125;,</span><br><span class="line">   &#123;update&#125;,</span><br><span class="line">   &#123;</span><br><span class="line">     upsert: &lt;boolean&gt;,</span><br><span class="line">     multi: &lt;boolean&gt;,</span><br><span class="line">     writeConcern: &lt;document&gt;</span><br><span class="line">   &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>例子:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">db.getCollection(&apos;activities&apos;).update(</span><br><span class="line">    &#123;&quot;dateStart&quot; : &#123;$gte:1514736000000&#125;&#125;, </span><br><span class="line">    &#123;$set : &#123;&apos;name&apos; : &apos;xxxx&apos;&#125;&#125;,</span><br><span class="line">    &#123;multi : true&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><strong>inc自增:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">db.getCollection(&apos;activities&apos;).update(</span><br><span class="line">    &#123; &quot;_id&quot; : ObjectId(&quot;5aa86f063dd35a000113401f&quot;) &#125;,</span><br><span class="line">    &#123; $inc : &#123; &quot;score&quot; : 10 &#125;&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="数组操作"><a href="#数组操作" class="headerlink" title="数组操作"></a>数组操作</h3><ul>
+<li>$push:向文档数组中添加元素，如果没有该数组，则自动添加数组</li>
+<li>$addToSet:功能与$push相同，区别在于，$addToSet把数组看作成一个Set,如果数组中存在相同的元素，不会插入。<code>$addToSet : {&#39;displayAttributes&#39; : &#39;totalPvShow&#39;}</code></li>
+</ul>
+<p>数组操作:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">db.getCollection(&apos;activities&apos;).update(</span><br><span class="line">    &#123;&quot;dateStart&quot; : &#123;$gte:1514736000000&#125;&#125;, </span><br><span class="line">    &#123;$addToSet : &#123;&apos;displayAttributes&apos; : &apos;totalPvShow&apos;&#125;&#125;,</span><br><span class="line">    &#123;multi : true&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="aggregate"><a href="#aggregate" class="headerlink" title="aggregate"></a>aggregate</h2><p>设每个数据包括 <code>{ &quot;icq&quot;: &quot;xxx&quot;, &quot;score1&quot; : 1, &quot;score2&quot; : 2 }</code>, 按<code>icq</code>聚合, 求<code>score1</code>和<code>score2</code>的和</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">db.getCollection(&apos;item&apos;).aggregate([</span><br><span class="line">&#123;$match : &#123; &quot;icq&quot; : &quot;xxxx&quot;&#125; &#125;,  # 匹配条件</span><br><span class="line">&#123;$group : &#123; </span><br><span class="line">        _id : &quot;$icq&quot; ,  # `_id`是固定的语法, 按哪一属性聚合</span><br><span class="line">        score1_sum : &#123; $sum : &quot;$score1&quot; &#125;,  # 自定义结果名: &#123;$操作 : &quot;$属性名&quot;&#125;</span><br><span class="line">        score2_sum : &#123; $sum : &quot;$channel&quot; &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<h1 id="mongo命令"><a href="#mongo命令" class="headerlink" title="mongo命令"></a>mongo命令</h1><p>启动数据库并开启权限: <code>/opt/apps/mongodb/bin/mongod --config /opt/conf/mongo/mongo.conf --auth</code></p>
+<p>连接mongo并查询</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mongo 127.0.0.1 -u username -p pwd --port 28015 # 连接数据库</span><br><span class="line">mongo 127.0.0.1 -u username -p pwd --port 28015 --authenticationDatabase "admin" # 指定验证的db</span><br><span class="line">mongo 127.0.0.1:27017/admin -u mongouser -p pwd # 另一种登录格式</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> show dbs <span class="comment"># 列出所有数据库</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> use db_name</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> show collections <span class="comment"># collection类似表</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> db.collection_name.find() <span class="comment"># 在xxx这个collection里查找</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> db.collection_name.find(&#123;appid: <span class="string">"total"</span>, time: <span class="string">"20170324"</span>&#125;) <span class="comment"># 在xxx里查找appid=total的项</span></span></span><br></pre></td></tr></table></figure>
+<p>关闭mongo服务:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; use admin</span><br><span class="line">&gt; db.shutdownServer();</span><br></pre></td></tr></table></figure>
+<h2 id="mongoexport"><a href="#mongoexport" class="headerlink" title="mongoexport"></a>mongoexport</h2><ul>
+<li><p>mongoexport参数说明:</p>
+<ul>
+<li>-d: database</li>
+<li>/c: collection</li>
+<li>/q: query filter, as a JSON string, e.g., ‘{x:{$gt:1}}’</li>
+<li>/sort: sort order, as a JSON string, e.g. ‘{x:1}’</li>
+<li>—-authenticationDatabase “admin” : 指定验证db</li>
+</ul>
+</li>
+<li><p>将info库中student的id,name信息以json格式导出到student_json.dat数据文件中，并且限定“行数”是1</p>
+<ul>
+<li><code>mongoexport -h 127.0.0.1 -u root -p 12345 -d info -c student --type=json -f id,name --limit=1 -o E:\data\student_json.dat</code></li>
+</ul>
+</li>
+<li>将info库student collections的name=a的信息以cvs格式导出到student_cvs.dat数据文件中<ul>
+<li><code>mongoexport -h 127.0.0.1 -u root -p 12345 -d info -c student --type=cvs -q{&quot;name&quot;:&quot;a&quot;} -o E:\data\student_cvs.dat</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h2><ul>
+<li>在admin数据库里addUser创建的是管理员用户, 可以访问任何数据库 <code>db.addUser(&quot;admin&quot;,&quot;admin&quot;);</code></li>
+<li><code>use DATABASE_NAME</code> : 如果数据库不存在，则创建数据库，否则切换到指定数据库。</li>
+<li>在某个数据库里addUser创建的用户, 只有对这个数据库的权限 </li>
+<li>创建用户: db.addUser(“user”,”pwd”);</li>
+<li>删除用户: db.removeUser(“xxx”);</li>
+<li>查找用户: db.system.users.find()</li>
+</ul>
+<p>创建具有admin权限的用户:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; use admin</span><br><span class="line">&gt; db.addUser(&quot;admin&quot;,&quot;password&quot;)</span><br><span class="line">&#123;</span><br><span class="line">    &quot;user&quot; : &quot;admin&quot;,</span><br><span class="line">    &quot;readOnly&quot; : false,</span><br><span class="line">    &quot;pwd&quot; : &quot;a254f094f02d3c96f4748175cb4b9403&quot;,</span><br><span class="line">    &quot;_id&quot; : ObjectId(&quot;595afee766c59f7c02021c99&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如何使用创建的用户登录:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">use admin # 授权admin必须切换到admin库</span><br><span class="line">db.auth(&quot;admin&quot;,&quot;password&quot;)</span><br><span class="line">use db_name  # 切换到要查询的库</span><br><span class="line">show collections</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/后端架构/" rel="tag"># 后端架构</a>
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/NoSQL/" rel="tag"># NoSQL</a>
+          
+            <a href="/tags/Mongo/" rel="tag"># Mongo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/32.Database/LevelDB-如何实现LSM-Tree/" rel="next" title="LevelDB 实现 LSM-Tree">
+                <i class="fa fa-chevron-left"></i> LevelDB 实现 LSM-Tree
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/32.Database/MySQL-00基础概念/" rel="prev" title="MySQL-00基础概念">
+                MySQL-00基础概念 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#mongo-shell"><span class="nav-text">mongo shell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#query"><span class="nav-text">query</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#条件"><span class="nav-text">条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排序"><span class="nav-text">排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#update"><span class="nav-text">update</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数组操作"><span class="nav-text">数组操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#aggregate"><span class="nav-text">aggregate</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mongo命令"><span class="nav-text">mongo命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mongoexport"><span class="nav-text">mongoexport</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#权限"><span class="nav-text">权限</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/32.Database/MongoDB/';
+          this.page.identifier = '32.Database/MongoDB/';
+          this.page.title = 'MongoDB';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

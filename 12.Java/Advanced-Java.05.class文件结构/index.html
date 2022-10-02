@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。class文件中的每个数据项都有它的固定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Advanced Java-05-class文件结构">
+<meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.05.class文件结构/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。class文件中的每个数据项都有它的固定">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-Class-Struct.png">
+<meta property="og:updated_time" content="2022-10-02T15:13:42.930Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Advanced Java-05-class文件结构">
+<meta name="twitter:description" content="class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。class文件中的每个数据项都有它的固定">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/java/JVM-Class-Struct.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.05.class文件结构/"/>
+
+
+
+
+
+  <title>Advanced Java-05-class文件结构 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.05.class文件结构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Advanced Java-05-class文件结构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/Java进阶系列/" itemprop="url" rel="index">
+                    <span itemprop="name">Java进阶系列</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,515
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。<br>class文件中的每个数据项都有它的固定长度， 数据项的不同长度分别用u1，u2，u4，u8表示，长度分别是byte、short、int、long。<br>class文件中存在以下数据项(该图表参考自《深入Java虚拟机》)：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">类型</th>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">u4</td>
+<td style="text-align:center">magic</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">minor_version</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">major_version</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">constant_pool_count</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">cp_info</td>
+<td style="text-align:center">constant_pool</td>
+<td style="text-align:center">constant_pool_count - 1</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">access_flags</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">this_class</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">super_class</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">interfaces_count</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">interfaces</td>
+<td style="text-align:center">interfaces_count</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">fields_count</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">field_info</td>
+<td style="text-align:center">fields</td>
+<td style="text-align:center">fields_count</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">methods_count</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">method_info</td>
+<td style="text-align:center">methods</td>
+<td style="text-align:center">methods_count</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">attribute_count</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">attribute_info</td>
+<td style="text-align:center">attributes</td>
+<td style="text-align:center">attributes_count</td>
+</tr>
+</tbody>
+</table>
+<p>下图参考自: <a href="https://blog.csdn.net/luanlouis/article/details/39960815" target="_blank" rel="noopener">《Java虚拟机原理图解》 Class文件中的常量池详解</a> @ref<br><img src="/images/java/JVM-Class-Struct.png" alt=""></p>
+<p><strong>class文件每个区域的说明：</strong></p>
+<ul>
+<li><code>magic</code>和<code>version</code>: magic也即魔数(固定值0xCAFEBABE)占用4字节, class文件版本号占用4字节, 不同版本的javac编译器编译的class文件, 版本号可能不同;</li>
+<li>常量池数量<code>constant_pool_count</code>, class文件中的项constant_pool_count的值为1, 说明每个类都只有一个常量池。 常量池中的数据也是一项一项的， 没有间隙的依次排放。常量池中各个数据项通过索引来访问， 有点类似与数组， 只不过常量池中的第一项的索引为1, 而不为0, 如果class文件中的其他地方引用了索引为0的常量池项， 就说明它不引用任何常量池项。</li>
+<li>常量池(<code>constant_pool</code>)存储的内容主要包括<code>符号引用</code>和<code>字面量</code>, 常量池中除了存放了常量字符串，final常量值，还包括 <strong>符号引用</strong>（包括当前类的类名， 字段名， 方法名， 各个字段和方法的描述符， 对当前类的字段和方法的引用信息， 当前类中对其他类的引用信息等等）。<br>class文件中的很多其他部分都是对常量池中的数据项的引用，比如后面要讲到的<code>this_class</code>, <code>super_class</code>, <code>field_info</code>, <code>attribute_info</code>等，<br>另外字节码指令中也存在对常量池的引用， 这个对常量池的引用当做字节码指令的一个操作数。此外， 常量池中各个项也会相互引用。<ul>
+<li><strong>a. 字面量</strong>: 主要包括字符串常量和final常量值;</li>
+<li><strong>b. 符号引用</strong>: 包括 类继承的超类, 接口的全限定名, 及描述符（包括fields的名称和描述符, methods的名称及描述符）<ol>
+<li>类和接口的全限定名: 例如一个类的权限定名是<code>org/kshan/corej/TestClass</code>;</li>
+<li>字段的名称和描述符:<ul>
+<li>字段名称: 当类被加载后的链接阶段, 这些符号引用被替换为直接引用;</li>
+<li>字段描述符: 用来描述字段的类型比如二维数组<code>int [][]</code>被记录为<code>[[I</code>, <code>String[]</code>被记录为<code>[Ljava/lang/String</code>;</li>
+</ul>
+</li>
+<li>方法的名称和描述符:<ul>
+<li>方法名称: 当类被加载后的链接阶段, 这些符号引用被替换为直接引用;</li>
+<li>方法描述符: 用来描述方法的形参/返回值, 例如方法<code>int getIndex(String name,char[] tgc,int start,int end,char target)</code>的描述符为<code>(Ljava/lang/String[CIIC) I</code>;</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><code>access_flag</code>, 在常量池之后的两个字节, 这个标志用于识别一些类或接口层次的访问信息</li>
+<li><code>this_class</code>/<code>super_class</code>/<code>interfaces</code>: 类索引（<code>this_class</code>）和父类索引（<code>super_class</code>）都是一个 u2 类型的数据,而接口索引集合（<code>interfaces</code>）则是一组 u2 类型的数据集合, Class 文件中由这三项数据来确定这个类的继承关系;</li>
+<li><code>field_info</code>字段表</li>
+<li><code>method_info</code>方法表</li>
+<li><code>attribute_info</code>属性表</li>
+<li>方法字节码</li>
+</ul>
+<h2 id="class文件常量池"><a href="#class文件常量池" class="headerlink" title="class文件常量池"></a>class文件常量池</h2><p>注意不要与JVM内存模型中的”运行时常量池”混淆, Class文件中常量池主要存储了字面量以及符号引用，其中<br>字面量主要包括字符串，final常量的值或者某个属性的初始值等等，<br>符号引用主要存储类和接口的全限定名称，字段的名称以及描述符，方法的名称以及描述符，<br>JVM内存模型中有堆，方法区，栈，而方法区中又存在一块区域叫运行时常量池，运行时常量池中存放的其实也是各种字面量以及符号引用， 只不过运行时常量池具有动态性，它可以在运行的时候向其中增加其它的常量进去，最具代表性的就是<code>String.intern</code>方法。</p>
+<h2 id="实例分析class文件常量池"><a href="#实例分析class文件常量池" class="headerlink" title="实例分析class文件常量池"></a>实例分析class文件常量池</h2><p>Java测试类:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CJEntry</span> <span class="keyword">extends</span> <span class="title">CJBaseClass</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> thatIsConstVar = <span class="number">5</span>; <span class="comment">// 整形常量</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> thatIsStaticVar = <span class="keyword">true</span>; <span class="comment">// 静态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> thatIsInstanceVar;  <span class="comment">// 实例变量</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">thatIsInstanceMethod</span><span class="params">(String input)</span> </span>&#123; <span class="comment">// 实例方法</span></span><br><span class="line">        <span class="keyword">return</span> Integer.parseInt(input); <span class="comment">// 调用静态方法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译后使用javap分析class文件: <code>javac org/kshan/corej/CJEntry.java &amp;&amp; javap -v org.kshan.corej.CJEntry</code>, 只截取输出的”Constant pool” :</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> #1 = Methodref          #5.#23         // org/kshan/corej/CJBaseClass.&quot;&lt;init&gt;&quot;:()V  ## 构造方法的符号引用</span><br><span class="line"> #2 = Methodref          #24.#25        // java/lang/Integer.parseInt:(Ljava/lang/String;)I  ## Integer.parseInt()的符号引用</span><br><span class="line"> #3 = Fieldref           #4.#26         // org/kshan/corej/CJEntry.thatIsStaticVar:Z  ## 静态field的符号引用</span><br><span class="line"> #4 = Class              #27            // org/kshan/corej/CJEntry  ## 父类符号引用</span><br><span class="line"> #5 = Class              #28            // org/kshan/corej/CJBaseClass ## 接口符号引用</span><br><span class="line"> #7 = Utf8               thatIsConstVar  ##static final常量名字</span><br><span class="line">#10 = Integer            5  ## static final常量值</span><br><span class="line">#11 = Utf8               thatIsStaticVar  ## 变量名字</span><br><span class="line">#13 = Utf8               thatIsInstanceVar ## 变量名字</span><br><span class="line">#14 = Utf8               &lt;init&gt; ##</span><br><span class="line">#15 = Utf8               ()V  ##</span><br><span class="line">#18 = Utf8               thatIsInstanceMethod</span><br><span class="line">#19 = Utf8               (Ljava/lang/String;)I</span><br><span class="line">#23 = NameAndType        #14:#15  // &quot;&lt;init&gt;&quot;:()V  ## 构造方法的NameAndType, &lt;init&gt;是构造方法的名字, ()V表示无参返回Void</span><br><span class="line">#24 = Class              #30      // java/lang/Integer</span><br><span class="line">#25 = NameAndType        #31:#19        // parseInt:(Ljava/lang/String;)I  ## 静态方法名字:描述符`(形参列表)返回值`的格式</span><br><span class="line">#26 = NameAndType        #11:#12        // thatIsStaticVar:Z</span><br><span class="line">#27 = Utf8               org/kshan/corej/CJEntry</span><br><span class="line">#28 = Utf8               org/kshan/corej/CJBaseClass</span><br><span class="line">#29 = Utf8               java/io/Serializable</span><br><span class="line">#30 = Utf8               java/lang/Integer</span><br><span class="line">#31 = Utf8               parseInt</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>@ref: <a href="https://coolshell.cn/articles/9229.html" target="_blank" rel="noopener">实例分析Java Class的文件结构 | | 酷 壳 - CoolShell</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Advanced-Java.04.ClassLoader/" rel="next" title="Advanced Java-04-ClassLoader">
+                <i class="fa fa-chevron-left"></i> Advanced Java-04-ClassLoader
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Advanced-Java.05.对象内存模型/" rel="prev" title="Advanced Java-05-对象内存模型">
+                Advanced Java-05-对象内存模型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#class文件常量池"><span class="nav-text">class文件常量池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例分析class文件常量池"><span class="nav-text">实例分析class文件常量池</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/12.Java/Advanced-Java.05.class文件结构/';
+          this.page.identifier = '12.Java/Advanced-Java.05.class文件结构/';
+          this.page.title = 'Advanced Java-05-class文件结构';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

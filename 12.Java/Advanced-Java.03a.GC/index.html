@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Minor/Major/Full GC我们把新生代 / 老年代 / 全部堆空间(包括新生代,老年代)对应的GC, 分别称为 Minor GC / Major GC / Full GC,三个不同内存区域的GC细节如下: ① Minor GC: 在年轻代Young space(包括Eden区和Survivor区)中的垃圾回收称之为 Minor GC，或 Young GC  触发条件: 无法为一个新的对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Advanced Java-03a-GC">
+<meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a.GC/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="Minor/Major/Full GC我们把新生代 / 老年代 / 全部堆空间(包括新生代,老年代)对应的GC, 分别称为 Minor GC / Major GC / Full GC,三个不同内存区域的GC细节如下: ① Minor GC: 在年轻代Young space(包括Eden区和Survivor区)中的垃圾回收称之为 Minor GC，或 Young GC  触发条件: 无法为一个新的对">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jvm-gc-minor-gc.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jvm-gc-mark-sweep.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jvm-gc-mark-sweep-vs-mark-compact.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-GC-Generation.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-ZGC-Pause-Time-Test.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-GC-Minor-Parallel.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-GC-Full-Parallel.png">
+<meta property="og:updated_time" content="2022-10-02T15:13:42.904Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Advanced Java-03a-GC">
+<meta name="twitter:description" content="Minor/Major/Full GC我们把新生代 / 老年代 / 全部堆空间(包括新生代,老年代)对应的GC, 分别称为 Minor GC / Major GC / Full GC,三个不同内存区域的GC细节如下: ① Minor GC: 在年轻代Young space(包括Eden区和Survivor区)中的垃圾回收称之为 Minor GC，或 Young GC  触发条件: 无法为一个新的对">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/java/jvm-gc-minor-gc.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a.GC/"/>
+
+
+
+
+
+  <title>Advanced Java-03a-GC | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a.GC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Advanced Java-03a-GC</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/Java进阶系列/" itemprop="url" rel="index">
+                    <span itemprop="name">Java进阶系列</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  7,026
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Minor-Major-Full-GC"><a href="#Minor-Major-Full-GC" class="headerlink" title="Minor/Major/Full GC"></a>Minor/Major/Full GC</h1><p>我们把新生代 / 老年代 / 全部堆空间(包括新生代,老年代)对应的GC, 分别称为 Minor GC / Major GC / Full GC,<br>三个不同内存区域的GC细节如下:</p>
+<p><strong>① Minor GC</strong>: 在年轻代Young space(包括Eden区和Survivor区)中的垃圾回收称之为 <strong>Minor GC</strong>，或 <strong>Young GC</strong></p>
+<ul>
+<li>触发条件: 无法为一个新的对象分配空间时，比如 <em>Eden区满了</em> 。所以分配率越高，越频繁执行Minor GC。</li>
+<li>STW: Minor GC会Stop the World，如果Eden区大部分对象都要被GC（这也是正常情形）Minor GC耗时可以基本不记，但是如果Eden区大部分对象都不符合GC条件，暂停时间将会长很多。</li>
+<li>GC过程: 一般使用Copy GC, 具体步骤如下<ul>
+<li>用new或者newInstance等方式创建的对象默认都是存放在Eden区，Eden满了触发Minor GC，把存活的对象放入S0，并清空Eden；</li>
+<li>第二次Eden满了，会把Eden和S0的存活对象放入S1，并清空Eden和S0区；</li>
+<li>在几次Minor GC后, 有些对象在S0/S1之间来回拷贝几次, 将会进入老年代(Tenured), 所以young GC后OldGen的占用量通常会有所升高；</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/java/jvm-gc-minor-gc.png" alt=""></p>
+<blockquote>
+<p>↑ Minor GC 图例: 左边是 Minor GC 前(黄色是垃圾对象, 红色是存活对象), 右边是 Minor GC 后</p>
+</blockquote>
+<p><strong>② Major GC</strong>: 清理老年代（Tenured space）</p>
+<ul>
+<li>触发条件: <em>老年代使用率超过某个阈值,默认大约90%</em>，许多Major GC是由Minor GC触发的。</li>
+<li>STW: 一般Tracing GC在标记和清理阶段都会有STW, 具体STW耗时根据使用哪种GC收集器而定；</li>
+<li>GC过程: 使用Mark-Sweep 或Mark-Compact算法；</li>
+</ul>
+<p><strong>③ Full GC</strong>: 清理整个堆，包括YoungGen / OldGen / PermGen（1.8之前） / Matespace(1.8+)等所有部分的全局范围的GC。</p>
+<ul>
+<li>触发条件：<ul>
+<li>在将要进行(Young GC)时, 如果发现要晋升至OldGen的对象大小比OldGen剩余大小更大, 则不会触发young GC而是转为触发full GC; // 如果是用的CMS收集器可以在日志中看到 “promotion failed” 和 “concurrent mode failure”</li>
+<li>当OldGen使用率大过某个比例; // ?</li>
+<li>方法区满了触发(在Java8之前);</li>
+<li>Metaspace Space使用达到MaxMetaspace阈值(Java8+)；</li>
+<li>调用<code>System.gc()</code>: 此方法的调用是建议JVM进行Full GC,虽然只是建议而非一定,但很多情况下它会触发 Full GC,从而增加Full GC的频率,也即增加了间歇性停顿的次数</li>
+<li>当执行<code>jmap -histo:live</code>或者<code>jmap -dump:live</code></li>
+</ul>
+</li>
+<li>STW: 视不同的GC收集器而定</li>
+<li>GC过程: 同上</li>
+</ul>
+<blockquote>
+<p>需要明白的一点， 我们在jstat或GC日志中看不到Minor GC/ Major GC / Full GC这些名词, 这些术语无论是在 JVM 规范还是在垃圾收集研究论文中都没有正式的定义.</p>
+<ul>
+<li>在jstat中, GC事件只分为两种: Young GC和 Full GC,  这里把Major GC和Full GC都算作了Ful GC。实际上<br>需要注意的是jstat返回的FGC并不是真正的Full GC发生次数, CMS的老年代GC分两个阶段(初始标记和Remark)都会Stop the World, 这两次STW在jstat里被视作了两次Full GC，所以jstat的FGC更接近于统计“Stop the World”的次数；</li>
+<li>在GC日志中, GC事件是由GC回收器命名的, 比如ParNew是清理年轻代(等同于Young GC),  日志里出现”CMS”等字样的都是指老年代的清理事件。</li>
+</ul>
+</blockquote>
+<h1 id="GC算法"><a href="#GC算法" class="headerlink" title="GC算法"></a>GC算法</h1><p>主要GC算法有Copy GC 和Tracing GC, 后者又根据是否压缩内存分为Mark-Sweep 和 Mark-Compact GC算法.</p>
+<h2 id="Copy-GC-算法"><a href="#Copy-GC-算法" class="headerlink" title="Copy GC 算法"></a>Copy GC 算法</h2><p>Copy GC算法(用于新生代的Minor GC): 把空间分成两部分，一个叫分配空间(Allocation Space)，一个是幸存者空间(Survivor Space)。创建新的对象的时候都是在分配空间里创建。在GC的时候，把分配空间里的活动对象复制到Survivor Space，把原来的Allocation Space全部清空。然后把这两个空间交换角色。</p>
+<ul>
+<li>Copy GC是从GC roots对象开始对象图的深度优先遍历，访问到一个对象则在Survivor Space分配一个与该对象大小相同的一块内存，然后把这个对象的所有数据都拷贝过去（copy data），然后把它的visited标记为true，它的forwarding记为新的地址。</li>
+<li>当存活对象少的时候，Copying GC算法的效率就有很高的吞吐量。Copying GC 是典型的采用空间换时间的方式来提升性能。</li>
+<li>Copying GC可以避免内存碎片。</li>
+</ul>
+<h2 id="Tracing-GC-算法"><a href="#Tracing-GC-算法" class="headerlink" title="Tracing GC 算法"></a>Tracing GC 算法</h2><p>Tracing GC算法(用于老年代的Major GC), 根据是否压缩内存又分两种 <strong>Mark-Sweep</strong>和 <strong>Mark-Compact</strong><br>在介绍Tracing GC之前, 需要先熟悉几个名词, 可达性分析和GC Roots：</p>
+<p>判断对象存活的两种方法:</p>
+<ul>
+<li>① <strong>引用计数法</strong>：每个对象有一个引用计数属性，新增一个引用时计数加1，引用释放时计数减1，计数为0时可以回收。此方法简单，无法解决对象相互循环引用的问题：比如对象a和b互相有一个对方的引用，虽然两个对象都没用了但是计数却不为0。<br>现在主流的JVM无一使用引用计数方式来实现Java对象的自动内存管理，但Py和PHP似乎是用的这种方法；</li>
+<li>② <strong>可达性分析法</strong>（Reachability Analysis）：它的处理方式就是，设立若干种roots对象，roots对象作为起点在图中进行深度优先遍历，每访问到一个对象，则该对象称为“可达对象”，也就是还活着的对象。否则就是不可达对象，可以被回收。<br>JVM里适用于老年代的GC收集器都使用了”可达性分析”来判断对象是否存活,是否可以回收</li>
+</ul>
+<blockquote>
+<p>什么是 <strong>GC Roots</strong>：对于一个正在回收的空间，所有不在这个空间里又指向本空间中的对象的引用的集合就是“GC roots”。<br>一般而言，GC Roots 包括（但不限于）如下几种：</p>
+<blockquote>
+<ol>
+<li>Java 方法栈桢中的局部变量</li>
+<li>已启动且未停止的Java线程以及线程栈帧内引用的对象</li>
+<li>方法区中类静态属性实体引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中JNI引用的对象</li>
+<li>由系统类加载器(system class loader)加载的对象，这些类是不能够被回收的</li>
+</ol>
+</blockquote>
+</blockquote>
+<h3 id="Mark-Sweep"><a href="#Mark-Sweep" class="headerlink" title="Mark-Sweep"></a>Mark-Sweep</h3><p><strong>标记-清除算法</strong> (Mark-Sweep)如同它的名字一样，算法分为“标记”和“清除”两个阶段：</p>
+<ul>
+<li>mark，从 root 开始进行树遍历，每个访问的对象标注为「使用中」</li>
+<li>sweep，扫描整个内存区域，对于标注为「使用中」的对象去掉该标志，对于没有该标注的对象直接回收掉</li>
+</ul>
+<p><img src="/images/java/jvm-gc-mark-sweep.png" alt="标记-清除算法示意图"></p>
+<p>标记-清除算法最基础的收集算法，是因为后续的收集算法都是基于这种思路并对其不足进行改进而得到的。它的主要不足有两个：</p>
+<ul>
+<li>效率问题，标记和清除两个过程的效率都不高, 回收时间与 heap 大小成正比；</li>
+<li>空间问题，标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后在程序运行过程中需要分配较大对象时，无法找到足够的连续内存而不得不提前触发另一次垃圾收集动作。</li>
+</ul>
+<h3 id="Mark-Compact"><a href="#Mark-Compact" class="headerlink" title="Mark-Compact"></a>Mark-Compact</h3><p><strong>标记-整理算法</strong> (Mark-Compact):</p>
+<ul>
+<li>mark: 从 root 开始进行树遍历，每个访问的对象标注为「使用中」</li>
+<li>compact: 扫描整个内存区域，把标注为「使用中」的对象移动到内存另一端，没有标注的对象回收掉。标记-整理算法是在标记-清除算法的基础上，又进行了对象的移动，因此成本更高，但是却解决了内存碎片的问题。</li>
+</ul>
+<p><img src="/images/java/jvm-gc-mark-sweep-vs-mark-compact.png" alt="mark-sweep vs mark-compact"></p>
+<h1 id="GC收集器"><a href="#GC收集器" class="headerlink" title="GC收集器"></a>GC收集器</h1><p>GC收集器是上面提到的几种GC算法的具体实现,  有些GC收集器只能用于新生代(比如ParNew), 有些只用于老年代(比如CMS), 有些可以同时用于两个代(Serial);<br>对于每种GC收集器, 都要注意以下几个问题:</p>
+<p>a. 这种GC收集器可以用于哪个区, 如何启用;<br>b. 实现是什么样的, 分几个阶段, 哪些阶段有STW;<br>c. 并行(Parallel)还是并发(Concurrent)的, 注意“并发”和“并行”的不同：</p>
+<ol>
+<li><p><strong>并行</strong>（Parallel）：使用多个线程同时执行GC任务，但此时用户线程仍然处于等待状态。并行GC的两个例子，一个是ParNew，一个是parallel scavenge。这两种GC的特点都是启动了多个GC线程来做垃圾回收。</p>
+<blockquote>
+<p>名字Par(allel)开头的一般都是并行GC, 多个线程同时进行GC, 但仍会停顿;</p>
+</blockquote>
+</li>
+<li><p><strong>并发</strong>（Concurrent）：指用户任务与GC任务同时执行（但不一定是并行的，可能会交替执行），用户任务不会停顿。并发GC的一个典型例子，是CMS，看它的名字就知道了Concurrent Mark Sweep。</p>
+<blockquote>
+<p>名字C(oncurrent)开头的是并发GC, GC线程和工作线程并发的执行;</p>
+</blockquote>
+</li>
+</ol>
+<p>下图是说明了不同分代可以使用的收集器，如果两个收集器之间存在连线，就说明它们可以搭配使用:<br><img src="/images/java/JVM-GC-Generation.png" alt=""></p>
+<p><strong>几种常见的GC收集器组合</strong>：</p>
+<blockquote>
+<p>新生代Parallel + 老年代Parallel Old<br>新生代ParNew + 老年代CMS<br>新生代, 老年代都使用G1</p>
+</blockquote>
+<p><strong>下面介绍7种GC收集器</strong> :</p>
+<p>① <strong>串行回收器</strong>（Serial Garbage Collector）, 可以用于新生代和老年代, 下面都使用Serial New和Serial Old表示两代的GC回收器</p>
+<ul>
+<li>通过JVM参数<code>-XX:+UseSerialGC</code>可以使用串行垃圾回收器。</li>
+<li>特性：<ul>
+<li>新生代、老年代都可以使用串行回收器, 新生代复制算法, 老年代标记-压缩算法.</li>
+<li>串行垃圾回收器通过持有应用程序所有的线程进行工作。它为单线程环境设计，只使用一个单独的线程进行垃圾回收，可能会产生较长的停顿，所以可能不适合服务器环境。它依然是HotSpot虚拟机运行在Client模式下的默认的新生代收集器。</li>
+</ul>
+</li>
+</ul>
+<p>② <strong>ParNew回收器</strong>：Serial收集器新生代的多线程版本, 只适用于新生代.</p>
+<ul>
+<li>-XX:+UseParNewGC（new代表新生代，所以适用于新生代），-XX:ParallelGCThreads 线程数量</li>
+<li>特性:<ul>
+<li>ParNew收集器就是Serial收集器的多线程版本，它也是一个新生代收集器。除了使用多线程进行垃圾收集外，其余行为包括Serial收集器可用的所有控制参数、收集算法（复制算法）、Stop The World、对象分配规则、回收策略等与Serial收集器完全相同，两者共用了相当多的代码</li>
+<li>ParNew收集器是许多运行在Server模式下的虚拟机中首选的新生代收集器，原因是: 除了Serial收集器外，目前只有它能和CMS收集器（Concurrent Mark Sweep）配合工作</li>
+</ul>
+</li>
+</ul>
+<p>③ <strong>并行回收器</strong>（Parallel Garbage Collector）: 可以用于新生代和老年代, 新生代是Parallel Scavenge 收集器( 复制算法), 老年代是Parallel Old( 标记整理算法).</p>
+<ul>
+<li>JVM参数:<ul>
+<li><code>-XX:+UseParallelGC</code>：新生代使用Parallel收集器 + 老年代使用串行收集器</li>
+<li><code>-XX:+UseParallelOldGC</code>：新生代+老年都使用Parallel</li>
+</ul>
+</li>
+<li>特性:<ul>
+<li>使用多线程进行扫描堆并标记对象, 缺点是在minor和full GC的时候都会Stop the world</li>
+<li>CMS等收集器的关注点是尽可能缩短垃圾收集时用户线程的停顿时间，而Parallel Scavenge收集器的目标是达到一个可控制的吞吐量（Throughput）。</li>
+</ul>
+</li>
+</ul>
+<p>④ <strong>CMS</strong>(Concurrent Mark Sweep), 仅适用于老年代的回收器, 是一种以获取最短回收停顿时间为目标的收集器，它非常符合那些集中在互联网站或者B/S系统的服务端上的Java应用，这些应用都非常重视服务的响应速度。从名字上（“Mark Sweep”）就可以看出它是基于“标记-清除”算法实现的。</p>
+<ul>
+<li>JVM参数:<ul>
+<li>通过JVM参数<code>-XX:+UseConcMarkSweepGC</code> 打开</li>
+<li><code>-XX:+ExplicitGCInvokesConcurrent</code> : 使<code>System.gc()</code>触发的Full GC改为CMS，防止过长的STW时间</li>
+</ul>
+</li>
+<li>特性:<ul>
+<li>只适用于老年代GC, 新生代可以搭配ParNew收集器;</li>
+<li>特点是尽可能降低STW停顿，但是因为与用户任务一起并发进行GC，所以吞吐量下降;</li>
+<li>“初始标记”和”重新标记”阶段仍然Stop the World, 但耗时最长的”并发标记”和”并发清除”过程收集器线程都可以与用户线程一起”并发的”工作;</li>
+<li>因为是Mark-Sweep的, GC后有内存碎片, 所以很多情况下Old Gen有足够空间但是仍会由Minor GC触发Major GC;</li>
+<li>当CMS失败出现Concurrent Mode Failure会转换到Serial Old, 将导致非常长时间的Stop The World</li>
+</ul>
+</li>
+<li>实现步骤:<ol>
+<li>初始标记（CMS initial mark）：仅仅只是标记一下GC Roots能直接关联到的对象（标记直接被GC root引用 或者 被年轻代存活对象所引用的所有对象），速度很快，<strong>需要“Stop The World”</strong>。</li>
+<li>并发标记（CMS concurrent mark）: 由上一阶段标记过的”可达对象”出发进行标记（遍历老年代），用户任务不停顿</li>
+<li>预清理(CMS preclean): 仍旧与用户任务并行, 主要是标记由新生代晋升的对象, 预清理阶段还可能包括一个”可中断预清理”等待一次 Minor GC, 详见 [GC日志实例分析];</li>
+<li>重新标记（CMS remark）: 这一阶段会暂停所有用户线程，因为并发标记阶段是和用户线程并发执行的过程，所以该过程中可能有用户线程修改某些活跃对象的字段，指向了一个未标记过的对象（变为可达），这个阶段需要重新标记出此类对象，防止在下一阶段被清理掉。特别需要注意一点，这个阶段是 <strong>以新生代中对象为根</strong> 来判断对象是否存活的（CMS只做老年代的Major GC，但判断老年代对象是否被引用到需要扫描新生代对象）详见[GC日志实例分析]部分的解释。<strong>该阶段会“Stop The World”</strong>；</li>
+<li>并发清除（CMS concurrent sweep）：用户任务不停顿</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>@ref <a href="https://tech.meituan.com/2017/12/29/jvm-optimize.html" target="_blank" rel="noopener">https://tech.meituan.com/2017/12/29/jvm-optimize.html</a></p>
+</blockquote>
+<p>⑤ <strong>G1回收器</strong> : 在JDK 7u4版本被正式推出，用于逐步替换掉CMS收集器, G1适用于新生代和老年代:</p>
+<ul>
+<li>通过参数<code>-XX:+UseG1GC</code>来启用</li>
+<li>特性:<ul>
+<li>采用标记整理（Mark-Compact）算法，不会产生内存空间碎片。</li>
+<li>可预测停顿，这是G1的另一大优势，降低停顿时间是G1和CMS的共同关注点，但G1除了追求低停顿外，还能建立可预测的停顿时间模型，能让使用者明确指定在一个长度为N毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒</li>
+</ul>
+</li>
+<li>实现步骤:<ul>
+<li>G1将整个Java堆划分为多个大小相等的独立区域（Region），虽然还保留新生代和老年代的概念，每个区域都可以充当 Eden 区、Survivor 区或者老年代的一部分。</li>
+<li>建立可预测的停顿时间模型，G1跟踪各个Region里面的垃圾堆积的价值大小（回收所获得的空间大小以及回收所需时间的经验值），在后台维护一个优先列表，每次根据允许的收集时间，优先回收价值最大（死亡对象最多）的Region（这也就是Garbage-First名称的来由）。</li>
+<li>GC步骤: @todo 重新整理<ul>
+<li>初始标记（Initial Marking） 仅仅只是标记一下GC Roots 能直接关联到的对象，并且修改TAMS（Nest Top Mark Start）的值，让下一阶段用户程序并发运行时，能在正确可以的Region中创建对象，<strong>此阶段需要STW</strong>，但耗时很短。</li>
+<li>并发标记（Concurrent Marking） 从GC Root 开始对堆中对象进行可达性分析，找到存活对象，此阶段耗时较长，但可与用户程序并发执行。</li>
+<li>最终标记（Final Marking） 为了修正在并发标记期间因用户程序继续运作而导致标记产生变动的那一部分标记记录，虚拟机将这段时间对象变化记录在线程的 Remembered Set Logs里面，最终标记阶段需要把 Remembered Set Logs的数据合并到 Remembered Set中，<strong>这阶段需要STW</strong>。</li>
+<li>筛选回收（Live Data Counting and Evacuation） 首先对各个Region中的回收价值和成本进行排序，根据用户所期望的GC 停顿是时间来制定回收计划。此阶段其实也可以做到与用户程序一起并发执行，但是因为只回收一部分Region，时间是用户可控制的，而且停顿用户线程将大幅度提高收集效率。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>⑥ <strong>ZCG</strong>: ZGC是JDK11引入的, 特点是极短的STW时间, 无论堆的大小(上T级的情况)能保证10ms以下的JVM停顿。</p>
+<ul>
+<li>特性:<ul>
+<li>采用标记整理（Mark-Compact）算法</li>
+</ul>
+</li>
+<li>实现细节:<ul>
+<li>ZGC将堆划分为Region作为清理，移动，以及并行GC线程工作分配的单位。不过G1一开始就把堆划分成固定大小的Region，而ZGC 可以有2MB，32MB，N× 2MB 三种Size Groups，动态地创建和销毁Region，动态地决定Region的大小。所以ZGC能更好的处理大对象的分配。</li>
+<li>ZGC的堆没有分代</li>
+<li>与标记对象的传统算法相比，ZGC在指针上做标记，在访问指针时加入Load Barrier（读屏障），比如当对象正被GC移动，指针上的颜色就会不对，这个屏障就会先把指针更新为有效地址再返回，也就是，永远只有单个对象读取时有概率被减速，而不存在为了保持应用与GC一致而粗暴整体的Stop The World。</li>
+<li>GC步骤:<ol>
+<li>Pause Mark Start －初始停顿标记</li>
+<li>Concurrent Mark －并发标记</li>
+<li>Relocate － 移动对象: 将被标记的对象（仍在使用的）移动到新的Region</li>
+<li>Remap － 修正指针</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p>下图是SPECjbb 2015基准测试，在128G的大堆下，最大停顿时间只有 1.68ms, 相比之下Parallel和G1都超过了200ms, 最坏高达800ms<br><img src="/images/java/JVM-ZGC-Pause-Time-Test.png" alt=""></p>
+<p>参考: <a href="https://blog.csdn.net/gupao123456/article/details/82355512" target="_blank" rel="noopener">一文读懂Java 11的ZGC为何如此高效 - CSDN博客</a> @ref</p>
+<h1 id="GC优化"><a href="#GC优化" class="headerlink" title="GC优化"></a>GC优化</h1><p>GC策略的评价指标</p>
+<ol>
+<li>吞吐量: 系统的生命周期内，应用程序所花费的时间和系统总运行时间的比值。系统总运行时间 = 应用程序耗时 + 总GC耗时。<br>如果系统运行了100分钟，全部GC耗时1分钟，则系统吞吐量=99%</li>
+<li>停顿时间： 是否需要STW，以及STW耗时多少</li>
+<li>垃圾回收频率: 一般而言，频率越低越好，通常增大堆空间可以有效降低垃圾回收发生的频率，但是会增加回收时产生的停顿时间。</li>
+<li>反应时间: 当一个对象成为垃圾后，多长时间内，它所占用的内存空间会被释放掉。</li>
+</ol>
+<p>给出一些经验性的参考值:</p>
+<ul>
+<li>Young CG发生频率很高, 可能几秒一次, 每次YGC的STW耗时很短, 可能不超过10ms;</li>
+<li>Major GC 正常情况大约1-2次/天, 如果几小时就出现一次 Major GC属于不正常,</li>
+<li>Full GC尽量杜绝</li>
+</ul>
+<p><strong>一些参考案例:</strong></p>
+<ul>
+<li><a href="https://www.jianshu.com/p/5524fce8b08f" target="_blank" rel="noopener">探索StringTable提升YGC性能 - 简书</a><ul>
+<li>StringTable 过大导致的YGC时间过长 // String Table在Young Gen ?</li>
+</ul>
+</li>
+<li><a href="https://tech.meituan.com/jvm_optimize.html" target="_blank" rel="noopener">从实际案例聊聊Java应用的GC优化</a><ul>
+<li>案例1: 优化TP99、TP90时间</li>
+<li>案例2: 优化耗时波动</li>
+<li>案例3: 避免Full GC</li>
+<li>25ms GC的影响有多大</li>
+</ul>
+</li>
+<li><a href="https://mp.weixin.qq.com/s/FeHquGVIRiF6oC9BEVOWCg" target="_blank" rel="noopener">如何降低young gc时间</a><ul>
+<li>Hystrix信号量+RPC异步化, 减少线程池数目, 降低YGC</li>
+</ul>
+</li>
+<li><a href="https://engineering.linkedin.com/garbage-collection/garbage-collection-optimization-high-throughput-and-low-latency-java-applications" target="_blank" rel="noopener">Garbage Collection Optimization for High-Throughput and Low-Latency Java Applications</a></li>
+</ul>
+<h1 id="GC日志解读"><a href="#GC日志解读" class="headerlink" title="GC日志解读"></a>GC日志解读</h1><p>GC日志相关参数:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-XX:+PrintGC 输出GC日志</span><br><span class="line">-XX:+PrintGCDetails 输出GC的详细日志</span><br><span class="line">-XX:+PrintGCTimeStamps 输出GC的时间戳（以基准时间的形式）</span><br><span class="line">-XX:+PrintGCDateStamps 输出GC的时间戳（以日期的形式，如 2013-05-04T21:53:59.234+0800）</span><br><span class="line">-XX:+PrintHeapAtGC 在进行GC的前后打印出堆的信息</span><br><span class="line">-Xloggc:../logs/gc.log 日志文件的输出路径</span><br></pre></td></tr></table></figure></p>
+<h2 id="一般GC日志格式"><a href="#一般GC日志格式" class="headerlink" title="一般GC日志格式"></a>一般GC日志格式</h2><p>图1: Young GC日志格式解释如下(ParallelGC):</p>
+<p><img src="/images/java/JVM-GC-Minor-Parallel.png" alt=""></p>
+<p>图2: Full GC日志格式解释如下(ParallelGC):</p>
+<p><img src="/images/java/JVM-GC-Full-Parallel.png" alt=""></p>
+<h2 id="GC日志实例分析"><a href="#GC日志实例分析" class="headerlink" title="GC日志实例分析"></a>GC日志实例分析</h2><h3 id="Serial收集器"><a href="#Serial收集器" class="headerlink" title="Serial收集器"></a>Serial收集器</h3><p><strong>一次YGC和Full GC:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">33.125: [GC [DefNew: 3324K-&gt;152K(3712K), 0.0025925 secs] 3324K-&gt;152K(11904K), 0.0031680 secs]</span><br><span class="line"># 33.125 表示从Java虚拟机启动以来经过的秒数</span><br><span class="line"># DefNew 表示新生代用了Serial收集器, ParNew表示ParNew收集器, PSYoungGen表示Parallel Scavenge收集器</span><br><span class="line"># 3324K-&gt;152K(3712K) 表示 GC前新生代大小-&gt;GC后新生代大小(新生代总大小)</span><br><span class="line"># 3324K-&gt;152K(11904K) 表示 GC前堆大小-&gt;GC后堆大小(堆总大小)</span><br><span class="line"># 0.0025925 secs 表示此次新生代GC耗时2ms</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">100.667: [Full GC [Tenured: 0K-&gt;210K(10240K), 0.0149142 secs] 4603K-&gt;210K(19456K), [Perm : 2999K-&gt;2999K(21248K)], 0.0150007 secs] [Times: user=0.01 sys=0.00, real=0.02 secs]</span><br><span class="line"># 100.667 表示从Java虚拟机启动以来经过的秒数</span><br><span class="line"># Full GC 表示这是一次Full GC</span><br><span class="line"># [Tenured: 0K-&gt;210K(10240K), 0.0149142 secs] 老年代GC前-&gt;后大小</span><br><span class="line"># 4603K-&gt;210K(19456K) 表示堆GC前-&gt;后</span><br><span class="line"># [Times: user=0.01 sys=0.00, real=0.02 secs] 表示耗时20ms</span><br></pre></td></tr></table></figure>
+<h3 id="ParNew-CMS收集器"><a href="#ParNew-CMS收集器" class="headerlink" title="ParNew + CMS收集器"></a>ParNew + CMS收集器</h3><p><strong>正常的CMS GC日志, 可以看到CMS标记的三个阶段:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 初始标记, STW</span><br><span class="line">15578.148: [GC [1 CMS-initial-mark: 6294851K(20971520K)] 6354687K(24746432K), 0.0466580 secs] [Times: user=0.04 sys=0.00, real=0.04 secs]</span><br><span class="line"></span><br><span class="line"># 并发标记, 从CG Root出发开始标记</span><br><span class="line">15578.195: [CMS-concurrent-mark-start]</span><br><span class="line">15578.333: [CMS-concurrent-mark: 0.138/0.138 secs] [Times: user=1.01 sys=0.21, real=0.14 secs]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 预清理</span><br><span class="line">15578.334: [CMS-concurrent-preclean-start]</span><br><span class="line">15578.391: [CMS-concurrent-preclean: 0.056/0.057 secs] [Times: user=0.20 sys=0.12, real=0.06 secs]</span><br><span class="line"></span><br><span class="line"># 可中断预清理</span><br><span class="line">15578.391: [CMS-concurrent-abortable-preclean-start]</span><br><span class="line">15581.905: [CMS-concurrent-abortable-preclean: 3.506/3.514 secs] [Times: user=11.93 sys=6.77, real=3.51 secs]</span><br><span class="line"></span><br><span class="line"># 重新标记, STW</span><br><span class="line">15582.032: [weak refs processing, 0.0027800 secs]15582.035: [class unloading, 0.0033120 secs]15582.038: [scrub symbol table, 0.0016780 secs]15582.040: [scrub string table, 0.0004780 secs] [1 CMS-remark: 6299829K(20971520K)] 6348225K(24746432K), 0.1365130 secs] [Times: user=1.24 sys=0.00, real=0.14 secs]</span><br><span class="line"></span><br><span class="line"># 并发清理</span><br><span class="line">15582.043: [CMS-concurrent-sweep-start]</span><br><span class="line">15590.327: [CMS-concurrent-sweep: 8.193/8.284 secs] [Times: user=30.34 sys=16.44, real=8.28 secs]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>阶段1：Initial Mark, 这个是 CMS 两次 stop-the-wolrd 事件的其中一次，这个阶段的目标是：标记那些直接被 GC root 引用或者被年轻代存活对象所引用的所有对象，</p>
+<blockquote>
+<p>40.146: [GC [1 CMS-initial-mark: 26386K(786432K)] 26404K(1048384K), 0.0074495 secs]</p>
+</blockquote>
+</li>
+<li><p>阶段2：并发标记, 在这个阶段 Garbage Collector 会根据上个阶段找到的 GC Roots 遍历查找，标记所有存活的对象。这一阶段，Garbage Collector 与用户的应用程序并发运行。</p>
+<blockquote>
+<p>40.683: [CMS-concurrent-mark: 0.521/0.529 secs]</p>
+</blockquote>
+</li>
+<li><p>阶段3：Concurrent Preclean, 这也是一个并发阶段，与应用的线程并发运行，不会 stop-the-wolrd 。这一阶段会查找前一阶段中从新生代晋升或者有更新的对象。这一阶段可以减少 stop-the-world 的remark阶段的工作量</p>
+<blockquote>
+<p>40.701: [CMS-concurrent-preclean: 0.017/0.018 secs]</p>
+</blockquote>
+</li>
+<li><p>阶段4：Concurrent Abortable Preclean (可中断的预清理) 这也是一个并发阶段，同样不会不会 stop-the-wolrd 。该阶段主要工作仍然是并发标记对象是否存活，只是这个过程可被中断。此阶段在 Eden区使用超过2M时启动，当然 2M是默认的阈值，可以通过参数修改。如果此阶段执行时等到了 Minor GC，或者等了超过<code>CMSMaxAbortablePrecleanTime</code>的时间(默认5s)都没有发生 Minor GC，则会进入下一阶段 – Remark。// 该阶段尽量等一次Minor GC来减少新生代对象数量，减少remark阶段需要扫描新生代对象的数量，减少remark阶段 STW耗时。 通过<code>CMSScavengeBeforeRemark</code>参数，可以在这一阶段强制进行一次Minor GC。</p>
+<blockquote>
+<p>15581.905: [CMS-concurrent-abortable-preclean: 3.506/3.514 secs] [Times: user=11.93 sys=6.77, real=3.51 secs]</p>
+</blockquote>
+</li>
+<li><p>阶段5：Remark, 这是第二个 STW 阶段，暂停所有用户线程，从GC Root开始重新扫描整堆，标记存活的对象。需要注意的是，虽然CMS只回收老年代的垃圾对象，但是这个阶段依然需要扫描新生代，因为很多GC Root都在新生代，而这些GC Root指向的对象又在老年代，这称为“跨代引用”。</p>
+<blockquote>
+<p>15582.032: [weak refs processing, 0.0027800 secs]15582.035: [class unloading, 0.0033120 secs]15582.038: [scrub symbol table, 0.0016780 secs]15582.040: [scrub string table, 0.0004780 secs] [1 CMS-remark: 6299829K(20971520K)] 6348225K(24746432K), 0.1365130 secs] [Times: user=1.24 sys=0.00, real=0.14 secs]</p>
+</blockquote>
+</li>
+<li><p>阶段6：Concurrent Sweep，并发清理，不需要 STW，需要注意的： 因为CMS是 Mark-Sweep算法, 仍会存在内存碎片。</p>
+<blockquote>
+<p>15590.327: [CMS-concurrent-sweep: 8.193/8.284 secs] [Times: user=30.34 sys=16.44, real=8.28 secs]</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>@ref 参考: <a href="https://mp.weixin.qq.com/s/Ukm3xcp4YLHDMJF-hVTczw" target="_blank" rel="noopener">JVM 之 ParNew 和 CMS 日志分析</a></p>
+</blockquote>
+<p><strong>有GC问题的日志例子:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">106.641: [GC 106.641: [ParNew (promotion failed): 14784K-&gt;14784K(14784K), 0.0370328 secs]106.678: [CMS106.715: [CMS-concurrent-mark: 0.065/0.103 secs] [Times: user=0.17 sys=0.00, real=0.11 secs]</span><br><span class="line"># ParNew (promotion failed) 表示新生代GC过程中, 对象晋升到老年代失败, 因为需要晋升至老年代的对象超过了老年代的可用大小</span><br><span class="line"># 这种情况下会触发Full GC, 见下</span><br><span class="line"></span><br><span class="line">0.195: [GC 0.195: [ParNew: 2986K-&gt;2986K(8128K), 0.0000083 secs]0.195: [CMS0.212: [CMS-concurrent-preclean: 0.011/0.031 secs] [Times: user=0.03 sys=0.02, real=0.03 secs]</span><br><span class="line">(concurrent mode failure): 56046K-&gt;138K(57344K), 0.0271519 secs] 59032K-&gt;138K(65472K), [CMS Perm : 2079K-&gt;2078K(12288K)], 0.0273119 secs] [Times: user=0.03 sys=0.00, real=0.03 secs]</span><br><span class="line"># 第二行表示在cms-preclean阶段发生了 concurrent mode failure,</span><br><span class="line"># CMS失败往往意味着JVM会退回到 Serial Old 收集器进行回收, 造成较长的STW</span><br></pre></td></tr></table></figure>
+<p>上面是因为执行 ParNew GC的时候, 因为需要晋升至老年代的对象超过了老年代的可用大小, 所以 promotion failed, 而触发了 Full GC,<br>还存在一种情况, 老年代大小足够的情况下仍然会触发 promotion failed, 可以通过 <code>-XX:UseCMSCompactAtFullCollection -XX:CMSFullGCBeforeCompaction=5</code> 参数, 在5次 Full GC后进行一次 Compaction操作避免内存碎片.</p>
+<p><strong>总结 CMS GC常见的两种错误解决方案:</strong></p>
+<ol>
+<li>promotion failed<br>解决办法：<code>-XX:UseCMSCompactAtFullCollection -XX:CMSFullGCBeforeCompaction=5</code> 或者 调大新生代或S0/S1空间;</li>
+<li>concurrent mode failure<br>解决办法： 或增加老年带的空间, 或者调节<code>+XX:CMSInitiatingOccupancyFraction=70</code>使老年代使用更高比例（这里是70%）后才开始CMS GC;</li>
+</ol>
+<h1 id="GC引起的Error"><a href="#GC引起的Error" class="headerlink" title="GC引起的Error"></a>GC引起的Error</h1><p>什么代码会导致GC引起的内存错误： <code>OutOfMemoryError:Java Heap</code>, <code>OutOfMemoryError:PermGen</code>, <code>OutOfMemoryError:Matespace</code>, <code>OutOfMemoryError: Direct buffer memory</code> ? (以及堆栈错误<code>StackOverflowError</code>)</p>
+<ul>
+<li>Java虚拟机栈和本地方法栈: 在JVM规范中，对Java虚拟机栈规定了两种异常：<ol>
+<li>如果线程请求的栈大于所分配的栈大小，则抛出 StackOverFlowError错误，比如进行了一个不会停止的递归调用；</li>
+<li>如果虚拟机栈是可以动态拓展的，拓展时无法申请到足够的内存，则抛出 OutOfMemoryError错误。</li>
+</ol>
+</li>
+<li>堆内存: OutOfMemoryError</li>
+<li>直接内存: 在JDK1.4中引入的NIO使用Native函数库在堆外内存上直接分配内存，但直接内存不足时，也会导致OOM。</li>
+<li>方法区: 随着Metaspace元数据区的引入，方法区的OOM错误信息也变成了 “java.lang.OutOfMemoryError:Metaspace”。<br>对于旧版本的Oracle JDK，由于永久代的大小有限，而JVM对永久代的垃圾回收并不积极，如果往永久代不断写入数据，例如String.Intern()的调用，在永久代占用太多空间导致内存不足，也会出现OOM的问题，对应的错误信为 “java.lang.OutOfMemoryError:PermGen space”</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Advanced-Java.02d.JVM分析工具/" rel="next" title="Advanced Java-02d-JVM分析工具">
+                <i class="fa fa-chevron-left"></i> Advanced Java-02d-JVM分析工具
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Advanced-Java.03b.GC案例分析/" rel="prev" title="Advanced Java-03b-GC案例分析">
+                Advanced Java-03b-GC案例分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Minor-Major-Full-GC"><span class="nav-text">Minor/Major/Full GC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC算法"><span class="nav-text">GC算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Copy-GC-算法"><span class="nav-text">Copy GC 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tracing-GC-算法"><span class="nav-text">Tracing GC 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mark-Sweep"><span class="nav-text">Mark-Sweep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mark-Compact"><span class="nav-text">Mark-Compact</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC收集器"><span class="nav-text">GC收集器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC优化"><span class="nav-text">GC优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC日志解读"><span class="nav-text">GC日志解读</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一般GC日志格式"><span class="nav-text">一般GC日志格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC日志实例分析"><span class="nav-text">GC日志实例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Serial收集器"><span class="nav-text">Serial收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ParNew-CMS收集器"><span class="nav-text">ParNew + CMS收集器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC引起的Error"><span class="nav-text">GC引起的Error</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a.GC/';
+          this.page.identifier = '12.Java/Advanced-Java.03a.GC/';
+          this.page.title = 'Advanced Java-03a-GC';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

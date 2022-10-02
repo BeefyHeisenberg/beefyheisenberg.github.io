@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="开发环境,Vim,Windows," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="首先, 开发环境是Windows,然后, 我又是一个信仰坚定的Vimer,所以就出现了Windows + Gvim这个有些不太协调的组合, 想在盖茨叔叔的视窗OS上稍微正常的使用Gvim还是有些小麻烦, 可是这都难不倒一个有信仰的Vimer. PS 如果你使用Osx or Linux, 大可不必这样折腾, 直接使用ack.vim 或 grep.vim吧, 简单的配置就可以搞定. 在Win上使用gr">
+<meta name="keywords" content="开发环境,Vim,Windows">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 Windows 下使用 vim grep 的正确姿势">
+<meta property="og:url" content="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="首先, 开发环境是Windows,然后, 我又是一个信仰坚定的Vimer,所以就出现了Windows + Gvim这个有些不太协调的组合, 想在盖茨叔叔的视窗OS上稍微正常的使用Gvim还是有些小麻烦, 可是这都难不倒一个有信仰的Vimer. PS 如果你使用Osx or Linux, 大可不必这样折腾, 直接使用ack.vim 或 grep.vim吧, 简单的配置就可以搞定. 在Win上使用gr">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cloud.githubusercontent.com/assets/2375604/9804914/d0c39ff0-5800-11e5-8e7d-b77543bf2dcf.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/whatrtos/findstr.vim/test/screenshot.png">
+<meta property="og:updated_time" content="2022-10-02T15:13:44.124Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在 Windows 下使用 vim grep 的正确姿势">
+<meta name="twitter:description" content="首先, 开发环境是Windows,然后, 我又是一个信仰坚定的Vimer,所以就出现了Windows + Gvim这个有些不太协调的组合, 想在盖茨叔叔的视窗OS上稍微正常的使用Gvim还是有些小麻烦, 可是这都难不倒一个有信仰的Vimer. PS 如果你使用Osx or Linux, 大可不必这样折腾, 直接使用ack.vim 或 grep.vim吧, 简单的配置就可以搞定. 在Win上使用gr">
+<meta name="twitter:image" content="https://cloud.githubusercontent.com/assets/2375604/9804914/d0c39ff0-5800-11e5-8e7d-b77543bf2dcf.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/"/>
+
+
+
+
+
+  <title>在 Windows 下使用 vim grep 的正确姿势 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">在 Windows 下使用 vim grep 的正确姿势</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,379
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>首先, 开发环境是Windows,<br>然后, 我又是一个信仰坚定的Vimer,<br>所以就出现了<code>Windows + Gvim</code>这个有些不太协调的组合, 想在盖茨叔叔的视窗OS上稍微正常的使用Gvim还是有些小麻烦, 可是这都难不倒一个有信仰的Vimer.</p>
+<p>PS 如果你使用Osx or Linux, 大可不必这样折腾, 直接使用<a href="https://github.com/mileszs/ack.vim" target="_blank" rel="noopener">ack.vim</a> 或 <a href="www.vim.org/script.php?script_id=311">grep.vim</a>吧, 简单的配置就可以搞定.</p>
+<h1 id="在Win上使用grep的可选方案"><a href="#在Win上使用grep的可选方案" class="headerlink" title="在Win上使用grep的可选方案"></a>在Win上使用grep的可选方案</h1><p>在Windows上使用grep搜索文本有以下几种方案:</p>
+<ol>
+<li>使用<code>grep</code>命令, 虽是GNU下的工具, 但也有Win移植版;</li>
+<li>使用vim内置的<code>vimgrep</code>命令, 速度最慢但是兼容性相对好;</li>
+<li>使用Win下的原生命令<code>findstr</code>;</li>
+<li>使用Win移植版的ack, 这种方法我没尝试过, 如果你用过了, 请一定告诉我:P</li>
+</ol>
+<h2 id="使用-grep-vim"><a href="#使用-grep-vim" class="headerlink" title="使用 grep.vim"></a>使用 grep.vim</h2><p>虽然grep.vim插件也可以在Windows上使用, 插件也提供了一些Win下使用的选项, 但grep.vim这款插件调用的是grep命令, Win上没有grep, 怎么办?<br>后来找到了grep在Win平台的<a href="http://gnuwin32.sourceforge.net/" target="_blank" rel="noopener">移植版: GnuWin</a><br>相关设置选项参考这里: <a href="http://www.vim.org/scripts/script.php?script_id=311" target="_blank" rel="noopener">grep.vim : Grep search tools integration with Vim </a>, 在页面上搜索”MS-Windows”就可以看到for Windows的特殊选项.<br>不过,移植版的grep也有很多兼容问题, 略过不表233<br>什么, 你问我为什么不早说, 因为我一写博客就容易啰嗦…<br>好吧. 接下来说另一种使用vimgrep的方案:</p>
+<h2 id="使用-EasyGrep"><a href="#使用-EasyGrep" class="headerlink" title="使用 EasyGrep"></a>使用 EasyGrep</h2><p>之前有过一篇介绍: <a href="http://zuyunfei.com/2013/08/25/vim-plugin-easy-grep/" target="_blank" rel="noopener">vim中的杀手级插件: EasyGrep</a>,<br>EasyGrep使用的是vim内置的搜索命令vimgrep, 相比上面说的移植版grep, vimgrep 在Win上兼容性要大大好于上面的grep移植版.<br>不过EasyGrep提供了一个比较友好的搜索选项界面, 就像下面这个样子, 调整搜索选项是不是要比grep.vim直观许多?<br><img src="https://cloud.githubusercontent.com/assets/2375604/9804914/d0c39ff0-5800-11e5-8e7d-b77543bf2dcf.gif" alt="EasyGrep Options"><br>vimgrep的最大问题是搜索效率, 真的很差, 尤其你要搜索的目录里有成百上千的文件时.<br>这时候可以切到Chrome里刷一会知乎…<br>但刷完知乎后却发现vimgrep仍旧在努力的转动你的硬盘… 所以我又放弃了EasyGrep.</p>
+<h2 id="使用-findstr-vim"><a href="#使用-findstr-vim" class="headerlink" title="使用 findstr.vim"></a>使用 findstr.vim</h2><p>Windows下提供了一个原生命令<code>findstr</code>, 相当于Linux下的grep.<br>如果你想了解一下findstr命令的使用姿势, 可以看这里: <a href="https://technet.microsoft.com/en-us/library/bb490907.aspx" target="_blank" rel="noopener">Findstr - TechNet - Microsoft</a><br>在vim.org上也找了一个为findstr写的插件 – <a href="http://www.vim.org/scripts/script.php?script_id=1575" target="_blank" rel="noopener">findstr.vim : Using MS-Windows findstr utility to search for text with Vim </a><br>看来在Windows上用Vim的可怜人儿还不少, 我觉得这款插件的作者就是一个:(<br>不过这插件简直可算得上朴素, 只提供了四个插件命令, 我觉得跟手动敲findstr命令行效率差不多, 可是我懒且健忘, 记不住这么多findstr参数,<br>等等, 刚才聊到的EasyGrep的搜索选项界面不是挺方便的嘛, 所以, 为什么不能把EasyGrep的搜索界面搬到findstr.vim上来?<br>恩, 对于程序员来说这并不难, vimscript似乎有些像shell和php的结合语言. 所以…</p>
+<h2 id="改进后的findstr-vim"><a href="#改进后的findstr-vim" class="headerlink" title="改进后的findstr.vim"></a>改进后的findstr.vim</h2><p>靠着google和勤勉的copy, 一个带有良好人机交互的多功能<code>findstr.vim</code>被提交到了github上(666)<br>Github repository在这里: <a href="https://github.com/whatrtos/findstr.vim" target="_blank" rel="noopener">https://github.com/whatrtos/findstr.vim</a><br><img src="https://raw.githubusercontent.com/whatrtos/findstr.vim/test/screenshot.png" alt="findstr"></p>
+<p>在vimrc里新增一行配置:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmap &lt;leader&gt;gg :VimFindstr&lt;CR&gt;</span><br></pre></td></tr></table></figure></p>
+<p>这样, 在普通模式按下<code>\gg</code>就可以愉快的使用findstr了.</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="http://zuyunfei.com/2013/08/25/vim-plugin-easy-grep/" target="_blank" rel="noopener">vim中的杀手级插件: EasyGrep</a></li>
+<li><a href="http://vim.wikia.com/wiki/Find_in_files_within_Vim" target="_blank" rel="noopener">Find in files within Vim</a></li>
+</ul>
+<h1 id="附-vimgrep命令"><a href="#附-vimgrep命令" class="headerlink" title="附: vimgrep命令"></a>附: vimgrep命令</h1><p>vimgrep命令格式如下:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vimgrep /搜索字符串/gj 文件</span><br></pre></td></tr></table></figure></p>
+<p>上面的<code>g</code>和<code>j</code>参数都是可选的,</p>
+<ul>
+<li>/g : 加上g参数的话, 如果一行有多个匹配, 那么这些匹配会都出现在搜索结果里, 所以一般不用加<code>/g</code>参数;</li>
+<li>/j : 如果不加j参数, 执行完vimgrep会自动跳转到第一个匹配处, 所以一般都会加上<code>/j</code>参数;</li>
+</ul>
+<p>比如<code>vimgrep /keyword/j *.php</code>表示仅在当前目录下的所有php文件里搜索”keyword”, 且不自动跳转到搜索结果.<br>如果也要在子目录递归搜索, <code>**</code>表示在当前目录以及子目录递归, 比如<code>**/*.php</code></p>
+<p>一些栗子:</p>
+<ul>
+<li>当前目录下递归搜索: <code>vimgrep /字符串/j **/*.php</code></li>
+<li>仅当前目录, 不递归: <code>vimgrep /字符串/g *.php</code></li>
+<li>如果要搜索多个文件扩展名, 用空格分开即可: <code>vimgrep /字符串/j **/*.cpp **/*.php</code></li>
+<li>Linux绝对路径, 递归搜索: <code>vimgrep /字符串/j /home/user/**/*.cpp</code></li>
+<li>Win绝对路径, 递归搜索: <code>vimgrep /字符串/j D:\home\user/**/*.cpp</code></li>
+</ul>
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p>@2016-08-01 发现一个问题, findstr.vim试用的是<code>system(cmd)</code>来执行findstr命令, 正常情况下这是没什么问题的, 但当遇到中文目录的时候, <code>system</code>执行的结果中的中文会变成”<3b><4a>“这样的代码. 所以搜索在中文目录会很蛋疼, 在quickfix里跳转不到正确的文件.<br>折中的办法是, 插件新增一个选项, 可以在使用findstr和vimgrep之间切换(最终还是没能摆脱vimgrep), 一般情况下推荐使用效率更高的findstr, 只有当遇到上面的问题时才使用”slowly but compatible”的vimgrep.</4a></3b></p>
+<p>findstr迭代了几个版本, 修改了一些bug和改进易用性, 欢迎fork, 提交pr和issue:)</p>
+<hr>
+<blockquote>
+<p>讲一个笑话, 从前森林里有只猴子, 为了能更方便的吃到樱桃, 所以这只猴子自己种了一棵樱桃树.</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/开发环境/" rel="tag"># 开发环境</a>
+          
+            <a href="/tags/Vim/" rel="tag"># Vim</a>
+          
+            <a href="/tags/Windows/" rel="tag"># Windows</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/50.Farbox-Blog/【Markdown】MarkEditor使用体验/" rel="next" title="MarkEditor使用体验">
+                <i class="fa fa-chevron-left"></i> MarkEditor使用体验
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/50.Farbox-Blog/【编辑器】为Eclipse安装Remote-System-Explorer/" rel="prev" title="为Eclipse安装 Terminal">
+                为Eclipse安装 Terminal <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在Win上使用grep的可选方案"><span class="nav-text">在Win上使用grep的可选方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-grep-vim"><span class="nav-text">使用 grep.vim</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-EasyGrep"><span class="nav-text">使用 EasyGrep</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-findstr-vim"><span class="nav-text">使用 findstr.vim</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改进后的findstr-vim"><span class="nav-text">改进后的findstr.vim</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附-vimgrep命令"><span class="nav-text">附: vimgrep命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#补充"><span class="nav-text">补充</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/';
+          this.page.identifier = '50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/';
+          this.page.title = '在 Windows 下使用 vim grep 的正确姿势';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

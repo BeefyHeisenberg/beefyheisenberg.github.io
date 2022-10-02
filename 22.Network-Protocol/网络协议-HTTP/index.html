@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="网络协议,HTTP,Restful," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="URLHTTP由URL(统一资源定位符)访问资源，一个完整的URL组成如下:  http://user:passwd@www.x.com:80/index.htm?var1=1&amp;amp;var2=2#frag这个真没什么好解释的… 更多有关URL的信息请参考RFC1808  URL编码 &amp;amp; 解码URL中的GET参数和POST内容，除字母数字。  常用编程符号(不含双引)之外，都要Encod">
+<meta name="keywords" content="网络协议,HTTP,Restful">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络协议：HTTP">
+<meta property="og:url" content="https://beefyheisenberg.github.io/22.Network-Protocol/网络协议-HTTP/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="URLHTTP由URL(统一资源定位符)访问资源，一个完整的URL组成如下:  http://user:passwd@www.x.com:80/index.htm?var1=1&amp;amp;var2=2#frag这个真没什么好解释的… 更多有关URL的信息请参考RFC1808  URL编码 &amp;amp; 解码URL中的GET参数和POST内容，除字母数字。  常用编程符号(不含双引)之外，都要Encod">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-10-02T15:13:43.353Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络协议：HTTP">
+<meta name="twitter:description" content="URLHTTP由URL(统一资源定位符)访问资源，一个完整的URL组成如下:  http://user:passwd@www.x.com:80/index.htm?var1=1&amp;amp;var2=2#frag这个真没什么好解释的… 更多有关URL的信息请参考RFC1808  URL编码 &amp;amp; 解码URL中的GET参数和POST内容，除字母数字。  常用编程符号(不含双引)之外，都要Encod">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/22.Network-Protocol/网络协议-HTTP/"/>
+
+
+
+
+
+  <title>网络协议：HTTP | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/22.Network-Protocol/网络协议-HTTP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络协议：HTTP</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/22-Network-Protocol/" itemprop="url" rel="index">
+                    <span itemprop="name">22.Network-Protocol</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,508
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h1><p>HTTP由URL(统一资源定位符)访问资源，一个完整的URL组成如下:</p>
+<blockquote>
+<p><a href="http://user:passwd@www.x.com:80/index.htm?var1=1&amp;var2=2#frag" target="_blank" rel="noopener">http://user:passwd@www.x.com:80/index.htm?var1=1&amp;var2=2#frag</a><br>这个真没什么好解释的… 更多有关URL的信息请参考RFC1808</p>
+</blockquote>
+<h2 id="URL编码-amp-解码"><a href="#URL编码-amp-解码" class="headerlink" title="URL编码 &amp; 解码"></a>URL编码 &amp; 解码</h2><p>URL中的GET参数和POST内容，除字母数字。  常用编程符号(不含双引)之外，都要Encode处理，空格被转换为<code>+</code>号，<code>+</code>号被转换为<code>%2b</code><br>Encode处理过的POST内容，Http头会增加<code>content-type: application/x-www-form-urlencoded</code>，参考Content-Type一节。</p>
+<h1 id="HTTP-Request"><a href="#HTTP-Request" class="headerlink" title="HTTP Request"></a>HTTP Request</h1><p>一个完整的请求分<code>请求头</code>和<code>消息体</code>两部分:</p>
+<ul>
+<li>请求头的每一行都是CRLF结尾，和消息体之间有一个空行分隔开，空行只能是一个CRLF而不能带有空格符。</li>
+<li>消息体则是也包括头部和内容. 头包括Allow、Content-Type、Content-Encoding、Content-Language、Content-Length、Content-Location、Content-Type、Expires等等。</li>
+</ul>
+<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><p>HTTP请求共有8种Method，Method是区分大小写的:</p>
+<ul>
+<li>OPTIONS: 查询服务器支持哪些action。</li>
+<li>HEAD: 请求服务器返回url对应资源的响应头，并不需要服务器返回响应消息体。</li>
+<li>GET: 请求url指定的资源。</li>
+<li>POST: 向url指定的位置增加数据。</li>
+<li>PUT: 上传资源。</li>
+<li>DELETE: 删除资源</li>
+<li>TRACE: 多用于诊断</li>
+<li>CONNECT: 备用</li>
+</ul>
+<blockquote>
+<p>PUT：client对一个URI发送一个Entity，服务器在这个URI下如果已经又了一个Entity，那么此刻服务器应该替换成client重新提交的，也由此保证了PUT的幂等性。如果服务器之前没有Entity ，那么服务器就应该将client提交的放在这个URI上。<br>因为服务器在实现POST是不可预知，所以将其定义为不安全、不幂等的Verb。基本上不能方便的归纳为“增删改”之类的行为，都可以使用POST方法。</p>
+</blockquote>
+<h3 id="幂等性"><a href="#幂等性" class="headerlink" title="幂等性"></a>幂等性</h3><p>怎么理解HTTP幂等性:<br>HTTP幂等方法，是指无论调用多少次返回的结果都相同，对资源没有影响。</p>
+<blockquote>
+<p>HTTP GET方法，用于获取资源，不管调用多少次接口，结果都不会改变，所以是幂等的。<br>HTTP POST方法是一个非幂等方法，因为每次调用都将产生新的资源。<br>HTTP PUT直接把实体部分的数据替换到服务器的资源，我们多次调用它，只会产生一次影响，但是有相同结果的 HTTP 方法，所以满足幂等性。<br>HTTP DELETE方法用于删除资源，会将资源删除。调用一次和多次对资源产生影响是相同的，所以也满足幂等性。</p>
+</blockquote>
+<h2 id="Content-type"><a href="#Content-type" class="headerlink" title="Content-type"></a>Content-type</h2><ul>
+<li>multipart/form-data ： 需要在表单中进行文件上传时，就需要使用该格式</li>
+<li>text/html ： HTML格式</li>
+<li>text/plain ：纯文本格式</li>
+<li>text/xml ：  XML格式</li>
+<li>image/gif ：gif图片格式</li>
+<li>application/xml     ： XML数据格式</li>
+<li>application/json    ： JSON数据格式</li>
+<li>application/msword  ： Word文档格式</li>
+<li>application/octet-stream ： 二进制流数据（如常见的文件下载）</li>
+</ul>
+<p>POST提交表单几种常见Content-type</p>
+<ul>
+<li>application/x-www-form-urlencoded: 格式为<code>k=v&amp;k=v</code>, 并且经过encode</li>
+<li>multipart/form-data: 多用来上传数据</li>
+<li>application/json: http的body是json格式</li>
+</ul>
+<h1 id="HTTP-Response"><a href="#HTTP-Response" class="headerlink" title="HTTP Response"></a>HTTP Response</h1><h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><p>Response Header第一行是服务器返回的状态码:</p>
+<ul>
+<li>200: OK</li>
+<li>204: No Content</li>
+<li>301: 永久重定向</li>
+<li>302: 临时</li>
+<li>400: Bad Request，比如缺少参数，语法错误</li>
+<li>401: Unauthorized</li>
+<li>403: Forbidden</li>
+<li>404: Not Found</li>
+<li>500: Internal Server Error 服务器内部错误</li>
+<li>502: Bad Gateway 后端服务返回给网关无效响应()</li>
+<li>503: Service Unavailable 后端服务由于维护或者过载，积极拒绝服务</li>
+<li>504: Gateway Timeout 代理从后端服务器获取超时</li>
+</ul>
+<p>[[../31.Backend/反向代理-Nginx#Nginx返回502 503 504]]</p>
+<h2 id="Http-Request和Response的一些常用参数"><a href="#Http-Request和Response的一些常用参数" class="headerlink" title="Http Request和Response的一些常用参数"></a>Http Request和Response的一些常用参数</h2><h3 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type:"></a>Content-Type:</h3><p>常见的Content-Type:</p>
+<ul>
+<li>text/html</li>
+<li>text/plain</li>
+<li>text/css</li>
+<li>text/javascript</li>
+<li>application/x-www-form-urlencoded: 常用的表单发包方式，POST内容做了URLEncode处理会自动加上这个参数</li>
+<li>multipart/form-data</li>
+<li>application/json</li>
+<li>application/xml</li>
+</ul>
+<h3 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control:"></a>Cache-Control:</h3><h3 id="Location"><a href="#Location" class="headerlink" title="Location:"></a>Location:</h3><p>用于将客户端重定向一个新的地址，一般和302状态值相关。</p>
+<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length:"></a>Content-Length:</h4><p>指定response的长度，如果一个response太大服务器无法确定其长度，服务器会在response头部插入一个 <code>Transfer-Encoding: chunked</code>字段，表示需要分块传输. 这个response的<code>消息体</code>包括数个chunk，每个chunk都由<code>本chunk字节数+CRLF</code> + <code>本chunk内容+CRLF</code>组成，最后会带一个长度为0的chunk表示结束。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: text/plain</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">25</span><br><span class="line">This is the data in the first chunk</span><br><span class="line">1A</span><br><span class="line">and this is the second one</span><br><span class="line">0</span><br></pre></td></tr></table></figure></p>
+<h1 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h1><p>HTTPS的端口是443，HTTP的端口是80，二者的区别还在于HTTPS是在普通HTTP和TCP之间插入了一个SSL(Secure SocketLaye，基于非对称/对称加密算法的协议)。</p>
+<h2 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h2><p>SSL使用了RSA非对称加密，SSL握手过程:</p>
+<ul>
+<li>客户端发出请求，服务端发送给客户端证书和公钥;</li>
+<li>客户端先验证服务端的证书有效性，然后随机生成<code>预备密码</code>(pre-master secret)，用公钥加密发给服务器;</li>
+<li>服务器用私钥解密出<code>预备密码</code>，然后双方用<code>预备密码</code>商议出<code>主密码</code>(master secret)，SSL握手结束;</li>
+<li>之后C/S端使用<code>主密码</code>做对称加密传输数据。</li>
+</ul>
+<h2 id="SSL的证书"><a href="#SSL的证书" class="headerlink" title="SSL的证书"></a>SSL的证书</h2><p>SSL证书由CA(“证书中心”certificate authority)颁发，CA将网站的的公钥，用CA的私钥加密，生成为<code>数字证书</code>(Digital Certificate). 也就是说网站的数字证书里是含有网站的公钥的，客户端可以从CA处请求验证这个证书是否正确。<br>@ref: <a href="http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html" target="_blank" rel="noopener">阮一峰:数字签名是什么？</a></p>
+<h1 id="Restful"><a href="#Restful" class="headerlink" title="Restful"></a>Restful</h1><h2 id="符合Restful风格"><a href="#符合Restful风格" class="headerlink" title="符合Restful风格"></a>符合Restful风格</h2><ul>
+<li>URI中只有名词, 表示资源</li>
+<li>动词不应该出现在URI中, 而使用HTTP协议里的<code>GET, POST, DELETE, PUT</code>对应查询, 新增, 删除, 更新;</li>
+<li>接口返回JSON, 或者XML</li>
+<li>返回Code用HTTP状态表示</li>
+<li><a href="https://github. com/tianlu1677/filemanager/wiki/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%87%87%E7%94%A8RESTful%E6%9E%B6%E6%9E%84%EF%BC%9F" target="_blank" rel="noopener">为什么要采用RESTful架构？·tianlu1677/filemanagerWiki·GitHub</a></li>
+</ul>
+<h2 id="Java对Restful的支持"><a href="#Java对Restful的支持" class="headerlink" title="Java对Restful的支持"></a>Java对Restful的支持</h2><ul>
+<li>用Java技术创建RESTfulWeb服务（JAX-RS）:<a href="https://www.ibm.com/developerworks/cn/web/wa-jaxrs/" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/web/wa-jaxrs/</a></li>
+</ul>
+<h2 id="Restful框架"><a href="#Restful框架" class="headerlink" title="Restful框架"></a>Restful框架</h2><ul>
+<li>Jersey, Restx …</li>
+<li>使用Jersey创建RESTful WebService: <a href="http://www.importnew.com/7336.html" target="_blank" rel="noopener">http://www.importnew.com/7336.html</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/网络协议/" rel="tag"># 网络协议</a>
+          
+            <a href="/tags/HTTP/" rel="tag"># HTTP</a>
+          
+            <a href="/tags/Restful/" rel="tag"># Restful</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/22.Network-Protocol/Tcpdump/" rel="next" title="Tcpdump">
+                <i class="fa fa-chevron-left"></i> Tcpdump
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/22.Network-Protocol/网络协议-IP/" rel="prev" title="网络协议-IP">
+                网络协议-IP <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#URL"><span class="nav-text">URL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#URL编码-amp-解码"><span class="nav-text">URL编码 &amp; 解码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-Request"><span class="nav-text">HTTP Request</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Method"><span class="nav-text">Method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#幂等性"><span class="nav-text">幂等性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Content-type"><span class="nav-text">Content-type</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-Response"><span class="nav-text">HTTP Response</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-text">Code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Http-Request和Response的一些常用参数"><span class="nav-text">Http Request和Response的一些常用参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Content-Type"><span class="nav-text">Content-Type:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cache-Control"><span class="nav-text">Cache-Control:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Location"><span class="nav-text">Location:</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Length"><span class="nav-text">Content-Length:</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTPS"><span class="nav-text">HTTPS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SSL"><span class="nav-text">SSL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSL的证书"><span class="nav-text">SSL的证书</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Restful"><span class="nav-text">Restful</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#符合Restful风格"><span class="nav-text">符合Restful风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java对Restful的支持"><span class="nav-text">Java对Restful的支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Restful框架"><span class="nav-text">Restful框架</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/22.Network-Protocol/网络协议-HTTP/';
+          this.page.identifier = '22.Network-Protocol/网络协议-HTTP/';
+          this.page.title = '网络协议：HTTP';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

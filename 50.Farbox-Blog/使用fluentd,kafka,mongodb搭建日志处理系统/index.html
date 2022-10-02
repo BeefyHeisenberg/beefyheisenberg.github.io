@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Linux,Kafka,日志处理,Fluentd,Flume," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="设计实现 采集: 可选的有fluentd, td-agent(fluentd的稳定版本, 二者区别), Apache flume. 消息持久化队列: http://kafka.apache.org/ (分布式消息队列), 数据源进行topic分流，实现Category 作为一层buffer来适配输入输出的消息速率，解除系统耦合度 作用类似于缓存，即活跃的数据和离线处理系统之间的缓存 kafka是显">
+<meta name="keywords" content="Linux,Kafka,日志处理,Fluentd,Flume">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用fluentd,kafka,mongodb搭建日志处理系统">
+<meta property="og:url" content="https://beefyheisenberg.github.io/50.Farbox-Blog/使用fluentd,kafka,mongodb搭建日志处理系统/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="设计实现 采集: 可选的有fluentd, td-agent(fluentd的稳定版本, 二者区别), Apache flume. 消息持久化队列: http://kafka.apache.org/ (分布式消息队列), 数据源进行topic分流，实现Category 作为一层buffer来适配输入输出的消息速率，解除系统耦合度 作用类似于缓存，即活跃的数据和离线处理系统之间的缓存 kafka是显">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-10-02T15:13:44.142Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用fluentd,kafka,mongodb搭建日志处理系统">
+<meta name="twitter:description" content="设计实现 采集: 可选的有fluentd, td-agent(fluentd的稳定版本, 二者区别), Apache flume. 消息持久化队列: http://kafka.apache.org/ (分布式消息队列), 数据源进行topic分流，实现Category 作为一层buffer来适配输入输出的消息速率，解除系统耦合度 作用类似于缓存，即活跃的数据和离线处理系统之间的缓存 kafka是显">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/50.Farbox-Blog/使用fluentd,kafka,mongodb搭建日志处理系统/"/>
+
+
+
+
+
+  <title>使用fluentd,kafka,mongodb搭建日志处理系统 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/使用fluentd,kafka,mongodb搭建日志处理系统/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用fluentd,kafka,mongodb搭建日志处理系统</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,811
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="设计实现"><a href="#设计实现" class="headerlink" title="设计实现"></a>设计实现</h1><ul>
+<li>采集: 可选的有fluentd, td-agent(fluentd的稳定版本, 二者区别), Apache flume.</li>
+<li>消息持久化队列: <a href="http://kafka.apache.org/" target="_blank" rel="noopener">http://kafka.apache.org/</a> (分布式消息队列),<ul>
+<li>数据源进行topic分流，实现Category</li>
+<li>作为一层buffer来适配输入输出的消息速率，解除系统耦合度</li>
+<li>作用类似于缓存，即活跃的数据和离线处理系统之间的缓存</li>
+<li>kafka是显式分布式架构，producer、broker（Kafka）和consumer都可以有多个。Kafka的作用类似于缓存，即活跃的数据和离线处理系统之间的缓存。几个基本概念：<ol>
+<li>message（消息）是通信的基本单位，每个producer可以向一个topic（主题）发布一些消息。如果consumer订阅了这个主题，那么新发布的消息就会广播给这些consumer。</li>
+<li>Kafka是显式分布式的，多个producer、consumer和broker可以运行在一个大的集群上，作为一个逻辑整体对外提供服务。对于consumer，多个consumer可以组成一个group，这个message只能传输给某个group中的某一个consumer.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>存储: mongo</li>
+</ul>
+<h1 id="Fluentd-td-agent"><a href="#Fluentd-td-agent" class="headerlink" title="Fluentd(td-agent)"></a>Fluentd(td-agent)</h1><p>Fluentd内置三种日志采集, file-tail, tcp, http-url, 通过插件可以支持更多的采集方式.</p>
+<h2 id="Install-fluentd-td-agent-by-RPM"><a href="#Install-fluentd-td-agent-by-RPM" class="headerlink" title="Install fluentd(td-agent) by RPM"></a>Install fluentd(td-agent) by RPM</h2><p>$ curl -L <a href="http://toolbelt.treasuredata.com/sh/install-redhat.sh" target="_blank" rel="noopener">http://toolbelt.treasuredata.com/sh/install-redhat.sh</a> | sh</p>
+<h2 id="Install-plugins"><a href="#Install-plugins" class="headerlink" title="Install plugins"></a>Install plugins</h2><p>参考 <a href="http://blog.csdn.net/virusfu/article/details/9023237" target="_blank" rel="noopener">http://blog.csdn.net/virusfu/article/details/9023237</a><br>安装插件: $ /usr/lib64/fluent/ruby/bin/gem install fluent-plugin-kafka<br>查看已安装的插件: $ /usr/lib64/fluent/ruby/bin/gem list | grep fluent-plugin-</p>
+<h2 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h2><p>参考 <a href="http://docs.fluentd.org/articles/config-file" target="_blank" rel="noopener">http://docs.fluentd.org/articles/config-file</a> and <a href="http://www.r66r.net/?p=504" target="_blank" rel="noopener">http://www.r66r.net/?p=504</a></p>
+<p>编辑 /etc/td-agent/td-agent.conf<br>td-agent和fluent不同之一就是: td配置文件默认输出到Treasure Data, 需要去掉配置文件里这部分.<br>td配置文件里重要的标签有三种:</p>
+<ul>
+<li>source： 输入源</li>
+<li>match ：输出目的地</li>
+<li>include：包含其它配置文件等<br>下面是一个采集source(file-tail日志)的例子:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;source&gt;</span><br><span class="line">  type tail</span><br><span class="line">  format apache</span><br><span class="line">  path /etc/httpd/logs/access_log</span><br><span class="line">  pos_file /tmp/td-agent/access_access.pos</span><br><span class="line">  tag apache.access</span><br><span class="line">&lt;/source&gt;</span><br></pre></td></tr></table></figure>
+<p>解释:</p>
+<ul>
+<li>type: tail文件追加, 或者http, forward等, 也可以使用插件输入: type tail_ex</li>
+<li>format: 使用td-agent内置的apach日志解析规则</li>
+<li>patch: 日志文件路径</li>
+<li>post_file: 建议使用这个参数, post_file保存读取log的长度, 在下次宕机重启后能继续收集</li>
+<li>tag: 用于match</li>
+</ul>
+<p>td-agent支持三种形式的日志采集, 不同的日志source配置也不同, 上面是file-tail的方式采集日志, 如果用http方式采集日志, 参考 <a href="http://docs.fluentd.org/articles/in_http" target="_blank" rel="noopener">http://docs.fluentd.org/articles/in_http</a> ;<br>source配置如下:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;source&gt;</span><br><span class="line">  type http</span><br><span class="line">  port 8994  # td-agent采集监听的port</span><br><span class="line">  tag http8994.access</span><br><span class="line">&lt;/source&gt;</span><br></pre></td></tr></table></figure></p>
+<p>测试命令: <code>curl -X POST -d &#39;json={&quot;action&quot;:&quot;login&quot;,&quot;user&quot;:2}&#39; http://10.11.0.9:8994/forum.php</code></p>
+<p>match:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;match apache.access&gt;</span><br><span class="line">  type file</span><br><span class="line">  path /tmp/td-agent/access_access.match</span><br><span class="line">&lt;/match&gt;</span><br></pre></td></tr></table></figure></p>
+<p>解释:<br>path输出的文件名, 默认生成名为”$path.日期.xxxx” 的文件.</p>
+<h2 id="Start-up"><a href="#Start-up" class="headerlink" title="Start up"></a>Start up</h2><ul>
+<li>$ /etc/init.d/td-agent start //启动</li>
+<li>$ /etc/init.d/td-agent status //状态查看</li>
+<li>$ /etc/init.d/td-agent reload //不重启重新载入配置<br>td-agent执行日志在: /var/log/td-agent/td-agent.log</li>
+</ul>
+<h2 id="附例"><a href="#附例" class="headerlink" title="附例:"></a>附例:</h2><p>下面是一个输出到mongo的match例子:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;match mongo.**&gt;</span><br><span class="line"># plugin type</span><br><span class="line">type mongo</span><br><span class="line"># mongodb db + collection</span><br><span class="line">database apache</span><br><span class="line">collection access</span><br><span class="line"># mongodb host + port</span><br><span class="line">host localhost</span><br><span class="line">port 27017</span><br><span class="line"># interval</span><br><span class="line">flush_interval 10s</span><br><span class="line">&lt;/match&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="fluent-plugin-kafka"><a href="#fluent-plugin-kafka" class="headerlink" title="fluent-plugin-kafka"></a>fluent-plugin-kafka</h3><p><a href="https://github.com/htgc/fluent-plugin-kafka" target="_blank" rel="noopener">https://github.com/htgc/fluent-plugin-kafka</a></p>
+<h3 id="例-match使用grep过滤-并用tag发送到Kafka"><a href="#例-match使用grep过滤-并用tag发送到Kafka" class="headerlink" title="例:  match使用grep过滤, 并用tag发送到Kafka"></a>例:  match使用grep过滤, 并用tag发送到Kafka</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;source&gt;</span><br><span class="line">type tail</span><br><span class="line">path  /home/wyyhzc/webApp.log</span><br><span class="line">pos_file /home/wyyhzc/webApp.log.pos</span><br><span class="line">tag webapp</span><br><span class="line">format  /^(?&lt;message&gt;(.*))$/</span><br><span class="line">&lt;/source&gt;</span><br></pre></td></tr></table></figure>
+<p>过滤一次:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;match webapp.**&gt;       // 注意&quot;webapp.*&quot;符合&quot;webapp.a&quot;, 但不符合&quot;webapp&quot;和&quot;webapp.a.b&quot;. &quot;webapp.**&quot;符合前面所有</span><br><span class="line">type    grep            // fluent-plugin-grep插件</span><br><span class="line">regexp1 code ^4\d\d$</span><br><span class="line">exclude1 referer ^https?://yourdomain.com</span><br><span class="line">add_tag_prefix webapp_filtered  // 为这个match加tag</span><br><span class="line">&lt;/match&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="发送到kafka"><a href="#发送到kafka" class="headerlink" title="发送到kafka"></a>发送到kafka</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;match webapp_filtered.**&gt;     // 对应上面的tag</span><br><span class="line">type             kafka</span><br><span class="line">brokers          hadoopdn1:9092 // kafka-server</span><br><span class="line">default_topic    webapp_log     // topic</span><br><span class="line">output_data_type json           // 可选(json|ltsv|msgpack|attr:&lt;record name&gt;)</span><br><span class="line">output_include_tag  false</span><br><span class="line">output_include_time flase</span><br><span class="line">&lt;/match&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h1><p>Apache Kafka是用于发布—订阅消息传递，实现了分布式提交日志，适用于离线和在线消息消费。</p>
+<ul>
+<li>消息的发布（publish）称作producer生产者，消息的订阅（subscribe）称作consumer消费者，中间的存储阵列称作broker。生产者将消息发布到Kafka主题，消费者订阅这些主题并消费这些消息。</li>
+<li>多个broker协同合作，producer、consumer和broker三者之间通过zookeeper来协调请求和转发</li>
+<li>producer产生和推送(push)数据到broker，consumer从broker拉取(pull)数据并进行处理</li>
+</ul>
+<h2 id="Install-kafka-参考http-kafka-apache-org-documentation-html"><a href="#Install-kafka-参考http-kafka-apache-org-documentation-html" class="headerlink" title="Install kafka (参考http://kafka.apache.org/documentation.html)"></a>Install kafka (参考<a href="http://kafka.apache.org/documentation.html" target="_blank" rel="noopener">http://kafka.apache.org/documentation.html</a>)</h2><p>安装方式有两种, 自己通过源码编译kafka, 或者直接在apache下载编译好的二进制文件.</p>
+<h3 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装:"></a>编译安装:</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tar xzf kafka-&lt;VERSION&gt;.tgz</span><br><span class="line">cd kafka-&lt;VERSION&gt;</span><br><span class="line">sbt update</span><br><span class="line">sbt package</span><br><span class="line">sbt assembly-package-dependency</span><br><span class="line">Kafka是用Scala写的，SBT是Simple Build Tool的简称，类似于Java的Maven。</span><br></pre></td></tr></table></figure>
+<h3 id="下载二进制文件"><a href="#下载二进制文件" class="headerlink" title="下载二进制文件"></a>下载二进制文件</h3><p><code>wget http://apache.mirrors.hoobly.com/kafka/0.8.1.1/kafka_2.8.0-0.8.1.1.tgz</code><br>通过<code>java -version</code>查看JVM是32bit or 64 bit, 如果安装了32位的HotSpot VM，需要修改/bin/kafka-run-class.sh文件 去掉KAFKA_JVM_PERFORMANCE_OPTS的”-XX:+UseCompressedOops” 参数.</p>
+<h3 id="启动zookeeper和kafka进程"><a href="#启动zookeeper和kafka进程" class="headerlink" title="启动zookeeper和kafka进程"></a>启动zookeeper和kafka进程</h3><p>Kafka需要zookeeper服务, 如果没有安装zookeeper, 可以启动kafka自带的单点zookeeper:</p>
+<ul>
+<li>启动zookeeper:  <code>$ nohup bin/zookeeper-server-start.sh config/zookeeper.properties &amp;</code></li>
+<li>启动kafka: $ <code>nohup bin/kafka-server-start.sh config/server.properties &amp;</code><br>停止kafka: <code>bin/kafka-server-stop.sh</code><br>停止zookeeper: <code>bin/zookeeper-server-stop.sh</code></li>
+</ul>
+<p>Zookeeper集群部署参考:</p>
+<ul>
+<li><a href="http://cn.soulmachine.me/blog/20140207/" target="_blank" rel="noopener">http://cn.soulmachine.me/blog/20140207/</a></li>
+<li><a href="http://blog.csdn.net/shirdrn/article/details/7183503" target="_blank" rel="noopener">http://blog.csdn.net/shirdrn/article/details/7183503</a></li>
+</ul>
+<h3 id="单机测试命令-可略过"><a href="#单机测试命令-可略过" class="headerlink" title="单机测试命令(可略过)"></a>单机测试命令(可略过)</h3><ol>
+<li><p>创建topic<br>message以topic(主题)为单位, productor可以向某个topic发送消息, consumer可以订阅topic;<br>bin/kafka-topics.sh –create –zookeeper localhost:2181 –replication-factor 1 –partitions 1 –topic test # 连接本机2181端口的zookeeper-serve<br>bin/kafka-topics.sh –list –zookeeper localhost:2181 # 查看已创建的topic<br>bin/kafka-topics.sh –describe –zookeeper localhost:2181 –topic test  # 查看topic的描述</p>
+</li>
+<li><p>启动msg消费者<br>bin/kafka-console-consumer.sh –zookeeper localhost:2181 –topic test –from-beginning  #</p>
+</li>
+<li><p>启动msg生产者<br>新启动Terminal输入:<br>bin/kafka-console-producer.sh –broker-list localhost:9092 –topic test<br>然后输入一些测试消息并回车, 可以看到消费者log对msg进行消费.<br>测试完成.</p>
+</li>
+</ol>
+<h2 id="kafka和zookeeper集群"><a href="#kafka和zookeeper集群" class="headerlink" title="kafka和zookeeper集群"></a>kafka和zookeeper集群</h2><p>参考 <a href="http://kafka.apache.org/documentation.html" target="_blank" rel="noopener">http://kafka.apache.org/documentation.html</a><br>修改./config/server.properties下列参数:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">broker.id=0  # 区分多个Kafka</span><br><span class="line">port=9092  #</span><br><span class="line">log.dir=/tmp/kafka-logs  #</span><br><span class="line">zookeeper.connect=nutch1:2181  # zookeeper集群地址</span><br></pre></td></tr></table></figure>
+<ul>
+<li>kafka-server配置文件参考 <a href="http://kafka.apache.org/documentation.html" target="_blank" rel="noopener">http://kafka.apache.org/documentation.html</a> // Broker Configs</li>
+<li>Topic配置参考 <a href="http://kafka.apache.org/documentation.html" target="_blank" rel="noopener">http://kafka.apache.org/documentation.html</a>  // Topic-level configuration</li>
+<li>Consumer配置参考:  <a href="http://kafka.apache.org/documentation.html" target="_blank" rel="noopener">http://kafka.apache.org/documentation.html</a>  // Consumer Configs , 重要参数group.id / zookeeper.connect</li>
+<li>Producer配置参考:  <a href="http://kafka.apache.org/documentation.html" target="_blank" rel="noopener">http://kafka.apache.org/documentation.html</a>   // Producer Configs,</li>
+</ul>
+<p>启动kafka : <code>bin/kafka-server-start.sh config/server.properties</code></p>
+<p>当然也可以在一台机器上启动多个kafka-server, 要修改上面的port和log.dir以区分不同的kafka-server, 步骤:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cp config/server.properties config/server-1.properties</span><br><span class="line">cp config/server.properties config/server-2.properties</span><br></pre></td></tr></table></figure>
+<p>修改上面两个properties文件, 启动:<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">bin/kafka-server-start.sh config/server-1.properties &amp;</span><br><span class="line">bin/kafka-server-start.sh config/server-2.properties &amp;</span><br></pre></td></tr></table></figure></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考:"></a>参考:</h2><ul>
+<li>fluentd+kafka+mongo: <a href="http://noops.me/?p=1325" target="_blank" rel="noopener">http://noops.me/?p=1325</a></li>
+<li>Fluentd + MongoDB <a href="http://blog.nosqlfan.com/html/3521.html" target="_blank" rel="noopener">http://blog.nosqlfan.com/html/3521.html</a></li>
+<li>kafka介绍:<ul>
+<li><a href="http://dongxicheng.org/search-engine/kafka/" target="_blank" rel="noopener">http://dongxicheng.org/search-engine/kafka/</a></li>
+<li><a href="http://my.oschina.net/ielts0909/blog/92972" target="_blank" rel="noopener">http://my.oschina.net/ielts0909/blog/92972</a></li>
+<li><a href="http://www.biaodianfu.com/kafka.html" target="_blank" rel="noopener">http://www.biaodianfu.com/kafka.html</a></li>
+</ul>
+</li>
+<li>kafka部署: <a href="http://shift-alt-ctrl.iteye.com/blog/1930791" target="_blank" rel="noopener">http://shift-alt-ctrl.iteye.com/blog/1930791</a></li>
+<li>tdagent: <a href="http://www.r66r.net/?p=504" target="_blank" rel="noopener">http://www.r66r.net/?p=504</a></li>
+</ul>
+<ul>
+<li>flume-ng+Kafka+Storm+HDFS 实时系统搭建 <a href="http://blog.csdn.net/weijonathan/article/details/18301321" target="_blank" rel="noopener">http://blog.csdn.net/weijonathan/article/details/18301321</a></li>
+<li>flume+kafka+storm+mysql架构设计 <a href="http://blog.csdn.net/mylittlered/article/details/20810265" target="_blank" rel="noopener">http://blog.csdn.net/mylittlered/article/details/20810265</a></li>
+<li>基于Flume的美团日志收集系统(一)架构和设计 <a href="http://tech.meituan.com/mt-log-system-arch.html" target="_blank" rel="noopener">http://tech.meituan.com/mt-log-system-arch.html</a></li>
+<li>使用Fluentd + MongoDB构建实时日志收集系统 <a href="http://blog.nosqlfan.com/html/3521.html" target="_blank" rel="noopener">http://blog.nosqlfan.com/html/3521.html</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+          
+            <a href="/tags/日志处理/" rel="tag"># 日志处理</a>
+          
+            <a href="/tags/Fluentd/" rel="tag"># Fluentd</a>
+          
+            <a href="/tags/Flume/" rel="tag"># Flume</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/50.Farbox-Blog/【编辑器】为Eclipse安装Remote-System-Explorer/" rel="next" title="为Eclipse安装 Terminal">
+                <i class="fa fa-chevron-left"></i> 为Eclipse安装 Terminal
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/50.Farbox-Blog/【效率工具】在Macbook上使用surge/" rel="prev" title="在Macbook上使用Surge">
+                在Macbook上使用Surge <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">245</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#设计实现"><span class="nav-text">设计实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fluentd-td-agent"><span class="nav-text">Fluentd(td-agent)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-fluentd-td-agent-by-RPM"><span class="nav-text">Install fluentd(td-agent) by RPM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-plugins"><span class="nav-text">Install plugins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Setup"><span class="nav-text">Setup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Start-up"><span class="nav-text">Start up</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附例"><span class="nav-text">附例:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fluent-plugin-kafka"><span class="nav-text">fluent-plugin-kafka</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例-match使用grep过滤-并用tag发送到Kafka"><span class="nav-text">例:  match使用grep过滤, 并用tag发送到Kafka</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发送到kafka"><span class="nav-text">发送到kafka</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kafka"><span class="nav-text">Kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-kafka-参考http-kafka-apache-org-documentation-html"><span class="nav-text">Install kafka (参考http://kafka.apache.org/documentation.html)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编译安装"><span class="nav-text">编译安装:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载二进制文件"><span class="nav-text">下载二进制文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动zookeeper和kafka进程"><span class="nav-text">启动zookeeper和kafka进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单机测试命令-可略过"><span class="nav-text">单机测试命令(可略过)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kafka和zookeeper集群"><span class="nav-text">kafka和zookeeper集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考:</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/50.Farbox-Blog/使用fluentd,kafka,mongodb搭建日志处理系统/';
+          this.page.identifier = '50.Farbox-Blog/使用fluentd,kafka,mongodb搭建日志处理系统/';
+          this.page.title = '使用fluentd,kafka,mongodb搭建日志处理系统';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>
