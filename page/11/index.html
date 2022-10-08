@@ -278,6 +278,1004 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/33.Bigdata/MapReduce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/33.Bigdata/MapReduce/" itemprop="url">MapReduce</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/33-Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">33.Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  0
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="/images/hadoop/MapReduce-Shuffle.png" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/33.Bigdata/Hive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/33.Bigdata/Hive/" itemprop="url">Hive</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/33-Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">33.Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,030
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>  Hive是建立在Hadoop上的数据仓库基础架构。它提供了一系列的工具，用来进行数据提取、转换、加载，这是一种可以存储、查询和分析存储在Hadoop中的大规模数据机制。可以把Hadoop下结构化数据文件映射为一张成Hive中的表，并提供类sql查询功能，除了不支持更新、索引和事务，sql其它功能都支持。可以将sql语句转换为MapReduce任务进行运行，作为sql到MapReduce的映射器。提供shell、JDBC/ODBC、Thrift、Web等接口。</p>
+<p>  Hive 并不适合那些需要低延迟的应用，例如，联机事务处理（OLTP）。Hive 查询操作过程严格遵守Hadoop MapReduce 的作业执行模型，Hive 将用户的HiveQL 语句通过解释器转换为MapReduce 作业提交到Hadoop 集群上，Hadoop 监控作业执行过程，然后返回作业执行结果给用户。Hive 并非为联机事务处理而设计，Hive 并不提供实时的查询和基于行级的数据更新操作。Hive 的最佳使用场合是大数据集的批处理作业，例如，网络日志分析。</p>
+<h1 id="元数据存储"><a href="#元数据存储" class="headerlink" title="元数据存储"></a>元数据存储</h1><p>  Hive将元数据存储在RDBMS中，有三种方式可以连接到数据库。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/33.Bigdata/Hive/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/33.Bigdata/Hadoop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/33.Bigdata/Hadoop/" itemprop="url">Hadoop</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/33-Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">33.Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  828
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Hadoop_logo.svg/2000px-Hadoop_logo.svg.png" alt="Hadoop"></p>
+<h1 id="Hadoop-安装-amp-配置"><a href="#Hadoop-安装-amp-配置" class="headerlink" title="Hadoop 安装 &amp; 配置"></a>Hadoop 安装 &amp; 配置</h1><h2 id="Hadoop-amp-Yarn安装步骤"><a href="#Hadoop-amp-Yarn安装步骤" class="headerlink" title="Hadoop &amp; Yarn安装步骤"></a>Hadoop &amp; Yarn安装步骤</h2><p>参考: <a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="noopener">Apache Hadoop 2.9.2 – Hadoop Cluster Setup</a></p>
+<ol>
+<li>/etc/hosts, ssh登录 // 使slave可以ssh到master<ul>
+<li>/etc/hosts: 所有slave可互相ping hostname</li>
+<li>authorized_keys : master可以ssh任意slave</li>
+</ul>
+</li>
+<li>hadoop配置文件<ul>
+<li>hadoop-env.sh : <code>HADOOP_CONF_DIR</code> 指定加载哪个目录下的配置文件</li>
+<li>slaves: 只有namenode需配置</li>
+<li>core-site.xml:(<a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-common/core-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-common/core-default.xml</a>)<ul>
+<li>fs.defaultFS : hdfs://namenode:9000 ## hdfs文件端口</li>
+<li>hadoop.tmp.dir : /opt/data/hadoop/tmp 其它目录会基于此路径</li>
+</ul>
+</li>
+<li>hdfs-site.xml:(<a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml</a>)<ul>
+<li>dfs.namenode.secondary.http-address :  第二NameNode web管理端口</li>
+<li>dfs.replication : 3 ## 数据需要备份的数量, 默认是3, 如果此数大于集群的机器数会出错</li>
+<li>dfs.namenode.name.dir : /opt/data/hadoop/namenode ## NameNode持久存储名字空间及事务日志的本地文件系统路径</li>
+<li>dfs.datanode.data.dir : /opt/data/hadoop/datenode ## DataNode存放块数据的本地文件系统路径</li>
+<li>dfs.namenode.http-address : namenode:50070  ## 浏览器可访问管理页面</li>
+<li>dfs.webhdfs.enabled : 开启WebHDFS (REST API)功能</li>
+</ul>
+</li>
+<li>mapred-site.xml:<ul>
+<li>mapreduce.framework.name: yarn</li>
+<li>mapreduce.jobhistory.address: 10020</li>
+<li>mapreduce.jobhistory.webapp.address: 19888</li>
+</ul>
+</li>
+<li>yarn-site.xml<ul>
+<li>yarn.resourcemanager.webapp.address: 8088 ## yarn框架中各个 task 的资源调度及运行状况通过通过该web界面访问</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>格式化namenode: <code>hdfs namenode -format</code></li>
+<li>启动HDFS NameNode: <code>sbin/hadoop-daemon.sh start namenode</code></li>
+<li>启动HDFS DateNode: <code>sbin/hadoop-daemons.sh start datanode</code><ul>
+<li><strong>或者在namenode上直接一个脚本启动: <code>sbin/start-dfs.sh</code> namenode和datanode的所有hdfs</strong></li>
+</ul>
+</li>
+<li>启动yarn: <code>sbin/start-yarn.sh</code>脚本一次启动ResourceManager和NodeManager, 如果要分别启动:<ul>
+<li><code>yarn-daemon.sh --config /opt/conf/hadoop start nodemanager</code></li>
+<li><code>yarn-daemon.sh --config /opt/conf/hadoop start resourcemanager</code></li>
+</ul>
+</li>
+<li>查看集群状态: <code>bin/hdfs dfsadmin -report</code></li>
+<li>测试hdfs写: <code>echo &quot;hello world&quot; | hadoop fs -put - /dir/hadoop/hello_world.txt &amp;&amp; hadoop fs -cat  /dir/hadoop/hello_world.txt</code></li>
+<li>一些web ui:<ul>
+<li>查看nameNode: <a href="http://namenode:50070/" target="_blank" rel="noopener">http://namenode:50070/</a></li>
+<li>查看yarn resourcemanager: <a href="http://namenode:8088/" target="_blank" rel="noopener">http://namenode:8088/</a></li>
+<li>MapReduce JobHistory: <a href="http://namenode:19888" target="_blank" rel="noopener">http://namenode:19888</a></li>
+</ul>
+</li>
+</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/33.Bigdata/Hadoop/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-05架构-高性能和高可用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/MySQL-05架构-高性能和高可用/" itemprop="url">MySQL-05架构-高性能和高可用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  15
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>@toc</p>
+<ul>
+<li>主从同步</li>
+<li>分库分表</li>
+</ul>
+<a href="/32.Database/MySQL-05架构-日志/" title="MySQL-05架构-日志">MySQL-05架构-日志</a>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-05架构-日志/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/MySQL-05架构-日志/" itemprop="url">MySQL-05架构-日志</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  120
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@toc:</p>
+<ul>
+<li>三种日志的作用分别是什么?</li>
+<li>三种日志数据格式有何不同?</li>
+<li>分别在MySQL架构哪一层实现;</li>
+</ul>
+<p>比较 Redo log/Undo log/Binlog:</p>
+<ul>
+<li>作用不同:<ul>
+<li>Redo log是WAL机制的日志, 更新数据先落日志, 防止Crash;</li>
+<li>Undo log是实现事务回滚和MVCC的;</li>
+<li>Binlog 是 server层实现的;</li>
+</ul>
+</li>
+<li>数据格式: Redo log是物理日志 …</li>
+<li>实现的层级不同: Redo/Undo 是引擎层实现, Binlog是server层实现</li>
+<li>写入时机:</li>
+</ul>
+<p>@ref: </p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/32.Database/MySQL-05架构-日志/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-04事务-特性和实现原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/MySQL-04事务-特性和实现原理/" itemprop="url">MySQL-04事务-特性和实现原理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,271
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>数据库事务(transaction)是访问并可能操作各种数据项的一个数据库操作序列，这些操作要么全部执行,要么全部不执行，是一个不可分割的工作单位。事务由事务开始与事务结束之间执行的全部数据库操作组成。</p>
+<h2 id="ACID特性"><a href="#ACID特性" class="headerlink" title="ACID特性"></a>ACID特性</h2><p>什么是ACID: 如果一个数据库声称支持事务的操作，那么该数据库必须要具备以下四个特性（事务的特性）：</p>
+<ul>
+<li><strong>原子性 Atomicity</strong>：原子性是指一个事务是一个不可分割的工作单位，其中的操作要么都做，要么都不做；如果事务中一个sql语句执行失败，则已执行的语句也必须回滚，数据库退回到事务前的状态。</li>
+<li><strong>一致性 Consistency</strong>：事务执行结束后，数据库的完整性约束没有被破坏，事务执行的前后都是合法的数据状态。 假设用户A和用户B两者的钱加起来一共是5000，那么不管A和B之间如何转账，转几次账，事务结束后两个用户的钱相加起来应该还得是5000，这就是事务的一致性。一致性是通过AID特性共同实现的</li>
+<li><strong>隔离性 Isolation</strong>：数据库允许多个并发事务同时对其数据进行读写和修改，规定并发事务之间的数据互不影响，隔离性用于控制多个事务并发执行结果的可见性。事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。</li>
+<li><strong>持久性 Durability</strong>：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</li>
+</ul>
+<h2 id="MySQL如何实现ACID"><a href="#MySQL如何实现ACID" class="headerlink" title="MySQL如何实现ACID"></a>MySQL如何实现ACID</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/32.Database/MySQL-04事务-特性和实现原理/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-04事务-使用事务/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2565,1008 +3563,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-03架构和原理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/32.Database/HBase-03架构和原理/" itemprop="url">HBase-03架构和原理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/32-Database/" itemprop="url" rel="index">
-                    <span itemprop="name">32.Database</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,788
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="架构简介"><a href="#架构简介" class="headerlink" title="架构简介"></a>架构简介</h2><p><img src="/images/hbase/hbase_arch.png" alt></p>
-<p>HBase包含3个重要组件：Zookeeper、HMaster和 HRegionServer。</p>
-<ul>
-<li>（1）Zookeeper： 为整个 HBase集群提供协助服务，包括：<ul>
-<li>a. 存放整个 HBase集群的元数据以及集群的状态信息。</li>
-<li>b. 实现 HMaster主从节点的 failover。</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>ZooKeeper为 HBase集群提供协调服务，它管理着 HMaster和 HRegionServer的状态(available/alive等)，并且会在它们宕机时通知给 HMaster，从而 HMaster可以实现 HMaster之间的 failover，或对宕机的 HRegionServer中的 HRegion集合的修复(将它们分配给其他的 HRegionServer)。</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/32.Database/HBase-03架构和原理/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-02运维和部署/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/32.Database/HBase-02运维和部署/" itemprop="url">HBase-02运维和部署</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/32-Database/" itemprop="url" rel="index">
-                    <span itemprop="name">32.Database</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  654
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="安装-amp-部署"><a href="#安装-amp-部署" class="headerlink" title="安装 &amp; 部署"></a>安装 &amp; 部署</h2><ul>
-<li>Hadoop &amp; HBase<ul>
-<li>Hadoop集群: 1x NameNode, 2x DataNode, 共7T</li>
-<li>HBase集群: 1x Master, 2x RegionServer</li>
-</ul>
-</li>
-<li>服务分布情况:<ul>
-<li>ip6 : hbase master, hadoop name_node, Zookeeper</li>
-<li>ip7 : hbase region</li>
-<li>ip8 : hbase region</li>
-</ul>
-</li>
-</ul>
-<h3 id="hadoop"><a href="#hadoop" class="headerlink" title="hadoop"></a>hadoop</h3><p>ssh ip6, 执行:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd /data1 &amp;&amp; mkdir -p hadoop/tmp &amp;&amp; mkdir -p hadoop/hdf/data &amp;&amp; mkdir -p hadoop/hdf/name</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/32.Database/HBase-02运维和部署/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-02API简介/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/32.Database/HBase-02API简介/" itemprop="url">HBase-02API简介</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/32-Database/" itemprop="url" rel="index">
-                    <span itemprop="name">32.Database</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,108
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="客户端API-基础"><a href="#客户端API-基础" class="headerlink" title="客户端API: 基础"></a>客户端API: 基础</h1><p>包括hbase shell命令行 和Java API</p>
-<h2 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h2><ul>
-<li><code>hbase shell</code>: 进入hbase shell, 然后可以用以下的hbase命令行</li>
-<li><code>list</code> : list all table</li>
-<li><code>help &#39;list&#39;</code> : 查看帮助</li>
-<li><code>status</code> : 查看状态</li>
-<li><code>create &#39;table1&#39;,&#39;col_family1&#39;,&#39;col_family2&#39;</code> : 创建表, 并包含两个列族</li>
-<li><code>alter &#39;table1&#39;, NAME =&gt; &#39;col_family1&#39;, TTL =&gt; &#39;604800&#39;</code> : 修改列族的TTL(秒)</li>
-<li><code>describe &#39;table1&#39;</code> : 查看表描述</li>
-<li><code>put &#39;table1&#39;, &#39;rowkey1&#39;, &#39;col_family1:col111&#39;, &#39;value&#39;</code> : 插入一条数据, 格式为<code>put 表名, 行键, 列族:列, 值</code></li>
-<li><code>get &#39;table1&#39;, &#39;rowkey1&#39;</code> : 查询记录, 格式为<code>get 表名, 行键</code></li>
-<li><code>get &#39;table1&#39;, &#39;rowkey1&#39;, &#39;col_family1:col111&#39;</code> : 查询记录, 格式为<code>get 表名, 行键, 列族:列</code></li>
-<li><code>get &#39;table1&#39;, &#39;rowkey1&#39;, { COLUMN =&gt; &#39;col_family1:col111&#39;, VERSIONS=&gt;1}</code>: 查询记录, 格式为<code>get 表名, 行键, {条件}</code>, 其中<code>COLUMN</code>和<code>VERSIONS</code>是预定义的, 分别表示列和版本号</li>
-<li><code>count &#39;table1&#39;</code> : 统计表的行数</li>
-<li><code>scan &#39;table1&#39; , {&#39;LIMIT&#39; =&gt; 5}</code> : 扫描一个表, <code>{&#39;LIMIT&#39; =&gt; 5}</code>是可选的</li>
-<li><code>scan &#39;table1&#39;, {COLUMNS =&gt; &#39;fam:col&#39;, STARTROW =&gt; &#39;executed|1530226272&#39;, STOPROW =&gt; &#39;executed|1530233472&#39;}</code> : 带条件的扫描</li>
-<li><code>scan &#39;hbase:meta&#39;</code> 扫描 hbase:meta 表, 旧的HBase版本里该表叫: <code>.META.</code></li>
-<li><code>scan &#39;hbase:meta&#39;, {COLUMNS =&gt; &#39;info:regioninfo&#39;}</code> 参考 # META表</li>
-<li><code>deleteall &#39;table1&#39;, &#39;rowkey1&#39;, &#39;column&#39;</code> : 删除该行键下”column”列的数据</li>
-<li><code>deleteall &#39;table1&#39;, &#39;rowkey1&#39;</code> : 删除所有该行键下的数据</li>
-<li><code>truncate &#39;table1&#39;</code> 清空表</li>
-<li><code>disable &#39;table1&#39;</code> 然后<code>drop &#39;table1&#39;</code> : 删除表</li>
-</ul>
-<h2 id="Java-API"><a href="#Java-API" class="headerlink" title="Java API"></a>Java API</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/32.Database/HBase-02API简介/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-00基础概念/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/32.Database/HBase-00基础概念/" itemprop="url">HBase-00基础概念</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/32-Database/" itemprop="url" rel="index">
-                    <span itemprop="name">32.Database</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,206
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><img src="https://hbase.apache.org/images/hbase_logo_with_orca_large.png" alt="HBase"></p>
-<p>HBase是一个分布式的、面向列的开源数据库，该技术来源于 Fay Chang 所撰写的Google论文“Bigtable：一个结构化数据的分布式存储系统”。就像Bigtable利用了Google文件系统（File System）所提供的分布式数据存储一样，HBase在Hadoop之上提供了类似于Bigtable的能力。HBase是Apache的Hadoop项目的子项目。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。<br>与FUJITSU Cliq等商用大数据产品不同，HBase是Google Bigtable的开源实现，类似Google Bigtable利用GFS作为其文件存储系统，HBase利用Hadoop HDFS作为其文件存储系统；Google运行MapReduce来处理Bigtable中的海量数据，HBase同样利用Hadoop MapReduce来处理HBase中的海量数据；Google Bigtable利用 Chubby作为协同服务，HBase利用Zookeeper作为对应。</p>
-<ul>
-<li>HBase适用于简单数据写入（如“消息类”应用）和海量、结构简单数据的查询（如“详单类”应用），适合稀疏表；</li>
-<li>作为大数据MapReduce的后台数据源，以支撑离线分析型应用；</li>
-<li>基于HDFS分布式文件系统, 可扩展性+；</li>
-<li>Facebook的消息类应用，包括Messages、Chats、Emails和SMS系统，用的都是HBase；</li>
-</ul>
-<h2 id="概念-表-行-列族-列-版本"><a href="#概念-表-行-列族-列-版本" class="headerlink" title="概念: 表, 行, 列族, 列, 版本"></a>概念: 表, 行, 列族, 列, 版本</h2><ul>
-<li>行（Row）: HBase 中的一行包含一个行键和一个或多个与其相关的值的列。在存储行时，行按字母顺序排序。<br>出于这个原因，行键的设计非常重要。目标是以相关行相互靠近的方式存储数据。常用的行键模式是网站域。如果你的行键是域名，则你可能应该将它们存储在相反的位置（org.apache.www，org.apache.mail，org.apache.jira）。这样，表中的所有 Apache 域都彼此靠近，而不是根据子域的第一个字母分布。</li>
-<li>列（Column）: HBase 中的列由一个列族和一个列限定符组成，它们由<code>:</code>字符分隔。<ul>
-<li>列族（Column Family）: 出于性能原因，列族在物理上共同存在一组列和它们的值。在 HBase 中每个列族都有一组存储属性，例如其值是否应缓存在内存中，数据如何压缩或其行编码是如何编码的等等。表中的每一行都有相同的列族，但给定的行可能不会在给定的列族中存储任何内容。列族一旦确定后，就不能轻易修改，因为它会影响到 HBase 真实的物理存储结构，但是列族中的列标识(Column Qualifier)以及其对应的值可以动态增删。</li>
-<li>列限定符（Column Qualifier）: 列限定符被添加到列族中，以提供给定数据段的索引。鉴于列族的content，列限定符可能是content:html，而另一个可能是content:pdf。虽然列族在创建表时是固定的，但列限定符是可变的，并且在行之间可能差别很大。</li>
-</ul>
-</li>
-<li>单元格（Cell） 单元格是行、列族和列限定符的组合，并且包含值和时间戳，它表示值的版本。</li>
-<li>时间戳（Timestamp） 时间戳与每个值一起编写，并且是给定版本的值的标识符。默认情况下，时间戳表示写入数据时 RegionServer 上的时间，但可以在将数据放入单元格时指定不同的时间戳值。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/32.Database/HBase-00基础概念/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/DB.01-数据库分类/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/32.Database/DB.01-数据库分类/" itemprop="url">DB.01-数据库分类 - OLTP、OLAP、TSDB</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/32-Database/" itemprop="url" rel="index">
-                    <span itemprop="name">32.Database</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  605
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="OLTP-vs-OLAP"><a href="#OLTP-vs-OLAP" class="headerlink" title="OLTP vs OLAP"></a>OLTP vs OLAP</h1><p>OLTP(online transcation processing)联机事务处理:</p>
-<ul>
-<li>多用来解决业务中的事务(ACID: 原子性,一致性,…)问题, 随机读写, 频繁的更改/删除;</li>
-<li>不适合数据分析场景: 场景特点(数据量大), 分析和计算能力(OLTP没有, 只能查询到业务层再处理) // 关系型数据库, count/max/group by的实现?</li>
-</ul>
-<p>OLAP(online analytical processing)联机分析处理:</p>
-<ul>
-<li>OLAP不关数据的事务特性, 也不关注数据的频繁删改, 而是关注大量数据的多维度/复杂分析和计算</li>
-<li>OLAP的分类:<ul>
-<li>多维度OLAP（Multi-Dimensional OLAP，简称MOLAP）:<br>对数据需要分析的维度预先建模, 在数据存储的物理层面使用cube的结构进行存储(?) 缺点是数据需要预先建模, 优点比下面的关系型OLAP分析计算更快</li>
-<li>关系型OLAP（Relational OLAP，简称ROLAP）:<br>使用类似关系型数据库的存储模型(例如用label取代column), 使用类似SQL的语句进行分析查询, 分析计算更自由(相比多维度OLAP预先建模的方式), 但是海量数据下计分析算速度不如多维度OLAP</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/32.Database/DB.01-数据库分类/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/如何画架构图/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/如何画架构图/" itemprop="url">如何画架构图</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
-                    <span itemprop="name">31.Backend</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  202
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <ol>
-<li>图是给什么角色看的(客户 运维/实施 &amp; 开发), 即决定了用途, 要表达什么? 对方关注什么, 应该给对方看什么</li>
-<li>组件(实体)是什么: 物理硬件、实际集群、中间件（服务）、业务服务 （考虑架构是基于SaaS or PasS平台？ 来决定图中的每个实体是什么）</li>
-<li>..</li>
-</ol>
-<h1 id="➤-逻辑视图1-业务向"><a href="#➤-逻辑视图1-业务向" class="headerlink" title="➤ 逻辑视图1(业务向)"></a>➤ 逻辑视图1(业务向)</h1><p><img src="/images/diagram-逻辑视图-业务向.png" alt="diagram-逻辑视图-业务向"></p>
-<h1 id="➤-逻辑视图2-技术向"><a href="#➤-逻辑视图2-技术向" class="headerlink" title="➤ 逻辑视图2(技术向)"></a>➤ 逻辑视图2(技术向)</h1><p><img src="/images/diagram-逻辑视图1.png" alt="diagram-逻辑视图1"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/如何画架构图/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3621,7 +3617,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">401</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3643,7 +3639,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">291</span>
+                  <span class="site-state-item-count">325</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
