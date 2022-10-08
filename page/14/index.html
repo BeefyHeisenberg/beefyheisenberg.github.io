@@ -278,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F29.蒙代尔不可能三角/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-03Sentinel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -297,7 +297,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/52.Financing/F29.蒙代尔不可能三角/" itemprop="url">F29.蒙代尔不可能三角</a></h1>
+                <a class="post-title-link" href="/31.Backend/Redis-03Sentinel/" itemprop="url">Redis-03Sentinel</a></h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
                   </a>
                 </span>
 
@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  71
+                  1,309
                 </span>
               
 
@@ -377,12 +377,19 @@
 
       
         
-          
-            <p>蒙代尔不可能三角：一个国家不可能同时实现<em>货币政策独立性</em>、<em>汇率稳定</em>以及<em>资本自由流动</em>三大金融目标，只能同时选择其中的两个。</p>
-<p><img src="/images/蒙代尔不可能三角.png" alt=""></p>
-<p>其他：<a href="https://zhuanlan.zhihu.com/p/362624382" target="_blank" rel="noopener">“蒙代尔不可能三角”还适用吗？ - 知乎</a></p>
-
-          
+          <p>Redis-Sentinel是Redis官方推荐的高可用性(HA)解决方案，可以实现：</p>
+<ul>
+<li>Master宕机时自动切换到从</li>
+<li>如果发现某个redis节点运行出现状况，能够通知另外一个进程(例如它的客户端);</li>
+</ul>
+<p>运行sentinel有两种方式:<br></p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">redis-sentinel /path/to/sentinel.conf</span><br><span class="line">redis-server /path/to/sentinel.conf --sentinel</span><br></pre></td></tr></table></figure><p></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/Redis-03Sentinel/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -429,7 +436,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F30.可投资的金融产品Index/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-03Raft实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -448,7 +455,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/52.Financing/F30.可投资的金融产品Index/" itemprop="url">F30.可投资的金融产品Index</a></h1>
+                <a class="post-title-link" href="/31.Backend/Redis-03Raft实现/" itemprop="url">Redis-03Raft实现</a></h1>
         
 
         <div class="post-meta">
@@ -471,8 +478,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
                   </a>
                 </span>
 
@@ -502,7 +509,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  304
+                  473
                 </span>
               
 
@@ -528,14 +535,344 @@
 
       
         
+          <p>@toc:</p>
+<ul>
+<li>Raft协议简述(角色, 任期Term, 发起投票);</li>
+<li>Redis中是如何实现的Raft?</li>
+</ul>
+<p>➤ Raft协议简介: Raft协议是用来解决分布式系统一致性的, 协议包括 选举leader/日志复制-提交机制等等,<br>除Raft外还有 Google的 Paxos协议, 但 Paxos协议难以理解, 更难以实现(仅仅有论文),但 Raft协议正好相反, 易于理解且有实际工程的代码实现 (Redis Sentinel的选举 就是通过Raft协议实现的)</p>
+<ul>
+<li>Raft协议中的角色: Leader, Follower, Candidate(候选者), 在系统正常状态下只有 Leader和 Follower两种角色,</li>
+<li>当有 Follower角色发现 Leader下线(心跳异常), 这个 Follower会暂时变为 Candidate, 然后这个Candidate 向其他 Follower发起给自己的投票, 当有超过半数的Follower给这个Candidate投票, 这个Candidate即成为新的Leader.</li>
+<li>在选举过程中, 还有一个需要解决的问题: 选举的时间有效性 (在选举过程中, 除了节点之间交换选举人的信息, 还需要表名这是在进行第几期选举), Raft协议使用 Term(任期)来表示这次选举, 在每次Term中, Follower只有一次投票机会. 当一次选举结束后, 所有节点保存的 Term将会更新, 当下一次某个 Candidate发起选举的时候, 会将 Term + 1</li>
+</ul>
+<p>➤ Redis实现Raft协议:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/Redis-03Raft实现/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-02部署和运维/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/Redis-02部署和运维/" itemprop="url">Redis-02部署和运维</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
           
-            <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">* 多头基金：[[F31.基金101]]</span><br><span class="line">* 债券大类：&#123;% post_link 52.Financing/F33.债券 &apos;F33.债券&apos; %&#125;</span><br><span class="line">* 期货：&#123;% post_link 52.Financing/F34.期货 &apos;F34.期货&apos; %&#125; 和 ETF</span><br><span class="line">* REITs：[[F35.REITs]]</span><br><span class="line">* 固收+：@Onenote</span><br><span class="line">* 衍生品：&#123;% post_link 52.Financing/F35.金融衍生品 &apos;F35.金融衍生品&apos; %&#125;</span><br></pre></td></tr></table></figure>
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,099
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="http://download.redis.io/logocontest/82.png" alt="Redis"></p>
+<h1 id="安装-amp-配置"><a href="#安装-amp-配置" class="headerlink" title="安装&amp;配置"></a>安装&amp;配置</h1><ul>
+<li>启动: /opt/apps/redis/bin/redis-server /opt/conf/redis/${port}.conf</li>
+<li>conf文件: <a href="http://yijiebuyi.com/blog/bc2b3d3e010bf87ba55267f95ab3aa71.html" target="_blank" rel="noopener">http://yijiebuyi.com/blog/bc2b3d3e010bf87ba55267f95ab3aa71.html</a></li>
+</ul>
+<h1 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h1><ul>
+<li>连接本地: <code>redis-cli -p 6379</code></li>
+<li>连接远程: <code>redis-cli -h host -p port -a pwd</code></li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/Redis-02部署和运维/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-01数据结构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/Redis-01数据结构/" itemprop="url">Redis-01数据结构</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,143
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Redis是一个K-V的数据库，“V” 的数据类型分为：String、Hash、List、Set、Sorted Set。</p>
+<p><img src="/images/redis/redis_all_type.png" alt></p>
+<h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><p>String 数据结构是简单的 key-value 类型，value 不仅可以是 String，也可以是数字（当数字类型用 Long 可以表示的时候encoding 就是整型，其他都存储在 sdshdr 当做字符串）。</p>
 <blockquote>
-<p>金融衍生品（derivatives)，是指一种基于基础金融工具的金融合约，其价值取决于一种或多种基础资产或指数，合约的基本种类包括远期合约、期货、掉期（互换）和期权。 金融衍生品还包括具有远期、期货、掉期（互换）和期权中一种或多种特征的混合金融工具。 这种合约可以是标准化的，也可以是非标准化的</p>
+<p>sds是在Redis中被广泛使用的字符串结构，它的全称是Simple Dynamic String。参考 <a href="http：//zhangtielei.com/posts/blog-redis-sds.html">Redis内部数据结构详解(2)——sds</a> @ref</p>
 </blockquote>
-<p><a href="https://xueqiu.com/u/9322843818" target="_blank" rel="noopener">南十里 - 雪球</a>很多有关股指期货的文章：想要真正了解衍生品世界，比如期权和期货市场，有时需要用不同方式去思考，而且这些方式通常都会让我们脱离自己的思维舒适地带。爱因斯坦曾说过：“任何一个聪明的傻瓜都可以把问题搞得更大、更复杂、更激烈。而朝相反方向前进，则需要一点点天分以及很大的勇气。”</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/Redis-01数据结构/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -582,7 +919,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F31.投资的α和β系数/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.06-序列化-ProtoBuf/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -601,7 +938,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/52.Financing/F31.投资的α和β系数/" itemprop="url">F31.投资的α和β系数</a></h1>
+                <a class="post-title-link" href="/31.Backend/RPC.06-序列化-ProtoBuf/" itemprop="url">RPC.06-序列化-ProtoBuf</a></h1>
         
 
         <div class="post-meta">
@@ -624,8 +961,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
                   </a>
                 </span>
 
@@ -655,7 +992,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  774
+                  657
                 </span>
               
 
@@ -681,21 +1018,17 @@
 
       
         
-          <h1 id="什么是α-β系数"><a href="#什么是α-β系数" class="headerlink" title="什么是α / β系数"></a>什么是α / β系数</h1><blockquote>
-<p>在投资领域中，收益分为阿尔法(α)收益和贝塔(β)收益，其中，α指主动投资收益，来源于选股和择时，超越市场收益；β指被动投资收益，来源于组合和市场相关的收益，跟随市场收益。</p>
-</blockquote>
-<p>衡量一个基金（or 投资品）的表现：</p>
-<p>$$ Y = α + βX + u $$</p>
+          <p>ProtoBuf（Protocol Buffers ）是Google的开源的序列化 &amp; 反序列化工具 <a href="https://developers.google.com/protocol-buffers/" target="_blank" rel="noopener">https://developers.google.com/protocol-buffers/</a></p>
+<h2 id="ProtoBuf-C-使用"><a href="#ProtoBuf-C-使用" class="headerlink" title="ProtoBuf C++使用"></a>ProtoBuf C++使用</h2><p>使用步骤: </p>
 <ul>
-<li>Y： 股票或基金的表现</li>
-<li>α： 阿尔法，基金收益减去基准的波动率，获得的超额收益</li>
-<li>β：贝塔，是相对于“基准”的波动率，可能带来收益也可能带来亏损</li>
-<li>X： 基准，例如可以使用沪深300指数</li>
-<li>u：残差，这是一年中无法解释的随机表现部分</li>
+<li>定义proto文件，文件的内容就是定义我们需要存储或者传输的数据结构，也就是定义我们自己的数据存储或者传输的协议。</li>
+<li>安装protocol buffer编译器来编译自定义的.proto文件，用于生成.pb.h文件（proto文件中自定义类的头文件）和 .pb.cc（proto文件中自定义类的实现文件）。</li>
+<li>使用protocol buffer的C++ API来读写消息</li>
 </ul>
+<p>protocol buffer 生成的函数, 除了getter和setter之外, 还有: </p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F31.投资的α和β系数/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/RPC.06-序列化-ProtoBuf/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -746,7 +1079,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F32.ETF产品索引/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.05-腾讯云TSF微服务平台简介/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -765,7 +1098,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/52.Financing/F32.ETF产品索引/" itemprop="url">F32.ETF索引</a></h1>
+                <a class="post-title-link" href="/31.Backend/RPC.05-腾讯云TSF微服务平台简介/" itemprop="url">RPC.05-腾讯云TSF微服务平台简介</a></h1>
         
 
         <div class="post-meta">
@@ -788,8 +1121,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
                   </a>
                 </span>
 
@@ -819,7 +1152,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  815
+                  205
                 </span>
               
 
@@ -845,1451 +1178,19 @@
 
       
         
-          <h1 id="ETF分类索引"><a href="#ETF分类索引" class="headerlink" title="ETF分类索引"></a>ETF分类索引</h1><p>@tag: #基金 #ETF</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">* 宽基ETF：&#123;% post_link 52.Financing/F32a.宽基ETF &apos;F32a.宽基ETF&apos; %&#125;</span><br><span class="line">* 行业ETF：</span><br><span class="line">* 商品ETF：&#123;% post_link 52.Financing/F32g.商品ETF.期货和大宗 &apos;F32g.商品ETF.期货和大宗&apos; %&#125;</span><br><span class="line">* 货币/债券ETF:</span><br></pre></td></tr></table></figure>
-<h1 id="ETF交易指南（2021最新版）zz"><a href="#ETF交易指南（2021最新版）zz" class="headerlink" title="ETF交易指南（2021最新版）zz"></a>ETF交易指南（2021最新版）zz</h1><p> @ref: <a href="https://zhuanlan.zhihu.com/p/340812618" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/340812618</a></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F32.ETF产品索引/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F32.指数基金smartBeta策略/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F32.指数基金smartBeta策略/" itemprop="url">F32.指数基金smartBeta策略</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
           
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  945
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@tag: #基金 #ETF</p>
-<p>Smart Beta 策略常见因子：</p>
+            <p>微服务平台（Tencent Service Framework，TSF）是一个围绕着应用和微服务的 PaaS 平台，提供应用全生命周期管理、数据化运营、立体化监控和服务治理等功能。<br>TSF 拥抱 Spring Cloud 、Service Mesh 微服务框架，帮助企业客户解决传统集中式架构转型的困难，打造大规模高可用的分布式系统架构，实现业务、产品的快速落地。针对原生 Spring Cloud 应用与 Mesh 方式零成本接入。</p>
+<p>@ref: <a href="https://cloud.tencent.com/document/product/649" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/649</a></p>
 <ul>
-<li>质量因子：通过企业基本面筛选优质的成份股，倾向于选择具有稳定收入和盈利能力的公司，常见的质量因子包括净资产收益率、总资产收益率等。</li>
-<li>成长因子：侧重公司未来的盈利，选择中长期业绩增长较快的公司进行投资，可以使用营业收入增长率、净利润增长率等指标。成长因子是进攻之王，在流动性宽松、估值扩张这样的环境下往往表现优异。</li>
-<li>价值因子：以一系列指标衡量公司股价是否相对其价值低估，常见的价值因子相关指标包括市净率、市现率、市销率等。</li>
-<li>红利因子：主要以股息率为选股标准，目的在于选取分红较高的股票。红利因子可以获得超额收益的逻辑在于，分红的基础是盈利，而高分红的基础是高的累计盈余，这些体现的是一个企业良好的经营状况。</li>
-<li>低波动因子：通过降低波动率，倾向于选择成熟的公司，这类公司往往表现出更好的风险调整收益。</li>
+<li>Spring Cloud 应用接入TSF: <a href="https://cloud.tencent.com/document/product/649/36285" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/649/36285</a></li>
+<li>Dubbo 应用接入TSF: <a href="https://cloud.tencent.com/document/product/649/13947" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/649/13947</a></li>
+<li>TSF Mesh 应用接入TSF: <a href="https://cloud.tencent.com/document/product/649/17928" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/649/17928</a></li>
 </ul>
-<p>值得注意的是，红利因子的使用最为久远。长年稳定分红的公司，盈利能力和财务状况都比较好，是成熟的机构投资者最喜欢的标的。当市场处于熊市时，分红率高的公司一般被视为防御属性标的，相对表现会更为稳健；当市场处于牛市时，随着股价的上涨，股票的股息率就会减少，股息率低的股票会自动剔除出组合，因此，在市场上涨的过程中，红利因子往往也表现不错。</p>
-<p>因子策略既可单独使用，即单因子策略，也可组合使用，形成多因子策略。随着市场的发展和研究的深入，因子策略仍在不断完善。近年来，越来越多的Smart Beta指数是以复合因子来实现，比如质量因子和价值因子混搭的复合策略，比如红利因子与低波动因子混搭的复合策略，中证东方红红利低波动指数(简称：东证红利低波，代码931446)就是具有复合策略的Smart Beta指数，值得关注。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F32.指数基金smartBeta策略/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F32a.宽基ETF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F32a.宽基ETF/" itemprop="url">F32.宽基ETF</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,649
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@tag: #基金 #ETF</p>
-<h2 id="选择宽基指数"><a href="#选择宽基指数" class="headerlink" title="选择宽基指数"></a>选择宽基指数</h2><p>选择宽基指数，需要注意指数构成是否有过大的调整。比如今年5月，中证100这个很重要的宽基指数，就发生了一次指数编制机制的修改。加大了对ESG因子的参考权重，从权重指数变成了ESG指数。</p>
-<p>以及指数的估值中枢近几年是否有较大的变化： 例如中证500，如果看的是十年PE百分位，会把2015年也包括进去。2015年的中证500还是小盘成长指数，指数估值在2015的爆炒中泡沫很大，中证500的估值中枢从2017年以来就一直处于一个下行的阶段。会使现在的估值百分位看起来“很低”但实际上并不低。</p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzI5NjU2ODMzNw==&amp;mid=2247487964&amp;idx=1&amp;sn=e534d7c8a245afe58e363a7567f5e169&amp;chksm=ec4302a2db348bb489db053e5a38ce39732b26f7301be8217d0090820c560e65932233ccf7cb&amp;token=1924071754&amp;lang=zh_CN#rd" target="_blank" rel="noopener">定投宽基指数，除了估值的历史分位数，还应该注意什么？</a></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F32a.宽基ETF/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F32b.行业ETF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F32b.行业ETF/" itemprop="url">F32b.行业ETF</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,474
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="消费ETF"><a href="#消费ETF" class="headerlink" title="消费ETF"></a>消费ETF</h2><p><a href="https://zhuanlan.zhihu.com/p/59848715" target="_blank" rel="noopener">必须消费行业，指数基金如何选 - 知乎</a></p>
-<p>必须消费类指数：</p>
-<ul>
-<li><p>上证消费（000036）选择上海证券市场主要消费行业股票组成，以反映该行业公司股票的整体表现。该指数成分股为30只，前十大权重占比71.63%，其中贵州茅台、伊利股份、海天味业三只个股的权重占比超过43%，典型的食品饮料蓝筹属性。该指数权重集中，龙头汇集，缺点是没有涵盖深市龙头。</p>
-</li>
-<li><p>中证消费（000932）中证主要消费指数由中证800指数样本股中的主要消费行业股票组成，成分股为41只，代表A股市场中大市值消费类股票指数，白酒板块个股占比较高，龙头股集中。业绩上不分伯仲，建议投资者选择汇添富中证主要消费ETF(159928)，嘉实中证主要消费ETF（512600）这只产品的规模只有600万，存在清盘风险。</p>
-</li>
-<li><p>全指消费(000990) 全指消费指数从中证全指样本股主要消费行业内选择流动性和市场代表性较好的股票构成指数样本股，由134只个股组成，主要权重集中食品饮料行业。广发基金管理的中证全指共有3只基金产品（001458、002976、159946），由于产品规模持续下滑，已经停止申购，被清盘的概率很大，非常可惜。</p>
-</li>
-</ul>
-<p>可选消费指数：</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F32b.行业ETF/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F32g.商品ETF.期货和大宗/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F32g.商品ETF.期货和大宗/" itemprop="url">F32g.商品ETF.期货和大宗</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  335
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@tag: 期货</p>
-<p>@todo:</p>
-<ul>
-<li><a href="/52.Financing/F44.周期股/" title="F44.周期股">F44.周期股</a>
-</li>
-</ul>
-<hr>
-<ul>
-<li><p><a href="https://www.zhihu.com/question/27376963/answer/36442797" target="_blank" rel="noopener">中国目前有商品指数基金吗？如果有，都有哪些？风险是什么？ - 知乎</a></p>
-</li>
-<li><p>“期货ETF的风险有换仓的耗损”: <a href="https://mp.weixin.qq.com/s?__biz=MzIyMjMwMDk2MQ==&amp;mid=2247483798&amp;idx=1&amp;sn=90d486b03b40674b5a704bad12911be3&amp;chksm=e82edfd8df5956ce0f88ed505c156eaeb606cc9f1304fc643d16a3d9f497d98e27b0f4fd093d" target="_blank" rel="noopener">交割制度与中行“原油宝”穿仓</a></p>
-</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F32g.商品ETF.期货和大宗/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F33.债券/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F33.债券/" itemprop="url">F33.债券</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,025
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@todo： 长端利率 </p>
-<ul>
-<li><a href="https://new.qq.com/rain/a/20210803A0AIWO00" target="_blank" rel="noopener">谁来决定长端利率？</a></li>
-<li><a href="https://www.zhihu.com/question/277535562/answer/2475711808" target="_blank" rel="noopener">什么是长端利率，什么是短端利率？ - 知乎</a></li>
-</ul>
-<hr>
-<p>关注几个指标：债券市场余额、存量、新发、成交额</p>
-<p><a href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/http://pdf.dfcfw.com/pdf/H3_AP201912311373114704_1.pdf" target="_blank" rel="noopener">华泰期货：中国债券市场结构介绍.pdf</a><br>截至2019年12月29日，中国债券市场余额达到96.96万<br>目前利率总存量为53.51万亿元，较年初增加6.16万亿，利率债市场仍然是目前国内最大的债券市场；信用债存量为32.83万亿元，较年初增加4.3万亿；同业存单数量为10.62万亿元，较年初增加0.74万亿元。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F33.债券/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F34.期货/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F34.期货/" itemprop="url">F34.期货</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  629
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@tag: 期货</p>
-<p><strong>开仓</strong>也叫建仓，是指投资者新买入或新卖出一定数量的股指期货合约。如果投资者将这份股指期货合约保留到最后交易日，他就必须通过现金交割来了结这笔期货交易。</p>
-<ul>
-<li>卖出合约一方，叫空方，货品（标的）跌价获利</li>
-<li>买入合约一方，叫多方，货品涨价获利</li>
-</ul>
-<p><strong>持仓</strong>：股指期货投资者在开仓之后尚没有平仓的合约，叫做未平仓合约，也叫持仓。开仓之后股指期货投资者有两种方式了结股指期货合约：或者择机平仓，或者持有至最后交易日并进行现金交割。</p>
-<ul>
-<li>期货逐日盯市制度：每天都会结算一次保证金、合约的盈亏（如果合约涨价，空方需要把合约上涨的价格给多方账户，从空方保证金扣除，如果空方保证金不足，需要再补保证金</li>
-<li>货品单价有可能跌成负的（a买入期货合约，但是又卖不出去无法平仓…</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F34.期货/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F35.金融衍生品/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F35.金融衍生品/" itemprop="url">F35.金融衍生品</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  381
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>衍生品主要四大类：远期，互换，期权，期货</p>
-<p> <a href="https://wiki.mbalib.com/wiki/%E7%BB%93%E6%9E%84%E6%80%A7%E7%90%86%E8%B4%A2%E4%BA%A7%E5%93%81" target="_blank" rel="noopener">结构性理财产品</a></p>
-<h2 id="衍生品1-雪球"><a href="#衍生品1-雪球" class="headerlink" title="衍生品1-雪球"></a>衍生品1-雪球</h2><p><a href="https://xueqiu.com/9322843818/165295388" target="_blank" rel="noopener">与友漫谈——障碍期权之雪球结构 - 雪球</a></p>
-<p>障碍期权可分为敲出期权（knock-out）和敲入期权（knock-in）两类。当标的资产价格达到一定水平时，敲出期权不再存在；当标的价格达到一定水平时，敲入期权才开始存在。我们常常听到的雪球结构期权就是障碍期权，设计中即包括敲入事件，也包括敲出事件，这样一来，最后的收益就取决于挂钩标的走势和敲入、敲出事件发生的时间</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F35.金融衍生品/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F36.REITs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F36.REITs/" itemprop="url">F35.REITs</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  24
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>@tag: #REITs</p>
-<p><a href="https://xueqiu.com/3179670287/216537149" target="_blank" rel="noopener">在我的投资组合里，必须要持有什么样的REITs基金？ - 雪球</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F39.桥水全天候策略/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F39.桥水全天候策略/" itemprop="url">F39.桥水全天候策略</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,223
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@tag: #资产配置</p>
-<p>风险平价(Risk Parity)理论，风险平价的意思是通过配置不同类型的资产（如股票、债券、商品、黄金等），目的是创造一个更好的分散组合，这个分散组合将有更好的收益风险比率，天候策略能适应各种经济环境，在风险最小的情况下获取市场平均回报。</p>
-<p>在漫长的投研积累过程中，Ray Dalio 最终把经济环境拆分成了四类，并描绘出了全天候策略：</p>
 <blockquote>
-<p>这个四宫格和平时看到的不太一样，并不是把2个要素当做2个轴组成四宫格，黄色上下表示通胀高低，红色上下表示经济增长高低</p>
+<p> Dubbo &amp; Spring Cloud 微服务介绍, 参考👉🏻 <a href="/31.Backend/RPC.01-浅谈服务治理-and-微服务(zz)/" title="RPC.01-浅谈服务治理-and-微服务(zz)">RPC.01-浅谈服务治理-and-微服务(zz)</a></p>
 </blockquote>
-<p><img src="/images/IMG20221003-2.png" alt></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F39.桥水全天候策略/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+
+          
         
       
     </div>
@@ -2336,7 +1237,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F41.K线图及指标/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.04-Service-Mesh/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2355,7 +1256,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/52.Financing/F41.K线图及指标/" itemprop="url">F41.K线图及指标</a></h1>
+                <a class="post-title-link" href="/31.Backend/RPC.04-Service-Mesh/" itemprop="url">RPC.04-Service Mesh</a></h1>
         
 
         <div class="post-meta">
@@ -2378,8 +1279,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
                   </a>
                 </span>
 
@@ -2409,7 +1310,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,461
+                  37
                 </span>
               
 
@@ -2435,492 +1336,1823 @@
 
       
         
-          <h2 id="K线"><a href="#K线" class="headerlink" title="K线"></a>K线</h2><p>▷ K线图, 英文名：K Chart, Candlestick Chart</p>
+          
+            <ul>
+<li><a href="https://juejin.im/entry/5b4c0be66fb9a04fb900c3a4" target="_blank" rel="noopener">什么是Service Mesh？ </a></li>
+<li><a href="https://time.geekbang.org/article/2360" target="_blank" rel="noopener">Service Mesh深度解析</a></li>
+<li>腾讯云微服务平台提供的 TSF Mesh: <a href="/31.Backend/RPC.05-腾讯云TSF微服务平台简介/" title="RPC.05-腾讯云TSF微服务平台简介">RPC.05-腾讯云TSF微服务平台简介</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.03-框架设计概要/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/RPC.03-框架设计概要/" itemprop="url">RPC.03-框架设计概要</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,199
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="RMI"><a href="#RMI" class="headerlink" title="RMI"></a>RMI</h2><p>早期JDK1.2引入的RMI框架图: （👉🏻[[../@project/Java-RMI]]）</p>
+<h2 id="RPC通用框架"><a href="#RPC通用框架" class="headerlink" title="RPC通用框架"></a>RPC通用框架</h2><p>通用RPC框架图:<br><img src="/images/20220315092643.png" alt="../_images/20220315092643.png"></p>
+<ul>
+<li><p>serviceClient：这个模块主要是封装服务端对外提供的API，让客户端像使用本地API接口一样调用远程服务。一般使用动态代理机制，当客户端调用api的方法时，serviceClient会走代理逻辑，去远程服务器请求真正的执行方法。类似RMI的stub模块。</p>
+</li>
+<li><p>processor：在服务端存在很多方法，当客户端请求过来，服务端需要定位到具体对象的具体方法，然后执行该方法，这个功能就由processor模块来完成。一般这个操作需要使用反射机制来获取用来执行真实处理逻辑的方法。类似RMI的skeleton模块。</p>
+</li>
+<li><p>protocol：协议层，一般协议层包括编码/解码，或者说序列化和反序列化工作；有的时候编解码不仅仅是对象序列化的工作，还有一些通信相关的字节流的额外解析部分。序列化工具有：hessian，Apache avro，G的 protobuf，FB的 Thrift，json系，xml系等等。在RMI中直接使用JDK自身的序列化组件。</p>
 <blockquote>
-<p>中文中的「K 线图」一词与英文字母 K 没关系，也是从日语误译而来：「K 线」音译自日文汉字「罫線」（kei-sen），因为日语「罫線表」一词指行情图表，并不专指 K 线图，这个张冠李戴的翻译，最终因简单好记不胫而走，成了一个让世界人民莫名其妙的中文词。</p>
+<p>Thrift和Protobuf的最大不同，在于Thrift提供了完整的RPC支持，包含了Server/Client，而Protobuf只包括了stub的生成器和格式定义。@ref <a href="https://developer.aliyun.com/article/229886" target="_blank" rel="noopener">Protobuf 和 Thrift对比-阿里云开发者社区</a></p>
 </blockquote>
-<ol>
-<li>最上方的一条细线称为上影线，中间的一条粗线为实体，下面的一条细线为下影线。</li>
-<li>当收盘价高于开盘价，也就是股价走势呈上升趋势时，我们称这种情况下的 K 线为阳线，中部的实体以空白或红色表示。反之称为阴线用黑色实体或绿色表示。</li>
-<li>上影线的长度表示最高价和收盘价之间的价差，实体的长短代表收盘价与开盘价之间的价差，下影线的长度则代表开盘价和最低价之间的差距。</li>
-</ol>
-<p><img src="/images/20220226145517.png" alt></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F41.K线图及指标/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F44.周期股/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F44.周期股/" itemprop="url">F44.周期股</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  614
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><a href="https://www.zhihu.com/question/384284730" target="_blank" rel="noopener">什么是「周期股」，它是如何形成的，有哪些特点？ - 知乎</a></p>
-<p>什么是周期股：指支付股息非常高（股价相对不会太高），并随着经济周期的盛衰而涨落的股票 // @ref: <a href="/52.Financing/F21.经济的周期性/" title="F21.经济的周期性">F21.经济的周期性</a></p>
-<p>该类股票诸如煤炭（传统能源）、钢铁、有色、化工、航运等行业的股票，当整体经济上升时，这些股票的价格也迅速上升；当整体经济走下坡路时，这些股票的价格也下跌。<br>与之对应的是非周期股，生产必需品的公司，不论经济走势如何，人们对这些产品的需求都不会有太大变动，例如食品饮料和医药生物行业。</p>
-<p>周期股与经济走势高度绑定，并有一定的提前反应。可以参照的一个价格信息是国际大宗商品价格走势，国际大宗商品价格走势是经济形势好坏的晴雨表，周期股的走势与国际大宗商品价格走势也有密切的关系。</p>
-<p>对于强周期行业，在景气周期顶点PE很低，却往往是可能需要卖出的时候；而景气低点盈利很少或者亏损，股价很低的时候PE却很高</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F44.周期股/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F49.戴维斯双杀/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F49.戴维斯双杀/" itemprop="url">F49.戴维斯双杀</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  738
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="戴维斯双杀"><a href="#戴维斯双杀" class="headerlink" title="戴维斯双杀"></a>戴维斯双杀</h2><p><code>P = PE*EPS</code>, 即<br>$$ 股价 = 市盈率 * 每股净利润 $$ </p>
-<p>股价受到企业盈利和企业估值产生的乘数效应的影响，在成长股成长的过程中PE和EPS都会增长，而最终股价增长的幅度是两者增长倍数的乘积。</p>
-<p>如果EPS（利润）下降，可能带来PE同时下降，估值和每股净利润的下滑导致的股价暴跌。<br>该模型向上叫做“戴维斯双击”，向下叫做“戴维斯双杀”</p>
-<h2 id="什么是杀业绩、杀估值"><a href="#什么是杀业绩、杀估值" class="headerlink" title="什么是杀业绩、杀估值"></a>什么是杀业绩、杀估值</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F49.戴维斯双杀/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F51.Quant.量化交易101/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F51.Quant.量化交易101/" itemprop="url">F51.Quant-量化交易101</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  386
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@tag: #入门101 #量化交易</p>
-<hr>
-<p>@todo:</p>
-<ul>
-<li><a href="https://leetcode-cn.com/circle/article/kvwd0R/" target="_blank" rel="noopener">量化交易入门指南 - 力扣（LeetCode）</a></li>
-<li>待整理: <a href="/52.Financing/F51a.Quant-量化交易经典策略/" title="F51a.Quant-量化交易经典策略">F51a.Quant-量化交易经典策略</a></li>
+</li>
+<li><p>transport：传输层，主要是服务端和客户端网络通信相关的功能。这里和下面的IO层区分开，主要是因为传输层处理server/client的网络通信交互，而不涉及具体底层处理连接请求和响应相关的逻辑。</p>
+</li>
+<li><p>I/O：这个模块主要是为了提高性能可能采用不同的IO模型和线程模型，当然，一般我们可能和上面的transport层联系的比较紧密，统一称为remote模块。</p>
+</li>
 </ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/RPC.03-框架设计概要/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.02-RMI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/RPC.02-RMI/" itemprop="url">RPC.02-RMI</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  631
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="RMI"><a href="#RMI" class="headerlink" title="RMI"></a>RMI</h2><p>@Ref: <a href="https://ketao1989.github.io/2016/12/10/2016-12-10-rpc-theory-in-action/" target="_blank" rel="noopener">https://ketao1989.github.io/2016/12/10/2016-12-10-rpc-theory-in-action/</a></p>
+<p>RMI，全称是Remote Method Invocation，也就是远程方法调用。在JDK 1.2的时候引入到Java体系。</p>
+<p><img src="/images/20220315142830.png" alt="A typical implementation model of Java-RMI using stub and skeleton objects."></p>
+<p>下面先看看RMI的调用流程:<br><img src="/images/20220314231644.png" alt="../_images/20220314231644.png"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/RPC.02-RMI/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.02-ProtoBuf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/RPC.02-ProtoBuf/" itemprop="url">RPC.02-ProtoBuf</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,916
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="ProtoBuf-C-使用"><a href="#ProtoBuf-C-使用" class="headerlink" title="ProtoBuf C++使用"></a>ProtoBuf C++使用</h2><p>ProtoBuf（Protocol Buffers ）是Google的开源的序列化 &amp; 反序列化工具 <a href="https://developers.google.com/protocol-buffers/" target="_blank" rel="noopener">https://developers.google.com/protocol-buffers/</a></p>
+<p>使用步骤:</p>
+<ul>
+<li>定义proto文件，文件的内容就是定义我们需要存储或者传输的数据结构，也就是定义我们自己的数据存储或者传输的协议。</li>
+<li>安装protocol buffer编译器来编译自定义的.proto文件，用于生成.pb.h文件（proto文件中自定义类的头文件）和 .pb.cc（proto文件中自定义类的实现文件）。</li>
+<li>使用protocol buffer的C++ API来读写消息</li>
+</ul>
+<p>protocol buffer 生成的函数, 除了getter和setter之外, 还有:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/RPC.02-ProtoBuf/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.01-浅谈服务治理-and-微服务(zz)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/RPC.01-浅谈服务治理-and-微服务(zz)/" itemprop="url">RPC.01-浅谈服务治理、微服务与Service Mesh(zz)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  7,233
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="浅谈服务治理、微服务与Service-Mesh（一）：Dubbo的前世今生"><a href="#浅谈服务治理、微服务与Service-Mesh（一）：Dubbo的前世今生" class="headerlink" title="浅谈服务治理、微服务与Service Mesh（一）：Dubbo的前世今生"></a>浅谈服务治理、微服务与Service Mesh（一）：Dubbo的前世今生</h1><p>@ref <a href="http://dockone.io/article/3294" target="_blank" rel="noopener">浅谈服务治理、微服务与Service Mesh（一）：Dubbo的前世今生 - DockOne.io</a></p>
+<p>服务治理（Service Governance），也称为SOA治理，是指用来管理SOA的采用和实现的过程。以下是在2006年时IBM对于服务治理要点的总结：  </p>
+<ul>
+<li>服务定义（服务的范围、接口和边界）</li>
+<li>服务部署生命周期（各个生命周期阶段）</li>
+<li>服务版本治理（包括兼容性）</li>
+<li>服务迁移（启用和退役）</li>
+<li>服务注册中心（依赖关系）</li>
+<li>服务消息模型（规范数据模型）</li>
+<li>服务监视（进行问题确定）</li>
+<li>服务所有权（企业组织）</li>
+<li>服务测试（重复测试）</li>
+<li>服务安全（包括可接受的保护范围）</li>
+</ul>
+<p>限于当时的技术发展水平，广大软件设计与开发人员对于SOA和服务治理的技术认知还主要停留在Web Service和ESB总线等技术和规范上，并没有真正在软件开发中得以充分落地。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/RPC.01-浅谈服务治理-and-微服务(zz)/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.01-从SOA到微服务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/RPC.01-从SOA到微服务/" itemprop="url">RPC.01-从SOA到微服务</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  639
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/images/rpc/SOA-Microservices-Title.png" alt></p>
+<h1 id="从SOA到微服务"><a href="#从SOA到微服务" class="headerlink" title="从SOA到微服务"></a>从SOA到微服务</h1><p>▶ <strong>SOA</strong>: 面向服务的架构（英语：service-oriented architecture）, 即把后台系统按照功能拆分为不同的服务, 这些服务通过统一接口(RPC 或 Http)提供给调用者.<br>比较容易实现SOA的架构是Web Service, 有几种主流的实现SOA的 Web Service: XML-RPC, SOAP, REST, 其中 XML-RPC 和 SOAP都是通过 “HTTP协议传输XML内容”的方式 </p>
+<p>参考: [[RESTful]]</p>
+<blockquote>
+<p>REST: 把对外提供的服务抽象为某种资源(User/Order), 通过HTTP的 GET/POST/DELETE/PUT方法对资源对象进行操作, 满足这几个条件的服务, 可以称为 #RESTful 的 (Representional State Transfer)</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/RPC.01-从SOA到微服务/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/22.Network-Protocol/网络协议-TCP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/22.Network-Protocol/网络协议-TCP/" itemprop="url">网络协议：TCP/IP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/22-Network-Protocol/" itemprop="url" rel="index">
+                    <span itemprop="name">22.Network-Protocol</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,709
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="OSI七层模型回顾"><a href="#OSI七层模型回顾" class="headerlink" title="OSI七层模型回顾"></a>OSI七层模型回顾</h2><p>参考: <a href="/22.Network-Protocol/网络协议-OSI七层模型/" title="网络协议-OSI七层模型">网络协议-OSI七层模型</a></p>
+<h2 id="TCP报头"><a href="#TCP报头" class="headerlink" title="TCP报头"></a>TCP报头</h2><p><img src="/images/network_protocol/tcp_header.jpg" alt="TCP头"></p>
+<ul>
+<li>Source Port，Destination Port：TCP的包是没有IP地址的，那是IP层上的事。但是有源端口和目标端口。</li>
+<li>Sequence Number是包的序号，用来解决网络包乱序（reordering）问题。</li>
+<li>Acknowledgement Number就是ACK——用于确认收到，用来解决不丢包的问题。</li>
+<li>TCP Flag ，也就是包的类型，主要是用于操控TCP的状态机的，Flag共6个，即URG、ACK、PSH、RST、SYN、FIN等，具体含义如下：<ul>
+<li>URG：紧急指针（urgent pointer）有效。</li>
+<li>ACK：Acknowledgement，确认收到。</li>
+<li>PSH：接收方应该尽快将这个报文交给应用层。</li>
+<li>RST：RESET，重置连接；</li>
+<li>SYN：Synchronize Sequence Numbers，一般在发起一个新连接的时候才会同步Seq Num；</li>
+<li>FIN：FINISH，释放一个连接。</li>
+</ul>
+</li>
+<li>Window又叫Advertised-Window，也就是著名的滑动窗口（Sliding Window），用于解决流控的。</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/22.Network-Protocol/网络协议-TCP/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/22.Network-Protocol/网络协议-OSI七层模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/22.Network-Protocol/网络协议-OSI七层模型/" itemprop="url">网络协议-OSI七层模型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/22-Network-Protocol/" itemprop="url" rel="index">
+                    <span itemprop="name">22.Network-Protocol</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  376
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@toc:</p>
+<ul>
+<li>OSI七层模型;</li>
+<li>七层、五层、四层对比;</li>
+</ul>
+<p>➤ 七层模型: 国际标准组织（ISO）定义的网络互联7层框架, 包括:</p>
+<ul>
+<li>7应用层: 该层协议包括 Socket, HTTP, HTTPS, FTP, SSH, POP3,  // WebSocket属于哪一层?</li>
+<li>6表示层: 格式转换, 把数据转换为应用层能兼容的格式 或 适合传输的格式, 比如: 加密/解密, 压缩/解压</li>
+<li>5会话层: 维护和管理数据传输过程中两台计算机之间的连接, 该层协议有: SSL/TLS</li>
+<li>4传输层: 传输控制, 例如TCP协议(传输控制协议, 主要实现了传输的可靠性, 例如超时重传), 该层把「传输表头」TH加入数据形成「报文」Segment, 传输表头包括了传输协议等</li>
+<li>3网络层: 决定数据的路由, 例如IP/ICMP协议, 该层把「网络表头」NH加入数据形成「包」Packet, 网络表头包括: @todo</li>
+<li>2链路层: 负责网络寻找和错误侦测, 该层把「数据链表头」DLH加入数据开头, 以及「数据链表尾」DLT加入数据结尾, 形成「信息框」Data Frame, 数据链表头包括, 该层协议包括WiFi, GPRS(通用分组无线服务)</li>
+<li>1物理层: 在局部局域网上传送「数据帧」Data Frame, 该层定义了网络硬件和网络数据之间的互通, 包括: 针脚/电压/集线器/网卡等</li>
+</ul>
+<p>➤ 7,5,4层网络模型的区别与联系:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/22.Network-Protocol/网络协议-OSI七层模型/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/22.Network-Protocol/网络协议-IP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/22.Network-Protocol/网络协议-IP/" itemprop="url">网络协议-IP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/22-Network-Protocol/" itemprop="url" rel="index">
+                    <span itemprop="name">22.Network-Protocol</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  547
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h2><ul>
+<li>IPv4地址由4字节(32位)组成, 每个字节范围0-255</li>
+<li>子网掩码（subnet mask）把一个IPv4地址划分为 网络地址 和 主机地址, <code>255.255.255.0</code> 表示前3个字节是网络地址, 第4个字节是主机地址</li>
+<li>子网掩码另一种表示方式 <em>CIDR(Classless Inter-Domain Routing)</em>: <ul>
+<li><code>192.168.1.0/24</code> 其中24表示子网掩码前24位全为1, 同<code>255.255.255.0</code> </li>
+<li><code>172.16.82.0/25</code>表示子网掩码是<code>前25bit都是子网地址，后7bit是主机地址</code>，所以主机数为<code>2^7 -2</code>=126个，表示的范围是172.16.82.1 — 172.16.82.126</li>
+<li><code>10.0.0.0/8</code>表示 10.0.0.1 — 10.255.255.255</li>
+</ul>
+</li>
+<li>广播地址: 主机地址全1</li>
+</ul>
+<h2 id="A-B-C类地址"><a href="#A-B-C类地址" class="headerlink" title="A,B,C类地址"></a>A,B,C类地址</h2><ul>
+<li>A类地址： 网络地址1字节，主机地址3字节，其中网络地址最高1位必须是0<ul>
+<li>网络地址占1位，范围是1 — 126（开区间 0000 0000 — 0111 1111）不包括0000 0000 和 0111 111，前者用于表示未知地址，后者表示回环地址</li>
+<li>主机地址占3位，表示一个网络地址中最大主机数是<code>2^24 - 2</code>（主机地址全0表示网络地址，全1表示广播地址，所以减2）</li>
+<li>A类地址范围： <code>1.0.0.1</code> — <code>126.255.255.254</code></li>
+<li>默认子网掩码255.0.0.0</li>
+<li>在A类地址中，10.0.0.0到10.255.255.255是私有地址（所谓的私有地址=只能在局域网络中使用）</li>
+</ul>
+</li>
+<li>B类地址： 网络地址2字节，主机地址2字节，其中网络地址最高2位必须是10<ul>
+<li>B类地址范围：<code>128.0.0.1</code> — <code>191.255.255.254</code>，每个网络中最大主机数65534</li>
+<li>默认子网掩码255.255.0.0</li>
+<li>在B类地址中，172.16.0.0 — 172.31.255.255是私有地址</li>
+</ul>
+</li>
+<li>C类地址： 网络地址3字节，主机地址1字节，其中网络地址最高3位必须是110<ul>
+<li>C类地址范围：<code>192.0.0.1</code> — <code>223.255.255.254</code>，每个网络中最大主机数254</li>
+<li>默认子网掩码255.255.255.0</li>
+<li>在C类地址中，192.168.0.0 — 192.168.255.255是私有地址</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/22.Network-Protocol/网络协议-HTTP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/22.Network-Protocol/网络协议-HTTP/" itemprop="url">网络协议：HTTP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/22-Network-Protocol/" itemprop="url" rel="index">
+                    <span itemprop="name">22.Network-Protocol</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,508
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h1><p>HTTP由URL(统一资源定位符)访问资源，一个完整的URL组成如下:</p>
+<blockquote>
+<p><a href="http://user:passwd@www.x.com:80/index.htm?var1=1&amp;var2=2#frag" target="_blank" rel="noopener">http://user:passwd@www.x.com:80/index.htm?var1=1&amp;var2=2#frag</a><br>这个真没什么好解释的… 更多有关URL的信息请参考RFC1808</p>
+</blockquote>
+<h2 id="URL编码-amp-解码"><a href="#URL编码-amp-解码" class="headerlink" title="URL编码 &amp; 解码"></a>URL编码 &amp; 解码</h2><p>URL中的GET参数和POST内容，除字母数字。  常用编程符号(不含双引)之外，都要Encode处理，空格被转换为<code>+</code>号，<code>+</code>号被转换为<code>%2b</code><br>Encode处理过的POST内容，Http头会增加<code>content-type: application/x-www-form-urlencoded</code>，参考Content-Type一节。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/22.Network-Protocol/网络协议-HTTP/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/22.Network-Protocol/Tcpdump/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/22.Network-Protocol/Tcpdump/" itemprop="url">Tcpdump</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/22-Network-Protocol/" itemprop="url" rel="index">
+                    <span itemprop="name">22.Network-Protocol</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  423
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">tcpdump -i any port 9542 -w file_name.pcap</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcpdump -s0 -i any 'udp and (src port 1719 or 18000) and (src host 9.143.243.8 or 9.143.243.18) and udp[0x10:4]=4444' -w file_name.pcap</span><br></pre></td></tr></table></figure>
+<h2 id="Tcpdump支持的滚动参数"><a href="#Tcpdump支持的滚动参数" class="headerlink" title="Tcpdump支持的滚动参数"></a>Tcpdump支持的滚动参数</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tcpdump [ -AdDefIKlLnNOpqRStuUvxX ] [ -B buffer_size ] [ -c count ]</span><br><span class="line">[ -C file_size ] [ -G rotate_seconds ] [ -F file ] [ -I interface ] [ -m module ] [ -M secret ] [ -r file ] [ -s snaplen ] [ -T type ] [ -w file ] [ -W filecount ] [ -E spi@ipaddr algo:secret,... ] [ -y datalinktype ] [ -z postrotate-command ] [ -Z user ] [ expression ]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>-G rotate_seconds:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">If specified, rotates the dump file specified with the -w option every rotate_seconds seconds.  Savefiles will have the name specified by -w which should include a time format as defined by strftime(3).  If no time format is specified, each new file will overwrite the previous.</span><br><span class="line"></span><br><span class="line">If used in conjunction with the -C option, filenames will take the form of &apos;file&lt;count&gt;&apos;.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>-C file_size:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Before writing a raw packet to a savefile, check whether the file is currently larger than file_size and, if so, close the current savefile and open a new one.  Savefiles after the first savefile will have the name specified with the -w flag, with a number after it, starting at 1 and continuing upward.  The units of file_size are millions of bytes (1,000,000 bytes, not 1,048,576 bytes).</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>-W filecount:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Used in conjunction with the -C option, this will limit the number of files created to the specified number, and begin overwriting files from the beginning, thus creating a &apos;rotating&apos; buffer. In addition, it will name the files with enough leading 0s to support the maximum number of files, allowing them to sort correctly.</span><br><span class="line"></span><br><span class="line">Used in conjunction with the -G option, this will limit the number of rotated dump files that get created, exiting with status 0 when reaching the limit. If used with -C as well, the behavior will result in cyclical files per timeslice.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>-w file</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-w /var/tmp/trace-%m-%d-%H-%M-%S-%s will give you %m=month, %d=day of month, %H=hour of day, %M=minute of day, %S=second of day, %s=millisecond of day</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/22.Network-Protocol/Tcpdump/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/为什么要内存对齐/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/为什么要内存对齐/" itemprop="url">为什么要内存对齐</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  485
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@ref: <a href="https://www.zhihu.com/question/27862634/answer/38506197" target="_blank" rel="noopener">如何理解 struct 的内存对齐？ - 張道遠 的回答 - 知乎</a></p>
+<p>为什么 32 位 CPU，Struct 默认是 4 字节对齐的？ </p>
+<ul>
+<li>一般的答案是：CPU 访问内存必须以 4 字节倍数开始，CPU 可以在一个总线周期读取一个‘word’，如果地址是非 4 字节对齐，CPU 可能要花费两个总线周期读取一个 word</li>
+<li>注意这里的字和字长的概念： ‘字’也即 word，一般来说一个 word 占用 4 字节，‘字长’也即 wordSize（4）</li>
+</ul>
+<p>进一步问，为什么 CPU 访问内存必须以 4 字节开头？ …<br>32 位 CPU（字长也即 wordSize = 4 字节），地址总线宽度是 30，这个 30 是怎么定义出来的？</p>
 <hr>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F51.Quant.量化交易101/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/为什么要内存对齐/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2971,7 +3203,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F51a.Quant-量化交易经典策略/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.31.Posix接口/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2990,7 +3222,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/52.Financing/F51a.Quant-量化交易经典策略/" itemprop="url">F51a.Quant-量化交易经典策略</a></h1>
+                <a class="post-title-link" href="/21.Operating-System/Linux.31.Posix接口/" itemprop="url">Linux.31.Posix接口</a></h1>
         
 
         <div class="post-meta">
@@ -3013,8 +3245,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
                   </a>
                 </span>
 
@@ -3044,7 +3276,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5,389
+                  2,472
                 </span>
               
 
@@ -3070,12 +3302,17 @@
 
       
         
-          <h1 id="量化交易主要有哪些经典的策略？"><a href="#量化交易主要有哪些经典的策略？" class="headerlink" title="量化交易主要有哪些经典的策略？"></a>量化交易主要有哪些经典的策略？</h1><h2 id="flyerye的回答-知乎-https-www-zhihu-com-question-26594258-answer-271090168"><a href="#flyerye的回答-知乎-https-www-zhihu-com-question-26594258-answer-271090168" class="headerlink" title="flyerye的回答 - 知乎 https://www.zhihu.com/question/26594258/answer/271090168"></a>flyerye的回答 - 知乎 <a href="https://www.zhihu.com/question/26594258/answer/271090168" target="_blank" rel="noopener">https://www.zhihu.com/question/26594258/answer/271090168</a></h2><p>这是一个对于刚入门的投资者的好问题。讲之前，先推荐一本好书《<a href="https://www.zhihu.com/search?q=Efficiently+Inefficient&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A271090168%7D" target="_blank" rel="noopener">Efficiently Inefficient</a>》（作者：Lasse Heje Pedersen）。它对于想了解<a href="https://www.zhihu.com/search?q=%E5%AF%B9%E5%86%B2%E5%9F%BA%E9%87%91&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A271090168%7D" target="_blank" rel="noopener">对冲基金</a>的朋友，是一本很好的启蒙书籍。不说废话，讲正题。从对冲基金的角度，交易策略可以有以下分类（来自《Efficiently Inefficient》）：</p>
-<p><img src="/images/20220405095731.png" alt></p>
-<p><strong>我们可以先把交易策略大体分成三类：1）股票策略 2）宏观策略 3）套利策略。其中，股票策略和宏观策略的收益主要来自投资目标的实际价值（absolute value）的变化，而套利策略的收益来自一对或一组投资目标的相对价值（relative value）的变化。</strong>这三者不是完全的独立，比如套利策略也有应用于股票市场，宏观资产配置也会借鉴股票策略中基本面分析方法。之所以这么分是因为三者有各自显著的特点。下面我们来逐一介绍：</p>
+          <h1 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h1><h2 id="创建进程"><a href="#创建进程" class="headerlink" title="创建进程"></a>创建进程</h2><h3 id="fork"><a href="#fork" class="headerlink" title="fork"></a>fork</h3><ul>
+<li>返回0: 子进程</li>
+<li>返回&gt;0: 父进程, 返回值是子进程pid</li>
+<li>子进程会得到父进程的堆(IO缓存, malloc的内存)、栈(局部变量)、数据空间(Data Segment)的拷贝, 在子进程里修改这些变量并不会影响父进程中的值, 注意这种拷贝是“写时复制”（Copy On Write，COW）;</li>
+<li>fork前打开的文件句柄, 其偏移量会在父子进程间共享, 原因是进程内存中仅保存了文件句柄的fd指针, 指针指向的结构体(也就是文件表,保存了文件标准和位移)是共享的. @Uncertain 那么”文件表”是存储在哪里的?</li>
+<li>另外需要注意的是, 因为堆内存也将被拷贝(IO缓存在堆里), 所以如果在创建子进程之前这个IO缓存中就有数据, 那么也会带入子进程, 导致子进程的IO缓存里”多”出一些数据.</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// child process because return value zero</span></span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Hello from Child!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// parent process because return value non-zero.</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Hello from Parent!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F51a.Quant-量化交易经典策略/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/Linux.31.Posix接口/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3126,7 +3363,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F52a.双均线策略/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.21.网络编程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -3145,7 +3382,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/52.Financing/F52a.双均线策略/" itemprop="url">F52a.双均线策略</a></h1>
+                <a class="post-title-link" href="/21.Operating-System/Linux.21.网络编程/" itemprop="url">Linux.21.网络编程</a></h1>
         
 
         <div class="post-meta">
@@ -3168,8 +3405,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
                   </a>
                 </span>
 
@@ -3199,7 +3436,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  232
+                  5,047
                 </span>
               
 
@@ -3225,175 +3462,28 @@
 
       
         
-          <h2 id="双均线策略"><a href="#双均线策略" class="headerlink" title="双均线策略"></a>双均线策略</h2><p>@ref ETF之家：<br>双均线策略是经典的趋势择时策略,<br>具体策略为:</p>
-<ul>
-<li>当50ETF的20日均线高于120日均线时, 次日买入</li>
-<li>当20日均线低于120日均线时, 次日卖出, 同时换成货币基金</li>
+          <h2 id="I-O相关概念"><a href="#I-O相关概念" class="headerlink" title="I/O相关概念"></a>I/O相关概念</h2><h3 id="缓存IO-Buffer-IO"><a href="#缓存IO-Buffer-IO" class="headerlink" title="缓存IO(Buffer IO)"></a>缓存IO(Buffer IO)</h3><ul>
+<li><strong>缓存I/O</strong> 又被称作 <strong>标准I/O</strong> ，大多数文件系统的默认I/O操作都是缓存I/O。在Linux的缓存I/O机制中，数据先从磁盘复制到内核空间的缓冲区，然后从内核空间缓冲区复制到应用程序的地址空间。<ul>
+<li>读操作：操作系统检查内核的缓冲区有没有需要的数据，如果已经缓存了，那么就直接从缓存中返回；否则从磁盘中读取，然后缓存在操作系统的缓存中。</li>
+<li>写操作：将数据从用户空间复制到内核空间的缓存中。这时对用户程序来说写操作就已经完成，至于什么时候再写到磁盘中由操作系统决定，除非显示地调用了sync同步命令。</li>
+<li>缓存I/O的优点：1）在一定程度上分离了内核空间和用户空间，保护系统本身的运行安全；2）可以减少读盘的次数，从而提高性能。</li>
+<li>缓存I/O的缺点：在缓存 I/O 机制中，DMA 方式可以将数据直接从磁盘读到页缓存中，或者将数据从页缓存直接写回到磁盘上，而不能直接在应用程序地址空间和磁盘之间进行数据传输，这样，数据在传输过程中需要在应用程序地址空间（用户空间）和缓存（内核空间）之间进行多次数据拷贝操作，这些数据拷贝操作所带来的CPU以及内存开销是非常大的。</li>
 </ul>
-<hr>
-<p>@ref: <a href="https://www.myquant.cn/docs/python_strategyies/153" target="_blank" rel="noopener">双均线策略(期货) - 经典策略 - 掘金量化</a><br>本策略以SHFE.rb2101为交易标的，根据其一分钟(即60s频度）bar数据建立双均线模型，<br>短周期为20，长周期为60，当短期均线由上向下穿越长期均线时做空，<br>当短期均线由下向上穿越长期均线时做多,每次开仓前先平掉所持仓位，再开仓。<br>注：为了适用于仿真和实盘，在策略中增加了一个“先判断是否平仓成功再开仓”的判断逻辑，以避免出现未平仓成功，可用资金不足的情况。</p>
+</li>
+</ul>
+<h3 id="直接IO-Direct-IO"><a href="#直接IO-Direct-IO" class="headerlink" title="直接IO(Direct IO)"></a>直接IO(Direct IO)</h3><ul>
+<li><strong>直接I/O</strong> 就是应用程序直接访问磁盘数据，而不经过内核缓冲区，这样做的目的是减少一次从内核缓冲区到用户程序缓存的数据复制。比如说数据库管理系统这类应用，它们更倾向于选择它们自己的缓存机制，因为数据库管理系统往往比操作系统更了解数据库中存放的数据，数据库管理系统可以提供一种更加有效的缓存机制来提高数据库中数据的存取性能。<ul>
+<li>直接IO的缺点：如果访问的数据不在应用程序缓存中，那么每次数据都会直接从磁盘加载，这种直接加载会非常缓存。通常直接IO与异步IO结合使用，会得到比较好的性能。（异步IO：当访问数据的线程发出请求之后，线程会接着去处理其他事，而不是阻塞等待）</li>
+</ul>
+</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F52a.双均线策略/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/Linux.21.网络编程/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
           <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F52b.布林线策略/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/52.Financing/F52b.布林线策略/" itemprop="url">F52b.布林线策略</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  176
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>布林线均值回归策略认为，标的价格在上轨线和下轨线围成的范围内浮动，即使短期内突破上下轨，但长期内仍然会回归到布林带之中。 因此，一旦突破上下轨，即形成买卖信号。 当股价向上突破上界时，为卖出信号，当股价向下突破下界时，为买入信号。</p>
-<p>以创业板ETF为例: </p>
-<ul>
-<li>收盘价超过上轨, 次日买入</li>
-<li>收盘价低于上下轨, 次日清仓, 同时买入货币基金</li>
-</ul>
-<p>这个策略在宽基指数上效果普遍优于一直买入持有, 但出现宽幅震荡的情况会被打脸</p>
-
-          
         
       
     </div>
@@ -3481,7 +3571,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">403</span>
+                  <span class="site-state-item-count">402</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3503,7 +3593,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">255</span>
+                  <span class="site-state-item-count">291</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
