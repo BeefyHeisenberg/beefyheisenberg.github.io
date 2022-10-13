@@ -278,6 +278,177 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-03集群-Cluster/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/Redis-03集群-Cluster/" itemprop="url">Redis-03集群-Cluster</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,587
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>对客户端来说，整个cluster被看做是一个整体，客户端可以连接任意一个node进行操作，就像操作单一Redis实例一样，当客户端操作的key没有分配到该node上时，Redis会返回转向指令，指向正确的node，这有点像浏览器页面的302 redirect跳转。客户端不需要连接集群所有节点,只要连接集群中任意一个节点即可。</p>
+<ul>
+<li>Redis Cluster中，Sharding采用slot(槽)的概念，一共分成16384个槽，这有点类pre sharding思路。</li>
+<li>对于每个进入Redis的键值对，根据key进行散列，分配到这16384个slot中的某一个中。<code>CRC16(key)%16384</code>计算Key属于哪个槽</li>
+<li>Redis集群中的每个node(节点)负责分摊这16384个slot中的一部分。当动态添加或减少node节点时，需要将16384个槽做个再分配，槽中的键值也要迁移。</li>
+<li>为了增加集群的可访问性，官方推荐的方案是将node配置成主从结构，即一个master主节点，挂n个slave从节点。</li>
+<li>如果主节点失效，Redis Cluster会根据选举算法从slave节点中选择一个上升为主节点。这非常类似前篇文章提到的Redis Sharding场景下服务器节点通过Sentinel监控架构成主从结构，只是Redis Cluster本身提供了故障转移容错的能力。</li>
+</ul>
+<p><img src="/images/redis/redis-cluster.png" alt="Redis_Cluster"></p>
+<h2 id="集群安装"><a href="#集群安装" class="headerlink" title="集群安装"></a>集群安装</h2><ul>
+<li>使用redis-trib.rb创建集群<code>redis-trib.rb create --replicas 1 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003</code></li>
+<li>添加主节点: <code>redis-trib.rb add-node 127.0.0.1:7007 127.0.0.1:7001</code></li>
+<li>当添加了一个主节点后,需要重新分配哈希槽: <code>redis-trib.rb reshard 127.0.0.1:7001</code></li>
+<li>添加从节点, 添加一个port为7008的Redis实例做为7007的从节点: <code>redis-trib.rb add-node --slave --master-id cad9f7413ec6842c971dbcc2c48b4ca959eb5db4  127.0.0.1:7008 127.0.0.1:7001</code><ul>
+<li>注: 主节点id可以在client中使用 <code>cluster nodes</code> 命令查询。</li>
+</ul>
+</li>
+<li>删除节点: <code>redis-trib.rb del-node 要删除的节点的ip和端口 节点id</code></li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/Redis-03集群-Cluster/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-03Sentinel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3350,173 +3521,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.21.网络编程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/Linux.21.网络编程/" itemprop="url">Linux.21.网络编程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  5,047
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="I-O相关概念"><a href="#I-O相关概念" class="headerlink" title="I/O相关概念"></a>I/O相关概念</h2><h3 id="缓存IO-Buffer-IO"><a href="#缓存IO-Buffer-IO" class="headerlink" title="缓存IO(Buffer IO)"></a>缓存IO(Buffer IO)</h3><ul>
-<li><strong>缓存I/O</strong> 又被称作 <strong>标准I/O</strong> ，大多数文件系统的默认I/O操作都是缓存I/O。在Linux的缓存I/O机制中，数据先从磁盘复制到内核空间的缓冲区，然后从内核空间缓冲区复制到应用程序的地址空间。<ul>
-<li>读操作：操作系统检查内核的缓冲区有没有需要的数据，如果已经缓存了，那么就直接从缓存中返回；否则从磁盘中读取，然后缓存在操作系统的缓存中。</li>
-<li>写操作：将数据从用户空间复制到内核空间的缓存中。这时对用户程序来说写操作就已经完成，至于什么时候再写到磁盘中由操作系统决定，除非显示地调用了sync同步命令。</li>
-<li>缓存I/O的优点：1）在一定程度上分离了内核空间和用户空间，保护系统本身的运行安全；2）可以减少读盘的次数，从而提高性能。</li>
-<li>缓存I/O的缺点：在缓存 I/O 机制中，DMA 方式可以将数据直接从磁盘读到页缓存中，或者将数据从页缓存直接写回到磁盘上，而不能直接在应用程序地址空间和磁盘之间进行数据传输，这样，数据在传输过程中需要在应用程序地址空间（用户空间）和缓存（内核空间）之间进行多次数据拷贝操作，这些数据拷贝操作所带来的CPU以及内存开销是非常大的。</li>
-</ul>
-</li>
-</ul>
-<h3 id="直接IO-Direct-IO"><a href="#直接IO-Direct-IO" class="headerlink" title="直接IO(Direct IO)"></a>直接IO(Direct IO)</h3><ul>
-<li><strong>直接I/O</strong> 就是应用程序直接访问磁盘数据，而不经过内核缓冲区，这样做的目的是减少一次从内核缓冲区到用户程序缓存的数据复制。比如说数据库管理系统这类应用，它们更倾向于选择它们自己的缓存机制，因为数据库管理系统往往比操作系统更了解数据库中存放的数据，数据库管理系统可以提供一种更加有效的缓存机制来提高数据库中数据的存取性能。<ul>
-<li>直接IO的缺点：如果访问的数据不在应用程序缓存中，那么每次数据都会直接从磁盘加载，这种直接加载会非常缓存。通常直接IO与异步IO结合使用，会得到比较好的性能。（异步IO：当访问数据的线程发出请求之后，线程会接着去处理其他事，而不是阻塞等待）</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.21.网络编程/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3571,7 +3575,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">403</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3593,7 +3597,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">327</span>
+                  <span class="site-state-item-count">328</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

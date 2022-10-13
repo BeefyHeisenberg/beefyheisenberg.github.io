@@ -117,20 +117,20 @@
 
 
 
-<meta name="description" content="Linux内存布局32位:  0xFFFFFFFF 高地址 +---+--------------------+--------------------1 GB |   Kernel           |                  内核空间  +------------------------+-------------------- |   | Random stack offset|">
+<meta name="description" content="Linux内存布局32位:  0xFFFFFFFF 高地址 +---+--------------------+----------------------1 GB |   Kernel           |                  内核空间  +------------------------+---------------------- |   | Random stack off">
 <meta name="keywords" content="内存">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux.11.内存">
 <meta property="og:url" content="https://beefyheisenberg.github.io/21.Operating-System/Linux.11.内存/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="Linux内存布局32位:  0xFFFFFFFF 高地址 +---+--------------------+--------------------1 GB |   Kernel           |                  内核空间  +------------------------+-------------------- |   | Random stack offset|">
+<meta property="og:description" content="Linux内存布局32位:  0xFFFFFFFF 高地址 +---+--------------------+----------------------1 GB |   Kernel           |                  内核空间  +------------------------+---------------------- |   | Random stack off">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/operating_system/64bit_linux_memory.png">
 <meta property="og:image" content="http://7xjtfr.com1.z0.glb.clouddn.com/segment_descriptor.png">
-<meta property="og:updated_time" content="2022-10-11T11:56:59.038Z">
+<meta property="og:updated_time" content="2022-10-13T08:56:18.943Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux.11.内存">
-<meta name="twitter:description" content="Linux内存布局32位:  0xFFFFFFFF 高地址 +---+--------------------+--------------------1 GB |   Kernel           |                  内核空间  +------------------------+-------------------- |   | Random stack offset|">
+<meta name="twitter:description" content="Linux内存布局32位:  0xFFFFFFFF 高地址 +---+--------------------+----------------------1 GB |   Kernel           |                  内核空间  +------------------------+---------------------- |   | Random stack off">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/operating_system/64bit_linux_memory.png">
 
 
@@ -356,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,943
+                  2,958
                 </span>
               
 
@@ -381,7 +381,7 @@
       
 
       
-        <h1 id="Linux内存布局"><a href="#Linux内存布局" class="headerlink" title="Linux内存布局"></a>Linux内存布局</h1><h2 id="32位"><a href="#32位" class="headerlink" title="32位:"></a>32位:</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  0xFFFFFFFF 高地址</span><br><span class="line"> +---+--------------------+--------------------</span><br><span class="line">1 GB |   Kernel           |                  内核空间 </span><br><span class="line"> +------------------------+--------------------</span><br><span class="line"> |   | Random stack offset|                  用户空间 ↓</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |   Stack↓           |  进程中的所有的线程共享相同的地址空间</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Mem Mapping        | 文件映射,so库文件等</span><br><span class="line"> |   |                    | mmap()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> +   |                    |</span><br><span class="line">3 GB |                    |</span><br><span class="line"> +   +--------------------+</span><br><span class="line"> |   |    Heap↑           | malloc()</span><br><span class="line"> |   |                    | brk()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Random stack offset|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | BSS Seg.           |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Data Seg. (+rodata)|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Text Seg.          |                  用户空间 ↑</span><br><span class="line"> +---+--------------------+--------------------</span><br><span class="line">  0x00000000 低地址</span><br></pre></td></tr></table></figure>
+        <h1 id="Linux内存布局"><a href="#Linux内存布局" class="headerlink" title="Linux内存布局"></a>Linux内存布局</h1><h2 id="32位"><a href="#32位" class="headerlink" title="32位:"></a>32位:</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  0xFFFFFFFF 高地址</span><br><span class="line"> +---+--------------------+----------------------</span><br><span class="line">1 GB |   Kernel           |                  内核空间 </span><br><span class="line"> +------------------------+----------------------</span><br><span class="line"> |   | Random stack offset|                  用户空间 ↓</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |   Stack↓           | 进程中的所有的线程共享相同的地址空间</span><br><span class="line"> |   |                    | </span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Mem Mapping ↓      | 文件映射,so库文件等</span><br><span class="line"> |   |                    | mmap()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> +   |                    |</span><br><span class="line">3 GB |                    |</span><br><span class="line"> +   +--------------------+</span><br><span class="line"> |   |    Heap↑           | 分配线性地址VM，不一定分配页框RAM</span><br><span class="line"> |   |                    | malloc() -&gt; brk()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Random stack offset|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | BSS Seg.           |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Data Seg. (+rodata)|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Text Seg.          |                  用户空间 ↑</span><br><span class="line"> +---+--------------------+----------------------</span><br><span class="line">  0x00000000 低地址</span><br></pre></td></tr></table></figure>
 <p>内存布局从高地址到低地址:</p>
 <ul>
 <li><code>Kernel</code>: 内核空间在页表中拥有较高的特权级（ring 2或以下）, 因此只要用户态的程序试图访问这些页, 就会导致一个页错误（page fault）, 用户程序不可访问内核页</li>
@@ -598,7 +598,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">403</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -620,7 +620,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">327</span>
+                  <span class="site-state-item-count">328</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

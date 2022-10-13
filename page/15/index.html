@@ -278,6 +278,173 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.21.IO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/Linux.21.IO/" itemprop="url">Linux.21.网络编程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  5,048
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="I-O相关概念"><a href="#I-O相关概念" class="headerlink" title="I/O相关概念"></a>I/O相关概念</h2><h3 id="缓存IO-Buffer-IO"><a href="#缓存IO-Buffer-IO" class="headerlink" title="缓存IO(Buffer IO)"></a>缓存IO(Buffer IO)</h3><ul>
+<li><strong>缓存I/O</strong> 又被称作 <strong>标准I/O</strong> ，大多数文件系统的默认I/O操作都是缓存I/O。在Linux的缓存I/O机制中，数据先从磁盘复制到内核空间的缓冲区，然后从内核空间缓冲区复制到应用程序的地址空间。<ul>
+<li>读操作：操作系统检查内核的缓冲区有没有需要的数据，如果已经缓存了，那么就直接从缓存中返回；否则从磁盘中读取，然后缓存在操作系统的缓存中。</li>
+<li>写操作：将数据从用户空间复制到内核空间的缓存中。这时对用户程序来说写操作就已经完成，至于什么时候再写到磁盘中由操作系统决定，除非显示地调用了sync同步命令。</li>
+<li>缓存I/O的优点：1）在一定程度上分离了内核空间和用户空间，保护系统本身的运行安全；2）可以减少读盘的次数，从而提高性能。</li>
+<li>缓存I/O的缺点：在缓存 I/O 机制中，DMA 方式可以将数据直接从磁盘读到页缓存中，或者将数据从页缓存直接写回到磁盘上，而不能直接在应用程序地址空间和磁盘之间进行数据传输，这样，数据在传输过程中需要在应用程序地址空间（用户空间）和缓存（内核空间）之间进行多次数据拷贝操作，这些数据拷贝操作所带来的CPU以及内存开销是非常大的。</li>
+</ul>
+</li>
+</ul>
+<h3 id="直接IO-Direct-IO"><a href="#直接IO-Direct-IO" class="headerlink" title="直接IO(Direct IO)"></a>直接IO(Direct IO)</h3><ul>
+<li><strong>直接I/O</strong> 就是应用程序直接访问磁盘数据，而不经过内核缓冲区，这样做的目的是减少一次从内核缓冲区到用户程序缓存的数据复制。比如说数据库管理系统这类应用，它们更倾向于选择它们自己的缓存机制，因为数据库管理系统往往比操作系统更了解数据库中存放的数据，数据库管理系统可以提供一种更加有效的缓存机制来提高数据库中数据的存取性能。<ul>
+<li>直接IO的缺点：如果访问的数据不在应用程序缓存中，那么每次数据都会直接从磁盘加载，这种直接加载会非常缓存。通常直接IO与异步IO结合使用，会得到比较好的性能。（异步IO：当访问数据的线程发出请求之后，线程会接着去处理其他事，而不是阻塞等待）</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/Linux.21.IO/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.12.CPU/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -509,7 +676,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,943
+                  2,958
                 </span>
               
 
@@ -535,7 +702,7 @@
 
       
         
-          <h1 id="Linux内存布局"><a href="#Linux内存布局" class="headerlink" title="Linux内存布局"></a>Linux内存布局</h1><h2 id="32位"><a href="#32位" class="headerlink" title="32位:"></a>32位:</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  0xFFFFFFFF 高地址</span><br><span class="line"> +---+--------------------+--------------------</span><br><span class="line">1 GB |   Kernel           |                  内核空间 </span><br><span class="line"> +------------------------+--------------------</span><br><span class="line"> |   | Random stack offset|                  用户空间 ↓</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |   Stack↓           |  进程中的所有的线程共享相同的地址空间</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Mem Mapping        | 文件映射,so库文件等</span><br><span class="line"> |   |                    | mmap()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> +   |                    |</span><br><span class="line">3 GB |                    |</span><br><span class="line"> +   +--------------------+</span><br><span class="line"> |   |    Heap↑           | malloc()</span><br><span class="line"> |   |                    | brk()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Random stack offset|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | BSS Seg.           |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Data Seg. (+rodata)|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Text Seg.          |                  用户空间 ↑</span><br><span class="line"> +---+--------------------+--------------------</span><br><span class="line">  0x00000000 低地址</span><br></pre></td></tr></table></figure>
+          <h1 id="Linux内存布局"><a href="#Linux内存布局" class="headerlink" title="Linux内存布局"></a>Linux内存布局</h1><h2 id="32位"><a href="#32位" class="headerlink" title="32位:"></a>32位:</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  0xFFFFFFFF 高地址</span><br><span class="line"> +---+--------------------+----------------------</span><br><span class="line">1 GB |   Kernel           |                  内核空间 </span><br><span class="line"> +------------------------+----------------------</span><br><span class="line"> |   | Random stack offset|                  用户空间 ↓</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |   Stack↓           | 进程中的所有的线程共享相同的地址空间</span><br><span class="line"> |   |                    | </span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Mem Mapping ↓      | 文件映射,so库文件等</span><br><span class="line"> |   |                    | mmap()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> +   |                    |</span><br><span class="line">3 GB |                    |</span><br><span class="line"> +   +--------------------+</span><br><span class="line"> |   |    Heap↑           | 分配线性地址VM，不一定分配页框RAM</span><br><span class="line"> |   |                    | malloc() -&gt; brk()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Random stack offset|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | BSS Seg.           |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Data Seg. (+rodata)|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Text Seg.          |                  用户空间 ↑</span><br><span class="line"> +---+--------------------+----------------------</span><br><span class="line">  0x00000000 低地址</span><br></pre></td></tr></table></figure>
 <p>内存布局从高地址到低地址:</p>
 <ul>
 <li><code>Kernel</code>: 内核空间在页表中拥有较高的特权级（ring 2或以下）, 因此只要用户态的程序试图访问这些页, 就会导致一个页错误（page fault）, 用户程序不可访问内核页</li>
@@ -770,7 +937,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.05.系统配置/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.04a.Sysctl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -789,172 +956,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/21.Operating-System/Linux.05.系统配置/" itemprop="url">Linux.05.系统配置</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,421
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="profile相关"><a href="#profile相关" class="headerlink" title="profile相关"></a>profile相关</h2><blockquote>
-<ol>
-<li>bashrc是在系统启动后就会自动运行。</li>
-<li>profile是在用户登录后才会运行。</li>
-<li>进行设置后，可运用source bashrc命令更新bashrc，也可运用source profile命令更新profile。</li>
-</ol>
-</blockquote>
-<ul>
-<li>/etc/profile: 中设定的变量(全局)的可以作用于任何用户</li>
-<li>~/.bashrc: 等中设定的变量(局部)只能继承/etc/profile中的变量</li>
-<li>~/.bash_profile: 每个用户都可使用该文件输入专用于自己使用的shell信息，当用户登录时，该文件仅仅执行一次!默认情况下,他设置一些环境变量,执行用户的.bashrc文件。</li>
-</ul>
-<h2 id="init系统"><a href="#init系统" class="headerlink" title="init系统"></a>init系统</h2><p>init进程是 Linux系统内核初始化最后一步启动的进程，也是系统的第一个进程，pid=1。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.05.系统配置/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.04.Sysctl/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/Linux.04.Sysctl/" itemprop="url">Linux.04.Sysctl命令速查</a></h1>
+                <a class="post-title-link" href="/21.Operating-System/Linux.04a.Sysctl/" itemprop="url">Linux.04.Sysctl命令速查</a></h1>
         
 
         <div class="post-meta">
@@ -1072,7 +1074,172 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.04.Sysctl/#more" rel="contents">
+            <a class="btn" href="/21.Operating-System/Linux.04a.Sysctl/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.04.系统配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/Linux.04.系统配置/" itemprop="url">Linux.05.系统配置</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,417
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="profile相关"><a href="#profile相关" class="headerlink" title="profile相关"></a>profile相关</h2><blockquote>
+<ol>
+<li>bashrc是在系统启动后就会自动运行。</li>
+<li>profile是在用户登录后才会运行。</li>
+<li>进行设置后，可运用source bashrc命令更新bashrc，也可运用source profile命令更新profile。</li>
+</ol>
+</blockquote>
+<ul>
+<li>/etc/profile: 中设定的变量(全局)的可以作用于任何用户</li>
+<li>~/.bashrc: 等中设定的变量(局部)只能继承/etc/profile中的变量</li>
+<li>~/.bash_profile: 每个用户都可使用该文件输入专用于自己使用的shell信息，当用户登录时，该文件仅仅执行一次!默认情况下,他设置一些环境变量,执行用户的.bashrc文件。</li>
+</ul>
+<h2 id="init系统"><a href="#init系统" class="headerlink" title="init系统"></a>init系统</h2><p>init进程是 Linux系统内核初始化最后一步启动的进程，也是系统的第一个进程，pid=1。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/Linux.04.系统配置/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3758,165 +3925,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/14.Coding-Pattern/设计模式-UML类图/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/14.Coding-Pattern/设计模式-UML类图/" itemprop="url">设计模式-UML类图</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/14-Coding-Pattern/" itemprop="url" rel="index">
-                    <span itemprop="name">14.Coding-Pattern</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  377
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="类和接口"><a href="#类和接口" class="headerlink" title="类和接口"></a>类和接口</h1><p>➤ 具体类:</p>
-<ul>
-<li>第一层类名, 第二层成员变量, 第三层方法</li>
-<li>访问控制: <code>+</code>表示public, <code>-</code>表示private …</li>
-</ul>
-<p><img src="/images/uml-class.png" alt="../_images/uml-class.png"></p>
-<p>➤ 抽象类:  </p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/14.Coding-Pattern/设计模式-UML类图/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3971,7 +3979,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">403</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3993,7 +4001,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">327</span>
+                  <span class="site-state-item-count">328</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
