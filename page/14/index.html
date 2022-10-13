@@ -278,6 +278,357 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-03主从同步/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/Redis-03主从同步/" itemprop="url">Redis-03主从同步</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  752
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ 2.8版本之前, Redis的主从同步分为”同步”和”命令传播”两个阶段</p>
+<ul>
+<li>当slave实例执行<code>SLAVEOF</code>命令时, 会向master发送<code>SYNC</code>命令</li>
+<li>master收到命令开始执行<code>BGSAVE</code>, 把内存数据存为RDB格式的文件, 同时在一个缓冲区记录从当前以后的所有写命令.</li>
+<li>master把RDB文件发送给slave, 然后再将缓冲区的数据发送给slave.</li>
+<li>Slave写入完成, 主从数据一致, 进入传播阶段, 每当master有数据更新, 把更新的数据传播给Slave</li>
+<li>2.8版本的主从同步存在的问题: 每次从服务器发送<code>SYNC</code>命令都会导致主服务器执行<code>BGSAVE</code>, 主服务器生成和传输RDB文件的消耗巨大;</li>
+</ul>
+<p>➤ 2.8版本之后的同步:</p>
+<ul>
+<li>完整的同步过程仍是分为”同步”和”命令传播”两个状态, 但并不是每次同步过程都会执行’BGSAVE同步’的步骤, 可能直接进入’命令传播’阶段’;</li>
+<li>判断是否执行第一步骤, 是由 “复制偏移量” / “复制积压缓冲区” / runnid 共同决定的<ul>
+<li>master/slave服务器都会存储复制偏移量, master存储的是”向从服务器发送了多少字节”, slave存储的是”从主服务器同步了多少字节”;</li>
+<li>master还有一个默认1MB大小的”复制积压缓冲区”, 每次master有数据更新, 除了向slave传播, 还会向这个缓冲区写入, 缓冲区大小固定,先进先出 缓冲区存储了每个偏移量和偏移量对应的字节;</li>
+<li>slave还会存储已同步的master的 run id;</li>
+</ul>
+</li>
+<li>slave 向 master发送<code>PSYNC</code>开始同步, 同时还将存储的 run id发送给 master, 如果 runid和 master的不一样, 则 master开始完整同步的第一步骤;</li>
+<li>如果 runnid一致, master开始检查 slave发来的偏移量n, 检查n+1是否在缓冲区, 如果n+1不在缓冲区内(主从复制差距大于1MB), 则开始完整同步第一个步骤;</li>
+<li>master/slave同步完成, slave每秒向master发送<code>REPLCONF ACK &lt;replication_offset&gt;</code>, 其中 <code>replication_offset</code> 是从服务器当前的复制偏移量, 这个命令有三个作用<ul>
+<li>作为主从服务器的心跳检查</li>
+<li>同步复制偏移量</li>
+<li>辅助实现 min-slaves 选项: <code>min-slaves-to-write 3</code>, <code>min-slaves-max-lag 10</code>, 这两个配置选项表示: 从服务器数量小于3, 且从服务器写入延迟大于10s, 主拒绝写入</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/redis/Redis复制积压缓冲区.png" alt="Redis复制积压缓冲区"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/Redis-03主从同步/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-03集群-Sharding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/Redis-03集群-Sharding/" itemprop="url">Redis-03集群-Sharding</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  709
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="分片方案（Redis-Sharding）"><a href="#分片方案（Redis-Sharding）" class="headerlink" title="分片方案（Redis Sharding）"></a>分片方案（Redis Sharding）</h2><p>Redis Sharding是一种客户端Sharding方式。<br>Java redis客户端驱动<code>jedis</code>，已支持Redis Sharding功能，即ShardedJedis以及结合缓存池的ShardedJedisPool, jedis的特点:</p>
+<ul>
+<li>采用一致性哈希算法(consistent hashing)，将key和节点name同时hashing，采用的算法是MURMUR_HASH。采用一致性哈希而不是采用简单类似哈希求模映射的主要原因是当增加或减少节点时，不会产生由于重新匹配造成的rehashing。一致性哈希只影响相邻节点key分配，影响量小。</li>
+<li>ShardedJedis支持keyTagPattern模式，即抽取key的一部分keyTag做sharding，这样通过合理命名key，可以将一组相关联的key放入同一个Redis节点，这在避免跨节点访问相关数据时很重要。</li>
+</ul>
+<p>➤ Redis Sharding 方案:</p>
+<ul>
+<li>通过客户端进行Sharding, 在Client侧做Sharding,  比如 Jedis 提供的 ShardedJedis:</li>
+<li>ShardedJedis特性:<ul>
+<li>使用虚拟节点, 使Key在Redis节点的分布更均匀, 如果一个节点挂掉, 不再是相邻的节点受影响. 每个实体节点默认有160个虚拟节点, ShardedJedis还支持权重, 虚拟节点个数 = <code>节点权重 x 160</code></li>
+<li>ShardedJedis使用了<code>MurMur Hash</code>做Hash函数, <code>MurMur Hash</code>相比较一般Hash算法, 对于规律性较强的Key随机分布的表现更好.</li>
+<li>支持<code>keyTagPattern</code>模式, 只抽取Key的一部分做Hash, 通过合理命名Key, 可以将相关的Key放入同一个Redis节点.</li>
+</ul>
+</li>
+<li>扩容问题 – presharding:<ul>
+<li>需要扩容时, 实际是把小的Redis实例数据复制到大的Redis实例, 复制完成后, 大的Redis实例替换小的Redis实例;</li>
+<li>需要扩容的Redis设为主, 新Redis设置为从, 完成数据同步后, 原实例的Shard给新实例用</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/Redis-03集群-Sharding/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-03集群-Cluster/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3201,326 +3552,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/为什么要内存对齐/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/为什么要内存对齐/" itemprop="url">为什么要内存对齐</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  485
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@ref: <a href="https://www.zhihu.com/question/27862634/answer/38506197" target="_blank" rel="noopener">如何理解 struct 的内存对齐？ - 張道遠 的回答 - 知乎</a></p>
-<p>为什么 32 位 CPU，Struct 默认是 4 字节对齐的？ </p>
-<ul>
-<li>一般的答案是：CPU 访问内存必须以 4 字节倍数开始，CPU 可以在一个总线周期读取一个‘word’，如果地址是非 4 字节对齐，CPU 可能要花费两个总线周期读取一个 word</li>
-<li>注意这里的字和字长的概念： ‘字’也即 word，一般来说一个 word 占用 4 字节，‘字长’也即 wordSize（4）</li>
-</ul>
-<p>进一步问，为什么 CPU 访问内存必须以 4 字节开头？ …<br>32 位 CPU（字长也即 wordSize = 4 字节），地址总线宽度是 30，这个 30 是怎么定义出来的？</p>
-<hr>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/为什么要内存对齐/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.31.Posix接口/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/Linux.31.Posix接口/" itemprop="url">Linux.31.Posix接口</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,472
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h1><h2 id="创建进程"><a href="#创建进程" class="headerlink" title="创建进程"></a>创建进程</h2><h3 id="fork"><a href="#fork" class="headerlink" title="fork"></a>fork</h3><ul>
-<li>返回0: 子进程</li>
-<li>返回&gt;0: 父进程, 返回值是子进程pid</li>
-<li>子进程会得到父进程的堆(IO缓存, malloc的内存)、栈(局部变量)、数据空间(Data Segment)的拷贝, 在子进程里修改这些变量并不会影响父进程中的值, 注意这种拷贝是“写时复制”（Copy On Write，COW）;</li>
-<li>fork前打开的文件句柄, 其偏移量会在父子进程间共享, 原因是进程内存中仅保存了文件句柄的fd指针, 指针指向的结构体(也就是文件表,保存了文件标准和位移)是共享的. @Uncertain 那么”文件表”是存储在哪里的?</li>
-<li>另外需要注意的是, 因为堆内存也将被拷贝(IO缓存在堆里), 所以如果在创建子进程之前这个IO缓存中就有数据, 那么也会带入子进程, 导致子进程的IO缓存里”多”出一些数据.</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// child process because return value zero</span></span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Hello from Child!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// parent process because return value non-zero.</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Hello from Parent!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.31.Posix接口/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3575,7 +3606,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">403</span>
+                  <span class="site-state-item-count">405</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3597,7 +3628,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">328</span>
+                  <span class="site-state-item-count">330</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
