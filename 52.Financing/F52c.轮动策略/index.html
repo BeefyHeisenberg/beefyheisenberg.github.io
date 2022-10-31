@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="如果说宏观大类资产配置是宏观视角下选优质资产，那么行业轮动就是权益市场视角下选热门行业。  宏观: 大类资产配置(β) 中观: 行业轮动(smart β) 微观: 个股(α)  轮动策略：行业轮动、风格轮动、大小盘轮动等。行业轮动其实本身也是风格切换的一种表现。只是它的这种切换的属性在一个行业上，而不是单纯的大盘或者说市场的风格上 @ref: 行业轮动策略及代表基金经理分享 - 雪球 大小盘轮动">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-10-13T11:02:33.760Z">
+<meta property="og:updated_time" content="2022-10-31T05:06:25.988Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="F52c.轮动策略">
 <meta name="twitter:description" content="如果说宏观大类资产配置是宏观视角下选优质资产，那么行业轮动就是权益市场视角下选热门行业。  宏观: 大类资产配置(β) 中观: 行业轮动(smart β) 微观: 个股(α)  轮动策略：行业轮动、风格轮动、大小盘轮动等。行业轮动其实本身也是风格切换的一种表现。只是它的这种切换的属性在一个行业上，而不是单纯的大盘或者说市场的风格上 @ref: 行业轮动策略及代表基金经理分享 - 雪球 大小盘轮动">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  575
+                  1,142
                 </span>
               
 
@@ -392,6 +392,18 @@
 <li>交易策略：每天收盘后将沪深300ETF（510300）和创业板（159915）按照最近20个交易日的涨幅排序，排名第一并且20日涨幅大于2%则次日以开盘价买入；如果排名不是第一或者20日涨幅小于-2%则次日开盘价卖出；如果以上两个条件都不满足则买入银华日利（511880）</li>
 <li>在趋势明显的的市场，轮动策略的效果更好，优势明显。比如牛市中市场趋势性上涨，容易获得超额收益；熊市中择时机制能够及时预警，赎回权益资产买人货基，从而躲避下跌降低熊市风险。在趋势不明显的震荡市场中，轮动策略的劣势也暴露无遗，反复“打脸”在所难免。</li>
 </ul>
+<h2 id="宽基ETF轮动"><a href="#宽基ETF轮动" class="headerlink" title="宽基ETF轮动"></a>宽基ETF轮动</h2><p><a href="https://xueqiu.com/6743234611/133661820" target="_blank" rel="noopener">三标的ETF轮动策略代码分享 - 雪球</a><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">【买入条件】（两个条件全部满足才买入）</span><br><span class="line">1、近13个交易日涨幅排名前三（设置涨幅阈值为0.1%），选择最强势的基金；</span><br><span class="line">2、当前价大于13日均线，主要用于过滤假突破信号。</span><br><span class="line"></span><br><span class="line">【卖出条件】（三个条件满足一个就卖出）</span><br><span class="line">1、近13个交易日涨幅排名未入前三（先剔除不符合买入条件的基金再排序）；</span><br><span class="line">2、近13个交易日涨幅不足0.1%；</span><br><span class="line">3、当前价小于近13个交易日均线</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://xueqiu.com/6743234611/133669138" target="_blank" rel="noopener">三标的ETF轮动策略搭配大盘止损的效果 - 雪球</a><br>改进：以30日成交量均线作为参考（以上证指数为标的）</p>
+<ul>
+<li>买进时：连续3日不过30日量线不进行买入操作。</li>
+<li>卖出时：连续3日不过30日量线，无条件卖出，提前出场等待</li>
+</ul>
+<p>我们可以看到收益发生了大幅的下降，检查日志之后发现，整个回测周期中有554个交易日是因为大盘成交量持续低于30日均线，保持空仓状态。这对于总计1388个交易日来说，止损信号的发出太过频繁。再考虑到三个标的轮动，已经在一定程度上分散了风险。所以，我们可以认为选择30日成交量均线显得过于保守。</p>
+<p>关于大盘量线过滤的思考:</p>
+<ul>
+<li>首先，基于动量的轮动是一种偏进攻型的策略，不追求高胜率，核心逻辑在于“多赚少亏”，整体盈利。连续3日不过量线不进行买入操作虽然可以过滤一些假信号，但是损失的收益可能会更多，这和“多赚”的逻辑有一定抵触。</li>
+<li>其次，轮动策略的“少亏”是通过轮动换仓实现的，但是我们发现基础策略的回撤幅度仍然是非常大的（超过35%），通过同时持有多个标的分散风险，我们把回撤控制在了25%以内，但是目前为止我们还未采用任何硬止损手段，这方面应该还有文章可做</li>
+</ul>
 <h2 id="行业轮动"><a href="#行业轮动" class="headerlink" title="行业轮动"></a>行业轮动</h2><p>@ref: <a href="https://www.myquant.cn/docs/python_strategyies/111" target="_blank" rel="noopener">行业轮动(股票) - 经典策略 - 掘金量化</a></p>
 <p>本策略每隔1个月定时触发计算：<br>SHSE.000910.SHSE.000909.SHSE.000911.SHSE.000912.SHSE.000913.SHSE.000914<br>(300工业.300材料.300可选.300消费.300医药.300金融)这几个行业指数过去<br>20个交易日的收益率并选取了收益率最高的指数的成份股获取并获取了他们的市值数据<br>随后把仓位调整至市值最大的5只股票上</p>
 <p>标的：行业ETF @link <a href="/52.Financing/F32b.行业ETF/" title="F32b.行业ETF">F32b.行业ETF</a></p>
@@ -425,8 +437,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/52.Financing/F52b.布林线策略/" rel="next" title="F52b.布林线策略">
-                <i class="fa fa-chevron-left"></i> F52b.布林线策略
+              <a href="/52.Financing/F41.K线图及指标/" rel="next" title="F41.K线图及指标">
+                <i class="fa fa-chevron-left"></i> F41.K线图及指标
               </a>
             
           </div>
@@ -435,8 +447,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/52.Financing/F52n.网格交易策略/" rel="prev" title="F52n.ETF网格">
-                F52n.ETF网格 <i class="fa fa-chevron-right"></i>
+              <a href="/54.Trips-and-Exploration/CN.国内自驾-收集箱/" rel="prev" title="CN.国内自驾-收集箱">
+                CN.国内自驾-收集箱 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -528,7 +540,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">405</span>
+                  <span class="site-state-item-count">412</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -550,7 +562,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">330</span>
+                  <span class="site-state-item-count">333</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -571,9 +583,9 @@
             <div class="links-of-author motion-element">
                 
                   <span class="links-of-author-item">
-                    <a href="https://github.com/" target="_blank" title="GitHub">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
                       
-                        <i class="fa fa-fw fa-github"></i></a>
+                        <i class="fa fa-fw fa-facebook"></i></a>
                   </span>
                 
                   <span class="links-of-author-item">
@@ -586,6 +598,12 @@
                     <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
                       
                         <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
                   </span>
                 
             </div>
@@ -612,7 +630,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#大小盘轮动"><span class="nav-text">大小盘轮动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行业轮动"><span class="nav-text">行业轮动</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#大小盘轮动"><span class="nav-text">大小盘轮动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宽基ETF轮动"><span class="nav-text">宽基ETF轮动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行业轮动"><span class="nav-text">行业轮动</span></a></li></ol></div>
             
 
           </div>

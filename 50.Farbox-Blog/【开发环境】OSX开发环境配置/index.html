@@ -129,7 +129,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/mac-os-x-launchpad.jpg">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/mac-os-x-menu-bar.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/mac-os-x-dock.jpg">
-<meta property="og:updated_time" content="2022-10-13T11:02:33.449Z">
+<meta property="og:updated_time" content="2022-10-31T05:06:25.632Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OSX（macOS）开发环境配置 and Tweaks">
 <meta name="twitter:description" content="安装OSX 从OSX制作启动U盘: http://www.iplaysoft.com/osx-yosemite-usb-install-drive.html 从WIN制作启动U盘: http://www.cnblogs.com/maybego/p/3266528.html  快捷键 Command + Option + Esc : 相当于Windows上的 Ctrl + Alt + Del，或者点">
@@ -358,7 +358,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,004
+                  3,014
                 </span>
               
 
@@ -453,14 +453,14 @@
 <h3 id="Mac上Java的安装目录"><a href="#Mac上Java的安装目录" class="headerlink" title="Mac上Java的安装目录"></a>Mac上Java的安装目录</h3><p>在终端输入<code>which java</code>, 返回的是: “/usr/bin/java” ,<br>/usr/bin/java 是个链接, 指向: “/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java” ,<br>但是我输入<code>echo $JAVA_HOME</code>, 返回”/Library/Java/JavaVirtualMachines/jdk1.8.0_192.jdk/Contents/Home” ,<br>那么 <strong>/System/Library/Frameworks/JavaVM.framework/</strong> 和 <strong>/Library/Java/JavaVirtualMachines</strong> 哪个才是真正的Java安装目录?</p>
 <p><img src="/images/Java_home-20190404-005514.png" alt=""></p>
 <p>答案是后者, 我发现 “/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/“ 下所有的可执行文件大小都是完全相同的,<br>该目录中的二进制文件是确定要使用哪个Java VM的存根应用程序, 可以使用<code>dtrace</code>查看<code>java -version</code>命令调用的全过程:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo dtrace -n 'syscall::posix_spawn:entry &#123; trace(copyinstr(arg1)); &#125;' -c "/usr/bin/java -version"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 返回如下:</span></span><br><span class="line">dtrace: description 'syscall::posix_spawn:entry ' matched 1 probe</span><br><span class="line">dtrace: pid 44727 has exited</span><br><span class="line">CPU     ID                    FUNCTION:NAME</span><br><span class="line">  8    619                posix_spawn:entry   /System/Library/Java/JavaVirtualMachines/jdk1.8.0_192.jdk/Contents/Home/bin/java</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo dtrace -n 'syscall::posix_spawn:entry &#123; trace(copyinstr(arg1)); &#125;' -c "/usr/bin/java -version"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 返回如下:</span><br><span class="line">dtrace: description 'syscall::posix_spawn:entry ' matched 1 probe</span><br><span class="line">dtrace: pid 44727 has exited</span><br><span class="line">CPU     ID                    FUNCTION:NAME</span><br><span class="line">  8    619                posix_spawn:entry   /System/Library/Java/JavaVirtualMachines/jdk1.8.0_192.jdk/Contents/Home/bin/java</span><br></pre></td></tr></table></figure>
 <h3 id="多版本Java共存"><a href="#多版本Java共存" class="headerlink" title="多版本Java共存"></a>多版本Java共存</h3><p>管理多版本Java的工具: <a href="http://www.jenv.be/" target="_blank" rel="noopener">jEnv</a></p>
 <p>安装 &amp; 配置:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 安装 jenv</span></span><br><span class="line">brew install jenv</span><br><span class="line">mkdir -p ~/.jenv</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 添加到你的 shell profile文件:</span></span><br><span class="line">echo 'eval "$(jenv init -)"' &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> 安装 jenv</span><br><span class="line">brew install jenv</span><br><span class="line">mkdir -p ~/.jenv</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 添加到你的 shell profile文件:</span><br><span class="line">echo 'eval "$(jenv init -)"' &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure>
 <p>添加 jdk:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> jenv add 会在 ~/.jenv/versions 下建立对应 jdk的软链</span></span><br><span class="line">jenv add /Library/Java/JavaVirtualMachines/jdk1.8.0_172.jdk/Contents/Home</span><br><span class="line">jenv add /Library/Java/JavaVirtualMachines/jdk-12.0.2.jdk/Contents/Home</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> jenv add 会在 ~/.jenv/versions 下建立对应 jdk的软链</span><br><span class="line">jenv add /Library/Java/JavaVirtualMachines/jdk1.8.0_172.jdk/Contents/Home</span><br><span class="line">jenv add /Library/Java/JavaVirtualMachines/jdk-12.0.2.jdk/Contents/Home</span><br></pre></td></tr></table></figure>
 <p>How to Use:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 列出所有的 jdk</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> jenv versions</span></span><br><span class="line">  system</span><br><span class="line">  openjdk12.0.2</span><br><span class="line">  oraclejdk1.8.0_172</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用jdk 12(全局生效)</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> jenv global openjdk12.0.2</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用jdk 12(当前shell生效)</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> jenv shell openjdk12.0.2</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> 列出所有的 jdk</span><br><span class="line"><span class="meta">$</span> jenv versions</span><br><span class="line">  system</span><br><span class="line">  openjdk12.0.2</span><br><span class="line">  oraclejdk1.8.0_172</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 使用jdk 12(全局生效)</span><br><span class="line"><span class="meta">$</span> jenv global openjdk12.0.2</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 使用jdk 12(当前shell生效)</span><br><span class="line"><span class="meta">$</span> jenv shell openjdk12.0.2</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>jenv 在我的MBP上一直有问题, <code>jenv global</code>无效, 港真我还是觉得自己手动修改 <code>$JAVA_HOME</code> 的方式比较好</p>
 </blockquote>
@@ -475,6 +475,7 @@
 <p>Add PATH:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export PATH=&quot;$(brew --prefix homebrew/php/php70)/bin:$PATH&quot;</span><br></pre></td></tr></table></figure>
 <h2 id="node环境"><a href="#node环境" class="headerlink" title="node环境"></a>node环境</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install node ## will install node &amp; npm</span><br></pre></td></tr></table></figure>
+<p>NPM命令： [[../41.Uncategorized/NPM命令速查]]</p>
 <h2 id="下载工具"><a href="#下载工具" class="headerlink" title="下载工具"></a>下载工具</h2><p>安装aira2:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install aria2</span><br><span class="line"></span><br><span class="line">touch ~/.aria2/aria2.conf</span><br></pre></td></tr></table></figure>
 <ul>
@@ -736,7 +737,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">405</span>
+                  <span class="site-state-item-count">412</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -758,7 +759,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">330</span>
+                  <span class="site-state-item-count">333</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -779,9 +780,9 @@
             <div class="links-of-author motion-element">
                 
                   <span class="links-of-author-item">
-                    <a href="https://github.com/" target="_blank" title="GitHub">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
                       
-                        <i class="fa fa-fw fa-github"></i></a>
+                        <i class="fa fa-fw fa-facebook"></i></a>
                   </span>
                 
                   <span class="links-of-author-item">
@@ -794,6 +795,12 @@
                     <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
                       
                         <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
                   </span>
                 
             </div>
