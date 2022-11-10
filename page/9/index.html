@@ -278,306 +278,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-负载均衡-算法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/SystemDesign-负载均衡-算法/" itemprop="url">SystemDesign | 负载均衡 | 总结：方案及算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  172
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>➤ 常用LB方案:</p>
-<ul>
-<li>DNS 负载均衡</li>
-<li>四层(传输层)负载均衡: <a href="/31.Backend/SystemDesign-负载均衡-LVS/" title="SystemDesign-负载均衡-LVS">SystemDesign-负载均衡-LVS</a></li>
-<li>七层(应用层)负载均衡: <a href="/31.Backend/SystemDesign-负载均衡-Nginx/" title="SystemDesign-负载均衡-Nginx">SystemDesign-负载均衡-Nginx</a>]</li>
-<li>硬件负载均衡: F5, A10</li>
-</ul>
-<p>➤ 常用LB算法:</p>
-<ul>
-<li>静态LB算法 (基于算法, 不考虑后端服务器状态)<ul>
-<li>随机: Random</li>
-<li>轮询: Round Robin</li>
-<li>加权轮询: Weighted Round Robin</li>
-<li>哈希: HASH, 包括源地址哈希, 目标地址哈希, 应用层LB也可以使用URL或者自定义Key进行哈希</li>
-</ul>
-</li>
-<li>动态LB算法 (基于后端服务器状态动态调整)<ul>
-<li>最小连接:</li>
-<li>最小耗时:</li>
-</ul>
-</li>
-</ul>
-<p>➤ 代码:</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/SystemDesign-负载均衡-算法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-延迟队列/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/SystemDesign-延迟队列/" itemprop="url">SystemDesign | 延迟队列方案</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  306
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>为什么需要延迟队列? </p>
-<ul>
-<li>单机延迟队列:<ul>
-<li>优先队列 // 该方式, 或者 Redis Zset这种方式的问题? 轮询线程Sleep后, 插入了一个需要马上处理的任务</li>
-<li>DelayQueue: @todo</li>
-<li>HashedWheelTimer(时间轮算法): 环形数组共n个元素, 每个元素表示一个单位时间(例如1s), 同时每个元素是一个”桶”, 指向一个链表, 链表里保存的是该秒要执行的任务. 如果放入一个x秒后执行的新任务, x大于n, 当前运行指针指向第3个元素, 那么放入数组第几个桶里呢? <code>index = x%n + 3</code>, 同时链表中的每个任务都保存圈数这个字段,每次指针经过这个桶, 桶中所有任务的圈数都-1, 如果圈数=0则表示要执行;</li>
-</ul>
-</li>
-<li>分布式延迟队列:<ul>
-<li>Redis : blpop/brpop</li>
-<li>RabbitMQ : Dead Letter Exchange</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>关于 <em>HashedWheelTimer</em>:<br>根据 George Varghese 和 Tony Lauck 1996 年的论文《Hashed and Hierarchical Timing Wheels: data structures to efficiently implement a timer facility》提出了一种定时轮的方式来管理和维护大量的 timer 调度。Netty 的定时任务调度就是基于时间轮算法调度 … @ref: <a href="https://www.infoq.cn/article/netty-threading-model" target="_blank" rel="noopener">https://www.infoq.cn/article/netty-threading-model</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-缓存设计/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3440,6 +3140,333 @@
             </a>
           </div>
           <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/消息队列-选型比较(Kafka-vs-RabbitMQ)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/消息队列-选型比较(Kafka-vs-RabbitMQ)/" itemprop="url">消息队列 | Kafka vs RabbitMQ</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  605
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="➤-Kafka"><a href="#➤-Kafka" class="headerlink" title="➤ Kafka"></a>➤ Kafka</h2><ul>
+<li>模型: 订阅/发布, 生产者和消费者是多对多</li>
+<li>存储: 磁盘</li>
+<li>吞吐量/延迟: 10W, 毫秒级</li>
+<li>架构: 参考 <a href="/31.Backend/消息队列-Kafka/" title="消息队列-Kafka">消息队列-Kafka</a></li>
+<li>高可用机制: 参考 <a href="/31.Backend/消息队列-Kafka-特性实现/" title="消息队列-Kafka-特性实现">消息队列-Kafka-特性实现</a></li>
+<li>如何保证顺序性: 顺序性指 生产者的(带有顺序性的)消息, 如何保证消费者也按照该顺序消费<ul>
+<li>生产者: 因为kafka 的topic 存储于多个分区, 为了防止一组顺序消息被投放到不同分区, 可以指定消息的key, 相同k的消息一定被发送到相同分区;</li>
+<li>消费者: @todo</li>
+</ul>
+</li>
+<li>防重复消费: 消费者在消费掉某条数据后, 把该条数据的offset提交给zk, 下次消费者请求数据, kafka 从 offset处开始</li>
+<li>防消息丢失机制: 因为kafka partition 的多副本机制, 要考虑 如果发生leader-follower切换的情况下, 如何不丢数据<ul>
+<li>生产者丢数据: 设置<code>acks=all</code>, 生产者投递消息, leader 保证所有 partition 都同步了数据才发送 ack 给生产者, 否则生产者会一直重试投递;</li>
+<li>消费者丢数据: 关闭消费者的自动提交offet, 需要消费者业务代码手动的提交offset</li>
+</ul>
+</li>
+</ul>
+<h2 id="➤-RabbitMQ"><a href="#➤-RabbitMQ" class="headerlink" title="➤ RabbitMQ"></a>➤ RabbitMQ</h2><ul>
+<li>模型: PTP, 生产者消费者1对1</li>
+<li>存储: 非持久化的消息一般只存在于内存中，在内存紧张的时候会被换入到磁盘中，以节省内存。</li>
+<li>吞吐量/延迟*: 1W, 微秒级</li>
+<li>架构: 基于队列实现, 可以”不同业务使用不同MQ实例”来做MQ的垂直切分, 同时RabbitMQ还提供了镜像模式, 即一个队列有多个镜像, 写入队列的数据会被同步到其他镜像队列上去( RbMQ如何实现主队列失效, 切换镜像队列的? )</li>
+<li>高可用机制: 镜像模式, 每个RabbitMQ节点上都一个queue的镜像</li>
+<li>如何保证顺序性机制: 队列的FIFO, 消费者多线程的情况下如何保证顺序?</li>
+<li>防重复消费:</li>
+<li>防消息丢失机制:<ul>
+<li>生产者防丢: confirm 模式, MQ Server 收到生产者发送的消息, 会返一个ack</li>
+<li>MQ Server防丢: 持久化</li>
+<li>消费者防丢: 关闭自动ack, 消费者取到消息, 业务代码处理完后, 再调用 ack api通知 MQ Server</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>@ref <a href="https://juejin.im/post/5db6ad39f265da4cfd2957d7#heading-8" target="_blank" rel="noopener">Java高频面试集-消息队列MQ - 掘金</a></p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/消息队列-选型比较(Kafka-vs-RabbitMQ)/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/架构案例-混沌工程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/架构案例-混沌工程/" itemprop="url">架构案例-混沌工程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  100
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>@ref: <a href="https://www.sohu.com/a/376252845_185201" target="_blank" rel="noopener">混沌工程：苏宁系统稳定性之道_实验</a></p>
+<ul>
+<li>混沌工程是Netflix在 《chaos engineing》提出的，目的是在分布式系统中..</li>
+<li>混沌工程vs故障注入测试:</li>
+<li>故障注入测试:<ul>
+<li>单机: CPU/内存/网卡资源被抢占, 单机进程挂掉</li>
+<li>数据库(DB/Redis等): 分库挂掉, 整库挂掉</li>
+<li>整个IDC机房故障, 核心网故障</li>
+</ul>
+</li>
+</ul>
+
+          
         
       
     </div>

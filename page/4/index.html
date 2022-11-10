@@ -278,341 +278,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.03b.GC案例分析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Advanced-Java.03b.GC案例分析/" itemprop="url">Advanced Java-03b-GC案例分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,132
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>➤ GC问题排查总结:</p>
-<ul>
-<li>GC常见问题: GC发生频繁, GC某个阶段耗时长</li>
-<li>要定位问题, 首先看GC Log 和监控图, 确定如下:<ul>
-<li>现在用的是哪种GC收集器? ( 该收集器的GC的触发条件? 每个阶段做了什么? 哪个阶段有STW?)</li>
-<li>如果是GC频繁, 是哪个分代的GC频繁?<ul>
-<li>如果是新生代GC: 新生对象太多, 新生代空间太小</li>
-<li>如果是FGC: 有些FGC是因为新生代GC引起的</li>
-</ul>
-</li>
-<li>如果是GC某个阶段耗时过长, 需要确认: 这个阶段主要做了什么? 导致耗时变长的原因之一是扫描对象过多</li>
-</ul>
-</li>
-</ul>
-<p>➤ 案例1: Minor 和Major GC 频繁, Major耗时较长, 且出现晋升的动态年龄阈值被降低的情况</p>
-<ul>
-<li>观察: 新生代和老年代使用率, 确定是因为大量新生对象(导致新生代GC频繁), JVM动态调整了晋升年龄, 导致大量低龄对象进入老年代.</li>
-<li>分析: 如果新生代容量扩容1倍, 可以推算, MinorGC发生频率降低1倍, Minor GC的”扫描阶段”耗时增加1倍, 但”拷贝阶段”的耗时不会显著增加, 虽然Minor GC间隔增加, 但…</li>
-<li>解决: 增大新生代容量</li>
-</ul>
-<p>➤ 案例2: 使用CMS, remark阶段STW超过1000ms</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Advanced-Java.03b.GC案例分析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.04.ClassLoader/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Advanced-Java.04.ClassLoader/" itemprop="url">Advanced Java-04-ClassLoader</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3,502
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><p>加载 – 链接 – 初始化, 以上三个阶段涉及到的JVM内存区域:</p>
-<blockquote>
-<ol>
-<li>在加载阶段, 创建的class对象存储在堆(Heap);</li>
-<li>在链接阶段, final常量和字符串在方法区分配空间(jdk8变成了元空间);</li>
-<li>在初始化阶段, 初始化static成员, 也在堆;</li>
-</ol>
-</blockquote>
-<p><img src="/images/java/JVM-Load-Class.png" alt></p>
-<h3 id="①加载-Loading"><a href="#①加载-Loading" class="headerlink" title="①加载(Loading)"></a>①加载(Loading)</h3>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Advanced-Java.04.ClassLoader/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.05.class文件结构/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3615,6 +3280,322 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/12.Java/Java-Tutorials.07d1.JUC-Atomic/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07d2.JUC-ReentrantLock/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/12.Java/Java-Tutorials.07d2.JUC-ReentrantLock/" itemprop="url">Java Tutorials-07d2-JUC-ReentrantLock</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,231
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="可重入锁-ReentrantLock"><a href="#可重入锁-ReentrantLock" class="headerlink" title="可重入锁: ReentrantLock"></a>可重入锁: ReentrantLock</h1><p>ReentrantLock是”可重入锁”: 一个线程已经持有锁的情况下, 重复对该锁进行<code>lock()</code>操作,  能立刻获得锁且不会被阻塞.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ReentrantLock reentrantLock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"></span><br><span class="line">reentrantLock.lock();</span><br><span class="line"><span class="keyword">try</span>&#123; ... &#125; <span class="keyword">catch</span> &#123; ... &#125;</span><br><span class="line"><span class="keyword">finally</span>&#123;</span><br><span class="line">  reentrantLock.unlock(); <span class="comment">// 在finally里释放锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ReentrantLock的构造函数<code>ReentrantLock(boolean fair)</code>可以返回公平锁(true)和非公平锁(false).</p>
+<ul>
+<li>公平锁（Fair）：加锁前检查是否有排队等待的线程，如果队列非空先进入队列，获取锁的顺序同调用lock的顺序一致;</li>
+<li>非公平锁（Nonfair）：加锁时不考虑排队等待问题，直接尝试获取锁，获取不到自动到队尾等待;</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/12.Java/Java-Tutorials.07d2.JUC-ReentrantLock/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07d3.线程安全的集合/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/12.Java/Java-Tutorials.07d3.线程安全的集合/" itemprop="url">Java Tutorials-07d3-JUC-线程安全的集合</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,259
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>旧的线程安全的集合: 任何集合类都可以通过使用同步包装器变成线程安全的：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;E&gt; synchArrayList = Collections.synchronizedList(<span class="keyword">new</span> ArrayList&lt;E&gt;());</span><br><span class="line">Map&lt;K,V&gt; synchMap = Collections.synchronizedList(<span class="keyword">new</span> HasMap&lt;K,V&gt;());</span><br></pre></td></tr></table></figure>
+<p><code>java.util.concurrent</code>包提供了线程安全的集合, 继承关系如下:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">阻塞队列</span><br><span class="line">  |- BlockingQueue（单向队列）</span><br><span class="line">       |- ArrayBlockingQueue: 一个由数组结构组成的有界阻塞队列</span><br><span class="line">       |- LinkedBlockingQueue: 一个由链表结构组成的有界阻塞队列</span><br><span class="line">       |- PriorityBlockingQueue: 一个支持优先级排序的无界阻塞队列</span><br><span class="line">       |- LinkedBlockingDeque: 一个由链表结构组成的双向阻塞队列</span><br><span class="line">  |- BlockingDeque（双向队列）</span><br><span class="line">       |- LinkedBlockingDeque: 一个由链表结构组成的双向阻塞队列</span><br><span class="line"></span><br><span class="line">非阻塞队列</span><br><span class="line">  |- ConcurrentLinkedQueue</span><br><span class="line">  |- ConcurrentLinkedDeque</span><br><span class="line"></span><br><span class="line">Map</span><br><span class="line">  |- ConcurrentHashMap</span><br><span class="line">  |- ConcurrentSkipListMap</span><br><span class="line"></span><br><span class="line">Set</span><br><span class="line">  |- ConcurrentSkipListSet</span><br></pre></td></tr></table></figure>
+<h1 id="Queue-amp-Deque"><a href="#Queue-amp-Deque" class="headerlink" title="Queue &amp; Deque"></a>Queue &amp; Deque</h1>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/12.Java/Java-Tutorials.07d3.线程安全的集合/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
