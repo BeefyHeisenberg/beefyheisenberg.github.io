@@ -124,7 +124,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="profile相关  bashrc是在系统启动后就会自动运行。 profile是在用户登录后才会运行。 进行设置后，可运用source bashrc命令更新bashrc，也可运用source profile命令更新profile。    /etc/profile: 中设定的变量(全局)的可以作用于任何用户 ~/.bashrc: 等中设定的变量(局部)只能继承/etc/profile中的变量 ~/.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-11-27T15:31:35.345Z">
+<meta property="og:updated_time" content="2022-12-03T14:13:27.188Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux.05.系统配置">
 <meta name="twitter:description" content="profile相关  bashrc是在系统启动后就会自动运行。 profile是在用户登录后才会运行。 进行设置后，可运用source bashrc命令更新bashrc，也可运用source profile命令更新profile。    /etc/profile: 中设定的变量(全局)的可以作用于任何用户 ~/.bashrc: 等中设定的变量(局部)只能继承/etc/profile中的变量 ~/.">
@@ -420,7 +420,7 @@
 <li>service: 同上</li>
 </ul>
 <p>使用 sysvinit 启动一个服务:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> /etc/init.d/apache2 start</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> service apache2 start</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> /etc/init.d/apache2 start</span><br><span class="line"><span class="meta">#</span> 或者</span><br><span class="line"><span class="meta">$</span> service apache2 start</span><br></pre></td></tr></table></figure>
 <p>这种方法有两个缺点。</p>
 <ul>
 <li>一是启动时间长。init进程是串行启动，只有前一个进程启动完，才会启动下一个进程。</li>
@@ -439,11 +439,11 @@
 <li><a href="https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/" target="_blank" rel="noopener">浅析Linux初始化init系统, 第3部分: Systemd</a> </li>
 </ul>
 <h4 id="systemctl-命令"><a href="#systemctl-命令" class="headerlink" title="systemctl 命令"></a>systemctl 命令</h4><p><code>systemctl</code>是 Systemd 的主命令，用于管理系统。//区别 <code>sysctl</code> 命令，用于修改 Kernel参数</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 重启系统</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl reboot</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭系统，切断电源</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl poweroff</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> CPU停止工作</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl halt</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 暂停系统</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl <span class="built_in">suspend</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 让系统进入冬眠状态</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl hibernate</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 让系统进入交互式休眠状态</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl hybrid-sleep</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动进入救援状态（单用户状态）</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl rescue</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> 重启系统</span><br><span class="line"><span class="meta">$</span> sudo systemctl reboot</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 关闭系统，切断电源</span><br><span class="line"><span class="meta">$</span> sudo systemctl poweroff</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> CPU停止工作</span><br><span class="line"><span class="meta">$</span> sudo systemctl halt</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 暂停系统</span><br><span class="line"><span class="meta">$</span> sudo systemctl suspend</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 让系统进入冬眠状态</span><br><span class="line"><span class="meta">$</span> sudo systemctl hibernate</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 让系统进入交互式休眠状态</span><br><span class="line"><span class="meta">$</span> sudo systemctl hybrid-sleep</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 启动进入救援状态（单用户状态）</span><br><span class="line"><span class="meta">$</span> sudo systemctl rescue</span><br></pre></td></tr></table></figure>
 <p>Systemd 可以管理所有系统资源。不同的资源统称为 Unit（单位）。相关命令：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 列出正在运行的 Unit</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> systemctl list-units</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出所有Unit，包括没有找到配置文件的或者启动失败的</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> systemctl list-units --all</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> 列出正在运行的 Unit</span><br><span class="line"><span class="meta">$</span> systemctl list-units</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 列出所有Unit，包括没有找到配置文件的或者启动失败的</span><br><span class="line"><span class="meta">$</span> systemctl list-units --all</span><br></pre></td></tr></table></figure>
 <p>启动、重启、停止Unit：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 立即启动一个服务</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl start example.service</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 立即停止一个服务</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl stop example.service</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 重启一个服务</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl restart example.service</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 杀死一个服务的所有子进程</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl <span class="built_in">kill</span> example.service</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> 立即启动一个服务</span><br><span class="line"><span class="meta">$</span> sudo systemctl start example.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 立即停止一个服务</span><br><span class="line"><span class="meta">$</span> sudo systemctl stop example.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 重启一个服务</span><br><span class="line"><span class="meta">$</span> sudo systemctl restart example.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 杀死一个服务的所有子进程</span><br><span class="line"><span class="meta">$</span> sudo systemctl kill example.service</span><br></pre></td></tr></table></figure>
 <p>Example: How to 新加一个 Service（Systemd Unit）:</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/systemd/system/ngx-example.service</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -655,7 +655,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">420</span>
+                  <span class="site-state-item-count">424</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -677,7 +677,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">345</span>
+                  <span class="site-state-item-count">362</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
