@@ -128,7 +128,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/linux-file-rwx.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/operating_system/linux-compress-cmd.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/20211227145907.png">
-<meta property="og:updated_time" content="2022-12-03T14:13:27.165Z">
+<meta property="og:updated_time" content="2022-12-05T10:15:53.221Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux.01.常用命令行">
 <meta name="twitter:description" content="命令全称=&amp;gt; Linux.01a.常用命令行全称速记 使用 manman 可以查看”系统命令/系统调用函数/glibc库函数” 等等共9类内容, 例如 man lsof 第一行是 “LSOF(8)”, 表示是第8类, man man 第一行是”man(8)” 表示man 是第8类, 也可以看到所有9类 “manual”, 如下:   系统命令 系统调用，一般是对应的C封装函数；所有系统调用的">
@@ -623,11 +623,11 @@
 <h2 id="命令重定向"><a href="#命令重定向" class="headerlink" title="命令重定向"></a>命令重定向</h2><blockquote>
 <p>一般情况下，每个 Unix/Linux 命令运行时都会打开三个文件: 文件描述符 0 通常是标准输入（STDIN），1 是标准输出（STDOUT），2 是标准错误输出（STDERR）。</p>
 </blockquote>
-<h3 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> 将输出重定向到 file</span><br><span class="line">command &gt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将输出追加重定向到 file</span><br><span class="line">command &gt;&gt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将文件描述符为n的文件重定向到 file</span><br><span class="line"><span class="meta">n&gt;</span>file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将文件描述符为 n 的文件以追加的方式重定向到 file</span><br><span class="line"><span class="meta">n&gt;</span>&gt;file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将文件描述符为 m 和 n 的内容合并,注意</span><br><span class="line"><span class="meta">n&gt;</span>&amp;m</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将文件描述符为 m 和 n 的内容合并, 一并输出到 file</span><br><span class="line">command &gt; file m&gt;&amp;n</span><br></pre></td></tr></table></figure>
+<h3 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 将输出重定向到 file</span></span><br><span class="line">command &gt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将输出追加重定向到 file</span></span><br><span class="line">command &gt;&gt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将文件描述符为n的文件重定向到 file</span></span><br><span class="line"><span class="meta">n&gt;</span><span class="bash">file</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将文件描述符为 n 的文件以追加的方式重定向到 file</span></span><br><span class="line"><span class="meta">n&gt;</span><span class="bash">&gt;file</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将文件描述符为 m 和 n 的内容合并,注意</span></span><br><span class="line"><span class="meta">n&gt;</span><span class="bash">&amp;m</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将文件描述符为 m 和 n 的内容合并, 一并输出到 file</span></span><br><span class="line">command &gt; file m&gt;&amp;n</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>有关 <code>command &gt;out.file  2&gt;&amp;1 &amp;</code> 的解释(注意文件描述符和重定向符号之间不能有空格):<br>最后的<code>&amp;</code> 表示后台运行;<br>为什么是 <code>2&gt;&amp;1</code> 而不是 <code>2&gt;1</code> ? 这样做会直接输出文件名为1的文件;<br><code>&gt;outfile</code> 和 <code>2&gt;&amp;1</code> 的顺序可以交换吗? 不可以, <code>command 2&gt;&amp;1 &gt;out.file</code> ,  先<code>2&gt;&amp;1</code> 的意思是 stderr输出到 stdout, 此时的 stdout是输出到终端的, stderr也就被输出到终端, 然后 <code>&gt;out.file</code>是把 stdout输出到文件, 但是此时 stderr还是输出到终端的;</p>
 </blockquote>
-<h3 id="输入重定向"><a href="#输入重定向" class="headerlink" title="输入重定向"></a>输入重定向</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> 将 file的内容作为标准输入</span><br><span class="line">command &lt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将 infile的内容作为标准输入, 标准输出写入 outfile</span><br><span class="line">command &lt; infile &gt; outfile</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Here Document 式重定向输入, 将定界符（下面例子中的EOF没有特殊含义, 可以自定义界定符）之间的作为stdin</span><br><span class="line">command &lt;&lt; EOF</span><br><span class="line">    hello</span><br><span class="line">    world</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h3 id="输入重定向"><a href="#输入重定向" class="headerlink" title="输入重定向"></a>输入重定向</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 将 file的内容作为标准输入</span></span><br><span class="line">command &lt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将 infile的内容作为标准输入, 标准输出写入 outfile</span></span><br><span class="line">command &lt; infile &gt; outfile</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Here Document 式重定向输入, 将定界符（下面例子中的EOF没有特殊含义, 可以自定义界定符）之间的作为stdin</span></span><br><span class="line">command &lt;&lt; EOF</span><br><span class="line">    hello</span><br><span class="line">    world</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>默认情况下，command &gt; file 将 stdout 重定向到 file，command &lt; file 将stdin 重定向到 file。</p>
 </blockquote>
@@ -801,7 +801,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">362</span>
+                  <span class="site-state-item-count">363</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
