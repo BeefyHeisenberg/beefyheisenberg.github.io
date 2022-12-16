@@ -278,6 +278,638 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/RAM.02.Linux进程内存布局/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/RAM.02.Linux进程内存布局/" itemprop="url">RAM.02.Linux进程内存布局</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  544
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="How-to-查看某个进程的内存分布"><a href="#How-to-查看某个进程的内存分布" class="headerlink" title="How to 查看某个进程的内存分布"></a>How to 查看某个进程的内存分布</h2><p><code>cat /proc/xxx/maps</code></p>
+<h2 id="32位"><a href="#32位" class="headerlink" title="32位"></a>32位</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  0xFFFFFFFF 高地址</span><br><span class="line"> +---+--------------------+----------------------</span><br><span class="line">1 GB |   Kernel           |                  内核空间 </span><br><span class="line"> +------------------------+----------------------</span><br><span class="line"> |   | Random stack offset|                  用户空间 ↓</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |   Stack↓           | 进程中的所有的线程共享相同的地址空间</span><br><span class="line"> |   |                    | </span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Mem Mapping ↓      | 文件映射,so库文件等</span><br><span class="line"> |   |                    | mmap()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> +   |                    |</span><br><span class="line">3 GB |                    |</span><br><span class="line"> +   +--------------------+</span><br><span class="line"> |   |    Heap↑           | 分配线性地址VM，不一定分配页框RAM</span><br><span class="line"> |   |                    | malloc() -&gt; brk()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Random stack offset|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | BSS Seg.           |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Data Seg. (+rodata)|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Text Seg.          |                  用户空间 ↑</span><br><span class="line"> +---+--------------------+----------------------</span><br><span class="line">  0x00000000 低地址</span><br></pre></td></tr></table></figure>
+<p>内存布局从高地址到低地址:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/RAM.02.Linux进程内存布局/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/RAM.01.内存寻址/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/RAM.01.内存寻址/" itemprop="url">RAM.01.内存寻址</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,409
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="内存寻址"><a href="#内存寻址" class="headerlink" title="内存寻址"></a>内存寻址</h1><p>内存寻址(Memory Addressing):<br>分段机制把<code>逻辑地址</code>转换为<code>线性地址</code>, 分页机制进一步把该<code>线性地址</code>再转换为<code>物理地址</code>.</p>
+<h2 id="段式内存管理"><a href="#段式内存管理" class="headerlink" title="段式内存管理"></a>段式内存管理</h2><blockquote>
+<p>内存可寻址范围总是跟”地址总线宽度”和”寄存器宽度”相关</p>
+</blockquote>
+<h3 id="实模式的诞生（16位处理器及寻址）"><a href="#实模式的诞生（16位处理器及寻址）" class="headerlink" title="实模式的诞生（16位处理器及寻址）"></a>实模式的诞生（16位处理器及寻址）</h3>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/RAM.01.内存寻址/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/RAM.01.内存对齐/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/RAM.01.内存对齐/" itemprop="url">RAM.01.内存对齐</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  485
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@ref: <a href="https://www.zhihu.com/question/27862634/answer/38506197" target="_blank" rel="noopener">如何理解 struct 的内存对齐？ - 張道遠 的回答 - 知乎</a></p>
+<p>为什么 32 位 CPU，Struct 默认是 4 字节对齐的？ </p>
+<ul>
+<li>一般的答案是：CPU 访问内存必须以 4 字节倍数开始，CPU 可以在一个总线周期读取一个‘word’，如果地址是非 4 字节对齐，CPU 可能要花费两个总线周期读取一个 word</li>
+<li>注意这里的字和字长的概念： ‘字’也即 word，一般来说一个 word 占用 4 字节，‘字长’也即 wordSize（4）</li>
+</ul>
+<p>进一步问，为什么 CPU 访问内存必须以 4 字节开头？ …<br>32 位 CPU（字长也即 wordSize = 4 字节），地址总线宽度是 30，这个 30 是怎么定义出来的？</p>
+<hr>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/RAM.01.内存对齐/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Posix.01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/Posix.01/" itemprop="url">Linux.31.Posix接口</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,472
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h1><h2 id="创建进程"><a href="#创建进程" class="headerlink" title="创建进程"></a>创建进程</h2><h3 id="fork"><a href="#fork" class="headerlink" title="fork"></a>fork</h3><ul>
+<li>返回0: 子进程</li>
+<li>返回&gt;0: 父进程, 返回值是子进程pid</li>
+<li>子进程会得到父进程的堆(IO缓存, malloc的内存)、栈(局部变量)、数据空间(Data Segment)的拷贝, 在子进程里修改这些变量并不会影响父进程中的值, 注意这种拷贝是“写时复制”（Copy On Write，COW）;</li>
+<li>fork前打开的文件句柄, 其偏移量会在父子进程间共享, 原因是进程内存中仅保存了文件句柄的fd指针, 指针指向的结构体(也就是文件表,保存了文件标准和位移)是共享的. @Uncertain 那么”文件表”是存储在哪里的?</li>
+<li>另外需要注意的是, 因为堆内存也将被拷贝(IO缓存在堆里), 所以如果在创建子进程之前这个IO缓存中就有数据, 那么也会带入子进程, 导致子进程的IO缓存里”多”出一些数据.</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// child process because return value zero</span></span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Hello from Child!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// parent process because return value non-zero.</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Hello from Parent!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/Posix.01/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.06.Sed-Awk-Grep/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -395,7 +1027,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.06.Sed-Awk-Grep/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/Linux.06.Sed-Awk-Grep/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -583,7 +1215,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.04a.Sysctl/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/Linux.04a.Sysctl/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -748,7 +1380,7 @@
 <h2 id="init系统"><a href="#init系统" class="headerlink" title="init系统"></a>init系统</h2><p>init进程是 Linux系统内核初始化最后一步启动的进程，也是系统的第一个进程，pid=1。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.04.系统配置/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/Linux.04.系统配置/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -925,7 +1557,7 @@
 <h1 id="基础性能参数"><a href="#基础性能参数" class="headerlink" title="基础性能参数"></a>基础性能参数</h1><h2 id="load"><a href="#load" class="headerlink" title="load"></a>load</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.03.命令行-Performance/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/Linux.03.命令行-Performance/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1086,7 +1718,7 @@
 <h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.02.网络命令/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/Linux.02.网络命令/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1757,7 +2389,7 @@
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.01.常用命令行/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/Linux.01.常用命令行/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1924,7 +2556,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/IO.块设备/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/IO.块设备/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2209,7 +2841,7 @@
 <p>二极管：二极管就是由一个PN结加上相应的电极引线及管壳封装而成的。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/CPU.是怎么制造出来的/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/CPU.是怎么制造出来的/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2378,7 +3010,7 @@
 <h1 id="CPU-Cache命中"><a href="#CPU-Cache命中" class="headerlink" title="CPU Cache命中"></a>CPU Cache命中</h1><p>➤ Cache Line 和N-Way查找策略</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/CPU.02.缓存/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/CPU.02.缓存/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2536,7 +3168,7 @@
 <h2 id="用户态到内核态的切换"><a href="#用户态到内核态的切换" class="headerlink" title="用户态到内核态的切换"></a>用户态到内核态的切换</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/CPU.01.基础/#espandi" rel="contents">
+            <a class="btn" href="/21.Operating-System/CPU.01.基础/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2695,7 +3327,7 @@
 <h2 id="LeetCode-二叉树"><a href="#LeetCode-二叉树" class="headerlink" title="#LeetCode 二叉树"></a>#LeetCode 二叉树</h2><p>➤ 使用非递归(栈)遍历二叉树有两种:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/19.Algorithm/Alg.LeetcodePattern/#espandi" rel="contents">
+            <a class="btn" href="/19.Algorithm/Alg.LeetcodePattern/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2858,7 +3490,7 @@
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/19.Algorithm/Alg.LeetcodeEtudes/#espandi" rel="contents">
+            <a class="btn" href="/19.Algorithm/Alg.LeetcodeEtudes/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3024,7 +3656,7 @@
 <h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><h3 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><h3 id="归约"><a href="#归约" class="headerlink" title="归约"></a>归约</h3>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/19.Algorithm/Alg.IntroductionToAlgorithm/#espandi" rel="contents">
+            <a class="btn" href="/19.Algorithm/Alg.IntroductionToAlgorithm/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3185,671 +3817,7 @@
 <h1 id="交换排序"><a href="#交换排序" class="headerlink" title="交换排序"></a>交换排序</h1><h2 id="冒泡排序-Bubble-Sort"><a href="#冒泡排序-Bubble-Sort" class="headerlink" title="冒泡排序(Bubble Sort)"></a>冒泡排序(Bubble Sort)</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/19.Algorithm/Alg.03.排序算法/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/19.Algorithm/Alg.02.算法概述/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/19.Algorithm/Alg.02.算法概述/" itemprop="url">算法概述</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">19.Algorithm</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  970
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@todo:</p>
-<ul>
-<li>算法设计:  排序, 贪心, 分治, 动态规划, 回溯, 随机化</li>
-<li>数学基础: 二分查找, 欧几里得算法, 快速幂算法</li>
-<li>字符串匹配算法: KMP</li>
-<li>图论算法:<ul>
-<li>拓扑顺序</li>
-<li>最短路径: Dijkstra算法, Floyd-Warshall算法</li>
-<li>最小生成树: Prim, Kruskal</li>
-</ul>
-</li>
-<li>搜索算法: BFS, DFS, A*搜索</li>
-<li>几何算法: 向量, 凸包</li>
-<li>快速傅里叶变换(FFT): 离散傅里叶变换</li>
-</ul>
-<h1 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h1><h2 id="几何级数-amp-算数级数"><a href="#几何级数-amp-算数级数" class="headerlink" title="几何级数 &amp; 算数级数"></a>几何级数 &amp; 算数级数</h2><ul>
-<li>几何级数: $$ 1 + 2^1 + 2^2 + … + 2^N = 2^(N+1) -1 ≈ 2^N $$</li>
-<li>算术级数: $$ 1 + 2 + 3 + … + N = N(N+1)/2  ≈ N^2/2 $$</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/19.Algorithm/Alg.02.算法概述/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/19.Algorithm/Alg.01.数据结构/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/19.Algorithm/Alg.01.数据结构/" itemprop="url">常用数据结构</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">19.Algorithm</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,742
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@todo</p>
-<ul>
-<li>链表, 队列</li>
-<li>平衡树, 红黑树</li>
-<li>哈希</li>
-<li>优先队列</li>
-<li>并查集Union-find(不相交集,第8章)</li>
-<li>补充: 线段树</li>
-</ul>
-<hr>
-<h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/19.Algorithm/Alg.01.数据结构/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/14.Coding-Pattern/软件架构模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/14.Coding-Pattern/软件架构模式/" itemprop="url">软件架构模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/14-Coding-Pattern/" itemprop="url" rel="index">
-                    <span itemprop="name">14.Coding-Pattern</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  195
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>➤ 软件设计的”方法论”</p>
-<ul>
-<li>design patterns: 代码层面</li>
-<li>architecture patterns: 架构层面</li>
-</ul>
-<p>architecture patterns:</p>
-<ul>
-<li>分层架构</li>
-<li>管道..</li>
-<li>CS..</li>
-<li>MVC..</li>
-<li>事件驱动..</li>
-<li>微服务..</li>
-</ul>
-<p>➤ 分层架构: 表现层→业务层→数据层</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/14.Coding-Pattern/软件架构模式/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/14.Coding-Pattern/设计模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/14.Coding-Pattern/设计模式/" itemprop="url">设计模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/14-Coding-Pattern/" itemprop="url" rel="index">
-                    <span itemprop="name">14.Coding-Pattern</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,263
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>索引: <a href="https://zh.wikipedia.org/wiki/设计模式：可复用面向对象软件的基础" target="_blank" rel="noopener">设计模式：可复用面向对象软件的基础</a></p>
-<blockquote>
-<p>《设计模式：可复用面向对象软件的基础》（Design Patterns: Elements of Reusable Object-Oriented Software）是软件工程领域有关设计模式的一本书，提出和总结了对于一些常见软件设计问题的标准解决方案，称为软件设计模式。该书作者是埃里希·伽玛（Erich Gamma）、Richard Helm、Ralph Johnson和John Vlissides，后以“四人帮”（Gang of Four，GoF）[1]著称，书中的设计模式也被成为“四人帮设计模式”（Gang of Four design patterns）</p>
-</blockquote>
-<h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h1><ul>
-<li><a href="https://www.runoob.com/design-pattern/command-pattern.html" target="_blank" rel="noopener">命令模式</a></li>
-<li><a href="https://www.runoob.com/design-pattern/intercepting-filter-pattern.html" target="_blank" rel="noopener">拦截过滤器模式</a></li>
-<li><a href="https://www.runoob.com/design-pattern/null-object-pattern.html" target="_blank" rel="noopener">空对象模式</a></li>
-<li><a href="https://www.runoob.com/design-pattern/prototype-pattern.html" target="_blank" rel="noopener">原型模式</a></li>
-</ul>
-<p><img src="/images/wikipedia-design-patterns.png" alt="wikipedia-design-patterns"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/14.Coding-Pattern/设计模式/#espandi" rel="contents">
+            <a class="btn" href="/19.Algorithm/Alg.03.排序算法/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3941,7 +3909,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">424</span>
+                  <span class="site-state-item-count">428</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3963,7 +3931,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">363</span>
+                  <span class="site-state-item-count">376</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

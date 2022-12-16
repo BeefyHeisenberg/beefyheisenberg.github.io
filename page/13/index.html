@@ -278,6 +278,673 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-00基础概念/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/HBase-00基础概念/" itemprop="url">HBase-00基础概念</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,206
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="https://hbase.apache.org/images/hbase_logo_with_orca_large.png" alt="HBase"></p>
+<p>HBase是一个分布式的、面向列的开源数据库，该技术来源于 Fay Chang 所撰写的Google论文“Bigtable：一个结构化数据的分布式存储系统”。就像Bigtable利用了Google文件系统（File System）所提供的分布式数据存储一样，HBase在Hadoop之上提供了类似于Bigtable的能力。HBase是Apache的Hadoop项目的子项目。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。<br>与FUJITSU Cliq等商用大数据产品不同，HBase是Google Bigtable的开源实现，类似Google Bigtable利用GFS作为其文件存储系统，HBase利用Hadoop HDFS作为其文件存储系统；Google运行MapReduce来处理Bigtable中的海量数据，HBase同样利用Hadoop MapReduce来处理HBase中的海量数据；Google Bigtable利用 Chubby作为协同服务，HBase利用Zookeeper作为对应。</p>
+<ul>
+<li>HBase适用于简单数据写入（如“消息类”应用）和海量、结构简单数据的查询（如“详单类”应用），适合稀疏表；</li>
+<li>作为大数据MapReduce的后台数据源，以支撑离线分析型应用；</li>
+<li>基于HDFS分布式文件系统, 可扩展性+；</li>
+<li>Facebook的消息类应用，包括Messages、Chats、Emails和SMS系统，用的都是HBase；</li>
+</ul>
+<h2 id="概念-表-行-列族-列-版本"><a href="#概念-表-行-列族-列-版本" class="headerlink" title="概念: 表, 行, 列族, 列, 版本"></a>概念: 表, 行, 列族, 列, 版本</h2><ul>
+<li>行（Row）: HBase 中的一行包含一个行键和一个或多个与其相关的值的列。在存储行时，行按字母顺序排序。<br>出于这个原因，行键的设计非常重要。目标是以相关行相互靠近的方式存储数据。常用的行键模式是网站域。如果你的行键是域名，则你可能应该将它们存储在相反的位置（org.apache.www，org.apache.mail，org.apache.jira）。这样，表中的所有 Apache 域都彼此靠近，而不是根据子域的第一个字母分布。</li>
+<li>列（Column）: HBase 中的列由一个列族和一个列限定符组成，它们由<code>:</code>字符分隔。<ul>
+<li>列族（Column Family）: 出于性能原因，列族在物理上共同存在一组列和它们的值。在 HBase 中每个列族都有一组存储属性，例如其值是否应缓存在内存中，数据如何压缩或其行编码是如何编码的等等。表中的每一行都有相同的列族，但给定的行可能不会在给定的列族中存储任何内容。列族一旦确定后，就不能轻易修改，因为它会影响到 HBase 真实的物理存储结构，但是列族中的列标识(Column Qualifier)以及其对应的值可以动态增删。</li>
+<li>列限定符（Column Qualifier）: 列限定符被添加到列族中，以提供给定数据段的索引。鉴于列族的content，列限定符可能是content:html，而另一个可能是content:pdf。虽然列族在创建表时是固定的，但列限定符是可变的，并且在行之间可能差别很大。</li>
+</ul>
+</li>
+<li>单元格（Cell） 单元格是行、列族和列限定符的组合，并且包含值和时间戳，它表示值的版本。</li>
+<li>时间戳（Timestamp） 时间戳与每个值一起编写，并且是给定版本的值的标识符。默认情况下，时间戳表示写入数据时 RegionServer 上的时间，但可以在将数据放入单元格时指定不同的时间戳值。</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/32.Database/HBase-00基础概念/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/DB.01-数据库分类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/DB.01-数据库分类/" itemprop="url">DB.01-数据库分类 - OLTP、OLAP、TSDB</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  605
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="OLTP-vs-OLAP"><a href="#OLTP-vs-OLAP" class="headerlink" title="OLTP vs OLAP"></a>OLTP vs OLAP</h1><p>OLTP(online transcation processing)联机事务处理:</p>
+<ul>
+<li>多用来解决业务中的事务(ACID: 原子性,一致性,…)问题, 随机读写, 频繁的更改/删除;</li>
+<li>不适合数据分析场景: 场景特点(数据量大), 分析和计算能力(OLTP没有, 只能查询到业务层再处理) // 关系型数据库, count/max/group by的实现?</li>
+</ul>
+<p>OLAP(online analytical processing)联机分析处理:</p>
+<ul>
+<li>OLAP不关数据的事务特性, 也不关注数据的频繁删改, 而是关注大量数据的多维度/复杂分析和计算</li>
+<li>OLAP的分类:<ul>
+<li>多维度OLAP（Multi-Dimensional OLAP，简称MOLAP）:<br>对数据需要分析的维度预先建模, 在数据存储的物理层面使用cube的结构进行存储(?) 缺点是数据需要预先建模, 优点比下面的关系型OLAP分析计算更快</li>
+<li>关系型OLAP（Relational OLAP，简称ROLAP）:<br>使用类似关系型数据库的存储模型(例如用label取代column), 使用类似SQL的语句进行分析查询, 分析计算更自由(相比多维度OLAP预先建模的方式), 但是海量数据下计分析算速度不如多维度OLAP</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/32.Database/DB.01-数据库分类/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/如何画架构图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/如何画架构图/" itemprop="url">如何画架构图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  202
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <ol>
+<li>图是给什么角色看的(客户 运维/实施 &amp; 开发), 即决定了用途, 要表达什么? 对方关注什么, 应该给对方看什么</li>
+<li>组件(实体)是什么: 物理硬件、实际集群、中间件（服务）、业务服务 （考虑架构是基于SaaS or PasS平台？ 来决定图中的每个实体是什么）</li>
+<li>..</li>
+</ol>
+<h1 id="➤-逻辑视图1-业务向"><a href="#➤-逻辑视图1-业务向" class="headerlink" title="➤ 逻辑视图1(业务向)"></a>➤ 逻辑视图1(业务向)</h1><p><img src="/images/diagram-逻辑视图-业务向.png" alt="diagram-逻辑视图-业务向"></p>
+<h1 id="➤-逻辑视图2-技术向"><a href="#➤-逻辑视图2-技术向" class="headerlink" title="➤ 逻辑视图2(技术向)"></a>➤ 逻辑视图2(技术向)</h1><p><img src="/images/diagram-逻辑视图1.png" alt="diagram-逻辑视图1"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/如何画架构图/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/分布式系统-Consistency/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/分布式系统-Consistency/" itemprop="url">分布式系统-Consistency</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  627
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ 分布式系统的一致性(概念)：</p>
+<ul>
+<li>分布式系统中, 每个节点(或者副本)的数据保持一致;</li>
+<li>「数据一致性其实是数据库系统中的概念。我们可以简单的把一致性理解为正确性或者完整性，那么数据一致性通常指关联数据之间的逻辑关系是否正确和完整」</li>
+</ul>
+<p>➤ 强一致性、弱一致性、最终一致性：</p>
+<ul>
+<li>强一致性: 当更新操作完成之后，任何多个后续进程或者线程的访问都会返回最新的更新过的值。但是这种实现对性能影响较大，因为这意味着，只要上次的操作没有处理完，就不能让用户读取数据。</li>
+<li>弱一致性: 系统并不保证进程或者线程的访问都会返回最新的更新过的值。系统在数据写入成功之后，不承诺立即可以读到最新写入的值，也不会具体的承诺多久之后可以读到。但会尽可能保证在某个时间级别（比如秒级别）之后，可以让数据达到一致性状态。</li>
+<li>最终一致性: 弱一致性的特定形式。系统保证在没有后续更新的前提下，系统最终返回上一次更新操作的值。在没有故障发生的前提下，不一致窗口的时间主要受通信延迟，系统负载和复制副本的个数影响。DNS是一个典型的最终一致性系统。</li>
+<li>最终一致性模型的变种:<ul>
+<li>因果一致性：如果A进程在更新之后向B进程通知更新的完成，那么B的访问操作将会返回更新的值。如果没有因果关系的C进程将会遵循最终一致性的规则。</li>
+<li>读己所写一致性：因果一致性的特定形式。一个进程总可以读到自己更新的数据。</li>
+<li>会话一致性：读己所写一致性的特定形式。进程在访问存储系统同一个会话内，系统保证该进程读己之所写。</li>
+<li>单调读一致性：如果一个进程已经读取到一个特定值，那么该进程不会读取到该值以前的任何值。</li>
+<li>单调写一致性：系统保证对同一个进程的写操作串行化。</li>
+</ul>
+</li>
+</ul>
+<p>@ref:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/分布式系统-Consistency/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/分布式系统-CAP理论/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -388,7 +1055,7 @@
 <p>CAP如何取舍: </p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/分布式系统-CAP理论/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/分布式系统-CAP理论/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -559,7 +1226,7 @@
 <p>相关阅读:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/分布式事务-2PC-and-3PC协议解析/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/分布式事务-2PC-and-3PC协议解析/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -886,7 +1553,7 @@
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/消息队列-选型比较(Kafka-vs-RabbitMQ)/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/消息队列-选型比较(Kafka-vs-RabbitMQ)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1041,7 +1708,7 @@
 <h1 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h1><p>Apache Hadoop YARN （Yet Another Resource Negotiator，另一种资源协调者）是一种新的 Hadoop 资源管理器，<br>它是一个通用资源管理系统，可为上层应用提供统一的资源管理和调度，它的引入为集群在利用率、资源统一管理和数据共享等方面带来了巨大好处。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/资源调度-Yarn-Mesos-k8s/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/资源调度-Yarn-Mesos-k8s/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1196,7 +1863,7 @@
 <h2 id="与Apache相比"><a href="#与Apache相比" class="headerlink" title="与Apache相比"></a>与Apache相比</h2><p>Nginx 的编写有一个明确目标就是超越 Apache Web 服务器的性能。Nginx 提供开箱即用的静态文件，使用的内存比 Apache 少得多，每秒可以处理大约四倍于 Apache 的请求。低并发下性能与 Apache 相当，有时候还低于，但是在高并发下 Nginx 能保持低资源低消耗高性能。还有高度模块化的设计，模块编写简单。配置文件简洁。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/反向代理-Nginx/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/反向代理-Nginx/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1352,7 +2019,7 @@
 <p>Kafka高效地处理实时流式数据，可以实现与Storm、HBase和Spark的集成。作为群集部署到多台服务器上，Kafka处理它所有的发布和订阅消息系统使用了四个API，即生产者API、消费者API、Stream API和Connector API。它能够传递大规模流式消息，自带容错功能，已经取代了一些传统消息系统，如JMS、AMQP等。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/消息队列-Kafka/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/消息队列-Kafka/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1516,7 +2183,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/消息队列-Kafka-选举机制/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/消息队列-Kafka-选举机制/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1700,7 +2367,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/消息队列-Kafka-特性实现/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/消息队列-Kafka-特性实现/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1862,7 +2529,7 @@
 <h1 id="K8s架构"><a href="#K8s架构" class="headerlink" title="K8s架构"></a>K8s架构</h1><p><img src="/images/k8s-cluster.png" alt="k8s-cluster"></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/容器编排-K8s/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/容器编排-K8s/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2023,7 +2690,7 @@
 <p>Docker 如何实现进程隔离 (宿主机进程 &amp; 容器内进程的隔离) ?</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/容器化-Docker-02容器隔离实现原理/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/容器化-Docker-02容器隔离实现原理/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2188,7 +2855,7 @@
 <h1 id="Docker命令参考"><a href="#Docker命令参考" class="headerlink" title="Docker命令参考"></a>Docker命令参考</h1><h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/容器化-Docker-01基础/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/容器化-Docker-01基础/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2351,7 +3018,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/缓存-Memcache/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/缓存-Memcache/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2516,7 +3183,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Zookeeper-04应用-分布式锁/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Zookeeper-04应用-分布式锁/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2682,7 +3349,7 @@
 <p>如果第一步, Client连接上的是Follower端, 则由Follower把写请求转发给Leader, Leader进行正常的写流程, 超半数节点写成功后, Leader把结果返回给Follower, Follower把写入成功的结果发送给Client</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Zookeeper-03一致性/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Zookeeper-03一致性/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2850,654 +3517,11 @@
 <p>或者使用socket:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Zookeeper-02部署和运维/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Zookeeper-02部署和运维/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
           <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Zookeeper-01基础概念/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/Zookeeper-01基础概念/" itemprop="url">Zookeeper-01基础概念</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
-                    <span itemprop="name">31.Backend</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  924
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@toc:</p>
-<ul>
-<li>Session;</li>
-<li>临时Znode;</li>
-<li>持久Znode;</li>
-<li>Watcher;</li>
-<li>Leader/Follower/Observer;</li>
-<li>zxid;</li>
-<li>ZAB;</li>
-</ul>
-<p>➤ Zk中的重要概念:</p>
-<ul>
-<li>Session(会话): Session 是客户端和Zk的一个长连接, 每个客户端的Session 都有一个 唯一id, 客户端定时向zk发送heart_beat , Session在创建的时候可以指定一个<code>sessionTimeout</code>, 如果超时则会断开该Session;</li>
-<li>ZNode是zk存储数据的节点, ZNode 分为永久节点和临时节点<ul>
-<li>持久节点是指一旦这个ZNode被创建了，除非主动进行ZNode的移除操作，否则这个ZNode将一直保存在Zookeeper上。</li>
-<li>临时节点的生命周期和客户端会话(Session)绑定，一旦客户端会话失效，那么这个客户端创建的所有临时节点都会被移除。</li>
-<li>创建节点时可以指定 SEQUENTIAL 属性, zk会在创建这个节点的时候加上递增整形序号, 序号递增是由父节点维护的</li>
-</ul>
-</li>
-<li>Watcher（事件监听器）: ，是Zookeeper中的一个很重要的特性。Zookeeper允许用户在指定节点上注册一些Watcher，并且在一些特定事件触发的时候，ZooKeeper服务端会将事件通知到感兴趣的客户端上去，该机制是Zookeeper实现分布式协调服务的重要特性。</li>
-<li>Zxid (Zookeeper Transaction Id): Zookeeper给每次更新操作都分配一个全局唯一递增编号, 这个编号反映了所有操作的先后顺序, 可以实现更高层次的同步原语;</li>
-<li>Zk集群中的节点的角色: Leader, Follower, Observer:<ul>
-<li>Leader 可以提供读/写服务;</li>
-<li>Follower 和 Observer 都只提供读服务, 不同的是Follower 参与Leader的选举, Observer不参与选举, 也不参与写的时候”超过半数节点写成功则写入成功”的策略, 可以认为 Obverser的作用是提高集群的读性能, 且不影响写入性能;</li>
-</ul>
-</li>
-<li>ZAB(Zookeeper Atomic Broadcast): Zookeeper通过ZAB协议实现了分布式数据的一致性(顺序一致性), 另外ZAB还提供了崩溃恢复(Leader选举);</li>
-<li>Paxos算法 和 Zab协议: 「ZooKeeper 并没有完全采用 Paxos算法 ，而是使用 ZAB 协议作为其保证数据一致性的核心算法。另外，在ZooKeeper的官方文档中也指出，ZAB协议并不像 Paxos 算法那样，是一种通用的分布式一致性算法，它是一种特别为Zookeeper设计的崩溃可恢复的原子消息广播算法。」</li>
-<li>Zab协议中定义的两种集群状态:<ul>
-<li>崩溃恢复: 当集群在启动过程/Leader网络断开/异常重启时, ZAB协议进入崩溃恢复模式, 进行leader选举, 然后Folower节点与Leader节点进行数据同步, <strong>当过半的Folower节点都同步完成</strong>, ZAB协议退出崩溃恢复模式, 进入消息广播状态;</li>
-<li>消息广播: 在此状态下, 只允许一台 Leader服务器进行事务请求的处理, 如果Follower节点接收到客户端的事务请求也应当转发给 Leader. Leader收到事务请求后, 会对事务进行提案并进行一轮新的广播</li>
-</ul>
-</li>
-</ul>
-<p>➤ Zk的以下特性使得其可以作为 1集群管理(Znode watch集群节点状态), 2分布式存储(Zk的数据一致性) 3分布式锁(操作的原子性, Watch特性), 具体使用场景有:</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Zookeeper-01基础概念/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-秒杀系统设计要点/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/SystemDesign-秒杀系统设计要点/" itemprop="url">SystemDesign | 秒杀系统</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  534
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@toc:</p>
-<ul>
-<li>高性能:静动分离/热点优化/系统优化;</li>
-<li>高可用:削峰/兜底, 库存数据一致性;</li>
-<li>一致性;</li>
-</ul>
-<p>➤ 高性能:</p>
-<ul>
-<li>静动分离: 数据拆分, 数据缓存, 数据整合;</li>
-<li>热点优化:<ul>
-<li>热点识别: 通过链路各节点收集热点key, 识别热点商品, 发送到各订阅模块, 各模块采取各自措施(缓存或限流或熔断)</li>
-<li>热点隔离:<ul>
-<li>系统隔离(怎么做?): 负载均衡层做(热点key如何更新到配置?) 或者端上存储特定cookie,</li>
-<li>数据隔离: 热点数据使用单独的Cache/DB</li>
-</ul>
-</li>
-<li>热点优化: 系统层(业务代码)对热点做优化, 本机缓存/ 限流等</li>
-</ul>
-</li>
-<li>系统优化(代码):<ul>
-<li>减少序列化(多在RPC阶段)</li>
-<li>字符串优化: 涉及到字符串的IO, OutputStream() 类函数从而减少数据的编码转换 (由于字符串每个字符需要转字节, 这个过程需要查编码表)</li>
-<li>去除不必要组件: 去掉MVC (因为MVC的 Chain)</li>
-<li>剪裁异常日志堆栈大小</li>
-</ul>
-</li>
-</ul>
-<p>➤ 一致性: 库存数据的一致性</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/SystemDesign-秒杀系统设计要点/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-分布式唯一ID/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/SystemDesign-分布式唯一ID/" itemprop="url">SystemDesign | 分布式唯一ID方案</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  253
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li>UUID:<ul>
-<li>版本1: Mac地址+时间戳</li>
-<li>版本4: 基于随机数, 可能是伪随机, 例如 <code>java.util.UUID.randomUUID()</code>是版本4的一个实现</li>
-</ul>
-</li>
-<li>Snowflake(Twitter方案):<ul>
-<li>实现: 64位 = 1位符号 + 41位毫秒时间戳 + 10位机器id + 12序列号<ul>
-<li>缺陷: 非严格递增, 机器上有多个线程, 如何保证1ms内每个线程生成的序列号不重复? // 可以使用随机数, 时间戳做seed, 多线程使用同一个seed(有没有并发互斥问题?)</li>
-</ul>
-</li>
-<li>实现2: 64位 = 1位符号 + 41位毫秒时间戳 + 10位机器id + 10位进程id + 2位序号<ul>
-<li>缺陷: 每个线程每毫秒只能生成4个id的限制</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>mysql自增(Flickr方案):<ul>
-<li>实现: 8台Mysql, 第一台起始seq=1, 第二台起始seq=2, 每次seq+=8</li>
-<li>缺陷: 不是严格递增</li>
-</ul>
-</li>
-</ul>
-<p>@ref:</p>
-<ul>
-<li>[[SystemDesign-随机数]]</li>
-<li><a href="https://soulmachine.gitbooks.io/system-design/content/cn/distributed-id-generator.html" target="_blank" rel="noopener">分布式ID生成器 · 系统设计(System Design)</a></li>
-<li><a href="https://juejin.im/post/5d9fe5006fb9a04de7734b9e#heading-1" target="_blank" rel="noopener">基于Twitter的雪花算法改造，分布式全局唯一ID生成器 - 掘金</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-短网址方案/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/SystemDesign-短网址方案/" itemprop="url">SystemDesign | 短网址方案</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  86
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li>5个字符的短网址, 能表示多少个URL ?<ul>
-<li>短网址的构成是大写+小写+数字 = 26+26+10 = 72, 也就是一个字节有72种选择, 假设短网址是5位, 那么能表示多少种网址? $72^5$</li>
-</ul>
-</li>
-<li>生成方案:<ul>
-<li>哈希: 缺点冲突</li>
-<li>UUID, 存储使用K-v, 短网址是K</li>
-</ul>
-</li>
-</ul>
-
-          
         
       
     </div>
@@ -3585,7 +3609,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">424</span>
+                  <span class="site-state-item-count">428</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3607,7 +3631,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">363</span>
+                  <span class="site-state-item-count">376</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
