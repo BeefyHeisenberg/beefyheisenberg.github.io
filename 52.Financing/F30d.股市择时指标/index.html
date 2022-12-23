@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="A股,股市估值,股债利差,巴菲特指数," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="=&amp;gt; 量化回测结果： @link: F30d1.股市择时指标-量化回测 大盘指数PE百分位上证指数/中证全指/国证A指/万得全A等综合指数的PE百分位：30%以下为低估，70%以上为高估 但是需要注意估值中枢的改变，最近几年是不断抬升的，可以在万得App参考茅指数/宁组合的 PE Band 股债利差">
+<meta name="keywords" content="A股,股市估值,股债利差,巴菲特指数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="F30d.股市择时指标（估值、风险溢价...）">
+<meta property="og:url" content="https://beefyheisenberg.github.io/52.Financing/F30d.股市择时指标/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="=&amp;gt; 量化回测结果： @link: F30d1.股市择时指标-量化回测 大盘指数PE百分位上证指数/中证全指/国证A指/万得全A等综合指数的PE百分位：30%以下为低估，70%以上为高估 但是需要注意估值中枢的改变，最近几年是不断抬升的，可以在万得App参考茅指数/宁组合的 PE Band 股债利差">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/沪深300股债利差.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/202208082474036891.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/yzgptjnew.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/IMG20221127-13.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/IMG20221127-14.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/IMG20221127-19.png">
+<meta property="og:updated_time" content="2022-12-23T17:49:38.066Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="F30d.股市择时指标（估值、风险溢价...）">
+<meta name="twitter:description" content="=&amp;gt; 量化回测结果： @link: F30d1.股市择时指标-量化回测 大盘指数PE百分位上证指数/中证全指/国证A指/万得全A等综合指数的PE百分位：30%以下为低估，70%以上为高估 但是需要注意估值中枢的改变，最近几年是不断抬升的，可以在万得App参考茅指数/宁组合的 PE Band 股债利差">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/沪深300股债利差.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/52.Financing/F30d.股市择时指标/"/>
+
+
+
+
+
+  <title>F30d.股市择时指标（估值、风险溢价...） | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F30d.股市择时指标/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">F30d.股市择时指标（估值、风险溢价...）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
+                    <span itemprop="name">52.Financing</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,705
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>=&gt; 量化回测结果： @link: <a href="/52.Financing/F30d1.股市择时指标-量化回测/" title="F30d1.股市择时指标-量化回测">F30d1.股市择时指标-量化回测</a></p>
+<h2 id="大盘指数PE百分位"><a href="#大盘指数PE百分位" class="headerlink" title="大盘指数PE百分位"></a>大盘指数PE百分位</h2><p>上证指数/中证全指/国证A指/万得全A等综合指数的PE百分位：30%以下为低估，70%以上为高估</p>
+<p>但是需要注意估值中枢的改变，最近几年是不断抬升的，可以在万得App参考茅指数/宁组合的 PE Band</p>
+<h2 id="股债利差"><a href="#股债利差" class="headerlink" title="股债利差"></a>股债利差</h2><p>股债利差/股债收益差，或者叫“股权风险溢价”，等于 <code>宽基指数E/P - 10y国债收益率</code>，不考虑股票的低买高卖，只考虑股票的股息（这里用宽基指数的EP，也即A股的股息收益的平均数）和无风险利率的比较（利差越高意味着股市的性价比越高）</p>
+<p>↓股债利差（蓝色）和沪深300指数（红色）走势负相关：<br><img src="/images/沪深300股债利差.png" alt="沪深300股债利差"></p>
+<p>统计历次股市低点，也即股债利差达到最大值的位置，利差约为6.7%，<br>  • 2016：6.7%<br>  • 2018：6.6%<br>  • 2020：6.5%<br>  • 2022：7%<br>结论：历次股市最高点的利差在3%左右</p>
+<p>在哪儿看股债利差：</p>
+<ul>
+<li><a href="https://danjuanfunds.com/valuation-table/jiucai" target="_blank" rel="noopener">蛋卷</a></li>
+<li><a href="https://mp.weixin.qq.com/s/HjrFjaGDL0nPWM5FYIwi-w" target="_blank" rel="noopener">公众号-指盈汇</a></li>
+<li>乐咕：<a href="https://legulegu.com/stockdata/equity-bond-spread" target="_blank" rel="noopener">https://legulegu.com/stockdata/equity-bond-spread</a></li>
+</ul>
+<hr>
+<p><a href="https://xueqiu.com/4778574435/231817263" target="_blank" rel="noopener">股债性价比择时失效了吗？ - 雪球</a></p>
+<ul>
+<li>这里股的EP用沪深300，债的收益率用美国10Y国债（近一年内美国国债价格下跌，收益率↑）国债价格下跌的原因是？ 可能流出到美元资产避险，或者是对长期国债不看好。这样的股债利差表明，现在不是买入的时机</li>
+<li>作为全球资产定价的核心：美国10年期国债收益率的快速上升，确实干扰到了沪深300股债性价比的有效</li>
+</ul>
+<h2 id="格雷厄姆指数"><a href="#格雷厄姆指数" class="headerlink" title="格雷厄姆指数"></a>格雷厄姆指数</h2><blockquote>
+<p>比较与股债利差的异同：都是股市整体股息收益和无风险利率的比较，前者用比值，后者用差值</p>
+</blockquote>
+<p><a href="https://m.gelonghui.com/p/511088" target="_blank" rel="noopener">市场红绿灯指数：格雷厄姆指数</a><br>格雷厄姆指数定义：假设某只股票的盈利收益率是10%，此时十年期国债收益率为5%，那么这只股票的格雷厄姆指数为2（10%÷5%=2）；其中 <em>盈利收益率=E/P</em>，也就是市盈率的倒数。</p>
+<p>20年的历史数据显示，</p>
+<pre><code>- 当股市的盈利收益率是十年期国债收益率2倍时（格雷厄姆指数&gt;=2），是比较好的投资机会。
+- 格雷厄姆指数 = 1.5，中位
+- 格雷厄姆指数 &lt;=1，这时候股市EP是小于国债的，相对危险
+</code></pre><p>格雷厄姆指数计算持仓：</p>
+<pre><code>- graham &gt; 2.2，权益：固收=10：0
+- graham = 2， 权益：固收=8:2
+- graham = 1.8，权益：固收=5：5
+- graham = 1， 权益：固收=0：10
+</code></pre><p>在哪看格雷厄姆指数：<a href="https://www.touzid.com/model/graham.html#/" target="_blank" rel="noopener">市场-格雷厄姆指数-投资数据网</a></p>
+<h2 id="证券化率（GNP）-amp-巴菲特指数"><a href="#证券化率（GNP）-amp-巴菲特指数" class="headerlink" title="证券化率（GNP） &amp; 巴菲特指数"></a>证券化率（GNP） &amp; 巴菲特指数</h2><p>用 <em>GNP</em> （证券化率） 估算买入时机：</p>
+<ul>
+<li>巴菲特认为，在美国证券化率在70%-80%之间适合持有股票，在证券化率低于60%，可以大举买入股票，而当该指标大于100%时，市场就开始值得警惕，而当该指标超过120%，市场就进入了疯狂的状态。</li>
+<li>标普500指数具有非常高的相关性。在90年代前，该指标从40%稳步提升至80%，之后该指标在80-150%的区间范围内大幅度震荡。在2000年左右美国的证券化率一度超过150%。随着当时一众互联网公司的市值泡沫破裂，该指标急剧下降，反弹后遇到08年金融危机，再度大幅下挫。</li>
+<li>A股 从07年~今：<br>分别是2007年7月（对应后期证券化率高点及时间：2007/12/27、146.60%）；<br>2009年8月（2009/8/4、81.14%）；<br>2015年4月（2015/6/12、113.26%）；<br>2018年1月（2018/1/26、81.67%）；<br>2021年末A股证券化率达到84.3%；<br>但是我们也可以清晰地看到，在10年11月到14年3月期间，该指标没有任何作用。而指数也一路阴跌，期间产生了最大的回撤超过40%。</li>
+</ul>
+<p>数据 @ref ：<a href="https://legulegu.com/stockdata/marketcap-gdp" target="_blank" rel="noopener">https://legulegu.com/stockdata/marketcap-gdp</a></p>
+<h2 id="中国波指"><a href="#中国波指" class="headerlink" title="中国波指"></a>中国波指</h2><p>基于50ETF期权的VIX指数（000188）。<br>与美国市场“慢涨急跌”不同，A股市场具有较为显著的“急涨慢跌”特征，因此中国波指往往在牛市中拉升，并在牛市末期达到极大值，而在熊市中降低，并在市场磨底期达到极小值。当中国波指较高时，可能市场未来会有调整，而当中国波指较低时，可能市场未来会有反弹。</p>
+<ul>
+<li><a href="https://xueqiu.com/S/SH000188" target="_blank" rel="noopener">中国波指(SH000188)股票股价<em>股价行情</em>财报_数据报告 - 雪球</a></li>
+<li><a href="http://www.sse.com.cn/assortment/options/neovolatility/c/4206989.pdf" target="_blank" rel="noopener">上证50 ETF波动率指数编制方案</a></li>
+</ul>
+<h2 id="破净股比例"><a href="#破净股比例" class="headerlink" title="破净股比例"></a>破净股比例</h2><p>破净股是指个股的股价跌破每股净资产，在市场较为低迷的时候破净股往往大量出现，统计整个A股的破净股比例，市场底部区域，A股中破净股的比例大约在10%</p>
+<p><img src="/images/202208082474036891.png" alt="202208082474036891"></p>
+<p>@ref: <a href="https://stock.eastmoney.com/a/202208082474036891.html" target="_blank" rel="noopener">354只股破净 银行板块破净率最高</a></p>
+<blockquote>
+<p>个股的 <strong>破净率</strong> 就是股票价格跌破每股净资产后，每股净资产减去股票现价之后，同每股净资产的比率。如某只股票现价2.89元，每股净资产6.22元，则市净率46.45%，破净率则为53.55%。理论上的涨幅空间为3.33元</p>
+</blockquote>
+<h2 id="新增开户数"><a href="#新增开户数" class="headerlink" title="新增开户数"></a>新增开户数</h2><p>新增股票账户（左） vs 上证指数（右）<br><img src="/images/yzgptjnew.png" alt="yzgptjnew"></p>
+<p>来源：<a href="https://data.eastmoney.com/cjsj/yzgptjnew.html" target="_blank" rel="noopener">https://data.eastmoney.com/cjsj/yzgptjnew.html</a></p>
+<h2 id="两融余额（杠杆率）"><a href="#两融余额（杠杆率）" class="headerlink" title="两融余额（杠杆率）"></a>两融余额（杠杆率）</h2><p>两融余额: 还有多少杠杆资金留在场内，杠杆的使用量是一个十分有效的情绪指标，融资存量大于融券存量一个数量级(千亿vs百亿)，一般情况下只看融资余额。</p>
+<p>2019.1月、2020.7月 两次融资余额快速上涨，对应股市大涨，；<br>2022.4月、2022.10月 两次大跌后融资余额快速下降（黄色柱状值是融资买入额，非净买入额）：<br><img src="/images/IMG20221127-13.png" alt="两融余额（存量） &amp; 融资买入"></p>
+<p>对融资融券（余额）的变动部分做柱状图统计，A股在2022.4、2022.10两次触底的原因一目了然，4月份的底是爆仓形成的“杠杆底”：<br><img src="/images/IMG20221127-14.png" alt="融资融券余额变动"></p>
+<hr>
+<p>当两融余额出现连续较大幅度上涨（经验是连续3个月呈现上涨趋势，平均月涨幅接近或超过10%），具有底部的指导意义。<br>当产业资本净增持出现连续的减持减少/增持（经验是连续6~8个月超过历史合理中位数），具有底部的指导意义 @ref: <a href="https://mp.weixin.qq.com/s/d6F-S3_qJ65FcX6z2CjOYA" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/d6F-S3_qJ65FcX6z2CjOYA</a></p>
+<p><img src="/images/IMG20221127-19.png" alt=""></p>
+<p>每日融资买入额、两融余额等数据来源：<a href="http://data.10jqka.com.cn/market/rzrq/" target="_blank" rel="noopener">http://data.10jqka.com.cn/market/rzrq/</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/A股/" rel="tag"># A股</a>
+          
+            <a href="/tags/股市估值/" rel="tag"># 股市估值</a>
+          
+            <a href="/tags/股债利差/" rel="tag"># 股债利差</a>
+          
+            <a href="/tags/巴菲特指数/" rel="tag"># 巴菲特指数</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/52.Financing/F30c.美股101/" rel="next" title="F30c.美股101">
+                <i class="fa fa-chevron-left"></i> F30c.美股101
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/52.Financing/F30d1.股市择时指标-量化回测/" rel="prev" title="F30d1.股市择时指标-量化回测">
+                F30d1.股市择时指标-量化回测 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">427</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">376</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#大盘指数PE百分位"><span class="nav-text">大盘指数PE百分位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#股债利差"><span class="nav-text">股债利差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格雷厄姆指数"><span class="nav-text">格雷厄姆指数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#证券化率（GNP）-amp-巴菲特指数"><span class="nav-text">证券化率（GNP） &amp; 巴菲特指数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中国波指"><span class="nav-text">中国波指</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#破净股比例"><span class="nav-text">破净股比例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新增开户数"><span class="nav-text">新增开户数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两融余额（杠杆率）"><span class="nav-text">两融余额（杠杆率）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/52.Financing/F30d.股市择时指标/';
+          this.page.identifier = '52.Financing/F30d.股市择时指标/';
+          this.page.title = 'F30d.股市择时指标（估值、风险溢价...）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>
