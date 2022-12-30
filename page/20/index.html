@@ -278,6 +278,174 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/C-Tutorials.01.基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/11.Programming-Language/C-Tutorials.01.基础/" itemprop="url">C Tutorials-01-基础</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
+                    <span itemprop="name">11.Programming-Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,172
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><ul>
+<li>C/C++作为一种强类型语言, 一个变量被使用前必须被定义.</li>
+<li>在32位系统中基本类型的长度(字节): char(1B), short(2B), int(4B), 指针(4B) long(4B), float(4B), double(8B), long long(8B);</li>
+<li>在64位系统中基本类型的长度(字节): char(1B), short(2B), int(4B), 指针(<strong>8B</strong>) long(<strong>8B</strong>), float(4B), double(8B), long long(8B);</li>
+<li>long 和 int 范围是<code>[-2^31,2^31)</code>, 即-2147483648~2147483647.</li>
+<li>而unsigned范围是<code>[0,2^32)</code>, 即0~4294967295. 也就是说, 常规的32位整数只能够处理40亿以下的数.</li>
+<li>相比于C++98标准, C++11整型的最大改变就是多了long long<ul>
+<li>long long整型有两种：long long和unsigned long long. 在C++11中, 标准要求long long整型可以在不同平台上有不同的长度, 但至少有64位. 我们在写常数字面量时, 可以使用LL后缀（或是ll）标识一个long long类型的字面量, 而ULL（或ull、Ull、uLL）表示一个unsigned long long类型的字面量. 比如：<code>unsigned long long int ulli = -9000000000000000000ULL;</code></li>
+<li>对于有符号的, 下面的类型是等价的：long long、signed long long、long long int、signed long long int; 对于无符号的：unsigned long long和unsigned long long int也是等价的.</li>
+<li>同其他的整型一样, 要了解平台上<code>long long</code>大小的方法就是查看<code>&lt;climits&gt;</code>（或<code>&lt;limits.h&gt;</code>中的宏）. 与long long整型相关的一共有3个：LLONG_MIN、LLONG_MAX和ULLONG_MIN, 它们分别代表了平台上最小的long long值、最大的long long值, 以及最大的unsigned long long值.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;climits&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> ll_min = LLONG_MIN;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> ll_max = LLONG_MAX;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> ull_max = ULLONG_MAX;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 编译选项:g++ -std=c++11 2-2-1.cpp</span></span><br><span class="line">    <span class="comment">// 在代码清单中, 将以上3个宏打印了出来, 对于printf函数来说,</span></span><br><span class="line">    <span class="comment">// 输出有符号的long long类型变量可以用符号%lld,</span></span><br><span class="line">    <span class="comment">// 无符号的unsigned long long则可以采用%llu.</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"min of long long: %lld\n"</span>, ll_min); <span class="comment">// min of long long: -9223372036854775808</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"max of long long: %lld\n"</span>, ll_max); <span class="comment">// max of long long: 9223372036854775807</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"max of unsigned long long: %llu\n"</span>, ull_max);   <span class="comment">// max of unsigned long long: 18446744073709551615</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@ref: <a href="https://blog.csdn.net/dos5gw/article/details/6448048" target="_blank" rel="noopener">结构体对齐, 位域, 柔性数组 - DOS5GW的专栏 - CSDN博客</a></p>
+<h2 id="大小端存储"><a href="#大小端存储" class="headerlink" title="大小端存储"></a>大小端存储</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/11.Programming-Language/C-Tutorials.01.基础/#meer" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/06.ObjectiveC-Tutorials/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -382,7 +550,7 @@
 <h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/06.ObjectiveC-Tutorials/#more" rel="contents">
+            <a class="btn" href="/11.Programming-Language/06.ObjectiveC-Tutorials/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -549,7 +717,7 @@
 </ol>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/05.响应式编程/#more" rel="contents">
+            <a class="btn" href="/11.Programming-Language/05.响应式编程/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -709,7 +877,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/04.Shell-Tutorials/#more" rel="contents">
+            <a class="btn" href="/11.Programming-Language/04.Shell-Tutorials/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -868,7 +1036,7 @@
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span><span class="params">(&amp;ref)</span> </span>&#123; <span class="comment">// 新建本地引用变量$ref, 指向$bar</span></span><br><span class="line">    $ref =&amp; GLOBALS[<span class="string">'xxx'</span>]; <span class="comment">// $ref被重新指向</span></span><br><span class="line">&#125;</span><br><span class="line">f($bar);</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/03.PHP-Tutorials/#more" rel="contents">
+            <a class="btn" href="/11.Programming-Language/03.PHP-Tutorials/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1007,7 +1175,7 @@
 <p>  缮写室、毕达哥拉斯的金诗、卡尔达诺书<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>……无论迷茫曾把我带向何处，当我翻开书时，我总能找到这片<strong>居心地</strong></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/99.Journal/2022.10人生的意义II/#more" rel="contents">
+            <a class="btn" href="/99.Journal/2022.10人生的意义II/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1344,7 +1512,7 @@
 <h1 id="方法3-使用-Settings-Sync-扩展"><a href="#方法3-使用-Settings-Sync-扩展" class="headerlink" title="方法3) 使用 Settings Sync 扩展"></a>方法3) 使用 Settings Sync 扩展</h1>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【编辑器】同步VSCode配置文件/#more" rel="contents">
+            <a class="btn" href="/50.Farbox-Blog/【编辑器】同步VSCode配置文件/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1500,7 +1668,7 @@
 <h1 id="制定"><a href="#制定" class="headerlink" title="制定"></a>制定</h1>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/OKR是什么/#more" rel="contents">
+            <a class="btn" href="/51.Productivity/OKR是什么/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1665,7 +1833,7 @@
 <p><img src="/images/新裤子年鉴/disco-girl.png" alt="Disco Girl"></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/63.Culture-and-Arts/新裤子年鉴/#more" rel="contents">
+            <a class="btn" href="/63.Culture-and-Arts/新裤子年鉴/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1827,7 +1995,7 @@
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【开发环境】OSX开发环境配置/#more" rel="contents">
+            <a class="btn" href="/50.Farbox-Blog/【开发环境】OSX开发环境配置/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2140,7 +2308,7 @@
 <p>安装SUMMARY.md自动生成插件: <code>npm install -g gitbook-summary</code></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【效率工具】GitBook使用指北/#more" rel="contents">
+            <a class="btn" href="/50.Farbox-Blog/【效率工具】GitBook使用指北/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2295,7 +2463,7 @@
 <h1 id="配置Surge"><a href="#配置Surge" class="headerlink" title="配置Surge"></a>配置Surge</h1>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【效率工具】在Macbook上使用surge/#more" rel="contents">
+            <a class="btn" href="/50.Farbox-Blog/【效率工具】在Macbook上使用surge/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2464,7 +2632,7 @@
 <h2 id="Install-fluentd-td-agent-by-RPM"><a href="#Install-fluentd-td-agent-by-RPM" class="headerlink" title="Install fluentd(td-agent) by RPM"></a>Install fluentd(td-agent) by RPM</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【架构】使用fluentd,kafka,mongodb搭建日志处理系统/#more" rel="contents">
+            <a class="btn" href="/50.Farbox-Blog/【架构】使用fluentd,kafka,mongodb搭建日志处理系统/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2778,7 +2946,7 @@
 </ol>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/#more" rel="contents">
+            <a class="btn" href="/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2940,7 +3108,7 @@
 <p>但也有一些Bug和功能上的不完备, 这也是让我最终决定暂不购买<a href="http://markeditor.farbox.com/" target="_blank" rel="noopener">MarkEditor</a>付费版的原因:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【Markdown】MarkEditor使用体验/#more" rel="contents">
+            <a class="btn" href="/50.Farbox-Blog/【Markdown】MarkEditor使用体验/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3099,7 +3267,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/关于闪光灯你应该知道的一些事/#more" rel="contents">
+            <a class="btn" href="/53.Photograph/关于闪光灯你应该知道的一些事/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3258,163 +3426,7 @@
 <p>注意, 根据情况替换上面的<code>X:\Dropbox\SublimeText3</code>路径;<br>第三行<code>mv</code>命令只能在相同盘符的目录之间移动, 如果你的Dropbox同步目录不是在C盘, 手动打开<code>%AppData%\Sublime Text 3\Packages\\</code>, 把下面的User目录移动到Dropbox同步目录中.</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【编辑器】在Windows和OSX之间同步Sublime配置文件/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/摄影笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/53.Photograph/摄影笔记/" itemprop="url">摄影笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,614
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><h2 id="色调"><a href="#色调" class="headerlink" title="色调"></a>色调</h2><ul>
-<li><a href="http://vod.sjtu.edu.cn/help/Article_Show.asp?ArticleID=1622" target="_blank" rel="noopener">色彩系列教程(2)：色系和色调</a><br>色调指的是一幅画中画面色彩的总体倾向, 色调指的是一幅画中画面色彩的总体倾向.<br>比如这样的画面: 不同颜色的物体或被笼罩在一片金色的阳光之中, 或被笼罩在一片轻纱薄雾似的、淡蓝色的月色之中;或被秋天迷人的金黄色所笼罩; 或被统一在冬季银白色的世界之中.<br>这种在不同颜色的物体上, 笼罩着某一种色彩, 使不同颜色的物体都带有同一色彩倾向, 这样的色彩现象就是色调.</li>
-</ul>
-<h2 id="色温"><a href="#色温" class="headerlink" title="色温"></a>色温</h2><h3 id="自然界的色温"><a href="#自然界的色温" class="headerlink" title="自然界的色温"></a>自然界的色温</h3>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/摄影笔记/#more" rel="contents">
+            <a class="btn" href="/50.Farbox-Blog/【编辑器】在Windows和OSX之间同步Sublime配置文件/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3506,7 +3518,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">426</span>
+                  <span class="site-state-item-count">427</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

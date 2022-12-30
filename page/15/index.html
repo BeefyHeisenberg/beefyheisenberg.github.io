@@ -278,6 +278,178 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-03集群-Sharding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/Redis-03集群-Sharding/" itemprop="url">Redis-03集群-Sharding</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  709
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="分片方案（Redis-Sharding）"><a href="#分片方案（Redis-Sharding）" class="headerlink" title="分片方案（Redis Sharding）"></a>分片方案（Redis Sharding）</h2><p>Redis Sharding是一种客户端Sharding方式。<br>Java redis客户端驱动<code>jedis</code>，已支持Redis Sharding功能，即ShardedJedis以及结合缓存池的ShardedJedisPool, jedis的特点:</p>
+<ul>
+<li>采用一致性哈希算法(consistent hashing)，将key和节点name同时hashing，采用的算法是MURMUR_HASH。采用一致性哈希而不是采用简单类似哈希求模映射的主要原因是当增加或减少节点时，不会产生由于重新匹配造成的rehashing。一致性哈希只影响相邻节点key分配，影响量小。</li>
+<li>ShardedJedis支持keyTagPattern模式，即抽取key的一部分keyTag做sharding，这样通过合理命名key，可以将一组相关联的key放入同一个Redis节点，这在避免跨节点访问相关数据时很重要。</li>
+</ul>
+<p>➤ Redis Sharding 方案:</p>
+<ul>
+<li>通过客户端进行Sharding, 在Client侧做Sharding,  比如 Jedis 提供的 ShardedJedis:</li>
+<li>ShardedJedis特性:<ul>
+<li>使用虚拟节点, 使Key在Redis节点的分布更均匀, 如果一个节点挂掉, 不再是相邻的节点受影响. 每个实体节点默认有160个虚拟节点, ShardedJedis还支持权重, 虚拟节点个数 = <code>节点权重 x 160</code></li>
+<li>ShardedJedis使用了<code>MurMur Hash</code>做Hash函数, <code>MurMur Hash</code>相比较一般Hash算法, 对于规律性较强的Key随机分布的表现更好.</li>
+<li>支持<code>keyTagPattern</code>模式, 只抽取Key的一部分做Hash, 通过合理命名Key, 可以将相关的Key放入同一个Redis节点.</li>
+</ul>
+</li>
+<li>扩容问题 – presharding:<ul>
+<li>需要扩容时, 实际是把小的Redis实例数据复制到大的Redis实例, 复制完成后, 大的Redis实例替换小的Redis实例;</li>
+<li>需要扩容的Redis设为主, 新Redis设置为从, 完成数据同步后, 原实例的Shard给新实例用</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/Redis-03集群-Sharding/#meer" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-03集群-Cluster/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -398,7 +570,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-03集群-Cluster/#more" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-03集群-Cluster/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -556,7 +728,7 @@
 <p>运行sentinel有两种方式:<br></p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">redis-sentinel /path/to/sentinel.conf</span><br><span class="line">redis-server /path/to/sentinel.conf --sentinel</span><br></pre></td></tr></table></figure><p></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-03Sentinel/#more" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-03Sentinel/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -720,7 +892,7 @@
 <p>➤ Redis实现Raft协议:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-03Raft实现/#more" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-03Raft实现/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -881,7 +1053,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-02部署和运维/#more" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-02部署和运维/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1039,7 +1211,7 @@
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-01数据结构/#more" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-01数据结构/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1199,7 +1371,7 @@
 <p>protocol buffer 生成的函数, 除了getter和setter之外, 还有: </p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/RPC.06-序列化-ProtoBuf/#more" rel="contents">
+            <a class="btn" href="/31.Backend/RPC.06-序列化-ProtoBuf/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1679,7 +1851,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/RPC.03-框架设计概要/#more" rel="contents">
+            <a class="btn" href="/31.Backend/RPC.03-框架设计概要/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1835,7 +2007,7 @@
 <p>下面先看看RMI的调用流程:<br><img src="/images/20220314231644.png" alt="../_images/20220314231644.png"></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/RPC.02-RMI/#more" rel="contents">
+            <a class="btn" href="/31.Backend/RPC.02-RMI/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1995,7 +2167,7 @@
 <p>protocol buffer 生成的函数, 除了getter和setter之外, 还有:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/RPC.02-ProtoBuf/#more" rel="contents">
+            <a class="btn" href="/31.Backend/RPC.02-ProtoBuf/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2162,7 +2334,7 @@
 <p>限于当时的技术发展水平，广大软件设计与开发人员对于SOA和服务治理的技术认知还主要停留在Web Service和ESB总线等技术和规范上，并没有真正在软件开发中得以充分落地。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/RPC.01-浅谈服务治理-and-微服务(zz)/#more" rel="contents">
+            <a class="btn" href="/31.Backend/RPC.01-浅谈服务治理-and-微服务(zz)/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2320,7 +2492,7 @@
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/RPC.01-从SOA到微服务/#more" rel="contents">
+            <a class="btn" href="/31.Backend/RPC.01-从SOA到微服务/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2489,7 +2661,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/22.Network-Protocol/网络协议-TCP/#more" rel="contents">
+            <a class="btn" href="/22.Network-Protocol/网络协议-TCP/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2657,7 +2829,7 @@
 <p>➤ 7,5,4层网络模型的区别与联系:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/22.Network-Protocol/网络协议-OSI七层模型/#more" rel="contents">
+            <a class="btn" href="/22.Network-Protocol/网络协议-OSI七层模型/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2995,7 +3167,7 @@
 <h2 id="URL编码-amp-解码"><a href="#URL编码-amp-解码" class="headerlink" title="URL编码 &amp; 解码"></a>URL编码 &amp; 解码</h2><p>URL中的GET参数和POST内容，除字母数字。  常用编程符号(不含双引)之外，都要Encode处理，空格被转换为<code>+</code>号，<code>+</code>号被转换为<code>%2b</code><br>Encode处理过的POST内容，Http头会增加<code>content-type: application/x-www-form-urlencoded</code>，参考Content-Type一节。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/22.Network-Protocol/网络协议-HTTP/#more" rel="contents">
+            <a class="btn" href="/22.Network-Protocol/网络协议-HTTP/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3163,7 +3335,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/22.Network-Protocol/Tcpdump/#more" rel="contents">
+            <a class="btn" href="/22.Network-Protocol/Tcpdump/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3318,164 +3490,7 @@
 <p>内存布局从高地址到低地址:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/RAM.02.Linux进程内存布局/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/RAM.01.内存寻址/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/RAM.01.内存寻址/" itemprop="url">RAM.01.内存寻址</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,409
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="内存寻址"><a href="#内存寻址" class="headerlink" title="内存寻址"></a>内存寻址</h1><p>内存寻址(Memory Addressing):<br>分段机制把<code>逻辑地址</code>转换为<code>线性地址</code>, 分页机制进一步把该<code>线性地址</code>再转换为<code>物理地址</code>.</p>
-<h2 id="段式内存管理"><a href="#段式内存管理" class="headerlink" title="段式内存管理"></a>段式内存管理</h2><blockquote>
-<p>内存可寻址范围总是跟”地址总线宽度”和”寄存器宽度”相关</p>
-</blockquote>
-<h3 id="实模式的诞生（16位处理器及寻址）"><a href="#实模式的诞生（16位处理器及寻址）" class="headerlink" title="实模式的诞生（16位处理器及寻址）"></a>实模式的诞生（16位处理器及寻址）</h3>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/RAM.01.内存寻址/#more" rel="contents">
+            <a class="btn" href="/21.Operating-System/RAM.02.Linux进程内存布局/#meer" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3567,7 +3582,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">426</span>
+                  <span class="site-state-item-count">427</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
