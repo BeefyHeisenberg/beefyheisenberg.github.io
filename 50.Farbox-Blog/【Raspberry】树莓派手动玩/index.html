@@ -125,14 +125,14 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="半年前败了一个树莓派，因为工作很忙所以没时间折腾一下。最近换工作，确认了offer，赋闲在家，也终于有空摆弄一下树莓派。 （一）启用SSH我的环境为：Thinkpad（Fedora）， TP-Link无线路由，树莓派（debian）一只。树莓派通过网线连接到无线路由器和电脑处于同一网段，没有显示器的情况下如何确定树莓派的IP呢？ 这时候nmap登场： nmap -v -sP 192.168.1.1">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/2014-05-09/ssh-login.png">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/2014-05-09/vnc-viewer-input-ip.png">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/2014-05-09/raspiberry-vnc.png">
-<meta property="og:updated_time" content="2023-01-02T16:57:13.429Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2014/ssh-login.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2014/vnc-viewer-input-ip.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2014/raspiberry-vnc.png">
+<meta property="og:updated_time" content="2023-01-02T17:41:28.416Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="树莓派手动玩(开启SSH,VNC)">
 <meta name="twitter:description" content="半年前败了一个树莓派，因为工作很忙所以没时间折腾一下。最近换工作，确认了offer，赋闲在家，也终于有空摆弄一下树莓派。 （一）启用SSH我的环境为：Thinkpad（Fedora）， TP-Link无线路由，树莓派（debian）一只。树莓派通过网线连接到无线路由器和电脑处于同一网段，没有显示器的情况下如何确定树莓派的IP呢？ 这时候nmap登场： nmap -v -sP 192.168.1.1">
-<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/2014-05-09/ssh-login.png">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/2014/ssh-login.png">
 
 
 
@@ -387,7 +387,7 @@
 <p><code>nmap -v -sP 192.168.1.1/10</code>稍等片刻，然后可以看到Raspberry Pi的设备。</p>
 <p>或者用手机上的一款应用<a href="https://play.google.com/store/apps/details?id=com.overlook.android.fing&amp;hl=zh_CN" target="_blank" rel="noopener">Fing</a>也可以扫描本网段的端口。</p>
 <p>树莓派默认安装了SSH服务，SSH登录的方式为：<code>ssh pi@树莓派ip地址</code>，默认密码为：<em>raspberry</em></p>
-<p>为了安全, 推荐关闭root用户ssh登录, 方法为修改”/etc/ssh/sshd_config”, 将 <code>PermitRootLogin yes</code> 改为 <code>PermitRootLogin no</code><br>重启ssh服务: <code>service ssh restart</code><br><img src="/images/2014-05-09/ssh-login.png" alt="SSH登录"></p>
+<p>为了安全, 推荐关闭root用户ssh登录, 方法为修改”/etc/ssh/sshd_config”, 将 <code>PermitRootLogin yes</code> 改为 <code>PermitRootLogin no</code><br>重启ssh服务: <code>service ssh restart</code><br><img src="/images/2014/ssh-login.png" alt="SSH登录"></p>
 <h1 id="（二）树莓派初始化设置并安装VNC"><a href="#（二）树莓派初始化设置并安装VNC" class="headerlink" title="（二）树莓派初始化设置并安装VNC"></a>（二）树莓派初始化设置并安装VNC</h1><ul>
 <li>SSH上去之后第一件事就是更新debian: <code>sudo apt-get update</code>, 升级完成后重启一下;</li>
 <li><p>在SSH终端输入<code>sudo raspi-config</code>, 这里需要打开几个选项:</p>
@@ -415,12 +415,12 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo chmod +x /etc/init.d/tightvncserver</span><br><span class="line">sudo service tightvncserver stop</span><br><span class="line">sudo service tightvncserver start</span><br></pre></td></tr></table></figure>
 <p>安装chkconfig， 并将vnc服务设为开机启动：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get install chkconfig</span><br><span class="line">chkconfig --add tightvncserver</span><br><span class="line">chkconfig tightvncserver on</span><br></pre></td></tr></table></figure>
-<h2 id="2-2-PC端连接树莓派"><a href="#2-2-PC端连接树莓派" class="headerlink" title="2.2 PC端连接树莓派"></a>2.2 PC端连接树莓派</h2><p>打开VNC Viewer， 输入“IP地址:1”，（这里冒号后面的1是指终端号，如果不填则是终端0）然后回车输入密码。<br><img src="/images/2014-05-09/vnc-viewer-input-ip.png" alt="输入IP：终端号"></p>
+<h2 id="2-2-PC端连接树莓派"><a href="#2-2-PC端连接树莓派" class="headerlink" title="2.2 PC端连接树莓派"></a>2.2 PC端连接树莓派</h2><p>打开VNC Viewer， 输入“IP地址:1”，（这里冒号后面的1是指终端号，如果不填则是终端0）然后回车输入密码。<br><img src="/images/2014/vnc-viewer-input-ip.png" alt="输入IP：终端号"></p>
 <p>注：如果使用终端0，可能会导致下面的错误</p>
 <blockquote>
 <p>unable connect to socket connection refused 111</p>
 </blockquote>
-<p><img src="/images/2014-05-09/raspiberry-vnc.png" alt="VNC-Viewer"></p>
+<p><img src="/images/2014/raspiberry-vnc.png" alt="VNC-Viewer"></p>
 <h1 id="（三）摄像头"><a href="#（三）摄像头" class="headerlink" title="（三）摄像头"></a>（三）摄像头</h1><p>树莓派支持两种摄像头，官方的raspberry camera和任何符合UVC标准的USB摄像头。如果要支持摄像头，需要在<code>sudo raspi-config</code>时选择”enable camera”.</p>
 <p>测试摄像头:</p>
 <ul>
