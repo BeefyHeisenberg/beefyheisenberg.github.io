@@ -117,21 +117,21 @@
 
 
 
-<meta name="description" content="RMI早期JDK1.2引入的RMI框架图: （👉🏻[[../@project/Java-RMI]]） RPC通用框架通用RPC框架图:  serviceClient：这个模块主要是封装服务端对外提供的API，让客户端像使用本地API接口一样调用远程服务。一般使用动态代理机制，当客户端调用api的方法时，serviceClient会走代理逻辑，去远程服务器请求真正的执行方法。类似RMI的stub">
+<meta name="description" content="RMI早期JDK1.2引入的RMI框架图: （👉🏻[[../@project/Java-RMI]]） RPC通用框架通用RPC框架图:">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RPC.03-框架设计概要">
 <meta property="og:url" content="https://beefyheisenberg.github.io/31.Backend/RPC.03-框架设计概要/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="RMI早期JDK1.2引入的RMI框架图: （👉🏻[[../@project/Java-RMI]]） RPC通用框架通用RPC框架图:  serviceClient：这个模块主要是封装服务端对外提供的API，让客户端像使用本地API接口一样调用远程服务。一般使用动态代理机制，当客户端调用api的方法时，serviceClient会走代理逻辑，去远程服务器请求真正的执行方法。类似RMI的stub">
+<meta property="og:description" content="RMI早期JDK1.2引入的RMI框架图: （👉🏻[[../@project/Java-RMI]]） RPC通用框架通用RPC框架图:">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/20220315092643.png">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/20220316000934.png">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/20220316001058.png">
-<meta property="og:updated_time" content="2022-12-31T03:59:21.965Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2022/20220315092643.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2022/20220316000934.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2022/20220316001058.png">
+<meta property="og:updated_time" content="2023-01-02T15:34:25.887Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RPC.03-框架设计概要">
-<meta name="twitter:description" content="RMI早期JDK1.2引入的RMI框架图: （👉🏻[[../@project/Java-RMI]]） RPC通用框架通用RPC框架图:  serviceClient：这个模块主要是封装服务端对外提供的API，让客户端像使用本地API接口一样调用远程服务。一般使用动态代理机制，当客户端调用api的方法时，serviceClient会走代理逻辑，去远程服务器请求真正的执行方法。类似RMI的stub">
-<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/20220315092643.png">
+<meta name="twitter:description" content="RMI早期JDK1.2引入的RMI框架图: （👉🏻[[../@project/Java-RMI]]） RPC通用框架通用RPC框架图:">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/2022/20220315092643.png">
 
 
 
@@ -382,7 +382,8 @@
 
       
         <h2 id="RMI"><a href="#RMI" class="headerlink" title="RMI"></a>RMI</h2><p>早期JDK1.2引入的RMI框架图: （👉🏻[[../@project/Java-RMI]]）</p>
-<h2 id="RPC通用框架"><a href="#RPC通用框架" class="headerlink" title="RPC通用框架"></a>RPC通用框架</h2><p>通用RPC框架图:<br><img src="/images/20220315092643.png" alt="../_images/20220315092643.png"></p>
+<h2 id="RPC通用框架"><a href="#RPC通用框架" class="headerlink" title="RPC通用框架"></a>RPC通用框架</h2><p>通用RPC框架图:</p>
+<p><img src="/images/2022/20220315092643.png" alt="../_images/2022/20220315092643.png"></p>
 <ul>
 <li><p>serviceClient：这个模块主要是封装服务端对外提供的API，让客户端像使用本地API接口一样调用远程服务。一般使用动态代理机制，当客户端调用api的方法时，serviceClient会走代理逻辑，去远程服务器请求真正的执行方法。类似RMI的stub模块。</p>
 </li>
@@ -402,12 +403,12 @@
 <h2 id="RPC技术要点"><a href="#RPC技术要点" class="headerlink" title="RPC技术要点"></a>RPC技术要点</h2><ul>
 <li>序列化:<ul>
 <li>JDK内置序列化 👉🏻 [[../12.Java/Java-Tutorials.06.序列化]]</li>
-<li>Hessian: 在字节流里为每个field存储了类型信息, 可以不依赖serialVersionUID 进行版本匹配(Java类的UID被更改, 反序列化也没有问题) </li>
+<li>Hessian: 在字节流里为每个field存储了类型信息, 可以不依赖serialVersionUID 进行版本匹配(Java类的UID被更改, 反序列化也没有问题)</li>
 <li>Kryo: “Kryo是一个快速高效的Java对象序列化框架，其在java的序列化上的性能指标甚至优于google著名的序列化框架protobuf，已经在Twitter、Groupon、Yahoo以及多个著名开源项目（如Hive、Storm）中广泛的使用”</li>
-<li>Json: </li>
+<li>Json:</li>
 </ul>
 </li>
-<li><p>编解码: 注意区分序列化的不同, RPC框架基本上都是基于Socket来实现通信层功能，但是在网络传输的数据由于网络链路和协议的问题，会出现半包、分包和粘包情况。这样就需要设计编解码协议头来解码网络流。比如dubbo给出的处理流程，可以清晰的看出序列化和编码之间的区别,  参考[[#Dubbo协议头]]<br>  <img src="/images/20220316000934.png" alt="../_images/20220316000934.png"></p>
+<li><p>编解码: 注意区分序列化的不同, RPC框架基本上都是基于Socket来实现通信层功能，但是在网络传输的数据由于网络链路和协议的问题，会出现半包、分包和粘包情况。这样就需要设计编解码协议头来解码网络流。比如dubbo给出的处理流程，可以清晰的看出序列化和编码之间的区别,  参考[[#Dubbo协议头]]<br>  <img src="/images/2022/20220316000934.png" alt="../_images/2022/20220316000934.png"></p>
 </li>
 <li><p>负载均衡:</p>
 <ul>
@@ -416,7 +417,7 @@
 <li>Client侧负载均衡算法: 👉🏻 <a href="/31.Backend/SystemDesign-负载均衡-算法/" title="SystemDesign-负载均衡-算法">SystemDesign-负载均衡-算法</a></li>
 </ul>
 </li>
-<li>超时管理: <ul>
+<li>超时管理:<ul>
 <li>client端的超时处理, 例如 future.get()</li>
 <li>server端的超时处理, 处理完后, 设定的超时参数比较, 如果发现已经超时则可以直接给client返回 err_code, 省去了序列化的时间</li>
 </ul>
@@ -432,7 +433,7 @@
 </li>
 <li>IO模型: 参考 [[../12.Java/Java-Tutorials.09.NIO##Reactor三种常见线程模型]]</li>
 </ul>
-<h2 id="Dubbo协议头"><a href="#Dubbo协议头" class="headerlink" title="Dubbo协议头"></a>Dubbo协议头</h2><p><img src="/images/20220316001058.png" alt="../_images/20220316001058.png"></p>
+<h2 id="Dubbo协议头"><a href="#Dubbo协议头" class="headerlink" title="Dubbo协议头"></a>Dubbo协议头</h2><p><img src="/images/2022/20220316001058.png" alt="../_images/2022/20220316001058.png"></p>
 <ul>
 <li>协议头固定长度16个字节</li>
 <li>Magic:  共2字节 <code>static final short MAGIC = (short) 0xdabb</code></li>
@@ -573,7 +574,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">427</span>
+                  <span class="site-state-item-count">428</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -683,7 +684,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

@@ -124,13 +124,13 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="tldr:  客户端上报调用服务端的结果(成功,失败,超时..) 服务端(北极星)为每个提供服务的节点, 维护一个熔断器 熔断器的状态(关闭, 打开)是根据滑动窗口内的成功率计算的  很多时候，服务端（provider）本身并不能检测到自身的异常。如主调方（consumer）调用时不断收到错误返回，但服务端仍旧保持工作状态中。这种情况下应该暂时屏蔽掉此实例，以减少错误返回。由此引入了故障熔断功能。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/20220416211631.png">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/20220416212133.png">
-<meta property="og:updated_time" content="2022-12-31T03:59:22.112Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2022/20220416211631.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2022/20220416212133.png">
+<meta property="og:updated_time" content="2023-01-02T15:34:25.979Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SystemDesign-熔断器-Polaris">
 <meta name="twitter:description" content="tldr:  客户端上报调用服务端的结果(成功,失败,超时..) 服务端(北极星)为每个提供服务的节点, 维护一个熔断器 熔断器的状态(关闭, 打开)是根据滑动窗口内的成功率计算的  很多时候，服务端（provider）本身并不能检测到自身的异常。如主调方（consumer）调用时不断收到错误返回，但服务端仍旧保持工作状态中。这种情况下应该暂时屏蔽掉此实例，以减少错误返回。由此引入了故障熔断功能。">
-<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/20220416211631.png">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/2022/20220416211631.png">
 
 
 
@@ -389,7 +389,7 @@
 <p>很多时候，服务端（provider）本身并不能检测到自身的异常。如主调方（consumer）调用时不断收到错误返回，但服务端仍旧保持工作状态中。这种情况下应该暂时屏蔽掉此实例，以减少错误返回。由此引入了故障熔断功能。</p>
 <p>故障熔断功能主要是为了屏蔽错误实例，防止错误扩散影响整体服务质量。北极星提供的是故障数目的统计与处理，因此强依赖于主调方对调用结果的数据上报。熔断器状态设计参考Martin Fowler提出的熔断器模型，将每一个节点实例与一个熔断器绑定，熔断器状态如下图所示。</p>
 <p>@ref: <a href="https://martinfowler.com/bliki/CircuitBreaker.html" target="_blank" rel="noopener">https://martinfowler.com/bliki/CircuitBreaker.html</a></p>
-<p><img src="/images/20220416211631.png" alt=""></p>
+<p><img src="/images/2022/20220416211631.png" alt=""></p>
 <p>熔断器必定处于以下三种状态之一：</p>
 <ul>
 <li>Closed状态：节点正常工作下熔断器的状态，熔断器处于关闭中，不产生任何效果。</li>
@@ -397,7 +397,7 @@
 <li>Half Open状态：中间状态，当熔断器Open一段时间后（主动打开隔离选项的除外），北极星会将熔断器设置为半开状态，处理少量的主调方请求，如果正常工作，则后续转变成Close状态，如果失败，则会依旧将其转变为Open状态，然后重复此过程。</li>
 </ul>
 <p>滑桶算法:<br>算法维持过去一段时间内的服务调用结果，根据每个时间单元（图示桶单元）统计四项数据：Success，Failure，Timeout，Rejection。将此段时间看作一个滑动窗口，窗口的大小是固定的，因此当一个新的时间单元被创建时，最旧的那个时间单元即被废弃。北极星统计每个窗口的调用失败率，超时量等信息，据此决定熔断器状态。</p>
-<p><img src="/images/20220416212133.png" alt="一个有10个单元时间的滑动窗口"></p>
+<p><img src="/images/2022/20220416212133.png" alt="一个有10个单元时间的滑动窗口"></p>
 
       
     </div>
@@ -516,7 +516,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">427</span>
+                  <span class="site-state-item-count">428</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -610,7 +610,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2022</span>
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
