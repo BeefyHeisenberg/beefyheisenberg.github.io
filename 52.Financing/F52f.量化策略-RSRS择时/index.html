@@ -104,7 +104,7 @@
 
 
 
-  <meta name="keywords" content="Hello, World" />
+  <meta name="keywords" content="量化交易,交易策略,阻力位,支撑位," />
 
 
 
@@ -117,17 +117,26 @@
 
 
 
-<meta name="description" content="RSRS（阻力支撑相对强度）择时从最高价与最低价的形成机制出发，每日的最高价与最低价就是一种阻力位与支撑位，它是当日全体市场参与者的交易行为所认可的阻力与支撑。 $$ High = a*Low + b $$  取前N日的最高价序列与最低价序列 将两列数据按公式的模型进行OLS线性回归 取前M日的斜率时间序列，计算当日斜率的标准分 将z与拟合方程的决定系数相乘，作为当日RSRS指标值(与决定系数相乘">
+<meta name="description" content="阻力支撑相关概念常见的确定阻力支撑位的方法有，布林带上下轨突破策略（突破上轨建仓买入，突破下轨卖出平仓）和均线策略（如超过20日均线建仓买入，低于20日均线卖出平仓）。然而，布林带突破策略在震荡期间出现了持续亏损，均线策略交易交易成本巨大，且在震荡期间的回撤很大。 阻力位 &amp;amp; 支撑位概念参考 F41a.K线和技术分析 RSRS（阻力支撑相对强度）择时RSRS概念来自光大证券研报《基于阻力支">
+<meta name="keywords" content="量化交易,交易策略,阻力位,支撑位">
 <meta property="og:type" content="article">
 <meta property="og:title" content="F52f.量化策略-RSRS择时">
 <meta property="og:url" content="https://beefyheisenberg.github.io/52.Financing/F52f.量化策略-RSRS择时/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="RSRS（阻力支撑相对强度）择时从最高价与最低价的形成机制出发，每日的最高价与最低价就是一种阻力位与支撑位，它是当日全体市场参与者的交易行为所认可的阻力与支撑。 $$ High = a*Low + b $$  取前N日的最高价序列与最低价序列 将两列数据按公式的模型进行OLS线性回归 取前M日的斜率时间序列，计算当日斜率的标准分 将z与拟合方程的决定系数相乘，作为当日RSRS指标值(与决定系数相乘">
+<meta property="og:description" content="阻力支撑相关概念常见的确定阻力支撑位的方法有，布林带上下轨突破策略（突破上轨建仓买入，突破下轨卖出平仓）和均线策略（如超过20日均线建仓买入，低于20日均线卖出平仓）。然而，布林带突破策略在震荡期间出现了持续亏损，均线策略交易交易成本巨大，且在震荡期间的回撤很大。 阻力位 &amp;amp; 支撑位概念参考 F41a.K线和技术分析 RSRS（阻力支撑相对强度）择时RSRS概念来自光大证券研报《基于阻力支">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-01-05T20:44:03.173Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2023-01-11.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2023-01-11-1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2023-01-11-2.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2023-01-11-3.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2023-01-14.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2023-01-14-1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/2023-01-14-2.png">
+<meta property="og:updated_time" content="2023-01-14T16:36:41.638Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="F52f.量化策略-RSRS择时">
-<meta name="twitter:description" content="RSRS（阻力支撑相对强度）择时从最高价与最低价的形成机制出发，每日的最高价与最低价就是一种阻力位与支撑位，它是当日全体市场参与者的交易行为所认可的阻力与支撑。 $$ High = a*Low + b $$  取前N日的最高价序列与最低价序列 将两列数据按公式的模型进行OLS线性回归 取前M日的斜率时间序列，计算当日斜率的标准分 将z与拟合方程的决定系数相乘，作为当日RSRS指标值(与决定系数相乘">
+<meta name="twitter:description" content="阻力支撑相关概念常见的确定阻力支撑位的方法有，布林带上下轨突破策略（突破上轨建仓买入，突破下轨卖出平仓）和均线策略（如超过20日均线建仓买入，低于20日均线卖出平仓）。然而，布林带突破策略在震荡期间出现了持续亏损，均线策略交易交易成本巨大，且在震荡期间的回撤很大。 阻力位 &amp;amp; 支撑位概念参考 F41a.K线和技术分析 RSRS（阻力支撑相对强度）择时RSRS概念来自光大证券研报《基于阻力支">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/2023-01-11.png">
 
 
 
@@ -352,7 +361,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  560
+                  1,730
                 </span>
               
 
@@ -377,45 +386,98 @@
       
 
       
-        <h2 id="RSRS（阻力支撑相对强度）择时"><a href="#RSRS（阻力支撑相对强度）择时" class="headerlink" title="RSRS（阻力支撑相对强度）择时"></a>RSRS（阻力支撑相对强度）择时</h2><p>从最高价与最低价的形成机制出发，每日的最高价与最低价就是一种阻力位与支撑位，它是当日全体市场参与者的交易行为所认可的阻力与支撑。</p>
-<p>$$ High = a*Low + b $$</p>
-<ol>
-<li>取前N日的最高价序列与最低价序列</li>
-<li>将两列数据按公式的模型进行OLS线性回归</li>
-<li>取前M日的斜率时间序列，计算当日斜率的标准分</li>
-<li>将z与拟合方程的决定系数相乘，作为当日RSRS指标值(与决定系数相乘可以降低拟合效果较差的斜率值对指标有效性的影响)</li>
-<li>若RSRS指标上穿阈值S，则开仓买入</li>
-</ol>
-<p>回测结论1：</p>
+        <h2 id="阻力支撑相关概念"><a href="#阻力支撑相关概念" class="headerlink" title="阻力支撑相关概念"></a>阻力支撑相关概念</h2><p>常见的确定阻力支撑位的方法有，布林带上下轨突破策略（突破上轨建仓买入，突破下轨卖出平仓）和均线策略（如超过20日均线建仓买入，低于20日均线卖出平仓）。然而，布林带突破策略在震荡期间出现了持续亏损，均线策略交易交易成本巨大，且在震荡期间的回撤很大。</p>
+<p>阻力位 &amp; 支撑位概念参考 <a href="/52.Financing/F41a.K线和技术分析/" title="F41a.K线和技术分析">F41a.K线和技术分析</a></p>
+<h2 id="RSRS（阻力支撑相对强度）择时"><a href="#RSRS（阻力支撑相对强度）择时" class="headerlink" title="RSRS（阻力支撑相对强度）择时"></a>RSRS（阻力支撑相对强度）择时</h2><p>RSRS概念来自光大证券研报《基于阻力支撑相对强度(RSRS)的市场择时》，</p>
+<p>RSRS即“阻力支撑相对强度”(Resistance Support Relative Strength,)是另一种阻力位与支撑位的运用方式，<strong>它不再把阻力位与支撑位当做一个定值，而是看做一个变量</strong>。</p>
+<p>从最高价与最低价的形成机制出发，每日的最高价与最低价就是一种阻力位与支撑位，它是当日全体市场参与者的交易行为所认可的阻力与支撑。一个很自然的想法是建立最高价和最低价的线性回归，并计算出斜率。即：</p>
+<p>$$ High = β*Low + α $$</p>
+<p>其中，β即斜率，近似等于一段时间内的<code>最高价/最低价</code>：</p>
 <ul>
-<li>参数M的敏感性相对较低</li>
-<li>阈值S属于0.6至0.7处较好（日频策略）</li>
-<li>RSRS指标择时频率越高，收益越好:从策略净值来看，5分钟线&gt;30分钟线&gt;小时线&gt;日线，但5分钟与30分钟差异较小，且主要得益于5分钟线择时在今年的表现。</li>
-<li>高频收益占优，但胜率、最大回撤均变差</li>
-<li>按行情特征选择合适的择时频率:<ul>
-<li>趋势行情下30分钟线择时效果最佳</li>
-<li>震荡行情则日线择时效果最佳</li>
+<li>当斜率β值很大时，支撑强度大于阻力强度。在牛市中阻力渐小，上方上涨空间大；在熊市中支撑渐强，下跌势头欲止。</li>
+<li>当斜率β值很小时，阻力强度大于支撑强度。在牛市中阻力渐强，上涨势头渐止；在熊市中支撑渐送，下方下跌空间渐大。</li>
+</ul>
+<p>我们按照不同市场状态分类来说明支撑阻力相对强度的应用逻辑：</p>
+<ol>
+<li>市场在上涨牛市中：<ul>
+<li>a.如果支撑明显强于阻力，牛市持续，价格加速上涨；</li>
+<li>b.如果阻力明显强于支撑，牛市可能即将结束，价格见顶；</li>
 </ul>
 </li>
+<li>市场在震荡中：<ul>
+<li>c.如果支撑明显强于阻力，牛市可能即将启动；</li>
+<li>d.如果阻力明显强于支撑，熊市可能即将启动；</li>
 </ul>
-<p>行业轮动：</p>
-<ul>
-<li>标的：一级行业对应的ETF</li>
-<li>Rank：N=回归使用的样本数，M=Z Score使用的历史长度，K=持仓行业数，D=调仓周期</li>
-<li>M=300，N在45-70之间时，策略整体表现更为出色</li>
-<li>K,D最佳组合：（3,0）</li>
+</li>
+<li>市场在下跌熊市中：<ul>
+<li>e.如果阻力明显强于支撑，熊市持续，价格加速下跌；</li>
+<li>f.如果支撑明显强于阻力，熊市可能即将结束，价格见底；</li>
 </ul>
-<p>➤ 参考：</p>
+</li>
+</ol>
+<p>如下4张图，对应上面的 a、b、e、f 四种情况：</p>
+<p>情形a，牛市，High和Low的拟合曲线的斜率都是正值，High/Low（斜率）逐步增大，后续上涨空间大：<br><img src="/images/2023-01-11.png" alt=""></p>
+<p>情形b，High/Low（斜率）逐步减小，上涨即将见顶：<br><img src="/images/2023-01-11-1.png" alt=""></p>
+<p>情形e，High和Low的拟合曲线的斜率都是负值，High/Low（斜率）逐步减小，后续加速下跌：<br><img src="/images/2023-01-11-2.png" alt=""><br>情形f，High/Low（斜率）逐步增加，下跌即将结束：<br><img src="/images/2023-01-11-3.png" alt=""></p>
+<h2 id="RSRS的概念-amp-技术分析的比较"><a href="#RSRS的概念-amp-技术分析的比较" class="headerlink" title="RSRS的概念 &amp; 技术分析的比较"></a>RSRS的概念 &amp; 技术分析的比较</h2><p>从上面4种情形，最高价&amp;最低价的示意图，我们发现了一些端倪，RSRS和老派的画线技术分析中提到的一些“收敛/发散形态，上升楔形/下跌楔形”有相似之处：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">RSRS描述</th>
+<th style="text-align:left">对应技术分析中的形态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">牛市中，斜率增加，加速上涨（情况a）</td>
+<td style="text-align:left">上涨过程中的发散形态</td>
+</tr>
+<tr>
+<td style="text-align:left">牛市中，斜率减少，上涨见顶（情况b）</td>
+<td style="text-align:left">上涨过程中，走出的向上的楔形</td>
+</tr>
+<tr>
+<td style="text-align:left">熊市中，斜率减少，加速下跌（情况e）</td>
+<td style="text-align:left">下跌过程中的发散形态</td>
+</tr>
+<tr>
+<td style="text-align:left">熊市中，斜率增加，下跌见底（情况f）</td>
+<td style="text-align:left">下跌过程中，走出的向下的楔形</td>
+</tr>
+</tbody>
+</table>
+<p>一个是严谨的量化计算，一个是传统的画线分析，虽然二者在理念上有区别（量化交易更注重“机器量化”，传统的技术分析更注重基于经验的画线），但在某些方面是相通的。</p>
+<blockquote>
+<p>表格右侧出现的技术形态，参考 <a href="/52.Financing/F41a.K线和技术分析/" title="F41a.K线和技术分析">F41a.K线和技术分析</a></p>
+</blockquote>
+<h2 id="RSRS相对强度的量化计算"><a href="#RSRS相对强度的量化计算" class="headerlink" title="RSRS相对强度的量化计算"></a>RSRS相对强度的量化计算</h2><p>最简单的想法就是用最近N个交易日的最高价/最低价数据，求得今天的斜率值，然后与阈值比较，大于m某个阈值则开仓买入，小于某个阈值则卖出。<br>但是实际上斜率β波动较大，效果不佳，所以尝试对斜率进行标准化，用标准分替代原始的β值，计算方式如下：</p>
 <ul>
+<li><p>（一）取前N日（N=18）的最高价序列与最低价数据，按公式的模型进行OLS（即普通最小二乘法，ordinary least squares）线性回归，拟合后的求得斜率β（也即当日的RSRS）；</p>
+</li>
+<li><p>（二）取前M日（M=600）的最高价序列与最低价数据，计算当日RSRS的标准分：<br>$$ RSRS_std = (RSRS-μ_M)/σ_M $$<br>其中 $μ_M$ 为前M日的斜率均值，$σ_M$ 为前M日的标准差。</p>
+</li>
+<li><p>（三）若 $RSRS_std$  大于买入阈值 $S_buy$，则全仓买入；若 $RSRS_std$  小于卖出阈值$S_sell$，则卖出平仓。（$S_buy = 0.7$，$S_sell = -0.7$）</p>
+</li>
+</ul>
+<h2 id="RSRS的参数调优"><a href="#RSRS的参数调优" class="headerlink" title="RSRS的参数调优"></a>RSRS的参数调优</h2><p>从策略净值来看，5分钟线&gt;30分钟线&gt;小时线&gt;日线，但5分钟与30分钟差异较小<br><img src="/images/2023-01-14.png" alt="../_images/2023-01-14.png"></p>
+<p>• 按行情特征选择合适的择时频率：趋势行情下30分钟线择时效果最佳，震荡行情则日线择时效果最佳</p>
+<p>• 各频率下参数N（前N个交易日的数据OLS拟合求斜率）的选择更重要，频率提高后对参数的敏感性上升：<br>  5分钟、30分钟频率上，不同N对应的策略净值差异较大；<br>  参数M的敏感性相对较低；</p>
+<p><img src="/images/2023-01-14-1.png" alt="../_images/2023-01-14-1.png"></p>
+<p>• S存在最优区间，频率越高，策略净值对参数S越敏感：<br>  无论在哪个频率下，S都有很明显的下凹抛物线形状；<br>  日频策略在S属于0.6至0.7处较好；<br>  其它频率的RSRS策略在S等于0.8，0.9附近较佳；</p>
+<p><img src="/images/2023-01-14-2.png" alt="../_images/2023-01-14-2.png"></p>
+<h2 id="基于RSRS的几种策略"><a href="#基于RSRS的几种策略" class="headerlink" title="基于RSRS的几种策略"></a>基于RSRS的几种策略</h2><p>（一）大小盘ETF轮动</p>
+<p>参考：<a href="https://www.joinquant.com/view/community/detail/e4defac10aa066f3b29811840e85c8ea?type=4" target="_blank" rel="noopener">RSRS模型深入研究3-二八轮动策略及其探究分析 - Marshal - JoinQuant</a></p>
+<p>（二）行业ETF轮动：</p>
+<p>参考光大原文“基于RSRS指标的行业轮动模型”：<a href="http://pg.jrj.com.cn/acc/Res/CN_RES/INVEST/2017/6/15/6baea273-4229-4ee5-88d0-1c940ccb190d.pdf" target="_blank" rel="noopener">http://pg.jrj.com.cn/acc/Res/CN_RES/INVEST/2017/6/15/6baea273-4229-4ee5-88d0-1c940ccb190d.pdf</a></p>
+<p>（三）RSRS作为个股择时信号：</p>
+<p>参考：<a href="https://www.joinquant.com/view/community/detail/713a60a2a1daaac2276dab73eb322ddc?type=1" target="_blank" rel="noopener">价值选股与RSRS择时 - K线放荡不羁 - JoinQuant</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="http://pg.jrj.com.cn/acc/Res/CN_RES/INVEST/2017/6/15/6baea273-4229-4ee5-88d0-1c940ccb190d.pdf" target="_blank" rel="noopener">光大证券：RSRS指标择时及行业轮动——技术择时系列研究之二</a></li>
+<li><a href="https://www.joinquant.com/view/community/detail/bec17e308647a2160ee1aeeac3a0c40c" target="_blank" rel="noopener">【量化课堂】RSRS(阻力支撑相对强度)择时策略（上） - JoinQuant量化课堂 - JoinQuant</a></li>
+<li><a href="https://www.joinquant.com/view/community/detail/28dc6d6605ce7f7471ff05904ccf046f" target="_blank" rel="noopener">【量化课堂】RSRS(阻力支撑相对强度)择时策略（下） - JoinQuant量化课堂 - JoinQuant</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/44280303" target="_blank" rel="noopener">基于阻力支撑相对强度（RSRS）的市场择时 - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/458800433/answer/2572938262" target="_blank" rel="noopener">分享一下你的ETF强势轮动策略？ - 知乎</a></li>
-<li><a href="https://www.joinquant.com/view/community/detail/713a60a2a1daaac2276dab73eb322ddc" target="_blank" rel="noopener">价值选股与RSRS择时 - K线放荡不羁 - JoinQuant</a></li>
+<li><a href="https://www.joinquant.com/community/post/detailMobile?postId=34314" target="_blank" rel="noopener">8年10倍，回撤小，有滑点！ETF动量简单轮动策略！ - 萌新王富贵 - JoinQuant</a></li>
 </ul>
-<p>➤ 代码：</p>
-<p><a href="https://www.joinquant.com/community/post/detailMobile?postId=34314" target="_blank" rel="noopener">8年10倍，回撤小，有滑点！ETF动量简单轮动策略！ - 萌新王富贵 - JoinQuant</a></p>
-<p>➤ 回测结果：</p>
-<p>onenote:<a href="https://d.docs.live.net/80b0141f307a273d/文档/Scriptorium/@Drafts.one#基于RSRS的择时&amp;section-id={0D04D376-3395-450F-A0A8-402D700F3CA2}&amp;page-id={097AC7C1-3534-6545-8498-276936F260E9}&amp;end" target="_blank" rel="noopener">https://d.docs.live.net/80b0141f307a273d/文档/Scriptorium/@Drafts.one#基于RSRS的择时&amp;section-id={0D04D376-3395-450F-A0A8-402D700F3CA2}&amp;page-id={097AC7C1-3534-6545-8498-276936F260E9}&amp;end</a></p>
 
       
     </div>
@@ -431,6 +493,18 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/量化交易/" rel="tag"># 量化交易</a>
+          
+            <a href="/tags/交易策略/" rel="tag"># 交易策略</a>
+          
+            <a href="/tags/阻力位/" rel="tag"># 阻力位</a>
+          
+            <a href="/tags/支撑位/" rel="tag"># 支撑位</a>
+          
+        </div>
+      
 
       
       
@@ -440,8 +514,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/52.Financing/F52d.网格交易策略/" rel="next" title="F52d.网格交易策略">
-                <i class="fa fa-chevron-left"></i> F52d.网格交易策略
+              <a href="/52.Financing/F41a.K线和技术分析/" rel="next" title="F41a.K线和技术分析">
+                <i class="fa fa-chevron-left"></i> F41a.K线和技术分析
               </a>
             
           </div>
@@ -450,8 +524,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/52.Financing/F52z.Quant-量化交易经典策略zz/" rel="prev" title="F52z.Quant-量化交易经典策略">
-                F52z.Quant-量化交易经典策略 <i class="fa fa-chevron-right"></i>
+              <a href="/62.Psychology/MBTI笔记/" rel="prev" title="MBTI">
+                MBTI <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -543,7 +617,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">429</span>
+                  <span class="site-state-item-count">430</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -554,7 +628,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -565,7 +639,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">381</span>
+                  <span class="site-state-item-count">384</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -633,7 +707,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RSRS（阻力支撑相对强度）择时"><span class="nav-text">RSRS（阻力支撑相对强度）择时</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#阻力支撑相关概念"><span class="nav-text">阻力支撑相关概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSRS（阻力支撑相对强度）择时"><span class="nav-text">RSRS（阻力支撑相对强度）择时</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSRS的概念-amp-技术分析的比较"><span class="nav-text">RSRS的概念 &amp; 技术分析的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSRS相对强度的量化计算"><span class="nav-text">RSRS相对强度的量化计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSRS的参数调优"><span class="nav-text">RSRS的参数调优</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于RSRS的几种策略"><span class="nav-text">基于RSRS的几种策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>

@@ -104,7 +104,7 @@
 
 
 
-  <meta name="keywords" content="树莓派,SSH," />
+  <meta name="keywords" content="树莓派,SSH,VNC," />
 
 
 
@@ -118,9 +118,9 @@
 
 
 <meta name="description" content="半年前败了一个树莓派，因为工作很忙所以没时间折腾一下。最近换工作，确认了offer，赋闲在家，也终于有空摆弄一下树莓派。 （一）启用SSH我的环境为：Thinkpad（Fedora）， TP-Link无线路由，树莓派（debian）一只。树莓派通过网线连接到无线路由器和电脑处于同一网段，没有显示器的情况下如何确定树莓派的IP呢？ 这时候nmap登场： nmap -v -sP 192.168.1.1">
-<meta name="keywords" content="树莓派,SSH">
+<meta name="keywords" content="树莓派,SSH,VNC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="树莓派手动玩(开启SSH,VNC)">
+<meta property="og:title" content="树莓派手动玩">
 <meta property="og:url" content="https://beefyheisenberg.github.io/50.Farbox-Blog/【Raspberry】树莓派手动玩/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="半年前败了一个树莓派，因为工作很忙所以没时间折腾一下。最近换工作，确认了offer，赋闲在家，也终于有空摆弄一下树莓派。 （一）启用SSH我的环境为：Thinkpad（Fedora）， TP-Link无线路由，树莓派（debian）一只。树莓派通过网线连接到无线路由器和电脑处于同一网段，没有显示器的情况下如何确定树莓派的IP呢？ 这时候nmap登场： nmap -v -sP 192.168.1.1">
@@ -128,9 +128,9 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/2014/ssh-login.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/2014/vnc-viewer-input-ip.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/2014/raspiberry-vnc.png">
-<meta property="og:updated_time" content="2023-01-05T20:44:02.218Z">
+<meta property="og:updated_time" content="2023-01-11T16:24:55.094Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="树莓派手动玩(开启SSH,VNC)">
+<meta name="twitter:title" content="树莓派手动玩">
 <meta name="twitter:description" content="半年前败了一个树莓派，因为工作很忙所以没时间折腾一下。最近换工作，确认了offer，赋闲在家，也终于有空摆弄一下树莓派。 （一）启用SSH我的环境为：Thinkpad（Fedora）， TP-Link无线路由，树莓派（debian）一只。树莓派通过网线连接到无线路由器和电脑处于同一网段，没有显示器的情况下如何确定树莓派的IP呢？ 这时候nmap登场： nmap -v -sP 192.168.1.1">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/2014/ssh-login.png">
 
@@ -168,7 +168,7 @@
 
 
 
-  <title>树莓派手动玩(开启SSH,VNC) | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>树莓派手动玩 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -303,7 +303,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">树莓派手动玩(开启SSH,VNC)</h1>
+          <h1 class="post-title" itemprop="name headline">树莓派手动玩</h1>
         
 
         <div class="post-meta">
@@ -357,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  802
+                  940
                 </span>
               
 
@@ -406,6 +406,9 @@
 <li>如果你的PC是Windows系统, 可以下载<a href="http://www.tightvnc.com/download.php" target="_blank" rel="noopener">TightVNC</a></li>
 <li>安装其他常用软件: <code>sudo apt-get install -y git build-essential vim tmux curl</code></li>
 </ul>
+<blockquote>
+<p>VNC  (Virtual Network Console)是虚拟网络控制台的缩写。它 是一款优秀的远程控制工具软件，由著名的 AT&amp;T 的欧洲研究实验室开发的。VNC 是在基于 UNIX 和 Linux 操作系统的免费的开源软件，远程控制能力强大，高效实用，其性能可以和 Windows 和 MAC 中的任何远程控制软件媲美。 在 Linux 中，VNC 包括以下四个命令：vncserver，vncviewer，vncpasswd，和 vncconnect。大多数情况下用户只需要其中的两个命令：vncserver 和 vncviewer。</p>
+</blockquote>
 <h2 id="2-1-在树莓派上配置VNC"><a href="#2-1-在树莓派上配置VNC" class="headerlink" title="2.1 在树莓派上配置VNC"></a>2.1 在树莓派上配置VNC</h2><ul>
 <li>首先要修改vnc密码：SSH终端里执行<code>vncpasswd</code>，然后输入两遍密码。</li>
 <li>创建vnc-server配置文件：<code>sudo vi /etc/init.d/tightvncserver</code> ,在这个文件里输入如下内容：</li>
@@ -447,6 +450,8 @@
             <a href="/tags/树莓派/" rel="tag"># 树莓派</a>
           
             <a href="/tags/SSH/" rel="tag"># SSH</a>
+          
+            <a href="/tags/VNC/" rel="tag"># VNC</a>
           
         </div>
       
@@ -562,7 +567,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">429</span>
+                  <span class="site-state-item-count">430</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -573,7 +578,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -584,7 +589,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">381</span>
+                  <span class="site-state-item-count">384</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -809,7 +814,7 @@
         var disqus_config = function () {
           this.page.url = 'https://beefyheisenberg.github.io/50.Farbox-Blog/【Raspberry】树莓派手动玩/';
           this.page.identifier = '50.Farbox-Blog/【Raspberry】树莓派手动玩/';
-          this.page.title = '树莓派手动玩(开启SSH,VNC)';
+          this.page.title = '树莓派手动玩';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://dropnotes-2.disqus.com/embed.js';
