@@ -278,6 +278,671 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/Golang-Tutorials.02.并发/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/11.Programming-Language/Golang-Tutorials.02.并发/" itemprop="url">Golang Tutorials-02并发</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
+                    <span itemprop="name">11.Programming-Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  487
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="chan-amp-select"><a href="#chan-amp-select" class="headerlink" title="chan &amp; select"></a>chan &amp; select</h1><ul>
+<li><p>chan是并发安全的通信对象:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 使用make 创建一个存储int 类型的chan:</span><br><span class="line">ch1 := make(chan int)</span><br><span class="line"></span><br><span class="line">// 向chan写入:</span><br><span class="line">ch1 &lt;- 1</span><br><span class="line"></span><br><span class="line">// 从chan读出:</span><br><span class="line">i := &lt;-ch1</span><br><span class="line"></span><br><span class="line">// 或者通过ok判断ch里是否有数据</span><br><span class="line">i, ok := &lt;-ch1</span><br><span class="line"></span><br><span class="line">// 不接受返回值的读:</span><br><span class="line">fmt.Println(&lt;-ch)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>channel的关闭: <code>close(channel)</code>, 问题:</p>
+<ul>
+<li>如果f正在因读ch阻塞, <code>close(ch)</code>后, f会继续阻塞or?</li>
+<li>如果ch还有数据, <code>close(ch)</code>后… 数据被丢弃?</li>
+</ul>
+</li>
+<li><p>select 监视一组chan, 并从已经准备好的chan里随机选出一个, 用法类似switch, 每个case是读取chan:<br>下面的select</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select &#123;</span><br><span class="line">  case i := &lt;-ch1:</span><br><span class="line">    fmt.Println(i)</span><br><span class="line">  case j := &lt;-ch2:</span><br><span class="line">    fmt.Println(j)</span><br><span class="line">  default:</span><br><span class="line">    fmt.Println(&quot;?&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>带缓冲区的chan: <code>ch := make(chan int, 100)</code></p>
+<ul>
+<li>不带缓冲区的channel, 如果ch已经有数据, 再向ch写数据会导致写入方阻塞, 如果ch空, 读取方会阻塞</li>
+<li>带缓冲区的channel, 如果ch没满, 写入方不会阻塞</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>@ref: <a href="https://zhuanlan.zhihu.com/p/36907022" target="_blank" rel="noopener">深入golang之—goroutine并发控制与通信 - 知乎</a></p>
+<p>任何语言的并发都需要解决的问题：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/11.Programming-Language/Golang-Tutorials.02.并发/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/Golang-Tutorials.01.基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/11.Programming-Language/Golang-Tutorials.01.基础/" itemprop="url">Golang Tutorials-01基础</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
+                    <span itemprop="name">11.Programming-Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,474
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p><a href="https://learnxinyminutes.com/docs/zh-cn/go-cn/" target="_blank" rel="noopener">Learn Go in Y Minutes</a></p>
+</blockquote>
+<h1 id="Golang中的约定大于配置"><a href="#Golang中的约定大于配置" class="headerlink" title="Golang中的约定大于配置"></a>Golang中的约定大于配置</h1><p>Golang遵循”约定大于配置”(convention over configuratio)的理念:</p>
+<ul>
+<li>小写开头的标识(变量/函数/结构体类型等等)是package内可见, 大写开头的标识包外可见(类似public)</li>
+<li>import as <code>_</code> 和 <code>.</code> 的包:<ul>
+<li><code>import _ &quot;packageXXX&quot;</code> : 调用包内的<code>init()</code>方法</li>
+<li><code>import . &quot;packageXXX&quot;</code> : 调用包内的函数,不需要再加<code>packageXXX.</code></li>
+</ul>
+</li>
+<li>单元测试:<ul>
+<li>文件名: <code>源文件名_test.go</code></li>
+<li>函数名: <code>func Test源函数名()</code></li>
+</ul>
+</li>
+<li>结构体中的”小写开头的成员”, 在用<code>json.Marshal</code>序列化时会被忽略</li>
+</ul>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/11.Programming-Language/Golang-Tutorials.01.基础/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/Cpp-Tutorials.04.Debug-and-Perf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/11.Programming-Language/Cpp-Tutorials.04.Debug-and-Perf/" itemprop="url">Cpp Tutorials-04-Debug and Perf</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
+                    <span itemprop="name">11.Programming-Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,029
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="排查指针-内存问题-amp-解决方案"><a href="#排查指针-内存问题-amp-解决方案" class="headerlink" title="排查指针/内存问题 &amp; 解决方案"></a>排查指针/内存问题 &amp; 解决方案</h1><p>指针引起的内存问题:</p>
+<ul>
+<li>野指针读写: 野指针指的是未经初始化的指针（似乎<code>int *p;</code>定义的指针没有自动置为Null）</li>
+<li>悬垂指针读写: 被free释放但是没有置为Null的指针</li>
+<li>数组等类型读写越界</li>
+<li>内存释放两次（DF，Double Free），第二次释放导致coredump</li>
+<li>内存泄漏, 通常是不匹配地使用 malloc/new/new[] 和 free/delete/delete[]</li>
+</ul>
+<h2 id="Core-Down问题排查"><a href="#Core-Down问题排查" class="headerlink" title="Core Down问题排查"></a>Core Down问题排查</h2><p>引起core down的原因可能有:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/11.Programming-Language/Cpp-Tutorials.04.Debug-and-Perf/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/Cpp-Tutorials.01b.内存/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/11.Programming-Language/Cpp-Tutorials.01b.内存/" itemprop="url">Cpp Tutorials-01b-内存</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
+                    <span itemprop="name">11.Programming-Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,114
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="内存对齐"><a href="#内存对齐" class="headerlink" title="内存对齐"></a>内存对齐</h1><p>自然对齐 <code>naturally aligned</code>（我没找到英文定义，不知道源自哪里）</p>
+<p>比如32位的Intel处理器通过总线访问(包括读和写)内存数据。每个总线周期从偶地址开始访问32位内存数据，内存数据以字节为单位存放。<br>如果一个32位的数据没有存放在4字节整除的内存地址处，那么处理器就需要2个总线周期对其进行访问，显然访问效率下降很多。<br>对于C/C++中的基本数据类型，假设它的长度为n字节，那么该类型的变量会被编译器默认分配到n字节对齐的内存上。<br>例如，char的长度是1字节，char类型变量的地址将是1字节对齐的（任意值均可）；int的长度是4字节，所以int类型变量将被分配到4字节对齐的地址上。这种默认情况下的变量对齐方式又称作自然对齐（naturally aligned）</p>
+<blockquote>
+<p><a href="https://www.quora.com/What-is-natural-alignment-Why-should-a-generic-pointer-be-aligned" target="_blank" rel="noopener">What is natural alignment? Why should a generic pointer be aligned? - Quora</a></p>
+</blockquote>
+<p>struct 以及含位域的结构体对齐 =&gt; <a href="/11.Programming-Language/C-Tutorials.01.基础/" title="C-Tutorials.01.基础">C-Tutorials.01.基础</a></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/11.Programming-Language/Cpp-Tutorials.01b.内存/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/Cpp-Tutorials.01.基础/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1578,6 +2243,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/99.Journal/2022.10人生的意义II/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/99.Journal/2022.10人生的意义II/" itemprop="url">人生的意义II</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/99-Journal/" itemprop="url" rel="index">
+                    <span itemprop="name">99.Journal</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,831
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>人生的意义是？ 不可否认，世间本就不存在为我们<strong>预设好的意义</strong>。甚至作为一个绝对的理性主义者，他还可能得出“生命没有意义” 这种接近虚无主义<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>的答案。<br>但人仍有自由选择的权利，这种自由可以决定是否要为自己创造出一个意义。罗素在自传序言《What I Have Lived for》中写道他的人生三动力：<strong>对爱情的渴望、对知识的追寻、以及对尘世的怜悯之心</strong>。</p>
+<p>如果让我回答这个问题，意义重要却不复杂，意义感源自那些 —— 最简单、最自然、带给自己正向感受的事物</p>
+<blockquote>
+<p>它们看起来是正确的、美好的；它们提供内在的满足，而不需要别的动机来支持<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></p>
+</blockquote>
+<p>一. 对知识的追求。它们帮我找回我那属于理性的另一半灵魂、帮我消除偏见，解答我的疑惑，也给予我开放和容纳的心态… 它一直在帮助我去理解… 我所触碰到的世界。</p>
+<p>  缮写室、毕达哥拉斯的金诗、卡尔达诺书<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>……无论迷茫曾把我带向何处，当我翻开书时，我总能找到这片<strong>居心地</strong></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/99.Journal/2022.10人生的意义II/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/99.Journal/沉思录-公开的部分/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1730,165 +2554,6 @@
 </ul>
 
           
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/99.Journal/2022.10人生的意义II/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/99.Journal/2022.10人生的意义II/" itemprop="url">人生的意义II</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/99-Journal/" itemprop="url" rel="index">
-                    <span itemprop="name">99.Journal</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,831
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>人生的意义是？ 不可否认，世间本就不存在为我们<strong>预设好的意义</strong>。甚至作为一个绝对的理性主义者，他还可能得出“生命没有意义” 这种接近虚无主义<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>的答案。<br>但人仍有自由选择的权利，这种自由可以决定是否要为自己创造出一个意义。罗素在自传序言《What I Have Lived for》中写道他的人生三动力：<strong>对爱情的渴望、对知识的追寻、以及对尘世的怜悯之心</strong>。</p>
-<p>如果让我回答这个问题，意义重要却不复杂，意义感源自那些 —— 最简单、最自然、带给自己正向感受的事物</p>
-<blockquote>
-<p>它们看起来是正确的、美好的；它们提供内在的满足，而不需要别的动机来支持<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></p>
-</blockquote>
-<p>一. 对知识的追求。它们帮我找回我那属于理性的另一半灵魂、帮我消除偏见，解答我的疑惑，也给予我开放和容纳的心态… 它一直在帮助我去理解… 我所触碰到的世界。</p>
-<p>  缮写室、毕达哥拉斯的金诗、卡尔达诺书<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>……无论迷茫曾把我带向何处，当我翻开书时，我总能找到这片<strong>居心地</strong></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/99.Journal/2022.10人生的意义II/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
         
       
     </div>
@@ -2873,644 +3538,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【效率工具】在Macbook上使用surge/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/50.Farbox-Blog/【效率工具】在Macbook上使用surge/" itemprop="url">在Macbook上使用Surge</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  301
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="安装surge"><a href="#安装surge" class="headerlink" title="安装surge"></a>安装surge</h1><p>Surge for Mac并不提供公开下载, 只对已经在手机上购买过Surge for iPhone的用户提供beta版本,<br>在Surge for iPhone的’More’标签找到<code>Surge Mac</code>, 下载链接会被发送到注册邮箱.</p>
-<h1 id="导出Surge-iPhone的配置文件"><a href="#导出Surge-iPhone的配置文件" class="headerlink" title="导出Surge iPhone的配置文件"></a>导出Surge iPhone的配置文件</h1><p>Surge iPhone的配置文件是通用的, 可以直接使用在Surge for Mac上.<br>导出方法很多, 可以通过url共享, dropbox, 或者iTunes导出.</p>
-<h1 id="配置Surge"><a href="#配置Surge" class="headerlink" title="配置Surge"></a>配置Surge</h1>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【效率工具】在Macbook上使用surge/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【架构】使用fluentd,kafka,mongodb搭建日志处理系统/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/50.Farbox-Blog/【架构】使用fluentd,kafka,mongodb搭建日志处理系统/" itemprop="url">使用fluentd,kafka,mongodb搭建日志处理系统</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,811
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="设计实现"><a href="#设计实现" class="headerlink" title="设计实现"></a>设计实现</h1><ul>
-<li>采集: 可选的有fluentd, td-agent(fluentd的稳定版本, 二者区别), Apache flume.</li>
-<li>消息持久化队列: <a href="http://kafka.apache.org/" target="_blank" rel="noopener">http://kafka.apache.org/</a> (分布式消息队列),<ul>
-<li>数据源进行topic分流，实现Category</li>
-<li>作为一层buffer来适配输入输出的消息速率，解除系统耦合度</li>
-<li>作用类似于缓存，即活跃的数据和离线处理系统之间的缓存</li>
-<li>kafka是显式分布式架构，producer、broker（Kafka）和consumer都可以有多个。Kafka的作用类似于缓存，即活跃的数据和离线处理系统之间的缓存。几个基本概念：<ol>
-<li>message（消息）是通信的基本单位，每个producer可以向一个topic（主题）发布一些消息。如果consumer订阅了这个主题，那么新发布的消息就会广播给这些consumer。</li>
-<li>Kafka是显式分布式的，多个producer、consumer和broker可以运行在一个大的集群上，作为一个逻辑整体对外提供服务。对于consumer，多个consumer可以组成一个group，这个message只能传输给某个group中的某一个consumer.</li>
-</ol>
-</li>
-</ul>
-</li>
-<li>存储: mongo</li>
-</ul>
-<h1 id="Fluentd-td-agent"><a href="#Fluentd-td-agent" class="headerlink" title="Fluentd(td-agent)"></a>Fluentd(td-agent)</h1><p>Fluentd内置三种日志采集, file-tail, tcp, http-url, 通过插件可以支持更多的采集方式.</p>
-<h2 id="Install-fluentd-td-agent-by-RPM"><a href="#Install-fluentd-td-agent-by-RPM" class="headerlink" title="Install fluentd(td-agent) by RPM"></a>Install fluentd(td-agent) by RPM</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【架构】使用fluentd,kafka,mongodb搭建日志处理系统/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【编辑器】为Eclipse安装Remote-System-Explorer/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/50.Farbox-Blog/【编辑器】为Eclipse安装Remote-System-Explorer/" itemprop="url">为Eclipse安装 Terminal</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  55
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>IDEA的Terminal很方便, 但Eclipse没有.<br>还是比较习惯敲命令行.</p>
-<p>Eclipse工具栏 -&gt; Run -&gt; Extrnal Tools -&gt; Configurations , 新建一个:<br>Location填入<code>C:\Windows\System32\cmd.exe</code>, Working Directory : <code>${project_loc}</code></p>
-<ul>
-<li>参考<a href="http://stackoverflow.com/questions/1562600/is-there-an-eclipse-plugin-to-run-system-shell-in-the-console" target="_blank" rel="noopener">Is there an Eclipse plugin to run system shell in the Console?</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/" itemprop="url">在 Windows 下使用 vim grep 的正确姿势</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,379
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>首先, 开发环境是Windows,<br>然后, 我又是一个信仰坚定的Vimer,<br>所以就出现了<code>Windows + Gvim</code>这个有些不太协调的组合, 想在盖茨叔叔的视窗OS上稍微正常的使用Gvim还是有些小麻烦, 可是这都难不倒一个有信仰的Vimer.</p>
-<p>PS 如果你使用Osx or Linux, 大可不必这样折腾, 直接使用<a href="https://github.com/mileszs/ack.vim" target="_blank" rel="noopener">ack.vim</a> 或 <a href="www.vim.org/script.php?script_id=311">grep.vim</a>吧, 简单的配置就可以搞定.</p>
-<h1 id="在Win上使用grep的可选方案"><a href="#在Win上使用grep的可选方案" class="headerlink" title="在Win上使用grep的可选方案"></a>在Win上使用grep的可选方案</h1><p>在Windows上使用grep搜索文本有以下几种方案:</p>
-<ol>
-<li>使用<code>grep</code>命令, 虽是GNU下的工具, 但也有Win移植版;</li>
-<li>使用vim内置的<code>vimgrep</code>命令, 速度最慢但是兼容性相对好;</li>
-<li>使用Win下的原生命令<code>findstr</code>;</li>
-<li>使用Win移植版的ack, 这种方法我没尝试过, 如果你用过了, 请一定告诉我:P</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3565,7 +3592,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">430</span>
+                  <span class="site-state-item-count">434</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3587,7 +3614,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">384</span>
+                  <span class="site-state-item-count">389</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
