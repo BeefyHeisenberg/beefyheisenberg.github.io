@@ -278,6 +278,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07a2.ThreadLocal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/12.Java/Java-Tutorials.07a2.ThreadLocal/" itemprop="url">Java Tutorials-07a2-ThreadLocal</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  959
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">java.lang.ThreadLocal&lt;T&gt;</span><br></pre></td></tr></table></figure>
+<p>ThreadLocal是一个为线程提供线程局部变量的工具类。为线程提供一个线程私有的变量副本，这样多个线程都可以随意更改自己线程局部的变量，不会影响到其他线程。<br><del>不过需要注意的是，ThreadLocal提供的只是一个浅拷贝，如果变量是一个引用类型，那么就要考虑它内部的状态是否会被改变，想要解决这个问题可以通过重写ThreadLocal的<code>initialValue()</code>函数来自己实现深拷贝，建议在使用ThreadLocal时一开始就重写该函数。</del><br>首次调用<code>threadLocal.get()</code>方法时会调用<code>initialValue()</code>赋一个初始值。</p>
+<p>例子: 1.8之前提供的<code>SimpleDateFormat</code>不是线程安全的, 下面的代码用ThreadLocal 解决这个问题:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> ThreadLocal&lt;DateFormat&gt; threadLocal = <span class="keyword">new</span> ThreadLocal&lt;DateFormat&gt;() &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> Session <span class="title">initialValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置当前线程的ThreadLocal 为新的对象</span></span><br><span class="line">threadLocal.set(<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yy-MM-dd"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取当前线程的ThreadLocal 内保存的对象</span></span><br><span class="line">DateFormat localFormatter = (DateFormat)threadLocal.get();</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/12.Java/Java-Tutorials.07a2.ThreadLocal/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.07a1.线程API/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3538,167 +3694,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.01.JDK/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Advanced-Java.01.JDK/" itemprop="url">Advanced Java-01-JDK</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,176
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Java Development Kit（JDK），包括一个完整的Java运行环境（Java Runtime Environment，JRE），还包括一系列用于Java开发的组件和工具（javac、jar、javap、javadoc、jdb、jps、jhat、jstack ……）</p>
-<h2 id="JDK-组件"><a href="#JDK-组件" class="headerlink" title="JDK 组件"></a>JDK 组件</h2><h3 id="java-javac-jar"><a href="#java-javac-jar" class="headerlink" title="java, javac, jar"></a>java, javac, jar</h3><ul>
-<li>编译Java源码： <code>javac -classpath PATH;PATH/xx.jar -sourcepath SOURCE_DIR -d OUTPUT_DIR</code></li>
-<li>把.class文件打成Jar包： <code>jar cvf JAR_FILE_NAME CLASS_FILE_NAMES</code></li>
-<li>运行executable的Jar包（Jar包指定了Main-Class）： <code>java -jar JAR_FILE_NAME</code></li>
-<li>执行Jar包里的类（该类有main方法）： <code>java -cp JAR_FILE_NAME CLASS_FULL_NAME</code></li>
-<li>执行Jar包里的类的指定方法： <code>java -cp JAR_FILE_NAME CLASS_FULL_NAME METHOD_NAME</code>, 例如Tomcat 的启动脚本最终是执行了 Bootstrap这个主类中的start方法：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java</span><br><span class="line">-Djava.util.logging.config.file=/data0/tomcat/tomcat_8080/conf/logging.properties</span><br><span class="line">-Xms2048m -Xmx2048m -XX:MaxPermSize=256m</span><br><span class="line">-classpath /data0/tomcat/tomcat_8080/bin/bootstrap.jar:/data0/tomcat/tomcat_8080/bin/tomcat-juli.jar -Dcatalina.base=/data0/tomcat/tomcat_8080 -Dcatalina.home=/data0/tomcat/tomcat_8080 -Djava.io.tmpdir=/data0/tomcat/tomcat_8080/temp</span><br><span class="line">org.apache.catalina.startup.Bootstrap start</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Advanced-Java.01.JDK/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3753,7 +3748,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">435</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3775,7 +3770,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">389</span>
+                  <span class="site-state-item-count">391</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
