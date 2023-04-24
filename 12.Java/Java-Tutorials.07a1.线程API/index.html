@@ -126,7 +126,7 @@
 <meta property="og:description" content="线程6种状态 New, 创建Thread实例之后; Runnable, 执行thread.start()之后; Blocked, 线程试图获取ReentrantLock失败, 或进入synchronize代码块, 或调用Block IO; Waiting, 调用object.wait()或thread.join()之后; 调用object.wait(), condition.await()方法都会">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/java_thread_states_all.png">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.526Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.431Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Tutorials-07a1-线程API">
 <meta name="twitter:description" content="线程6种状态 New, 创建Thread实例之后; Runnable, 执行thread.start()之后; Blocked, 线程试图获取ReentrantLock失败, 或进入synchronize代码块, 或调用Block IO; Waiting, 调用object.wait()或thread.join()之后; 调用object.wait(), condition.await()方法都会">
@@ -355,7 +355,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,525
+                  2,526
                 </span>
               
 
@@ -412,7 +412,7 @@
 <li>对于<code>sleep()</code>方法，我们首先要知道该方法是属于Thread类中的。而<code>wait()</code>方法，则是属于Object类中的。</li>
 <li><code>sleep()</code>方法导致了程序暂停执行指定的时间，让出cpu该其他线程，但是cpu对线程的监控状态依然保持者，当指定的时间到了又会自动恢复runnable。</li>
 <li>在调用<code>sleep()</code>方法后, 线程进入timed_waiting状态, 并且线程不会释放对象锁。</li>
-<li>当调用线程里调用<code>obj.wait()</code>方法的时候，线程进入等待此对象的等待队列，放弃对象锁并进入waiting状态，只有针对此对象调用<code>notify()</code>方法后, 线程才会从对象锁的等待队列中被取出。</li>
+<li>线程 A 里调用 <code>obj.wait()</code> 方法的时候，线程 A 进入等待此对象的等待队列，放弃对象锁并进入 waiting 状态，只有针对此对象调用 <code>notify()</code> 方法后, 线程 A 才会从对象锁的等待队列中被取出。</li>
 </ul>
 <h2 id="sleep和wait的区别"><a href="#sleep和wait的区别" class="headerlink" title="sleep和wait的区别?"></a>sleep和wait的区别?</h2><ul>
 <li><code>Thread.sleep()</code>方法是一个静态方法，作用在当前线程上；</li>
@@ -443,7 +443,7 @@
 <h2 id="唤醒线程"><a href="#唤醒线程" class="headerlink" title="唤醒线程"></a>唤醒线程</h2><p>如何唤醒sleep或者wait的线程?</p>
 <ul>
 <li>对于因为IO阻塞而进入的blocked状态的线程, 没有办法唤醒;</li>
-<li>对于因为调用<code>waiting()</code>, <code>t.sleep()</code>, <code>t.join()</code>而进入waiting或timed_waiting状态的线程, 调用<code>t.interrupt()</code>可以让上面的”阻塞操作”抛出<code>InterruptedException</code>来打到”唤醒”的效果;</li>
+<li>对于因为调用 <code>waiting()</code>, <code>t.sleep()</code>, <code>t.join()</code> 而进入 waiting 或 timed_waiting 状态的线程, 调用 <code>t.interrupt()</code> 可以让上面的”阻塞操作”抛出 <code>InterruptedException</code> 来达到”唤醒”的效果;</li>
 </ul>
 <h2 id="被弃用的方法"><a href="#被弃用的方法" class="headerlink" title="被弃用的方法"></a>被弃用的方法</h2><p>Thread类不再推荐被使用的方法: <del>~yield,stop,suspend,resume</del>~</p>
 <h3 id="yield"><a href="#yield" class="headerlink" title="yield"></a>yield</h3><p>yield方法会临时暂停当前正在执行的线程，来让有同样优先级的正在等待的线程有机会执行。<br>如果没有正在等待的线程，或者所有正在等待的线程的优先级都比较低，那么该线程会继续运行。<br>执行了yield方法的线程什么时候会继续运行由线程调度器来决定。<br>yield方法不保证当前的线程会暂停或者停止，但是可以保证当前线程在调用yield方法时会放弃CPU。</p>
@@ -601,7 +601,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -623,7 +623,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

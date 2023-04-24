@@ -117,18 +117,18 @@
 
 
 
-<meta name="description" content="@Question:  如何定义一个可序列化的类? serialVersionUID属性的作用和生成方式? 哪些字段不会被序列化? ArrayList类的序列化是如何实现的? 如何自定义序列化? 反序列化的调用过程?   实现 Serializable接口的类可以被序列化, 通过ObjectOutputStream和ObjectInputStream对象进行序列化及反序列化 通过ObjectOut">
+<meta name="description" content="Question:  如何定义一个可序列化的类? serialVersionUID属性的作用和生成方式? 哪些字段不会被序列化? ArrayList类的序列化是如何实现的? 如何自定义序列化? 反序列化的调用过程?  Answer：  实现 Serializable接口的类可以被序列化, 通过ObjectOutputStream和ObjectInputStream对象进行序列化及反序列化 通过Ob">
 <meta name="keywords" content="Java基础">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java Tutorials-06-序列化">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.06.序列化/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="@Question:  如何定义一个可序列化的类? serialVersionUID属性的作用和生成方式? 哪些字段不会被序列化? ArrayList类的序列化是如何实现的? 如何自定义序列化? 反序列化的调用过程?   实现 Serializable接口的类可以被序列化, 通过ObjectOutputStream和ObjectInputStream对象进行序列化及反序列化 通过ObjectOut">
+<meta property="og:description" content="Question:  如何定义一个可序列化的类? serialVersionUID属性的作用和生成方式? 哪些字段不会被序列化? ArrayList类的序列化是如何实现的? 如何自定义序列化? 反序列化的调用过程?  Answer：  实现 Serializable接口的类可以被序列化, 通过ObjectOutputStream和ObjectInputStream对象进行序列化及反序列化 通过Ob">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.521Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.427Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Tutorials-06-序列化">
-<meta name="twitter:description" content="@Question:  如何定义一个可序列化的类? serialVersionUID属性的作用和生成方式? 哪些字段不会被序列化? ArrayList类的序列化是如何实现的? 如何自定义序列化? 反序列化的调用过程?   实现 Serializable接口的类可以被序列化, 通过ObjectOutputStream和ObjectInputStream对象进行序列化及反序列化 通过ObjectOut">
+<meta name="twitter:description" content="Question:  如何定义一个可序列化的类? serialVersionUID属性的作用和生成方式? 哪些字段不会被序列化? ArrayList类的序列化是如何实现的? 如何自定义序列化? 反序列化的调用过程?  Answer：  实现 Serializable接口的类可以被序列化, 通过ObjectOutputStream和ObjectInputStream对象进行序列化及反序列化 通过Ob">
 
 
 
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  461
+                  470
                 </span>
               
 
@@ -378,7 +378,7 @@
       
 
       
-        <p>@Question:</p>
+        <p>Question:</p>
 <ul>
 <li>如何定义一个可序列化的类?</li>
 <li>serialVersionUID属性的作用和生成方式?</li>
@@ -387,13 +387,14 @@
 <li>如何自定义序列化?</li>
 <li>反序列化的调用过程?</li>
 </ul>
+<p>Answer：</p>
 <ol>
 <li>实现 <code>Serializable</code>接口的类可以被序列化, 通过<code>ObjectOutputStream</code>和<code>ObjectInputStream</code>对象进行序列化及反序列化</li>
 <li>通过<code>ObjectOutputStream</code>反序列化的时候, 会比较 serialVersionUID是否相同, 如果不同会抛异常<code>InvalidClassException</code>, 建议: 在创建可序列化的类的时候指定一个serialVersionUID, 并且在可兼容升级的时候不要修改serialVersionUID, 除非是不兼容的版本. 如果没有定义serialVersionUID, 在反序列化的时候, ObjectOutputStream会自动生成一个(根据类名,接口名,属性名, 以及描述符等生成一个64位的哈希数字)</li>
 <li>static 和 transient关键字修饰的属性不会被序列化</li>
 <li>ArrayList的实现里, 把<code>elementData[]</code>声明为 transient, 同时也实现了<code>writeObject(ObjectOutputStream)</code>和<code>readObject(ObjectInputStream)</code>, 在这两个方法里实现自定义序列化, 目的是为了避免<code>elementData[]</code>中大量空元素被序列化, 减少序列化字节占用.</li>
-<li>如何自定义序列化实现: 类实现自己的<code>writeObject(ObjectOutputStream)</code>和<code>readObject(ObjectInputStream)</code></li>
-<li>反序列化调用过程(伪码): <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ObjectInputStream.readObject(Object)</span><br><span class="line">    ObjectStreamClass.initNonProxy // 检查是否实现 Serializable接口, serialVersionUID是相等</span><br><span class="line">        调用类的readObject()</span><br></pre></td></tr></table></figure>
+<li>如何自定义序列化实现: 参考 ArrayList 类，重写 <code>writeObject(ObjectOutputStream)</code> 和 <code>readObject(ObjectInputStream)</code> 方法;</li>
+<li>反序列化调用过程(伪码): <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ObjectInputStream.readObject(Object)</span><br><span class="line">    ObjectStreamClass.initNonProxy // 该方法里检查是否实现 Serializable接口, serialVersionUID是相等</span><br><span class="line">        readObjectMethod.invoke(...) // 调用类的 readObject()</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <blockquote>
@@ -525,7 +526,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -547,7 +548,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

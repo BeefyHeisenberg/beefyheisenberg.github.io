@@ -130,7 +130,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/javaee/tomcat_architecture.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/javaee/tomcat-nio-connector-process.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/javaee/tomcat-nioendpoint-poler-worker.png">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.640Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.546Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat">
 <meta name="twitter:description" content="配置文件 server.xml一个配置文件实例:&amp;lt;Server port=&quot;8005&quot; shutdown=&quot;SHUTDOWN&quot;&amp;gt;  &amp;lt;Listener className=&quot;org.apache.catalina.startup.VersionLoggerListener&quot; /&amp;gt;  &amp;lt;Listener className=&quot;org.apache.catalina.c">
@@ -661,10 +661,7 @@
 <li><strong>Bootstrap</strong> 这种类加载器包含 JVM 所提供的基本的运行时类，以及来自系统扩展目录（<code>$JAVA_HOME/jre/lib/ext</code>）里 JAR 文件中的类。<br>注意：在有些 JVM 的实现中，它的作用不仅仅是类加载器，或者它可能根本不可见（作为类加载器）。</li>
 <li><strong>System</strong> 这种类加载器通常是根据 CLASSPATH 环境变量内容进行初始化的。所有的这些类对于 Tomcat 内部类以及 Web 应用来说都是可见的。<br>不过，标准的 Tomcat 启动脚本（<code>$CATALINA_HOME/bin/catalina.sh</code> 或 <code>%CATALINA_HOME%\bin\catalina.bat</code>）完全忽略了 CLASSPATH 环境变量自身的内容，相反从下列仓库来构建系统类加载器：<ul>
 <li><code>$CATALINA_HOME/bin/bootstrap.jar</code> 包含用来初始化 Tomcat 服务器的 <code>main()</code> 方法，以及它所依赖的类加载器实现类。</li>
-<li><code>$CATALINA_BASE/bin/tomcat-juli.jar</code> 或 <code>$CATALINA_HOME/bin/tomcat-juli.jar</code> 日志实现类。其中包括了对 <code>java.util.logging</code> API 的功能增强类（Tomcat JULI），以及对 Tomcat 内部使用的 Apache Commons 日志库的包重命名副本。详情参看 Tomcat 日志文档。<blockquote>
-<p>如果 <code>*$CATALINA_BASE/bin*</code> 中存在 <code>tomcat-juli.jar</code>，就不会使用 <em>$CATALINA_HOME/bin</em> 中的那一个。它有助于日志的特定配置。</p>
-</blockquote>
-</li>
+<li><code>$CATALINA_BASE/bin/tomcat-juli.jar</code> 或 <code>$CATALINA_HOME/bin/tomcat-juli.jar</code> 日志实现类。其中包括了对 <code>java.util.logging</code> API 的功能增强类（Tomcat JULI），以及对 Tomcat 内部使用的 Apache Commons 日志库的包重命名副本。详情参看 Tomcat 日志文档。<br>如果 <code>*$CATALINA_BASE/bin*</code> 中存在 <code>tomcat-juli.jar</code>，就不会使用 <em>$CATALINA_HOME/bin</em> 中的那一个。它有助于日志的特定配置。</li>
 <li><code>$CATALINA_HOME/bin/commons-daemon.jar</code> Apache Commons Daemon 项目的类。该 JAR 文件并不存在于由 catalina.bat 或 catalina.sh 脚本所创建的 CLASSPATH 中，而是引用自 bootstrap.jar 的清单文件。</li>
 </ul>
 </li>
@@ -953,7 +950,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -975,7 +972,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

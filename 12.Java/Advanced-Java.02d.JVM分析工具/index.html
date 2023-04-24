@@ -127,7 +127,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmap-histo-live.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVisualVM.png">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.457Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.362Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-02d-JVM分析工具">
 <meta name="twitter:description" content="JDK提供的命令行 以下每个工具都可以 cmd --help的方式查看说明  jps查看当前用户启动jvm进程  jps -m: 显示传递给Main方法的参数 jps -l: 显示Java进程的完整包名 jps -v: 显示JVM的参数 jps -lvm">
@@ -356,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,909
+                  2,906
                 </span>
               
 
@@ -438,7 +438,7 @@
 <h4 id="jstat-gcutil返回列解析"><a href="#jstat-gcutil返回列解析" class="headerlink" title="jstat -gcutil返回列解析"></a>jstat -gcutil返回列解析</h4><p><strong>示例2</strong>: attaches 到pid=14542的进程上, -h3表示每三行打印一次列名称, 采样间隔250ms<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jstat -gcutil -h3 14542 3s</span><br><span class="line"></span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line"> 16.35   0.00  94.62  63.31  97.41  94.84   4522   83.661    32    0.931   84.592</span><br><span class="line"> 16.35   0.00  95.52  63.31  97.41  94.84   4522   83.661    32    0.931   84.592</span><br><span class="line"> 16.35   0.00  96.92  63.31  97.41  94.84   4522   83.661    32    0.931   84.592</span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">  0.00  14.90   1.43  63.31  97.41  94.84   4523   83.678    32    0.931   84.609</span><br><span class="line">  0.00  14.90   2.65  63.31  97.41  94.84   4523   83.678    32    0.931   84.609</span><br><span class="line">  0.00  14.90   3.68  63.31  97.41  94.84   4523   83.678    32    0.931   84.609</span><br></pre></td></tr></table></figure></p>
 <p>上面发生了一次Young GC, S0从16.35%降到0%, S1从0%增长到14.90%, Eden从96.92%降到1.43, 耗时0.017s</p>
 <p>以上参考Oracle Java 8 jstat手册：<br><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html" target="_blank" rel="noopener">jstat</a></p>
-<h4 id="jstatd"><a href="#jstatd" class="headerlink" title="jstatd"></a>jstatd</h4><p>jstatd是一个[[../@project/Java-RMI]]的server，它可以监控Hotspot的JVM的启动和结束，同时提供接口可以让远程机器连接到JVM。 比如 jstat / JVisualVM 都可以通过jstatd来远程观察JVM的运行情况。<br>在远程服务器上启动jstatd: <code>nohup jstatd -J-Djava.security.policy=/home/xxx/jstatd.all.policy -J-Djava.rmi.server.hostname=192.168.0.2 -p 1099 &amp;</code> , 1099是jstatd的默认端口</p>
+<h4 id="jstatd"><a href="#jstatd" class="headerlink" title="jstatd"></a>jstatd</h4><p>jstatd是一个 RMI的server，它可以监控 Hotspot的JVM的启动和结束，同时提供接口可以让远程机器连接到JVM。 比如 jstat / JVisualVM 都可以通过jstatd来远程观察JVM的运行情况。<br>在远程服务器上启动jstatd: <code>nohup jstatd -J-Djava.security.policy=/home/xxx/jstatd.all.policy -J-Djava.rmi.server.hostname=192.168.0.2 -p 1099 &amp;</code> , 1099是jstatd的默认端口</p>
 <p>jstatd.all.policy内容如下:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">grant codebase &quot;file:$&#123;java.home&#125;/../lib/tools.jar&quot; &#123;</span><br><span class="line">    permission java.security.AllPermission;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>查看jvm进程的线程状态, 也可以做线程的dump,<br><code>jstack pid</code> : 查看当前所有线程的运行栈, 包括线程当前状态(blocked, waitting), 线程占用了哪个对象锁, 线程在等待哪个对象锁;</p>
 <h3 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h3><p>查看堆内存的情况, 也可以生成堆内存的dump信息,<br>jmap dump会触发Full GC, 所以在生产环境要小心使用.</p>
@@ -674,7 +674,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -696,7 +696,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

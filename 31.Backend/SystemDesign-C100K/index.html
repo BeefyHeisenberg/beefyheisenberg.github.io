@@ -117,18 +117,18 @@
 
 
 
-<meta name="description" content="C100K系统设计: 本篇只讨论OS级别的并发优化，不包括语言层面对并发的支持特性，C10K / C100K / C1000K 都是指系统能够支持的空闲长连接的数量。 @ref: https://www.zhihu.com/question/41740986 有关Linux系统的限制系统最大文件数使用ulimit设置最多能打开文件数:">
+<meta name="description" content="本篇只讨论OS 级别的并发优化，不包括语言层面对并发的支持特性，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。 有关 Linux 系统的限制服务器能支持建立连接数由几个决定：  建立 TCP 连接最大并发数：TCP 连接四元组是由源 IP 地址、源端口、目的 IP 地址和目的端口构成，理论上是无上限的；   端口数限制：参考 [[#系统端口">
 <meta name="keywords" content="后端架构,并发,性能测试,C10K,C100K,ulimit">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C100K系统设计">
 <meta property="og:url" content="https://beefyheisenberg.github.io/31.Backend/SystemDesign-C100K/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="C100K系统设计: 本篇只讨论OS级别的并发优化，不包括语言层面对并发的支持特性，C10K / C100K / C1000K 都是指系统能够支持的空闲长连接的数量。 @ref: https://www.zhihu.com/question/41740986 有关Linux系统的限制系统最大文件数使用ulimit设置最多能打开文件数:">
+<meta property="og:description" content="本篇只讨论OS 级别的并发优化，不包括语言层面对并发的支持特性，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。 有关 Linux 系统的限制服务器能支持建立连接数由几个决定：  建立 TCP 连接最大并发数：TCP 连接四元组是由源 IP 地址、源端口、目的 IP 地址和目的端口构成，理论上是无上限的；   端口数限制：参考 [[#系统端口">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.892Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.816Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C100K系统设计">
-<meta name="twitter:description" content="C100K系统设计: 本篇只讨论OS级别的并发优化，不包括语言层面对并发的支持特性，C10K / C100K / C1000K 都是指系统能够支持的空闲长连接的数量。 @ref: https://www.zhihu.com/question/41740986 有关Linux系统的限制系统最大文件数使用ulimit设置最多能打开文件数:">
+<meta name="twitter:description" content="本篇只讨论OS 级别的并发优化，不包括语言层面对并发的支持特性，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。 有关 Linux 系统的限制服务器能支持建立连接数由几个决定：  建立 TCP 连接最大并发数：TCP 连接四元组是由源 IP 地址、源端口、目的 IP 地址和目的端口构成，理论上是无上限的；   端口数限制：参考 [[#系统端口">
 
 
 
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,903
+                  2,755
                 </span>
               
 
@@ -378,49 +378,68 @@
       
 
       
-        <p>C100K系统设计: 本篇只讨论<strong>OS级别的并发优化</strong>，不包括<strong>语言层面对并发的支持特性</strong>，C10K / C100K / C1000K 都是指系统能够支持的空闲长连接的数量。</p>
-<p>@ref: <a href="https://www.zhihu.com/question/41740986" target="_blank" rel="noopener">https://www.zhihu.com/question/41740986</a></p>
-<h1 id="有关Linux系统的限制"><a href="#有关Linux系统的限制" class="headerlink" title="有关Linux系统的限制"></a>有关Linux系统的限制</h1><h2 id="系统最大文件数"><a href="#系统最大文件数" class="headerlink" title="系统最大文件数"></a>系统最大文件数</h2><p>使用<code>ulimit</code>设置最多能打开文件数:</p>
+        <p>本篇只讨论<strong>OS 级别的并发优化</strong>，不包括<strong>语言层面对并发的支持特性</strong>，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。</p>
+<h1 id="有关-Linux-系统的限制"><a href="#有关-Linux-系统的限制" class="headerlink" title="有关 Linux 系统的限制"></a>有关 Linux 系统的限制</h1><p>服务器能支持建立连接数由几个决定：</p>
+<ul>
+<li>建立 TCP 连接最大并发数：TCP 连接四元组是由源 IP 地址、源端口、目的 IP 地址和目的端口构成，理论上是无上限的；</li>
+</ul>
+<ul>
+<li>端口数限制：参考 [[#系统端口限制]]</li>
+</ul>
+<ul>
+<li>Linux 文件描述符数量限制：打开一个 socket 要创建多个结构体（参考《深入理解 Linux 内核》），占用内存，所以 linux 系统出于安全角度的考虑，在多个位置都限制了可打开的文件描述符的数量，包括系统级、进程级、用户进程级，参考 [[#系统最大文件数]]</li>
+<li>TCP 连接的内存开销：Linux 为内核对象申请空间使用 Slab 机制，在 Linux 3.10.0 版本中，创建一个 socket 需要消耗 densty、flip、sock_inode_cache、TCP 四个内核对象。这些对象加起来总共需要消耗大约 3 KB 多一点的内存。</li>
+<li>服务器端应用层设置：Nginx、Apache、Tomcat 都有各自的最大并发数限制选项</li>
+</ul>
+<h2 id="系统最大文件数"><a href="#系统最大文件数" class="headerlink" title="系统最大文件数"></a>系统最大文件数</h2><p>使用 <code>ulimit</code> 设置最多能打开文件数:</p>
+<blockquote>
 <ul>
 <li>查看所有的限制: <code>ulimit -a</code></li>
-<li>设置最大打开文件句柄数: <code>ulimit -n 65535</code>, 65535 = 2^16 = 0xFFFF</li>
+<li>设置最大打开文件句柄数: <code>ulimit -n 65535</code>, 65535 = 2^16 = 0 xFFFF</li>
 <li>设置 <strong>每个用户的</strong> 最大进程数: <code>ulimit -u 32768</code></li>
 <li>设置线程栈的大小: <code>ulimit -s 10240</code></li>
-<li>设置最大线程数数: <code>ulimit -T</code> (在Unix上可能不同)</li>
-<li>设置产生core文件大小: <code>ulimit -c xxx</code></li>
-<li>不限制core的大小: <code>ulimit -c unlimited</code></li>
+<li>设置最大线程数数: <code>ulimit -T</code> (在 Unix 上可能不同)</li>
+<li>设置产生 core 文件大小: <code>ulimit -c xxx</code></li>
+<li>不限制 core 的大小: <code>ulimit -c unlimited</code></li>
 </ul>
-<p>ulimit起作用的范围是”当前Shell”, 并不是作用于”当前用户”, 如要对”用户”级别做限制, 则需要修改系统文件 <code>/etc/security/limits.conf</code>:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># * 表示所有用户, nofile表示限制文件打开数, 限制在100</span><br><span class="line">* hard nofile 100</span><br></pre></td></tr></table></figure>
-<p>如果是针对整个系统, 则需要使用<code>sysctl</code>修改, 命令格式为: <code>sysctl -w fs.nr_open=10000000</code>, 每个系统参数对应一个/proc下的文件, <code>fs.nr_open</code>对应的文件路径是<code>/proc/sys/fs/nr_open</code><br>系统最大打开文件数相关的参数有两个:</p>
+</blockquote>
+<p>ulimit 起作用的范围是”当前 Shell”, 并不是作用于”当前用户”, 如要对”用户”级别做限制, 则需要修改系统文件 <code>/etc/security/limits.conf</code>:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># * 表示所有用户, nofile表示限制文件打开数, 限制在100</span><br><span class="line"># 注意 [hard nofile]一定要比 fs.nr_open 要小，否则可能导致用户无法登陆</span><br><span class="line">* soft  nofile  55000  </span><br><span class="line">* hard  nofile 100</span><br></pre></td></tr></table></figure>
+<p>如果是针对整个系统, 则需要使用 <code>sysctl</code> 修改, 命令格式为: <code>sysctl -w fs.nr_open=10000000</code>, 每个系统参数对应一个/proc 下的文件, <code>fs.nr_open</code> 对应的文件路径是 <code>/proc/sys/fs/nr_open</code><br>系统最大打开文件数相关的参数有两个:</p>
 <ul>
 <li>fs.nr_open，进程级别</li>
 <li>fs.file-max，系统级别</li>
 </ul>
-<p>至此总结一下, “Linux系统最多能打开文件数” 有当前shell, 用户, 系统三个级别,<br>shell级别的更改限制命令是ulimit, 更改系统级别限制的命令是sysctl,<br>限制优先级最大的是fs.file-max, 假如fs.file-max设置为100万, ulimit是不能超过100万的.</p>
+<p>至此总结一下, “Linux 系统最多能打开文件数” 有当前 shell, 进程, 用户, 系统三个级别,<br>shell 级别的更改限制命令是 ulimit, 更改系统级别限制的命令是 sysctl, 用户级别<br>限制优先级最大的是 fs.file-max, 假如 fs.file-max 设置为 100 万, ulimit 是不能超过 100万的.</p>
 <blockquote>
-<p>cat /proc/sys/fs/file-nr, 输出 9344 0 592026，分别为：1.已经分配的文件句柄数，2.已经分配但没有使用的文件句柄数，3.最大文件句柄数<br>file-nr不是单个进程的限制, 是系统级的, 最后一个数字与<code>file-max</code>相同</p>
+<p>cat /proc/sys/fs/file-nr, 输出 9344 0 592026，分别为：1.已经分配的文件句柄数，2.已经分配但没有使用的文件句柄数，3.最大文件句柄数<br>file-nr 不是单个进程的限制, 是系统级的, 最后一个数字与 <code>file-max</code> 相同</p>
 </blockquote>
-<p>@ref:</p>
+<p>➤ 系统打开文件数有上限吗？<br>还没查到靠谱的资料，参考 RH6 手册，对于文件的限制，只有最大文件大小、最多子目录的数量等待，没有提到打开文件数 <a href="https://access.redhat.com/zh_CN/articles/3482381" target="_blank" rel="noopener">Red Hat Enterprise Linux 的技术能力和限制 - Red Hat Customer Portal</a></p>
+<p>➤ 如何查看已创建文件描述符数?</p>
 <ul>
-<li>Sysctl 命令参考: [[../21.Operating-System/Linux.04a.Sysctl]]</li>
-</ul>
-<h3 id="如何查看已创建文件描述符数"><a href="#如何查看已创建文件描述符数" class="headerlink" title="如何查看已创建文件描述符数?"></a>如何查看已创建文件描述符数?</h3><ul>
 <li>某进程打开文件数 <code>ll /proc/1599/fd | wc -l</code></li>
-<li>某进程打开socket的数量: <code>ll /proc/1599/fd | grep socket | wc -l</code>  # nginx一个worker打开了200-300个socket</li>
+<li>某进程打开 socket 的数量: <code>ll /proc/1599/fd | grep socket | wc -l</code>  # nginx 一个 worker 打开了 200-300 个 socket</li>
 <li>系统全部打开的文件数 <code>lsof | wc -l</code></li>
-<li>系统全部打开的TCP连接数 <code>lsof | grep TCP | wc -l</code></li>
-<li>查看tcp不同状态连接数: <code>netstat -n | awk &#39;/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}&#39;</code><ul>
-<li>注意处于TIME_WAIT的链接, 如果这个数过高会占用大量连接, 应该调整参数尽快的释放time_wait连接</li>
+<li>系统全部打开的 TCP 连接数 <code>lsof | grep TCP | wc -l</code></li>
+<li>查看 tcp 不同状态连接数: <code>netstat -n | awk &#39;/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}&#39;</code><ul>
+<li>注意处于 TIME_WAIT 的链接, 如果这个数过高会占用大量连接, 应该调整参数尽快的释放 time_wait 连接</li>
 </ul>
 </li>
 </ul>
-<p>在Nginx机器上测试:</p>
+<p>在 Nginx 机器上测试:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[@zw_85_63 ~]# netstat -n | awk &apos;/^tcp/ &#123;++S[$NF]&#125; END &#123;for(a in S) print a, S[a]&#125;&apos;</span><br><span class="line">TIME_WAIT 37968</span><br><span class="line">SYN_SENT 1</span><br><span class="line">FIN_WAIT1 5</span><br><span class="line">FIN_WAIT2 4</span><br><span class="line">ESTABLISHED 2725</span><br><span class="line">SYN_RECV 18</span><br><span class="line">LAST_ACK 4</span><br></pre></td></tr></table></figure>
+<h2 id="系统端口限制"><a href="#系统端口限制" class="headerlink" title="系统端口限制"></a>系统端口限制</h2><p>TCP 协议规定的端口数量有 65535 个，但是一般的系统里 1024 以下的端口都是保留的，可用的大约就是 64 k 个. 默认情况下，Linux 只开启了 3 万多个可用端口：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#vi /etc/sysctl.conf</span><br><span class="line">net.ipv4.ip_local_port_range = 5000 65000</span><br></pre></td></tr></table></figure>
+<p>但对于服务端，端口数不是问题，因为一个监听的端口可以复用，<br>对于客户端，端口其实也是可以复用的，但还是有<strong>四元组</strong>的限制（举例，如果 Client 用一个端口，那么 dst_ip dst_port 的组合不能相同）</p>
+<blockquote>
+<p>四元组相关的代码, 参考 net/ipv4/inet_hashtables.c 下的 INET_MATCH 宏</p>
+</blockquote>
+<p>如果 Client 只连接一个 Server（这种情况下 dst_ip 和 dst_port 被固定了），那么作为 Client 只能一个 port 建立一个连接了，也就受到 TCP 协议端口数上限的限制。如果 Client 启动大量并发线程去连接 Server，这时候可能遇到一个问题：TIME_WAIT 状态的连接过多，当端口资源被耗尽，就无法与这个服务器再建立连接了。 </p>
+<p>但有个优化选项：打开 <code>net.ipv4.tcp_tw_reuse</code> 这个内核参数，客户端调用 connect 函数时，如果选择到的端口，已经被相同四元组的连接占用的时候，就会判断该连接是否处于 TIME_WAIT 状态，如果该连接处于 TIME_WAIT 状态并且 TIME_WAIT 状态持续的时间超过了 1 秒，那么就会重用这个连接，然后就可以正常使用该端口了。</p>
 <h2 id="系统最大进线程数"><a href="#系统最大进线程数" class="headerlink" title="系统最大进线程数"></a>系统最大进线程数</h2><p>某些服务程序(Apache, Tomcat) 采用 “Thread Per Request”, 系统的进线程最大数也会影响并发性能.</p>
 <p>Linux 没有 <strong>直接限制</strong> 每个进程能够创建线程数, 仅限制了系统最大进线程数, 相关的配置有 :</p>
 <ul>
-<li>仅对当前 shell有效: <code>ulimit -u 102400</code>, <code>-u</code>表示 “max user processes”;</li>
+<li>仅对当前 shell 有效: <code>ulimit -u 102400</code>, <code>-u</code> 表示 “max user processes”;</li>
 <li>系统级别有效:<ol>
 <li>临时生效: <code>echo 102400 &gt; /proc/sys/kernel/threads-max</code> 或 <code>sysctl -w sys.kernel.threads-max=10240</code> ;</li>
 <li>永久生效: 修改 /etc/sysctl.conf 文件;</li>
@@ -428,65 +447,71 @@
 </li>
 </ul>
 <blockquote>
-<p>这里的 threads-max 不是指 进程, 是 “maximum number of threads that can be created using fork()”,<br>@ref <a href="https://www.kernel.org/doc/Documentation/sysctl/kernel.txt" target="_blank" rel="noopener">https://www.kernel.org/doc/Documentation/sysctl/kernel.txt</a></p>
+<p>这里的 threads-max 不是指进程, 是 “maximum number of threads that can be created using fork()”,<br>@ref <a href="https://www.kernel.org/doc/Documentation/sysctl/kernel.txt" target="_blank" rel="noopener">https://www.kernel.org/doc/Documentation/sysctl/kernel.txt</a></p>
 </blockquote>
-<p>每个进程能创建的最大线程数, 是由 total virtual memory 和stack size 共同决定的, <code>number of threads = total virtual memory / stack size</code><br>这两个参数分别用 <code>ulimit -v xxx</code> 和 <code>ulimit -s xxx</code>设置</p>
-<p>此外系统能创建最大进程数还受 <code>kernel.pid_max</code>影响:</p>
+<p>每个进程能创建的最大线程数, 是由 total virtual memory 和 stack size 共同决定的, <code>number of threads = total virtual memory / stack size</code><br>这两个参数分别用 <code>ulimit -v xxx</code> 和 <code>ulimit -s xxx</code> 设置</p>
+<p>此外系统能创建最大进程数还受 <code>kernel.pid_max</code> 影响:</p>
 <ul>
 <li>方式1 运行时限制,临时生效 <code>echo 999999 &gt; /proc/sys/kernel/pid_max</code></li>
 <li>方式2 修改/etc/sysctl.conf，永久生效 <code>sys.kernel.pid_max = 999999</code></li>
 </ul>
-<h1 id="应用程序的设置"><a href="#应用程序的设置" class="headerlink" title="应用程序的设置"></a>应用程序的设置</h1><p>根据不同程序不同IO模型, 设置的思路也不一样</p>
+<p>但是线程数没限制不代表”Thread Per Request”可以行得通，如果创建了百万级的线程，上下文切换对 CPU 的调度也是考验</p>
+<h1 id="应用程序的设置"><a href="#应用程序的设置" class="headerlink" title="应用程序的设置"></a>应用程序的设置</h1><p>根据不同程序不同 IO 模型, 设置的思路也不一样</p>
 <blockquote>
-<p>BIO：Apache/Tomcat, 主要是并发量要求不高的场景<br>NIO：Nginx/Redis, 主要是高并发量要求的场景<br>Redis使用单线程的I/O复用模型，自己封装了一个简单的AeEvent事件处理框架，主要实现了epoll、kqueue和select。对于单纯只有I/O操作来说，单线程可以将速度优势发挥到最大。<br>但是Redis也提供了一些简单的计算功能，比如排序、聚合等，对于这些操作，单线程模型实际会严重影响整体吞吐量，CPU计算过程中，整个I/O调度都是被阻塞住的，</p>
+<p>BIO：Apache/Tomcat, 主要是并发量要求不高的场景<br>NIO：Nginx/Redis, 主要是高并发量要求的场景<br>Redis 使用单线程的 I/O 复用模型，自己封装了一个简单的 AeEvent 事件处理框架，主要实现了 epoll、kqueue 和 select。对于单纯只有 I/O 操作来说，单线程可以将速度优势发挥到最大。<br>但是 Redis 也提供了一些简单的计算功能，比如排序、聚合等，对于这些操作，单线程模型实际会严重影响整体吞吐量，CPU 计算过程中，整个 I/O 调度都是被阻塞住的，</p>
 </blockquote>
 <h2 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h2><ul>
-<li>worker_connections= //每个worker线程能创建的连接数</li>
-<li>upstream可以使用http 1.1的keepalive //与后端服务器创建的连接池大小</li>
-<li>worker_processes 8; // nginx进程数，一般等于cpu core数量</li>
-<li>worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000; // 每个进程分配到cpu的core上</li>
-<li>worker_rlimit_nofile 65535; // 一个nginx进程打开的最多文件描述符数目</li>
+<li>worker_rlimit_nofile 65535; // 一个 nginx 进程打开的最多文件描述符数目</li>
+<li><p>listen 8080 backlog=168888; // accept 成功队列长度，用于 listen(int sockfd, int backlog)，默认值 511</p>
+</li>
+<li><p>worker_connections= //每个 worker 线程能创建的连接数</p>
+</li>
+<li>upstream 可以使用 http 1.1的 keepalive //与后端服务器创建的连接池大小</li>
+<li>worker_processes 8; // nginx 进程数，一般等于 cpu core 数量</li>
+<li>worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000; // 每个进程分配到 cpu 的 core 上</li>
 </ul>
 <h2 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h2><p>@todo</p>
-<h2 id="apache"><a href="#apache" class="headerlink" title="apache"></a>apache</h2><p>默认是多进程同步处理request, 所以思路和Nginx每个Core一个进程epoll轮询的方式不同, apache应该增加”系统创建进程数上限”, 并且减小进程栈内存</p>
+<h2 id="apache"><a href="#apache" class="headerlink" title="apache"></a>apache</h2><p>默认是多进程同步处理 request, 所以思路和 Nginx 每个 Core 一个进程 epoll 轮询的方式不同, apache 应该增加”系统创建进程数上限”, 并且减小进程栈内存</p>
 <h2 id="tomcat"><a href="#tomcat" class="headerlink" title="tomcat"></a>tomcat</h2><ul>
-<li>maxThreads=500 最大线程数，此值限制了bio的最大连接数<ul>
-<li>一般的当一个进程有500个线程在跑的话，那性能已经是很低很低了。Tomcat默认配置的最大请求数是150。当某个应用拥有250个以上并发的时候，应考虑应用服务器的集群。</li>
+<li>maxThreads=500 最大线程数，此值限制了 bio 的最大连接数<ul>
+<li>一般的当一个进程有 500 个线程在跑的话，那性能已经是很低很低了。Tomcat 默认配置的最大请求数是 150。当某个应用拥有 250 个以上并发的时候，应考虑应用服务器的集群。</li>
 </ul>
 </li>
-<li>maxConnection=8192: 使用nio或者apr时，最大连接数受此值影响。</li>
+<li>maxConnection=8192: 使用 nio 或者 apr 时，最大连接数受此值影响。</li>
 </ul>
 <p>参考 <a href="http://www.cnblogs.com/zhanjindong/p/concurrent-and-tomcat-threads.html" target="_blank" rel="noopener">聊下并发和Tomcat线程数（Updated） - zhanjindong - 博客园</a> @ref</p>
 <h2 id="FastCGI"><a href="#FastCGI" class="headerlink" title="FastCGI"></a>FastCGI</h2><ul>
 <li>fastcgi_connect_timeout 300;</li>
 </ul>
 <h1 id="高并发配置-无废话总结"><a href="#高并发配置-无废话总结" class="headerlink" title="高并发配置-无废话总结"></a>高并发配置-无废话总结</h1><ol>
-<li>应用程序的并发设置: 主要是timeout, 进/线程数这几类参数</li>
-<li>操作系统打开文件数量限制:  <code>ulimit -n</code>单个Shell环境的限制, <code>sysctl -w fs.file-max</code>修改系统打开文件限制</li>
-<li>操作系统打开端口数量限制: 最大端口数65535(2^16), 但1024以后的端口是给系统用的</li>
-<li>sysctl修改的TCP协议栈参数</li>
+<li>应用程序的并发设置: 主要是 timeout, 进/线程数这几类参数</li>
+<li>操作系统打开文件数量限制:  <code>ulimit -n</code> 单个 Shell 环境的限制, <code>sysctl -w fs.file-max</code> 修改系统打开文件限制</li>
+<li>操作系统打开端口数量限制: 最大端口数 65535(2^16), 但 1024 以后的端口是给系统用的</li>
+<li></li>
+<li>sysctl 修改的 TCP 协议栈参数</li>
 </ol>
 <h1 id="并发性能测试工具"><a href="#并发性能测试工具" class="headerlink" title="并发性能测试工具"></a>并发性能测试工具</h1><h2 id="ab-Apache-Bench"><a href="#ab-Apache-Bench" class="headerlink" title="ab(Apache Bench)"></a>ab(Apache Bench)</h2><p>1000并发, 总共20000次请求: <code>ab -n 20000 -c 1000 &lt;url&gt;</code></p>
 <h2 id="http-load"><a href="#http-load" class="headerlink" title="http_load"></a>http_load</h2><p>30个并发线程, 共60秒测试: <code>http_load -p 30 -s 60 Url.txt</code></p>
 <h2 id="JMeter"><a href="#JMeter" class="headerlink" title="JMeter"></a>JMeter</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>@todo</p>
 <h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>@todo</p>
-<h3 id="报告"><a href="#报告" class="headerlink" title="报告"></a>报告</h3><p>在聚合报告中，会显示一行数据，共有10个字段，含义分别如下。</p>
+<h3 id="报告"><a href="#报告" class="headerlink" title="报告"></a>报告</h3><p>在聚合报告中，会显示一行数据，共有 10 个字段，含义分别如下。</p>
 <ul>
 <li>Label：每个 JMeter 的 element（例如 HTTP Request）都有一个 Name 属性，这里显示的就是 Name 属性的值</li>
-<li>Samples：表示你这次测试中一共发出了多少个请求，如果模拟10个用户，每个用户迭代10次，那么这里显示100</li>
-<li>Average：平均响应时间——默认情况下是单个 Request 的平均响应时间，当使用了 Transaction Controller 时，也可以以Transaction 为单位显示平均* 响应时间</li>
+<li>Samples：表示你这次测试中一共发出了多少个请求，如果模拟 10 个用户，每个用户迭代 10 次，那么这里显示 100</li>
+<li>Average：平均响应时间——默认情况下是单个 Request 的平均响应时间，当使用了 Transaction Controller 时，也可以以 Transaction 为单位显示平均* 响应时间</li>
 <li>Median：中位数，也就是 50％ 用户的响应时间</li>
 <li>90% Line：90％ 用户的响应时间</li>
 <li>Min：最小响应时间</li>
 <li>Max：最大响应时间</li>
 <li>Error%：本次测试中出现错误的请求的数量/请求的总数</li>
 <li>Throughput：吞吐量——默认情况下表示每秒完成的请求数（Request per Second）</li>
-<li>KB/Sec：每秒从服务器端接收到的数据量，相当于LoadRunner中的Throughput/Sec</li>
+<li>KB/Sec：每秒从服务器端接收到的数据量，相当于 LoadRunner 中的 Throughput/Sec</li>
 </ul>
 <p>参考: <a href="http://www.importnew.com/13876.html" target="_blank" rel="noopener">使用JMeter进行负载测试——终极指南 - ImportNew</a> @ref</p>
 <h2 id="wrk"><a href="#wrk" class="headerlink" title="wrk"></a>wrk</h2><p><a href="https://github.com/wg/wrk" target="_blank" rel="noopener">wg/wrk: Modern HTTP benchmarking tool</a></p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
 <li><a href="http://www.rowkey.me/blog/2015/09/09/load-analysis/" target="_blank" rel="noopener">系统负载能力浅析</a></li>
+<li><a href="https://www.zhihu.com/question/361111920" target="_blank" rel="noopener">一台主机上只能保持最多 65535 个 TCP 连接吗？ - 知乎</a></li>
 <li><a href="https://www.ibm.com/developerworks/cn/linux/l-cn-ulimit/" target="_blank" rel="noopener">通过 ulimit 改善系统性能</a> @Archived</li>
 <li><a href="http://www.chengweiyang.cn/2015/11/14/how-to-enlarge-linux-open-files-upper-cell/" target="_blank" rel="noopener">怎样增大 Linux 系统的 open file(s) 上限</a></li>
 <li><a href="http://www.cnblogs.com/sxlfybb/archive/2011/09/15/2178160.html" target="_blank" rel="noopener">nginx优化 突破十万并发</a></li>
@@ -636,7 +661,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -658,7 +683,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -726,7 +751,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#有关Linux系统的限制"><span class="nav-text">有关Linux系统的限制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#系统最大文件数"><span class="nav-text">系统最大文件数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何查看已创建文件描述符数"><span class="nav-text">如何查看已创建文件描述符数?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统最大进线程数"><span class="nav-text">系统最大进线程数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用程序的设置"><span class="nav-text">应用程序的设置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx"><span class="nav-text">nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis"><span class="nav-text">redis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#apache"><span class="nav-text">apache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat"><span class="nav-text">tomcat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FastCGI"><span class="nav-text">FastCGI</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高并发配置-无废话总结"><span class="nav-text">高并发配置-无废话总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#并发性能测试工具"><span class="nav-text">并发性能测试工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ab-Apache-Bench"><span class="nav-text">ab(Apache Bench)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http-load"><span class="nav-text">http_load</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMeter"><span class="nav-text">JMeter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-text">测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#报告"><span class="nav-text">报告</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wrk"><span class="nav-text">wrk</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#有关-Linux-系统的限制"><span class="nav-text">有关 Linux 系统的限制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#系统最大文件数"><span class="nav-text">系统最大文件数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统端口限制"><span class="nav-text">系统端口限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统最大进线程数"><span class="nav-text">系统最大进线程数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用程序的设置"><span class="nav-text">应用程序的设置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx"><span class="nav-text">nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis"><span class="nav-text">redis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#apache"><span class="nav-text">apache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat"><span class="nav-text">tomcat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FastCGI"><span class="nav-text">FastCGI</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高并发配置-无废话总结"><span class="nav-text">高并发配置-无废话总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#并发性能测试工具"><span class="nav-text">并发性能测试工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ab-Apache-Bench"><span class="nav-text">ab(Apache Bench)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http-load"><span class="nav-text">http_load</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMeter"><span class="nav-text">JMeter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-text">测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#报告"><span class="nav-text">报告</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wrk"><span class="nav-text">wrk</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>

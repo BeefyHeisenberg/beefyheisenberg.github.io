@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,132
+                  1,141
                 </span>
               
 
@@ -397,7 +397,14 @@
 <li>分析: 如果新生代容量扩容1倍, 可以推算, MinorGC发生频率降低1倍, Minor GC的”扫描阶段”耗时增加1倍, 但”拷贝阶段”的耗时不会显著增加, 虽然Minor GC间隔增加, 但…</li>
 <li>解决: 增大新生代容量</li>
 </ul>
-<p>➤ 案例2: 使用CMS, remark阶段STW超过1000ms</p>
+<blockquote>
+<p><strong>动态年龄计算</strong>：Hotspot 遍历所有对象时，按照年龄从小到大对其所占用的大小进行累积，当累积的某个年龄大小超过了 survivor 区的一半时，取这个年龄和 MaxTenuringThreshold 中更小的一个值，作为新的晋升年龄阈值。在本案例中，调优前：Survivor 区 = 64 M，desired survivor = 32 M，此时 Survivor 区中 age&lt;=2 的对象累计大小为 41 M，41 M 大于 32 M，所以晋升年龄阈值被设置为 2，下次 Minor GC 时将年龄超过2的对象被晋升到老年代。</p>
+<p>JVM 引入动态年龄计算，主要基于如下两点考虑：</p>
+<ol>
+<li>如果固定按照 MaxTenuringThreshold 设定的阈值作为晋升条件： a）MaxTenuringThreshold 设置的过大，原本应该晋升的对象一直停留在 Survivor 区，直到 Survivor 区溢出，一旦溢出发生，Eden+Svuvivor 中对象将不再依据年龄全部提升到老年代，这样对象老化的机制就失效了。 b）MaxTenuringThreshold 设置的过小，“过早晋升”即对象不能在新生代充分被回收，大量短期对象被晋升到老年代，老年代空间迅速增长，引起频繁的 Major GC。分代回收失去了意义，严重影响 GC 性能。</li>
+<li>相同应用在不同时间的表现不同：特殊任务的执行或者流量成分的变化，都会导致对象的生命周期分布发生波动，那么固定的阈值设定，因为无法动态适应变化，会造成和上面相同的问题。</li>
+</ol>
+</blockquote>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/12.Java/Advanced-Java.03b.GC案例分析/#more" rel="contents">
@@ -524,7 +531,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,502
+                  3,729
                 </span>
               
 
@@ -550,12 +557,12 @@
 
       
         
-          <h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><p>加载 – 链接 – 初始化, 以上三个阶段涉及到的JVM内存区域:</p>
+          <h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><p>加载 – 链接 – 初始化, 以上三个阶段涉及到的 JVM 内存区域:</p>
 <blockquote>
 <ol>
-<li>在加载阶段, 创建的class对象存储在堆(Heap);</li>
-<li>在链接阶段, final常量和字符串在方法区分配空间(jdk8变成了元空间);</li>
-<li>在初始化阶段, 初始化static成员, 也在堆;</li>
+<li>在加载阶段, 创建的 class 对象存储在堆(Heap);</li>
+<li>在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间);</li>
+<li>在初始化阶段, 初始化 static 成员, 也在堆;</li>
 </ol>
 </blockquote>
 <p><img src="/images/java/JVM-Load-Class.png" alt></p>
@@ -960,7 +967,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  426
+                  418
                 </span>
               
 
@@ -988,7 +995,7 @@
         
           <p>HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。</p>
 <p><img src="/images/java/JVM-Object-Memory.png" alt></p>
-<h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h2><p>HotSpot虚拟机的对象头包括两部分信息对象头分三部分内容(如果不是数组则是两部分):</p>
+<h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h2><p>在HotSpot里对象头包括3部分(如果此对象不是数组，则只包括前2部分):</p>
 <ol>
 <li><strong>Mark Word</strong>: 用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等，这部分数据的长度在32位和64位VM中分别为32bit和64bit;</li>
 <li><strong>Class Metadata Address</strong>: klass类型指针, 用来指向对象对应的Class对象（其对应的元数据对象）的内存地址。这部分数据的长度在32位和64位VM中分别为32bit和64bit。64位开启指针压缩的情况下, 这部分占32bit;</li>
@@ -1120,7 +1127,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  7,593
+                  7,694
                 </span>
               
 
@@ -1155,12 +1162,12 @@
 </ul>
 </li>
 <li><a href="#Java内存模型的抽象">Java内存模型的抽象</a><ul>
-<li>Java内存模型（JMM）的抽象: 主内存和线程的”本地内存”</li>
+<li>Java 内存模型（JMM）的抽象: 主内存和线程的”本地内存”</li>
 <li><a href="#JMM的happens-before规则">happens-before规则</a><ul>
-<li>该规则是JSR-133内存模型(JDK层面定义的)中提出的概念, happens-before并不是指两个指令执行的先后顺序, 而是两个指令的 <strong>内存可见性</strong>. 如果一个操作执行的结果需要对另一个操作可见，那么这两个操作之间必须存在happens-before关系。</li>
-<li>该规则还保证了, 哪些java代码能达到happens-before的效果:<ul>
+<li>该规则是 JSR-133 内存模型(JDK 层面定义的)中提出的概念, happens-before 并不是指两个指令执行的先后顺序, 而是两个指令的 <strong>内存可见性</strong>. 如果一个操作执行的结果需要对另一个操作可见，那么这两个操作之间必须存在 happens-before 关系。</li>
+<li>该规则还保证了, 哪些 java 代码能达到 happens-before 的效果:<ul>
 <li>单线程下顺序执行;</li>
-<li>正确使用volatile, Synchronize 的情况下, 多线程也能提供happens-before效果;</li>
+<li>正确使用 volatile, Synchronize 的情况下, 多线程也能提供 happens-before 效果;</li>
 </ul>
 </li>
 </ul>
@@ -1169,27 +1176,27 @@
 </li>
 <li><a href="#重排序">重排序</a><ul>
 <li>为什么会产生重排序，有哪几种重排序?</li>
-<li>在JMM上, 重排序必须遵守as-if-serial语义: as if serial, 「就像是顺序执行」<ul>
-<li>在单线程环境下, 保证a-i-s, 处理器和编译器的重排序优化,不能改变存在数据依赖关系的两个操作的执行顺序</li>
-<li>在存在竞争的多线程下, 处理器和编译器不保证a-i-s, 必须正确使用lock，volatile和final 才可以.</li>
+<li>在 JMM 上, 重排序必须遵守 as-if-serial 语义: as if serial, 「就像是顺序执行」<ul>
+<li>在单线程环境下, 保证 a-i-s, 处理器和编译器的重排序优化,不能改变存在数据依赖关系的两个操作的执行顺序</li>
+<li>在存在竞争的多线程下, 处理器和编译器不保证 a-i-s, 必须正确使用 lock，volatile 和 final 才可以.</li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#内存屏障">内存屏障</a><ul>
-<li>内存屏障指令是cpu架构层面定义的, Java编译器会在生成字节码中插入内存屏障指令来禁止某些重排序, 保证多核环境下代码执行的”一致性”</li>
-<li>JMM提供了四种内存屏障, 其中最重要的是<code>StoreLoad</code>屏障指令, 它能保证…</li>
+<li>内存屏障指令是 cpu 架构层面定义的, Java 编译器会在生成字节码中插入内存屏障指令来禁止某些重排序, 保证多核环境下代码执行的”一致性”</li>
+<li>JMM 提供了四种内存屏障, 其中最重要的是 <code>StoreLoad</code> 屏障指令, 它能保证…</li>
 </ul>
 </li>
-<li>Java如何实现多线程环境下的正确同步:<ul>
-<li>Volatile实现了怎样的内存语义, 是如何实现的?</li>
-<li>Synchronize实现了怎样的内存语义, 是如何实现的?</li>
-<li>ReentrantLock是如何实现的? CAS具有跟Volatile读写一样的内存语义, 是如何实现的?</li>
-<li><a href="concurrent包的实现">concurrent包的实现</a> : 四种方式(CAS和volatile)</li>
+<li>Java 如何实现多线程环境下的正确同步:<ul>
+<li>Volatile 实现了怎样的内存语义, 是如何实现的?</li>
+<li>Synchronize 实现了怎样的内存语义, 是如何实现的?</li>
+<li>ReentrantLock 是如何实现的? CAS 具有跟 Volatile 读写一样的内存语义, 是如何实现的?</li>
+<li><a href="concurrent包的实现">concurrent包的实现</a> : 四种方式(CAS 和 volatile)</li>
 </ul>
 </li>
 </ul>
-<h2 id="并发编程模型"><a href="#并发编程模型" class="headerlink" title="并发编程模型"></a>并发编程模型</h2><p>在并发编程中，我们需要处理两个关键问题：线程之间如何通信及线程之间如何同步（这里的线程是指并发执行的活动实体）。</p>
+<h2 id="并发编程模型"><a href="#并发编程模型" class="headerlink" title="并发编程模型"></a>并发编程模型</h2><p>在并发编程中，我们需要处理两个关键问题：线程之间如何通信及线程之间如何同步。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/12.Java/Advanced-Java.06.深入理解Java内存模型/#more" rel="contents">
@@ -1633,7 +1640,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  9,085
+                  9,175
                 </span>
               
 
@@ -1797,7 +1804,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,911
+                  5,114
                 </span>
               
 
@@ -1823,9 +1830,9 @@
 
       
         
-          <h1 id="集合类继承关系"><a href="#集合类继承关系" class="headerlink" title="集合类继承关系"></a>集合类继承关系</h1><p>Java核心类库提供了两大类容器, Collection(集合)和Map, 其中Collection接口又派生出List, Queue, Set三种接口:</p>
+          <h1 id="集合类继承关系"><a href="#集合类继承关系" class="headerlink" title="集合类继承关系"></a>集合类继承关系</h1><p>Java 核心类库提供了两大类容器, Collection(集合)和 Map, 其中 Collection 接口又派生出 List, Queue, Set 三种接口:</p>
 <p><img src="/images/java/java-collection-hierarchy.gif" alt="Hierarchy of Collection"></p>
-<p>容器顶层接口Collection/Map以及主要实现类 &amp; 继承关系:</p>
+<p>容器顶层接口 Collection/Map 以及主要实现类 &amp; 继承关系:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java.util.Collection [I]</span><br><span class="line">    java.util.List [I]</span><br><span class="line">        ArrayList</span><br><span class="line">        LinkedList*</span><br><span class="line">        Vector</span><br><span class="line">            Stack</span><br><span class="line">    java.util.Queue [I]</span><br><span class="line">        LinkedList*</span><br><span class="line">        PriorityQueue</span><br><span class="line">    java.util.Deque [I]</span><br><span class="line">        LinkedList</span><br><span class="line">    java.util.Set [I]</span><br><span class="line">        TreeSet*</span><br><span class="line">        HashSet*</span><br><span class="line">            LinkedHashSet</span><br><span class="line">java.util.Map [I]</span><br><span class="line">        TreeMap*</span><br><span class="line">        HashMap*</span><br><span class="line">            LinkedHashMap</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
@@ -2124,7 +2131,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  973
+                  985
                 </span>
               
 
@@ -2438,7 +2445,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  461
+                  470
                 </span>
               
 
@@ -2464,7 +2471,7 @@
 
       
         
-          <p>@Question:</p>
+          <p>Question:</p>
 <ul>
 <li>如何定义一个可序列化的类?</li>
 <li>serialVersionUID属性的作用和生成方式?</li>
@@ -2473,19 +2480,19 @@
 <li>如何自定义序列化?</li>
 <li>反序列化的调用过程?</li>
 </ul>
+<p>Answer：</p>
 <ol>
 <li>实现 <code>Serializable</code>接口的类可以被序列化, 通过<code>ObjectOutputStream</code>和<code>ObjectInputStream</code>对象进行序列化及反序列化</li>
 <li>通过<code>ObjectOutputStream</code>反序列化的时候, 会比较 serialVersionUID是否相同, 如果不同会抛异常<code>InvalidClassException</code>, 建议: 在创建可序列化的类的时候指定一个serialVersionUID, 并且在可兼容升级的时候不要修改serialVersionUID, 除非是不兼容的版本. 如果没有定义serialVersionUID, 在反序列化的时候, ObjectOutputStream会自动生成一个(根据类名,接口名,属性名, 以及描述符等生成一个64位的哈希数字)</li>
 <li>static 和 transient关键字修饰的属性不会被序列化</li>
 <li>ArrayList的实现里, 把<code>elementData[]</code>声明为 transient, 同时也实现了<code>writeObject(ObjectOutputStream)</code>和<code>readObject(ObjectInputStream)</code>, 在这两个方法里实现自定义序列化, 目的是为了避免<code>elementData[]</code>中大量空元素被序列化, 减少序列化字节占用.</li>
-<li>如何自定义序列化实现: 类实现自己的<code>writeObject(ObjectOutputStream)</code>和<code>readObject(ObjectInputStream)</code></li>
-<li>反序列化调用过程(伪码): <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ObjectInputStream.readObject(Object)</span><br><span class="line">    ObjectStreamClass.initNonProxy // 检查是否实现 Serializable接口, serialVersionUID是相等</span><br><span class="line">        调用类的readObject()</span><br></pre></td></tr></table></figure>
+<li>如何自定义序列化实现: 参考 ArrayList 类，重写 <code>writeObject(ObjectOutputStream)</code> 和 <code>readObject(ObjectInputStream)</code> 方法;</li>
+<li>反序列化调用过程(伪码): <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ObjectInputStream.readObject(Object)</span><br><span class="line">    ObjectStreamClass.initNonProxy // 该方法里检查是否实现 Serializable接口, serialVersionUID是相等</span><br><span class="line">        readObjectMethod.invoke(...) // 调用类的 readObject()</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <blockquote>
 <p>@ref <a href="https://mp.weixin.qq.com/s?__biz=MzI3NzE0NjcwMg==&amp;mid=2650120882&amp;idx=1&amp;sn=8e355b5ee3cce0a2d0108edbdf88e606" target="_blank" rel="noopener">你真的以为你了解Java的序列化了吗？</a><br>@ref <a href="https://juejin.im/entry/5c2192de6fb9a049e2320859" target="_blank" rel="noopener">为什么阿里巴巴要求程序员谨慎修改serialVersionUID 字段的值 - 后端 - 掘金</a></p>
 </blockquote>
-<p>序列化/反序列化API示例代码:</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/12.Java/Java-Tutorials.06.序列化/#more" rel="contents">
@@ -2612,7 +2619,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,525
+                  2,526
                 </span>
               
 
@@ -3656,7 +3663,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -3706,7 +3713,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3728,7 +3735,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

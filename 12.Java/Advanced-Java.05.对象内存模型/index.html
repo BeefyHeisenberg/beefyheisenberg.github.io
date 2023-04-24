@@ -117,21 +117,21 @@
 
 
 
-<meta name="description" content="HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。  对象头HotSpot虚拟机的对象头包括两部分信息对象头分三部分内容(如果不是数组则是两部分):  Mark Word: 用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时">
+<meta name="description" content="HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。  对象头在HotSpot里对象头包括3部分(如果此对象不是数组，则只包括前2部分):  Mark Word: 用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等，这部">
 <meta name="keywords" content="Java进阶">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Advanced Java-05-对象内存模型">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.05.对象内存模型/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。  对象头HotSpot虚拟机的对象头包括两部分信息对象头分三部分内容(如果不是数组则是两部分):  Mark Word: 用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时">
+<meta property="og:description" content="HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。  对象头在HotSpot里对象头包括3部分(如果此对象不是数组，则只包括前2部分):  Mark Word: 用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等，这部">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-Object-Memory.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmm-object-memory-head.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmm-object-mark-word.png">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.479Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.385Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-05-对象内存模型">
-<meta name="twitter:description" content="HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。  对象头HotSpot虚拟机的对象头包括两部分信息对象头分三部分内容(如果不是数组则是两部分):  Mark Word: 用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时">
+<meta name="twitter:description" content="HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。  对象头在HotSpot里对象头包括3部分(如果此对象不是数组，则只包括前2部分):  Mark Word: 用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等，这部">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/java/JVM-Object-Memory.png">
 
 
@@ -357,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  426
+                  418
                 </span>
               
 
@@ -384,7 +384,7 @@
       
         <p>HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。</p>
 <p><img src="/images/java/JVM-Object-Memory.png" alt=""></p>
-<h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h2><p>HotSpot虚拟机的对象头包括两部分信息对象头分三部分内容(如果不是数组则是两部分):</p>
+<h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h2><p>在HotSpot里对象头包括3部分(如果此对象不是数组，则只包括前2部分):</p>
 <ol>
 <li><strong>Mark Word</strong>: 用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等，这部分数据的长度在32位和64位VM中分别为32bit和64bit;</li>
 <li><strong>Class Metadata Address</strong>: klass类型指针, 用来指向对象对应的Class对象（其对应的元数据对象）的内存地址。这部分数据的长度在32位和64位VM中分别为32bit和64bit。64位开启指针压缩的情况下, 这部分占32bit;</li>
@@ -528,7 +528,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -550,7 +550,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

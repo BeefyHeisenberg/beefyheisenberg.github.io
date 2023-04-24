@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="4种引用对比 强引用: 只要强引用还在就不会被 GC，JVM宁愿抛出 OutOfMemoryError错误也不会回收； 软引用(SoftReference): 用来描述非必需对象, GC时发现内存不够时（Heap内存超阈值）将会被回收。当垃圾回收器决定对其回收时，会先清空它的 SoftReference，也就是说 SoftReference 的 get()方法将会返回 null，然后再调用对象的f">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.602Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.506Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Tutorials-13-引用">
 <meta name="twitter:description" content="4种引用对比 强引用: 只要强引用还在就不会被 GC，JVM宁愿抛出 OutOfMemoryError错误也不会回收； 软引用(SoftReference): 用来描述非必需对象, GC时发现内存不够时（Heap内存超阈值）将会被回收。当垃圾回收器决定对其回收时，会先清空它的 SoftReference，也就是说 SoftReference 的 get()方法将会返回 null，然后再调用对象的f">
@@ -396,7 +396,7 @@
 <p>调用WeakHashMap 的 put(k,v), 首先创建Entry对象, Entry构造里首先调用了<code>WeakReference(K, Queue)</code>,<br>用一个WeakReference指向key，key会在下次GC被回收(null)，value被一个强引用指向了，不会被回收，可以通过queue.poll取出所有被释放的Key，</p>
 <p>A: 那么WeakHashMap 是如何回收value的?</p>
 <p>Q: 在<code>get</code>, <code>put</code>, <code>size</code> 方法里都会先调用一个<code>expungeStaleEntries()</code>方法,<br>遍历ReferenceQueue 取出每个Entry(即被回收的Key), 找到Entry 对应的<code>table[i]</code>,<br><code>table[i]</code>是 Entry组成的链表(当hash冲突的时候), 遍历这个链表, 取出每一个Entry, 如果ReferenceQueue 取出的那个Entry,<br>把这个 Entry.value置为null, 帮助回收;</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private void expungeStaleEntries() &#123;</span><br><span class="line">     for (Object x; (x = queue.poll()) != null; ) &#123;</span><br><span class="line">         synchronized (queue) &#123;</span><br><span class="line">             @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">                 Entry&lt;K,V&gt; e = (Entry&lt;K,V&gt;) x; // @Uncertain</span><br><span class="line">             int i = indexFor(e.hash, table.length);</span><br><span class="line"></span><br><span class="line">             Entry&lt;K,V&gt; prev = table[i];</span><br><span class="line">             Entry&lt;K,V&gt; p = prev;</span><br><span class="line">             while (p != null) &#123;</span><br><span class="line">                 Entry&lt;K,V&gt; next = p.next;</span><br><span class="line">                 if (p == e) &#123;</span><br><span class="line">                     if (prev == e)</span><br><span class="line">                         table[i] = next;</span><br><span class="line">                     else</span><br><span class="line">                         prev.next = next;</span><br><span class="line">                     // Must not null out e.next;</span><br><span class="line">                     // stale entries may be in use by a HashIterator</span><br><span class="line">                     e.value = null; // Help GC</span><br><span class="line">                     size--;</span><br><span class="line">                     break;</span><br><span class="line">                 &#125;</span><br><span class="line">                 prev = p;</span><br><span class="line">                 p = next;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private void expungeStaleEntries() &#123;</span><br><span class="line">     for (Object x; (x = queue.poll()) != null; ) &#123;</span><br><span class="line">         synchronized (queue) &#123;</span><br><span class="line">             @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">                 Entry&lt;K,V&gt; e = (Entry&lt;K,V&gt;) x; // @doubt</span><br><span class="line">             int i = indexFor(e.hash, table.length);</span><br><span class="line"></span><br><span class="line">             Entry&lt;K,V&gt; prev = table[i];</span><br><span class="line">             Entry&lt;K,V&gt; p = prev;</span><br><span class="line">             while (p != null) &#123;</span><br><span class="line">                 Entry&lt;K,V&gt; next = p.next;</span><br><span class="line">                 if (p == e) &#123;</span><br><span class="line">                     if (prev == e)</span><br><span class="line">                         table[i] = next;</span><br><span class="line">                     else</span><br><span class="line">                         prev.next = next;</span><br><span class="line">                     // Must not null out e.next;</span><br><span class="line">                     // stale entries may be in use by a HashIterator</span><br><span class="line">                     e.value = null; // Help GC</span><br><span class="line">                     size--;</span><br><span class="line">                     break;</span><br><span class="line">                 &#125;</span><br><span class="line">                 prev = p;</span><br><span class="line">                 p = next;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <p>// 疑问, 只有Key是WeakReference, GC发生时, 应该只有Key 被放入ReferenceQueue, 而不是Entry对象<br>// 解释, queue 里存储的是 <code>Reference&lt;K&gt;</code> 类型, 而Entry 是Reference的子类, 所以可以转换<br>// <a href="https://www.zhihu.com/question/63932795" target="_blank" rel="noopener">WeakHashMap中关于queue的疑惑 ？ - 知乎</a></p>
 
       
@@ -531,7 +531,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -553,7 +553,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

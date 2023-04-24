@@ -126,12 +126,14 @@
 <meta property="og:description" content="索引: 设计模式：可复用面向对象软件的基础  《设计模式：可复用面向对象软件的基础》（Design Patterns: Elements of Reusable Object-Oriented Software）是软件工程领域有关设计模式的一本书，提出和总结了对于一些常见软件设计问题的标准解决方案，称为软件设计模式。该书作者是埃里希·伽玛（Erich Gamma）、Richard Helm、Ral">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/wikipedia-design-patterns.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/design-patterns-abstract-factory.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/design-patterns-builder.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/design-patterns-adapter.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/design-patterns-bridge.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/design-patterns-decorator.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/design-patterns-proxy.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/design-patterns-observer.png">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.668Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.572Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式">
 <meta name="twitter:description" content="索引: 设计模式：可复用面向对象软件的基础  《设计模式：可复用面向对象软件的基础》（Design Patterns: Elements of Reusable Object-Oriented Software）是软件工程领域有关设计模式的一本书，提出和总结了对于一些常见软件设计问题的标准解决方案，称为软件设计模式。该书作者是埃里希·伽玛（Erich Gamma）、Richard Helm、Ral">
@@ -360,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,263
+                  2,507
                 </span>
               
 
@@ -406,22 +408,32 @@
 </li>
 </ul>
 <h2 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h2><ul>
-<li>抽象工厂类提供抽象工厂方法(可以有多种方法), 此类方法返回产品的抽象类</li>
-<li>实现抽象工厂类, 实现类需要实现不同的工厂方法, 此外还需要实现 FactoryProducer 来获取不同的工厂实例</li>
-<li>对于调用者而言, 调用这些工厂方法的方式都是一样的</li>
+<li>抽象工厂类提供抽象工厂方法(可以有多种方法), 此类方法返回产品的抽象类；</li>
+<li>实现抽象工厂类, 实现类需要实现不同的工厂方法, 此外还需要实现 FactoryProducer 来获取不同的工厂实例；</li>
 <li>相比简单工厂:<ul>
-<li>简单工厂在一个工厂方法里生产所有产品, 如果需要新增产品…需要更改具体的工厂方法</li>
-<li>抽象工厂包含多个工厂实现, 每个工厂实现类只生产一类产品, 如果需要新增产品, 只需要增加新工厂类和方法</li>
-<li>问题是, 用户代码又引入了”FactoryProducer”, 以及, 如果要新增产品和工厂, 需要修改抽象工厂类</li>
+<li>简单工厂在一个工厂方法里生产所有产品, 如果需要新增产品…需要更改具体的工厂方法；</li>
+<li>抽象工厂包含多个“工厂实现”, 每个工厂实现类只生产一类产品, 如果需要新增产品, 只需要增加新工厂类和方法；</li>
+<li>问题是, 用户代码又引入了”FactoryProducer”, 如果要新增产品和工厂, 需要修改抽象工厂类</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">```</span><br></pre></td></tr></table></figure>
-<p>AbstractFactory factory1 = FactoryProducer.getFactory(type1)<br>AbstractFactory factory2 = FactoryProducer.getFactory(type2)</p>
-<p>AbstractProduct product1 = factory1.get()<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">## 建造模式</span><br><span class="line">* 抽象Builder, 提供为产品设定各个属性的的抽象方法, 以及创建产品的抽象方法</span><br><span class="line">* 具体Builder, 实现...</span><br><span class="line">* 调用者创建具体的Builder实例, 调用抽象Builder类的设定属性的方法, 最后创建产品..</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 单例模式</span><br><span class="line">* 单例模式的类, 会保证该类仅有一个实例, 并提供一个创建&amp;获取唯一实例的方法</span><br><span class="line">* 为了保证只有一个实例, 单例类的构造函数是私有的, 不允许其他类调用其构造函数</span><br><span class="line">* 基本样式:</span><br></pre></td></tr></table></figure></p>
-<p>   class Singleton {<br>     private static Singleton INSTANCE;<br>     private Singleton();<br>     public Singleton getInstance(); // 获取单例的具体实现<br>   }<br>  <code>`</code></p>
-<ul>
-<li>实现singleton的几种方式:<ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">AbstractFactory factory1 = FactoryProducer.getFactory(type1)</span><br><span class="line">AbstractFactory factory2 = FactoryProducer.getFactory(type2)</span><br><span class="line"></span><br><span class="line">AbstractProduct product1 = factory1.get()</span><br></pre></td></tr></table></figure>
+<p>【图】抽象工厂示例，用户代码从main()函数开始<br><img src="/images/design-patterns-abstract-factory.png" alt="../_images/design-patterns-abstract-factory.png"></p>
+<h2 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h2><ul>
+<li>建造者模式（Builder Pattern）使用多个简单的对象一步一步构建成一个复杂的对象。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。</li>
+<li>抽象Builder, 提供为产品设定各个属性的的抽象方法, 以及创建产品的抽象方法</li>
+<li>具体Builder, 实现…</li>
+<li>调用者创建具体的Builder实例, 调用抽象Builder类的设定属性的方法, 最后创建产品..</li>
+</ul>
+<p>【图】建造者模式，从 main()函数开始，用户代码使用 MealBuilder 创建一个复杂的 Meal 对象<br><img src="/images/design-patterns-builder.png" alt="../_images/design-patterns-builder.png"></p>
+<h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><ul>
+<li>单例模式的类, 会保证该类仅有一个实例, 并提供一个创建&amp;获取唯一实例的方法</li>
+<li>为了保证只有一个实例, 单例类的构造函数是私有的, 不允许其他类调用其构造函数</li>
+<li><p>基本样式:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Singleton &#123;</span><br><span class="line">  private static Singleton INSTANCE;</span><br><span class="line">  private Singleton();</span><br><span class="line">  public Singleton getInstance(); // 获取单例的具体实现</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实现singleton的几种方式:</p>
+<ol>
 <li>Lazy式, <code>getInstance()</code>使用synchronized 加锁</li>
 <li>Lazy式, <code>getInstance()</code>使用DLC(double lock check)</li>
 <li>非Lazy式, 在static区进行实例化 // 不需要lazy loading时的首选</li>
@@ -431,13 +443,14 @@
 </li>
 </ul>
 <h1 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h1><h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><ul>
-<li>adaptor or wrapper</li>
+<li>适配器模式（Adapter Pattern）</li>
 <li>用户代码里调用 methodA(), 但是实现类()没有提供 methodA()却提供了 methodB(), 这时候需要 adaptor类对实现类进行包装, 并提供 methodA()</li>
 <li>实现: adaptor类中, 持有一个实现类的引用 // 注意adaptor和实现类非继承, 而是关联关系</li>
 </ul>
-<p><img src="/images/design-patterns-adapter.png" alt="design-patterns-adapter"></p>
+<p>【图】用户代码（Client 类）通过 Adaptor 的实例，最终调用 methodB()<br><img src="/images/design-patterns-adapter.png" alt="design-patterns-adapter"></p>
 <h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><ul>
-<li>桥接模式把抽象事物/抽象行为分离开, 抽象事物 调用 抽象行为(的方法)</li>
+<li>桥接（Bridge）模式把抽象事物/抽象行为分离开, 抽象事物调用抽象行为(的方法)</li>
+<li>桥接是用于把抽象化与实现化解耦，使得二者可以独立变化。这种类型的设计模式属于结构型模式，它通过提供抽象化和实现化之间的桥接结构，来实现二者的解耦。</li>
 <li>抽象事物(Abstraction)的继承类仍是抽象类(RedefinedAbstraction)</li>
 <li>抽象行为(Implementor)</li>
 <li>抽象事物(Abstraction)像桥一样把 RedefinedAbstraction类和 Implementor类连接在一起</li>
@@ -448,8 +461,9 @@
 </ul>
 </li>
 </ul>
-<p><img src="/images/design-patterns-bridge.png" alt="design-patterns-bridge"></p>
+<p>【图】<br><img src="/images/design-patterns-bridge.png" alt="design-patterns-bridge"></p>
 <h2 id="装饰模式"><a href="#装饰模式" class="headerlink" title="装饰模式"></a>装饰模式</h2><ul>
+<li>装饰器模式（Decorator Pattern）允许向一个现有的对象添加新的功能，同时又不改变其结构。这种类型的设计模式属于结构型模式，它是作为现有的类的一个包装。</li>
 <li>增加一个修饰类, 包裹原来的类, 包裹的方式一般是通过修饰类的构造函数传入, 修饰类实现新的功能</li>
 <li>装饰模式可以避免向一个实现类添加新方法导致代码膨胀</li>
 <li>下图中的 Decorator类即装饰类, 装饰类可以改写operation()方法也可以增加自己的方法</li>
@@ -477,9 +491,9 @@
 </ul>
 <p><img src="/images/design-patterns-proxy.png" alt="design-patterns-proxy"></p>
 <h2 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h2><ul>
-<li>创建大量对象时, 把这些对象共有的部分抽象出来单独存储, 这些对象共享共有部分, 而不是重复创建</li>
+<li>享元模式（Flyweight Pattern），创建大量对象时, 把这些对象共有的部分抽象出来单独存储, 这些对象共享共有部分, 而不是重复创建</li>
 <li>享元模式通过共享数据减少内存使用量</li>
-<li>例子: Java String Pool</li>
+<li>例子: Java String Pool、Java Intger</li>
 </ul>
 <h1 id="行为模式"><a href="#行为模式" class="headerlink" title="行为模式"></a>行为模式</h1><h2 id="责任链模式"><a href="#责任链模式" class="headerlink" title="责任链模式"></a>责任链模式</h2><ul>
 <li>实现责任链模式的抽象类, 通常具有一个next属性</li>
@@ -663,7 +677,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -685,7 +699,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -753,7 +767,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TODO"><span class="nav-text">TODO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建型模式"><span class="nav-text">创建型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单工厂"><span class="nav-text">简单工厂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象工厂"><span class="nav-text">抽象工厂</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结构型模式"><span class="nav-text">结构型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#适配器模式"><span class="nav-text">适配器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#桥接模式"><span class="nav-text">桥接模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰模式"><span class="nav-text">装饰模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代理模式"><span class="nav-text">代理模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#享元模式"><span class="nav-text">享元模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#行为模式"><span class="nav-text">行为模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#责任链模式"><span class="nav-text">责任链模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式"><span class="nav-text">观察者模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK里的设计模式-zz"><span class="nav-text">JDK里的设计模式(zz)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于UML"><span class="nav-text">关于UML</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TODO"><span class="nav-text">TODO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建型模式"><span class="nav-text">创建型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单工厂"><span class="nav-text">简单工厂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象工厂"><span class="nav-text">抽象工厂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建造者模式"><span class="nav-text">建造者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单例模式"><span class="nav-text">单例模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结构型模式"><span class="nav-text">结构型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#适配器模式"><span class="nav-text">适配器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#桥接模式"><span class="nav-text">桥接模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰模式"><span class="nav-text">装饰模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代理模式"><span class="nav-text">代理模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#享元模式"><span class="nav-text">享元模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#行为模式"><span class="nav-text">行为模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#责任链模式"><span class="nav-text">责任链模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式"><span class="nav-text">观察者模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK里的设计模式-zz"><span class="nav-text">JDK里的设计模式(zz)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于UML"><span class="nav-text">关于UML</span></a></li></ol></div>
             
 
           </div>

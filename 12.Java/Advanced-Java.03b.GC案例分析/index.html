@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="➤ GC问题排查总结:  GC常见问题: GC发生频繁, GC某个阶段耗时长 要定位问题, 首先看GC Log 和监控图, 确定如下: 现在用的是哪种GC收集器? ( 该收集器的GC的触发条件? 每个阶段做了什么? 哪个阶段有STW?) 如果是GC频繁, 是哪个分代的GC频繁? 如果是新生代GC: 新生对象太多, 新生代空间太小 如果是FGC: 有些FGC是因为新生代GC引起的   如果是GC某个">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.466Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.372Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-03b-GC案例分析">
 <meta name="twitter:description" content="➤ GC问题排查总结:  GC常见问题: GC发生频繁, GC某个阶段耗时长 要定位问题, 首先看GC Log 和监控图, 确定如下: 现在用的是哪种GC收集器? ( 该收集器的GC的触发条件? 每个阶段做了什么? 哪个阶段有STW?) 如果是GC频繁, 是哪个分代的GC频繁? 如果是新生代GC: 新生对象太多, 新生代空间太小 如果是FGC: 有些FGC是因为新生代GC引起的   如果是GC某个">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,132
+                  1,141
                 </span>
               
 
@@ -398,6 +398,14 @@
 <li>分析: 如果新生代容量扩容1倍, 可以推算, MinorGC发生频率降低1倍, Minor GC的”扫描阶段”耗时增加1倍, 但”拷贝阶段”的耗时不会显著增加, 虽然Minor GC间隔增加, 但…</li>
 <li>解决: 增大新生代容量</li>
 </ul>
+<blockquote>
+<p><strong>动态年龄计算</strong>：Hotspot 遍历所有对象时，按照年龄从小到大对其所占用的大小进行累积，当累积的某个年龄大小超过了 survivor 区的一半时，取这个年龄和 MaxTenuringThreshold 中更小的一个值，作为新的晋升年龄阈值。在本案例中，调优前：Survivor 区 = 64 M，desired survivor = 32 M，此时 Survivor 区中 age&lt;=2 的对象累计大小为 41 M，41 M 大于 32 M，所以晋升年龄阈值被设置为 2，下次 Minor GC 时将年龄超过2的对象被晋升到老年代。</p>
+<p>JVM 引入动态年龄计算，主要基于如下两点考虑：</p>
+<ol>
+<li>如果固定按照 MaxTenuringThreshold 设定的阈值作为晋升条件： a）MaxTenuringThreshold 设置的过大，原本应该晋升的对象一直停留在 Survivor 区，直到 Survivor 区溢出，一旦溢出发生，Eden+Svuvivor 中对象将不再依据年龄全部提升到老年代，这样对象老化的机制就失效了。 b）MaxTenuringThreshold 设置的过小，“过早晋升”即对象不能在新生代充分被回收，大量短期对象被晋升到老年代，老年代空间迅速增长，引起频繁的 Major GC。分代回收失去了意义，严重影响 GC 性能。</li>
+<li>相同应用在不同时间的表现不同：特殊任务的执行或者流量成分的变化，都会导致对象的生命周期分布发生波动，那么固定的阈值设定，因为无法动态适应变化，会造成和上面相同的问题。</li>
+</ol>
+</blockquote>
 <p>➤ 案例2: 使用CMS, remark阶段STW超过1000ms</p>
 <ul>
 <li>分析: remark是CMS进行老年代回收的第3个步骤, remark阶段需要以新生代对象为根进行扫描(防止跨代引用), 所以新生代对象数量直接影响remark阶段的扫描耗时</li>
@@ -417,14 +425,6 @@
 <li>案例: 排除1, 因为没有 promotion failed; 排除2, 因为发生Full GC时老年代使用率不高; 并且Full GC之后 Perm代变大, 确定是第3种情况, perm不够用;</li>
 <li>解决: 增加 permSize</li>
 </ul>
-<blockquote>
-<p><strong>动态年龄计算</strong>：Hotspot遍历所有对象时，按照年龄从小到大对其所占用的大小进行累积，当累积的某个年龄大小超过了survivor区的一半时，取这个年龄和MaxTenuringThreshold中更小的一个值，作为新的晋升年龄阈值。在本案例中，调优前：Survivor区 = 64M，desired survivor = 32M，此时Survivor区中age&lt;=2的对象累计大小为41M，41M大于32M，所以晋升年龄阈值被设置为2，下次Minor GC时将年龄超过2的对象被晋升到老年代。</p>
-<p>JVM引入动态年龄计算，主要基于如下两点考虑：</p>
-<ol>
-<li>如果固定按照MaxTenuringThreshold设定的阈值作为晋升条件： a）MaxTenuringThreshold设置的过大，原本应该晋升的对象一直停留在Survivor区，直到Survivor区溢出，一旦溢出发生，Eden+Svuvivor中对象将不再依据年龄全部提升到老年代，这样对象老化的机制就失效了。 b）MaxTenuringThreshold设置的过小，“过早晋升”即对象不能在新生代充分被回收，大量短期对象被晋升到老年代，老年代空间迅速增长，引起频繁的Major GC。分代回收失去了意义，严重影响GC性能。</li>
-<li>相同应用在不同时间的表现不同：特殊任务的执行或者流量成分的变化，都会导致对象的生命周期分布发生波动，那么固定的阈值设定，因为无法动态适应变化，会造成和上面相同的问题。</li>
-</ol>
-</blockquote>
 <blockquote>
 <p>@ref <a href="https://tech.meituan.com/2017/12/29/jvm-optimize.html" target="_blank" rel="noopener">从实际案例聊聊Java应用的GC优化 - 美团技术团队</a></p>
 </blockquote>
@@ -552,7 +552,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -574,7 +574,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

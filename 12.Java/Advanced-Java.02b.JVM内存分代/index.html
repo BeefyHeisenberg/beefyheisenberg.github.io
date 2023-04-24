@@ -129,7 +129,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-HEAP-EDEN-TLAB.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jvm-memory-heap-jdk8.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jvm-gensize-experience-point.png">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.447Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.353Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-02b-JVM内存分代">
 <meta name="twitter:description" content="JDK6时期 如上图, JDK6时代的JVM内存分为下面几个部分:  堆区(Heap Space): 这部分被所有线程共享, 包括: 年轻代: eden:s0:s1 的默认比例是8:1:1,  可见eden区大部分对象都是要被回收的; 老年代: 老年代:年轻代 的比例默认是2:1 , 也就是说默认情况下堆区的2/3都属于老年代,   栈区(Stack Space): 每个线程独有, 包括: PC,">
@@ -358,7 +358,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,284
+                  4,359
                 </span>
               
 
@@ -395,7 +395,7 @@
 <li>方法区(Method Area)</li>
 </ul>
 <blockquote>
-<p>JVM标准定义的内存区域为Heap/Stack Space/Medhod Area; 分代的名称（年轻代/老年代/永久代）是HotSpot中定义的, 并不是JVM标准中定义的, 注意区分 @Uncertain</p>
+<p>JVM标准定义的内存区域为Heap/Stack Space/Medhod Area; 分代的名称（年轻代/老年代/永久代）是HotSpot中定义的, 并不是JVM标准中定义的, 注意区分 @doubt</p>
 </blockquote>
 <h2 id="Heap"><a href="#Heap" class="headerlink" title="Heap"></a>Heap</h2><ul>
 <li>这块区域被同一JVM实例的所有线程共享, Java对象全都创建在堆上.</li>
@@ -452,7 +452,7 @@
 <li>大量JSP或动态产生JSP文件的应用（JSP第一次运行时需要编译为Java类）。</li>
 <li>基于OSGi的应用（即使是同一个类文件，被不同的类加载器加载也会视为不同的类）。<br>这些都会导致方法区溢出，报出java.lang.OutOfMemoryError: PermGen space</li>
 </ul>
-<h1 id="JDK7时期"><a href="#JDK7时期" class="headerlink" title="JDK7时期"></a>JDK7时期</h1><p>String Pool被从 PermGen里移除了, 放在了Heap里, 并且可以通过<code>-XX:StringTableSize</code>指定其大小;<br>Runtime Constant Pool 也在1.7之后放入了Heap里? @Uncertain<br>此外JDK7的内存模型基本和6一样;</p>
+<h1 id="JDK7时期"><a href="#JDK7时期" class="headerlink" title="JDK7时期"></a>JDK7时期</h1><p>String Pool被从 PermGen里移除了, 放在了Heap里, 并且可以通过<code>-XX:StringTableSize</code>指定其大小;<br>Runtime Constant Pool 也在1.7之后放入了Heap里? @doubt<br>此外JDK7的内存模型基本和6一样;</p>
 <h1 id="JDK6-7的VM参数总结"><a href="#JDK6-7的VM参数总结" class="headerlink" title="JDK6~7的VM参数总结"></a>JDK6~7的VM参数总结</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">             &lt;JVM 6 &amp; 7 Memory options&gt;</span><br><span class="line">+-----------------+-----------------+--------------</span><br><span class="line">|     PC          |                 |</span><br><span class="line">|-----------------|-----------------+-------------</span><br><span class="line">|    Stack &amp;      |                 |</span><br><span class="line">|  Native Stack   |                 |  -Xss</span><br><span class="line">+-----------------+-----------------+---------------</span><br><span class="line">|   Method Area   |  String Pool &amp;  |</span><br><span class="line">|   (PermGen)     |    Runtime-     | -XX:MaxPermSize</span><br><span class="line">|                 |  Constant Pool  | -XX:PermSize</span><br><span class="line">+-----------------+-----------------+-------+-------+---</span><br><span class="line">|    OldGen       |                 |       |       |</span><br><span class="line">|  (TenuredGen)   |                 |       | -Xmx  |</span><br><span class="line">+-----------------+-----------------+-------+       |</span><br><span class="line">|                 |  To Survivor    |       |       | Heap</span><br><span class="line">|    YoungGen     |-----------------| -Xmn  |       |</span><br><span class="line">|                 |  From Survivor  |       | -Xms  |</span><br><span class="line">|                 |-----------------|       |       |</span><br><span class="line">|                 |     Eden        |       |       |</span><br><span class="line">+-----------------+-----------------+-------+-------+---</span><br></pre></td></tr></table></figure>
 <h1 id="JDK8时期"><a href="#JDK8时期" class="headerlink" title="JDK8时期"></a>JDK8时期</h1><p>在HotSpot JDK7以及更早的版本里, 永久代最大大小由<code>-XX:MaxPermSize</code>指定, 一旦超过这个大小就不能再扩展, 假如加载的类过多会导致Medhod Area过大而导致OOM,<br>HotSpot JDK8 <strong>移除</strong> 了JDK7的 PermGen(永久代), 类的元信息被移到了 Meta space(元空间), 这块内存放在 Native memory当中, 不再属于JVM线程内的内存区.</p>
 <blockquote>
@@ -541,6 +541,9 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s = <span class="keyword">new</span> String(<span class="string">"1"</span>); <span class="comment">// 两个对象, 一个存储于String Pool, 一个在Heap</span></span><br><span class="line">s.intern();</span><br><span class="line">String s2 = <span class="string">"1"</span>;</span><br><span class="line">System.out.println(s == s2);</span><br><span class="line"></span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"1"</span>) + <span class="keyword">new</span> String(<span class="string">"1"</span>); <span class="comment">// 一个对象, 在Heap</span></span><br><span class="line">s3.intern();</span><br><span class="line">String s4 = <span class="string">"11"</span>;</span><br><span class="line"><span class="comment">//s3.intern();</span></span><br><span class="line">System.out.println(s3 == s4);</span><br></pre></td></tr></table></figure>
 <p>先说答案: 在JDK6 下结果是 “false false”, 在JDK8下是 “false, true”.</p>
 <p>没有在JDK8上验证, 但我觉得 7和8在 String Pool 上改动不大, 8仅仅是把 Method Area 移动到了 Native Memory 中 –被叫做 Metespace(元空间)的区域.<br>因为看不到 HotSpot的 native层源码, 所以只能看 OpenJDK的, 但是不保证 OpenJDK 与 HotSpot 实现一样 @todo 有时间一定要看了才能解惑.</p>
+<blockquote>
+<p>public String intern()<br>Returns a canonical representation for the string object.<br>A pool of strings, initially empty, is maintained privately by the class String.<br>When the intern method is invoked, if the pool already contains a string equal to this String object as determined by the equals(Object) method, then the string from the pool is returned. Otherwise, this String object is added to the pool and a reference to this String object is returned.</p>
+</blockquote>
 <p>从JDK6 到 JDK7 的 String Pool 和 <code>intern</code>方法的改变都比较大(String Pool从 PermGen移动到了 Heap, <code>String.intern()</code>改变见下面的分析)</p>
 <p><strong>in JDK6:</strong></p>
 <ul>
@@ -591,8 +594,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/12.Java/Advanced-Java.02a.JVM简介/" rel="next" title="Advanced Java-02a-JVM简介">
-                <i class="fa fa-chevron-left"></i> Advanced Java-02a-JVM简介
+              <a href="/12.Java/Advanced-Java.02a.JVM架构简介/" rel="next" title="Advanced Java-02a-JVM架构简介">
+                <i class="fa fa-chevron-left"></i> Advanced Java-02a-JVM架构简介
               </a>
             
           </div>
@@ -694,7 +697,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -716,7 +719,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

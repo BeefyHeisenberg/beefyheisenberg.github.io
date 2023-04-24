@@ -130,7 +130,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/operating_system/linux-performance-benchmark-tools.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/operating_system/linux-performance-tuning-tools.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/operating_system/linux-performance-observability-sar.png">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.742Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.687Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux.03.性能分析命令行 | Performance">
 <meta name="twitter:description" content="@tldr cpu: uptime 查看load值, 不高于core数, sar -q也可以查看load值 vmstat: 关注r(同load), 和b(等待资源的进程数), 以及cpu占用(用户进程和内核进程)时间百分比: us%不超过50%, us% + sy%不超过80% sar也可以查看us% sy%占用CPU时间百分比   内存: free: 可用内存小于20%需要关注, sar -r">
@@ -359,7 +359,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,765
+                  2,961
                 </span>
               
 
@@ -408,7 +408,14 @@
 </ul>
 </li>
 </ul>
-<h1 id="基础性能参数"><a href="#基础性能参数" class="headerlink" title="基础性能参数"></a>基础性能参数</h1><h2 id="load"><a href="#load" class="headerlink" title="load"></a>load</h2><p>一个类比说明load值: 如果CPU每分钟最多处理100个进程，那么系统负荷0.2，意味着CPU在这1分钟里只处理20个进程</p>
+<h1 id="基础性能参数"><a href="#基础性能参数" class="headerlink" title="基础性能参数"></a>基础性能参数</h1><h2 id="load"><a href="#load" class="headerlink" title="load"></a>load</h2><p>如果CPU每分钟最多处理100个进程：</p>
+<ul>
+<li>那么系统负荷0.2，意味着CPU在这1分钟里只处理20个进程；</li>
+<li>系统负荷1.0，意味着CPU在这1分钟里正好处理100个进程；</li>
+<li>系统负荷1.7，意味着除了CPU正在处理的100个进程以外，还有70个进程正排队等着CPU处理。</li>
+</ul>
+<p>为了电脑顺畅运行，系统负荷最好不要超过1.0，这样就没有进程需要等待了，所有进程都能第一时间得到处理。很显然，1.0是一个关键值，超过这个值，系统就不在最佳状态了，你要动手干预了。</p>
+<p>@ref: <a href="http://www.ruanyifeng.com/blog/2011/07/linux_load_average_explained.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2011/07/linux_load_average_explained.html</a></p>
 <h3 id="uptime"><a href="#uptime" class="headerlink" title="uptime"></a>uptime</h3><ul>
 <li>uptime返回1/5/15分钟内的load值(进程队列的长度), 对于单核cpu, load值在1.0以下可以接受, 对于多核CPU, load值要除以”核心数”</li>
 <li>多核CPU的话, 满负荷状态的数字为 “1.00 * CPU核数”, 这里的CPU核数是<code>processor</code>的数量,</li>
@@ -433,18 +440,33 @@
 <li><code>ps -T -p &lt;pid&gt;</code> : 查看进程的所有线程</li>
 </ul>
 <h3 id="ps-aux"><a href="#ps-aux" class="headerlink" title="ps aux"></a>ps aux</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND</span><br><span class="line">root                47   0.0  0.0  2502056   1700   ??  Ss   一09上午   0:11.65 /usr/libexec/kextd</span><br><span class="line">root                45   0.0  0.2  2503976   6576   ??  Ss   一09上午   0:29.45 /usr/libexec/UserEventAgent (System)</span><br><span class="line">root                44   0.0  0.0  2472460   1204   ??  Ss   一09上午   0:32.91 /usr/sbin/syslogd</span><br><span class="line">beefymiracle       424  98.7  0.1  2507128   4764   ??  R    一09上午 1762:56.80 /System/Library/PrivateFrameworks/ParsecUI.framework/Versions/A/Support/SpotlightNetHelper.app/Contents/MacOS/SpotlightNetHelper</span><br></pre></td></tr></table></figure>
-<h4 id="VSZ"><a href="#VSZ" class="headerlink" title="VSZ"></a>VSZ</h4><p>KB, virtual memory size, Device mappings are currently excluded;</p>
-<h4 id="RSS"><a href="#RSS" class="headerlink" title="RSS"></a>RSS</h4><p>KB, resident set size, 一般作为实际占用内存大小,<br>包括程序二进制映像(binary image), Heap/Stack实际使用(系统为进程分配的堆和栈, 不一定完全用掉), 共享区(shared Library, 也即Memory Mapping)实际使用的空间;</p>
-<h4 id="区分VSZ-RSS-SZ"><a href="#区分VSZ-RSS-SZ" class="headerlink" title="区分VSZ,RSS,SZ"></a>区分VSZ,RSS,SZ</h4><p><a href="http://stackoverflow.com/questions/7880784/what-is-rss-and-vsz-in-linux-memory-management" target="_blank" rel="noopener">http://stackoverflow.com/questions/7880784/what-is-rss-and-vsz-in-linux-memory-management</a></p>
-<h4 id="STAT"><a href="#STAT" class="headerlink" title="STAT"></a>STAT</h4><p>R/S/D/T/Z/X : <a href="http://askubuntu.com/questions/360252/what-do-the-stat-column-values-in-ps-mean" target="_blank" rel="noopener">http://askubuntu.com/questions/360252/what-do-the-stat-column-values-in-ps-mean</a></p>
+<ul>
+<li><p>VSZ：KB, virtual memory size, Device mappings are currently excluded;</p>
+</li>
+<li><p>RSS：KB, resident set size, 一般作为实际占用内存大小,<br>包括程序二进制映像(binary image), Heap/Stack实际使用(系统为进程分配的堆和栈, 不一定完全用掉), 共享区(shared Library, 也即Memory Mapping)实际使用的空间;</p>
+</li>
+<li><p>区分VSZ,RSS,SZ <a href="http://stackoverflow.com/questions/7880784/what-is-rss-and-vsz-in-linux-memory-management" target="_blank" rel="noopener">http://stackoverflow.com/questions/7880784/what-is-rss-and-vsz-in-linux-memory-management</a></p>
+</li>
+<li><p>STAT：R/S/D/T/Z/X  @ref: <a href="http://askubuntu.com/questions/360252/what-do-the-stat-column-values-in-ps-mean" target="_blank" rel="noopener">http://askubuntu.com/questions/360252/what-do-the-stat-column-values-in-ps-mean</a></p>
+</li>
+</ul>
+<blockquote>
+<p>进程状态 R S D T X Z:<br>R: Running<br>S: Interruptible Sleep, 可中断的睡眠<br>D: Uninterruptible Sleep. 不可中断的睡眠, 比如等待磁盘IO, 这种进程不接受kill,kill -9的信号<br>T: Stoped, 按下Ctrl+Z的状态</p>
+</blockquote>
 <h3 id="ps-el"><a href="#ps-el" class="headerlink" title="ps -el"></a>ps -el</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">UID   PID  PPID        F CPU PRI NI       SZ    RSS WCHAN     S             ADDR TTY           TIME CMD</span><br><span class="line">  0     1     0     4004   0  37  0  2478772   7372 -      Ss                  0 ??         3:01.68 /sbin/launchd</span><br><span class="line">  0    44     1     4004   0   4  0  2474032   1228 -      Ss                  0 ??         0:32.87 /usr/sbin/syslogd</span><br><span class="line">501   424     1     4004   0   4  0  2506604   4952 -      R                   0 ??       1757:31.24 /System/Library/PrivateFrameworks/ParsecUI.framework/Versions/A/Support/SpotlightNetHelper.app/Contents/MacOS/SpotlightNetHelper</span><br></pre></td></tr></table></figure>
-<h4 id="SZ"><a href="#SZ" class="headerlink" title="SZ"></a>SZ</h4><p>size in physical pages of the core image of the process. This includes text, data, and stack space. Device mappings are currently excluded</p>
-<h4 id="PRI-优先级"><a href="#PRI-优先级" class="headerlink" title="PRI 优先级"></a>PRI 优先级</h4><p>PRI表示线程优先级(数值越小越先执行), 优先级的范围是[0, MAX_PRIO-1], <code>MAX_PRIO</code> 的值一般为140.</p>
-<h4 id="NI-修正优先级"><a href="#NI-修正优先级" class="headerlink" title="NI 修正优先级"></a>NI 修正优先级</h4><ul>
+<ul>
+<li><p>SZ：size in physical pages of the core image of the process. This includes text, data, and stack space. Device mappings are currently excluded</p>
+</li>
+<li><p>PRI：PRI表示线程优先级(数值越小越先执行), 优先级的范围是[0, MAX_PRIO-1], <code>MAX_PRIO</code> 的值一般为140.</p>
+</li>
+<li><p>NI 修正优先级：</p>
+<ul>
 <li>NI=Nice, 值表示对优先级PRI的修正, 范围从-20~19, Nice越小表示优先级越高.</li>
 <li>以指定Nice启动任务: <code>nice -n -5 /usr/bin/mysqld &amp;</code>, 注意这里<code>-5</code>并不是表示负数, 而是正数5, 如果要以高优先级启动某进程(负的Nice值), 则应该为<code>nice -n --5 top</code>.</li>
 <li>使用nohup: <code>nohup -n 10 COMMANDS</code></li>
 <li>改变已存在进程的优先级: <code>renice -5 -p 1203</code>注意这里的”-5”表示负数.</li>
+</ul>
+</li>
 </ul>
 <h2 id="pstree"><a href="#pstree" class="headerlink" title="pstree"></a>pstree</h2><ul>
 <li>pstree -apu 显示进程树</li>
@@ -466,7 +488,7 @@
 <h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><ul>
 <li><a href="https://www.quora.com/What-is-the-difference-between-Buffers-and-Cached-columns-in-proc-meminfo-output" target="_blank" rel="noopener">What is the difference between Buffers and Cached columns in /proc/meminfo output?</a><ul>
 <li>Buffer 是准备写入块设备的数据, 存储了文件的目录/权限等metadata;</li>
-<li>Cache 频繁访问的文件都会被cache, 里面只有文件内容数据;</li>
+<li>Cache  频繁访问的文件都会被cache, 里面只有文件内容数据;</li>
 </ul>
 </li>
 </ul>
@@ -731,7 +753,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -753,7 +775,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -821,7 +843,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#tldr"><span class="nav-text">@tldr</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础性能参数"><span class="nav-text">基础性能参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#load"><span class="nav-text">load</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#uptime"><span class="nav-text">uptime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cat-proc-cpuinfo"><span class="nav-text">cat /proc/cpuinfo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ps"><span class="nav-text">ps</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ps-aux"><span class="nav-text">ps aux</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#VSZ"><span class="nav-text">VSZ</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RSS"><span class="nav-text">RSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#区分VSZ-RSS-SZ"><span class="nav-text">区分VSZ,RSS,SZ</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#STAT"><span class="nav-text">STAT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ps-el"><span class="nav-text">ps -el</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SZ"><span class="nav-text">SZ</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PRI-优先级"><span class="nav-text">PRI 优先级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NI-修正优先级"><span class="nav-text">NI 修正优先级</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pstree"><span class="nav-text">pstree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#top"><span class="nav-text">top</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#free"><span class="nav-text">free</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vmstat"><span class="nav-text">vmstat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iostat"><span class="nav-text">iostat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sar"><span class="nav-text">sar</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#netstat"><span class="nav-text">netstat</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sysctl优化内核参数"><span class="nav-text">sysctl优化内核参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附：Linux-Performance-Tools（图）"><span class="nav-text">附：Linux Performance Tools（图）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附：线上服务器的数据"><span class="nav-text">附：线上服务器的数据</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#tldr"><span class="nav-text">@tldr</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础性能参数"><span class="nav-text">基础性能参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#load"><span class="nav-text">load</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#uptime"><span class="nav-text">uptime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cat-proc-cpuinfo"><span class="nav-text">cat /proc/cpuinfo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ps"><span class="nav-text">ps</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ps-aux"><span class="nav-text">ps aux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ps-el"><span class="nav-text">ps -el</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pstree"><span class="nav-text">pstree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#top"><span class="nav-text">top</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#free"><span class="nav-text">free</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vmstat"><span class="nav-text">vmstat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iostat"><span class="nav-text">iostat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sar"><span class="nav-text">sar</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#netstat"><span class="nav-text">netstat</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sysctl优化内核参数"><span class="nav-text">sysctl优化内核参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附：Linux-Performance-Tools（图）"><span class="nav-text">附：Linux Performance Tools（图）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附：线上服务器的数据"><span class="nav-text">附：线上服务器的数据</span></a></li></ol></div>
             
 
           </div>

@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="泛型类和泛型方法泛型类public class Pair&amp;lt;T&amp;gt; &amp;#123;  private T first;  private T second;  public T getFirst() &amp;#123;...&amp;#125;  public T getSecond() &amp;#123;...&amp;#125;  public setFirst(T) &amp;#123;...&amp;#125;  public">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-03-29T04:12:53.512Z">
+<meta property="og:updated_time" content="2023-04-24T08:25:36.418Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Tutorials-04-泛型">
 <meta name="twitter:description" content="泛型类和泛型方法泛型类public class Pair&amp;lt;T&amp;gt; &amp;#123;  private T first;  private T second;  public T getFirst() &amp;#123;...&amp;#125;  public T getSecond() &amp;#123;...&amp;#125;  public setFirst(T) &amp;#123;...&amp;#125;  public">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  973
+                  985
                 </span>
               
 
@@ -390,7 +390,7 @@
 </li>
 </ul>
 <h3 id="对类型查询的影响"><a href="#对类型查询的影响" class="headerlink" title="对类型查询的影响"></a>对类型查询的影响</h3><h4 id="1-instanceof"><a href="#1-instanceof" class="headerlink" title="1. instanceof"></a>1. instanceof</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Pair&lt;String&gt; s = <span class="keyword">new</span> Pair&lt;String&gt;(); <span class="comment">// 擦除后为 Pair&lt;Object&gt; s</span></span><br><span class="line"><span class="keyword">if</span>(s <span class="keyword">instanceof</span> Pair&lt;T&gt;) &#123; <span class="comment">// Pair&lt;T&gt;擦除后为Pair&lt;Object&gt;</span></span><br><span class="line"> <span class="comment">// yes</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(s <span class="keyword">instanceof</span> Pair&lt;Double&gt;) &#123;</span><br><span class="line"> <span class="comment">// yes</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="2-getClass"><a href="#2-getClass" class="headerlink" title="2. getClass()"></a>2. getClass()</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Pair&lt;String&gt; s = <span class="keyword">new</span> Pair&lt;String&gt;();</span><br><span class="line">Pair&lt;Double&gt; d = <span class="keyword">new</span> Pair&lt;Double&gt;();</span><br><span class="line"><span class="keyword">if</span>(s.getClass() == d.getCLass()) &#123; <span class="comment">// getClass()总是返回Pair&lt;Object&gt;</span></span><br><span class="line">  <span class="comment">// yes</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-getClass"><a href="#2-getClass" class="headerlink" title="2. getClass()"></a>2. getClass()</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Pair&lt;String&gt; s = <span class="keyword">new</span> Pair&lt;String&gt;();</span><br><span class="line">Pair&lt;Double&gt; d = <span class="keyword">new</span> Pair&lt;Double&gt;();</span><br><span class="line"><span class="keyword">if</span>(s.getClass() == d.getCLass()) &#123; <span class="comment">// getClass()总是返回Pair&lt;Object&gt;</span></span><br><span class="line">  <span class="comment">// yes</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 打印 s.getClass().toString() ， 得到的类型是 ‘Pair’</span></span><br></pre></td></tr></table></figure>
 <h3 id="不能创建泛型类数组"><a href="#不能创建泛型类数组" class="headerlink" title="不能创建泛型类数组"></a>不能创建泛型类数组</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 试图创建泛型类型的数组会在编译期报错:</span></span><br><span class="line">Pair&lt;String&gt;[] arr = <span class="keyword">new</span> Pair&lt;String&gt;[<span class="number">1</span>]; <span class="comment">// error !</span></span><br><span class="line">Pair&lt;String&gt;[] arr = Array.newInstance(Pair&lt;String&gt;.getClass(),<span class="number">1</span>); <span class="comment">// error !</span></span><br></pre></td></tr></table></figure>
 <p>原因是数组一旦创建会记住元素的类型, 当试图向数组中存储不同的类型时会报错, <code>Pair&lt;String&gt;[]</code>这样声明的泛型数组, 擦除后变为<code>Pair&lt;Object&gt;[]</code>.</p>
 <h3 id="不能实例化泛型"><a href="#不能实例化泛型" class="headerlink" title="不能实例化泛型"></a>不能实例化泛型</h3><p>不能使用像<code>new T()</code>, <code>new T[N]</code>, <code>T.class</code>这样的表达式.</p>
@@ -551,7 +551,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">434</span>
+                  <span class="site-state-item-count">447</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -573,7 +573,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">391</span>
+                  <span class="site-state-item-count">397</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
