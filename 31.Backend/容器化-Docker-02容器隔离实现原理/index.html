@@ -127,7 +127,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/docker-container-process.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/docker-cgroup.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/docker-fs-layer.png">
-<meta property="og:updated_time" content="2023-04-24T10:10:32.759Z">
+<meta property="og:updated_time" content="2023-04-28T00:14:17.193Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="容器化-Docker-02容器隔离实现原理">
 <meta name="twitter:description" content="Docker容器隔离的实现原理Namespace先认识Linux 提供的Namespace机制: Linux的 Namespace 提供了7种不同的命名空间:  PID namespace: 隔离进程ID,每个容器有自己的pid命名空间 UTS namespace: 隔离主机名 &amp;amp; 域名, ….有自己的主机名和NIS域名 IPC namespace: 隔离进程间通信, 相同IPC Ns的进">
@@ -356,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,251
+                  1,256
                 </span>
               
 
@@ -453,7 +453,7 @@
 <li>Docker启动的进程和宿主机共享一个内核.</li>
 <li>对Docker容器内进程的优化(内核参数优化), 也可以在容器内执行<code>sysctl</code>命令更改, 或者在Docker启动时: <code>docker run --sysctl key=value IMAGE:TAG CMD</code></li>
 <li>Docker有一个白名单, 定义哪些sysctl参数可以在<code>docker run</code>时更改, 不在白名单内的参数, 在docker容器内<code>sysctl -a</code>也看不到</li>
-<li>有些参数可以在容器内使用sysctl更改(如kernel.pid_max), 但是容器内更改后会影响到主机, 原因是这类参数没有Namespace隔离(大部分kernel开头的), docker和宿主机共享内核. 这类参数也不建议通过容器更改</li>
+<li>有些参数可以在容器内使用 sysctl 更改(如 kernel.pid_max), 但是容器内更改后会影响到主机, 原因是这类参数没有 Namespace 隔离(大部分 kernel 开头的), docker 和宿主机共享内核. 这类参数也不建议通过容器更改, sysctl 命令参考：[[../21.Operating-System/Linux.04a.Sysctl]]</li>
 <li>所以针对docker的内核类优化:<ul>
 <li>最好是在宿主机内修改, 然后作用于docker进程;</li>
 <li>如果需要针对docker修改, 可以通过<code>docker run</code>传入参数, 并注意这些参数会不会影响到宿主机</li>
@@ -462,7 +462,6 @@
 </ul>
 <p>@ref: </p>
 <ul>
-<li>[[../21.Operating-System/Linux.04a.Sysctl]]</li>
 <li><a href="https://zhuanlan.zhihu.com/p/82488569" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/82488569</a></li>
 </ul>
 
@@ -489,8 +488,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/31.Backend/容器化-Docker-01基础/" rel="next" title="Docker">
-                <i class="fa fa-chevron-left"></i> Docker
+              <a href="/31.Backend/SystemDesign-01-C100K/" rel="next" title="C100K系统设计">
+                <i class="fa fa-chevron-left"></i> C100K系统设计
               </a>
             
           </div>
@@ -499,8 +498,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/31.Backend/容器编排-K8s/" rel="prev" title="容器编排-K8s">
-                容器编排-K8s <i class="fa fa-chevron-right"></i>
+              <a href="/51.Productivity/PKM.笔记分类法.ACCESS/" rel="prev" title="PKM.笔记分类法.ACCESS">
+                PKM.笔记分类法.ACCESS <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -592,7 +591,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">447</span>
+                  <span class="site-state-item-count">449</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -614,7 +613,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">397</span>
+                  <span class="site-state-item-count">398</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

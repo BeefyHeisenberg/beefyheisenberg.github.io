@@ -278,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/一些有效的学习方法&笔记方法/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-03b-事务的特性和实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -297,7 +297,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/51.Productivity/一些有效的学习方法&笔记方法/" itemprop="url">一些有效的学习方法&笔记方法</a></h1>
+                <a class="post-title-link" href="/32.Database/MySQL-03b-事务的特性和实现/" itemprop="url">MySQL-04事务-特性和实现原理</a></h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  809
+                  2,377
                 </span>
               
 
@@ -377,21 +377,18 @@
 
       
         
-          <h2 id="SQ3R"><a href="#SQ3R" class="headerlink" title="SQ3R"></a>SQ3R</h2><p>SQ3R方法是一种提升研习能力的方法，为美国俄亥俄州州立大学心理学教授罗宾逊（F. P. Robinson）所设计的一套有效读书方法，于1946年在他的著作《Effective Study》有所提及，主要用于精读课文。</p>
-<p>“SQ3R”来自以下五个英语词语的字首，即：<strong>综览（Survey）、发问（Question）、阅读（Read）、背诵（Recite）、复习（Review）</strong>。</p>
+          <p>数据库事务(transaction)是访问并可能操作各种数据项的一个数据库操作序列，这些操作要么全部执行,要么全部不执行，是一个不可分割的工作单位。事务由事务开始与事务结束之间执行的全部数据库操作组成。</p>
+<h2 id="事务的-ACID-特性"><a href="#事务的-ACID-特性" class="headerlink" title="事务的 ACID 特性"></a>事务的 ACID 特性</h2><p>什么是 ACID: 如果一个数据库声称支持事务的操作，那么该数据库必须要具备以下四个特性（事务的特性）：</p>
 <ul>
-<li>综览（Survey，为时约1分钟）：在详读文章之前，先概览文章一番：留意文章内的标题及结构，以控制阅读的目的、方向和注意力。细阅文章的引言、总结及参考，但不要阅读文章的内容，试试能否从所得的资料略知文章的主题。目标为掌握文章主题的3个至6个要点。</li>
-<li>发问（Question，为时不超过半分钟）：主要利用每个章节的标题和 <strong>六何法</strong>来对要研习的题目自行拟定问题。</li>
-<li>阅读（Read，不设时限，但以个人步伐）：指专心注意于找出发问问题的答案。阅读者需要逐一章节细阅，而不是一次过细阅整个篇章。阅读时应用主动阅读技巧，尝试在内文中找寻先前拟定问题的答案。</li>
-<li>“背诵”（Recite）：能够在阅读时利用各种阅读技巧以帮助记忆，例如：做重点画线、口头复诵或笔记摘要。</li>
-<li>复习（Review）：回忆所记忆的重点。</li>
+<li><strong>原子性 Atomicity</strong>：原子性是指一个事务是一个不可分割的工作单位，其中的操作要么都做，要么都不做；如果事务中一个 sql 语句执行失败，则已执行的语句也必须回滚，数据库退回到事务前的状态。</li>
+<li><strong>一致性 Consistency</strong>：事务执行结束后，数据库的完整性约束没有被破坏，事务执行的前后都是合法的数据状态。假设用户 A 和用户 B 两者的钱加起来一共是 5000，那么不管 A 和 B 之间如何转账，转几次账，事务结束后两个用户的钱相加起来应该还得是 5000，这就是事务的一致性。一致性是通过 AID 特性共同实现的</li>
+<li><strong>隔离性 Isolation</strong>：数据库允许多个并发事务同时对其数据进行读写和修改，规定并发事务之间的数据互不影响，隔离性用于控制多个事务并发执行结果的可见性。事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。</li>
+<li><strong>持久性 Durability</strong>：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</li>
 </ul>
-<blockquote>
-<p>六何法，又称6W分析法或5W1H，即何人（Who）、何时（When)、何事（What）、何地（Where）、为何（Why）及如何（How）。 由这六个疑问词所组成的问句，都不是是非题，而是需要一或多个事实佐证的应用题。 有时“如何”不计在内，因为“如何”可以被“何事”、“何时”和“何地”描述，变成“五何法”。即何人（Who）、何事（What）、何时（When）、何地（Where）及为何（Why）。</p>
-</blockquote>
+<h2 id="MySQL-事务如何实现-ACID"><a href="#MySQL-事务如何实现-ACID" class="headerlink" title="MySQL 事务如何实现 ACID"></a>MySQL 事务如何实现 ACID</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/一些有效的学习方法&笔记方法/#more" rel="contents">
+            <a class="btn" href="/32.Database/MySQL-03b-事务的特性和实现/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -442,7 +439,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/高效学习法/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-04a-锁概念/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -461,7 +458,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/51.Productivity/高效学习法/" itemprop="url">高效学习法（费曼、SQ3R）</a></h1>
+                <a class="post-title-link" href="/32.Database/MySQL-04a-锁概念/" itemprop="url">MySQL-04a-锁概念</a></h1>
         
 
         <div class="post-meta">
@@ -484,8 +481,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -515,7 +512,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  391
+                  1,009
                 </span>
               
 
@@ -541,195 +538,34 @@
 
       
         
-          <h1 id="SQ3R"><a href="#SQ3R" class="headerlink" title="SQ3R"></a>SQ3R</h1><p>SQ3R来自以下五个英语词语的字首，即：综览（Survey）、发问（Question）、阅读（Read）、背诵（Recite）、复习（Review）</p>
+          <h2 id="锁的概念"><a href="#锁的概念" class="headerlink" title="锁的概念"></a>锁的概念</h2><p>@toc:</p>
 <ul>
-<li><p>综览（Survey，为时约1分钟）：在详读文章之前，先概览文章一番：留意文章内的标题及结构，以控制阅读的目的、方向和注意力。细阅文章的引言、总结及参考，但不要阅读文章的内容，试试能否从所得的资料略知文章的主题。目标为掌握文章主题的3个至6个要点。</p>
-</li>
-<li><p>发问（Question，为时不超过半分钟）：主要利用每个章节的标题和六何法来对要研习的题目自行拟定问题。</p>
-</li>
-<li><p>阅读（Read，不设时限，但以个人步伐）：指专心注意于找出发问问题的答案。阅读者需要逐一章节细阅，而不是一次过细阅整个篇章。阅读时应用主动阅读技巧，尝试在内文中找寻先前拟定问题的答案。</p>
-</li>
-<li><p>“背诵”（Recite）：能够在阅读时利用各种阅读技巧以帮助记忆，例如：做重点画线、口头复诵或笔记摘要。</p>
-</li>
-<li><p>复习（Review）：回忆所记忆的重点。</p>
-</li>
+<li>全局锁/表级锁/行锁;</li>
+<li>共享锁/排他锁;</li>
+<li>意向锁;</li>
+<li>两段锁协议;</li>
 </ul>
-<p>@ref: <a href="https://zh.wikipedia.org/zh-cn/SQ3R%E6%96%B9%E6%B3%95" target="_blank" rel="noopener">https://zh.wikipedia.org/zh-cn/SQ3R%E6%96%B9%E6%B3%95</a></p>
-<h1 id="费曼学习法"><a href="#费曼学习法" class="headerlink" title="费曼学习法"></a>费曼学习法</h1>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/高效学习法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/数据可视化/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/51.Productivity/数据可视化/" itemprop="url">数据可视化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  583
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@todo 待整理</p>
-<p><a href="https://antv-2018.alipay.com/zh-cn/index.html" target="_blank" rel="noopener">AntV</a> 是蚂蚁金服全新一代数据可视化解决方案，致力于提供一套简单方便、专业可靠、无限可能的数据可视化最佳实践。</p>
-<p>选择什么图表，需要回答的首要问题是『我有什么数据，需要用图表做什么』，而不是 『图表长成什么样』 。因此我们从数据出发，从功能角度对图表进行分类，如下所示：<br>@ref: <a href="https://antv-2018.alipay.com/zh-cn/vis/chart/index.html" target="_blank" rel="noopener">图表用法 - AntV</a></p>
+<p>➤ 按锁的范围分: 全局锁(数据库锁), 表级锁(表锁, meta锁), 行锁;</p>
 <ul>
-<li>比较类<ul>
-<li>柱状图</li>
-<li>直方图</li>
-<li>南丁格尔玫瑰图</li>
-<li>…</li>
+<li>全局锁: 锁住整个数据库实例, 例如<code>Flush tables with read lock</code> 整个数据库处于只读状态, 常用于全库备份;</li>
+<li>表级锁: 分为 <strong>表锁</strong> 和 <strong>元数据锁</strong><ul>
+<li>表锁需要显式加锁: 例如 <code>lock table t1 write</code> 即给表t1加写锁, 允许读不允许写;</li>
+<li>元数据锁(MDL) 不需要显式加,<ul>
+<li>当增删改查时, 数据库自动给表加MDL读锁, 可以增删改查数据, 但对修改表结构互斥;</li>
+<li>当修改表结构时, 数据库自动给表加MDL写锁;</li>
 </ul>
 </li>
-<li>分布类<ul>
-<li>热力图</li>
-<li>散点图</li>
 </ul>
 </li>
-<li>…待整理 @todo</li>
+<li>行锁: 行锁分为S锁/X锁 (类似读写锁), 根据数据库当前隔离级别的不同, 以及sql语句的不同, 加的锁也不同;<ul>
+<li>Serializable级别: 读加S锁, 写加X锁</li>
+<li>RR/RC级别: 读不加锁(MVCC), 写可能加 X锁 和 间隙锁</li>
 </ul>
-<hr>
+</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/数据可视化/#more" rel="contents">
+            <a class="btn" href="/32.Database/MySQL-04a-锁概念/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -780,7 +616,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/如何写论文/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-04b-SQL加锁分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -799,7 +635,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/51.Productivity/如何写论文/" itemprop="url">如何写论文</a></h1>
+                <a class="post-title-link" href="/32.Database/MySQL-04b-SQL加锁分析/" itemprop="url">MySQL-04b-SQL加锁分析</a></h1>
         
 
         <div class="post-meta">
@@ -822,8 +658,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -853,1660 +689,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  202
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="「IMRAD-」方法"><a href="#「IMRAD-」方法" class="headerlink" title="「IMRAD 」方法"></a>「IMRAD 」方法</h2><p><a href="https://www.quora.com/What-is-the-structure-of-research-papers-article" target="_blank" rel="noopener">What is the structure of research papers/article? - Quora</a></p>
-<p>常规的研究论文包含以下9个部分: Title, Abstract, Introduction, Materials &amp; Methods, Results, Discussion, Conclusion, Acknowledgements, References。其中，IMRAD（引言、方法、结果、讨论）则是整篇文章最重要的主体部分。IMRAD在目前的科技论文结构中占据主导地位，无论是写作前的构思还是在实际写作过程中，通过IMRAD法则来架构你的论文会让逻辑结构更为清晰，也有利于论文的规范化。</p>
-<p>IMRAD是研究论文中一种常用的写作逻辑结构，每个字母分别代表：Introduction（前言），Methods（研究方法），Results（研究结果）以及Discussion（讨论）。</p>
-<p><a href="https://zhuanlan.zhihu.com/p/425331049" target="_blank" rel="noopener">Academics丨论文——IMRAD格式 - 知乎</a></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/如何写论文/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/开始使用Obsidian/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/51.Productivity/开始使用Obsidian/" itemprop="url">开始使用Obsidian</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  850
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="有用的链接"><a href="#有用的链接" class="headerlink" title="有用的链接"></a>有用的链接</h2><ul>
-<li>特性介绍: <a href="https://obsidian.md/features" target="_blank" rel="noopener">Features - Obsidian</a></li>
-<li>版本发布: <a href="https://forum.obsidian.md/c/announcements/13" target="_blank" rel="noopener">Latest Announcements topics - Obsidian Forum</a></li>
-<li>Feature requests: <a href="https://forum.obsidian.md/c/feature-requests/8" target="_blank" rel="noopener">Latest Feature requests topics - Obsidian Forum</a></li>
-</ul>
-<h2 id="Vault（库）"><a href="#Vault（库）" class="headerlink" title="Vault（库）"></a>Vault（库）</h2><p>每个vault下有单独的.obsidian文件夹:</p>
-<ul>
-<li><code>.obsidian/thems/</code>:   CSS主题目录</li>
-<li><code>.obsidian/snippets/</code>: CSS代码片段目录</li>
-<li><code>.obsidian/config</code>:</li>
-<li><code>.obsidian/workspace</code>:</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/开始使用Obsidian/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/看板（Kanban）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/51.Productivity/看板（Kanban）/" itemprop="url">看板（Kanban）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  474
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="如何使用看板（Trello）"><a href="#如何使用看板（Trello）" class="headerlink" title="如何使用看板（Trello）"></a>如何使用看板（Trello）</h1><p>@tag:  #方法论 #看板</p>
-<ul>
-<li>看板历史历史：<br>  丰田生产模式，解决生产线不同车间（流式生产线）库存和消耗量对齐的问题。<br>  例子: 车间1 → 车间2 → 车间3 …</li>
-<li>看板例子（流式任务）：参考 <a href="https://www.zhihu.com/question/20339647" target="_blank" rel="noopener">Trello 等任务管理工具体验如何？ - 知乎</a><ul>
-<li>bug处理： bug汇集池 → bug处理（Tips 用标签区分不同产品）</li>
-<li>待办： 收集箱 → Doing → Done（Tips 用标签作为优先级标识）</li>
-<li>项目： 需求TODO → 开发ing → 测试ing → 已完成/被阻塞</li>
-<li>里程碑/周报： 第一周 → 第二周 （完成的留在本周，未完成流向下一周）</li>
-<li>追踪多个项目：</li>
-</ul>
-</li>
-<li>除了解决“任务流转”，看板还可以： 解决<code>列表</code>结构的局限性： <code>列表</code>是单线结构，并单向生长。如果需要关注多个并行的<code>列表</code> &amp; 某个列表过长..</li>
-</ul>
-<h1 id="模板整理"><a href="#模板整理" class="headerlink" title="模板整理"></a>模板整理</h1><ul>
-<li><a href="https://trello.com/templates/project-management/it-project-workflow-TcQNw7nZ" target="_blank" rel="noopener">IT Project Workflow</a>: TODO、IN PROGRESS、BLOCKING</li>
-<li><a href="https://trello.com/templates/personal/4-ls-exercise-Bay7DwxN" target="_blank" rel="noopener">4 L’s exercise</a>： 此看板包括四个列表，记录发生的事情：里程碑，喜欢的，想做的，不喜欢的</li>
-<li><a href="https://trello.com/templates/personal/book-clubs-tP0ROvp8" target="_blank" rel="noopener">Books Club</a>：列表1=好书待读，列表2=book1，列表3=book2 …</li>
-<li><a href="https://trello.com/templates/productivity/marc-andreesen-productivity-system-VOy8QVlg" target="_blank" rel="noopener">马克安德森生产力体系</a>：此看板用于GTD，TODO、Today、Later…</li>
-<li><a href="https://trello.com/templates/productivity/annual-life-goals-&amp;-planning-ves3wHI2" target="_blank" rel="noopener">Life Goals</a>： 此看板包括几个列表：已计划事件、1月完成、2月完成…</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/看板（Kanban）/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/Zotero简单试用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/51.Productivity/Zotero简单试用/" itemprop="url">Zotero简单试用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  346
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li>Zotero 可以单独建立笔记：笔记内容存储在 zotero.sqlite文件的<code>itemNotes</code>表</li>
-<li>用 dropbox 同步 Zotero 文件夹的问题：<a href="https://blog.yesmryang.net/tags/Zotero/" target="_blank" rel="noopener">https://blog.yesmryang.net/tags/Zotero/</a><ul>
-<li>zotero.sqlite在打开的时候会被zotero锁定，此时Dropbox就认为这个文件已经有了修改，经过二进制对比，Dropbox会把修改部分上传并同步。如果两台电脑同时打开zotero的话，Dropbox会认为两边都是在更新这个文件，于是他会把对应修改的二进制文件合并到一块去，如果不能合并到一块去的话就生成冲突文件，在这个过程中很有可能就造成数据库文件的损坏</li>
-<li>处理方法：让zotero自己提供的网络同步功能同步数据库文件即可，然后存储在zotero里面的附件文件夹用符号链接的方式放到Dropbox目录里就可以了，这样把数据库和外部附件分开，以免Dropbox去处理zotero.sqlite</li>
-</ul>
-</li>
-<li>在Microsoft Word中成功安装了Zotero插件后，就可以直接将Zotero中的引文插入文档。点击Word文档菜单栏中的“Zotero”，然后点击“Add/Edit Citation”。</li>
-</ul>
-<p>@ref:</p>
-<ul>
-<li><a href="https://sspai.com/post/56724" target="_blank" rel="noopener">文献管理神器 Zotero 学习路径指南 - 少数派</a></li>
-<li><a href="https://blog.yesmryang.net/zotero-mendeley-papers/" target="_blank" rel="noopener">Zotero, Mendeley, Papers比较 | 大家都叫我老杨</a></li>
-<li><a href="https://help.jianguoyun.com/?p=3168" target="_blank" rel="noopener">如何在Zotero中设置webdav连接到坚果云？ | 坚果云帮助中心</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/PKM.什么是卡片盒笔记法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/51.Productivity/PKM.什么是卡片盒笔记法/" itemprop="url">PKM.什么是卡片盒笔记法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  682
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@tag: #Zettelkasten #卡片盒笔记法 #Luhmann</p>
-<p>这里只讨论什么是 “符合原旨主义的卡片盒笔记法”？ 换句话是卢曼怎么做的。从以下几个方面评估：</p>
-<ol>
-<li>单篇笔记格式：Atomicity，遵循原子笔记（Anatomy of Zettel）</li>
-<li>笔记间互相引用</li>
-<li>以带序号的文件名，表示笔记之间的层级关系、生长关系：<ul>
-<li>“第一条笔记的地址为数字1。如果你想添加一个与第一条笔记无关的笔记，那么将新笔记的地址设为数字2”</li>
-<li>“如果你想写一条与笔记1有关的新笔记，那么你应该以笔记1为起点产生一条分支，此时新笔记的地址被设为1a”</li>
-<li>卢曼的 <a href="https://luhmann.surge.sh/communicating-with-slip-boxes" target="_blank" rel="noopener">Communicating with Slip Boxes by Niklas Luhmann</a> <sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>文章里说明了这种命名方式，笔记通过命名组成了虚拟的slip（滑道），实现了 internal growth（内在生长）</li>
-<li>国内介绍的文章，大都把 Zettelkasten 翻译为卡片盒，特性介绍里只保留了“原子笔记”，但丢掉了“slip”</li>
-</ul>
-</li>
-<li>放入哪个盒子？即盒子是如何分类的，以及盒子无法实现“大盒子套小盒子”的情况下，如何应对树形概念？<ul>
-<li>google图片搜索 “Luhmann box Stock Photos”：卢曼的盒子是有纸条的，但也可能是后人加上去的</li>
-</ul>
-</li>
-<li>卡片盒不是双链笔记，只是卢曼的时代很难实现反链</li>
-</ol>
-<p>以上部分概念来自 <a href="https://zettelkasten.de/introduction/zh/" target="_blank" rel="noopener">https://zettelkasten.de/introduction/zh/</a></p>
-<hr>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/PKM.什么是卡片盒笔记法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/PKM.资源分类法.PARA-and-IARP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/51.Productivity/PKM.资源分类法.PARA-and-IARP/" itemprop="url">PKM.资源分类法.PARA-and-IARP</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,228
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="P-A-R-A"><a href="#P-A-R-A" class="headerlink" title="P.A.R.A"></a>P.A.R.A</h2><p>P.A.R.A 是一个通用且简单的数字资料分类方法</p>
-<p><img src="/images/2022/20220311142045.png" alt></p>
-<p>一个好的个人知识管理体系，应该可以支持并帮助你的工作，它应该让你在放置信息时准确知道放置的位置，以及在需要信息时能准确查找到信息的位置。</p>
-<p>这个系统应该有如下特点：</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/PKM.资源分类法.PARA-and-IARP/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/PKM.数字花园/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/51.Productivity/PKM.数字花园/" itemprop="url">PKM.数字花园</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,033
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="何谓数字花园"><a href="#何谓数字花园" class="headerlink" title="何谓数字花园"></a>何谓数字花园</h2><blockquote>
-<p>数字花园 是介于笔记应用和博客应用之间的半公开数字展览馆，半公开指的不是读者没有权限阅览，而是很多想法只是相互关联的半成品，令他人难以轻易看懂。<br>因为数字花园降低了对内容的要求，不强求作者将所有内容都打磨成文章级的成果，数字花园就会鼓励作者产出更多的内容，不拘一格降笔记。</p>
-</blockquote>
-<h2 id="菲尔德的隐喻：花园、溪流和篝火"><a href="#菲尔德的隐喻：花园、溪流和篝火" class="headerlink" title="菲尔德的隐喻：花园、溪流和篝火"></a>菲尔德的隐喻：花园、溪流和篝火</h2><blockquote>
-<p>在2015年数字学习研究网络上，迈克·考菲尔德（Mike Caufield）发表了关于《花园与溪流：技术田园》的主题演讲。它后来成为一篇重要的文章，为我们现在对这个词语的理解奠定了基础。如果说有谁应该被认为是最早提出了数字花园的话，那就是考菲尔德。他是第一个用诗意的、连贯的文字来阐述整个想法的人。</p>
-</blockquote>
-<p>麦克·考菲尔德认为，互联网有两种形态，一种是“花园”，一种是“溪流”。花园（Garden）是说，互联网就像一块土地，上面有小路，有花草树木，它们皆有所指。小路就是超链接，让我们在不同网页穿梭，花花草草则是不同的网站。这的确和早期的互联网形态很像，和上面提到的1998年的超文本花园联系上了。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/PKM.数字花园/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/PKM.01.我的笔记系统实践/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/51.Productivity/PKM.01.我的笔记系统实践/" itemprop="url">PKM.01.我的笔记系统实践</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  7,246
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@tag: #PKM #知识管理 #Zettelkasten #卡片盒笔记法 #Luhmann</p>
-<p>@link: <a href="/51.Productivity/PKM.什么是卡片盒笔记法/" title="PKM.什么是卡片盒笔记法">PKM.什么是卡片盒笔记法</a></p>
-<p>sspai链接： <a href="https://sspai.com/post/75940" target="_blank" rel="noopener">https://sspai.com/post/75940</a></p>
-<hr>
-<h2 id="01-从这里开始"><a href="#01-从这里开始" class="headerlink" title="01.从这里开始"></a>01.从这里开始</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/PKM.01.我的笔记系统实践/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/PKM.00.Index/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/51.Productivity/PKM.00.Index/" itemprop="url">PKM.00.个人知识管理-索引</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,633
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>相关笔记：Meditations / Thinking-知识管理</p>
-<p>@tag: #_Index</p>
-<hr>
-<h1 id="开始：PKM-的定义，包括什么"><a href="#开始：PKM-的定义，包括什么" class="headerlink" title="开始：PKM 的定义，包括什么"></a>开始：PKM 的定义，包括什么</h1><p>中文wiki <a href="https://zh.m.wikipedia.org/zh-hans/%E4%B8%AA%E4%BA%BA%E7%9F%A5%E8%AF%86%E7%AE%A1%E7%90%86" target="_blank" rel="noopener">个人知识管理 - 维基百科，自由的百科全书</a></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/PKM.00.Index/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/Logseq简单试用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/51.Productivity/Logseq简单试用/" itemprop="url">Logseq简单试用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  772
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li>Logseq书写方式类似于 <a href="https://workflowy.com/" target="_blank" rel="noopener">WorkFlowy</a>，一种可以无限缩进的、且支持折叠的列表作为书写方式 <a href="https://zhuanlan.zhihu.com/p/503704174" target="_blank" rel="noopener">大纲笔记软件 Workflowy 综合评测</a>；</li>
-<li>Logseq同时支持 Markdown 以及 <a href="https://orgmode.org/" target="_blank" rel="noopener">Org-mode</a>；</li>
-<li>Logseq把一个“笔记本库”叫Graph（图谱），Obsidian里则是“Vault”；</li>
-<li>块（Block）是一段文字，也是 Logseq 的最小内容单位，可以认为 Markdown语法的 “列表”的一行就是一个 Block ，按<code>回车键</code>会自动创建一个新块</li>
-<li>页（Page）包含许多块，一个页对应“pages”文件夹下的一个md文件；<ul>
-<li>Logseq似乎完全放弃了文件夹层级这种结构，上面的操作只能创建一个<code>一个新页面%2F一个子页面</code>为名的md文件，在“全部页面”里二者是并列的，也没有显示上的层级性</li>
-<li>如果想用 Logseq但又不想放弃树状文件夹层级，可以建一个索引页，用 list 和 sub-list模拟树状关系</li>
-</ul>
-</li>
-<li>Card（记忆卡片） 和 Journals（日志）是两个内置功能，可以选择开启或关闭</li>
-<li>如何使用 Logseq 的卡片功能：<ul>
-<li>这是一个卡片的例子，带有<code>#card</code>标签的块，会变成一个卡片</li>
-<li>卡片支持完形填空（cloze）的功能，输入<code>/cloze</code>即可进入</li>
-<li>从左侧导航栏里的“卡片”可以列出所有的卡片</li>
-</ul>
-</li>
-<li>如何使用 Logseq 的日志功能：<ul>
-<li>每天自动生成一个新日志页面，点击左侧的“日志”即可开始书写，日志存储在 “journals”文件夹下，每天的日志对应一个md文件，例如“2022_09_15.md”</li>
-</ul>
-</li>
-<li>其他功能：<ul>
-<li>同步：<ul>
-<li>Logseq 不包括云端服务，全部笔记都存储在本地库文件夹，可以使用 Dropbox、Git对笔记文件夹进行同步</li>
-<li>Logseq（桌面版）还提供了周期 git commit 的功能</li>
-<li>Logseq 有 iOS客户端，如果要同步数据，目前只能用 iCloud Drive（2022-09-15）</li>
-</ul>
-</li>
-<li>页面引用：  Logseq 使用<code>[[wikilink]]</code>的方式来引用另一个页</li>
-<li>块引用： 输入 <code>((</code>括号，然后输入以关联某块，例如 ((6322ef12-1529-4939-af2a-7840675787df))，可以看到<code>(())</code>里是一段类似uuid的代码，同时 Logseq会在被引用的块下面增加一行 <code>id:: 6322ef12-1529-4939-af2a-7840675787df</code>用以标注该块的唯一ID</li>
-<li>标签：<ul>
-<li>在 Logseq 中使用<code>#tag</code>来增加一个标签，与 Mkd 语法一致，例如： #Markdown</li>
-<li>在创建一个标签后，Logseq 自动在“全部页面”里增加一个该标签为名的页面</li>
-</ul>
-</li>
-<li>测试 Markdown 中的标题<code>#</code> ：<ul>
-<li><h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1></li>
-<li>Markdown中的层级可以理解为一级标题 &gt; 二级标题 &gt; n级标题，内容的容器（包括列表块、代码块、普通文字块）都隶属于标题之下。但 Logseq的页面里，列表才是第一层级的容器</li>
-</ul>
-</li>
-<li>测试贴图：默认图片附件在库的根目录下的assets文件夹</li>
-</ul>
-</li>
-</ul>
-<hr>
-<p>@ref:</p>
-<ul>
-<li><a href="https://github.com/logseq/logseq" target="_blank" rel="noopener">GitHub - logseq/logseq: A privacy-first, open-source platform for knowledge management and collaboration. Desktop app download link: https://github.com/logseq/logseq/releases, roadmap: https://trello.com/b/8txSM12G/roadmap</a></li>
-<li><a href="https://sspai.com/post/69503" target="_blank" rel="noopener">双链笔记软件推荐：Logseq 和它的五种用法 - 少数派</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/开源项目源代码阅读指北/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/41.Uncategorized/开源项目源代码阅读指北/" itemprop="url">开源项目源代码阅读指北</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
-                    <span itemprop="name">41.Uncategorized</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,157
+                  745
                 </span>
               
 
@@ -2533,17 +716,31 @@
       
         
           <blockquote>
-<p>本文参考 @ref: <a href="http://www.nosqlnotes.com/techpoints/how-to-read-opensource-code/" target="_blank" rel="noopener">Jaison - 阅读开源项目源码的建议姿势</a> </p>
+<p>在MySQL/InnoDB中，所谓的读不加锁，并不适用于所有的情况，而是隔离级别相关的。Serializable隔离级别，读不加锁就不再成立，所有的读操作，都是当前读。<br>分析SQL语句加锁情况，还要考虑几种情况：当前用什么引擎（InnoDB/MyISAM）？你要当前系统的隔离级别是什么？ id列是不是主键？ id列如果不是主键，那么id列上有索引吗？id列上如果有二级索引，那么这个索引是唯一索引吗？</p>
 </blockquote>
-<h1 id="先选择合适的源码版本"><a href="#先选择合适的源码版本" class="headerlink" title="先选择合适的源码版本"></a>先选择合适的源码版本</h1><p>需要先审视自己的需求：“我阅读源码，是单纯的为了学习？还是希望在业务系统中更好的用好它？”</p>
+<p>➤ SQL语句在不同隔离级别的加锁分析:</p>
 <ul>
-<li>如果是前者，那完全可以选择最新发布或待发布的稳定版本。</li>
-<li>如果是后者，则需要选择自己业务系统中正在使用的版本。</li>
+<li>如果是 Serializable 级别, 防止了脏读, 读加S锁, 写加X锁;</li>
+<li>如果是RC级别, 当前读允许有幻读, 所以上面的”非唯一索引的情形没有加Gap锁;</li>
+<li>如果是RR级别: (RR级别解决了幻读问题, 事务中两次当前读, 读出来的数目一致), 以 <code>update T1 set id = 100 where name = ‘d’</code> 为例, 下面为了简化分析, 只考虑 <code>where =</code>的更新, 不考虑 <code>where between</code>范围更新 :<ul>
+<li>如果 where条件是<code>=主键</code>: 聚簇索引上加X锁, 由于主键索引的唯一性, 只有一行加X锁;</li>
+<li>如果 where条件是<code>=唯一索引</code>, 但非主键: 普通索引上加X锁(只有一行),  聚簇索引对应的行加X锁;</li>
+<li>如果 where条件是<code>=非唯一索引</code>, 但非主键: 由于where索引是非唯一, where索引上可能有多行符合条件, 每行都需要加X锁, 同时行之间还需要加 <strong>Gap锁</strong> (间隙锁, 解决幻读), 聚簇索引对应的行都要加X锁;</li>
+<li>如果 where条件上没有索引: 会导致聚簇索引上每行都加X锁( <strong>相当于锁住了整个表</strong>), 并且聚簇索引每行之间都加 Gap锁;</li>
+<li>综上, update语句的条件是<code>where=主键</code>时, 需要的锁最少, 如果 update语句的 where条件是无索引列, 会引起整个主键索引树的每行都加X锁, 性能消耗非常大</li>
 </ul>
-<h1 id="快速了解架构和关键特性"><a href="#快速了解架构和关键特性" class="headerlink" title="快速了解架构和关键特性"></a>快速了解架构和关键特性</h1>
+</li>
+</ul>
+<p>➤ 锁优化建议</p>
+<ol>
+<li>合理设计索引，让 InnoDB 在索引键上面加锁的时候尽可能准确，尽可能的缩小锁定范围，避免造成不必要的锁定而影响其他 Query 的执行。</li>
+<li>尽可能减少基于范围的数据检索过滤条件，避免因为间隙锁带来的负面影响而锁定了不该锁定的记录。</li>
+<li>尽量控制事务的大小，减少锁定的资源量和锁定时间长度。</li>
+<li>在业务环境允许的情况下，尽量使用较低级别的事务隔离，以减少 MySQL 因为实现事务隔离级别所带来的附加成本。</li>
+</ol>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/41.Uncategorized/开源项目源代码阅读指北/#more" rel="contents">
+            <a class="btn" href="/32.Database/MySQL-04b-SQL加锁分析/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2594,7 +791,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/正则表达式-RegExp/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-05架构-日志/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2613,7 +810,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/41.Uncategorized/正则表达式-RegExp/" itemprop="url">正则表达式-RegExp</a></h1>
+                <a class="post-title-link" href="/32.Database/MySQL-05架构-日志/" itemprop="url">MySQL-05架构-日志</a></h1>
         
 
         <div class="post-meta">
@@ -2636,8 +833,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
-                    <span itemprop="name">41.Uncategorized</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -2667,7 +864,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,574
+                  120
                 </span>
               
 
@@ -2693,23 +890,390 @@
 
       
         
-          <p><img src="images/others/regexp.png" alt="RegEXp"></p>
-<h1 id="正则表达式的流派"><a href="#正则表达式的流派" class="headerlink" title="正则表达式的流派"></a>正则表达式的流派</h1><p>正则的两个标准： Perl 和 POSIX 标准</p>
-<ol>
-<li>Perl标准(PCRE)： 标准概述： <a href="http://perldoc.perl.org/perlre.html#Regular-Expressions" target="_blank" rel="noopener">perlre - perldoc.perl.org</a>，只关注[The Basics] 和[Metacharacters] （元字符）这两节即可.<ul>
-<li>正则表达式在线检测： <a href="https：//www.debuggex.com/">Debuggex</a></li>
+          <p>@toc:</p>
+<ul>
+<li>三种日志的作用分别是什么?</li>
+<li>三种日志数据格式有何不同?</li>
+<li>分别在MySQL架构哪一层实现;</li>
+</ul>
+<p>比较 Redo log/Undo log/Binlog:</p>
+<ul>
+<li>作用不同:<ul>
+<li>Redo log是WAL机制的日志, 更新数据先落日志, 防止Crash;</li>
+<li>Undo log是实现事务回滚和MVCC的;</li>
+<li>Binlog 是 server层实现的;</li>
 </ul>
 </li>
-<li>Posix标准，包括两个流派：BRE（基本型正则表达式）和ERE（扩展型正则表达式）<ul>
-<li>BRE： grep，sed，vi</li>
-<li>ERE： egrep，awk，grep -E，</li>
+<li>数据格式: Redo log是物理日志 …</li>
+<li>实现的层级不同: Redo/Undo 是引擎层实现, Binlog是server层实现</li>
+<li>写入时机:</li>
+</ul>
+<p>@ref: </p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/32.Database/MySQL-05架构-日志/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-05架构-高性能和高可用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/MySQL-05架构-高性能和高可用/" itemprop="url">MySQL-05架构-高性能和高可用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  15
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>@toc</p>
+<ul>
+<li>主从同步</li>
+<li>分库分表</li>
+</ul>
+<a href="/32.Database/MySQL-05架构-日志/" title="MySQL-05架构-日志">MySQL-05架构-日志</a>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/33.Bigdata/Hadoop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/33.Bigdata/Hadoop/" itemprop="url">Hadoop</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/33-Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">33.Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  828
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Hadoop_logo.svg/2000px-Hadoop_logo.svg.png" alt="Hadoop"></p>
+<h1 id="Hadoop-安装-amp-配置"><a href="#Hadoop-安装-amp-配置" class="headerlink" title="Hadoop 安装 &amp; 配置"></a>Hadoop 安装 &amp; 配置</h1><h2 id="Hadoop-amp-Yarn安装步骤"><a href="#Hadoop-amp-Yarn安装步骤" class="headerlink" title="Hadoop &amp; Yarn安装步骤"></a>Hadoop &amp; Yarn安装步骤</h2><p>参考: <a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="noopener">Apache Hadoop 2.9.2 – Hadoop Cluster Setup</a></p>
+<ol>
+<li>/etc/hosts, ssh登录 // 使slave可以ssh到master<ul>
+<li>/etc/hosts: 所有slave可互相ping hostname</li>
+<li>authorized_keys : master可以ssh任意slave</li>
+</ul>
+</li>
+<li>hadoop配置文件<ul>
+<li>hadoop-env.sh : <code>HADOOP_CONF_DIR</code> 指定加载哪个目录下的配置文件</li>
+<li>slaves: 只有namenode需配置</li>
+<li>core-site.xml:(<a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-common/core-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-common/core-default.xml</a>)<ul>
+<li>fs.defaultFS : hdfs://namenode:9000 ## hdfs文件端口</li>
+<li>hadoop.tmp.dir : /opt/data/hadoop/tmp 其它目录会基于此路径</li>
+</ul>
+</li>
+<li>hdfs-site.xml:(<a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml</a>)<ul>
+<li>dfs.namenode.secondary.http-address :  第二NameNode web管理端口</li>
+<li>dfs.replication : 3 ## 数据需要备份的数量, 默认是3, 如果此数大于集群的机器数会出错</li>
+<li>dfs.namenode.name.dir : /opt/data/hadoop/namenode ## NameNode持久存储名字空间及事务日志的本地文件系统路径</li>
+<li>dfs.datanode.data.dir : /opt/data/hadoop/datenode ## DataNode存放块数据的本地文件系统路径</li>
+<li>dfs.namenode.http-address : namenode:50070  ## 浏览器可访问管理页面</li>
+<li>dfs.webhdfs.enabled : 开启WebHDFS (REST API)功能</li>
+</ul>
+</li>
+<li>mapred-site.xml:<ul>
+<li>mapreduce.framework.name: yarn</li>
+<li>mapreduce.jobhistory.address: 10020</li>
+<li>mapreduce.jobhistory.webapp.address: 19888</li>
+</ul>
+</li>
+<li>yarn-site.xml<ul>
+<li>yarn.resourcemanager.webapp.address: 8088 ## yarn框架中各个 task 的资源调度及运行状况通过通过该web界面访问</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>格式化namenode: <code>hdfs namenode -format</code></li>
+<li>启动HDFS NameNode: <code>sbin/hadoop-daemon.sh start namenode</code></li>
+<li>启动HDFS DateNode: <code>sbin/hadoop-daemons.sh start datanode</code><ul>
+<li><strong>或者在namenode上直接一个脚本启动: <code>sbin/start-dfs.sh</code> namenode和datanode的所有hdfs</strong></li>
+</ul>
+</li>
+<li>启动yarn: <code>sbin/start-yarn.sh</code>脚本一次启动ResourceManager和NodeManager, 如果要分别启动:<ul>
+<li><code>yarn-daemon.sh --config /opt/conf/hadoop start nodemanager</code></li>
+<li><code>yarn-daemon.sh --config /opt/conf/hadoop start resourcemanager</code></li>
+</ul>
+</li>
+<li>查看集群状态: <code>bin/hdfs dfsadmin -report</code></li>
+<li>测试hdfs写: <code>echo &quot;hello world&quot; | hadoop fs -put - /dir/hadoop/hello_world.txt &amp;&amp; hadoop fs -cat  /dir/hadoop/hello_world.txt</code></li>
+<li>一些web ui:<ul>
+<li>查看nameNode: <a href="http://namenode:50070/" target="_blank" rel="noopener">http://namenode:50070/</a></li>
+<li>查看yarn resourcemanager: <a href="http://namenode:8088/" target="_blank" rel="noopener">http://namenode:8088/</a></li>
+<li>MapReduce JobHistory: <a href="http://namenode:19888" target="_blank" rel="noopener">http://namenode:19888</a></li>
 </ul>
 </li>
 </ol>
-<h1 id="Perl正则"><a href="#Perl正则" class="headerlink" title="Perl正则"></a>Perl正则</h1>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/41.Uncategorized/正则表达式-RegExp/#more" rel="contents">
+            <a class="btn" href="/33.Bigdata/Hadoop/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2760,7 +1324,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/安全笔记/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/33.Bigdata/Hive/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2779,7 +1343,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/41.Uncategorized/安全笔记/" itemprop="url">安全笔记</a></h1>
+                <a class="post-title-link" href="/33.Bigdata/Hive/" itemprop="url">Hive</a></h1>
         
 
         <div class="post-meta">
@@ -2802,8 +1366,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
-                    <span itemprop="name">41.Uncategorized</span>
+                  <a href="/categories/33-Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">33.Bigdata</span>
                   </a>
                 </span>
 
@@ -2833,7 +1397,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  235
+                  2,030
                 </span>
               
 
@@ -2859,15 +1423,799 @@
 
       
         
-          <h1 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h1><p><a href="../30MinsToturial/Java Tutorials.md">参考 Java Tutorials.md - (十七)安全</a></p>
-<blockquote>
-<p>Blowfish是1993年布鲁斯·施奈尔(Bruce Schneier)开发的对称密钥区块加密算法，区块长为64位，密钥为1至448位的可变长度。与DES等算法相比，其处理速度较快。因为其无须授权即可使用，作为一种自由授权的加密方式在SSH、文件加密软件等被广泛地使用</p>
+          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>  Hive是建立在Hadoop上的数据仓库基础架构。它提供了一系列的工具，用来进行数据提取、转换、加载，这是一种可以存储、查询和分析存储在Hadoop中的大规模数据机制。可以把Hadoop下结构化数据文件映射为一张成Hive中的表，并提供类sql查询功能，除了不支持更新、索引和事务，sql其它功能都支持。可以将sql语句转换为MapReduce任务进行运行，作为sql到MapReduce的映射器。提供shell、JDBC/ODBC、Thrift、Web等接口。</p>
+<p>  Hive 并不适合那些需要低延迟的应用，例如，联机事务处理（OLTP）。Hive 查询操作过程严格遵守Hadoop MapReduce 的作业执行模型，Hive 将用户的HiveQL 语句通过解释器转换为MapReduce 作业提交到Hadoop 集群上，Hadoop 监控作业执行过程，然后返回作业执行结果给用户。Hive 并非为联机事务处理而设计，Hive 并不提供实时的查询和基于行级的数据更新操作。Hive 的最佳使用场合是大数据集的批处理作业，例如，网络日志分析。</p>
+<h1 id="元数据存储"><a href="#元数据存储" class="headerlink" title="元数据存储"></a>元数据存储</h1><p>  Hive将元数据存储在RDBMS中，有三种方式可以连接到数据库。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/33.Bigdata/Hive/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/33.Bigdata/MapReduce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/33.Bigdata/MapReduce/" itemprop="url">MapReduce</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/33-Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">33.Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  0
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="/images/hadoop/MapReduce-Shuffle.png" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/33.Bigdata/Spark/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/33.Bigdata/Spark/" itemprop="url">Spark</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/33-Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">33.Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,516
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/images/spark/Stream-Processing-Analitics-and-Machine-Learning.jpg" alt></p>
+<h1 id="什么是Spark"><a href="#什么是Spark" class="headerlink" title="什么是Spark"></a>什么是Spark</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>现如今在大规模数据处理分析的技术领域中，Hadoop及其生态内的各功能组件占据了绝对的统治地位。<br>Hadoop原生的MapReduce计算框架由于任务抽象简单、计算流程固定、计算的中间结果写入磁盘引起大量读写开销等短板，正逐步的被基于内存的分布式计算框架Spark代替，应用于各类大规模数据处理分析的场景中，其优势主要体现在以下5个方面：</p>
+<ul>
+<li>1、更快的计算速度。采用计算中间结果的内存缓存机制和基于DAG的数据处理过程优化策略，进一步提升数据处理速率。</li>
+<li>2、简单易用的分布式计算。将大规模数据处理任务，抽象为RDD的处理变换操作，将并行实现的分布式计算任务拆分为各自独立的串行计算过程。</li>
+<li>3、适合丰富的应用场景。Spark内部集成了SQL、机器学习、流计算、图运算等多种类型计算模型，满足多种大规模数据分析的场景需求。</li>
+<li>4、兼容多样的存储系统。满足对包括HDFS、HBase、Hive、S3等多种大规模数据存储系统的高效读写需求，轻松处理TB级以上规模以上的数据。</li>
+<li>5、资源管理与高可靠性。结合Yarn、Mesos等多种类型的资源管理器，监控协调各计算子任务的运行状态，失败重启机制确保分布式作业的可靠性。</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/33.Bigdata/Spark/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/33.Bigdata/Storm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/33.Bigdata/Storm/" itemprop="url">Storm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/33-Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">33.Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,316
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="http://storm.apache.org/images/logo.png" alt="Storm"></p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>  Storm是一个开源的分布式实时计算系统，可以简单、可靠的处理大量的数据流。被称作“实时的hadoop”。<br>  Storm有很多使用场景：如实时分析，在线机器学习，持续计算， 分布式RPC，ETL等等。<br>  Storm支持水平扩展，具有高容错性，保证每个消息都会得到处理，而且处理速度很快。<br>  Storm的部署和运维都很便捷，而且更为重要的是可以使用任意编程语言来开发应用。</p>
+<h2 id="Storm的特点"><a href="#Storm的特点" class="headerlink" title="Storm的特点"></a>Storm的特点</h2><ul>
+<li>简单的编程模型:<br>在大数据处理方面相信大家对 hadoop已经耳熟能详，基于 Google Map/Reduce来实现的 Hadoop为开发者提供了map、reduce原语，使并行批处理程序变得非常地简单。<br>同样，Storm也为大数据 的实时计算提供了一些简单优美的原语，这大大降低了开发并行实时处理的任务的复杂性，帮助你快速、高效的开发应用。</li>
+<li>水平扩展:<br>在 Storm集群中真正运行 topology的主要有三个实体：工作进程、线程和任务。Storm集群中的每台机器上都可以运行多个工作进程，每个工作进程又可创建多个线程，每个线程可以执行多个任务，任务是真正进行数据处理的实体，我们开发的 spout、bolt就是作为一个或者多个任务的方式执行的。<br>计算任务在多个线程、进程和服务器之间并行进行，支持灵活的水平扩展。</li>
+<li>支持多种编程语言:<br>你可以在Storm之上使用各种编程语言。默认支持 Clojure、Java、Ruby和 Python。要增加对其他语言的支持，只需实现一个简单的 Storm通信协议即可。</li>
+<li>高可靠性:<br>Storm保证每个消息至少能得到一次完整处理。任务失败时，它会负责从消息源重试消息。<br>spout发出的消息后续可能会触发产生成千上万条消息，可以形象的理解为一棵消息树，其中 spout发出的消息为树根，Storm会跟踪这棵消息树的处理情况，只有当这棵消息树中的所有消息都被处理了，Storm才会认为 spout发出的这个消息已经被“完全处理”。如果这棵消息树中的任何一个消息处理失败了，或者整棵消息树在限定的时间内没有“完全处理”，那么 spout发出的消息就会重发。</li>
+<li>高容错性:<br>Storm会管理工作进程和节点的故障。<br>如果在消息处理过程中出了一些异常，Storm会重新安排这个出问题的处理单元。Storm保证一个处理单元永远运行（除非你显式杀掉这个处理单元）。<br>当然，如果处理单元中存储了中间状态，那么当处理单元重新被Storm启动的时候，需要应用自己处理中间状态的恢复。</li>
+<li>本地模式:<br>Storm有一个“本地模式”，可以在处理过程中完全模拟Storm集群。这让你可以快速进行开发和单元测试。</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/33.Bigdata/Storm/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/34.Machine-Learning/DeepLearning-深度学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/34.Machine-Learning/DeepLearning-深度学习/" itemprop="url">笔记：深度学习</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/34-Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">34.Machine-Learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,297
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/images/machine_learning/Deep-Learning-Title.png" alt></p>
+<h1 id="深度学习入门"><a href="#深度学习入门" class="headerlink" title="深度学习入门"></a>深度学习入门</h1><h2 id="机器学习-vs-深度学习"><a href="#机器学习-vs-深度学习" class="headerlink" title="机器学习 vs 深度学习"></a>机器学习 vs 深度学习</h2><p><strong>机器学习</strong> 通过算法分析数据，从结果中进行学习，然后将「学习后的算法」用来做出决策或进行预测，例子有我们熟悉的聚类、贝叶斯网络和视觉数据映射等等。</p>
+<p><strong>深度学习</strong>，深度学习是机器学习的一个子集，和其它所有机器学习一样都是基于算法。然而它并非像「数据分类」一样根据任务选择的算法，而是模仿人类大脑结构与运算过程——识别非结构化输入的数据，输出精确地行为和决策。<br>机器学习可以是监督的也可以是非监督的，这意味着大型神经网络可以接受「标签化输入」，但并不需要。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/34.Machine-Learning/DeepLearning-深度学习/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/34.Machine-Learning/MachineLearning-机器学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/34.Machine-Learning/MachineLearning-机器学习/" itemprop="url">笔记：机器学习</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/34-Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">34.Machine-Learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  7,771
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/images/machine_learning/Machine-Learning-Title.png" alt></p>
+<h1 id="机器学习入门"><a href="#机器学习入门" class="headerlink" title="机器学习入门"></a>机器学习入门</h1><ul>
+<li><a href="https://developers.google.com/machine-learning/crash-course/prereqs-and-prework?hl=zh-cn" target="_blank" rel="noopener">Google机器学习速成课程</a></li>
+<li><a href="https://github.com/MLEveryday/100-Days-Of-ML-Code" target="_blank" rel="noopener">机器学习100天</a></li>
+</ul>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><blockquote>
+<p>@ref: <a href="https://developers.google.com/machine-learning/glossary/?hl=zh-cn#f" target="_blank" rel="noopener">机器学习术语表  |  Google Developers</a> </p>
 </blockquote>
-<p>bcrypt是根据Blowfish加密算法所设计的密码散列函数</p>
-<h1 id="Salt"><a href="#Salt" class="headerlink" title="Salt"></a>Salt</h1>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/41.Uncategorized/安全笔记/#more" rel="contents">
+            <a class="btn" href="/34.Machine-Learning/MachineLearning-机器学习/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2918,7 +2266,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/前端笔记/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/34.Machine-Learning/RecommenderSystem-推荐系统/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2937,7 +2285,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/41.Uncategorized/前端笔记/" itemprop="url">前端笔记</a></h1>
+                <a class="post-title-link" href="/34.Machine-Learning/RecommenderSystem-推荐系统/" itemprop="url">推荐系统</a></h1>
         
 
         <div class="post-meta">
@@ -2960,8 +2308,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
-                    <span itemprop="name">41.Uncategorized</span>
+                  <a href="/categories/34-Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">34.Machine-Learning</span>
                   </a>
                 </span>
 
@@ -2991,7 +2339,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,554
+                  1,984
                 </span>
               
 
@@ -3017,22 +2365,12 @@
 
       
         
-          <h1 id="Todo"><a href="#Todo" class="headerlink" title="Todo"></a>Todo</h1><ul>
-<li>Javascript绝对简明教程 <a href="http://wiki.woodpecker.org.cn/moin/jsInAWord" target="_blank" rel="noopener">http://wiki.woodpecker.org.cn/moin/jsInAWord</a></li>
-<li>对Web标准的理解, 浏览器差异</li>
-<li>HTML / CSS / JavaScript(基础, JS面向对象实现原理/闭包机制/作用域)</li>
-<li>AngularJS / Ember.js / jQuery</li>
-<li>Jade / Swig / Handlebars / Mustache 或者其它模板引擎</li>
-<li>SASS 或者其它 CSS 预处理器</li>
-<li>Js代码混淆 grunt/uglify</li>
-</ul>
-<h1 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type"></a>Content-Type</h1><ul>
-<li>各浏览器对常用或者错误的 Content-Type 类型处理方式 <a href="http://w3help.org/zh-cn/causes/CH9001" target="_blank" rel="noopener">http://w3help.org/zh-cn/causes/CH9001</a> or <a href="http://www.w3help.org/zh-cn/causes/CH9002" target="_blank" rel="noopener">http://www.w3help.org/zh-cn/causes/CH9002</a></li>
-</ul>
-<h1 id="P3P-Cookie"><a href="#P3P-Cookie" class="headerlink" title="P3P Cookie"></a>P3P Cookie</h1>
+          <h1 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h1><p><img src="/images/machine_learning/Recom-System-Arch.png" alt></p>
+<h1 id="效果评估"><a href="#效果评估" class="headerlink" title="效果评估"></a>效果评估</h1><p>先了解一个概念: <strong>混淆矩阵</strong></p>
+<p>混淆矩阵是用来总结一个分类器结果的矩阵。对于k元分类，其实它就是一个k x k的表格，用来记录分类器的预测结果。<br>对于最常见的二元分类来说，它的混淆矩阵是2乘2的，如下</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/41.Uncategorized/前端笔记/#more" rel="contents">
+            <a class="btn" href="/34.Machine-Learning/RecommenderSystem-推荐系统/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3083,7 +2421,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/使用jEnv管理Jdk版本/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/34.Machine-Learning/人工智能和神经网络101/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -3102,7 +2440,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/41.Uncategorized/使用jEnv管理Jdk版本/" itemprop="url">使用jEnv管理Jdk版本</a></h1>
+                <a class="post-title-link" href="/34.Machine-Learning/人工智能和神经网络101/" itemprop="url">人工智能和神经网络101</a></h1>
         
 
         <div class="post-meta">
@@ -3125,8 +2463,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
-                    <span itemprop="name">41.Uncategorized</span>
+                  <a href="/categories/34-Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">34.Machine-Learning</span>
                   </a>
                 </span>
 
@@ -3156,7 +2494,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  20
+                  957
                 </span>
               
 
@@ -3182,10 +2520,22 @@
 
       
         
-          
-            <p>=&gt; [[../50.Farbox-Blog/【开发环境】OSX开发环境配置#多版本Java共存]]</p>
-
-          
+          <p>@ref: <a href="https://www.youtube.com/watch?v=5A9bmW1qTpk" target="_blank" rel="noopener">机器能像人一样思考吗？人工智能（一）机器学习和神经网络 - YouTube</a></p>
+<p><img src="/images/2022/20220419220023.png" alt></p>
+<h3 id="人工智能发展史"><a href="#人工智能发展史" class="headerlink" title="人工智能发展史"></a>人工智能发展史</h3><ul>
+<li>1950：图灵测试提出（直到2014年才出现第一台通过图灵测试的程序）</li>
+<li>1956：马文丶明斯基，约翰丶麦卡锡，香农 =&gt; 达特茅斯会议，第一次提出“AI”</li>
+<li>1997：IBM深蓝战胜卡斯帕罗夫</li>
+<li>辛顿（BP反向传播算法），杨立昆（CNN卷积神经网络），本吉奥获得2018年图灵奖</li>
+</ul>
+<p><img src="/images/2022/20220419231717.png" alt></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/34.Machine-Learning/人工智能和神经网络101/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -3232,7 +2582,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/使用NVM管理Node版本/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/Github-Repo-Starred/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -3251,7 +2601,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/41.Uncategorized/使用NVM管理Node版本/" itemprop="url">使用NVM管理Node</a></h1>
+                <a class="post-title-link" href="/41.Uncategorized/Github-Repo-Starred/" itemprop="url">Github-Repo-Starred</a></h1>
         
 
         <div class="post-meta">
@@ -3305,7 +2655,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  129
+                  495
                 </span>
               
 
@@ -3331,14 +2681,497 @@
 
       
         
-          <p>NVM = <a href="https://github.com/nvm-sh/nvm" target="_blank" rel="noopener">Node Version Manager</a></p>
-<p>安装NVM（zsh）参考： <a href="https://gist.github.com/mike-casas/6d489bebf48d89f5109cd1395aabe150" target="_blank" rel="noopener">install nvm on mac with zsh shell</a></p>
-<p>输入<code>nvm v</code>查看当前 NVM 版本号，如果成功出现版本号，则代表安装成功</p>
-<p>输入<code>nvm ls available</code>查看可以安装的 Node 版本</p>
-<p>如果返回结果为N/A，解决办法：<a href="https://stackoverflow.com/questions/26476744/nvm-ls-remote-command-results-in-n-a" target="_blank" rel="noopener">https://stackoverflow.com/questions/26476744/nvm-ls-remote-command-results-in-n-a</a></p>
+          <p>@todo</p>
+<ul>
+<li>High-performance event loop : such as libev;</li>
+<li>PHP Framework;</li>
+<li>Python mvc;</li>
+</ul>
+<h1 id="C-C"><a href="#C-C" class="headerlink" title="C/C++"></a>C/C++</h1><p><a href="https://github.com/WhatsDJGPP/STL" target="_blank" rel="noopener">STL</a> : STL笔记;</p>
+<p><a href="http://git.oschina.net/whatsdjgpp/protothreads-port" target="_blank" rel="noopener">Protothreads</a> : 针对C语言封装后的宏函数库, 为C语言模拟了一种无堆栈的轻量线程环境, 能够实现模拟线程的条件阻塞、信号量操作等操作系统中特有的机制, 从而使程序实现多线程操作.</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/41.Uncategorized/使用NVM管理Node版本/#more" rel="contents">
+            <a class="btn" href="/41.Uncategorized/Github-Repo-Starred/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/Git速查手册/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/41.Uncategorized/Git速查手册/" itemprop="url">Git速查手册</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
+                    <span itemprop="name">41.Uncategorized</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,097
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="stash"><a href="#stash" class="headerlink" title="stash"></a>stash</h2><ul>
+<li><code>git stash</code>: 暂存没有add的修改</li>
+<li><code>git stash list</code>: 查看已经暂存的</li>
+<li><code>git stash apply</code>: 应用暂存的修改到当前分支</li>
+</ul>
+<h2 id="工作流"><a href="#工作流" class="headerlink" title="工作流"></a>工作流</h2><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2015/12/git-workflow.html" target="_blank" rel="noopener">Git 工作流程 - 阮一峰的网络日志</a><ul>
+<li>Git flow</li>
+<li>Github flow</li>
+</ul>
+</li>
+</ul>
+<h2 id="checkout-amp-merge"><a href="#checkout-amp-merge" class="headerlink" title="checkout &amp; merge"></a>checkout &amp; merge</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/41.Uncategorized/Git速查手册/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/NPM命令速查/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/41.Uncategorized/NPM命令速查/" itemprop="url">NPM命令速查</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
+                    <span itemprop="name">41.Uncategorized</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  286
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="npm-install安装目录"><a href="#npm-install安装目录" class="headerlink" title="npm install安装目录"></a>npm install安装目录</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install xx  # 局部安装到当前目录node_moduels/</span><br><span class="line"></span><br><span class="line">npm install -g xx # 全局安装到全局目录，见“npm安装路径说明”</span><br></pre></td></tr></table></figure>
+<p>npm安装路径说明：</p>
+<p>默认的，npm 全局安装路径默认是： /usr/local/lib/node_modules</p>
+<p>如果用NVM安装的Node，安装路径是 ~/.nvm/versions/node/v16.17.1/lib/node_modules</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/41.Uncategorized/NPM命令速查/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/Tools-and-IDE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/41.Uncategorized/Tools-and-IDE/" itemprop="url">开发工具（screen, tmux）、IDE快捷键（Vim, Jetbrains, etc.）速查手册</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
+                    <span itemprop="name">41.Uncategorized</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,129
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="值得尝试的新工具"><a href="#值得尝试的新工具" class="headerlink" title="值得尝试的新工具"></a>值得尝试的新工具</h1><ul>
+<li>ag: 比grep、ack更快的递归搜索文件内容。</li>
+<li>mycli: mysql客户端，支持语法高亮和命令补全，效果类似ipython，可以替代mysql命令。</li>
+<li>shellcheck: shell脚本静态检查工具，能够识别语法错误以及不规范的写法。</li>
+<li>cloc: 代码统计工具，能够统计代码的空行数、注释行、编程语言。</li>
+</ul>
+<h1 id="Text-Editor"><a href="#Text-Editor" class="headerlink" title="Text Editor"></a>Text Editor</h1><h2 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h2><p>移动/跳转光标:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/41.Uncategorized/Tools-and-IDE/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3533,6 +3366,163 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/使用NVM管理Node版本/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/41.Uncategorized/使用NVM管理Node版本/" itemprop="url">使用NVM管理Node</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
+                    <span itemprop="name">41.Uncategorized</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  129
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>NVM = <a href="https://github.com/nvm-sh/nvm" target="_blank" rel="noopener">Node Version Manager</a></p>
+<p>安装NVM（zsh）参考： <a href="https://gist.github.com/mike-casas/6d489bebf48d89f5109cd1395aabe150" target="_blank" rel="noopener">install nvm on mac with zsh shell</a></p>
+<p>输入<code>nvm v</code>查看当前 NVM 版本号，如果成功出现版本号，则代表安装成功</p>
+<p>输入<code>nvm ls available</code>查看可以安装的 Node 版本</p>
+<p>如果返回结果为N/A，解决办法：<a href="https://stackoverflow.com/questions/26476744/nvm-ls-remote-command-results-in-n-a" target="_blank" rel="noopener">https://stackoverflow.com/questions/26476744/nvm-ls-remote-command-results-in-n-a</a></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/41.Uncategorized/使用NVM管理Node版本/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -3587,7 +3577,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">447</span>
+                  <span class="site-state-item-count">449</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3609,7 +3599,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">397</span>
+                  <span class="site-state-item-count">398</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

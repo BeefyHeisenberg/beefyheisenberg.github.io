@@ -128,7 +128,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/linux-file-rwx.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/operating_system/linux-compress-cmd.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/2021/20211227145907.png">
-<meta property="og:updated_time" content="2023-04-24T10:10:32.409Z">
+<meta property="og:updated_time" content="2023-04-28T00:14:16.902Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux.01.常用命令行">
 <meta name="twitter:description" content="命令全称=&amp;gt; Linux.01a.常用命令行全称速记 使用 manman 可以查看”系统命令/系统调用函数/glibc库函数” 等等共9类内容, 例如 man lsof 第一行是 “LSOF(8)”, 表示是第8类, man man 第一行是”man(8)” 表示man 是第8类, 也可以看到所有9类 “manual”, 如下:   系统命令 系统调用，一般是对应的C封装函数；所有系统调用的">
@@ -357,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,759
+                  3,901
                 </span>
               
 
@@ -531,13 +531,16 @@
 </li>
 <li>用法示例:<ul>
 <li>查找已被删除但硬盘空间不释放的文件: <code>lsof |grep delete</code>, 这个文件的innode链接被移除了, 但还没有被删掉</li>
-<li>某个端口: <code>lsof -i TCP:8080</code> or <code>lsof -i :80</code></li>
+<li>某个端口: <code>lsof -i TCP:8080</code> or <code>lsof -i :80</code>， -i是列出listening的sock，If -i4 or -i6 is specified with no following address, only files of the indicated IP version</li>
 <li>某个进程: <code>lsof -p PID</code></li>
 <li>查看所有活动状态的网络服务: lsof -i</li>
-<li>查看某个用户打开的文件: <code>lsof -u ^root</code>, 或者<code>lsof | grep ^root</code></li>
+<li>查看某个用户打开的文件: <code>lsof -u ^root</code>, 或者<code>lsof | grep ^root</code><br>*</li>
 </ul>
 </li>
 </ul>
+<blockquote>
+<p>文件实际上是一个指向inode的链接, inode链接包含了文件的所有属性, 比如权限和所有者, 数据块地址(文件存储在磁盘的这些数据块中). 当你删除(rm)一个文件, 实际删除了指向inode的链接, 并没有删除inode的内容. 进程可能还在使用. 只有当inode的所有链接完全移去, 然后这些数据块将可以写入新的数据.</p>
+</blockquote>
 <p>Example: lsof返回数据如下:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">COMMAND     PID    USER   FD      TYPE             DEVICE    SIZE/OFF       NODE NAME</span><br><span class="line">init          1    root  cwd       DIR                8,1        4096          2 /</span><br><span class="line">crond      4621    root  txt       REG                8,5       64096     151941 /usr/sbin/crond</span><br><span class="line">crond      4621    root  DEL       REG                8,1                    115 /lib64/libnss_files-2.12.so</span><br><span class="line">nginx     42544    root  194u     unix 0xffff880012b9a080         0t0  510761950 socket</span><br><span class="line">nginx     42544    root  195u     unix 0xffff8800cbb99cc0         0t0  510761952 socket</span><br><span class="line">java      27672    root   66u     IPv4           41351930         0t0        TCP *:56494 (LISTEN)</span><br></pre></td></tr></table></figure>
 <ul>
@@ -631,11 +634,11 @@
 <h2 id="命令重定向"><a href="#命令重定向" class="headerlink" title="命令重定向"></a>命令重定向</h2><blockquote>
 <p>一般情况下，每个 Unix/Linux 命令运行时都会打开三个文件: 文件描述符 0 通常是标准输入（STDIN），1 是标准输出（STDOUT），2 是标准错误输出（STDERR）。</p>
 </blockquote>
-<h3 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 将输出重定向到 file</span></span><br><span class="line">command &gt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将输出追加重定向到 file</span></span><br><span class="line">command &gt;&gt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将文件描述符为n的文件重定向到 file</span></span><br><span class="line"><span class="meta">n&gt;</span><span class="bash">file</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将文件描述符为 n 的文件以追加的方式重定向到 file</span></span><br><span class="line"><span class="meta">n&gt;</span><span class="bash">&gt;file</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将文件描述符为 m 和 n 的内容合并,注意</span></span><br><span class="line"><span class="meta">n&gt;</span><span class="bash">&amp;m</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将文件描述符为 m 和 n 的内容合并, 一并输出到 file</span></span><br><span class="line">command &gt; file m&gt;&amp;n</span><br></pre></td></tr></table></figure>
+<h3 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> 将输出重定向到 file</span><br><span class="line">command &gt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将输出追加重定向到 file</span><br><span class="line">command &gt;&gt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将文件描述符为n的文件重定向到 file</span><br><span class="line"><span class="meta">n&gt;</span>file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将文件描述符为 n 的文件以追加的方式重定向到 file</span><br><span class="line"><span class="meta">n&gt;</span>&gt;file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将文件描述符为 m 和 n 的内容合并,注意</span><br><span class="line"><span class="meta">n&gt;</span>&amp;m</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将文件描述符为 m 和 n 的内容合并, 一并输出到 file</span><br><span class="line">command &gt; file m&gt;&amp;n</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>有关 <code>command &gt;out.file  2&gt;&amp;1 &amp;</code> 的解释(注意文件描述符和重定向符号之间不能有空格):<br>最后的<code>&amp;</code> 表示后台运行;<br>为什么是 <code>2&gt;&amp;1</code> 而不是 <code>2&gt;1</code> ? 这样做会直接输出文件名为1的文件;<br><code>&gt;outfile</code> 和 <code>2&gt;&amp;1</code> 的顺序可以交换吗? 不可以, <code>command 2&gt;&amp;1 &gt;out.file</code> ,  先<code>2&gt;&amp;1</code> 的意思是 stderr输出到 stdout, 此时的 stdout是输出到终端的, stderr也就被输出到终端, 然后 <code>&gt;out.file</code>是把 stdout输出到文件, 但是此时 stderr还是输出到终端的;</p>
 </blockquote>
-<h3 id="输入重定向"><a href="#输入重定向" class="headerlink" title="输入重定向"></a>输入重定向</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 将 file的内容作为标准输入</span></span><br><span class="line">command &lt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将 infile的内容作为标准输入, 标准输出写入 outfile</span></span><br><span class="line">command &lt; infile &gt; outfile</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Here Document 式重定向输入, 将定界符（下面例子中的EOF没有特殊含义, 可以自定义界定符）之间的作为stdin</span></span><br><span class="line">command &lt;&lt; EOF</span><br><span class="line">    hello</span><br><span class="line">    world</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h3 id="输入重定向"><a href="#输入重定向" class="headerlink" title="输入重定向"></a>输入重定向</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> 将 file的内容作为标准输入</span><br><span class="line">command &lt; file</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将 infile的内容作为标准输入, 标准输出写入 outfile</span><br><span class="line">command &lt; infile &gt; outfile</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Here Document 式重定向输入, 将定界符（下面例子中的EOF没有特殊含义, 可以自定义界定符）之间的作为stdin</span><br><span class="line">command &lt;&lt; EOF</span><br><span class="line">    hello</span><br><span class="line">    world</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>默认情况下，command &gt; file 将 stdout 重定向到 file，command &lt; file 将stdin 重定向到 file。</p>
 </blockquote>
@@ -684,8 +687,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/21.Operating-System/APUE.07b.网络编程（Reactor_Proactor）/" rel="next" title="APUE.07b.网络编程（Reactor_Proactor）">
-                <i class="fa fa-chevron-left"></i> APUE.07b.网络编程（Reactor_Proactor）
+              <a href="/About/About-Scriptorium/" rel="next" title="About-Scriptorium">
+                <i class="fa fa-chevron-left"></i> About-Scriptorium
               </a>
             
           </div>
@@ -694,8 +697,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/21.Operating-System/Linux.01a.常用命令行全称速记/" rel="prev" title="Linux.01a.常用命令行全称速记">
-                Linux.01a.常用命令行全称速记 <i class="fa fa-chevron-right"></i>
+              <a href="/21.Operating-System/Linux.02.网络命令/" rel="prev" title="Linux.02.网络命令行">
+                Linux.02.网络命令行 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -787,7 +790,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">447</span>
+                  <span class="site-state-item-count">449</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -809,7 +812,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">397</span>
+                  <span class="site-state-item-count">398</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

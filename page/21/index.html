@@ -278,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/C-Tutorials.01.基础/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/64.Novel-and-Poesy/契科夫/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -297,1811 +297,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/11.Programming-Language/C-Tutorials.01.基础/" itemprop="url">C Tutorials-01-基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
-                    <span itemprop="name">11.Programming-Language</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  5,116
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><ul>
-<li>C/C++作为一种强类型语言, 一个变量被使用前必须被定义.</li>
-<li>在32位系统中基本类型的长度(字节): char(1B), short(2B), int(4B), 指针(4B), long(4B), float(4B), double(8B), long long(8B);</li>
-<li>在64位系统中基本类型的长度(字节): char(1B), short(2B), int(4B), 指针(<strong>8B</strong>) long(<strong>8B</strong>), float(4B), double(8B), long long(8B);</li>
-<li>long 和 int 范围是<code>[-2^31,2^31)</code>, 即-2147483648~2147483647.</li>
-<li>而unsigned范围是<code>[0,2^32)</code>, 即0~4294967295. 也就是说, 常规的32位整数只能够处理40亿以下的数.</li>
-<li>相比于C++98标准, C++11整型的最大改变就是多了long long<ul>
-<li>long long整型有两种：long long和unsigned long long. 在C++11中, 标准要求long long整型可以在不同平台上有不同的长度, 但至少有64位. 我们在写常数字面量时, 可以使用LL后缀（或是ll）标识一个long long类型的字面量, 而ULL（或ull、Ull、uLL）表示一个unsigned long long类型的字面量. 比如：<code>unsigned long long int ulli = -9000000000000000000ULL;</code></li>
-<li>对于有符号的, 下面的类型是等价的：long long、signed long long、long long int、signed long long int; 对于无符号的：unsigned long long和unsigned long long int也是等价的.</li>
-<li>同其他的整型一样, 要了解平台上<code>long long</code>大小的方法就是查看<code>&lt;climits&gt;</code>（或<code>&lt;limits.h&gt;</code>中的宏）. 与long long整型相关的一共有3个：LLONG_MIN、LLONG_MAX和ULLONG_MIN, 它们分别代表了平台上最小的long long值、最大的long long值, 以及最大的unsigned long long值.</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;climits&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> ll_min = LLONG_MIN;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> ll_max = LLONG_MAX;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> ull_max = ULLONG_MAX;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 编译选项:g++ -std=c++11 2-2-1.cpp</span></span><br><span class="line">    <span class="comment">// 在代码清单中, 将以上3个宏打印了出来, 对于printf函数来说,</span></span><br><span class="line">    <span class="comment">// 输出有符号的long long类型变量可以用符号%lld,</span></span><br><span class="line">    <span class="comment">// 无符号的unsigned long long则可以采用%llu.</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"min of long long: %lld\n"</span>, ll_min); <span class="comment">// min of long long: -9223372036854775808</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"max of long long: %lld\n"</span>, ll_max); <span class="comment">// max of long long: 9223372036854775807</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"max of unsigned long long: %llu\n"</span>, ull_max);   <span class="comment">// max of unsigned long long: 18446744073709551615</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>@ref: <a href="https://blog.csdn.net/dos5gw/article/details/6448048" target="_blank" rel="noopener">结构体对齐, 位域, 柔性数组 - DOS5GW的专栏 - CSDN博客</a></p>
-<h2 id="大小端存储"><a href="#大小端存储" class="headerlink" title="大小端存储"></a>大小端存储</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/C-Tutorials.01.基础/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/06.ObjectiveC-Tutorials/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/11.Programming-Language/06.ObjectiveC-Tutorials/" itemprop="url">Objective-C Tutorials</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
-                    <span itemprop="name">11.Programming-Language</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  229
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="h文件"><a href="#h文件" class="headerlink" title="h文件"></a>h文件</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">"AnyHeaderFile.h"</span></span></span><br><span class="line">@interface ClassName : SuperClass</span><br><span class="line">&#123;</span><br><span class="line">    @property <span class="keyword">int</span> x; <span class="comment">// @property属性成员, m文件不用自己写getter 和 setter</span></span><br><span class="line">    @property (nonatomic, assign) <span class="keyword">int</span> commentTimeFontSize;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 公有方法</span></span><br><span class="line">+ (<span class="keyword">void</span>) getInstance; <span class="comment">// 静态方法</span></span><br><span class="line">- (type)doItWithA:(type)a;</span><br><span class="line">- (type)doItWithA:(type)a</span><br><span class="line">    ParamB:(type)b</span><br><span class="line">    ParamC:(type)c;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<h1 id="m文件"><a href="#m文件" class="headerlink" title="m文件"></a>m文件</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">"YourClassName.h"</span></span></span><br><span class="line">@<span class="function">interface <span class="title">ClassName</span> <span class="params">()</span></span></span><br><span class="line"><span class="function">    <span class="comment">// m文件里也可以定义interface</span></span></span><br><span class="line">@end</span><br><span class="line">@implementation ClassName &#123;</span><br><span class="line">    <span class="comment">// define private instance variables</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// implement methods</span></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/06.ObjectiveC-Tutorials/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/05.响应式编程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/11.Programming-Language/05.响应式编程/" itemprop="url">响应式编程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
-                    <span itemprop="name">11.Programming-Language</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,677
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="什么是响应式编程"><a href="#什么是响应式编程" class="headerlink" title="什么是响应式编程"></a>什么是响应式编程</h1><p>响应式编程或反应式编程（英语：Reactive programming）是一种面向数据流和变化传播的编程范式。这意味着可以在编程语言中很方便地表达静态或动态的数据流，而相关的计算模型会自动将变化的值通过数据流进行传播。<br>例如，在命令式编程环境中， <code>a:=b+c</code>表示将表达式的结果赋给 a，而之后改变 b或 c的值不会影响 a。<br>但在响应式编程中， a的值会随着 b或 c的更新而更新。</p>
-<p>响应式编程最初是为了简化交互式用户界面的创建和实时系统动画的绘制而提出来的一种方法，但它本质上是一种通用的编程范式。例如，在MVC软件架构中，响应式编程允许将相关模型的变化自动反映到视图上，反之亦然。</p>
-<p>响应式编程的三种模型:</p>
-<ol>
-<li>Actor模型, 实现类库:<ul>
-<li>AKKA Actor: Actor模型为编写并发和分布式系统提供了一种更高的抽象级别。它将开发人员从显式地处理锁和线程管理的工作中解脱出来，使编写并发和并行系统更加容易。</li>
-</ul>
-</li>
-<li>响应式扩展(reactive extensions, Rx)模型, 实现类库:<ul>
-<li>RxJava: Reactive Extensions for Java</li>
-<li>Reactor: Reactor是Pivotal发布的第四代响应式框架，跟RxJava 2有些相似。 Spring WebFlux 以Reactor为基础，实现Web领域的反应式编程框架。</li>
-</ul>
-</li>
-<li>函数响应式编程(functional reactive programming, FRP)模型</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/05.响应式编程/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/04.Shell-Tutorials/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/11.Programming-Language/04.Shell-Tutorials/" itemprop="url">Shell Script Tutorials</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
-                    <span itemprop="name">11.Programming-Language</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,294
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Shell-简介"><a href="#Shell-简介" class="headerlink" title="Shell 简介"></a>Shell 简介</h1><p>Shell是用户和 Linux操作系统之间的接口, 也可以看作是命令行的解释器.<br>常见的 Shell Script解释器有:</p>
-<ul>
-<li>sh: 即 Bourne shell，POSIX（Portable Operating System Interface）标准的shell解释器，它的二进制文件路径通常是/bin/sh，由Bell Labs开发。</li>
-<li>bash: Bash是Bourne shell的替代品，属GNU Project，二进制文件路径通常是/bin/bash。</li>
-<li>zsh: zsh是由Paul Falstad于1990年创建的，它是一个Bourne风格的shell，它包含了bash中的功能，甚至更多。 例如，zsh具有拼写检查功能，可以监视登录/注销，某些内置编程功能（如字节码），支持语法中的科学计数，允许浮点运算和更多功能。</li>
-</ul>
-<p>Shell 脚本文件开头一般会声明用哪种脚本解释器:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/04.Shell-Tutorials/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/03.PHP-Tutorials/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/11.Programming-Language/03.PHP-Tutorials/" itemprop="url">PHP Tutorials</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
-                    <span itemprop="name">11.Programming-Language</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  5,365
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="变量引用"><a href="#变量引用" class="headerlink" title="变量引用"></a>变量引用</h1><ul>
-<li><code>$ref =&amp; $a</code> : <code>$ref</code>是一个引用, ‘ref’会被增加到符号表, 但不会新建一个zval, 而是<code>$ref</code>和<code>$a</code>指向同一个zval, <code>zval::is_ref</code>变为1, <code>zval::refcount</code>变为2</li>
-<li>在函数内引用全局变量:</li>
-</ul>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$var1 = <span class="string">"hello world"</span>;</span><br><span class="line">$var2 = <span class="string">""</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 相当于$var1 =&amp; GLOBALS['var1'], 函数内新建一个本地的引用$var1指向全局变量</span></span><br><span class="line">    <span class="keyword">global</span> $var1,$var2;</span><br><span class="line">    $var2 =&amp; var1; <span class="comment">// 本地的引用$var2重新被指向</span></span><br><span class="line">&#125;</span><br><span class="line">f();</span><br><span class="line">var_dump($var2); <span class="comment">// var2仍然是空字串</span></span><br></pre></td></tr></table></figure>
-<p>下面的代码不会改变$bar的值:</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span><span class="params">(&amp;ref)</span> </span>&#123; <span class="comment">// 新建本地引用变量$ref, 指向$bar</span></span><br><span class="line">    $ref =&amp; GLOBALS[<span class="string">'xxx'</span>]; <span class="comment">// $ref被重新指向</span></span><br><span class="line">&#125;</span><br><span class="line">f($bar);</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/03.PHP-Tutorials/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/99.Journal/2022.10人生的意义II/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/99.Journal/2022.10人生的意义II/" itemprop="url">人生的意义II</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/99-Journal/" itemprop="url" rel="index">
-                    <span itemprop="name">99.Journal</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,030
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>人生的意义是？ 不可否认，世间本就不存在为我们<strong>预设好的意义</strong>。甚至作为一个绝对的理性主义者，他还可能得出“生命没有意义” 这种接近虚无主义<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>的答案。<br>但人仍有自由选择的权利，这种自由可以决定是否要为自己创造出一个意义。罗素在自传序言《What I Have Lived for》中写道他的人生三动力：<strong>对爱情的渴望、对知识的追寻、以及对尘世的怜悯之心</strong>。</p>
-<p>如果让我回答这个问题，意义重要却不复杂，意义感源自那些 —— 最简单、最自然、带给自己正向感受的事物</p>
-<blockquote>
-<p>它们看起来是正确的、美好的；它们提供内在的满足，而不需要别的动机来支持<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></p>
-</blockquote>
-<p>一. 对知识的追求。它们帮我找回我那属于理性的另一半灵魂、帮我消除偏见，解答我的疑惑，也给予我开放和容纳的心态… 它一直在帮助我去理解… 我所触碰到的世界。</p>
-<p>  缮写室、毕达哥拉斯的金诗、卡尔达诺书<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>……无论迷茫曾把我带向何处，当我翻开书时，我总能找到这片<strong>居心地</strong></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/99.Journal/2022.10人生的意义II/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/99.Journal/沉思录-公开的部分/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/99.Journal/沉思录-公开的部分/" itemprop="url">沉思录：公开的部分</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/99-Journal/" itemprop="url" rel="index">
-                    <span itemprop="name">99.Journal</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  994
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li><p>2022.10 如果你总用<strong>宇宙视角</strong>的无意义感逃避琐碎，那你也同样应该承认，现在诚惶诚恐的维护一个人设、在意他人眼光、以及道德的自我束缚、会让自己的<strong>体验受限</strong>，这些行为在被拉长的时空里进行考察，都是微不足道的事</p>
-</li>
-<li><p>2022.9 当沮丧和低落到来时，应该用更强硬的行动反击，而不是用颓靡的姿态附和它，这只会给它们更多的给养。<br>—— “用愤怒面对你的懈怠”</p>
-</li>
-<li><p>2022.9 另一个建议，<strong>做任何事都纯粹一点</strong>，比如跑步途中不要思考人生，出去旅行就不要带一堆书，做饭的时候就不要刷手机，也不要试图在网吧里写代码，吃饭要像吃最后一顿。</p>
-</li>
-<li><p>2022.8 《存在主义心理治疗》:</p>
-<ul>
-<li>「如果什么都不重要，那么“什么都不重要”这个结论本身也不重要 」—— 黑洞并非无法直视</li>
-<li>「一个人了解自己是为了不要将全副心神贯注在自己身上」—— 自我探索、自我反省的目的都是为了更好的回归到外部生活中去</li>
-</ul>
-</li>
-<li><p>2022.6 里尔克：「几乎一切人都错用了、浪费了这种经验，把它放在生命疲倦的地方当作刺激，当作疏散，而不当作向着顶点的聚精会神」</p>
-</li>
-<li><p>2021.7 心生妒忌……或者用批判的态度对待他人的价值观、以及其他不端正的心态，今天它们是否又出现？这也是一种考察你内心是否平静的角度</p>
-</li>
-<li><p>2020.5 自控力像是一块肌肉，也会疲劳，也需要休息，也需要能量储备，长期松弛也会变弱</p>
-</li>
-<li><p>2019.9 不要总关注 <strong>内部价值</strong> 的实现而忽视了 <strong>外部价值</strong> 的实现，“取得内部价值的成功后，外部价值的成功是顺理成章的”这种想法非常想当然，从内部目标到外部目标这个路径非常长也非常不可控。</p>
-</li>
-<li><p>2019.7 人生每个阶段都会遇到『迷障』，是指让你在一段时间内耗尽精力但不会获得内在价值的事物（比如烧摄影设备、打游戏），保持批判式的判断力，可以有效避免沉迷于此。</p>
-</li>
-<li><p>2019.2 如果我们承认了人生的虚无和无意义，那也就没有理由感到恐惧，也没有理由感到失望。当我们否定了恐惧和失望，我们还需要害怕虚无吗？</p>
-</li>
-<li><p>2019.2 盛夏季节也不要忘记：寒冬可能会来的很快（2018-2019）</p>
-</li>
-<li><p>2018.3 无节制的生活方式，和失控的offline ，让你断断续续的努力变成一堆无用的零件。</p>
-</li>
-<li><p>2017.12 当你戾气渐长的时候, 多想想有关人类历史或者仅仅其中一朵涟漪, 先人对浩瀚的星空从遐想到探索, 科学史上无数璀璨的姓名。</p>
-</li>
-<li><p>2017.11 断线式的内省很危险。内省走向了偏差 —— 一条阴暗的小路</p>
-</li>
-<li><p>2017 用愤怒面对你的懈怠。</p>
-</li>
-<li><p>2016 幻想由你人格最羸弱的部分构成</p>
-</li>
-<li><p>2016 扔掉欲望，扔掉低俗，你才变得有趣。</p>
-</li>
-<li><p>2015.11 你不能把世界让给你鄙视的人。</p>
-</li>
-<li><p>2015.11 想成为什么样的人, 和另一半是什么样的人并没有直接关系, 持续的自我认知, 自我反省, 自我改良的起因和动力, 都源于自身想要进化完整的渴望, 而非他人.</p>
-</li>
-<li><p>2015.6 「生活方式 总是自我实践为始 再蔓延成为他者认同的影响力 看似很多无用 却是创造的巨大养分」</p>
-</li>
-<li><p>2014.11 保持对知识的好奇心</p>
-</li>
-<li><p>2014.9「写下的，可能被忘记，只字不提的，却都铭记在心」</p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【编辑器】同步VSCode配置文件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/50.Farbox-Blog/【编辑器】同步VSCode配置文件/" itemprop="url">同步 VSCode 配置文件（macOS）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  54
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="方法1-使用Dropbox同步"><a href="#方法1-使用Dropbox同步" class="headerlink" title="方法1) 使用Dropbox同步"></a>方法1) 使用Dropbox同步</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd ~/Library/Application\ Support/Code</span><br><span class="line">mv -f User ~/Dropbox/VSCode/</span><br><span class="line">ln -s ~/Dropbox/VSCode/User User</span><br></pre></td></tr></table></figure>
-<h1 id="方法2-使用-Microsoft-账号同步"><a href="#方法2-使用-Microsoft-账号同步" class="headerlink" title="方法2) 使用 Microsoft 账号同步"></a>方法2) 使用 Microsoft 账号同步</h1><p><a href="https://code.visualstudio.com/docs/editor/settings-sync" target="_blank" rel="noopener">Settings Sync in Visual Studio Code</a></p>
-<h1 id="方法3-使用-Settings-Sync-扩展"><a href="#方法3-使用-Settings-Sync-扩展" class="headerlink" title="方法3) 使用 Settings Sync 扩展"></a>方法3) 使用 Settings Sync 扩展</h1>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【编辑器】同步VSCode配置文件/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/51.Productivity/OKR是什么/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/51.Productivity/OKR是什么/" itemprop="url">OKR是什么</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/51-Productivity/" itemprop="url" rel="index">
-                    <span itemprop="name">51.Productivity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  674
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="vs-KPI"><a href="#vs-KPI" class="headerlink" title="vs KPI"></a>vs KPI</h1><p>KPI只有数据指标, 没有目标（Objective）</p>
-<p>KPI还有一个更严重的问题，那就是为了完成可测量的目标，有可能实际执行手段与该目标要达到的不可测量愿景正好相反。举个例子来说，我们希望用户更喜欢使用我们的产品，因为喜欢无法测量，所以把PV写进了KPI里面。但在实际执行过程中，我们可以把用户原本在一个页面上就能完成的事情分到几个页面上来完成，结果PV达到了KPI指定的目标，但用户其实更讨厌我们的产品了。</p>
-<p>OKR解决了KPI的种种缺陷。首先它和绩效考核分离，把绩效考核交给peerreview（相当于中国公司的360度评价）来做。</p>
-<h1 id="制定"><a href="#制定" class="headerlink" title="制定"></a>制定</h1>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/51.Productivity/OKR是什么/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/63.Culture-and-Arts/新裤子年鉴/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/63.Culture-and-Arts/新裤子年鉴/" itemprop="url">新裤子年鉴</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/63-Culture-and-Arts/" itemprop="url" rel="index">
-                    <span itemprop="name">63.Culture-and-Arts</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,410
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="专辑list"><a href="#专辑list" class="headerlink" title="专辑list"></a>专辑list</h1><p>乐评from： <a href="https://www.huxiu.com/article/308640.html" target="_blank" rel="noopener">新裤子：北京旧浪潮-虎嗅网</a></p>
-<p><img src="/images/新裤子年鉴/新裤子.png" alt="新裤子"></p>
-<ul>
-<li>1998年：<a href="https://music.douban.com/subject/1406354/" target="_blank" rel="noopener">同名专辑《新裤子》</a> #Punk<ol start="2">
-<li>我们的时代</li>
-<li>嘿！你</li>
-<li>我不想失去你</li>
-<li>猴子</li>
-<li>过时</li>
-</ol>
-</li>
-</ul>
-<p><img src="/images/新裤子年鉴/disco-girl.png" alt="Disco Girl"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/63.Culture-and-Arts/新裤子年鉴/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【开发环境】OSX开发环境配置/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/50.Farbox-Blog/【开发环境】OSX开发环境配置/" itemprop="url">OSX（macOS）开发环境配置 and Tweaks</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3,186
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="安装OSX"><a href="#安装OSX" class="headerlink" title="安装OSX"></a>安装OSX</h1><ul>
-<li>从OSX制作启动U盘: <a href="http://www.iplaysoft.com/osx-yosemite-usb-install-drive.html" target="_blank" rel="noopener">http://www.iplaysoft.com/osx-yosemite-usb-install-drive.html</a></li>
-<li>从WIN制作启动U盘: <a href="http://www.cnblogs.com/maybego/p/3266528.html" target="_blank" rel="noopener">http://www.cnblogs.com/maybego/p/3266528.html</a></li>
-</ul>
-<h1 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h1><ul>
-<li><code>Command + Option + Esc</code> : 相当于Windows上的 Ctrl + Alt + Del，或者点击左上角图标-强制退出</li>
-</ul>
-<blockquote>
-<p>参考 <a href="https://support.apple.com/zh-cn/HT201236" target="_blank" rel="noopener">https://support.apple.com/zh-cn/HT201236</a></p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【开发环境】OSX开发环境配置/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/64.Novel-and-Poesy/《缮写室》 Quick-view/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/64.Novel-and-Poesy/《缮写室》 Quick-view/" itemprop="url">《缮写室》 Quick view</a></h1>
+                <a class="post-title-link" href="/64.Novel-and-Poesy/契科夫/" itemprop="url">契科夫</a></h1>
         
 
         <div class="post-meta">
@@ -2155,7 +351,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  218
+                  935
                 </span>
               
 
@@ -2181,19 +377,650 @@
 
       
         
-          <p><a href="https://book.douban.com/subject/30264864/" target="_blank" rel="noopener">缮写室 (豆瓣)</a></p>
+          <h2 id="《海鸥》1896"><a href="#《海鸥》1896" class="headerlink" title="《海鸥》1896"></a>《海鸥》1896</h2><blockquote>
+<p>《海鸥》由契诃夫创作，讲述的是在一个乡村的美丽的湖滨，有一位少女妮娜，她幻想着舞台、荣誉、爱情、幸福，一个初学写作的青年特里勃列夫爱上了她。<br>特里勃列夫的母亲是一个名演员，她带着名作家果林一块来到自己哥哥庄园里休养。随后，妮娜狂热地爱上了果林。而果林却是一个轻浮的人，他玩厌了妮娜后，给她留下个孩子，然后抛弃了她。但生活的磨难并没有把妮娜打垮，最终她成为了一个好演员，面对事业成功的妮娜，一事无成的特里勃列夫在绝望中开枪自杀。</p>
+</blockquote>
+<p>可是你我的灵魂呢，却没有可以接触之点。我爱你，由于苦恼，我在家里坐不住。我每天来回走十二里路，跑来看你，而我所遇到的只是你那种表示无能为力的冷淡。这是很可以理解的。我没有财产，家里人口又多……谁也不会嫁给一个连自己都没得吃的男人啊</p>
 <hr>
-<p>《缮写室》 Quick view</p>
-<p><img src="/images/2019/2019-05-03.png" alt></p>
+<p>人，狮子，鹰和鹧鸪，长着犄角的鹿，鹅，蜘蛛，居住在水中的无言的鱼，海盘车，和一切肉眼所看不见的生灵——总之，一切生命，一切，一切，都在完成它们凄惨的变化历程之后绝迹了……到现在，大地已经有千万年不再负荷着任何一个活的东西了，可怜的月亮徒然点着它的明灯。草地上，清晨不再扬起鹭鸶的长鸣，菩提树里再也听不见小金虫的低吟了。只有寒冷、空虚、凄凉。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/64.Novel-and-Poesy/契科夫/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/64.Novel-and-Poesy/战时笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/64.Novel-and-Poesy/战时笔记/" itemprop="url">战时笔记-维特根斯坦</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/64-Novel-and-Poesy/" itemprop="url" rel="index">
+                    <span itemprop="name">64.Novel-and-Poesy</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  238
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>仅《战时笔记》的私人部分</p>
+</blockquote>
+<p>14.8.15<br>船上的船员是一群猪！没有任何志向，令人难以置信地粗俗、愚蠢、邪恶，因此以下说法自然不成立：一项共同的伟大事业必然使人变得高尚</p>
+<p>14.9.2<br>几乎完全没有感性上的要求，以前我总是想象着是在与一个朋友交谈，但是几乎没有这样的事了</p>
+<p>14.9.12<br>我总是一再地在心中对自己说托尔斯泰的如下一段话：一个人从肉体上说是软弱无力的，但是经由精神他成为自由的</p>
+<p>14.9.15<br>削土豆皮之于我就如同磨镜片之于斯宾莎诺一样</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/64.Novel-and-Poesy/战时笔记/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/64.Novel-and-Poesy/但丁《神曲》/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/64.Novel-and-Poesy/但丁《神曲》/" itemprop="url">但丁《神曲》</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/64-Novel-and-Poesy/" itemprop="url" rel="index">
+                    <span itemprop="name">64.Novel-and-Poesy</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,143
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>但丁·阿利吉耶里（义大利语：Dante Alighieri，义大利语：[ˈdante aliˈɡjɛːri]，1265年－1321年9月14日）全名杜兰提·第·阿利吉耶罗·戴尔·阿利吉耶里，意大利中世纪诗人。他是现代意大利语的奠基者，也是欧洲文艺复兴时代的开拓人物。</p>
+</blockquote>
+<p><img src="/images/Dante-Alighieri.png" alt></p>
+<h2 id="名称的由来"><a href="#名称的由来" class="headerlink" title="名称的由来"></a>名称的由来</h2><p>神曲（意大利语：Divina Commedia，英语：Divine Comedy）</p>
+<p>但丁并没有为这部史诗给出明确的标题。在作品中但丁也只在《地狱篇》中提到过两次 <code>Commedia</code> 一词（意大利语，原意为喜剧），而 <code>Divina</code>（意大利意为：神圣）这一词则出自意大利著名文学家乔万尼·薄伽丘。如今，虽然在科学及文学的角度应该把这部著作称 <code>Commedia</code>，但 <code>La Divina Commedia</code> 一词还是依旧被广泛运用。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/64.Novel-and-Poesy/但丁《神曲》/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/64.Novel-and-Poesy/夏伯阳与虚空/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/64.Novel-and-Poesy/夏伯阳与虚空/" itemprop="url">夏伯阳与虚空</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/64-Novel-and-Poesy/" itemprop="url" rel="index">
+                    <span itemprop="name">64.Novel-and-Poesy</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  470
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><a href="https://book.douban.com/subject/1179913/" target="_blank" rel="noopener">夏伯阳与虚空 (豆瓣)</a></p>
+<p><img src="https://img9.doubanio.com/view/subject/s/public/s5710575.jpg" alt></p>
+<p>《夏伯阳与虚空》艺术地反映了苏联解体后俄罗斯社会光怪陆离的现实生活。是俄罗斯当代最神秘，同时又是最受读者欢迎的作家维克多·佩列文的一部代表作。小说发表后在俄罗斯国内和国际上获得多项奖励，为作者带来世界性的声望。作者本人认为：“这是世界文学中第一部情节发生于绝对虚空中的作品。”故事发生在1919年夏伯阳所部的红军师中，同时又有当今时代虚空环境中的情节。小说主要主人公彼得·虚空是颓废派诗人、夏伯阳师的政委。而电影《夏伯阳》中的百战不殆的天才的红军师长夏伯阳在这部小说中却成了点缀时下生活的幽默人物。虚拟、虚空、虚幻，犹如一幅后现代主义的抽象画。但是，这位貌似遁世的严肃文学作家对于他的生于斯、长于斯的俄罗斯国家和俄罗斯人民的命运、前途的关切之情，却借助书的中主人公之口作了奇特的表述。</p>
+<p>与他的《百事一代》、《昆虫的生活》等作品一样，《夏伯阳与虚空》并不注重结构，语言也十分随意，表现出某种梦魇式的支离破碎和荒唐无稽，其实这些特点本身也是俄罗斯过渡时期社会现实的反映。</p>
+<p>这部严肃小说立意深沉，风格独特，是俄罗斯当代鲜见的一本好书。喜爱文学的读者，文学研究者和作家，在细心阅读这部作品时将会体会到不同寻常的感悟并得到富于教益的启迪。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/64.Novel-and-Poesy/夏伯阳与虚空/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/64.Novel-and-Poesy/托洛茨基自传/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/64.Novel-and-Poesy/托洛茨基自传/" itemprop="url">《托洛茨基自传》</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/64-Novel-and-Poesy/" itemprop="url" rel="index">
+                    <span itemprop="name">64.Novel-and-Poesy</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,392
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <div id="footnotes" style="display: none"><br>- 不要当做符号而去寻找认同感<br>- 如何处理 Ni-Fe的矛盾？<br>- 是否也有受虚无主义、人生意义的影响<br>- 对存在和价值的看法<br>- 支持其不断斗志的是什么<br>- 他提到的“马克思主义的世界观和思维方法”，是什么样的？<br></div>
+
+<hr>
+<p>生平：</p>
 <ul>
-<li>天堂是缮写室的模样<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>：缮写士、旷野恐惧症 （ [[../53.Photograph/使用谷歌街景进行街拍]] 中提到了摄影师 Jacqui Kenny 的“广场恐惧症”）</li>
-<li>《世界之步: 中世纪地图鸟瞰》某种地图并非为了指路, 而是为了让人迷失在符号和色彩之中：中世纪的【T-O地图】，地图边缘的插画是欧洲版本的《山海经》</li>
-<li>《无处流浪的吉普赛人》:  gyp词根、罗姆人，大篷车、集体回忆口授之书</li>
-<li>《不要在中世纪花园入眠》: 中世纪出现的”梦幻诗”, 可能是在宗教夹缝中 冒出来的对<strong>孤独和自恰这种完美状态</strong>的渴望的隐喻表达</li>
+<li><a href="https://baike.baidu.com/item/%E5%88%97%E5%A4%AB%C2%B7%E8%BE%BE%E7%BB%B4%E5%A4%9A%E7%BB%B4%E5%A5%87%C2%B7%E6%89%98%E6%B4%9B%E8%8C%A8%E5%9F%BA/81021?" target="_blank" rel="noopener">列夫·达维多维奇·托洛茨基_百度百科</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E6%89%98%E6%B4%9B%E8%8C%A8%E5%9F%BA%E4%B8%BB%E4%B9%89" target="_blank" rel="noopener">托洛茨基主义 - 维基百科，自由的百科全书</a></li>
 </ul>
+<p>相关影视作品：</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/64.Novel-and-Poesy/《缮写室》 Quick-view/#more" rel="contents">
+            <a class="btn" href="/64.Novel-and-Poesy/托洛茨基自传/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2244,7 +1071,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【效率工具】GitBook使用指北/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/64.Novel-and-Poesy/陀思妥耶夫斯基/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2263,7 +1090,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/50.Farbox-Blog/【效率工具】GitBook使用指北/" itemprop="url">GitBook 使用指北</a></h1>
+                <a class="post-title-link" href="/64.Novel-and-Poesy/陀思妥耶夫斯基/" itemprop="url">陀思妥耶夫斯基</a></h1>
         
 
         <div class="post-meta">
@@ -2286,8 +1113,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
+                  <a href="/categories/64-Novel-and-Poesy/" itemprop="url" rel="index">
+                    <span itemprop="name">64.Novel-and-Poesy</span>
                   </a>
                 </span>
 
@@ -2317,7 +1144,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  192
+                  1,536
                 </span>
               
 
@@ -2343,338 +1170,1308 @@
 
       
         
-          <p>安装cli: <code>mkdir GitBook &amp;&amp; cd GitBook &amp;&amp; npm install gitbook-cli -g</code></p>
-<p>查看是否安装成功: <code>gitbook -V</code></p>
-<p>创建书籍目录:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bookRoot</span><br><span class="line">├── 1-FirstChapter   // The first chapter，format: &#123;orderNumber or alphabet&#125;-&#123;chapterName&#125;.md</span><br><span class="line">├────── 1-FirstDocument.md</span><br><span class="line">├────── 5-SecondDocument.md  // concentrating solely on the order, not the numbers.</span><br><span class="line">├── 3-SecondChapter                     // Focus only on the order, not the numbers.</span><br><span class="line">├────── 1-FirstDocumentOfSecondChapter.md</span><br><span class="line">├────── 2-SecondDocumentOfSecondChapter.md</span><br><span class="line">├── 7-ThirdChapter</span><br><span class="line">├── FourthChapter  // May have no order</span><br><span class="line">├── README.md // In addition to readme.md, not to put other markdown documents</span><br><span class="line">└── book.json     // Set up the book</span><br></pre></td></tr></table></figure>
-<p>安装SUMMARY.md自动生成插件: <code>npm install -g gitbook-summary</code></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【效率工具】GitBook使用指北/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【效率工具】在Macbook上使用surge/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/50.Farbox-Blog/【效率工具】在Macbook上使用surge/" itemprop="url">在Macbook上使用Surge</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
           
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  301
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="安装surge"><a href="#安装surge" class="headerlink" title="安装surge"></a>安装surge</h1><p>Surge for Mac并不提供公开下载, 只对已经在手机上购买过Surge for iPhone的用户提供beta版本,<br>在Surge for iPhone的’More’标签找到<code>Surge Mac</code>, 下载链接会被发送到注册邮箱.</p>
-<h1 id="导出Surge-iPhone的配置文件"><a href="#导出Surge-iPhone的配置文件" class="headerlink" title="导出Surge iPhone的配置文件"></a>导出Surge iPhone的配置文件</h1><p>Surge iPhone的配置文件是通用的, 可以直接使用在Surge for Mac上.<br>导出方法很多, 可以通过url共享, dropbox, 或者iTunes导出.</p>
-<h1 id="配置Surge"><a href="#配置Surge" class="headerlink" title="配置Surge"></a>配置Surge</h1>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【效率工具】在Macbook上使用surge/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【架构】使用fluentd,kafka,mongodb搭建日志处理系统/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/50.Farbox-Blog/【架构】使用fluentd,kafka,mongodb搭建日志处理系统/" itemprop="url">使用fluentd,kafka,mongodb搭建日志处理系统</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,811
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="设计实现"><a href="#设计实现" class="headerlink" title="设计实现"></a>设计实现</h1><ul>
-<li>采集: 可选的有fluentd, td-agent(fluentd的稳定版本, 二者区别), Apache flume.</li>
-<li>消息持久化队列: <a href="http://kafka.apache.org/" target="_blank" rel="noopener">http://kafka.apache.org/</a> (分布式消息队列),<ul>
-<li>数据源进行topic分流，实现Category</li>
-<li>作为一层buffer来适配输入输出的消息速率，解除系统耦合度</li>
-<li>作用类似于缓存，即活跃的数据和离线处理系统之间的缓存</li>
-<li>kafka是显式分布式架构，producer、broker（Kafka）和consumer都可以有多个。Kafka的作用类似于缓存，即活跃的数据和离线处理系统之间的缓存。几个基本概念：<ol>
-<li>message（消息）是通信的基本单位，每个producer可以向一个topic（主题）发布一些消息。如果consumer订阅了这个主题，那么新发布的消息就会广播给这些consumer。</li>
-<li>Kafka是显式分布式的，多个producer、consumer和broker可以运行在一个大的集群上，作为一个逻辑整体对外提供服务。对于consumer，多个consumer可以组成一个group，这个message只能传输给某个group中的某一个consumer.</li>
-</ol>
+            <p><img src="/images/Dostoevsky.png" alt="../_images/Dostoevsky.png"></p>
+<ul>
+<li>1821年在莫斯科出生于莫斯科一个贫穷的家庭，在七个孩子中排名老二。他的父亲是一名退休军医和彻彻底底的酒鬼。他的父母的家系是源自平斯克地区的立陶宛裔贵族。父亲工作的医院地处莫斯科的荒郊野岭，犯人公墓、精神病院和孤儿院便是仅有地标式建筑。这些景象给年纪尚小的陀思妥耶夫斯基留下了深刻的印象，对穷困者的怜悯深深刺痛着他的心灵。虽然父母不允许，年轻的陀思妥耶夫斯基还是喜欢去医院花园走走，看看那些晒太阳的病人，听他们讲故事。早年时透过童话故事及传说开始接触文学，也有涉猎俄罗斯及其他国家作者的作品。</li>
+<li>1837年，陀思妥耶夫斯基的母亲过世，当时陀思妥耶夫斯基才15岁，同年他离开家，进入尼古拉耶夫军事工程学院就读。在彼得堡的军事工程学校期间，陀思妥耶夫斯基学习他于之不屑的数学。与此同时，他还涉猎了莎士比亚、帕斯卡尔、维克多·雨果的文学作品。</li>
+<li>1839年父亲去世，死因不明。或许这个专制的父亲给了陀思妥耶夫斯基很大的影响，以至于他把父亲的形象搬到了《卡拉马佐夫兄弟》中的老卡拉马佐夫这个“邪恶而感情脆弱的小丑”父亲身上。</li>
+<li>1840 年代陀思妥耶夫斯基结识了尼卡索夫，并在他的鼓励下开始写作。</li>
+<li>1842 年，陀思妥耶夫斯基受命成为中尉，并在一年后从军事工程学校毕业。</li>
+<li>1844 年他退伍后，陀思妥耶夫斯基开始了自己的专职写作生涯</li>
+<li>1846年，25岁时第一本长篇小说《穷人》在出版，让他可以进入圣彼得堡的文学圈中。《穷人》连载于期刊《当代人》上，广获好评。据说杂志主编尼卡索夫在读完小说后兴奋地冲进俄罗斯文学评论家别林斯基的办公室，大叫：“又一个果戈理出现了！”。</li>
+<li>1847 年，陀思妥耶夫斯基开始对空想社会主义感兴趣，参加了彼得拉舍夫斯基小组的革命活动。陀思妥耶夫斯基非常喜欢别林斯基这篇文章，并寻找到手抄本在小组上朗读。</li>
+<li>1849年4月23日他因牵涉反对沙皇的革命活动而被捕，并于11月16日被判处死刑。在1849年12月22日行刑之前的一刻才改判成了流放西伯利亚。</li>
+<li>1850年1月23日，陀思妥耶夫斯基被押送至西伯利亚鄂木斯克军事监狱，开始了四年的漫长苦役生涯。在西伯利亚他的思想发生了巨变，他将服苦役期间的感受和见闻记在了《西伯利亚笔记》中，里面的很多素材被写进了《死屋手记》和其他作品中。1854年他被释放，但是要求必须在西伯利亚服役。</li>
+<li>1857年，他恢复了贵族身份，并于1858年升为少尉，从此可以有自己的时间来思考与写作。从假处决事件到西伯利亚服刑这十年时间是他人生主要的转折，他开始反省自己，笃信宗教。也正是在西伯利亚，他遇到了今后的妻子——玛丽亚·伊萨耶娃（Maria Dmitriyevna Isaeva）。</li>
+<li>1860 年，陀思妥耶夫斯基返回圣彼得堡，次年发表了第一部长篇《被侮辱与被损害的》。这部作品可以被看作是他前后期的过渡作品，既有前期的对社会苦难人民的描写，又带有后期的宗教与哲学探讨。这段时间他文学上有所进展，但生活却连遭打击。1864 年他的妻子和兄长相继逝世，他还需要照顾兄长的家人，这使得他濒临破产。他希望通过赌博来还清债务，却欠下更多债，整个人陷入消沉之中。</li>
+<li>1866 年他的代表作《罪与罚》出版，而另一部长篇离交稿一个月，还没有写。在朋友介绍下，他认识了速记学校的高材生安娜·斯尼特金娜，两人高效率的工作，一个月内完成了《赌徒》，于 1867 年出版。</li>
+<li>1867年两人结婚，在安娜的鼓励与帮助下，他的生活才开始安定下来。</li>
+<li>1868 年他完成了《白痴》，1872 年完成了《群魔》</li>
+<li>1880 年他发表了《卡拉马佐夫兄弟》这部他后期最重要的作品。1881 年陀思妥耶夫斯基准备写作《卡拉马佐夫兄弟》第二部。</li>
+<li>1881年死于肺气肿的出血，陀思妥耶夫斯基的最后一句话是，他引用了马太福音 3:14–15:“约翰想要拦住他，说，我当受你的浸，你反到我这里来么？耶稣回答说，你暂且容许我吧，因为我们理当这样尽全般的义。” 他的墓碑上刻着《新约》经文：“我实实在在的告诉你们，一粒麦子不落在地里死了，仍旧是一粒；若是死了，就结出许多子粒来。”</li>
+</ul>
+<hr>
+<ul>
+<li><p>Pain and suffering are always inevitable for a large intelligence and a deep heart. The really great men must, I think, have great sadness on earth. // 《罪与罚》</p>
+</li>
+<li><p>Life is now given to man at the cost of pain and fear. Here, they are blinded by this sometimes. Now man is not yet that man. There will be another, new person, happy and proud, and for him it wouldn’t matter the death-life. He who overcomes pain and fear will become God himself. There will not be that God any longer. // 《群魔》</p>
+</li>
+<li><p>“The awful thing is that beauty is mysterious as well as terrible. God and the devil are fighting there and the battlefield is the heart of man.” // 可怕的是，美既神秘又可怕。上帝和魔鬼在那里战斗，战场是人类的心脏 —— 《卡拉马佐夫兄弟》</p>
 </li>
 </ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/65.Movies/电影list/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/65.Movies/电影list/" itemprop="url">电影和电视剧list</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/65-Movies/" itemprop="url" rel="index">
+                    <span itemprop="name">65.Movies</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  60
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>★★★★★</p>
+<ul>
+<li>阳光灿烂的日子</li>
+<li>少年派</li>
+<li>地球最后的夜晚</li>
+<li>她 / Her</li>
+</ul>
+<p>★★★★</p>
+<ul>
+<li>两杆大烟枪</li>
+<li>低俗小说</li>
+<li>银翼杀手</li>
+<li>绿皮书</li>
+<li>头号玩家</li>
+<li>失控玩家</li>
+<li>永无止境 / Limitless</li>
+<li>路边野餐</li>
+<li>漫长的婚约</li>
+<li>角斗士</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/66.History-and-Politics/02.中国历史时空图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/66.History-and-Politics/02.中国历史时空图/" itemprop="url">02.中国历史时空图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/66-History-and-Politics/" itemprop="url" rel="index">
+                    <span itemprop="name">66.History-and-Politics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  0
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="/images/2022/IMG20220921.png" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/66.History-and-Politics/Yeremenko/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/66.History-and-Politics/Yeremenko/" itemprop="url">Yeremenko</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/66-History-and-Politics/" itemprop="url" rel="index">
+                    <span itemprop="name">66.History-and-Politics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  539
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="关于一张照片"><a href="#关于一张照片" class="headerlink" title="关于一张照片"></a>关于一张照片</h1><p><img src="/images/Yeremenko.png" alt="../_images/Yeremenko.png"></p>
+<p>这张照片的拍摄者是 Max Vladimirovich Alpert（Макс Влади́мирович А́льперт），Max Alpert 后来回忆拍摄于 1941——1943 年间，对照片中军装进行分析后发现不同于 M43 式军装，所以应该也不是 1943 年拍摄。作者并不知道照片中人物的信息，但并不能就此认为照片中信息为宣传系统的杜撰——战争时期苏联并未将其宣传为“牺牲的政治委员”，而只是单纯地描述为 Комбат。</p>
+<p>直到战后第 29 年，原伏罗希洛夫格勒、现卢甘斯克地区一户家庭写信给作者，认为这是他们的家人 <strong>Oleksiy Hordiyovych Yeremenko</strong>（Єременко Олексій Гордійович），共青团真理报与作者和当地政府联系，通过战前照片对比，以及亲历战斗的当事人回忆，认为 Oleksiy Hordiyovych Yeremenko 是照片上的人。</p>
+<p>Oleksiy Hordiyovych Yeremenko 当时是苏联第 18 军第 4 步兵师第 220 步兵团下属政治委员，1942 年 7 月 12 日在伏罗希洛夫格勒地区霍罗舍村带领部队反攻时阵亡。 两名健在的这场战斗的参与者——隶属于第 285 师的 Vasily Sevastianovich 中校，以及同属于第 220 步兵团并在后来接替 Yeremenko 政委职务的 Alexander Matvajevich Makarov 少校接受了共青团真理报、伏罗希洛夫格勒地区政府和 Yeremenko 家人的质询和联合调查，各自独立描述了当时的情况并相互印证。而最具决定性的证据来自拍摄者 Max Vladimirovich Alpert 本人——1942 年 7 月，他正是在伏罗希洛夫格勒地区进行战地摄影。相关调查结果发表于苏联 1987 年 11 月《科学与生活》杂志。苏联政府在调查结束后向 Yeremenko 的家人发布了更新后的阵亡通知。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/66.History-and-Politics/Yeremenko/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/66.History-and-Politics/游戏《Rise-of-Kingdoms》中的历史人物/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/66.History-and-Politics/游戏《Rise-of-Kingdoms》中的历史人物/" itemprop="url">游戏《Rise-of-Kingdoms》中的历史人物</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/66-History-and-Politics/" itemprop="url" rel="index">
+                    <span itemprop="name">66.History-and-Politics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,336
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="大西庇阿"><a href="#大西庇阿" class="headerlink" title="大西庇阿"></a>大西庇阿</h2><p><img src="/images/2022/IMG20220922-1.png" alt><br>大西庇阿（前235年—前183年），全名为普布利乌斯·科尔内利乌斯·西庇阿。古罗马统帅和政治家。他是第二次布匿战争中罗马方面的主要将领之一，以在扎马战役中打败迦太基统帅汉尼拔而著称于世。由于西庇阿的胜利，罗马人以绝对有利的条件结束了第二次布匿战争。西庇阿因此得到他那著名的绰号：“阿非利加征服者”。</p>
+<h2 id="贝利萨留（Belisarius）"><a href="#贝利萨留（Belisarius）" class="headerlink" title="贝利萨留（Belisarius）"></a>贝利萨留（Belisarius）</h2><p><img src="/images/2022/IMG20220922.png" alt><br>贝利萨留（约505年～565年），又名贝利萨留斯，拜占庭帝国统帅、军事家。他一生当中的大多数战役是以少胜多。<br>贝利萨留出生于色雷斯。早年任皇帝查士丁尼一世的侍卫。527年率军参加对波斯的战争。529年，升任禁卫军长官。530年，任德拉总督，击败4万波斯-阿拉伯联军，名声大振。532年，镇压君士坦丁堡的尼卡起义，解救被围困的皇帝。533～534年，仅率1万步兵和6000骑兵入侵北非，灭汪达尔-阿兰王国并俘其国王。回国后被授予执政官称号。535年，出征意大利的东哥特王国，登陆西西里岛。536年攻入意大利南部，随后北上占领罗马。540年，攻陷东哥特都城拉韦纳，俘东哥特王。曾经用“自己将政变”为计谋欺骗敌方获胜，结果因此受到查士丁尼一世的怀疑。562年，被指控参与谋反，被捕入狱。563年，获释。565年，去世，享年61岁。</p>
+<h2 id="海尔曼"><a href="#海尔曼" class="headerlink" title="海尔曼"></a>海尔曼</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/66.History-and-Politics/游戏《Rise-of-Kingdoms》中的历史人物/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/66.History-and-Politics/修昔底德陷阱/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/66.History-and-Politics/修昔底德陷阱/" itemprop="url">修昔底德陷阱</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/66-History-and-Politics/" itemprop="url" rel="index">
+                    <span itemprop="name">66.History-and-Politics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  416
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>修昔底德陷阱最早是格雷厄姆·艾利森在2012年在金融时报上发表的一篇探讨中美之间潜在冲突文章中提出的。文章引用了<a href="/66.History-and-Politics/伯罗奔尼撒战争/" title="伯罗奔尼撒战争">伯罗奔尼撒战争</a>史的一段话︰</p>
+<blockquote>
+<p>正是因为雅典的崛起引致斯巴达的恐惧，最终使战争不可避免。</p>
+</blockquote>
+<p>格雷厄姆·艾利森在其著作《注定的一战》(英语：Destined For War)中进一步阐述，用这个术语描述当时快速崛起的大国雅典，挑战现有强国斯巴达国际霸主的地位时，战争最后无可避免地爆发。他认为“中美两国目前正处于通往战争冲突的进程中”。</p>
+<p>该术语描述了这样一种理论，即当一个大国的霸权地位受到新兴大国的威胁时，两个大国之间很可能发生战争。用格雷厄姆艾利森的话来说：</p>
+<blockquote>
+<p>修昔底德陷阱指的是当一个快速崛起的大国威胁了现有的霸主时，便自然会发生不可避免的混乱……当一个崛起的大国威胁要取代现有霸主地位时，由此产生的结构性压力使暴力冲突成为必然。</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/66.History-and-Politics/修昔底德陷阱/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/66.History-and-Politics/伯罗奔尼撒战争/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/66.History-and-Politics/伯罗奔尼撒战争/" itemprop="url">伯罗奔尼撒战争</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/66-History-and-Politics/" itemprop="url" rel="index">
+                    <span itemprop="name">66.History-and-Politics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  905
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>伯罗奔尼撒战争是以<strong>雅典</strong>为首的提洛同盟与以<strong>斯巴达</strong>为首的伯罗奔尼撒联盟之间的一场战争。这场战争从公元前431年一直持续到公元前404年，期间双方曾几度停战，最终斯巴达一方获得胜利，但也付出了巨大的代价。</p>
+<p>这场战争标志着古希腊黄金时代的终结，从政治、经济、文化、社会心理风气等改变了希腊的各个城邦。几乎所有希腊的城邦参加了这场战争，其战场几乎涉及整个当时的希腊世界。在现代西方研究者中也有人称这场战争为“古代世界大战”。</p>
+<p>这场战争不但对古希腊的历史走向影响深远，而且对历史学本身也具有重要的意义，这场战争是第一次被历史学家记录下来的史实：希腊历史学家<strong>修昔底德</strong>在他的《伯罗奔尼撒战争史》中详细记录了当时的事件，该纪录到公元前411年冬中止。修昔底德分析了这场战争的原因和背景，他的分析对欧洲的历史学具有先驱作用。修昔底德死后，色诺芬在他的《希腊史》中延续修昔底德的工作，记录公元前411年之后的事件。</p>
+<p>修昔底德是雅典人，他从雅典人的角度出发将其著作命名为《伯罗奔尼撒战争史》，而当时的伯罗奔尼撒人称这场战争为雅典战争。</p>
+<blockquote>
+<p>雅典的修昔底德纪录伯罗奔尼撒人与雅典人之间的战争。他在战争爆发时开始他的纪录，他当时想到这场战争可能是非常重要的，可能比此前的战争都有历史意义。他这样想因为战争双方使用它们所有的手段，而其它的希腊城市迟早参加这场战争。这场战争深刻影响希腊和一部分野蛮人，可以说这场战争影响整个人类社会。<br>——修昔底德</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/66.History-and-Politics/伯罗奔尼撒战争/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/66.History-and-Politics/Цесаревич (броненосец)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/66.History-and-Politics/Цесаревич (броненосец)/" itemprop="url">Цесаревич (броненосец)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/66-History-and-Politics/" itemprop="url" rel="index">
+                    <span itemprop="name">66.History-and-Politics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,159
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Цесаревич"><a href="#Цесаревич" class="headerlink" title="Цесаревич"></a>Цесаревич</h2><p>皇太子号战列舰，又译太子号，俄语：Цесаревич）是俄罗斯帝国海军向法国订购的前无畏舰，先后参加了日俄战争和第一次世界大战。本舰所参与的战斗中最著名的是在黄海海战中作为俄国太平洋舰队旅顺分舰队旗舰，交战中舰桥因为受到日军一发炮弹命中，舰队指挥机构瘫痪，从而导致俄国舰队突围失败。本舰虽受重创，依旧趁夜逃脱日军封锁前往胶洲湾，在当地受到德国当局扣押直到战争结束。战后皇太子号返回俄国，加入波罗的海舰队，参加了一战。1917年俄国国内动荡时，舰上水兵发生哗变并参加了革命，舰名也随之更改为公民号（俄语：Гражданин）。@Ref：<a href="https://zh.m.wikipedia.org/zh-hans/%E7%9A%87%E5%A4%AA%E5%AD%90%E8%99%9F%E6%88%B0%E5%88%97%E8%89%A6" target="_blank" rel="noopener">皇太子号战列舰 - 维基百科，自由的百科全书</a></p>
+<p><img src="/images/%D0%9A%D1%80%D0%BE%D0%BD%D0%BF%D1%80%D0%B8%CC%81%D0%BD%D1%86-1.png" alt="../_images/Кронпри́нц-1.png"></p>
+<h2 id="模型制作参考"><a href="#模型制作参考" class="headerlink" title="模型制作参考"></a>模型制作参考</h2><ul>
+<li><a href="https://tieba.baidu.com/p/7146335463" target="_blank" rel="noopener">【图片】long time no see先来个小船，皇太子1904，基本直做，换master炮管和船坞木甲板【模型船吧】_百度贴吧</a></li>
+<li><a href="http://mt.sohu.com/20170307/n482643700.shtml" target="_blank" rel="noopener">【战舰】“迅速突围，驶往海参崴！ ”- 鏖战黄海的皇太子号战列舰-搜狐</a></li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/66.History-and-Politics/Цесаревич (броненосец)/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/71.Science-and-Tech/天文学101/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/71.Science-and-Tech/天文学101/" itemprop="url">天文学101</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/71-Science-and-Tech/" itemprop="url" rel="index">
+                    <span itemprop="name">71.Science-and-Tech</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  587
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@tag: #入门101 #天文学</p>
+<h2 id="恒星生命周期"><a href="#恒星生命周期" class="headerlink" title="恒星生命周期"></a>恒星生命周期</h2><blockquote>
+<p><a href="https://www.youtube.com/watch?v=Lf6srcoTpg8&amp;vl=zh-Hans" target="_blank" rel="noopener">太阳会死亡吗？红巨星、中子星和黑洞等都是哪来的？李永乐老师讲恒星演化 - YouTube</a></p>
+</blockquote>
+<p>恒星演化:</p>
+<ul>
+<li>初始: 星际云(氢, 氦)</li>
+<li>原恒星: (氢 -&gt; 氦)</li>
+<li>主序星阶段(恒星壮年)<ul>
+<li>不是所有的原恒星都能变成恒星, 质量不够的原恒星-&gt;褐矮星(不是恒星)</li>
+<li>介于0.08太阳质量 ~ 0.5太阳质量, 原恒星-&gt;红矮星, 红矮星上发生的聚变 氢 -&gt; 氦</li>
+<li>介于0.5太阳质量 ~ 8太阳质量之间: 原恒星-&gt;黄矮星(太阳), 发生的聚变 氢 -&gt; 氦 -&gt; 碳</li>
+<li>大于8太阳质量: 原恒星-&gt;蓝色恒星, 质量越大的恒星寿命越短, 发生的聚变 氢 -&gt; 氦 -&gt; 碳 -&gt; 铁</li>
+</ul>
 </li>
-<li>存储: mongo</li>
 </ul>
-<h1 id="Fluentd-td-agent"><a href="#Fluentd-td-agent" class="headerlink" title="Fluentd(td-agent)"></a>Fluentd(td-agent)</h1><p>Fluentd内置三种日志采集, file-tail, tcp, http-url, 通过插件可以支持更多的采集方式.</p>
-<h2 id="Install-fluentd-td-agent-by-RPM"><a href="#Install-fluentd-td-agent-by-RPM" class="headerlink" title="Install fluentd(td-agent) by RPM"></a>Install fluentd(td-agent) by RPM</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【架构】使用fluentd,kafka,mongodb搭建日志处理系统/#more" rel="contents">
+            <a class="btn" href="/71.Science-and-Tech/天文学101/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2725,7 +2522,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【编辑器】为Eclipse安装Remote-System-Explorer/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/72.Math-and-Logic/博弈论/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2744,7 +2541,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/50.Farbox-Blog/【编辑器】为Eclipse安装Remote-System-Explorer/" itemprop="url">为Eclipse安装 Terminal</a></h1>
+                <a class="post-title-link" href="/72.Math-and-Logic/博弈论/" itemprop="url">博弈论</a></h1>
         
 
         <div class="post-meta">
@@ -2767,8 +2564,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
+                  <a href="/categories/72-Math-and-Logic/" itemprop="url" rel="index">
+                    <span itemprop="name">72.Math-and-Logic</span>
                   </a>
                 </span>
 
@@ -2798,7 +2595,339 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  55
+                  1,519
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="博弈论相关概念"><a href="#博弈论相关概念" class="headerlink" title="博弈论相关概念"></a>博弈论相关概念</h1><ul>
+<li>纳什均衡</li>
+<li>囚徒困境</li>
+<li>重复博弈</li>
+<li>大众定理</li>
+<li>信息</li>
+<li>帕累托最优</li>
+<li>零和博弈</li>
+<li>非零和博弈</li>
+<li>微分包含式</li>
+<li>拍卖博弈</li>
+</ul>
+<h1 id="帕累托最优"><a href="#帕累托最优" class="headerlink" title="帕累托最优"></a>帕累托最优</h1><p><strong>帕累托最优</strong> 也称为帕累托效率（Pareto Efficiency）、帕雷托最佳配置，是博弈论中的重要概念，并且在经济学， 工程学和社会科学中有着广泛的应用。<br>　　帕累托最优是指资源分配的一种理想状态，假定固有的一群人和可分配的资源，从一种分配状态到另一种状态的变化中，在没有使任何人境况变坏的前提下，使得至少一个人变得更好，这就是帕累托改进或帕累托最优化。帕累托最优的状态就是不可能再有更多的帕累托改进的余地；换句话说，帕累托改进是达到帕累托最优的路径和方法。帕累托最优是公平与效率的“理想王国”。<br>　　帕累托最优回答的是效率问题。从社会福利角度出发，用效率来评价总体经济运行有其合理性，因为如果资源配置未达到帕累托最优，那么，总有一些人能改善境况而没有人会受损，也就是说，社会福利总量肯定能上升，那么通过一种恰当的分配或补偿措施，能使所有人的境况都有所改善。[1]</p>
+<p><strong>举例1：</strong><br>假设现在有两个人，甲和乙，分10块蛋糕，并且两个人都喜欢吃蛋糕。10块蛋糕无论在两个人之间如何分配，都是帕累托最优，因为你想让某一个人拥有更大利益的唯一办法是从另一个人手里拿走蛋糕，导致的结果是那个被拿走蛋糕的人利益受损</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/72.Math-and-Logic/博弈论/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/72.Math-and-Logic/傅里叶变换/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/72.Math-and-Logic/傅里叶变换/" itemprop="url">傅里叶变换</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/72-Math-and-Logic/" itemprop="url" rel="index">
+                    <span itemprop="name">72.Math-and-Logic</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  190
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="➤-傅里叶变换"><a href="#➤-傅里叶变换" class="headerlink" title="➤ 傅里叶变换"></a>➤ 傅里叶变换</h2><ul>
+<li>傅里叶级数: 任何周期函数, 都可以看做不同振幅,不同相位的正弦波的叠加</li>
+<li>图: 周期函数 → N个正弦波叠加</li>
+<li>上图从频域看… 频域的x/y轴物理意义是? 即傅里叶级数的频谱</li>
+<li>上图频域里的离散信号, 如果无限接近连续..</li>
+<li>频域的相位谱</li>
+<li>傅里叶级数: (时域)周期连续 → (频域)非周期离散</li>
+<li>傅里叶变换: (时域)非周期连续→ (频域)非周期连续</li>
+<li>虚数: 虚数i也即-1的平方根, 乘以虚数可以理解为: 旋转</li>
+<li>欧拉公式: $$ e^(ix) = cos(x) + isin(x) $$</li>
+</ul>
+<p><img src="/images/2022/20220217153337.png" alt="../_images/Pasted image 20220217153337.png"></p>
+<hr>
+<p>@ref: <a href="https://zhuanlan.zhihu.com/p/19763358" target="_blank" rel="noopener">傅里叶分析之掐死教程（完整版）更新于2014.06.06 - 知乎</a></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/72.Math-and-Logic/傅里叶变换/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/72.Math-and-Logic/贝叶斯公式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/72.Math-and-Logic/贝叶斯公式/" itemprop="url">贝叶斯公式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/72-Math-and-Logic/" itemprop="url" rel="index">
+                    <span itemprop="name">72.Math-and-Logic</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  53
                 </span>
               
 
@@ -2825,650 +2954,518 @@
       
         
           
-            <p>IDEA的Terminal很方便, 但Eclipse没有.<br>还是比较习惯敲命令行.</p>
-<p>Eclipse工具栏 -&gt; Run -&gt; Extrnal Tools -&gt; Configurations , 新建一个:<br>Location填入<code>C:\Windows\System32\cmd.exe</code>, Working Directory : <code>${project_loc}</code></p>
+            <h2 id="➤-贝叶斯公式"><a href="#➤-贝叶斯公式" class="headerlink" title="➤ 贝叶斯公式"></a>➤ 贝叶斯公式</h2><ul>
+<li>P(A|B)是B发生的情况下, A发生的可能性, 贝叶斯公式:<br>$$ P(A|B) = P(B|A)*P(A)/P(B) $$</li>
+</ul>
+<p>@ref: <a href="https://zhuanlan.zhihu.com/p/22467549" target="_blank" rel="noopener">Think Bayes - 我所理解的贝叶斯定理 - 知乎</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/73.Health-and-Medicine/Fitness-and-Gym指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/73.Health-and-Medicine/Fitness-and-Gym指南/" itemprop="url">Fitness-and-Gym指南</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/73-Health-and-Medicine/" itemprop="url" rel="index">
+                    <span itemprop="name">73.Health-and-Medicine</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  381
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="健身房-器械"><a href="#健身房-器械" class="headerlink" title="健身房-器械"></a>健身房-器械</h1><h2 id="力竭和组间休息"><a href="#力竭和组间休息" class="headerlink" title="力竭和组间休息"></a>力竭和组间休息</h2><blockquote>
+<p><a href="https://www.zhihu.com/question/25022205" target="_blank" rel="noopener">每组力竭的话和组间休息时间怎么安排？ - 知乎</a><br>什么是组间间歇？假设我们锻炼一个部位采用abcd四个动作，我们首先使用a动作，一般采用递增的重量连续做四组，a动作四组之间的休息时间即为组间间歇时间。还有一种情况是a动作四组结束之后与b动作之间的休息时间，同样b动作结束后连接c动作的时间。<br>正确的组间间歇：你可以通过带一个秒表或者一款心率表去健身房，通过这两块表来控制组间间歇时间，组间间歇一般在0s—90s之间（除硬拉，深蹲等大重量动作），并且时间越短越好。</p>
+</blockquote>
+<h2 id="Gym-颈前正握下拉"><a href="#Gym-颈前正握下拉" class="headerlink" title="[Gym]颈前正握下拉"></a>[Gym]颈前正握下拉</h2><p><img src="/images/Fitness-Gym/16038802165474.jpg" alt></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/73.Health-and-Medicine/Fitness-and-Gym指南/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/73.Health-and-Medicine/如何在 2 分钟内入睡/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/73.Health-and-Medicine/如何在 2 分钟内入睡/" itemprop="url">如何在 2 分钟内入睡</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/73-Health-and-Medicine/" itemprop="url" rel="index">
+                    <span itemprop="name">73.Health-and-Medicine</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,238
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/images/fall-asleep-in-2-min.png" alt="../_images/fall-asleep-in-2-min.png"></p>
+<p>在二战那几年，美军意识到了一个问题：由于空中作战的巨大压力，许多飞行员都存在着应激反应，这让他们身体虚弱，不堪负重。从而犯下一系列致命的错误，无意击中友军飞机或者自己的误操作而受伤。</p>
+<p>为了阻止飞行员和飞机的损失，海军少尉 Bud Winter 开始研究测试一种可以训练的放松方法，以便飞行员能够减压，提高反应速度，增加注意力减少恐惧。</p>
+<p>战前 Winter 是一个成功的大学橄榄球和田径教练，他与心理学教授一起合作，帮助运动员在高压下放松并取得更好的表现。</p>
+<p>他将睡眠定义为「身心放松的状态」。第一步是身体放松，第二步是心理放松。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/73.Health-and-Medicine/如何在 2 分钟内入睡/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/73.Health-and-Medicine/饮食健康.IBS（肠易激综合征）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/73.Health-and-Medicine/饮食健康.IBS（肠易激综合征）/" itemprop="url">饮食健康.IBS（肠易激综合征）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/73-Health-and-Medicine/" itemprop="url" rel="index">
+                    <span itemprop="name">73.Health-and-Medicine</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  427
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <ul>
+<li><p>肠易激综合征（irritable bowel syndrome，IBS）</p>
 <ul>
-<li>参考<a href="http://stackoverflow.com/questions/1562600/is-there-an-eclipse-plugin-to-run-system-shell-in-the-console" target="_blank" rel="noopener">Is there an Eclipse plugin to run system shell in the Console?</a></li>
+<li>“喝了冰冻饮料就会拉肚子”</li>
+<li>“紧张一点会有腹痛感”</li>
+<li>“吃了某些‘寒气’食物就会拉肚子”</li>
+<li>“肚子痛然后马上就像上厕所”</li>
+<li>压力、紧张也会导致： <a href="https://mp.weixin.qq.com/s/xYoaQaW1N-oM9gmISHGtKw" target="_blank" rel="noopener">一有压力就胃痛，肠易激综合征如何解决？</a></li>
 </ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/" itemprop="url">在 Windows 下使用 vim grep 的正确姿势</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,379
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>首先, 开发环境是Windows,<br>然后, 我又是一个信仰坚定的Vimer,<br>所以就出现了<code>Windows + Gvim</code>这个有些不太协调的组合, 想在盖茨叔叔的视窗OS上稍微正常的使用Gvim还是有些小麻烦, 可是这都难不倒一个有信仰的Vimer.</p>
-<p>PS 如果你使用Osx or Linux, 大可不必这样折腾, 直接使用<a href="https://github.com/mileszs/ack.vim" target="_blank" rel="noopener">ack.vim</a> 或 <a href="www.vim.org/script.php?script_id=311">grep.vim</a>吧, 简单的配置就可以搞定.</p>
-<h1 id="在Win上使用grep的可选方案"><a href="#在Win上使用grep的可选方案" class="headerlink" title="在Win上使用grep的可选方案"></a>在Win上使用grep的可选方案</h1><p>在Windows上使用grep搜索文本有以下几种方案:</p>
-<ol>
-<li>使用<code>grep</code>命令, 虽是GNU下的工具, 但也有Win移植版;</li>
-<li>使用vim内置的<code>vimgrep</code>命令, 速度最慢但是兼容性相对好;</li>
-<li>使用Win下的原生命令<code>findstr</code>;</li>
-<li>使用Win移植版的ack, 这种方法我没尝试过, 如果你用过了, 请一定告诉我:P</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【Vim】在Windows下使用vim-grep的正确姿势/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Markdown】MarkEditor使用体验/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/50.Farbox-Blog/【Markdown】MarkEditor使用体验/" itemprop="url">MarkEditor使用体验</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  318
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><img src="/images/2016/sublime_dropbox.jpg" alt="sublime+dropbox"></p>
-<p>一直用<code>Sublime + Dropbox</code>的组合来写Markdown笔记. 这个组合看起来有点怪异,<br><strong>Sublime</strong>是使用体验最好的编辑器(安装了MarkdownEditting和MarkdownPreview插件),<br><strong>Dropbox</strong>是使用体验最好的同步工具,<br>但”最佳编辑器”+”最佳同步工具”的组合并非那样无懈可击.<br>相比Evernote,有道云笔记, Sublime+Dropbox的组合在移动端阅读和检索略有不便, 但同步速度和编辑体验简直甩大象有道这两位”全职笔记”几条街.</p>
-<p>试用了farbox.com推出的markdown编辑器–<a href="http://markeditor.farbox.com/" target="_blank" rel="noopener">MarkEditor</a>使用体验非常棒, 几乎是我使用过的最好的markdown编辑器</p>
+</li>
+<li><p>什么引起：腹泻由FODMAP（Fermentable Oligo-, Di-, Mono-saccharides And Polyols，可发酵的寡糖，二糖，单糖和多元醇）引起，FODMAP包括：</p>
 <ul>
-<li>支持工作目录和标签, 对于我这种经常要在多个Markdown笔记来回切换的人来说, 非常方便.</li>
-<li>漂亮的语法高亮.</li>
-<li>方便的TOC导航侧边栏</li>
-<li>图片管理</li>
+<li>Fructose：果糖</li>
+<li>Lactose：乳糖</li>
+<li>Mannitol：甘露糖醇</li>
+<li>Sorbitol：山梨糖醇</li>
+<li>GOS：低聚半乳糖</li>
+<li>Fructan：果聚糖</li>
 </ul>
-<p>但也有一些Bug和功能上的不完备, 这也是让我最终决定暂不购买<a href="http://markeditor.farbox.com/" target="_blank" rel="noopener">MarkEditor</a>付费版的原因:</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【Markdown】MarkEditor使用体验/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/关于闪光灯你应该知道的一些事/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/53.Photograph/关于闪光灯你应该知道的一些事/" itemprop="url">关于闪光灯你应该知道的一些事</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3,764
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="一-快门的前帘与后帘"><a href="#一-快门的前帘与后帘" class="headerlink" title="(一) 快门的前帘与后帘"></a>(一) 快门的前帘与后帘</h2><p>单反上的快门都属于<code>焦平面快门</code>(区别镜间快门)，了解闪光同步速度之前，要先了解单反的快门的工作原理。<br>快门的机械部件最高可以在1/200秒内扫过整个感光元件 ，这个1/200s大概是目前单反的快门的极限，也叫<code>闪光同步速度</code>。<br>所以，<code>闪光同步速度</code>是<strong>单反机身的</strong>性能参数，而不是闪光灯的性能参数。<br>如果单反的同步速度只有1/200秒，那么如若需要更高速度的快门，比如1/4000或更高的快门速度，应该如何实现呢?</p>
-<p>如果把快门做成一条狭缝，这个狭缝扫过整个感光元件需要1/200秒，感光元件上每行像素点受到光照时间就可以做到小于1/200秒了，只要狭缝做的足够窄，也可以实现1/4000秒的高速快门。<br>焦平面快门有两个门帘，第一个门帘先移动，第二门帘立刻跟上，就相当于上面的”狭缝”了。</p>
-<p>假设机身的快门机械部分扫过整个CMOS的最短需要1/200秒，那么低于1/200的快门速度，我们称之为”低速快门”，高于1/200的快门就需要以前后帘以”狭缝”的方式实现，也叫”高速快门”。</p>
+</li>
+</ul>
 <ul>
-<li><code>低速快门</code>：前帘落下，快门完全打开，CMOS完全曝光，然后后帘落下。</li>
-<li><code>高速快门</code>：前帘落下，后帘立刻跟上，前后帘之间只有一条狭缝，相当于光线通过狭缝，从上至下扫描过CMOS，这整个扫描过程大约是1/200秒。这里的1/200秒就是单反机身的闪光同步速度。</li>
+<li><p>为什么FODMAP等糖类引起腹泻：</p>
+<ul>
+<li>无法被小肠吸收的短链碳水化合物（被称为FODMAP）会将进入大肠，大肠内细菌会迅速发酵FODMAP并产生过量气体。</li>
+<li>大量水分和过量气体导致肠道过分扩展，肠壁因扩张而过分延伸，肠壁上高度连接的神经会马上向大脑传输疼痛信号。于是人就会出现腹痛、腹泻。</li>
 </ul>
+</li>
+<li><p>IBS患者不能吃什么：高FODMAP的食物</p>
+<ul>
+<li>Furctose 果糖： 蜂蜜</li>
+<li>Lactos 乳糖： 牛奶</li>
+<li>Mannitol 甘露糖醇/Sorbitol 山梨糖醇： 雪梨、桃子、苹果</li>
+<li>GOS 低聚半乳糖/Fructan 果聚糖：小麦、黑麦、洋葱、大蒜、豆类</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>IBS患者吃什么：低FODMAP的食物可以降低IBS症状，燕麦、香蕉、少量芒果、少量北杏仁是符合低FODMAP的食物<ul>
+<li>麦片：避免添加奶粉和糖的麦片</li>
+</ul>
+</li>
+</ul>
+<p>图1: FODMAP糖类 和 引起腹泻的原因<br><img src="/images/IBS/15949232146885.jpg" alt="-w679"></p>
+<p>识别生活中常见的高/低FODMAP食物：<br>注意! 面粉(面包,馒头,面)是高FODMAP, 米饭是低FODMAP食物<br><img src="/images/IBS/15949232497059.jpg" alt="-w679"></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/关于闪光灯你应该知道的一些事/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【编辑器】在Windows和OSX之间同步Sublime配置文件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/50.Farbox-Blog/【编辑器】在Windows和OSX之间同步Sublime配置文件/" itemprop="url">在 Windows 和 macOS 之间同步 Sublime 配置文件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
-                    <span itemprop="name">50.FarBox博客备份</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  258
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>下面介绍如何把Windows上的Sublime设置同步到OSX</p>
-<h3 id="Windows设置"><a href="#Windows设置" class="headerlink" title="Windows设置"></a>Windows设置</h3><ul>
-<li>关闭Sublime;</li>
-<li>以administrator打开PowerShell, 输入以下命令:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &quot;%appdata%\Sublime Text 3\Packages\&quot;</span><br><span class="line">mkdir &apos;X:\Dropbox\SublimeText3&apos;</span><br><span class="line">mv User &apos;X:\Dropbox\SublimeText3\&apos;</span><br><span class="line">cmd /c mklink /D User &quot;X:\Dropbox\SublimeText3\User&quot;</span><br></pre></td></tr></table></figure>
-<p>注意, 根据情况替换上面的<code>X:\Dropbox\SublimeText3</code>路径;<br>第三行<code>mv</code>命令只能在相同盘符的目录之间移动, 如果你的Dropbox同步目录不是在C盘, 手动打开<code>%AppData%\Sublime Text 3\Packages\\</code>, 把下面的User目录移动到Dropbox同步目录中.</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/50.Farbox-Blog/【编辑器】在Windows和OSX之间同步Sublime配置文件/#more" rel="contents">
+            <a class="btn" href="/73.Health-and-Medicine/饮食健康.IBS（肠易激综合征）/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3560,7 +3557,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">447</span>
+                  <span class="site-state-item-count">449</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3582,7 +3579,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">397</span>
+                  <span class="site-state-item-count">398</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
