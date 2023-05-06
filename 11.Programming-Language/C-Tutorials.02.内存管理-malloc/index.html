@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="深入理解mallocvoid *ptr = malloc(N) 之后发生了什么? 从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。 1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。  内核中使用 start_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C Tutorials-02-内存管理（深入理解 malloc）">
+<meta property="og:url" content="https://beefyheisenberg.github.io/11.Programming-Language/C-Tutorials.02.内存管理-malloc/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="深入理解mallocvoid *ptr = malloc(N) 之后发生了什么? 从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。 1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。  内核中使用 start_">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2023-05-06T10:49:36.207Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C Tutorials-02-内存管理（深入理解 malloc）">
+<meta name="twitter:description" content="深入理解mallocvoid *ptr = malloc(N) 之后发生了什么? 从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。 1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。  内核中使用 start_">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/11.Programming-Language/C-Tutorials.02.内存管理-malloc/"/>
+
+
+
+
+
+  <title>C Tutorials-02-内存管理（深入理解 malloc） | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/C-Tutorials.02.内存管理-malloc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">C Tutorials-02-内存管理（深入理解 malloc）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
+                    <span itemprop="name">11.Programming-Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,426
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="深入理解malloc"><a href="#深入理解malloc" class="headerlink" title="深入理解malloc"></a>深入理解malloc</h2><p><code>void *ptr = malloc(N)</code> 之后发生了什么?</p>
+<p>从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。</p>
+<p>1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存<br>2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。</p>
+<blockquote>
+<p>内核中使用 start_brk 标识堆的起始位置，brk 标识堆当前的结束位置。当堆申请新的内存空间时，只需要将 brk 指针增加对应的大小，回收地址时减少对应的大小即可。</p>
+</blockquote>
+<p>这两种方式分配的都是虚拟内存，没有分配物理内存。在第一次访问已分配的虚拟地址空间的时候，发生缺页中断，操作系统负责分配物理内存，然后建立虚拟内存和物理内存之间的映射关系。</p>
+<p>▷ 情况 1：malloc 小于128k 的内存，会调用 <code>do_brk()</code> 进行分配内存，将 brk 指针往高地址推，给进程分配了 N bytes 的线性地址区域(VM)  ，此时系统并没有随即分配页框(RAM), 进程也没有占用 N bytes 的物理内存. // 这也表明了, 你时常在使用 top 的时候 VIRT 值增大, 而 RES 值却不变的原因.</p>
+<blockquote>
+<p>Linux 管理虚存内存的最小单位是页（在内核中用 struct page 结构表示），一内存页大小是 4K。为了换入、换出的方便，物理内存也按大小分成若干个块。由于物理内存中的块空间是用来容纳虚拟页的容器，所以物理内存中的块叫做<strong>页框</strong>。</p>
+</blockquote>
+<p>但是  <code>do_brk()</code>  也不一定每次都上推 brk 指针，如果在 start_brk - brk 地址之间有未使用的内存块（这些内存块可能是被 free 过了，但是页框没有被回收，参考 free），会优先使用这部分内存块；</p>
+<p>当第一次通过指针使用此内存页, 在 RAM 中找不到与之相对应的页框. 发生 <strong>缺页异常</strong>, 系统灵敏地捕获这一异常, 进入缺页异常处理阶段：接下来, 系统会分配一个页框(RAM)映射给它, 我们把这种情况(被访问的页还没有被放在任何一个页框中, 内核分配一新的页框并适当初始化来满足调用请求)称为 Demand Paging.</p>
+<p>过了很长一段时间, 通过 <code>*ptr</code> 再次引用内存第一页. 若系统在 RAM 找不到它映射的页框(可能交换至磁盘了). 也会发生缺页异常, 进入缺页异常处理：系统会分配一页页框(RAM), 找到备份在磁盘的那“页”, 并将它换入内存(其实因为换入操作比较昂贵, 所以预换入多页. 这也表明某些文档说：”vmstat 某时出现不少 si 并不能意味着物理内存不足”).</p>
+<p>通过指针使用到了 N bytes 的第二页. 参见第一次访问 N bytes 第一页, “Demand Paging”</p>
+<p>凡是类似这种会迫使进程去睡眠(很可能是由于当前磁盘数据填充至页框(RAM)所花的时间), 阻塞当前进程的缺页异常处理称为主缺页(major falut), 也称为 <code>大缺页</code>. 相反, 不会阻塞进程的缺页, 称为次缺页(minor fault).</p>
+<blockquote>
+<p>内存页每页大小为 4K，一页大小的内存块在内核中用 struct page 结构体来进行管理，struct page 中封装了每页内存块的状态信息，比如：组织结构，使用信息，统计信息，以及与其他结构的关联映射信息等。</p>
+</blockquote>
+<p>▷ 情况 2：malloc 函数分配内存大于128K（可由 M_MMAP_THRESHOLD 选项调节），那就不是去推 brk 指针了，而是利用 mmap 系统调用，从堆和栈的中间分配一块虚拟内存（也即内存映射区）。内存映射区即 Mapping Area : [[../21.Operating-System/APUE.03b.进程的虚拟内存管理]]</p>
+<p>▷ free 的过程：</p>
+<ul>
+<li>如果是在内存映射区分配的内存（大于 128K），指针对应的虚拟内存和物理内存一起释放；</li>
+<li>如果是在堆区分配的内存（小于 128K），这时情况会变得不同，如果用 <code>malloc</code> 依次申请了 a、b、c 三块内存（这时候 brk 指针指向的是 c 的末端），如果 <code>free(b)</code>，这时候 b 的虚拟内存和物理内存都没有被释放，因为 c 内存块还在使用中所以无法直接移动 brk 指针，这样就产生了<strong>内存碎片</strong>。<br>如果这时又新 malloc 了一块内存，b 还可以重复使用，如果 b 比这次 malloc 分配的区域小，那么原来 b 区域要分裂为两块，此时还是有碎片。<br>在 free 的时候，发现最大地址空闲内存超过128K（可由 M_TRIM_THRESHOLD 选项调节），执行内存紧缩操作（trim）</li>
+</ul>
+<p>因为 Heap 区都是小于128k 的细碎内存块, 上面的链表可以防止反复申请/释放带来的内存碎片, 但 mmap 对应的区域都是大块(大于128K)的内存, 所以不用采用上面的机制.</p>
+<p>▷ 主缺页异常处理过程示意图,参见 <a href="https://www.slideshare.net/guestb7dc8e/handling-page-fault" target="_blank" rel="noopener">Handling Page Fault</a>, 当系统进入缺页异常流程后（do_page_fault），最终会调用 <code>alloc_pages</code> 申请真正的物理内存页 @link 伙伴系统</p>
+<p>@ref:</p>
+<ul>
+<li><a href="https://blog.codinglabs.org/articles/a-malloc-tutorial.html" target="_blank" rel="noopener">CodingLabs - 如何实现一个malloc</a></li>
+<li><a href="https://vinoit.me/2016/05/20/linux-memory-alloc/" target="_blank" rel="noopener">Linux内存分配的原理–malloc/brk/mmap | VZ’s Blog</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/11.Programming-Language/C-Tutorials.01.基础/" rel="next" title="C Tutorials-01-基础">
+                <i class="fa fa-chevron-left"></i> C Tutorials-01-基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/11.Programming-Language/Cpp-Tutorials.01.基础/" rel="prev" title="Cpp Tutorials-01-基础">
+                Cpp Tutorials-01-基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">454</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#深入理解malloc"><span class="nav-text">深入理解malloc</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/11.Programming-Language/C-Tutorials.02.内存管理-malloc/';
+          this.page.identifier = '11.Programming-Language/C-Tutorials.02.内存管理-malloc/';
+          this.page.title = 'C Tutorials-02-内存管理（深入理解 malloc）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

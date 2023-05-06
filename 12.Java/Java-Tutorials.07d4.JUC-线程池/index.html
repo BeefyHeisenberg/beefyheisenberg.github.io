@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="线程池相关类和方法 ExecutorService: Java线程池的接口, 提供了如下方法: void execute(Runnable command) 执行Ruannable类型的任务 Future&amp;lt;?&amp;gt; submit(Runnable task) 可用来提交Callable或Runnable任务，并返回代表此任务的Future对象 Future&amp;lt;T&amp;gt; submit(">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-04-24T12:23:21.100Z">
+<meta property="og:updated_time" content="2023-05-06T10:49:36.384Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Tutorials-07d4-JUC-线程池">
 <meta name="twitter:description" content="线程池相关类和方法 ExecutorService: Java线程池的接口, 提供了如下方法: void execute(Runnable command) 执行Ruannable类型的任务 Future&amp;lt;?&amp;gt; submit(Runnable task) 可用来提交Callable或Runnable任务，并返回代表此任务的Future对象 Future&amp;lt;T&amp;gt; submit(">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,749
+                  2,760
                 </span>
               
 
@@ -440,7 +440,12 @@
 <li><code>newSingleThreadExecutor()</code>: 创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。</li>
 </ul>
 </blockquote>
-<p>所以,<br>使用<code>newCachedThreadPool()</code>的问题在于, 如果没有控制好任务大小(所有线程一直在忙) 线程数会一直增长（<code>maxPoolSize</code> 是<code>Integer.MAX_VALUE</code>). 只有线程空闲的时候才有机会减少线程数.<br>使用<code>newFixedThreadPool()</code>的问题在于, 虽然工作线程数是固定的, 但是等待队列大小是<code>Integer.MAX_VALUE</code>,<br>这两种线程池都有可能因为创建大量线程导致OOM.</p>
+<p>上面提到的几种线程，都有不足：</p>
+<ul>
+<li>使用 <code>newCachedThreadPool()</code> 的问题在于, 如果没有控制好任务大小(所有线程一直在忙) 线程数会一直增长（<code>maxPoolSize</code> 是 <code>Integer.MAX_VALUE</code>). 只有线程空闲的时候才有机会减少线程数.</li>
+<li>使用 <code>newFixedThreadPool()</code> 的问题在于, 虽然工作线程数是固定的, 但是等待队列大小是 <code>Integer.MAX_VALUE</code>,</li>
+</ul>
+<p>这两种线程池都有可能因为创建大量线程导致OOM.</p>
 <h2 id="工作线程"><a href="#工作线程" class="headerlink" title="工作线程"></a>工作线程</h2><p>线程池创建线程时，会将工作线程封装成Worker类，Worker在执行完任务后，还会无限循环获取工作队列里的任务来执行。<br>我们可以从Worker的run方法里看到这点：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 执行当前task或从队列里取出新的task</span></span><br><span class="line">      <span class="keyword">while</span> (task != <span class="keyword">null</span> || (task = getTask()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        beforeExecute(wt, task);</span><br><span class="line">        task.run(); <span class="comment">// 执行Runnable.run()</span></span><br><span class="line">        afterExecute(task, thrown);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      processWorkerExit(w, completedAbruptly);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="优化线程池"><a href="#优化线程池" class="headerlink" title="优化线程池"></a>优化线程池</h1><p>线程池参数的解析和使用建议:</p>
@@ -610,7 +615,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">449</span>
+                  <span class="site-state-item-count">454</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

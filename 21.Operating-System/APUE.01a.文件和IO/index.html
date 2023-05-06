@@ -125,7 +125,9 @@
 <meta property="og:description" content="page cache（页缓冲）@Inbox 缓存 I/O vs 直接 I/O内核将文件的 IO 操作根据是否使用内核缓冲区（页高速缓存 page cache），将文件 IO 分为：Buffered IO 和 Direct IO 两种类型。进程在通过系统调用 open() 打开文件的时候，可以通过将参数 flags 赋值为 O_DIRECT 来指定文件操作为 Direct IO。默认情况下为 Buf">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/operating_system/Linux-DirectIO-vs-BufferIO.png">
-<meta property="og:updated_time" content="2023-04-24T12:23:21.277Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-04-29-1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-04-29-2.png">
+<meta property="og:updated_time" content="2023-05-06T10:49:36.576Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="APUE.01a.文件和IO">
 <meta name="twitter:description" content="page cache（页缓冲）@Inbox 缓存 I/O vs 直接 I/O内核将文件的 IO 操作根据是否使用内核缓冲区（页高速缓存 page cache），将文件 IO 分为：Buffered IO 和 Direct IO 两种类型。进程在通过系统调用 open() 打开文件的时候，可以通过将参数 flags 赋值为 O_DIRECT 来指定文件操作为 Direct IO。默认情况下为 Buf">
@@ -354,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,130
+                  2,660
                 </span>
               
 
@@ -404,6 +406,47 @@
 <p>下图中的 stdio buff 即 <code>fwrite</code> 在用户空间使用的缓冲：<br><img src="/images/operating_system/Linux-DirectIO-vs-BufferIO.png" alt=""></p>
 <p>借助 GDB 即可看到 fflush 时的调用栈:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(gdb) bt</span><br><span class="line"></span><br><span class="line">#0  0x00007ffff72e0840 in **write** () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#1  0x00007ffff726cfb3 in _IO_new_file_write () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#2  0x00007ffff726e41c in __GI__IO_do_write () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#3  0x00007ffff726c810 in **__GI_****_IO_file_sync** () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#4  0x00007ffff72620a2 in **fflush** () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#5  0x00000000004007bd in main () at ggg.cpp:12</span><br></pre></td></tr></table></figure></p>
 <h2 id="mmap"><a href="#mmap" class="headerlink" title="mmap"></a>mmap</h2><p>@Inbox</p>
+<h2 id="文件系统：inode-和-dentry"><a href="#文件系统：inode-和-dentry" class="headerlink" title="文件系统：inode 和 dentry"></a>文件系统：inode 和 dentry</h2><p>➤ Linux 文件系统会为每个文件分配两个数据结构：<strong>索引节点（<em>index node</em>）和目录项（<em>directory entry</em>）</strong>，它们主要用来记录文件的元信息和目录层次结构。</p>
+<ul>
+<li>索引节点，也就是 inode，用来记录文件的元信息，比如 inode 编号、文件大小、访问权限、创建时间、修改时间、<strong>数据在磁盘的位置</strong>等等。索引节点是文件的<strong>唯一</strong>标识，它们之间一一对应，也同样都会被存储在硬盘中，所以<strong>索引节点同样占用磁盘空间</strong>。</li>
+<li>目录项，也就是 <em>dentry</em>，用来记录文件的名字、<strong>索引节点指针</strong>以及与其他目录项的层级关联关系。多个目录项关联起来，就会形成目录结构，但它与索引节点不同的是，<strong>目录项是由内核维护的一个数据结构，不存放于磁盘，而是缓存在内存</strong>。目录项这个数据结构不只是表示目录，也是可以表示文件。</li>
+</ul>
+<p>由于索引节点唯一标识一个文件，而目录项记录着文件的名字，所以目录项和索引节点的关系是多对一，也就是说，一个文件可以有多个别名。比如，硬链接的实现就是多个目录项中的索引节点指向同一个文件。</p>
+<p>➤ 磁盘读写的最小单位是<strong>扇区</strong>，扇区的大小只有 <code>512B</code> 大小，很明显，如果每次读写都以这么小为单位，那这读写的效率会非常低。所以，文件系统把多个扇区组成了一个<strong>逻辑块</strong>，每次读写的最小单位就是逻辑块（数据块），Linux 中的逻辑块大小为 <code>4KB</code>，也就是一次性读写 8 个扇区，这将大大提高了磁盘的读写的效率。</p>
+<p>以上就是索引节点、目录项以及文件数据的关系，下面这个图就很好的展示了它们之间的关系：</p>
+<p><img src="/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-04-29-1.png" alt="../_images/APUE.01a.文件和IO-2023-04-29-1.png"></p>
+<p>索引节点是存储在硬盘上的数据，那么为了加速文件的访问，通常会把索引节点加载到内存中。</p>
+<p>另外，磁盘进行格式化的时候，会被分成三个存储区域，分别是超级块、索引节点区和数据块区。</p>
+<ul>
+<li><strong>超级块</strong>，用来存储文件系统的详细信息，比如块个数、块大小、空闲块等等。</li>
+<li><strong>索引节点区</strong>，用来存储索引节点；</li>
+<li><strong>数据块区</strong>，用来存储文件或目录数据；</li>
+</ul>
+<p>我们不可能把超级块和索引节点区全部加载到内存，这样内存肯定撑不住，所以只有当需要使用的时候，才将其加载进内存，它们加载进内存的时机是不同的：</p>
+<ul>
+<li>超级块：当文件系统挂载时进入内存；</li>
+<li>索引节点区：当文件被访问时进入内存；</li>
+</ul>
+<h2 id="文件系统：块组和块结构"><a href="#文件系统：块组和块结构" class="headerlink" title="文件系统：块组和块结构"></a>文件系统：块组和块结构</h2><p>前面提到 Linux 是用位图的方式管理空闲空间，用户在创建一个新文件时，Linux 内核会通过 inode 的位图找到空闲可用的 inode，并进行分配。要存储数据时，会通过块的位图找到空闲的块，并分配，但仔细计算一下还是有问题的。</p>
+<p>数据块的位图是放在磁盘块里的，假设是放在一个块里，一个块 4K，每位表示一个数据块，共可以表示 <code>4 * 1024 * 8 = 2^15</code> 个空闲块，由于 1 个数据块是 4K 大小，那么最大可以表示的空间为 <code>2^15 * 4 * 1024 = 2^27</code> 个 byte，也就是 128M。</p>
+<p>也就是说按照上面的结构，如果采用「一个块的位图 + 一系列的块」，外加「一个块的 inode 的位图 + 一系列的 inode 的结构」能表示的最大空间也就 128M，这太少了，现在很多文件都比这个大。</p>
+<p>在 Linux 文件系统，把这个结构称为一个<strong>块组</strong>，那么有 N 多的块组，就能够表示 N 大的文件。</p>
+<p>下图给出了 Linux Ext2 整个文件系统的结构和块组的内容，文件系统都由大量「<strong>块组</strong>」组成，在硬盘上相继排布：</p>
+<p><img src="/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-04-29-2.png" alt="../_images/APUE.01a.文件和IO-2023-04-29-2.png"></p>
+<p>最前面的第一个块是引导块，在系统启动时用于启用引导，接着后面就是一个一个连续的块组了，块组的内容如下：</p>
+<ul>
+<li><strong>超级块</strong>，包含的是文件系统的重要信息，比如 inode 总个数、块总个数、每个块组的 inode 个数、每个块组的块个数等等。</li>
+<li><strong>块组描述符</strong>，包含文件系统中各个块组的状态，比如块组中空闲块和 inode 的数目等，每个块组都包含了文件系统中「所有块组的组描述符信息」。</li>
+<li><strong>数据位图</strong>和 <strong>inode 位图</strong>，用于表示对应的数据块或 inode 是空闲的，还是被使用中。</li>
+<li><strong>inode 列表</strong>，<strong>包含了块组中所有的 inode</strong>，inode 用于保存文件系统中与各个文件和目录相关的所有元数据。</li>
+<li><strong>数据块</strong>，包含文件的有用数据。</li>
+</ul>
+<p>你可以会发现每个块组里有很多重复的信息，比如<strong>超级块和块组描述符表，这两个都是全局信息，而且非常的重要</strong>，这么做是有两个原因：</p>
+<ul>
+<li>如果系统崩溃破坏了超级块或块组描述符，有关文件系统结构和内容的所有信息都会丢失。如果有冗余的副本，该信息是可能恢复的。</li>
+<li>通过使文件和管理数据尽可能接近，减少了磁头寻道和旋转，这可以提高文件系统的性能。</li>
+</ul>
+<p>不过，Ext2 的后续版本采用了稀疏技术。该做法是，超级块和块组描述符表不再存储到文件系统的每个块组中，而是只写入到块组 0、块组 1 和其他 ID 可以表示为 3、 5、7 的幂的块组中。</p>
 
       
     </div>
@@ -438,8 +481,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/21.Operating-System/APUE.02a.高级IO/" rel="prev" title="APUE.02a.高级IO">
-                APUE.02a.高级IO <i class="fa fa-chevron-right"></i>
+              <a href="/21.Operating-System/APUE.03a.进程/" rel="prev" title="APUE.03a.进程">
+                APUE.03a.进程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -531,7 +574,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">449</span>
+                  <span class="site-state-item-count">454</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -621,7 +664,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#page-cache（页缓冲）"><span class="nav-text">page cache（页缓冲）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存-I-O-vs-直接-I-O"><span class="nav-text">缓存 I/O vs 直接 I/O</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fwrite-amp-fflush-amp-fsync"><span class="nav-text">fwrite &amp; fflush &amp; fsync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mmap"><span class="nav-text">mmap</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#page-cache（页缓冲）"><span class="nav-text">page cache（页缓冲）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存-I-O-vs-直接-I-O"><span class="nav-text">缓存 I/O vs 直接 I/O</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fwrite-amp-fflush-amp-fsync"><span class="nav-text">fwrite &amp; fflush &amp; fsync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mmap"><span class="nav-text">mmap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统：inode-和-dentry"><span class="nav-text">文件系统：inode 和 dentry</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统：块组和块结构"><span class="nav-text">文件系统：块组和块结构</span></a></li></ol></div>
             
 
           </div>

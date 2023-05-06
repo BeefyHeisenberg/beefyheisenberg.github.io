@@ -117,17 +117,21 @@
 
 
 
-<meta name="description" content="当数据存储在成倍数据大小的地址中时，CPU 会更有效地读取和写入内存。例如，如果数据存储在倍数为 4 的地址中，则会更有效地访问 4 字节整数。如果数据未对齐，则 CPU 需要执行更多地址计算工作来访问数据。 默认情况下，编译器会根据数据的大小对齐数据：char 在 1 字节的边界上对齐，short 在 2 字节的边界上对齐，int、long 和 float 在 4 字节的边界上对齐，double">
+<meta name="description" content="➤ 从硬件角度说明为什么需要内存对齐  内存条上的黑色颗粒，被称为 Chip，每个 Chip 内部又是由 8 个 Bank 组成；  每个 Bank 可以看做是一个矩阵，矩阵上每个元素可以存储1字节（8bit，也就是说包含了8个小电容）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="01.RAM.2.内存对齐">
 <meta property="og:url" content="https://beefyheisenberg.github.io/21.Operating-System/01.RAM.2.内存对齐/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="当数据存储在成倍数据大小的地址中时，CPU 会更有效地读取和写入内存。例如，如果数据存储在倍数为 4 的地址中，则会更有效地访问 4 字节整数。如果数据未对齐，则 CPU 需要执行更多地址计算工作来访问数据。 默认情况下，编译器会根据数据的大小对齐数据：char 在 1 字节的边界上对齐，short 在 2 字节的边界上对齐，int、long 和 float 在 4 字节的边界上对齐，double">
+<meta property="og:description" content="➤ 从硬件角度说明为什么需要内存对齐  内存条上的黑色颗粒，被称为 Chip，每个 Chip 内部又是由 8 个 Bank 组成；  每个 Bank 可以看做是一个矩阵，矩阵上每个元素可以存储1字节（8bit，也就是说包含了8个小电容）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-04-24T12:23:21.268Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/01.RAM.2.%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90-2023-05-05-1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/01.RAM.2.%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90-2023-05-05-2.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/01.RAM.2.%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90-2023-05-05-3.png">
+<meta property="og:updated_time" content="2023-05-06T10:49:36.562Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01.RAM.2.内存对齐">
-<meta name="twitter:description" content="当数据存储在成倍数据大小的地址中时，CPU 会更有效地读取和写入内存。例如，如果数据存储在倍数为 4 的地址中，则会更有效地访问 4 字节整数。如果数据未对齐，则 CPU 需要执行更多地址计算工作来访问数据。 默认情况下，编译器会根据数据的大小对齐数据：char 在 1 字节的边界上对齐，short 在 2 字节的边界上对齐，int、long 和 float 在 4 字节的边界上对齐，double">
+<meta name="twitter:description" content="➤ 从硬件角度说明为什么需要内存对齐  内存条上的黑色颗粒，被称为 Chip，每个 Chip 内部又是由 8 个 Bank 组成；  每个 Bank 可以看做是一个矩阵，矩阵上每个元素可以存储1字节（8bit，也就是说包含了8个小电容）">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/01.RAM.2.%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90-2023-05-05-1.png">
 
 
 
@@ -352,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,133
+                  1,753
                 </span>
               
 
@@ -377,7 +381,21 @@
       
 
       
-        <p>当数据存储在成倍数据大小的地址中时，CPU 会更有效地读取和写入内存。例如，如果数据存储在倍数为 4 的地址中，则会更有效地访问 4 字节整数。如果数据未对齐，则 CPU 需要执行更多地址计算工作来访问数据。</p>
+        <p>➤ 从硬件角度说明为什么需要内存对齐</p>
+<p><img src="/images/01.RAM.2.%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90-2023-05-05-1.png" alt="../_images/01.RAM.2.内存对齐-2023-05-05-1.png"></p>
+<p>内存条上的黑色颗粒，被称为 Chip，每个 Chip 内部又是由 8 个 Bank 组成；</p>
+<p><img src="/images/01.RAM.2.%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90-2023-05-05-2.png" alt="../_images/01.RAM.2.内存对齐-2023-05-05-2.png"></p>
+<p>每个 Bank 可以看做是一个矩阵，矩阵上每个元素可以存储1字节（8bit，也就是说包含了8个小电容）</p>
+<p>对于我们在应用程序中内存中地址连续的8个字节,例如0x0000-0x0007，是从位于 bank 上的呢？直观感觉，应该是在第一个 bank 上吗？其实不是的，程序员视角看起来连续的地址0x0000-0x0007，实际上是位于8个 bank 中的，每一个 bank 只保存了一个字节。在物理上，他们并不连续。下图很好地阐述了实际情况，一个 64 bits 连续的空间，对应到每个 Bank 上的一个元素（8 bits）：</p>
+<p><img src="/images/01.RAM.2.%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90-2023-05-05-3.png" alt="../_images/01.RAM.2.内存对齐-2023-05-05-3.png"></p>
+<p>这样设计的原因是电路工作效率。内存中的8个 bank 是可以并行工作的。上面的例子中读取 8 字节，只需要 1 个周期，如果设计为连续地址存储在一个 bank 里，只能串行进行读取，需要读8次，这样速度会慢很多。</p>
+<p>所以，内存对齐最最底层的原因是内存的 IO 是以8个字节64bit 为单位进行的。对于64位数据宽度的内存，假如 cpu 也是64位的 cpu（现在的计算机基本都是这样的），每次内存 IO 获取数据都是从同行同列的8个 bank 中各自读取一个字节拼起来的。从内存的0地址开始，0-7字节的数据可以一次 IO 读取出来，8-15字节的数据也可以一次读取出来。</p>
+<p>换个例子，假如你指定要获取的是0x0001-0x0008，也是8字节，但是不是0开头的，内存需要怎么工作呢？没有好办法，内存只好先工作一次把0x0000-0x0007取出来，然后再把0x0008-0x0015取出来，把两次的结果都返回给你。CPU和内存IO的硬件限制导致没办法一次跨在两个数据宽度中间进行IO。</p>
+<blockquote>
+<p>事实上，编译和链接器会自动替开发者对齐内存的，尽量帮你保证一个变量不跨列寻址。但是他不能做到十分完美。<br>CPU 缓存的最小单元是 <strong>Cache Line</strong>，size 是 64 字节，可以整除 8 字节（内存的 IO 单位）</p>
+</blockquote>
+<hr>
+<p>当数据存储在成倍数据大小的地址中时，CPU 会更有效地读取和写入内存。例如，如果数据存储在倍数为 4 的地址中，则会更有效地访问 4 字节整数。如果数据未对齐，则 CPU 需要执行更多地址计算工作来访问数据。</p>
 <p>默认情况下，编译器会根据数据的大小对齐数据：char 在 1 字节的边界上对齐，short 在 2 字节的边界上对齐，int、long 和 float 在 4 字节的边界上对齐，double 在 8 字节的边界上对齐，依次类推。</p>
 <p>通常，无需担心对齐方式。编译器通常在基于目标处理器和数据大小的自然边界上对齐数据。在 32 位处理器上，数据最多在 4 字节的边界上对齐，在 64 位处理器上，数据最多在 8 字节的边界对齐。但是，在某些情况下，你可以通过指定数据结构的自定义对齐方式获得性能提升或节约内存。</p>
 <p>另外，通过将常用数据与处理器的缓存行大小对齐，可以提高缓存性能。例如，假设定义了一个大小小于 32 个字节的结构。可能需要使用 32 字节对齐方式，以确保有效缓存结构的所有实例。</p>
@@ -525,7 +543,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">449</span>
+                  <span class="site-state-item-count">454</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

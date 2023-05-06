@@ -131,7 +131,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmm-volatile-barriers_store.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmm-volatile-barriers_load.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmm-cas-and-volatile.png">
-<meta property="og:updated_time" content="2023-04-24T12:23:21.015Z">
+<meta property="og:updated_time" content="2023-05-06T10:49:36.300Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《深入理解Java内存模型》笔记">
 <meta name="twitter:description" content="@ref: 《深入理解Java内存模型》 @tldr:  并发编程模型 并发编程模型要解决的两个问题: 通信和同步 两种并发编程模型的: 基于共享内存, 基于消息   Java内存模型的抽象 Java 内存模型（JMM）的抽象: 主内存和线程的”本地内存” happens-before规则 该规则是 JSR-133 内存模型(JDK 层面定义的)中提出的概念, happens-before 并不是">
@@ -567,7 +567,8 @@
 <li>对比锁释放-获取的内存语义与 volatile 写-读的内存语义，可以看出：锁释放与 volatile 写有相同的内存语义；锁获取与 volatile 读有相同的内存语义。</li>
 </ul>
 <h3 id="Synchronized-内存语义的实现"><a href="#Synchronized-内存语义的实现" class="headerlink" title="Synchronized 内存语义的实现"></a>Synchronized 内存语义的实现</h3><p>Synchronized 提供的 Monitor 机制可以保证：临界区内的代码可以重排序，但不允许临界区内的代码“逸出”到临界区之外。<br>JMM 会在退出 Monitor 和进入 Monitor 这两个关键时间点做一些特别处理，使得线程在这两个时间点具有与顺序一致性模型相同的内存视图。虽然线程在临界区内可以做重排序，但其他线程根本无法“观察”到该线程在临界区内的重排序。这种重排序既提高了执行效率，又没有改变程序的执行结果。</p>
-<h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><p>ReentrantLock 实现的 happens-before 关系和内存语义与 Synchronized 的一样。<br>ReentrantLock 实现的基础是 Volatile 变量和 CAS, 上面提到了 Volatile 变量的读/写可以实现”禁止重排序”的效果, CAS 操作同时具有 Volatile 读和写的禁止重排序效果.<br>( #CAS的原理和实现的内存语义 )一节介绍了 CAS 是如何同时具有 Volatile 变量的读和写的内存语义的.</p>
+<h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><p>ReentrantLock 实现的 happens-before 关系和内存语义与 Synchronized 的一样。<br>ReentrantLock 实现的基础是 Volatile 变量和 CAS, 上面提到了 Volatile 变量的读/写可以实现”禁止重排序”的效果, CAS 操作同时具有 Volatile 读和写的禁止重排序效果.</p>
+<p>「CAS的原理和实现的内存语义」一节介绍了 CAS 是如何同时具有 Volatile 变量的读和写的内存语义的.</p>
 <h3 id="ReentrantLock-内存语义的实现解析"><a href="#ReentrantLock-内存语义的实现解析" class="headerlink" title="ReentrantLock 内存语义的实现解析"></a>ReentrantLock 内存语义的实现解析</h3><p>回顾 ReentrantLock 的实现，<code>lock()</code> 调用栈如下：</p>
 <ol>
 <li>ReentrantLock : lock()</li>
@@ -784,7 +785,7 @@ T 是一个外部类, T 被初始化的时候, 其静态内部类 Inner 不会�
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">449</span>
+                  <span class="site-state-item-count">454</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

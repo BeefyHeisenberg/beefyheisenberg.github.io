@@ -126,7 +126,7 @@
 <meta property="og:description" content="概述Nginx是异步框架的网页服务器，也可以用作反向代理、负载平衡器和HTTP缓存。 与Apache相比Nginx 的编写有一个明确目标就是超越 Apache Web 服务器的性能。Nginx 提供开箱即用的静态文件，使用的内存比 Apache 少得多，每秒可以处理大约四倍于 Apache 的请求。低并发下性能与 Apache 相当，有时候还低于，但是在高并发下 Nginx 能保持低资源低消耗高">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://cdn-1.wp.nginx.com/wp-content/uploads/2015/04/NGINX_logo_rgb-01.png">
-<meta property="og:updated_time" content="2023-04-24T12:23:21.597Z">
+<meta property="og:updated_time" content="2023-05-06T10:49:36.884Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="反向代理-Nginx">
 <meta name="twitter:description" content="概述Nginx是异步框架的网页服务器，也可以用作反向代理、负载平衡器和HTTP缓存。 与Apache相比Nginx 的编写有一个明确目标就是超越 Apache Web 服务器的性能。Nginx 提供开箱即用的静态文件，使用的内存比 Apache 少得多，每秒可以处理大约四倍于 Apache 的请求。低并发下性能与 Apache 相当，有时候还低于，但是在高并发下 Nginx 能保持低资源低消耗高">
@@ -355,7 +355,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,346
+                  2,602
                 </span>
               
 
@@ -400,7 +400,7 @@
 <li>Full Example Configuration | NGINX：<a href="https://www.nginx.com/resources/wiki/start/topics/examples/full/" target="_blank" rel="noopener">https://www.nginx.com/resources/wiki/start/topics/examples/full/</a> </li>
 </ul>
 <p>cat nginx.conf : </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">user       www www;  ## Default: nobody</span><br><span class="line">worker_processes  5;  ## Default: 1</span><br><span class="line">error_log  logs/error.log;</span><br><span class="line">pid        logs/nginx.pid;</span><br><span class="line">worker_rlimit_nofile 8192;</span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    use epoll;</span><br><span class="line">    multi_accept        on;</span><br><span class="line">    worker_connections  10240;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       /etc/nginx/mime.types; # 设定mime类型</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line">    access_log    /var/log/nginx/access.log; # 设定日志格式</span><br><span class="line">    include upstream-servers.conf; # 建议把upstream设置放在单独的文件</span><br><span class="line"></span><br><span class="line">    # 虚拟服务器, 可以有多个server</span><br><span class="line">    server&#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  s1.xxx.com;</span><br><span class="line">        index index.shtml index.html index.htm;</span><br><span class="line">        root /opt/xxx;</span><br><span class="line"></span><br><span class="line">        # upstream定义，下面会引用：</span><br><span class="line">        upstream resin-labs &#123;</span><br><span class="line">            server 192.168.1.100 weight=3;</span><br><span class="line">            server 192.168.1.101;</span><br><span class="line">        &#125;</span><br><span class="line">        upstream resin-admin &#123;</span><br><span class="line">            server 192.168.1.109;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # 一些rewrite：</span><br><span class="line">        rewrite ^/help$ /help/ redirect;</span><br><span class="line"></span><br><span class="line">        # location定义，建议顺序：精确匹配=, 前缀匹配^~, 正则匹配~, 普通匹配</span><br><span class="line">        location ~ ^/api/labs &#123;</span><br><span class="line">            access_log /opt/logs/nginx/labs_stat.log labs_stat;</span><br><span class="line">            # 反向代理到‘resin-labs’的 upstream</span><br><span class="line">            proxy_pass http://resin-labs;</span><br><span class="line">        &#125;</span><br><span class="line">        location /&#123;</span><br><span class="line">            # 反向代理到‘resin-admin’的 upstream</span><br><span class="line">            proxy_pass http://resin-admin;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">user       www www;  ## Default: nobody</span><br><span class="line">worker_processes  5;  ## Default: 1</span><br><span class="line">error_log  logs/error.log;</span><br><span class="line">pid        logs/nginx.pid;</span><br><span class="line">worker_rlimit_nofile 8192;</span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    use epoll;</span><br><span class="line">    multi_accept        on;</span><br><span class="line">    worker_connections  10240;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       /etc/nginx/mime.types; # 设定mime类型</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line">    access_log    /var/log/nginx/access.log; # 设定日志格式</span><br><span class="line">    include upstream-servers.conf; # 建议把upstream设置放在单独的文件</span><br><span class="line"></span><br><span class="line">    # 虚拟服务器, 可以有多个server</span><br><span class="line">    server&#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  s1.xxx.com;</span><br><span class="line">        index index.shtml index.html index.htm;</span><br><span class="line">        root /opt/xxx;</span><br><span class="line"></span><br><span class="line">        # upstream定义，上游服务器设置：</span><br><span class="line">        upstream resin-labs &#123;</span><br><span class="line">            server 192.168.1.100 weight=3;</span><br><span class="line">            server 192.168.1.101;</span><br><span class="line">            # 设置超时时间 proxy_connect_timeout 5s; proxy_read_timeout 10s;</span><br><span class="line">        &#125;</span><br><span class="line">        upstream resin-admin &#123;</span><br><span class="line">            server 192.168.1.109;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # rewrite规则：</span><br><span class="line">        rewrite ^/help$ /help/ redirect;</span><br><span class="line"></span><br><span class="line">        # location规则，建议顺序：精确匹配=, 前缀匹配^~, 正则匹配~, 普通匹配</span><br><span class="line">        location ~ ^/api/labs &#123;</span><br><span class="line">            access_log /opt/logs/nginx/labs_stat.log labs_stat;</span><br><span class="line">            # 反向代理到‘resin-labs’的 upstream</span><br><span class="line">            proxy_pass http://resin-labs;</span><br><span class="line">        &#125;</span><br><span class="line">        location /&#123;</span><br><span class="line">            # 反向代理到‘resin-admin’的 upstream</span><br><span class="line">            proxy_pass http://resin-admin;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="http"><a href="#http" class="headerlink" title="http"></a>http</h2><p>http下的Keepalive设置, 是Nginx与客户端（一般为浏览器、APP等）保持的长连接进行限制管理: </p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">keepalive_timeout  120s 120s; // </span><br><span class="line">keepalive_requests 100; //</span><br></pre></td></tr></table></figure>
 <ul>
@@ -408,6 +408,9 @@
 <li>keepalive_requests：默认100，某个长连接连续处理请求次数限制，超过次数则该长连接被关闭；如果需要释放某个连接占用的内存，必须关闭该链接，内存不大的情况下，不建议开大该配置；在QPS较高的场景，则有必要加大这个参数；官方文档：<a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#keepalive_requests" target="_blank" rel="noopener">Module ngx_http_core_module</a></li>
 </ul>
 <h2 id="http-server"><a href="#http-server" class="headerlink" title="http/server"></a>http/server</h2><p>一个<code>server{}</code> 对应一个port</p>
+<p>server 下的超时：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">send_timeout 30s;</span><br></pre></td></tr></table></figure>
+<p>用于设置 Nginx 在响应请求时的超时时间。如果在设置的时间内 Nginx 还没有将响应完全发送出去，则会返回 “408 Request Time-out” 错误。<br>上面的例子中，如果 Nginx 在响应请求时超过了 30 秒还没有将响应完全发送出去，则会返回 “408 Request Time-out” 错误。</p>
 <h2 id="server-location"><a href="#server-location" class="headerlink" title="server/location"></a>server/location</h2><p>参考 (<a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#location" target="_blank" rel="noopener">http://nginx.org/en/docs/http/ngx_http_core_module.html#location</a>)<br>优先级:</p>
 <ol>
 <li>精确匹配: <code>location = /xxx</code>  URL完全匹配”/xxx”</li>
@@ -426,7 +429,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># URL后面没有`/`</span><br><span class="line"># proxy_pass相对路径, 将会代理到(http://127.0.0.1:8080/api/**)</span><br><span class="line"></span><br><span class="line">location /api &#123;</span><br><span class="line">    proxy_pass http://127.0.0.1:8080  # 结尾没有/, 表示相对路径</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># URL后面有`/`</span><br><span class="line"># 将会跳转到(http://127.0.0.1:8080/**), 没有&quot;/api&quot;</span><br><span class="line"></span><br><span class="line">location /api &#123;</span><br><span class="line">    proxy_pass http://127.0.0.1:8080/ # 结尾有/, 表示绝对路径</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="location-allow-deny"><a href="#location-allow-deny" class="headerlink" title="location/allow,deny"></a>location/allow,deny</h2><p>allow,deny 是 ngx_http_access_module 模块提供的,<br>一般用在 <code>location</code>下, 允许/拒绝某些客户端访问location, 示例:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">allow 192.168.1.0/24</span><br><span class="line">deny all;</span><br></pre></td></tr></table></figure></p>
-<p>子网掩码的表示,  使用CIDR ( 参考 [[../22.Network-Protocol/网络协议-IP]] ) 表示法: </p>
+<p>子网掩码的表示,  使用CIDR ( 参考 [[../22.Network-Protocol/网络协议2-IP]] ) 表示法: </p>
 <ul>
 <li><code>/24</code>: 255.255.255.0</li>
 <li><code>/16</code>: 255.255.0.0</li>
@@ -454,6 +457,8 @@
 <li>url_hash: 后端服务器为缓存时</li>
 </ul>
 <p>参考 <a href="/31.Backend/SystemDesign-负载均衡-Nginx/" title="SystemDesign-负载均衡-Nginx">SystemDesign-负载均衡-Nginx</a></p>
+<h4 id="上游超时"><a href="#上游超时" class="headerlink" title="上游超时"></a>上游超时</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">upstream backend &#123; </span><br><span class="line">    # 设置超时时间 </span><br><span class="line">    proxy_connect_timeout 5s; </span><br><span class="line">    proxy_read_timeout 10s; </span><br><span class="line">    proxy_send_timeout</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的示例中，我们将连接超时时间设置为 5 秒，读取响应超时时间设置为 10 秒。如果在这些时间内没有建立连接或者没有接收到响应，nginx 将返回相应的错误码（504）。</p>
 <h2 id="log-access-error"><a href="#log-access-error" class="headerlink" title="log(access,error)"></a>log(access,error)</h2><p>log 由 <code>ngx_http_log_module</code> 模块支持. </p>
 <p>示例:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># log_format 可以在任何位置定义?</span><br><span class="line">log_format  myLog  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</span><br><span class="line">                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</span><br><span class="line">                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; $host $request_time&apos;;</span><br><span class="line">                      </span><br><span class="line"># 可以出现在 http，server，location，limit_except 作用域</span><br><span class="line">access_log   /opt/logs/nginx/access.log  myLog; ## 使用上面定义的format</span><br><span class="line"></span><br><span class="line"># 可以出现在 main， http, mail, stream, server, location 作用域</span><br><span class="line">error_log   /opt/logs/nginx/error.log notice;</span><br></pre></td></tr></table></figure></p>
 <p>➤ access_log</p>
@@ -476,21 +481,30 @@
 <li>if判断字符串(注意是<code>=</code> 而不是<code>==</code>):<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if ($arg_client_id = &quot;cxsh9byIb&quot;) &#123;</span><br><span class="line">    return 200 &apos;:)&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h1 id="Nginx返回502-503-504"><a href="#Nginx返回502-503-504" class="headerlink" title="Nginx返回502, 503, 504"></a>Nginx返回502, 503, 504</h1><p><strong>502: Bad Gateway</strong><br>作为网关或者代理工作的服务器尝试执行请求时，从上游服务器接收到无效的响应。可能的原因：</p>
+<h1 id="Nginx返回502-503-504"><a href="#Nginx返回502-503-504" class="headerlink" title="Nginx返回502, 503, 504"></a>Nginx返回502, 503, 504</h1><p><strong>502: Bad Gateway</strong></p>
+<blockquote>
+<p>作为网关或者代理工作的服务器尝试执行请求时，从上游服务器接收到无效的响应。</p>
+</blockquote>
+<p>什么是无效的响应？与上游服务器无法连接 or 与上游服务器的连接断开</p>
 <ul>
-<li>高并发, 后端服务线程池耗尽[?]</li>
-<li>后端服务(php-fpm/tomcat..)shutdown</li>
-<li>后端程序执行太久，后端服务终止了此次请求的Worker进程，Nginx发现自己与后端服务断开</li>
+<li>与上游服务器无法连接 =&gt; 上游服务器因连接太多无法处理（例如 req-pre-thread 的服务器，线程池耗尽）</li>
+<li>上游服务器断开了连接 =&gt; 上游服务程序执行太久，上游服务终止了此次请求的 Worker 进程，Nginx 发现自己与上游服务断开</li>
 </ul>
-<p><strong>503: Service Unavailable</strong><br>由于临时的服务器维护或者过载，服务器当前无法处理请求。这个状况是临时的，并且将在一段时间以后恢复。如果能够预计延迟时间，那么响应中可以包含一个 Retry-After 头用以标明这个延迟时间。如果没有给出这个 Retry-After 信息，那么客户端应当以处理500响应的方式处理它。可能的原因：</p>
+<p><strong>503: Service Unavailable</strong></p>
+<blockquote>
+<p>由于临时的服务器维护或者过载，服务器当前无法处理请求。这个状况是临时的，并且将在一段时间以后恢复。如果能够预计延迟时间，那么响应中可以包含一个 Retry-After 头用以标明这个延迟时间。如果没有给出这个 Retry-After 信息，那么客户端应当以处理500响应的方式处理它。</p>
+</blockquote>
+<p>可能的原因：</p>
 <ul>
-<li>后端服务器当前因为过载无法处理请求，主动拒绝响应，比较少见到</li>
+<li>上游服务器当前因为过载无法处理请求，主动拒绝响应，需要上游服务具备返回“Retry-After”的机制，比较少见到</li>
 </ul>
-<p><strong>504: Gateway Timeoua</strong><br>作为网关或者代理工作的服务器尝试执行请求时，未能及时从后端服务器或者辅助服务器（例如DNS）收到响应。可能的原因：</p>
+<p><strong>504: Gateway Timeoua</strong></p>
+<blockquote>
+<p>作为网关或者代理工作的服务器尝试执行请求时，未能及时从上游服务器或者辅助服务器（例如 DNS）收到响应。</p>
+</blockquote>
+<p>可能的原因：</p>
 <ul>
-<li>nginx发起请求，在最大等待时间内没有收到返回</li>
-<li>nginx的timeout是否设置的太短</li>
-<li>查询DNS超时也会504</li>
+<li>与上游服务的 connect time、send timeout、read time ，在最大等待时间内没有收到返回</li>
 </ul>
 <blockquote>
 <p>参考 <a href="https://juejin.im/entry/589148f92f301e00690e863d" target="_blank" rel="noopener">http 502 和 504 的区别 - 后端 - 掘金</a> @ref</p>
@@ -633,7 +647,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">449</span>
+                  <span class="site-state-item-count">454</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -723,7 +737,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#与Apache相比"><span class="nav-text">与Apache相比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令行"><span class="nav-text">命令行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx-conf配置"><span class="nav-text">nginx.conf配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example"><span class="nav-text">example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http"><span class="nav-text">http</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http-server"><span class="nav-text">http/server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-location"><span class="nav-text">server/location</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#location-proxy-pass"><span class="nav-text">location/proxy_pass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#location-allow-deny"><span class="nav-text">location/allow,deny</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-rewrite"><span class="nav-text">server/rewrite</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rewrite的flag标记"><span class="nav-text">rewrite的flag标记</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-upstream"><span class="nav-text">server/upstream</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#负载均衡方式"><span class="nav-text">负载均衡方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#log-access-error"><span class="nav-text">log(access,error)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#include"><span class="nav-text">include</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#module"><span class="nav-text">module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需要注意的"><span class="nav-text">需要注意的</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx返回502-503-504"><span class="nav-text">Nginx返回502, 503, 504</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码解读"><span class="nav-text">代码解读</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#与Apache相比"><span class="nav-text">与Apache相比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令行"><span class="nav-text">命令行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx-conf配置"><span class="nav-text">nginx.conf配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example"><span class="nav-text">example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http"><span class="nav-text">http</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http-server"><span class="nav-text">http/server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-location"><span class="nav-text">server/location</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#location-proxy-pass"><span class="nav-text">location/proxy_pass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#location-allow-deny"><span class="nav-text">location/allow,deny</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-rewrite"><span class="nav-text">server/rewrite</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rewrite的flag标记"><span class="nav-text">rewrite的flag标记</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-upstream"><span class="nav-text">server/upstream</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#负载均衡方式"><span class="nav-text">负载均衡方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#上游超时"><span class="nav-text">上游超时</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#log-access-error"><span class="nav-text">log(access,error)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#include"><span class="nav-text">include</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#module"><span class="nav-text">module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需要注意的"><span class="nav-text">需要注意的</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx返回502-503-504"><span class="nav-text">Nginx返回502, 503, 504</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码解读"><span class="nav-text">代码解读</span></a></li></ol></div>
             
 
           </div>

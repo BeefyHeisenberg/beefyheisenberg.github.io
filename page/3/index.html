@@ -1349,7 +1349,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5,116
+                  6,121
                 </span>
               
 
@@ -1444,7 +1444,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/C-Tutorials.03.make-and-cmake/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/C-Tutorials.02.内存管理-malloc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -1463,7 +1463,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/11.Programming-Language/C-Tutorials.03.make-and-cmake/" itemprop="url">C Tutorials-03-make and cmake</a></h1>
+                <a class="post-title-link" href="/11.Programming-Language/C-Tutorials.02.内存管理-malloc/" itemprop="url">C Tutorials-02-内存管理（深入理解 malloc）</a></h1>
         
 
         <div class="post-meta">
@@ -1517,7 +1517,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  145
+                  1,426
                 </span>
               
 
@@ -1543,182 +1543,15 @@
 
       
         
-          <h2 id="make-cmake-qmake-区别"><a href="#make-cmake-qmake-区别" class="headerlink" title="make/cmake/qmake 区别"></a>make/cmake/qmake 区别</h2><p>@ref: <a href="https://www.zhihu.com/question/27455963" target="_blank" rel="noopener">make makefile cmake qmake都是什么，有什么区别？ - 知乎</a></p>
-<h2 id="make-命令常用参数"><a href="#make-命令常用参数" class="headerlink" title="make 命令常用参数"></a>make 命令常用参数</h2><p>格式：<code>make  [ -f makefile ] [ options ] ... [ targets ] ...</code></p>
-<ul>
-<li><code>-C DIR，--directory=DIR</code>: 在读取 Makefile 之前，进入到目录 DIR，然后执行 make。当存在多个 “-C” 选项的时候，make 的最终工作目录是第一个目录的相对路径</li>
-<li><code>-e，--enveronment-overrides</code>: 使用环境变量定义覆盖 Makefile 中的同名变量定义。</li>
-<li><code>-f=FILE，--file=FILE，-makefile=FILE</code>: 指定文件 “FILE” 为 make 执行的 Makefile 文件</li>
-</ul>
+          <h2 id="深入理解malloc"><a href="#深入理解malloc" class="headerlink" title="深入理解malloc"></a>深入理解malloc</h2><p><code>void *ptr = malloc(N)</code> 之后发生了什么?</p>
+<p>从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。</p>
+<p>1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存<br>2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。</p>
+<blockquote>
+<p>内核中使用 start_brk 标识堆的起始位置，brk 标识堆当前的结束位置。当堆申请新的内存空间时，只需要将 brk 指针增加对应的大小，回收地址时减少对应的大小即可。</p>
+</blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/C-Tutorials.03.make-and-cmake/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/C-Tutorials.04.C和CPP标准/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/11.Programming-Language/C-Tutorials.04.C和CPP标准/" itemprop="url">C Tutorials-04-C语言 and CPP标准</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
-                    <span itemprop="name">11.Programming-Language</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  845
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="C语言标准"><a href="#C语言标准" class="headerlink" title="C语言标准"></a>C语言标准</h1><ul>
-<li>C89: 1989 年，C语言由美国国家标准协会（ANSI）进行了标准化，这个版本的语言经常被称作”ANSI C”，或有时称为”C89”</li>
-<li>C99: 在2000年三月，ANSI采纳了ISO/IEC 9899:1999标准。这个标准通常指C99。<br>新特性: 包括内联函数（inline functions）、可变长度的数组（variable-length array）、灵活的数组成员（即柔性数组）、复合字面量、指定成员的初始化器、对IEEE754浮点数的改进、支持不定参数个数的宏定义，在数据类型上还增加了 long long int 以及复数类型。</li>
-<li>C11: 在2011年12月，ANSI采纳了ISO/IEC 9899:2011标准。这个标准通常即C11。<br>新特性: 字节对齐说明符(alignas)、泛型机制（generic selection）、对多线程的支持、静态断言、原子操作以及对 Unicode 的支持</li>
-<li>C18: 在2018年6月，ANSI采纳了ISO/IEC 9899:2018标准，这个标准通常即C18(有时被称为C17)，它是C语言的现行标准。</li>
-</ul>
-<h1 id="C-标准"><a href="#C-标准" class="headerlink" title="C++标准"></a>C++标准</h1><ul>
-<li>C++98: C++98是第一个C++标准。它分为两个部分：核心语言和C++标准程序库；后者包含了大部分标准模板库和C标准程序库的稍加修改版本。存在许多不属于标准部分的C++程序库，且使用外部链接，程序库甚至可以用C撰写。</li>
-<li>C++03:</li>
-<li>C++11:</li>
-<li>C++14</li>
-<li>C++17:</li>
-</ul>
-<h1 id="C-和-C-的异同"><a href="#C-和-C-的异同" class="headerlink" title="C 和 C++的异同"></a>C 和 C++的异同</h1>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/C-Tutorials.04.C和CPP标准/#more" rel="contents">
+            <a class="btn" href="/11.Programming-Language/C-Tutorials.02.内存管理-malloc/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1842,7 +1675,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,932
+                  4,781
                 </span>
               
 
@@ -1932,7 +1765,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/Cpp-Tutorials.01b.内存管理/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/Cpp-Tutorials.02a.内存管理-new/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -1951,7 +1784,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/11.Programming-Language/Cpp-Tutorials.01b.内存管理/" itemprop="url">Cpp Tutorials-01b-内存管理</a></h1>
+                <a class="post-title-link" href="/11.Programming-Language/Cpp-Tutorials.02a.内存管理-new/" itemprop="url">Cpp Tutorials-02a-内存管理（深入理解 new）</a></h1>
         
 
         <div class="post-meta">
@@ -2005,7 +1838,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,760
+                  1,658
                 </span>
               
 
@@ -2031,15 +1864,174 @@
 
       
         
-          <h2 id="深入理解malloc"><a href="#深入理解malloc" class="headerlink" title="深入理解malloc"></a>深入理解malloc</h2><p><code>void *ptr = malloc(N)</code> 之后发生了什么?</p>
-<p>从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。</p>
-<p>1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存<br>2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。</p>
+          <h2 id="使用-new-amp-delete"><a href="#使用-new-amp-delete" class="headerlink" title="使用 new &amp; delete"></a>使用 new &amp; delete</h2><p>@tldr: C++中的<code>new</code>, <code>operator new</code>, <code>placement new</code>:</p>
 <blockquote>
-<p>内核中使用 start_brk 标识堆的起始位置，brk 标识堆当前的结束位置。当堆申请新的内存空间时，只需要将 brk 指针增加对应的大小，回收地址时减少对应的大小即可。</p>
+<p>cplusplus.com :<br><code>operator new</code> can be called explicitly as a regular function, but in C++, new is an operator with a very specific behavior: An expression with the new operator, first calls function operator new (i.e., this function) with the size of its type specifier as first argument, and if this is successful, it then automatically initializes or constructs the object (if needed). Finally, the expression evaluates as a pointer to the appropriate type.</p>
 </blockquote>
+<p>new(new operator) 作用是申请内存和执行构造函数 <code>A *a = new A();</code>，分两步：</p>
+<ol>
+<li>operator new 只负责申请内存</li>
+<li>placement new 调用构造函数</li>
+</ol>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/11.Programming-Language/Cpp-Tutorials.01b.内存管理/#more" rel="contents">
+            <a class="btn" href="/11.Programming-Language/Cpp-Tutorials.02a.内存管理-new/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/Cpp-Tutorials.02b.智能指针/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/11.Programming-Language/Cpp-Tutorials.02b.智能指针/" itemprop="url">Cpp Tutorials-02b-智能指针</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
+                    <span itemprop="name">11.Programming-Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  428
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>C++11 中推出了三种智能指针，unique_ptr、shared_ptr 和 weak_ptr，同时也将 auto_ptr 置为废弃 (deprecated)。</p>
+<h2 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h2><p>它是一个独占型的智能指针，不允许其他的智能指针共享其内部的指针，更像原生的指针（但更为安全，能够自己释放内存）。<strong>不允许赋值和拷贝操作，只能够移动</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">std::unique_ptr&lt;int&gt; ptr1(new int(0)); </span><br><span class="line">std::unique_ptr&lt;int&gt; ptr2 = ptr1; // 错误，不能复制 std::unique_ptr&lt;int&gt; ptr3 = std::move(ptr1); // 可以移动</span><br></pre></td></tr></table></figure>
+<p>在 C++14 中，对于 <code>std::unique_ptr</code> 引入了 <code>std::make_unique</code> 方法进行初始化：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/11.Programming-Language/Cpp-Tutorials.02b.智能指针/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2201,6 +2193,172 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/11.Programming-Language/Cpp-Tutorials.04.Debug-and-Perf/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/C和CPP标准/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/11.Programming-Language/C和CPP标准/" itemprop="url">C语言 & C++ 标准</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
+                    <span itemprop="name">11.Programming-Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  845
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="C语言标准"><a href="#C语言标准" class="headerlink" title="C语言标准"></a>C语言标准</h1><ul>
+<li>C89: 1989 年，C语言由美国国家标准协会（ANSI）进行了标准化，这个版本的语言经常被称作”ANSI C”，或有时称为”C89”</li>
+<li>C99: 在2000年三月，ANSI采纳了ISO/IEC 9899:1999标准。这个标准通常指C99。<br>新特性: 包括内联函数（inline functions）、可变长度的数组（variable-length array）、灵活的数组成员（即柔性数组）、复合字面量、指定成员的初始化器、对IEEE754浮点数的改进、支持不定参数个数的宏定义，在数据类型上还增加了 long long int 以及复数类型。</li>
+<li>C11: 在2011年12月，ANSI采纳了ISO/IEC 9899:2011标准。这个标准通常即C11。<br>新特性: 字节对齐说明符(alignas)、泛型机制（generic selection）、对多线程的支持、静态断言、原子操作以及对 Unicode 的支持</li>
+<li>C18: 在2018年6月，ANSI采纳了ISO/IEC 9899:2018标准，这个标准通常即C18(有时被称为C17)，它是C语言的现行标准。</li>
+</ul>
+<h1 id="C-标准"><a href="#C-标准" class="headerlink" title="C++标准"></a>C++标准</h1><ul>
+<li>C++98: C++98是第一个C++标准。它分为两个部分：核心语言和C++标准程序库；后者包含了大部分标准模板库和C标准程序库的稍加修改版本。存在许多不属于标准部分的C++程序库，且使用外部链接，程序库甚至可以用C撰写。</li>
+<li>C++03:</li>
+<li>C++11:</li>
+<li>C++14</li>
+<li>C++17:</li>
+</ul>
+<h1 id="C-和-C-的异同"><a href="#C-和-C-的异同" class="headerlink" title="C 和 C++的异同"></a>C 和 C++的异同</h1>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/11.Programming-Language/C和CPP标准/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2597,6 +2755,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/11.Programming-Language/make-and-cmake/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/11.Programming-Language/make-and-cmake/" itemprop="url">make and cmake</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/11-Programming-Language/" itemprop="url" rel="index">
+                    <span itemprop="name">11.Programming-Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  352
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="make-cmake-qmake-区别"><a href="#make-cmake-qmake-区别" class="headerlink" title="make/cmake/qmake 区别"></a>make/cmake/qmake 区别</h2><p><strong>GNU Make</strong>：<a href="https://www.gnu.org/software/make/" target="_blank" rel="noopener">Make - GNU Project - Free Software Foundation</a><br>GNU Make is a tool which controls the generation of executables and other non-source files of a program from the program’s source files.</p>
+<p>Make gets its knowledge of how to build your program from a file called the <strong>makefile</strong>, which lists each of the non-source files and how to compute it from other files. When you write a program, you should write a makefile for it, so that it is possible to use Make to build and install the program.</p>
+<p><strong>CMake</strong>：<a href="https://cmake.org/" target="_blank" rel="noopener">CMake</a><br>CMake is an open-source, cross-platform family of tools designed to build, test and package software. CMake is used to control the software compilation process using simple platform and compiler independent configuration files, and generate native makefiles.<br>cmake是跨平台项目管理工具，它用比Makefile更友好的语法来组织项目，cmake 根据 CMakeLists.txt 来生成 makefile</p>
+<p><strong>qmake</strong>：<a href="https://doc.qt.io/qt-6/qmake-manual.html" target="_blank" rel="noopener">qmake Manual</a><br>The qmake tool helps simplify the build process for development projects across different platforms. It automates the generation of Makefiles so that only a few lines of information are needed to create each Makefile. You can use qmake for any software project, whether it is written with Qt or not.</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/11.Programming-Language/make-and-cmake/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.01.JDK/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2670,7 +2984,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,176
+                  1,766
                 </span>
               
 
@@ -3251,333 +3565,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.02d.JVM分析工具/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Advanced-Java.02d.JVM分析工具/" itemprop="url">Advanced Java-02d-JVM分析工具</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,906
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="JDK提供的命令行"><a href="#JDK提供的命令行" class="headerlink" title="JDK提供的命令行"></a>JDK提供的命令行</h2><blockquote>
-<p>以下每个工具都可以 <code>cmd --help</code>的方式查看说明</p>
-</blockquote>
-<h3 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h3><p>查看当前用户启动jvm进程</p>
-<ul>
-<li><code>jps -m</code>: 显示传递给Main方法的参数</li>
-<li><code>jps -l</code>: 显示Java进程的完整包名</li>
-<li><code>jps -v</code>: 显示JVM的参数</li>
-<li><code>jps -lvm</code></li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Advanced-Java.02d.JVM分析工具/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a.GC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Advanced-Java.03a.GC/" itemprop="url">Advanced Java-03a-GC</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  7,200
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Minor-Major-Full-GC"><a href="#Minor-Major-Full-GC" class="headerlink" title="Minor/Major/Full GC"></a>Minor/Major/Full GC</h1><p>我们把新生代 / 老年代 / 全部堆空间(包括新生代,老年代)对应的 GC, 分别称为 Minor GC / Major GC / Full GC,<br>三个不同内存区域的 GC 细节如下:</p>
-<p><strong>① Minor GC</strong>: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 <strong>Minor GC</strong>，或 <strong>Young GC</strong></p>
-<ul>
-<li>触发条件: 无法为一个新的对象分配空间时，比如 <em>Eden 区满了</em> 。所以分配率越高，越频繁执行 Minor GC。</li>
-<li>STW: Minor GC 会 Stop the World，如果 Eden 区大部分对象都要被 GC（这也是正常情形）Minor GC 耗时可以基本不记，但是如果 Eden 区大部分对象都不符合 GC 条件，暂停时间将会长很多。</li>
-<li>GC 过程: 一般使用 Copy GC, 具体步骤如下<ul>
-<li>用 new 或者 newInstance 等方式创建的对象默认都是存放在 Eden 区，Eden 满了触发 Minor GC，把存活的对象放入 S 0，并清空 Eden；</li>
-<li>第二次 Eden 满了，会把 Eden 和 S 0 的存活对象放入 S 1，并清空 Eden 和 S0区；</li>
-<li>在几次 Minor GC 后, 有些对象在 S 0/S 1 之间来回拷贝几次, 将会进入老年代(Tenured), 所以 young GC 后 OldGen 的占用量通常会有所升高；</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/java/jvm-gc-minor-gc.png" alt></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Advanced-Java.03a.GC/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3632,7 +3619,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">449</span>
+                  <span class="site-state-item-count">454</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

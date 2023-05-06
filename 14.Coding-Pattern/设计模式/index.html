@@ -133,7 +133,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/design-patterns-decorator.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/design-patterns-proxy.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/design-patterns-observer.png">
-<meta property="og:updated_time" content="2023-04-24T12:23:21.210Z">
+<meta property="og:updated_time" content="2023-05-06T10:49:36.498Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式">
 <meta name="twitter:description" content="索引: 设计模式：可复用面向对象软件的基础  《设计模式：可复用面向对象软件的基础》（Design Patterns: Elements of Reusable Object-Oriented Software）是软件工程领域有关设计模式的一本书，提出和总结了对于一些常见软件设计问题的标准解决方案，称为软件设计模式。该书作者是埃里希·伽玛（Erich Gamma）、Richard Helm、Ral">
@@ -362,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,507
+                  2,722
                 </span>
               
 
@@ -391,12 +391,6 @@
 <blockquote>
 <p>《设计模式：可复用面向对象软件的基础》（Design Patterns: Elements of Reusable Object-Oriented Software）是软件工程领域有关设计模式的一本书，提出和总结了对于一些常见软件设计问题的标准解决方案，称为软件设计模式。该书作者是埃里希·伽玛（Erich Gamma）、Richard Helm、Ralph Johnson和John Vlissides，后以“四人帮”（Gang of Four，GoF）[1]著称，书中的设计模式也被成为“四人帮设计模式”（Gang of Four design patterns）</p>
 </blockquote>
-<h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h1><ul>
-<li><a href="https://www.runoob.com/design-pattern/command-pattern.html" target="_blank" rel="noopener">命令模式</a></li>
-<li><a href="https://www.runoob.com/design-pattern/intercepting-filter-pattern.html" target="_blank" rel="noopener">拦截过滤器模式</a></li>
-<li><a href="https://www.runoob.com/design-pattern/null-object-pattern.html" target="_blank" rel="noopener">空对象模式</a></li>
-<li><a href="https://www.runoob.com/design-pattern/prototype-pattern.html" target="_blank" rel="noopener">原型模式</a></li>
-</ul>
 <p><img src="/images/wikipedia-design-patterns.png" alt="wikipedia-design-patterns"></p>
 <h1 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h1><h2 id="简单工厂"><a href="#简单工厂" class="headerlink" title="简单工厂"></a>简单工厂</h2><ul>
 <li>工厂类实现工厂方法, 根据传入参数的不同, 返回不同的产品实例(可以返回产品的抽象类)</li>
@@ -418,7 +412,7 @@
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">AbstractFactory factory1 = FactoryProducer.getFactory(type1)</span><br><span class="line">AbstractFactory factory2 = FactoryProducer.getFactory(type2)</span><br><span class="line"></span><br><span class="line">AbstractProduct product1 = factory1.get()</span><br></pre></td></tr></table></figure>
-<p>【图】抽象工厂示例，用户代码从main()函数开始<br><img src="/images/design-patterns-abstract-factory.png" alt="../_images/design-patterns-abstract-factory.png"></p>
+<p>【图】抽象工厂示例，用户代码从main()函数开始，通过 FactoryProducer 获取抽象工厂（AbstractFactory）<br><img src="/images/design-patterns-abstract-factory.png" alt="../_images/design-patterns-abstract-factory.png"></p>
 <h2 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h2><ul>
 <li>建造者模式（Builder Pattern）使用多个简单的对象一步一步构建成一个复杂的对象。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。</li>
 <li>抽象Builder, 提供为产品设定各个属性的的抽象方法, 以及创建产品的抽象方法</li>
@@ -438,22 +432,28 @@
 <li>Lazy式, <code>getInstance()</code>使用DLC(double lock check)</li>
 <li>非Lazy式, 在static区进行实例化 // 不需要lazy loading时的首选</li>
 <li>Lazy式, 嵌套类(Singleton类里加一个static类) // 需要lazy loading时的首选</li>
-<li>枚举 // </li>
+<li>枚举 //</li>
 </ol>
 </li>
 </ul>
+<h2 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h2><p>原型模式（Prototype）是一种创建型设计模式，使你能够复制已有对象，而又无需使代码依赖它们所属的类。原型模式主要用于对象的复制，例如 clone()</p>
+<ul>
+<li>如果业务对象需要“可 clone”，一般需继承一个表示是 “cloneable” 的 interface ；</li>
+<li>业务对象实现 clone()</li>
+</ul>
 <h1 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h1><h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><ul>
 <li>适配器模式（Adapter Pattern）</li>
-<li>用户代码里调用 methodA(), 但是实现类()没有提供 methodA()却提供了 methodB(), 这时候需要 adaptor类对实现类进行包装, 并提供 methodA()</li>
-<li>实现: adaptor类中, 持有一个实现类的引用 // 注意adaptor和实现类非继承, 而是关联关系</li>
+<li>用户代码里调用 methodA(), 但是<strong>实现类</strong>没有提供 methodA() 却提供了 methodB(), 这时候需要 adaptor 类对实现类进行包装, 并提供 methodA()</li>
+<li>实现: adaptor类中, 持有一个实现类的引用 // 注意adaptor和实现类<strong>非继承关系, 而是关联关系</strong></li>
 </ul>
 <p>【图】用户代码（Client 类）通过 Adaptor 的实例，最终调用 methodB()<br><img src="/images/design-patterns-adapter.png" alt="design-patterns-adapter"></p>
-<h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><ul>
+<h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><p><strong>桥接模式</strong>是<a href="https://zh.wikipedia.org/wiki/%E8%BB%9F%E4%BB%B6%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F" title="软件设计模式" target="_blank" rel="noopener">软件设计模式</a>中最复杂的模式之一，它把事物对象和其具体行为、具体特征分离开来，使它们可以各自独立的变化。事物对象仅是一个抽象的概念。如“圆形”、“三角形”归于抽象的“形状”之下，而“画圆”、“画三角”归于实现行为的“画图”类之下，然后由“形状”调用“画图”。</p>
+<ul>
 <li>桥接（Bridge）模式把抽象事物/抽象行为分离开, 抽象事物调用抽象行为(的方法)</li>
 <li>桥接是用于把抽象化与实现化解耦，使得二者可以独立变化。这种类型的设计模式属于结构型模式，它通过提供抽象化和实现化之间的桥接结构，来实现二者的解耦。</li>
 <li>抽象事物(Abstraction)的继承类仍是抽象类(RedefinedAbstraction)</li>
 <li>抽象行为(Implementor)</li>
-<li>抽象事物(Abstraction)像桥一样把 RedefinedAbstraction类和 Implementor类连接在一起</li>
+<li>抽象事物(Abstraction)像桥一样把 RedefinedAbstraction 类和 Implementor 类连接在一起</li>
 <li>实现:<ul>
 <li>抽象事物(Abstraction) 持有抽象行为(Implementor)的引用</li>
 <li>RedefinedAbstraction extends Abstraction //实现具体事物</li>
@@ -476,16 +476,12 @@
 <p><img src="/images/design-patterns-decorator.png" alt="design-patterns-decorator"></p>
 <h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><ul>
 <li>用户代码不调用具体的功能类, 而是通过调用代理类间接调用这些功能类 (用户代码往往调用的是代理类的抽象接口, 代理也不直接调用功能类, 而是调用功能类的接口)</li>
-<li>代理类可以调用多种功能类, 并且可以在代理类中, 增加一些功能</li>
+<li>代理类可以调用多种功能类, 并且可以在代理类中, 增加一些功能 @link [[../12.Java/Java-Tutorials.14.代理]]</li>
 <li>实现:<ul>
 <li>被代理的类(RealSubject), 需要有一个接口(Subject)</li>
 <li>创建Proxy类, Proxy类也实现该接口(Subject)</li>
-<li>用户(client) 不直接调用 <code>realSubject.DoAction()</code>, 而是调用 Proxy的<code>DoAction()</code>, 间接调用 <code>realSubject.DoAction()</code></li>
-<li>可以在代理类 <code>Proxy::DoAction()</code>中做一些额外的操作: e.g.<ul>
-<li>实现引用计数</li>
-<li>Java的AOP(面向切面编程)</li>
-</ul>
-</li>
+<li>用户(client) 不直接调用 <code>realSubject.DoAction()</code>, 调用的是接口（Subject）的方法，然后是 Proxy的<code>DoAction()</code>, 最终调用 <code>realSubject.DoAction()</code></li>
+<li>可以在代理类 <code>Proxy::DoAction()</code>中做一些额外的操作: e.g. 实现引用计数 &amp; Java的AOP(面向切面编程)</li>
 </ul>
 </li>
 </ul>
@@ -511,36 +507,34 @@
 </ul>
 <p><img src="/images/design-patterns-observer.png" alt="../_images/design-patterns-observer.png"></p>
 <h1 id="JDK里的设计模式-zz"><a href="#JDK里的设计模式-zz" class="headerlink" title="JDK里的设计模式(zz)"></a>JDK里的设计模式(zz)</h1><ul>
-<li>创建模式:<ul>
-<li>抽象工厂模式：抽象工厂模式提供了一个协议来生成一系列的相关或者独立的对象，而不用指定具体对象的类型，如 <code>java.util.Calendar#getInstance()</code>。</li>
-<li>建造模式(Builder)：定义了一个新的类来构建另一个类的实例，以简化复杂对象的创建，如：<code>java.lang.StringBuilder#append()</code>。</li>
-<li>工厂方法：一个返回具体对象的方法，而不是多个，如 <code>java.lang.Object#toString()</code>、<code>java.lang.Class#newInstance()</code>。</li>
-<li>原型模式：使得类的实例能够生成自身的拷贝、如：<code>java.lang.Object#clone()</code>。</li>
-<li>单例模式：全局只有一个实例，如 <code>java.lang.Runtime#getRuntime()</code>。</li>
+<li>创建模式:<pre><code>- 抽象工厂模式：抽象工厂模式提供了一个协议来生成一系列的相关或者独立的对象，而不用指定具体对象的类型，如 `java.util.Calendar#getInstance()`。
+- 建造模式(Builder)：定义了一个新的类来构建另一个类的实例，以简化复杂对象的创建，如：`java.lang.StringBuilder#append()`。
+- 工厂方法：一个返回具体对象的方法，而不是多个，如 `java.lang.Object#toString()`、`java.lang.Class#newInstance()`。
+- 原型模式：使得类的实例能够生成自身的拷贝、如：`java.lang.Object#clone()`。
+- 单例模式：全局只有一个实例，如 `java.lang.Runtime#getRuntime()`。
+</code></pre></li>
+<li>结构型模式：<pre><code>- 适配器：用来把一个接口转化成另一个接口，如 `java.util.Arrays#asList()`。
+- 桥接模式：这个模式将抽象和抽象操作的实现进行了解耦，这样使得抽象和实现可以独立地变化，如JDBC；
+- 组合模式：使得客户端看来单个对象和对象的组合是同等的。换句话说，某个类型的方法同时也接受自身类型作为参数，如 `Map.putAll`，`List.addAll`、`Set.addAll`。
+- 装饰者模式：动态的给一个对象附加额外的功能，这也是子类的一种替代方式，如 `java.util.Collections#checkedList|Map|Set|SortedSet|SortedMap`。
+- 享元模式：使用缓存来加速大量小对象的访问时间，如 valueOf(int)。
+- 代理模式：代理模式是用一个简单的对象来代替一个复杂的或者创建耗时的对象，如 `java.lang.reflect.Proxy`
+</code></pre></li>
+<li>行为模式：<pre><code>- 命令模式：将操作封装到对象内，以便存储，传递和返回，如：`java.lang.Runnable`。
+- 解释器模式：定义了一个语言的语法，然后解析相应语法的语句，如，`java.text.Format`，`java.text.Normalizer`。
+- 迭代器模式：提供一个一致的方法来顺序访问集合中的对象，如 `java.util.Iterator`。
+- 中介者模式：通过使用一个中间对象来进行消息分发以及减少类之间的直接依赖，`java.lang.reflect.Method#invoke()`。
+- 观察者模式：它使得一个对象可以灵活的将消息发送给感兴趣的对象，如 `java.util.EventListener`。
+- 责任链模式：通过把请求从一个对象传递到链条中下一个对象的方式，直到请求被处理完毕，以实现对象间的解耦。如 `javax.servlet.Filter#doFilter()`。
+- 空对象模式：如 `java.util.Collections#emptyList()`。
+- 模板方法模式：让子类可以重写方法的一部分，而不是整个重写，如 `java.util.Collections#sort()`。
+</code></pre></li>
 </ul>
-</li>
-<li>结构型模式：<ul>
-<li>适配器：用来把一个接口转化成另一个接口，如 <code>java.util.Arrays#asList()</code>。</li>
-<li>桥接模式：这个模式将抽象和抽象操作的实现进行了解耦，这样使得抽象和实现可以独立地变化，如JDBC；</li>
-<li>组合模式：使得客户端看来单个对象和对象的组合是同等的。换句话说，某个类型的方法同时也接受自身类型作为参数，如 <code>Map.putAll</code>，<code>List.addAll</code>、<code>Set.addAll</code>。</li>
-<li>装饰者模式：动态的给一个对象附加额外的功能，这也是子类的一种替代方式，如 <code>java.util.Collections#checkedList|Map|Set|SortedSet|SortedMap</code>。</li>
-<li>享元模式：使用缓存来加速大量小对象的访问时间，如 valueOf(int)。</li>
-<li>代理模式：代理模式是用一个简单的对象来代替一个复杂的或者创建耗时的对象，如 <code>java.lang.reflect.Proxy</code></li>
+<p>@ref:</p>
+<ul>
+<li><a href="https://www.javacodegeeks.com/2011/03/design-patterns-in-jdk.html" target="_blank" rel="noopener">Design Patterns in the JDK | Java Code Geeks - 2021</a></li>
+<li><a href="https://coolshell.cn/articles/3320.html" target="_blank" rel="noopener">JDK里的设计模式 | 酷 壳 - CoolShell</a></li>
 </ul>
-</li>
-<li>行为模式：<ul>
-<li>命令模式：将操作封装到对象内，以便存储，传递和返回，如：<code>java.lang.Runnable</code>。</li>
-<li>解释器模式：定义了一个语言的语法，然后解析相应语法的语句，如，<code>java.text.Format</code>，<code>java.text.Normalizer</code>。</li>
-<li>迭代器模式：提供一个一致的方法来顺序访问集合中的对象，如 <code>java.util.Iterator</code>。</li>
-<li>中介者模式：通过使用一个中间对象来进行消息分发以及减少类之间的直接依赖，<code>java.lang.reflect.Method#invoke()</code>。</li>
-<li>观察者模式：它使得一个对象可以灵活的将消息发送给感兴趣的对象，如 <code>java.util.EventListener</code>。</li>
-<li>责任链模式：通过把请求从一个对象传递到链条中下一个对象的方式，直到请求被处理完毕，以实现对象间的解耦。如 <code>javax.servlet.Filter#doFilter()</code>。</li>
-<li>空对象模式：如 <code>java.util.Collections#emptyList()</code>。</li>
-<li>模板方法模式：让子类可以重写方法的一部分，而不是整个重写，如 <code>java.util.Collections#sort()</code>。</li>
-</ul>
-</li>
-</ul>
-<p>@ref: <a href="https://www.javacodegeeks.com/2011/03/design-patterns-in-jdk.html" target="_blank" rel="noopener">Design Patterns in the JDK | Java Code Geeks - 2021</a></p>
 <h1 id="关于UML"><a href="#关于UML" class="headerlink" title="关于UML"></a>关于UML</h1><p>UML参考: <a href="/14.Coding-Pattern/设计模式-UML类图/" title="设计模式-UML类图">设计模式-UML类图</a></p>
 
       
@@ -677,7 +671,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">449</span>
+                  <span class="site-state-item-count">454</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -767,7 +761,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TODO"><span class="nav-text">TODO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建型模式"><span class="nav-text">创建型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单工厂"><span class="nav-text">简单工厂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象工厂"><span class="nav-text">抽象工厂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建造者模式"><span class="nav-text">建造者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单例模式"><span class="nav-text">单例模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结构型模式"><span class="nav-text">结构型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#适配器模式"><span class="nav-text">适配器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#桥接模式"><span class="nav-text">桥接模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰模式"><span class="nav-text">装饰模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代理模式"><span class="nav-text">代理模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#享元模式"><span class="nav-text">享元模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#行为模式"><span class="nav-text">行为模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#责任链模式"><span class="nav-text">责任链模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式"><span class="nav-text">观察者模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK里的设计模式-zz"><span class="nav-text">JDK里的设计模式(zz)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于UML"><span class="nav-text">关于UML</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建型模式"><span class="nav-text">创建型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单工厂"><span class="nav-text">简单工厂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象工厂"><span class="nav-text">抽象工厂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建造者模式"><span class="nav-text">建造者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单例模式"><span class="nav-text">单例模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原型模式"><span class="nav-text">原型模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结构型模式"><span class="nav-text">结构型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#适配器模式"><span class="nav-text">适配器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#桥接模式"><span class="nav-text">桥接模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰模式"><span class="nav-text">装饰模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代理模式"><span class="nav-text">代理模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#享元模式"><span class="nav-text">享元模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#行为模式"><span class="nav-text">行为模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#责任链模式"><span class="nav-text">责任链模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式"><span class="nav-text">观察者模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK里的设计模式-zz"><span class="nav-text">JDK里的设计模式(zz)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于UML"><span class="nav-text">关于UML</span></a></li></ol></div>
             
 
           </div>

@@ -124,7 +124,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="创建进程fork 返回0: 子进程 返回&amp;gt;0: 父进程, 返回值是子进程pid 子进程会得到父进程的堆(IO缓存, malloc的内存)、栈(局部变量)、数据空间(Data Segment)的拷贝, 在子进程里修改这些变量并不会影响父进程中的值, 注意这种拷贝是“写时复制”（Copy On Write，COW）; fork前打开的文件句柄, 其偏移量会在父子进程间共享, 原因是进程内存中仅保">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-04-24T12:23:21.286Z">
+<meta property="og:updated_time" content="2023-05-06T10:49:36.580Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="APUE.03a.进程">
 <meta name="twitter:description" content="创建进程fork 返回0: 子进程 返回&amp;gt;0: 父进程, 返回值是子进程pid 子进程会得到父进程的堆(IO缓存, malloc的内存)、栈(局部变量)、数据空间(Data Segment)的拷贝, 在子进程里修改这些变量并不会影响父进程中的值, 注意这种拷贝是“写时复制”（Copy On Write，COW）; fork前打开的文件句柄, 其偏移量会在父子进程间共享, 原因是进程内存中仅保">
@@ -402,21 +402,21 @@
 </ul>
 <h2 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h2><p>fork 或者 vfork之后往往需要再调用 exec启动另一个新程序, 因为 exec不创建新进程, 所以pid不会变, 原程序的 Text Seg, Data Seg, Heap/Stack会被替换</p>
 <h2 id="僵尸进程和孤儿进程"><a href="#僵尸进程和孤儿进程" class="headerlink" title="僵尸进程和孤儿进程"></a>僵尸进程和孤儿进程</h2><ul>
-<li>僵尸进程(zombie process): ps显示stat为”z”的进程<ul>
+<li><p>僵尸进程(zombie process): ps显示stat为”z”的进程</p>
+<ul>
 <li>产生原因: 子进程退出后(exit, 或发生错误), 子进程仍存在于进程表, 当父进程调用wait之后才会从进程表删除. 如果子进程死掉但是父进程没有调用wait, 子进程就变成了僵尸进程;</li>
 <li>正确做法: 子进程死后, 系统会向父进程发生SIGCHLD信号, 父进程收到此信号后应该用wait处理子进程;</li>
 <li>如果父进程没有处理SIGCHLD信号, 那么只能kill父进程, 让init成为子进程的父进程, init进程会周期性调用wait清理Zombie进程.</li>
 <li>处理SIGCHLD信号示例代码: <a href="https://docs.oracle.com/cd/E19455-01/806-4750/signals-7/index.html" target="_blank" rel="noopener">https://docs.oracle.com/cd/E19455-01/806-4750/signals-7/index.html</a></li>
 </ul>
 </li>
-<li>孤儿进程(orphan process): 父进程死掉, 子进程被init进程接管</li>
-<li>守护(Daemon)进程: 守护进程就是后台服务进程, 因为它会有一个很长的生命周期提供服务, 关闭终端不会影响服务, 也就是说可以忽略某些信号<ul>
+<li><p>孤儿进程(orphan process): 父进程死掉, 子进程被init进程接管</p>
+</li>
+<li>守护(Daemon)进程: 守护进程就是后台服务进程, 因为它会有一个很长的生命周期提供服务, 关闭终端不会影响服务, 也就是说可以忽略某些信号</li>
 <li>如何实现Deamon进程:<ul>
 <li>父进程exit</li>
 <li>command &amp;</li>
 <li>nohup command</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -426,7 +426,7 @@
 <li>守护进程没的父进程是0 @doubt</li>
 <li>守护进程会忽略一些signal（包括处理信号SIGHUP（进程和控制终端分离时收到SIGHUP）、 SIGTERM（系统关机之前收到SIGTERM）</li>
 </ul>
-<h1 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h1><p>@ref: </p>
+<h1 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h1><p>@ref:</p>
 <ul>
 <li><a href="https://zhuanlan.zhihu.com/p/73248894" target="_blank" rel="noopener">浅谈Linux Namespace机制（一） - 知乎</a></li>
 <li>[<a href="https://coolshell.cn/articles/17010.html" target="_blank" rel="noopener">Docker基础技术：Linux Namespace（上） | 酷 壳 - CoolShell</a>]</li>
@@ -461,8 +461,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/21.Operating-System/APUE.02a.高级IO/" rel="next" title="APUE.02a.高级IO">
-                <i class="fa fa-chevron-left"></i> APUE.02a.高级IO
+              <a href="/21.Operating-System/APUE.01a.文件和IO/" rel="next" title="APUE.01a.文件和IO">
+                <i class="fa fa-chevron-left"></i> APUE.01a.文件和IO
               </a>
             
           </div>
@@ -564,7 +564,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">449</span>
+                  <span class="site-state-item-count">454</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

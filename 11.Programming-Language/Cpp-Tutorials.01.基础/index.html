@@ -124,7 +124,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="类型限定符 const volatile restrict mutable register static extern  @todo 类访问控制">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-04-24T12:23:20.939Z">
+<meta property="og:updated_time" content="2023-05-06T10:49:36.212Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cpp Tutorials-01-基础">
 <meta name="twitter:description" content="类型限定符 const volatile restrict mutable register static extern  @todo 类访问控制">
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,932
+                  4,781
                 </span>
               
 
@@ -393,9 +393,32 @@
 <li>public：可以被1.该类中的函数、2.子类的函数、3.其友元函数访问</li>
 </ul>
 <p>注：友元函数包括3种：设为友元的普通的非成员函数；设为友元的其他类的成员函数；设为友元类中的所有成员函数。</p>
+<h2 id="static-成员"><a href="#static-成员" class="headerlink" title="static 成员"></a>static 成员</h2><p>区别与C，在C++中 static 的类成员表示：属于一个类而不是属于此类的任何特定对象的变量和函数. 对于类的static成员, 该类的所有实例都共用一个static成员.比如在对某一个类的对象进行计数时, 计数生成多少个类的实例, 就可以用到静态数据成员. 注意, static成员函数必须只能调用static成员.</p>
 <h2 id="类实例内存占用"><a href="#类实例内存占用" class="headerlink" title="类实例内存占用"></a>类实例内存占用</h2><p>@todo</p>
-<h2 id="构造函数-amp-析构函数"><a href="#构造函数-amp-析构函数" class="headerlink" title="构造函数 &amp; 析构函数"></a>构造函数 &amp; 析构函数</h2><p>@todo</p>
-<h2 id="对象的创建-amp-销毁"><a href="#对象的创建-amp-销毁" class="headerlink" title="对象的创建 &amp; 销毁"></a>对象的创建 &amp; 销毁</h2><p>C++ 中的 new 和 delete 分别用来分配和释放内存，它们与C语言中 malloc()、free() 最大的一个不同之处在于：用 new 分配内存时会调用构造函数，用 delete 释放内存时会调用析构函数。</p>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><h2 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h2><ul>
+<li>析构函数是一个成员函数，在对象超出范围或通过调用 delete 显式销毁对象时，会自动调用析构函数。</li>
+<li>只有当类存储了需要释放的系统资源的句柄，或拥有其指向的内存的指针时，你才需要定义自定义析构函数。</li>
+<li>当下列事件之一发生时，将调用析构函数：<ul>
+<li>具有块范围的本地（自动）对象超出范围。</li>
+<li>使用 delete 显式解除分配了使用 new 运算符分配的对象。</li>
+<li>临时对象的生存期结束。</li>
+<li>程序结束，并且存在全局或静态对象。</li>
+<li>使用析构函数的完全限定名显式调用了析构函数。</li>
+</ul>
+</li>
+<li>析构函数可以随意调用类成员函数和访问类成员数据。</li>
+<li><p>析构的顺序：</p>
+<ul>
+<li>按照非静态成员对象的析构函数在类声明中的显示顺序的相反顺序调用这些函数。 这些成员的构造中使用的可选成员初始化列表不会影响构造或销毁顺序。</li>
+<li>非虚拟基类的析构函数以声明的相反顺序被调用</li>
+<li>虚拟基类的析构函数以声明的相反顺序被调用</li>
+</ul>
+</li>
+<li><p>很少需要显式(手动的)调用析构函数。但是，对置于绝对地址的对象进行清理会很有用（这些对象通常用 placement new 创建），可能会用到手动调用析构，但注意显式析构并不能释放”类自身”占用的内存，：</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span>* p_space = (<span class="keyword">char</span>*)<span class="built_in">malloc</span>( <span class="keyword">sizeof</span>(Thing) ); <span class="comment">// 创建内存块</span></span><br><span class="line">Thing* p_thing = <span class="keyword">new</span> (p_space) Thing(); <span class="comment">// 在此内存块上new实例</span></span><br><span class="line">p_thing-&gt;~Thing(); <span class="comment">// 调用析构, 但Thing实例的内存不释放</span></span><br><span class="line"><span class="keyword">delete</span> p_space; <span class="comment">// 销毁了存储区, 不会调用析构函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//delete p_thing; // 这样会连同存储区p_space一起销毁, 并调用析构~Thing()</span></span><br></pre></td></tr></table></figure>
+<p>@ref: <a href="https://learn.microsoft.com/zh-cn/cpp/cpp/destructors-cpp?view=msvc-170" target="_blank" rel="noopener">https://learn.microsoft.com/zh-cn/cpp/cpp/destructors-cpp?view=msvc-170</a></p>
 <h1 id="重载"><a href="#重载" class="headerlink" title="重载"></a>重载</h1><p>C++ 允许在同一作用域中的某个函数和运算符指定多个定义，分别称为函数重载和运算符重载。</p>
 <h2 id="重载函数"><a href="#重载函数" class="headerlink" title="重载函数"></a>重载函数</h2><p>在同一个作用域内(namespace or class)内可以声明几个同名的函数, 函数的参数列表(参数个数/类型/顺序)必须不同, 不能近通过返回值区分重载函数;</p>
 <h2 id="重载运算符"><a href="#重载运算符" class="headerlink" title="重载运算符"></a>重载运算符</h2><p>头文件:</p>
@@ -407,7 +430,7 @@
 <p>这样一来就造成问题：C和C++中对函数的生成规则是不同的，C++程序不能直接调用 C 函数。<br>例如在C++中，调用foo的代码编译为汇编是<code>call _foo_int_int</code>，如果这个foo是在C库中的，那么foo的符号是<code>_foo</code>，在链接过程中就造成找不到这个符号报错</p>
 <h2 id="extern-“C”"><a href="#extern-“C”" class="headerlink" title="extern “C”"></a>extern “C”</h2><p>在C++项目中，调用C库函数，需要在头文件声明：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#ifdef __cplusplus</span><br><span class="line">extern &quot;C&quot; &#123;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">void foo(int x, int y);</span><br><span class="line"></span><br><span class="line">#ifdef __cplusplus</span><br><span class="line">&#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
-<p>这就告诉 C++编译译器,函数 foo 是个 C库的函数，那么C++编译器应该按照C编译器的编译和链接规则来进行链接，也就是说到库中找名字_foo 而不是找_foo_int_int。</p>
+<p>这就告诉 C++编译译器,函数 foo 是个 C库的函数，那么C++编译器应该按照C编译器的编译和链接规则来进行链接，也就是说到库中找名字_foo 而不是找_foo_int_int（原因是C++支持函数的重载）</p>
 <h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><h2 id="类的继承后方法属性变化"><a href="#类的继承后方法属性变化" class="headerlink" title="类的继承后方法属性变化"></a>类的继承后方法属性变化</h2><ul>
 <li>private 属性不能够被继承。</li>
 <li>使用private继承，父类的protected和public属性在子类中变为private，并且不能被这个派生类的子类所访问。</li>
@@ -423,7 +446,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a>虚函数</h2><p>虚函数的定义格式: <code>virtual  void  func(param);</code></p>
+<h2 id="虚函数-amp-纯虚函数"><a href="#虚函数-amp-纯虚函数" class="headerlink" title="虚函数 &amp; 纯虚函数"></a>虚函数 &amp; 纯虚函数</h2><p>虚函数的定义格式: <code>virtual  void  func(param);</code></p>
 <ul>
 <li>虚函数作用是在程序的运行阶段动态地选择合适的成员函数，在定义了虚函数后，可以在基类的派生类中对虚函数重新定义，在派生类中重新定义的函数应与虚函数具有相同的形参个数和形参类型。</li>
 <li>如果在派生类中没有对虚函数重新定义，则它继承其基类的虚函数。</li>
@@ -437,8 +460,9 @@
 <li>private的纯虚函数: 可以作为一种策略, 比如我们要实现一个抽象类, 但是不想让其他人的代码继承这个抽象类, 就可以使用这种策略.</li>
 <li>private的构造函数 &amp; 析构函数： …</li>
 </ul>
-<h2 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h2><p>首先,友元关系不能被继承, 即Func()函数是Base类的友元, 但对于Base类的派生Derive, 不存在友元关系;<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">class A</span><br><span class="line">&#123;</span><br><span class="line">    friend void func();</span><br><span class="line">    friend class B; // B类 是 A类的友元</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="虚函数表（vtable）"><a href="#虚函数表（vtable）" class="headerlink" title="虚函数表（vtable）"></a>虚函数表（vtable）</h2><p>类实例的前4个字节, 是”数组的首地址”, 数组的元素是”虚函数地址”, 这个数组就是虚函数表.</p>
+<h2 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h2><p>首先,友元关系不能被继承, 即Func()函数是Base类的友元, 但对于Base类的派生Derive, 不存在友元关系;<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class A</span><br><span class="line">&#123;</span><br><span class="line">    friend void func();</span><br><span class="line">    friend class B; // B类 是 A类的友元</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="虚函数表（vtable）"><a href="#虚函数表（vtable）" class="headerlink" title="虚函数表（vtable）"></a>虚函数表（vtable）</h2><p>类实例的前4个字节, 是”数组的首地址”, 数组的元素是”虚函数地址”, 这个数组就是<strong>虚函数表</strong>.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Derive1 d;</span><br><span class="line"></span><br><span class="line">cout &lt;&lt; &quot;vtable数组首地址&quot; &lt;&lt; *(int*)(&amp;d)&lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; &quot;第一个虚函数地址vtable[0]&quot; &lt;&lt; *((int*)(*(int*)(&amp;d))+ 0) &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; &quot;第二个虚函数地址vtable[1]&quot; &lt;&lt; *((int*)(*(int*)(&amp;d))+ 1) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">typedef void (*pFunc)(void);</span><br><span class="line">pFunc pf;</span><br><span class="line">pf = (pFunc)*((int*)(*(int*)(&amp;d))+ 0);</span><br><span class="line">pf(); // 执行第一个vFunc</span><br><span class="line">pf = (pFunc)*((int*)(*(int*)(&amp;d))+ 1);</span><br><span class="line">pf(); // 执行第一个vFunc</span><br><span class="line"></span><br><span class="line">pFunc* vtable = (pFunc*)*(int*)(&amp;d);</span><br><span class="line">(vtable[0])();</span><br><span class="line">(vtable[1])();</span><br></pre></td></tr></table></figure>
 <h2 id="虚继承"><a href="#虚继承" class="headerlink" title="虚继承"></a>虚继承</h2><p>@todo</p>
 <h1 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h1><p>C++中几种类型转换方式：</p>
 <ul>
@@ -458,7 +482,7 @@
 </li>
 </ul>
 </li>
-<li><p><code>dynamic_cast</code>:  主要用来在继承体系中的安全向下转型。它能安全地将指向基类的指针转型为指向子类的指针或引用，</p>
+<li><p><code>dynamic_cast</code>:  主要用来在继承体系中的安全向下转型。它能安全地将指向基类的指针转型为指向子类的指针或引用</p>
 <ul>
 <li>为什么需要<code>dynamic_cast</code>强制转换? 当无法使用virtual函数的时候</li>
 <li>如果转型失败会返回null（转型对象为指针时）或抛出异常（转型对象为引用时）</li>
@@ -469,10 +493,18 @@
 </ul>
 <h2 id="充满风险的隐式类型转换"><a href="#充满风险的隐式类型转换" class="headerlink" title="充满风险的隐式类型转换"></a>充满风险的隐式类型转换</h2><p>什么是“隐式类型转换”：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 1.赋值</span><br><span class="line">int a = 0;</span><br><span class="line">long b = a + 1;</span><br><span class="line"></span><br><span class="line">// 2.比较（==,&gt;,&lt;）和switch</span><br><span class="line">if (a == b) &#123;</span><br><span class="line">    // 默认的operator==需要a的类型和b相同，因此也发生转换</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">std::shared_ptr&lt;int&gt; ptr = func();</span><br><span class="line">if (ptr) &#123; // 这里会从shared_ptr转换成bool</span><br><span class="line">    // 处理数据</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 3.函数传参</span><br></pre></td></tr></table></figure>
-<h1 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h1><h1 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h1><ul>
-<li><a href="https://msdn.microsoft.com/zh-cn/library/hh279674.aspx" target="_blank" rel="noopener">智能指针（现代 C++）</a></li>
+<h1 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h1><p>与指针相似的是，引用将存储位于内存中其他位置的对象的地址。有两种引用：</p>
+<ul>
+<li>引用命名变量的 lvalue 引用：&amp; 运算符表示 lvalue 引用</li>
+<li>引用临时对象的 rvalue 引用：&amp;&amp; 运算符表示 rvalue 引用，或通用引用（rvalue 或 lvalue），具体取决于上下文</li>
 </ul>
-<h1 id="STL"><a href="#STL" class="headerlink" title="STL"></a>STL</h1><p>@todo</p>
+<p>引用很容易与指针混淆，它们之间有三个主要的不同：</p>
+<ul>
+<li>不存在空引用。引用必须连接到一块合法的内存。</li>
+<li>一旦引用被初始化为一个对象，就不能被指向到另一个对象。指针可以在任何时候指向到另一个对象。</li>
+<li>引用必须在创建时被初始化。指针可以在任何时间被初始化。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">inline</span> String&amp; String::<span class="keyword">operator</span>=(<span class="keyword">const</span> String&amp; other)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>!=&amp;other)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] m_data;</span><br><span class="line">        <span class="keyword">if</span>(!other.m_data) m_data=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            m_data = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="built_in">strlen</span>(other.m_data)+<span class="number">1</span>];</span><br><span class="line">            <span class="built_in">strcpy</span>(m_data,other.m_data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>; <span class="comment">//返回this的解</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="C-设计技巧"><a href="#C-设计技巧" class="headerlink" title="C++ 设计技巧"></a>C++ 设计技巧</h1><h2 id="RAII"><a href="#RAII" class="headerlink" title="RAII"></a>RAII</h2><p>资源获取即初始化（ Resource Acquisition Is Initialization ），或称 RAII。<br>它将必须在使用前请求的资源（被分配的堆内存、执行的线程、打开的接头、打开的文件、被锁的互斥、磁盘空间、数据库连接等——任何存在于受限供给中的事物）的生命周期绑定到一个对象的生存期。</p>
 <p>RAII 可总结如下:</p>
 <ul>
@@ -563,8 +595,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/11.Programming-Language/C-Tutorials.04.C和CPP标准/" rel="next" title="C Tutorials-04-C语言 and CPP标准">
-                <i class="fa fa-chevron-left"></i> C Tutorials-04-C语言 and CPP标准
+              <a href="/11.Programming-Language/C-Tutorials.02.内存管理-malloc/" rel="next" title="C Tutorials-02-内存管理（深入理解 malloc）">
+                <i class="fa fa-chevron-left"></i> C Tutorials-02-内存管理（深入理解 malloc）
               </a>
             
           </div>
@@ -573,8 +605,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/11.Programming-Language/Cpp-Tutorials.01b.内存管理/" rel="prev" title="Cpp Tutorials-01b-内存管理">
-                Cpp Tutorials-01b-内存管理 <i class="fa fa-chevron-right"></i>
+              <a href="/11.Programming-Language/Cpp-Tutorials.02a.内存管理-new/" rel="prev" title="Cpp Tutorials-02a-内存管理（深入理解 new）">
+                Cpp Tutorials-02a-内存管理（深入理解 new） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -666,7 +698,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">449</span>
+                  <span class="site-state-item-count">454</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -756,7 +788,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类型限定符"><span class="nav-text">类型限定符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类"><span class="nav-text">类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#访问控制"><span class="nav-text">访问控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类实例内存占用"><span class="nav-text">类实例内存占用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数-amp-析构函数"><span class="nav-text">构造函数 &amp; 析构函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的创建-amp-销毁"><span class="nav-text">对象的创建 &amp; 销毁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重载"><span class="nav-text">重载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#重载函数"><span class="nav-text">重载函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重载运算符"><span class="nav-text">重载运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-如何实现重载"><span class="nav-text">C++如何实现重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern-“C”"><span class="nav-text">extern “C”</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#继承"><span class="nav-text">继承</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的继承后方法属性变化"><span class="nav-text">类的继承后方法属性变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多重继承"><span class="nav-text">多重继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚函数"><span class="nav-text">虚函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#友元"><span class="nav-text">友元</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚函数表（vtable）"><span class="nav-text">虚函数表（vtable）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚继承"><span class="nav-text">虚继承</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型转换"><span class="nav-text">类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#充满风险的隐式类型转换"><span class="nav-text">充满风险的隐式类型转换</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引用"><span class="nav-text">引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#智能指针"><span class="nav-text">智能指针</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STL"><span class="nav-text">STL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-设计技巧"><span class="nav-text">C++ 设计技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RAII"><span class="nav-text">RAII</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#例子1"><span class="nav-text">例子1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子2"><span class="nav-text">例子2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pimpl"><span class="nav-text">Pimpl</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#“实现私有化”必要性"><span class="nav-text">“实现私有化”必要性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何Pimpl"><span class="nav-text">如何Pimpl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前置声明-forward-declaration"><span class="nav-text">前置声明(forward declaration)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NVI"><span class="nav-text">NVI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么需要NVI"><span class="nav-text">为什么需要NVI</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类型限定符"><span class="nav-text">类型限定符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类"><span class="nav-text">类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#访问控制"><span class="nav-text">访问控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#static-成员"><span class="nav-text">static 成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类实例内存占用"><span class="nav-text">类实例内存占用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#析构函数"><span class="nav-text">析构函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重载"><span class="nav-text">重载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#重载函数"><span class="nav-text">重载函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重载运算符"><span class="nav-text">重载运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-如何实现重载"><span class="nav-text">C++如何实现重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern-“C”"><span class="nav-text">extern “C”</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#继承"><span class="nav-text">继承</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的继承后方法属性变化"><span class="nav-text">类的继承后方法属性变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多重继承"><span class="nav-text">多重继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚函数-amp-纯虚函数"><span class="nav-text">虚函数 &amp; 纯虚函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#友元"><span class="nav-text">友元</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚函数表（vtable）"><span class="nav-text">虚函数表（vtable）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚继承"><span class="nav-text">虚继承</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型转换"><span class="nav-text">类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#充满风险的隐式类型转换"><span class="nav-text">充满风险的隐式类型转换</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引用"><span class="nav-text">引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-设计技巧"><span class="nav-text">C++ 设计技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RAII"><span class="nav-text">RAII</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#例子1"><span class="nav-text">例子1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子2"><span class="nav-text">例子2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pimpl"><span class="nav-text">Pimpl</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#“实现私有化”必要性"><span class="nav-text">“实现私有化”必要性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何Pimpl"><span class="nav-text">如何Pimpl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前置声明-forward-declaration"><span class="nav-text">前置声明(forward declaration)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NVI"><span class="nav-text">NVI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么需要NVI"><span class="nav-text">为什么需要NVI</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
