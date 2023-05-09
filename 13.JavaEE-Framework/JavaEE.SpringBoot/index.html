@@ -5,7 +5,7 @@
 
 <html class="theme-next muse" lang="zh-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+  <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -126,7 +126,8 @@
 <meta property="og:description" content="Spring Boot vs Spring 内置了嵌入式的Tomcat、Jetty等Servlet容器，应用可以不用打包成War格式，而是可以直接以Jar格式运行 Spring Boot提倡无XML配置文件的理念，使用Spring Boot生成的应用完全不会生成任何配置代码与XML配置文件。 提供了多个可选择的「starter」: spring-boot-starter-data-redis:">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://sdtimes.com/wp-content/uploads/2018/03/spring-boot-490x257.png">
-<meta property="og:updated_time" content="2023-05-06T10:52:24.070Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/JavaEE.springboot-bucket.png">
+<meta property="og:updated_time" content="2023-05-09T04:45:01.085Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Boot">
 <meta name="twitter:description" content="Spring Boot vs Spring 内置了嵌入式的Tomcat、Jetty等Servlet容器，应用可以不用打包成War格式，而是可以直接以Jar格式运行 Spring Boot提倡无XML配置文件的理念，使用Spring Boot生成的应用完全不会生成任何配置代码与XML配置文件。 提供了多个可选择的「starter」: spring-boot-starter-data-redis:">
@@ -166,7 +167,7 @@
 
 
 
-  <title>Spring Boot | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>Spring Boot | 扔掉笔记 ᐛ</title>
   
 
 
@@ -185,7 +186,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -355,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  371
+                  824
                 </span>
               
 
@@ -393,7 +394,8 @@
 </ul>
 </li>
 </ul>
-<h1 id="Spring-Boot-全家桶-简介"><a href="#Spring-Boot-全家桶-简介" class="headerlink" title="Spring Boot 全家桶(简介)"></a>Spring Boot 全家桶(简介)</h1><p>@todo</p>
+<h1 id="Spring-Boot-全家桶"><a href="#Spring-Boot-全家桶" class="headerlink" title="Spring Boot 全家桶"></a>Spring Boot 全家桶</h1><p><img src="/images/JavaEE.springboot-bucket.png" alt="../_images/JavaEE.springboot-bucket.png"></p>
+<p>@ref: <a href="https://gitee.com/yidao620/springboot-bucket" target="_blank" rel="noopener">https://gitee.com/yidao620/springboot-bucket</a></p>
 <h1 id="Spring-Boot-的新注解"><a href="#Spring-Boot-的新注解" class="headerlink" title="Spring Boot 的新注解"></a>Spring Boot 的新注解</h1><ul>
 <li><code>@SpringBootApplication</code>: 相当于 <code>@Configuration + @EnableAutoConfiguration + @ComponentScan</code><ul>
 <li><code>@Configuration</code> : 指明是IOC容器的配置类, 被标注的类等于在spring的XML配置文件中(applicationContext.xml)，装配所有bean事务，提供了一个spring的上下文环境。</li>
@@ -404,7 +406,30 @@
 <li><code>@RestController</code>: 作用是将controller的方法返回的对象通过适当的转换器转换为指定的格式之后，写入到response对象的body区，通常用来返回JSON或者是XML。使用此注解之后不会再走视图处理器，而是直接将数据写入到输入流中，效果等同于通过向<code>response.getOutputStream()</code>写入数据</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@ImportResource</span>(locations = &#123;<span class="string">"classpath:spring/spring-main.xml"</span>&#125;)</span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyApiApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(MyApiApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="Spring-Cloud-amp-微服务"><a href="#Spring-Cloud-amp-微服务" class="headerlink" title="Spring Cloud &amp; 微服务"></a>Spring Cloud &amp; 微服务</h1><p>@todo</p>
+<h1 id="Spring-Cloud"><a href="#Spring-Cloud" class="headerlink" title="Spring Cloud"></a>Spring Cloud</h1><p>Spring Cloud 主要组件：</p>
+<ul>
+<li>Spring Cloud Config：配置管理工具包，让你可以把配置放到远程服务器，集中化管理集群配置，目前支持本地存储、Git 以及 Subversion。</li>
+<li><p>Spring Cloud Bus：事件、消息总线，用于在集群（例如，配置变化事件）中传播状态变化，可与 Spring Cloud Config 联合实现热部署。</p>
+</li>
+<li><p>Zuul：Zuul 是在云平台上提供动态路由,监控,弹性,安全等边缘服务的框架。Zuul 相当于是设备和 Netflix 流应用的 Web 网站后端所有请求的前门。</p>
+</li>
+<li>Ribbon：提供云端负载均衡，有多种负载均衡策略可供选择，可配合服务发现和断路器使用。</li>
+<li>Hystrix：熔断器，容错管理工具，旨在通过熔断机制控制服务和第三方库的节点,从而对延迟和故障提供更强大的容错能力。</li>
+<li>Consul：封装了 Consul 操作，consul 是一个服务发现与配置工具，与 Docker 容器可以无缝集成。</li>
+<li><del>Eureka</del>：云端服务发现，一个基于 REST 的服务，用于定位服务，以实现云端中间层服务发现和故障转移。</li>
+<li>Spring Cloud Cluster：提供 Leadership 选举，如：Zookeeper, Redis, Hazelcast, Consul 等常见状态模式的抽象和实现。</li>
+<li>Spring Cloud Zookeeper：操作 Zookeeper 的工具包，用于使用 zookeeper 方式的服务发现和配置管理。</li>
+<li>Spring Cloud Task：提供云端计划任务管理、任务调度。</li>
+</ul>
+<ul>
+<li>Spring Cloud Data Flow：大数据操作工具，作为 Spring XD 的替代产品，它是一个混合计算模型，结合了流数据与批量数据的处理方式。</li>
+<li>Spring Cloud Stream：数据流操作开发包，封装了与 Redis,Rabbit、Kafka 等发送接收消息。</li>
+</ul>
+<p>@ref:  </p>
+<ul>
+<li><a href="https://www.zhihu.com/question/47304987" target="_blank" rel="noopener"> Spring boot与Spring cloud 是什么关系？ - 知乎</a></li>
+<li><a href="https://www.springcloud.cc/" target="_blank" rel="noopener">https://www.springcloud.cc/</a></li>
+</ul>
 
       
     </div>
@@ -540,7 +565,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">454</span>
+                  <span class="site-state-item-count">460</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -562,7 +587,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-count">399</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -630,7 +655,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot-vs-Spring"><span class="nav-text">Spring Boot vs Spring</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot-全家桶-简介"><span class="nav-text">Spring Boot 全家桶(简介)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot-的新注解"><span class="nav-text">Spring Boot 的新注解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Cloud-amp-微服务"><span class="nav-text">Spring Cloud &amp; 微服务</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot-vs-Spring"><span class="nav-text">Spring Boot vs Spring</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot-全家桶"><span class="nav-text">Spring Boot 全家桶</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot-的新注解"><span class="nav-text">Spring Boot 的新注解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Cloud"><span class="nav-text">Spring Cloud</span></a></li></ol></div>
             
 
           </div>
@@ -863,24 +888,7 @@
 
   
   <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
-  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
 
 
   

@@ -5,7 +5,7 @@
 
 <html class="theme-next muse" lang="zh-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+  <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -117,18 +117,18 @@
 
 
 
-<meta name="description" content="本篇只讨论OS 级别的并发优化，不包括语言层面对并发的支持特性，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。 有关 Linux 系统的限制服务器能支持建立连接数由几个决定：  建立 TCP 连接最大并发数：TCP 连接四元组是由源 IP 地址、源端口、目的 IP 地址和目的端口构成，理论上是无上限的；   端口数限制：参考 [[#系统端口">
+<meta name="description" content="本篇只讨论OS 级别的并发优化，不包括语言层面对并发的支持特性，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。 一般情况下服务端达到 C10K 连接时，大多数连接都是空闲连接，少数的活跃连接有数据读写，这种情况下讨论 C10K 的瓶颈在于“如何管理 10K-100K 级别的连接数”。 如果 C10K 的连接情况下，每个链接还有大量的读写数据">
 <meta name="keywords" content="后端架构,并发,性能测试,C10K,C100K,ulimit">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C100K系统设计">
 <meta property="og:url" content="https://beefyheisenberg.github.io/31.Backend/SystemDesign-01-C100K/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="本篇只讨论OS 级别的并发优化，不包括语言层面对并发的支持特性，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。 有关 Linux 系统的限制服务器能支持建立连接数由几个决定：  建立 TCP 连接最大并发数：TCP 连接四元组是由源 IP 地址、源端口、目的 IP 地址和目的端口构成，理论上是无上限的；   端口数限制：参考 [[#系统端口">
+<meta property="og:description" content="本篇只讨论OS 级别的并发优化，不包括语言层面对并发的支持特性，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。 一般情况下服务端达到 C10K 连接时，大多数连接都是空闲连接，少数的活跃连接有数据读写，这种情况下讨论 C10K 的瓶颈在于“如何管理 10K-100K 级别的连接数”。 如果 C10K 的连接情况下，每个链接还有大量的读写数据">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-05-06T10:52:24.423Z">
+<meta property="og:updated_time" content="2023-05-09T04:45:01.658Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C100K系统设计">
-<meta name="twitter:description" content="本篇只讨论OS 级别的并发优化，不包括语言层面对并发的支持特性，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。 有关 Linux 系统的限制服务器能支持建立连接数由几个决定：  建立 TCP 连接最大并发数：TCP 连接四元组是由源 IP 地址、源端口、目的 IP 地址和目的端口构成，理论上是无上限的；   端口数限制：参考 [[#系统端口">
+<meta name="twitter:description" content="本篇只讨论OS 级别的并发优化，不包括语言层面对并发的支持特性，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。 一般情况下服务端达到 C10K 连接时，大多数连接都是空闲连接，少数的活跃连接有数据读写，这种情况下讨论 C10K 的瓶颈在于“如何管理 10K-100K 级别的连接数”。 如果 C10K 的连接情况下，每个链接还有大量的读写数据">
 
 
 
@@ -164,7 +164,7 @@
 
 
 
-  <title>C100K系统设计 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>C100K系统设计 | 扔掉笔记 ᐛ</title>
   
 
 
@@ -183,7 +183,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,755
+                  2,996
                 </span>
               
 
@@ -379,6 +379,8 @@
 
       
         <p>本篇只讨论<strong>OS 级别的并发优化</strong>，不包括<strong>语言层面对并发的支持特性</strong>，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。</p>
+<p>一般情况下服务端达到 C10K 连接时，大多数连接都是空闲连接，少数的活跃连接有数据读写，<strong>这种情况下讨论 C10K 的瓶颈在于“如何管理 10K-100K 级别的连接数”</strong>。</p>
+<p>如果 C10K 的连接情况下，每个链接还有大量的读写数据，瓶颈就不仅仅是上面的“单机管理 10k-100k 数量级的 Connection”了，这种情况下，网卡、带宽都可能成为瓶颈，所以本文只考虑上面的情况“连接大多空闲、少数活跃”。</p>
 <h1 id="有关-Linux-系统的限制"><a href="#有关-Linux-系统的限制" class="headerlink" title="有关 Linux 系统的限制"></a>有关 Linux 系统的限制</h1><p>服务器能支持建立连接数由几个决定：</p>
 <ul>
 <li>建立 TCP 连接最大并发数：TCP 连接四元组是由源 IP 地址、源端口、目的 IP 地址和目的端口构成，理论上是无上限的；</li>
@@ -456,10 +458,10 @@
 <li>方式2 修改/etc/sysctl.conf，永久生效 <code>sys.kernel.pid_max = 999999</code></li>
 </ul>
 <p>但是线程数没限制不代表”Thread Per Request”可以行得通，如果创建了百万级的线程，上下文切换对 CPU 的调度也是考验</p>
-<h1 id="应用程序的设置"><a href="#应用程序的设置" class="headerlink" title="应用程序的设置"></a>应用程序的设置</h1><p>根据不同程序不同 IO 模型, 设置的思路也不一样</p>
-<blockquote>
-<p>BIO：Apache/Tomcat, 主要是并发量要求不高的场景<br>NIO：Nginx/Redis, 主要是高并发量要求的场景<br>Redis 使用单线程的 I/O 复用模型，自己封装了一个简单的 AeEvent 事件处理框架，主要实现了 epoll、kqueue 和 select。对于单纯只有 I/O 操作来说，单线程可以将速度优势发挥到最大。<br>但是 Redis 也提供了一些简单的计算功能，比如排序、聚合等，对于这些操作，单线程模型实际会严重影响整体吞吐量，CPU 计算过程中，整个 I/O 调度都是被阻塞住的，</p>
-</blockquote>
+<h1 id="应用程序的设置"><a href="#应用程序的设置" class="headerlink" title="应用程序的设置"></a>应用程序的设置</h1><p>首先考虑，服务端程序（Ngx、Redis、Tomcat 等）采用哪种 IO 线程模型？</p>
+<p>如果是 BIO（比如较早版本的 Tomcat ，当然现在很少有 BIO 实现的服务了），一般采用的是 Connection pre thread 的方式，意味着需要起 10K-100K 线程，所以 BIO 模式直接 pass</p>
+<p>如果是多路复用，那还要看是用的 select ？poll？epoll？<br>select 和 poll 都无法胜任 C10K，只有 epoll 可以，原因见 [[../21.Operating-System/APUE.07b.网络编程-多路复用epoll]]，</p>
+<p>当然现在的服务端 Ngx、Redis 、Java 的 Netty 等都用的是 epoll，少数系统上可能会用 select、kqueue 等，Nginx &amp; Redis 的线程模型解析=&gt; [[../21.Operating-System/APUE.07d.服务端常用IO模型]]</p>
 <h2 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h2><ul>
 <li>worker_rlimit_nofile 65535; // 一个 nginx 进程打开的最多文件描述符数目</li>
 <li><p>listen 8080 backlog=168888; // accept 成功队列长度，用于 listen(int sockfd, int backlog)，默认值 511</p>
@@ -472,14 +474,15 @@
 </ul>
 <h2 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h2><p>@todo</p>
 <h2 id="apache"><a href="#apache" class="headerlink" title="apache"></a>apache</h2><p>默认是多进程同步处理 request, 所以思路和 Nginx 每个 Core 一个进程 epoll 轮询的方式不同, apache 应该增加”系统创建进程数上限”, 并且减小进程栈内存</p>
-<h2 id="tomcat"><a href="#tomcat" class="headerlink" title="tomcat"></a>tomcat</h2><ul>
+<h2 id="tomcat"><a href="#tomcat" class="headerlink" title="tomcat"></a>tomcat</h2><p>Tomcat 也提供 NIO 模式（epoll + 非阻塞 IO），但 Tomcat 是个“跑业务代码”的服务，业务代码比较耗费时间（各种 CRUD），所以 Tomcat 注定不能像 Nginx 那样，在 epoll 线程里处理所有。</p>
+<p>Tomcat 采用的是 1 个线程 accept，多个线程（ core 数的 2 倍个）监听<strong>已建连接</strong>的 IO 事件，收到一个 Http Req 则扔进线程池处理，线程池大小默认几百。参考 [[[../13.JavaEE-Framework/JavaEE.Tomcat]]]</p>
+<ul>
 <li>maxThreads=500 最大线程数，此值限制了 bio 的最大连接数<ul>
 <li>一般的当一个进程有 500 个线程在跑的话，那性能已经是很低很低了。Tomcat 默认配置的最大请求数是 150。当某个应用拥有 250 个以上并发的时候，应考虑应用服务器的集群。</li>
 </ul>
 </li>
 <li>maxConnection=8192: 使用 nio 或者 apr 时，最大连接数受此值影响。</li>
 </ul>
-<p>参考 <a href="http://www.cnblogs.com/zhanjindong/p/concurrent-and-tomcat-threads.html" target="_blank" rel="noopener">聊下并发和Tomcat线程数（Updated） - zhanjindong - 博客园</a> @ref</p>
 <h2 id="FastCGI"><a href="#FastCGI" class="headerlink" title="FastCGI"></a>FastCGI</h2><ul>
 <li>fastcgi_connect_timeout 300;</li>
 </ul>
@@ -558,8 +561,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/31.Backend/SystemDesign-00-亿级流量网站架构/" rel="next" title="后端架构：System Design">
-                <i class="fa fa-chevron-left"></i> 后端架构：System Design
+              <a href="/22.Network-Protocol/网络协议2-IP/" rel="next" title="网络协议-IP">
+                <i class="fa fa-chevron-left"></i> 网络协议-IP
               </a>
             
           </div>
@@ -568,8 +571,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/31.Backend/SystemDesign-RESTful/" rel="prev" title="SystemDesign-RESTful">
-                SystemDesign-RESTful <i class="fa fa-chevron-right"></i>
+              <a href="/32.Database/MySQL-02b-BTree索引原理/" rel="prev" title="MySQL-03b-索引-BTree">
+                MySQL-03b-索引-BTree <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -661,7 +664,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">454</span>
+                  <span class="site-state-item-count">460</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -683,7 +686,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-count">399</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -984,24 +987,7 @@
 
   
   <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
-  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
 
 
   

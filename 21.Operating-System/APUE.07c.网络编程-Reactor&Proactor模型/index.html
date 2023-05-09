@@ -5,7 +5,7 @@
 
 <html class="theme-next muse" lang="zh-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+  <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -117,17 +117,17 @@
 
 
 
-<meta name="description" content="I/O 多路复用模式：Reactor &amp;amp; Proactor 一般地,I/O 多路复用机制（I/O multiplexing mechanisms）都依赖于一个事件多路分离器(Event Demultiplexer)。我们常见的事件多路分用器包括：Linux 的 epoll 和 Windows 的 IOCP。 事件多路分离器（Event Demultiplexer）可将来自事件源的 I/O">
+<meta name="description" content="I/O 多路复用模式：Reactor &amp;amp; Proactor一般地,I/O 多路复用机制（I/O multiplexing mechanisms）都依赖于一个事件多路分离器(Event Demultiplexer)。我们常见的事件多路分用器包括：Linux 的 epoll 和 Windows 的 IOCP。 事件多路分离器（Event Demultiplexer）可将来自事件源的 I/O 事">
 <meta property="og:type" content="article">
 <meta property="og:title" content="APUE.07c.网络编程-Reactor vs Proactor">
 <meta property="og:url" content="https://beefyheisenberg.github.io/21.Operating-System/APUE.07c.网络编程-Reactor&Proactor模型/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="I/O 多路复用模式：Reactor &amp;amp; Proactor 一般地,I/O 多路复用机制（I/O multiplexing mechanisms）都依赖于一个事件多路分离器(Event Demultiplexer)。我们常见的事件多路分用器包括：Linux 的 epoll 和 Windows 的 IOCP。 事件多路分离器（Event Demultiplexer）可将来自事件源的 I/O">
+<meta property="og:description" content="I/O 多路复用模式：Reactor &amp;amp; Proactor一般地,I/O 多路复用机制（I/O multiplexing mechanisms）都依赖于一个事件多路分离器(Event Demultiplexer)。我们常见的事件多路分用器包括：Linux 的 epoll 和 Windows 的 IOCP。 事件多路分离器（Event Demultiplexer）可将来自事件源的 I/O 事">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-05-06T10:52:24.248Z">
+<meta property="og:updated_time" content="2023-05-09T04:45:01.398Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="APUE.07c.网络编程-Reactor vs Proactor">
-<meta name="twitter:description" content="I/O 多路复用模式：Reactor &amp;amp; Proactor 一般地,I/O 多路复用机制（I/O multiplexing mechanisms）都依赖于一个事件多路分离器(Event Demultiplexer)。我们常见的事件多路分用器包括：Linux 的 epoll 和 Windows 的 IOCP。 事件多路分离器（Event Demultiplexer）可将来自事件源的 I/O">
+<meta name="twitter:description" content="I/O 多路复用模式：Reactor &amp;amp; Proactor一般地,I/O 多路复用机制（I/O multiplexing mechanisms）都依赖于一个事件多路分离器(Event Demultiplexer)。我们常见的事件多路分用器包括：Linux 的 epoll 和 Windows 的 IOCP。 事件多路分离器（Event Demultiplexer）可将来自事件源的 I/O 事">
 
 
 
@@ -163,7 +163,7 @@
 
 
 
-  <title>APUE.07c.网络编程-Reactor vs Proactor | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>APUE.07c.网络编程-Reactor vs Proactor | 扔掉笔记 ᐛ</title>
   
 
 
@@ -182,7 +182,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,179
+                  1,191
                 </span>
               
 
@@ -377,11 +377,10 @@
       
 
       
-        <p><strong>I/O 多路复用模式：Reactor &amp; Proactor</strong></p>
-<p>一般地,I/O 多路复用机制（I/O multiplexing mechanisms）都依赖于一个事件多路分离器(Event Demultiplexer)。<br>我们常见的事件多路分用器包括：Linux 的 epoll 和 Windows 的 IOCP。</p>
+        <h2 id="I-O-多路复用模式：Reactor-amp-Proactor"><a href="#I-O-多路复用模式：Reactor-amp-Proactor" class="headerlink" title="I/O 多路复用模式：Reactor &amp; Proactor"></a>I/O 多路复用模式：Reactor &amp; Proactor</h2><p>一般地,I/O 多路复用机制（I/O multiplexing mechanisms）都依赖于一个事件多路分离器(Event Demultiplexer)。<br>我们常见的事件多路分用器包括：Linux 的 epoll 和 Windows 的 IOCP。</p>
 <p><strong>事件多路分离器</strong>（Event Demultiplexer）可将来自事件源的 I/O 事件分离出来，并分发到对应的 <strong>事件处理器</strong> (Event Handler)进行 read/write。</p>
 <p>两个与事件分离器有关的模式是 Reactor 和 Proactor，Reactor 模式采用同步 IO，而 Proactor 采用异步 IO。</p>
-<h3 id="Reactor-模式"><a href="#Reactor-模式" class="headerlink" title="Reactor 模式"></a>Reactor 模式</h3><p>在 Reactor 中，<strong>事件多路分离器</strong> 等待文件描述符状态变为读写操作准备就绪状态，然后将就绪事件传递给对应的 <strong>处理器</strong>，最后由 <strong>处理器</strong> 负责完成实际的读写工作。</p>
+<h2 id="Reactor-模式"><a href="#Reactor-模式" class="headerlink" title="Reactor 模式"></a>Reactor 模式</h2><p>在 Reactor 中，<strong>事件多路分离器</strong> 等待文件描述符状态变为读写操作准备就绪状态，然后将就绪事件传递给对应的 <strong>处理器</strong>，最后由 <strong>处理器</strong> 负责完成实际的读写工作。</p>
 <p>Linux epoll 使用 Reactor 模式，Reactor 模式使用同步 I/O（一般来说）。Reactor 的标准（典型）的工作方式是：</p>
 <ul>
 <li>Reactor 线程中, epoll 注册读/写等等事件</li>
@@ -391,7 +390,7 @@
 <li>处理器线程进行处理(decode 数据, 执行业务代码, encode 数据)</li>
 </ul>
 <p><strong>Netty 的 Reactor 线程模型</strong> @link: [[../12.Java/Java-Tutorials.09.NIO&amp;Netty#Reactor三种常见线程模型]]</p>
-<h3 id="Proactor-模式"><a href="#Proactor-模式" class="headerlink" title="Proactor 模式"></a>Proactor 模式</h3><p>而在 Proactor 模式中，<strong>处理器</strong> 只负责发起异步读写操作。 <strong>处理器</strong> 传递给操作系统 <strong>用户态的数据缓冲区</strong>，之后的 IO 操作、以及内核态缓冲区→ 用户态缓冲区操作，这些都由操作系统来完成。</p>
+<h2 id="Proactor-模式"><a href="#Proactor-模式" class="headerlink" title="Proactor 模式"></a>Proactor 模式</h2><p>而在 Proactor 模式中，<strong>处理器</strong> 只负责发起异步读写操作。 <strong>处理器</strong> 传递给操作系统 <strong>用户态的数据缓冲区</strong>，之后的 IO 操作、以及内核态缓冲区→ 用户态缓冲区操作，这些都由操作系统来完成。</p>
 <p>比如，在 windows 上，处理器发起一个异步 IO 操作，再由事件分离器等待 IOCompletion 事件。IOCompletion 通知的时候, 数据已经被拷贝到处理器的 buff 了.<br>典型的异步模式实现，都建立在操作系统支持异步 API 的基础之上，我们将这种实现称为“系统级”异步或“真”异步，因为应用程序完全依赖操作系统执行真正的 IO 工作。</p>
 <p>Windows IOCP 使用 Proactor 模式，Proactor 模式使用异步 I/O。Proactor 的标准（典型）的工作方式是：</p>
 <ul>
@@ -402,11 +401,11 @@
 <li>事件处理器处理用户自定义缓冲区中的数据，然后启动一个新的异步操作，并将控制权返回事件分离器。</li>
 </ul>
 <p>以上参考: <a href="https://blog.csdn.net/robinjwong/article/details/50117091" target="_blank" rel="noopener">Reactor VS Proactor 模式</a> @ref</p>
-<h3 id="两种模式的比较"><a href="#两种模式的比较" class="headerlink" title="两种模式的比较"></a>两种模式的比较</h3><h4 id="比较实现"><a href="#比较实现" class="headerlink" title="比较实现"></a>比较实现</h4><ul>
+<h2 id="两种模式的比较"><a href="#两种模式的比较" class="headerlink" title="两种模式的比较"></a>两种模式的比较</h2><h3 id="比较实现"><a href="#比较实现" class="headerlink" title="比较实现"></a>比较实现</h3><ul>
 <li>在 Reactor 模式，用户代码的责任是： 在收到 IO事件后进行实际的 IO 操作；</li>
 <li>在 Proactor 模式，用户代码需要负责收到 IO事件后的所有操作；</li>
 </ul>
-<h4 id="优势和劣势"><a href="#优势和劣势" class="headerlink" title="优势和劣势"></a>优势和劣势</h4><p><strong>✔︎ Reactor 优势</strong></p>
+<h3 id="优势和劣势"><a href="#优势和劣势" class="headerlink" title="优势和劣势"></a>优势和劣势</h3><p><strong>✔︎ Reactor 优势</strong></p>
 <ul>
 <li>Reactor 实现相对简单，对于耗时短的处理场景处理高效；</li>
 <li>操作系统可以在多个事件源上等待，并且避免了多线程编程相关的性能开销和编程复杂性；</li>
@@ -425,13 +424,17 @@
 <ul>
 <li>Proactor 依赖操作系统对异步的支持，目前实现了纯异步操作的操作系统少，比较优秀的如 windows IOCP（完成端口），但由于其 windows 系统用于服务器的局限性，目前应用范围较小；<br>而 Unix/Linux 系统对纯异步的支持尚不成熟，应用事件驱动的主流还是通过 select/epoll 来实现；</li>
 </ul>
-<h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><ul>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
 <li>Reactor：同时接收多个服务请求，并且依次同步的处理它们的事件驱动程序；</li>
 <li>Proactor：异步接收和同时处理多个服务请求的事件驱动程序；</li>
 </ul>
-<h4 id="在实际工程中的使用"><a href="#在实际工程中的使用" class="headerlink" title="在实际工程中的使用"></a>在实际工程中的使用</h4><ul>
+<h3 id="在实际工程中的使用"><a href="#在实际工程中的使用" class="headerlink" title="在实际工程中的使用"></a>在实际工程中的使用</h3><ul>
 <li>Reactor: libevent / libev /libuv / ZeroMQ / Event Library in Redis</li>
 <li>Proactor: Windows IOCP / Boost.Asio</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/161214505" target="_blank" rel="noopener">System|IO|Proactor - 知乎</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/161159888" target="_blank" rel="noopener">System|IO|Reactor - 知乎</a></li>
 </ul>
 
       
@@ -560,7 +563,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">454</span>
+                  <span class="site-state-item-count">460</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -582,7 +585,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-count">399</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -650,7 +653,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Reactor-模式"><span class="nav-text">Reactor 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Proactor-模式"><span class="nav-text">Proactor 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两种模式的比较"><span class="nav-text">两种模式的比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#比较实现"><span class="nav-text">比较实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优势和劣势"><span class="nav-text">优势和劣势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适用场景"><span class="nav-text">适用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在实际工程中的使用"><span class="nav-text">在实际工程中的使用</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O-多路复用模式：Reactor-amp-Proactor"><span class="nav-text">I/O 多路复用模式：Reactor &amp; Proactor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactor-模式"><span class="nav-text">Reactor 模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Proactor-模式"><span class="nav-text">Proactor 模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两种模式的比较"><span class="nav-text">两种模式的比较</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#比较实现"><span class="nav-text">比较实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优势和劣势"><span class="nav-text">优势和劣势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适用场景"><span class="nav-text">适用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在实际工程中的使用"><span class="nav-text">在实际工程中的使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
@@ -883,24 +886,7 @@
 
   
   <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
-  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
 
 
   

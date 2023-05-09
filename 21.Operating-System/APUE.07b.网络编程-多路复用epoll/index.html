@@ -5,7 +5,7 @@
 
 <html class="theme-next muse" lang="zh-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+  <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -130,7 +130,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/operating_system/Linux-IO-Async.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.07b.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8epoll-2023-05-04-2.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.07b.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8epoll-2023-05-04-1.png">
-<meta property="og:updated_time" content="2023-05-06T10:52:24.243Z">
+<meta property="og:updated_time" content="2023-05-09T04:45:01.383Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="APUE.07b.网络编程-多路复用">
 <meta name="twitter:description" content="五种 I/O 模型 阻塞 IO: 调用 read, 如果内核数据未就绪, 调用 read 的进程进入阻塞状态。应用程序调用一个 IO 函数，导致应用程序阻塞并等待数据准备就绪。如果数据没有准备好，一直等待。如果数据准备好了，则从内核拷贝到用户空间拷贝数据，IO 函数返回成功指示。 非阻塞 IO: nonblocking IO 的特点是用户进程需要不断的主动询问 kernel 数据是否准备好. 当所">
@@ -170,7 +170,7 @@
 
 
 
-  <title>APUE.07b.网络编程-多路复用 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>APUE.07b.网络编程-多路复用 | 扔掉笔记 ᐛ</title>
   
 
 
@@ -189,7 +189,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -359,7 +359,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,759
+                  4,783
                 </span>
               
 
@@ -484,7 +484,7 @@
 <li><a href="https://mp.weixin.qq.com/s/OmRdUgO1guMX76EdZn11UQ" target="_blank" rel="noopener">图解 | 深入揭秘 epoll 是如何实现 IO 多路复用的！</a></li>
 <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2MzU3Mjc3Ng==&amp;mid=2247483737&amp;idx=1&amp;sn=7ef3afbb54289c6e839eed724bb8a9d6" target="_blank" rel="noopener">聊聊Netty那些事儿之从内核角度看IO模型</a></li>
 </ul>
-<h3 id="epoll-的水平触发和边缘触发"><a href="#epoll-的水平触发和边缘触发" class="headerlink" title="epoll 的水平触发和边缘触发"></a>epoll 的水平触发和边缘触发</h3><p><strong>再谈水平触发（LT）和边缘触发（ET）</strong>：</p>
+<h3 id="水平触发和边缘触发"><a href="#水平触发和边缘触发" class="headerlink" title="水平触发和边缘触发"></a>水平触发和边缘触发</h3><p><strong>再谈水平触发（LT）和边缘触发（ET）</strong>：</p>
 <p>网上有大量的关于这两种模式的讲解，大部分讲的比较模糊，感觉只是强行从概念上进行描述，看完让人难以理解。所以在这里，笔者想结合上边 epoll 的工作过程，再次对这两种模式做下自己的解读，力求清晰的解释出这两种工作模式的异同。</p>
 <p>水平触发和边缘触发最关键的区别就在于 <strong>当 socket 中的接收缓冲区还有数据可读时。epoll_wait 是否会清空 rdllist</strong>。</p>
 <ul>
@@ -495,6 +495,9 @@
 </ul>
 <p><strong>如果你在边缘触发模式下，处理了部分 socket 上的数据，那么想要处理剩下部分的数据，就只能等到这个 socket 上再次有网络数据到达</strong>。</p>
 <p>在 Netty 中实现的 EpollSocketChannel 默认的就是<strong>边缘触发</strong>模式。JDK 的 NIO 默认是<strong>水平触发</strong>模式。</p>
+<blockquote>
+<p>epoll 默认也是 LT <a href="https://stackoverflow.com/questions/24400941/how-do-we-know-whether-call-to-epoll-wait-is-edge-triggered-or-level-triggered" target="_blank" rel="noopener">https://stackoverflow.com/questions/24400941/how-do-we-know-whether-call-to-epoll-wait-is-edge-triggered-or-level-triggered</a></p>
+</blockquote>
 <p>@ref: <a href="https://mp.weixin.qq.com/s?__biz=Mzg2MzU3Mjc3Ng==&amp;mid=2247483737&amp;idx=1&amp;sn=7ef3afbb54289c6e839eed724bb8a9d6" target="_blank" rel="noopener">聊聊Netty那些事儿之从内核角度看IO模型</a></p>
 <hr>
 <p>比较 ET 和 LT 的性能：</p>
@@ -550,8 +553,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/21.Operating-System/APUE.07a.网络编程API/" rel="next" title="APUE.07a.网络编程API">
-                <i class="fa fa-chevron-left"></i> APUE.07a.网络编程API
+              <a href="/19.Algorithm/Alg.02.算法概述/" rel="next" title="算法概述">
+                <i class="fa fa-chevron-left"></i> 算法概述
               </a>
             
           </div>
@@ -653,7 +656,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">454</span>
+                  <span class="site-state-item-count">460</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -675,7 +678,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-count">399</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -743,7 +746,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#五种-I-O-模型"><span class="nav-text">五种 I/O 模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select"><span class="nav-text">select</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#poll"><span class="nav-text">poll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epoll"><span class="nav-text">epoll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select-amp-poll-amp-epoll-内部实现"><span class="nav-text">select &amp; poll &amp; epoll 内部实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#select-1"><span class="nav-text">select</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#poll-1"><span class="nav-text">poll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epoll-1"><span class="nav-text">epoll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epoll-的水平触发和边缘触发"><span class="nav-text">epoll 的水平触发和边缘触发</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epoll-example"><span class="nav-text">epoll example</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#五种-I-O-模型"><span class="nav-text">五种 I/O 模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select"><span class="nav-text">select</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#poll"><span class="nav-text">poll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epoll"><span class="nav-text">epoll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select-amp-poll-amp-epoll-内部实现"><span class="nav-text">select &amp; poll &amp; epoll 内部实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#select-1"><span class="nav-text">select</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#poll-1"><span class="nav-text">poll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epoll-1"><span class="nav-text">epoll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#水平触发和边缘触发"><span class="nav-text">水平触发和边缘触发</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epoll-example"><span class="nav-text">epoll example</span></a></li></ol></div>
             
 
           </div>
@@ -976,24 +979,7 @@
 
   
   <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
-  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
 
 
   

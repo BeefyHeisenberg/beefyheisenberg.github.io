@@ -5,7 +5,7 @@
 
 <html class="theme-next muse" lang="zh-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+  <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -126,7 +126,7 @@
 <meta property="og:description" content="JVM Architecture Explained The JVM Architecture Explained - DZone Java  JVM 分为三个子系统: Class Loader, Runtime Data Area, Execution Engine （1）ClassLoader：Java’s dynamic class loading functionality is hand">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-Architecture.png">
-<meta property="og:updated_time" content="2023-05-06T10:52:23.861Z">
+<meta property="og:updated_time" content="2023-05-09T04:45:00.760Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-02a-JVM架构简介">
 <meta name="twitter:description" content="JVM Architecture Explained The JVM Architecture Explained - DZone Java  JVM 分为三个子系统: Class Loader, Runtime Data Area, Execution Engine （1）ClassLoader：Java’s dynamic class loading functionality is hand">
@@ -166,7 +166,7 @@
 
 
 
-  <title>Advanced Java-02a-JVM架构简介 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>Advanced Java-02a-JVM架构简介 | 扔掉笔记 ᐛ</title>
   
 
 
@@ -185,7 +185,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -384,15 +384,15 @@
 <p><a href="https://dzone.com/articles/jvm-architecture-explained?oid=18544920" target="_blank" rel="noopener">The JVM Architecture Explained - DZone Java</a></p>
 </blockquote>
 <p>JVM 分为三个子系统: Class Loader, Runtime Data Area, Execution Engine</p>
-<p>（1）ClassLoader：Java’s dynamic class loading functionality is handled by the ClassLoader subsystem. It loads, links. and initializes the class file when it refers to a class for the first time at runtime, not compile time.</p>
+<p>（1）<strong>ClassLoader</strong>：Java’s dynamic class loading functionality is handled by the ClassLoader subsystem. It loads, links. and initializes the class file when it refers to a class for the first time at runtime, not compile time.</p>
 <ol>
 <li>BootStrap ClassLoader – Responsible for loading classes from the bootstrap classpath, nothing but rt.jar. Highest priority will be given to this loader.</li>
 <li>Extension ClassLoader – Responsible for loading classes which are inside the ext folder (jre\lib).</li>
 <li>Application ClassLoader –Responsible for loading Application Level Classpath, path mentioned Environment Variable, etc.</li>
 </ol>
 <p>The above ClassLoaders will follow <strong>Delegation Hierarchy Algorithm</strong> while loading the class files.</p>
-<p>（2）Runtime Data Area：… </p>
-<p>（3）Execution Engine: The bytecode, which is assigned to the Runtime Data Area, will be executed by the Execution Engine. The Execution Engine reads the bytecode and executes it piece by piece (// Execution Engine 又分为三个子系统: 解释器, JIT编译器, 垃圾收集器) :</p>
+<p>（2）<strong>Runtime Data Area</strong>：… </p>
+<p>（3）<strong>Execution Engine</strong>: The bytecode, which is assigned to the Runtime Data Area, will be executed by the Execution Engine. The Execution Engine reads the bytecode and executes it piece by piece (// Execution Engine 又分为三个子系统: 解释器, JIT编译器, 垃圾收集器) :</p>
 <ol>
 <li>Interpreter: The interpreter interprets the bytecode faster but executes slowly. The disadvantage of the interpreter is that when one method is called multiple times, every time a new interpretation is required. // 解释器,每次执行同一段代码需要创建多个解释器?</li>
 <li>JIT Compiler:  Execution Engine 使用 Interpreter解释代码并执行, 当 Execution Engine 检测到重复执行的代码时, JIT编译器将字节码便以为 native code<ol>
@@ -448,8 +448,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/12.Java/Advanced-Java.01.JDK/" rel="next" title="Advanced Java-01-JDK">
-                <i class="fa fa-chevron-left"></i> Advanced Java-01-JDK
+              <a href="/About/About-Scriptorium/" rel="next" title="About-Scriptorium">
+                <i class="fa fa-chevron-left"></i> About-Scriptorium
               </a>
             
           </div>
@@ -458,8 +458,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/12.Java/Advanced-Java.02b.JVM内存分代/" rel="prev" title="Advanced Java-02b-JVM内存分代">
-                Advanced Java-02b-JVM内存分代 <i class="fa fa-chevron-right"></i>
+              <a href="/12.Java/Java-Tutorials.02.集合/" rel="prev" title="Java Tutorials-02-集合">
+                Java Tutorials-02-集合 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -551,7 +551,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">454</span>
+                  <span class="site-state-item-count">460</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -573,7 +573,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-count">399</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -874,24 +874,7 @@
 
   
   <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
-  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
 
 
   

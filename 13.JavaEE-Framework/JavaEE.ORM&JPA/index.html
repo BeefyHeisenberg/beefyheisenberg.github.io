@@ -5,7 +5,7 @@
 
 <html class="theme-next muse" lang="zh-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+  <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -120,14 +120,14 @@
 <meta name="description" content="一些概念：JDBC &amp;amp; PJA &amp;amp; ORMJDBC (Java Database Connectivity) API，即Java数据库编程接口，是一组标准的Java语言中的接口和类，使用这些接口和类，Java客户端程序可以访问各种不同类型的数据库。  JPA 全称为Java Persistence API ，Java持久化API是Sun公司在Java EE 5规范中提出的Java持">
 <meta name="keywords" content="JavaEE,ORM,MyBatis,Hibernate">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java ORM框架">
-<meta property="og:url" content="https://beefyheisenberg.github.io/13.JavaEE-Framework/JavaEE.ORM/index.html">
+<meta property="og:title" content="Java JPA &amp; ORM框架">
+<meta property="og:url" content="https://beefyheisenberg.github.io/13.JavaEE-Framework/JavaEE.ORM&JPA/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="一些概念：JDBC &amp;amp; PJA &amp;amp; ORMJDBC (Java Database Connectivity) API，即Java数据库编程接口，是一组标准的Java语言中的接口和类，使用这些接口和类，Java客户端程序可以访问各种不同类型的数据库。  JPA 全称为Java Persistence API ，Java持久化API是Sun公司在Java EE 5规范中提出的Java持">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-05-06T10:52:24.059Z">
+<meta property="og:updated_time" content="2023-05-09T04:45:01.073Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java ORM框架">
+<meta name="twitter:title" content="Java JPA &amp; ORM框架">
 <meta name="twitter:description" content="一些概念：JDBC &amp;amp; PJA &amp;amp; ORMJDBC (Java Database Connectivity) API，即Java数据库编程接口，是一组标准的Java语言中的接口和类，使用这些接口和类，Java客户端程序可以访问各种不同类型的数据库。  JPA 全称为Java Persistence API ，Java持久化API是Sun公司在Java EE 5规范中提出的Java持">
 
 
@@ -158,13 +158,13 @@
 
 
 
-  <link rel="canonical" href="https://beefyheisenberg.github.io/13.JavaEE-Framework/JavaEE.ORM/"/>
+  <link rel="canonical" href="https://beefyheisenberg.github.io/13.JavaEE-Framework/JavaEE.ORM&JPA/"/>
 
 
 
 
 
-  <title>Java ORM框架 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>Java JPA & ORM框架 | 扔掉笔记 ᐛ</title>
   
 
 
@@ -183,7 +183,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/13.JavaEE-Framework/JavaEE.ORM/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/13.JavaEE-Framework/JavaEE.ORM&JPA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -299,7 +299,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java ORM框架</h1>
+          <h1 class="post-title" itemprop="name headline">Java JPA & ORM框架</h1>
         
 
         <div class="post-meta">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,419
+                  2,004
                 </span>
               
 
@@ -387,7 +387,7 @@
 <p>Connection、Statement、ResultSet 都是接口，具体实现由各个数据库提供商提供。可以通过 JDBC统一的接口，访问多种类型的数据库，可随便切换数据库。</p>
 <p>下面是一个例子：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Connection conn = <span class="keyword">null</span>; </span><br><span class="line">PreparedStatement ps = <span class="keyword">null</span>; </span><br><span class="line">ResultSet rs = <span class="keyword">null</span>; </span><br><span class="line"><span class="keyword">try</span> &#123; </span><br><span class="line">    <span class="comment">//1. 加载驱动 </span></span><br><span class="line">    Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>); </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//2. 获取连接</span></span><br><span class="line">    conn = DriverManager.getConnection(<span class="string">"jdbc:mysql://localhost:3306/dropnotes?serverTimezone=UTC"</span>, <span class="string">"user"</span>, <span class="string">"pwd"</span>); </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//3. 创建 PreparedStatement</span></span><br><span class="line">    ps = conn.prepareStatement(<span class="string">"select * from notes"</span>); </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//4. 执行sql</span></span><br><span class="line">    rs = ps.executeQuery(); </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//5. 遍历结果集 </span></span><br><span class="line">    <span class="keyword">while</span>(rs.next()) &#123; </span><br><span class="line">        System.out.println(rs.getString(<span class="number">2</span>)); </span><br><span class="line">    &#125; </span><br><span class="line">&#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123; </span><br><span class="line">    e.printStackTrace(); </span><br><span class="line">&#125; <span class="keyword">catch</span> (SQLException e) &#123; </span><br><span class="line">    e.printStackTrace(); </span><br><span class="line">&#125;<span class="keyword">finally</span> &#123; </span><br><span class="line">    <span class="keyword">try</span> &#123; </span><br><span class="line">        rs.close(); </span><br><span class="line">        ps.close(); </span><br><span class="line">        conn.close(); </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">catch</span> (SQLException e) &#123; </span><br><span class="line">        e.printStackTrace(); </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面使用 DriverManager 获取数据库 connection 是 JDBC1 提供的，需要自己维护 connection 并释放，频繁建立 &amp; 释放 connection 性能也不高。</p>
+<p>JDBC1 提供了 DriverManager 用于加载数据库驱动 &amp; 获取 connection ，但这种方式显然不方便，需要自己管理 connection ，频繁建立 &amp; 释放 connection 性能也不高。</p>
 <blockquote>
 <p>DriverManager 中使用了 SPI 模式来加载数据库 Driver Jar 包 @ref：<a href="https://pdai.tech/md/java/advanced/java-advanced-spi.html#spi%E6%9C%BA%E5%88%B6-jdbc-drivermanager" target="_blank" rel="noopener">Java常用机制 - SPI机制详解 | Java 全栈知识体系</a></p>
 </blockquote>
@@ -396,7 +396,23 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> ComboPooledDataSource dataSource = <span class="keyword">new</span> ComboPooledDataSource(); </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">dataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        dataSource.setDriverClass(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">        dataSource.setJdbcUrl(<span class="string">"jdbc:mysql://localhost:3306/test?serverTimezone=UTC"</span>);</span><br><span class="line">        dataSource.setUser(<span class="string">"root"</span>);</span><br><span class="line">        dataSource.setPassword(<span class="string">"123456"</span>);</span><br><span class="line">        dataSource.setInitialPoolSize(<span class="number">3</span>);</span><br><span class="line">        dataSource.setMaxPoolSize(<span class="number">10</span>);</span><br><span class="line">        dataSource.setMinPoolSize(<span class="number">3</span>);</span><br><span class="line">        dataSource.setAcquireIncrement(<span class="number">3</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (PropertyVetoException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Connection <span class="title">conn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Connection conn = <span class="keyword">null</span>;</span><br><span class="line">    dataSource();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        conn = dataSource.getConnection();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> conn;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>使用了连接池后，无需手动管理 connection 释放，方便了很多，但此时还是需要手动写 Statement 和 ResultSet 的代码。</p>
 <p>这时候就需要使用 ORM（对象关系映射），主要解决数据库数据和 POJO 对象的相互映射，就不需要手动写 SQL 了</p>
-<h2 id="对比-Hibernate-和-MyBatis"><a href="#对比-Hibernate-和-MyBatis" class="headerlink" title="对比 Hibernate 和 MyBatis"></a>对比 Hibernate 和 MyBatis</h2><p>Hibernate 和 Mybatis 都是 <strong>ORM 持久层框架</strong>，</p>
+<h1 id="选型对比"><a href="#选型对比" class="headerlink" title="选型对比"></a>选型对比</h1><h2 id="Spring-JPA-MyBatis"><a href="#Spring-JPA-MyBatis" class="headerlink" title="Spring JPA - MyBatis"></a>Spring JPA - MyBatis</h2><p><strong>Spring Data JPA or Mybatis</strong>?</p>
+<p>Jpa（Java Persistence API）是 sun 官方提出的 java 持久化规范。它为 java 开发人员提供了一种对象/关联映射工具，来管理 java 应用中的关系数据。它的出现主要是为了简化现有的持久化开发工作和整合 ORM 技术，结束现在 hibernate、<a href="https://www.zhihu.com/search?q=toplink&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2525463657%7D" target="_blank" rel="noopener">toplink</a>、jdo 等 ORM 框架各自为营的局面。</p>
+<p>值得注意的是，Jpa 是在充分吸收了现有 ORM 框架的基础上发展而来的，具有易于使用，伸缩性强等优点。从目前的开发社区的反应上看，Jpa 受到了极大的支持和赞扬，其中就包括了 spring 和 EJB 的开发团队。</p>
+<ul>
+<li><p>Spring Data Jpa 是 Spring 基于 ORM 框架、JPA 规范的基础上封装的一套 Jpa 应用框架，可使开发者用极简的代码即可实现对数据库的访问和操作。它提供了包括增删改查等在内的常用功能，且易于扩展</p>
+</li>
+<li><p>MyBatis 本是 apache 的一个开源项目 iBatis, 2010年这个项目由 apache software foundation 迁移到了 google code，并且改名为 MyBatis 。Mybatis：着力于 POJO 与 SQL 之间的映射关系</p>
+</li>
+</ul>
+<p>Spring Data JPA 默认使用 hibernate 作为 ORM。我们再看看 hibernate 的官方概念，Hibernate 是一个开放源代码的对象关系映射框架，它对 JDBC 进行了非常轻量级的对象封装，它将 POJO 与数据库表建立映射关系，是一个全自动的 orm 框架，hibernate 可以自动生成 SQL 语句</p>
+<p>@ref: <a href="https://www.zhihu.com/question/316458408" target="_blank" rel="noopener">SpringBoot开发使用Mybatis还是Spring Data JPA?? - 知乎</a></p>
+<hr>
+<p>使用 Spring Data Jpa 仅需要定义接口，并继承 JpaRepository 接口，不需要编写实现类，也不需要编写 XML 映射文件。Spring Data Jpa 默认提供简单的 CRUD 方法，并支持自动根据方法名生成 SQL，提供注解方式动态生成 SQL，也支持分页、排序。</p>
+<p>个人更喜欢在分布式微服务项目中使用 Spring Data Jpa，特别是使用领域驱动设计架构设计的项目，而在管理后台项目使用 Mybatis。</p>
+<p>因为管理后台需要更灵活的查询支持，经常写些复杂的 SQL，在这方面 Jpa 显得较弱势，而分布式微服务项目实现业务的核心逻辑，只需要用到简单的数据查询、删增改，因此较适合使用 Jpa。</p>
+<p>@ref: <a href="https://juejin.cn/post/6932485961532063752" target="_blank" rel="noopener">Mybatis与Spring Data Jpa怎么选？ - 掘金</a></p>
+<h2 id="Hibernate-MyBatis"><a href="#Hibernate-MyBatis" class="headerlink" title="Hibernate - MyBatis"></a>Hibernate - MyBatis</h2><p>Hibernate 和 Mybatis 都是 <strong>ORM 持久层框架</strong>，</p>
 <p>Hibernate 提供的是一种全表映射的模型，对 JDBC 的封装程度比较高。但 Hibernate 也有不少缺点：</p>
 <ul>
 <li>全表映射带来的不便，比如更新时需要发送所有的字段；</li>
@@ -407,7 +423,7 @@
 </ul>
 <p>大型互联网环境中，灵活、SQL 优化，减少数据的传递是最基本的优化方法，Hibernate 无法满足要求，而 MyBatis 是一个半自动映射的框架，提供了更灵活、方便的方式。</p>
 <p>MyBatis需要手工匹配提供POJO、SQL和映射关系，而全表映射的Hibernate只需要提供POJO和映射关系。</p>
-<h1 id="MyBatis"><a href="#MyBatis" class="headerlink" title="MyBatis"></a>MyBatis</h1><p>在 Spring 项目中引入 MyBatis 支持 @link <a href="/13.JavaEE-Framework/JavaEE.SpringMVC/" title="JavaEE.SpringMVC">JavaEE.SpringMVC</a><br>主要是定义 SqlSessionFactory、DataSource 和 Mapper。</p>
+<h1 id="Spring-Data-JPA"><a href="#Spring-Data-JPA" class="headerlink" title="Spring Data JPA"></a>Spring Data JPA</h1><h1 id="MyBatis"><a href="#MyBatis" class="headerlink" title="MyBatis"></a>MyBatis</h1><p>在 Spring 项目中引入 MyBatis 支持 @link <a href="/13.JavaEE-Framework/JavaEE.SpringMVC/" title="JavaEE.SpringMVC">JavaEE.SpringMVC</a><br>主要是定义 SqlSessionFactory、DataSource 和 Mapper。</p>
 <p>Mybatis 四大核心类：</p>
 <ul>
 <li>SqlSessionFactoryBuilder：会根据配置信息或代码来生成 SqlSessionFactory；</li>
@@ -415,7 +431,6 @@
 <li>SqlSession：是一个既可以发送SQL去执行并返回结果，也可以获取Mapper的接口；</li>
 <li>SQL Mapper：是MyBatis新设计的组件，由一个Java接口和XML文件构成，需要给出对应的SQL和映射规则。它负责发送SQL去执行，并返回结果。</li>
 </ul>
-<p>作者：情情说<br>链接：<a href="https://juejin.cn/post/6844903582639063054" target="_blank" rel="noopener">https://juejin.cn/post/6844903582639063054</a><br>来源：稀土掘金<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
 <ul>
 <li><a href="http://www.mybatis.org/mybatis-3/zh/getting-started.html" target="_blank" rel="noopener">MyBatis 3 | 入门</a></li>
 <li><a href="https://gitbook.cn/books/5a37b6b66eec7c4f044a75d0/index.html" target="_blank" rel="noopener">通过源码深入理解 SQL 的执行过程</a></li>
@@ -563,7 +578,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">454</span>
+                  <span class="site-state-item-count">460</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -585,7 +600,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-count">399</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -653,7 +668,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一些概念：JDBC-amp-PJA-amp-ORM"><span class="nav-text">一些概念：JDBC &amp; PJA &amp; ORM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从-JDBC-到-ORM"><span class="nav-text">从 JDBC 到 ORM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对比-Hibernate-和-MyBatis"><span class="nav-text">对比 Hibernate 和 MyBatis</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MyBatis"><span class="nav-text">MyBatis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hibernate"><span class="nav-text">Hibernate</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一些概念：JDBC-amp-PJA-amp-ORM"><span class="nav-text">一些概念：JDBC &amp; PJA &amp; ORM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从-JDBC-到-ORM"><span class="nav-text">从 JDBC 到 ORM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#选型对比"><span class="nav-text">选型对比</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-JPA-MyBatis"><span class="nav-text">Spring JPA - MyBatis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate-MyBatis"><span class="nav-text">Hibernate - MyBatis</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Data-JPA"><span class="nav-text">Spring Data JPA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MyBatis"><span class="nav-text">MyBatis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hibernate"><span class="nav-text">Hibernate</span></a></li></ol></div>
             
 
           </div>
@@ -808,9 +823,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://beefyheisenberg.github.io/13.JavaEE-Framework/JavaEE.ORM/';
-          this.page.identifier = '13.JavaEE-Framework/JavaEE.ORM/';
-          this.page.title = 'Java ORM框架';
+          this.page.url = 'https://beefyheisenberg.github.io/13.JavaEE-Framework/JavaEE.ORM&JPA/';
+          this.page.identifier = '13.JavaEE-Framework/JavaEE.ORM&JPA/';
+          this.page.title = 'Java JPA & ORM框架';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://dropnotes-2.disqus.com/embed.js';
@@ -886,24 +901,7 @@
 
   
   <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
-  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
 
 
   

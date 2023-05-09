@@ -5,7 +5,7 @@
 
 <html class="theme-next muse" lang="zh-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+  <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -159,7 +159,7 @@
 
 
 
-  <title>扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>扔掉笔记 ᐛ</title>
   
 
 
@@ -178,7 +178,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
+  <div class="container sidebar-position-left 
   page-home">
     <div class="headband"></div>
 
@@ -264,6 +264,969 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Markdown】Hexo部署和使用指北/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/50.Farbox-Blog/【Markdown】Hexo部署和使用指北/" itemprop="url">Hexo部署和使用指北(Windows)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,022
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="静态博客对比"><a href="#静态博客对比" class="headerlink" title="静态博客对比"></a>静态博客对比</h1><ul>
+<li>Hugo: 基于Golang <a href="https://gohugo.io/" target="_blank" rel="noopener">The world’s fastest framework for building websites | Hugo</a></li>
+<li>Jekyll: 基于Ruby / 支持 GitHub Pages 部署 <a href="https://jekyllrb.com/" target="_blank" rel="noopener">Jekyll • Simple, blog-aware, static sites | Transform your plain text into static websites and blogs</a></li>
+<li>Hexo: 基于Node.js / 支持 GitHub Pages 部署 <a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo</a></li>
+</ul>
+<h1 id="安装-Step-by-Step"><a href="#安装-Step-by-Step" class="headerlink" title="安装 Step by Step"></a>安装 Step by Step</h1><p>安装<a href="http://git-scm.com/downloads" target="_blank" rel="noopener">Git客户端</a>和<a href="http://nodejs.org/download/" target="_blank" rel="noopener">node.js</a>环境, 然后你还要有一个Github帐号.<br>安装完node.js之后, 不要忘记把<code>User/AppData/Roaming/npm</code>添加到PATH.</p>
+<ul>
+<li>安装hexo: 打开Git CMD（因为），输入: <code>npm install -g hexo-cli</code></li>
+<li>初始化hexo: <code>hexo init BLOG</code>, 将在当前目录建立”BLOG”为名的目录并在此初始化, Hexo 即会自动在目标文件夹建立网站所需要的所有文件.</li>
+<li>安装依赖包: <code>cd BLOG &amp;&amp; npm install</code>,<ul>
+<li>如果需要把Blog部署到Github上, 还需要安装hexo-git模块: <code>npm install hexo-deployer-git --save</code> (这一步可选);</li>
+<li>如果需要Blog主页不显示全文而是摘要, 需要安装<code>npm install --save hexo-excerpt</code> (这一步可选);</li>
+</ul>
+</li>
+<li>本地启动测试: <code>hexo server</code>, 然后访问<a href="http://127.0.0.1:4000/" target="_blank" rel="noopener">127.0.0.1:4000</a>查看.</li>
+<li>Github上新建一个repository, 名字为<code>yoursite.github.io</code></li>
+<li><p>修改本地的<code>_config.yml</code>文件, 找到<code>#site</code>一栏, 修改博客的title, 然后在最后的<code>deploy:</code>处增加下面几行:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type: github</span><br><span class="line">repository: https://github.com/Your_Github_Account/yoursite.github.io.git</span><br><span class="line">branch: master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加评论系统: 国外比较常用的评论系统有disqus等, 这个在hexo中也是默认开启的, 如果我们要添加其他的评论系统, 还需要做一点修改.<br>在国内推荐使用搜狐畅言: <img src="http://changyan.sohu.com/platformstatic/images/pic/f02.jpg" alt="搜狐畅言-专业的社会化评论系统">.<br>首先需要在配置文件中禁用disqus, 编辑根目录的_config.yml文件: 查找并注释掉<code>disqus_shortname</code>一行.<br>然后编辑 <code>themes\landscape\layout\_partial\article.ejs</code>文件, 在文件最后找到<code>section id=&quot;comments&quot;</code>一段, 修改为:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;% if (!index)&#123; %&gt;</span><br><span class="line">&lt;section id=&quot;comments&quot;&gt;</span><br><span class="line">    &lt;%- partial(&apos;comment&apos;) %&gt;</span><br><span class="line">&lt;/section&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure>
+<p>编辑<code>themes\landscape\layout\_partial\comment.ejs</code> 并添加<a href="http://changyan.sohu.com/" target="_blank" rel="noopener">畅言</a>的Js代码:</p>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/50.Farbox-Blog/【Markdown】Hexo部署和使用指北/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】EasyGrep使用介绍/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/50.Farbox-Blog/【Vim】EasyGrep使用介绍/" itemprop="url">EasyGrep使用简介</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  611
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Linux上使用Vim进行文件搜一般使用grep命令+grep.vim插件完成, 但在Windows上使用grep就有些不方便了, <a href="http://gnuwin32.sourceforge.net/" target="_blank" rel="noopener">GnuWin32</a>和<a href="http://sourceforge.net/projects/unxutils/" target="_blank" rel="noopener">UnxUtils</a>虽然都提供了Windows移植版本的Grep.exe, 但都有bug, 比如:</p>
+<ul>
+<li><a href="http://stackoverflow.com/questions/3995493/gnuwin32-find-exe-expands-wildcard-before-performing-search" target="_blank" rel="noopener">Gnuwin32 find.exe expands wildcard before performing search</a></li>
+<li><a href="http://sourceforge.net/p/unxutils/bugs/58/" target="_blank" rel="noopener">UnxUtils: #58 xargs: cannot fork</a></li>
+</ul>
+<p>在Windows上使用grep还有一个折衷的办法: 使用Cygwin环境, 不过今天这里不讨论Cygwin…<br>偶然在这个博客上发现了EasyGrep插件的介绍: <a href="http://zuyunfei.com/2013/08/25/vim-plugin-easy-grep/" target="_blank" rel="noopener">vim中的杀手级插件: EasyGrep</a>, 当时我是多么执着于在Windows上移植Grep和ack啊… 浪费了不少时间之后才发现还是使用现成的工具比较好-.-</p>
+<h2 id="EasyGrep的安装"><a href="#EasyGrep的安装" class="headerlink" title="EasyGrep的安装"></a>EasyGrep的安装</h2><p>如果你已经使用了Vundle管理Vim插件, 只需要在.vimrc里增加<code>Bundle &#39;EasyGrep&#39;</code>然后使用<code>:BundleInstall</code>安装即可.</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/50.Farbox-Blog/【Vim】EasyGrep使用介绍/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【开发环境】还是告别Linux-Desktop了/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/50.Farbox-Blog/【开发环境】还是告别Linux-Desktop了/" itemprop="url">还是告别 Linux Desktop了</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  804
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>用了几年Ubuntu,还有Fedora.曾经认为*nix的一切概念都比Windows更加合理. 但是… 折腾了这么久, 我还是决定换回Windows了.</p>
+<p>至于原因,简单的解释就是: 无论哪个桌面OS都只是工具而已,在”折腾工具”上花费太多时间本身已经违背了工具被设计出来的初衷, 无论那个Linux桌面发行版(作为日常使用OS)距离”好用”还是有相当的差距.</p>
+<ul>
+<li>比如Chrome for Linux版本播放flash的渣性能;</li>
+<li>功耗控制的不完善,就算装了Tlp/Powertop,仍旧比不上Windows上Thinkpad自带的PowerManager;</li>
+<li>双显卡虽然有Bumblebee,但性能还是比不上NVIDIA Optimus一半;</li>
+<li>多少开源的中文字体, 在Chrome上居然都不如微软的雅黑表现出色…</li>
+<li>此外,还有Thinkpad的指纹识别,APS硬盘保护(老朽的HDAPS已经不能支持新款的Tp了). 值得吐槽的地方还有很多很多, 没法一一举例.</li>
+</ul>
+<p>当你在google,stackexchange上查了好多答案,折腾了许久,却发现只实现了Windows上同等功能(可能还不及),这是多么败兴的事情-.-</p>
+<p>上面提到的,或许有些人不赞同是Linux自身的原因,而是因为”大多数硬件厂商对Linux支持不够”. 唉,说直白一点, 桌面Linux败就败在了生态环境上. 无论Linux在服务器上表现如何, 都救不了Linux Desktop.</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/50.Farbox-Blog/【开发环境】还是告别Linux-Desktop了/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【效率工具】Shell的进化-Zsh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/50.Farbox-Blog/【效率工具】Shell的进化-Zsh/" itemprop="url">Shell 的进化 - Zsh</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  835
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="1-Zsh和Oh-my-zsh的安装"><a href="#1-Zsh和Oh-my-zsh的安装" class="headerlink" title="(1) Zsh和Oh-my-zsh的安装"></a>(1) Zsh和Oh-my-zsh的安装</h1><h2 id="1-1-install-zsh"><a href="#1-1-install-zsh" class="headerlink" title="(1.1) install zsh"></a>(1.1) install zsh</h2><p>OSX自带了zsh，不必再安装. 对于Redhat系/Debian系的Linux，使用yum/apt-get工具安装: <code>sudo -c &#39;yum install zsh&#39;</code>.</p>
+<h2 id="1-2-install-oh-my-zsh"><a href="#1-2-install-oh-my-zsh" class="headerlink" title="(1.2) install oh-my-zsh"></a>(1.2) install oh-my-zsh</h2><p>方式1 自动安装:<br><code>wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh</code><br>方式2 手动安装:<br><code>git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh</code><br><code>cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc</code></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/50.Farbox-Blog/【效率工具】Shell的进化-Zsh/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【效率工具】在Linux上安装BitTorrent-Sync/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/50.Farbox-Blog/【效率工具】在Linux上安装BitTorrent-Sync/" itemprop="url">在 Linux 上安装 BitTorrent Sync</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  253
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>BitTorrent Sync是一款同步工具，和Dropbox/Google Drive这些云存储的区别是，BitTorrent Sync不用连接服务器，而是基于P2P分布式进行设备和设备之间的文件同步，支持PC（Win/Linux/Mac），FreeBSD，Android，iOS设备。<br>用BitTorrent Sync可以方便的在同一局域网里的PC/智能设备之间同步文件。</p>
+<h2 id="1-下载-amp-安装："><a href="#1-下载-amp-安装：" class="headerlink" title="1.下载&amp;安装："></a>1.下载&amp;安装：</h2><p>两种安装方式：通过PPA安装，或直接下载二进制文件。</p>
+<h3 id="1-1-方式1"><a href="#1-1-方式1" class="headerlink" title="1.1 方式1"></a>1.1 方式1</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo add-apt-repository ppa:tuxpoldo/btsync</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install btsync-user</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/50.Farbox-Blog/【效率工具】在Linux上安装BitTorrent-Sync/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【C语言】C语言的编译与链接/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/50.Farbox-Blog/【C语言】C语言的编译与链接/" itemprop="url">C语言的编译与链接 - gcc/ld/ar等工具的介绍</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,472
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>这篇半成品已经在硬盘上放了好久了, 今天终于忍无可忍, 熬夜也要写完(▔皿▔)<br>起因是因为一个makefile引起的 <code>undefined reference</code> 问题, 下面贴出出错的makefile:</p>
+<h1 id="起因：Makefile错误"><a href="#起因：Makefile错误" class="headerlink" title="起因：Makefile错误"></a>起因：Makefile错误</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CC = gcc</span><br><span class="line">CXX = g++</span><br><span class="line">LD = ldd</span><br><span class="line"></span><br><span class="line">$(CPP_OBJS): $(DIR_OBJ)/%.o: %.cpp</span><br><span class="line">	$(CXX) $(CFLAGS) -o $@ $&lt; $(INCLUDE)</span><br><span class="line"></span><br><span class="line">$(OBJS): $(DIR_OBJ)/%.o: %.c</span><br><span class="line">	$(CC) -c $(CFLAGS) -o $@ $&lt; $(INCLUDE)</span><br><span class="line"></span><br><span class="line">$(APP): $(OBJS) $(CPP_OBJS)</span><br><span class="line">	$(CC) $^ -o $(APP) $(LDFLAGS) $(INCLUDE)</span><br></pre></td></tr></table></figure>
+<p>这个makefile很简单，g++将<em>.cpp文件编译为 \</em>.o, gcc将 *.c 文件编译为 *.o, 最后 gcc链接所有的 *.o生成可执行程序.<br>但是上面这个简单的 makefile, 执行make时却报错了:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; gcc   -o _test_code.o _test_code.c -I.</span><br><span class="line">/usr/lib/gcc/x86_64-redhat-linux/4.7.2/../../../../lib64/crt1.o: In function &apos;_start&apos;:</span><br><span class="line">(.text+0x20): undefined reference to &apos;main&apos;</span><br><span class="line">collect2: error: ld returned 1 exit status</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/50.Farbox-Blog/【C语言】C语言的编译与链接/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -2567,7 +3530,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">454</span>
+                  <span class="site-state-item-count">460</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2589,7 +3552,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">398</span>
+                  <span class="site-state-item-count">399</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2858,24 +3821,7 @@
 
   
   <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
-  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
 
 
   
