@@ -5,7 +5,7 @@
 
 <html class="theme-next muse" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -131,7 +131,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/javaee/tomcat_architecture.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/javaee/tomcat-nio-connector-process.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/javaee/tomcat-nioendpoint-poler-worker.png">
-<meta property="og:updated_time" content="2023-05-09T04:45:01.102Z">
+<meta property="og:updated_time" content="2023-05-09T04:50:59.879Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat">
 <meta name="twitter:description" content="为什么 Java Web 开发需要Tomcat Java EE（Java Platform Enterprise Edition，2018 年 3 月更名为Jakarta EE） Servlet 是 Java EE 众多标准下的一个 （link JavaEE.Servlet）  一个 Servlet 的工作模式：  创建并填充 Request 对象，包括：URI、参数、method、请求头信息、">
@@ -171,7 +171,7 @@
 
 
 
-  <title>Tomcat | 扔掉笔记 ᐛ</title>
+  <title>Tomcat | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -190,7 +190,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -360,7 +360,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  11,544
+                  11,547
                 </span>
               
 
@@ -540,7 +540,7 @@
 <ul>
 <li><strong>maxThreads</strong> = 业务线程池大小，一般几百~几 K，如果并发到来的请求数超过 maxThreads，再新来的请求不能被及时处理；</li>
 <li><strong>maxConnections</strong>：意思是 Tomcat 维护的<strong>已建立连接数</strong>上限。当连接数达到 maxConnections，Tomcat 不会再 accept，而是直接 block 掉（这时候系统仍然能 accept，但 Tomcat 不会把新连接扔给 Poller 线程了，而是 block 掉新的连接），maxConnections 在 NIO 模式默认是 1W；</li>
-<li><strong>acceptCount</strong>：如果所有的业务线程都在忙（ all possible request processing threads are in use），即并发处理中的请求数超过了 maxThreads。这时候新请会放入 accept 队列（区别 socket 的 accept），acceptCount 即是这个队列的长度；</li>
+<li><strong>acceptCount</strong>：如果所有的业务线程都在忙（ all possible request processing threads are in use），即并发处理中的请求数超过了 maxThreads。这时候新请会放入 accept 队列（区别 socket 的 accept），acceptCount 即是这个队列的长度，默认 100；</li>
 </ul>
 <p>用 <a href="https://asciiflow.com/#/" target="_blank" rel="noopener">ASCIIFlow</a> 画图解释：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">新连接到来：</span><br><span class="line"></span><br><span class="line">[Acceptor] ────────────► [Poller] ──线程池是否满？────NO─────► [业务线程池]&lt;maxThreads limits&gt;</span><br><span class="line">      &lt;maxConnections limits&gt;            │                    ▲</span><br><span class="line">                                         │                    │</span><br><span class="line">                                         │                    │</span><br><span class="line">                                        Yes──►[accept queue]──┴</span><br><span class="line">                                          &lt;acceptCount limits&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">图示：</span><br><span class="line">[ ] 表示对象实体</span><br><span class="line">&lt; &gt; 表示限制</span><br></pre></td></tr></table></figure>
@@ -647,7 +647,7 @@
 <li>JULI 的 handler 支持额外的属性, 比如<code>bufferSize</code></li>
 </ul>
 <h2 id="Tomcat日志配置解析"><a href="#Tomcat日志配置解析" class="headerlink" title="Tomcat日志配置解析"></a>Tomcat日志配置解析</h2><p>以下是一个 <code>$CATALINA_BASE/conf</code> 中的默认 logging.properties 文件：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span># 声明所有的handlers</span><br><span class="line">handlers = 1catalina.org.apache.juli.FileHandler, 2localhost.org.apache.juli.FileHandler, 3manager.org.apache.juli.FileHandler, 4host-manager.org.apache.juli.FileHandler, java.util.logging.ConsoleHandler</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span># RootLogger使用的handlers</span><br><span class="line">.handlers = 1catalina.org.apache.juli.FileHandler, java.util.logging.ConsoleHandler</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span># 定义了4个 org.apache.juli.FileHandler : 1catalina, 2localhost, 3manager, 4host-manager</span><br><span class="line">1catalina.org.apache.juli.FileHandler.level = FINE</span><br><span class="line">1catalina.org.apache.juli.FileHandler.directory = $&#123;catalina.base&#125;/logs</span><br><span class="line">1catalina.org.apache.juli.FileHandler.prefix = catalina.</span><br><span class="line">1catalina.org.apache.juli.AsyncFileHandler.encoding = UTF-8</span><br><span class="line"></span><br><span class="line">2localhost.org.apache.juli.FileHandler.level = FINE</span><br><span class="line">2localhost.org.apache.juli.FileHandler.directory = $&#123;catalina.base&#125;/logs</span><br><span class="line">2localhost.org.apache.juli.FileHandler.prefix = localhost.</span><br><span class="line">2localhost.org.apache.juli.AsyncFileHandler.encoding = UTF-8</span><br><span class="line"></span><br><span class="line">3manager.org.apache.juli.FileHandler.level = FINE</span><br><span class="line">3manager.org.apache.juli.FileHandler.directory = $&#123;catalina.base&#125;/logs</span><br><span class="line">3manager.org.apache.juli.FileHandler.prefix = manager.</span><br><span class="line">3manager.org.apache.juli.FileHandler.bufferSize = 16384</span><br><span class="line">3manager.org.apache.juli.AsyncFileHandler.encoding = UTF-8</span><br><span class="line"></span><br><span class="line">4host-manager.org.apache.juli.FileHandler.level = FINE</span><br><span class="line">4host-manager.org.apache.juli.FileHandler.directory = $&#123;catalina.base&#125;/logs</span><br><span class="line">4host-manager.org.apache.juli.FileHandler.prefix = host-manager.</span><br><span class="line">4host-manager.org.apache.juli.AsyncFileHandler.encoding = UTF-8</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span># 定义 ava.util.logging.ConsoleHandler :</span><br><span class="line">java.util.logging.ConsoleHandler.level = FINE</span><br><span class="line">java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter</span><br><span class="line">java.util.logging.ConsoleHandler.encoding = UTF-8</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span># 定义handlers, 使用上面定义的 FileHandler</span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].level = INFO</span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].handlers = 2localhost.org.apache.juli.FileHandler</span><br><span class="line"></span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/manager].level = INFO</span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/manager].handlers = 3manager.org.apache.juli.FileHandler</span><br><span class="line"></span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/host-manager].level = INFO</span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/host-manager].handlers = 4host-manager.org.apache.juli.FileHandler</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> For example, set the org.apache.catalina.util.LifecycleBase logger to log</span><br><span class="line"><span class="meta">#</span> each component that extends LifecycleBase changing state:</span><br><span class="line"><span class="meta">#</span>org.apache.catalina.util.LifecycleBase.level = FINE</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> To see debug messages in TldLocationsCache, uncomment the following line:</span><br><span class="line"><span class="meta">#</span>org.apache.jasper.compiler.TldLocationsCache.level = FINE</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 声明所有的handlers</span></span></span><br><span class="line">handlers = 1catalina.org.apache.juli.FileHandler, 2localhost.org.apache.juli.FileHandler, 3manager.org.apache.juli.FileHandler, 4host-manager.org.apache.juli.FileHandler, java.util.logging.ConsoleHandler</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># RootLogger使用的handlers</span></span></span><br><span class="line">.handlers = 1catalina.org.apache.juli.FileHandler, java.util.logging.ConsoleHandler</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 定义了4个 org.apache.juli.FileHandler : 1catalina, 2localhost, 3manager, 4host-manager</span></span></span><br><span class="line">1catalina.org.apache.juli.FileHandler.level = FINE</span><br><span class="line">1catalina.org.apache.juli.FileHandler.directory = $&#123;catalina.base&#125;/logs</span><br><span class="line">1catalina.org.apache.juli.FileHandler.prefix = catalina.</span><br><span class="line">1catalina.org.apache.juli.AsyncFileHandler.encoding = UTF-8</span><br><span class="line"></span><br><span class="line">2localhost.org.apache.juli.FileHandler.level = FINE</span><br><span class="line">2localhost.org.apache.juli.FileHandler.directory = $&#123;catalina.base&#125;/logs</span><br><span class="line">2localhost.org.apache.juli.FileHandler.prefix = localhost.</span><br><span class="line">2localhost.org.apache.juli.AsyncFileHandler.encoding = UTF-8</span><br><span class="line"></span><br><span class="line">3manager.org.apache.juli.FileHandler.level = FINE</span><br><span class="line">3manager.org.apache.juli.FileHandler.directory = $&#123;catalina.base&#125;/logs</span><br><span class="line">3manager.org.apache.juli.FileHandler.prefix = manager.</span><br><span class="line">3manager.org.apache.juli.FileHandler.bufferSize = 16384</span><br><span class="line">3manager.org.apache.juli.AsyncFileHandler.encoding = UTF-8</span><br><span class="line"></span><br><span class="line">4host-manager.org.apache.juli.FileHandler.level = FINE</span><br><span class="line">4host-manager.org.apache.juli.FileHandler.directory = $&#123;catalina.base&#125;/logs</span><br><span class="line">4host-manager.org.apache.juli.FileHandler.prefix = host-manager.</span><br><span class="line">4host-manager.org.apache.juli.AsyncFileHandler.encoding = UTF-8</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 定义 ava.util.logging.ConsoleHandler :</span></span></span><br><span class="line">java.util.logging.ConsoleHandler.level = FINE</span><br><span class="line">java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter</span><br><span class="line">java.util.logging.ConsoleHandler.encoding = UTF-8</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 定义handlers, 使用上面定义的 FileHandler</span></span></span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].level = INFO</span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].handlers = 2localhost.org.apache.juli.FileHandler</span><br><span class="line"></span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/manager].level = INFO</span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/manager].handlers = 3manager.org.apache.juli.FileHandler</span><br><span class="line"></span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/host-manager].level = INFO</span><br><span class="line">org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/host-manager].handlers = 4host-manager.org.apache.juli.FileHandler</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> For example, <span class="built_in">set</span> the org.apache.catalina.util.LifecycleBase logger to <span class="built_in">log</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> each component that extends LifecycleBase changing state:</span></span><br><span class="line"><span class="meta">#</span><span class="bash">org.apache.catalina.util.LifecycleBase.level = FINE</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> To see debug messages <span class="keyword">in</span> TldLocationsCache, uncomment the following line:</span></span><br><span class="line"><span class="meta">#</span><span class="bash">org.apache.jasper.compiler.TldLocationsCache.level = FINE</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li><code>java.util.logging.ConsoleHandler</code>:<br>When running Tomcat on unixes, the console output is usually redirected to the file named catalina.out.<br>The name is configurable using an environment variable. (See the startup scripts).<br>Whatever is written to System.err/out will be caught into that file. That may include:<ul>
 <li>Uncaught exceptions printed by java.lang.ThreadGroup.uncaughtException(..)</li>
@@ -665,7 +665,7 @@
 <p>org.apache.支持日志缓存。日志缓存默认是没有启用的。使用 handler 的 bufferSize 属性可以配置它：<br>属性值为 0 时，代表使用系统默认的缓存（通常使用 8k 缓存）；<br>属性值小于 0 时，将在每个日志写入上强制使用 writer flush（将缓存区中的数据强制写出到系统输出）功能；<br>属性值大于 0 时，则使用带有定义值的 BufferedOutputStream 类——但要注意的是，这也将应用于系统默认的缓存。</p>
 </blockquote>
 <h2 id="WebApp的日志配置解析"><a href="#WebApp的日志配置解析" class="headerlink" title="WebApp的日志配置解析"></a>WebApp的日志配置解析</h2><p>下例是一个用于 servlet-examples 应用的 WEB-INF/classes 中的 logging.properties 文件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">handlers = org.apache.juli.FileHandler</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>###########################################################</span><br><span class="line"><span class="meta">#</span> Handler specific properties.</span><br><span class="line"><span class="meta">#</span> Describes specific configuration info for Handlers.</span><br><span class="line"><span class="meta">#</span>###########################################################</span><br><span class="line"></span><br><span class="line">org.apache.juli.FileHandler.level = FINE</span><br><span class="line">org.apache.juli.FileHandler.directory =  $&#123;catalina.base&#125;/logs</span><br><span class="line">org.apache.juli.FileHandler.prefix = $&#123;classloader.webappName&#125;.</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">handlers = org.apache.juli.FileHandler</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">###########################################################</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Handler specific properties.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Describes specific configuration info <span class="keyword">for</span> Handlers.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">###########################################################</span></span></span><br><span class="line"></span><br><span class="line">org.apache.juli.FileHandler.level = FINE</span><br><span class="line">org.apache.juli.FileHandler.directory =  $&#123;catalina.base&#125;/logs</span><br><span class="line">org.apache.juli.FileHandler.prefix = $&#123;classloader.webappName&#125;.</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>Tomcat启动时报错 “SEVERE: Error listenerStart” 或者 “SEVERE: Error filterStart” 等, 但没有具体的错误日志:<br>这种一般是因为 Tomcat WebAppClassLoader 加载的<code>org.springframework</code>类的日志没有关联一个Handler,<br>可以修改 webapps/xxx/WEB-INF/classes/logging.properties, Tomcat就会在打印 org.springframework 类的详细的报错信息了.<br>注意, 老的应用可能还在使用 System.out 或 System.err，这种情况下还需要在web应用的classes/logging.properties 里增加 java.util.logging.ConsoleHandler:</p>
 </blockquote>
@@ -927,8 +927,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/14.Coding-Pattern/Pattern-in-Spring/" rel="prev" title="Spring 中都用到了那些设计模式?">
-                Spring 中都用到了那些设计模式? <i class="fa fa-chevron-right"></i>
+              <a href="/13.JavaEE-Framework/Tools-构建工具/" rel="prev" title="Java构建工具 - Maven and Gradle">
+                Java构建工具 - Maven and Gradle <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -1343,7 +1343,24 @@
 
   
   <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
-  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 
   
