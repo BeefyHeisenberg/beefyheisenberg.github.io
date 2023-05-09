@@ -278,302 +278,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-短网址方案/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/SystemDesign-短网址方案/" itemprop="url">SystemDesign | 短网址方案</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  86
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li>5个字符的短网址, 能表示多少个URL ?<ul>
-<li>短网址的构成是大写+小写+数字 = 26+26+10 = 72, 也就是一个字节有72种选择, 假设短网址是5位, 那么能表示多少种网址? $72^5$</li>
-</ul>
-</li>
-<li>生成方案:<ul>
-<li>哈希: 缺点冲突</li>
-<li>UUID, 存储使用K-v, 短网址是K</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-分布式唯一ID/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/SystemDesign-分布式唯一ID/" itemprop="url">SystemDesign | 分布式唯一ID方案</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  253
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li>UUID:<ul>
-<li>版本1: Mac地址+时间戳</li>
-<li>版本4: 基于随机数, 可能是伪随机, 例如 <code>java.util.UUID.randomUUID()</code>是版本4的一个实现</li>
-</ul>
-</li>
-<li>Snowflake(Twitter方案):<ul>
-<li>实现: 64位 = 1位符号 + 41位毫秒时间戳 + 10位机器id + 12序列号<ul>
-<li>缺陷: 非严格递增, 机器上有多个线程, 如何保证1ms内每个线程生成的序列号不重复? // 可以使用随机数, 时间戳做seed, 多线程使用同一个seed(有没有并发互斥问题?)</li>
-</ul>
-</li>
-<li>实现2: 64位 = 1位符号 + 41位毫秒时间戳 + 10位机器id + 10位进程id + 2位序号<ul>
-<li>缺陷: 每个线程每毫秒只能生成4个id的限制</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>mysql自增(Flickr方案):<ul>
-<li>实现: 8台Mysql, 第一台起始seq=1, 第二台起始seq=2, 每次seq+=8</li>
-<li>缺陷: 不是严格递增</li>
-</ul>
-</li>
-</ul>
-<p>@ref:</p>
-<ul>
-<li>[[SystemDesign-随机数]]</li>
-<li><a href="https://soulmachine.gitbooks.io/system-design/content/cn/distributed-id-generator.html" target="_blank" rel="noopener">分布式ID生成器 · 系统设计(System Design)</a></li>
-<li><a href="https://juejin.im/post/5d9fe5006fb9a04de7734b9e#heading-1" target="_blank" rel="noopener">基于Twitter的雪花算法改造，分布式全局唯一ID生成器 - 掘金</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-秒杀系统设计要点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3531,6 +3235,337 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/分布式系统-Consistency/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/分布式系统-Consistency/" itemprop="url">分布式系统-Consistency</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  627
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ 分布式系统的一致性(概念)：</p>
+<ul>
+<li>分布式系统中, 每个节点(或者副本)的数据保持一致;</li>
+<li>「数据一致性其实是数据库系统中的概念。我们可以简单的把一致性理解为正确性或者完整性，那么数据一致性通常指关联数据之间的逻辑关系是否正确和完整」</li>
+</ul>
+<p>➤ 强一致性、弱一致性、最终一致性：</p>
+<ul>
+<li>强一致性: 当更新操作完成之后，任何多个后续进程或者线程的访问都会返回最新的更新过的值。但是这种实现对性能影响较大，因为这意味着，只要上次的操作没有处理完，就不能让用户读取数据。</li>
+<li>弱一致性: 系统并不保证进程或者线程的访问都会返回最新的更新过的值。系统在数据写入成功之后，不承诺立即可以读到最新写入的值，也不会具体的承诺多久之后可以读到。但会尽可能保证在某个时间级别（比如秒级别）之后，可以让数据达到一致性状态。</li>
+<li>最终一致性: 弱一致性的特定形式。系统保证在没有后续更新的前提下，系统最终返回上一次更新操作的值。在没有故障发生的前提下，不一致窗口的时间主要受通信延迟，系统负载和复制副本的个数影响。DNS是一个典型的最终一致性系统。</li>
+<li>最终一致性模型的变种:<ul>
+<li>因果一致性：如果A进程在更新之后向B进程通知更新的完成，那么B的访问操作将会返回更新的值。如果没有因果关系的C进程将会遵循最终一致性的规则。</li>
+<li>读己所写一致性：因果一致性的特定形式。一个进程总可以读到自己更新的数据。</li>
+<li>会话一致性：读己所写一致性的特定形式。进程在访问存储系统同一个会话内，系统保证该进程读己之所写。</li>
+<li>单调读一致性：如果一个进程已经读取到一个特定值，那么该进程不会读取到该值以前的任何值。</li>
+<li>单调写一致性：系统保证对同一个进程的写操作串行化。</li>
+</ul>
+</li>
+</ul>
+<p>@ref:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/分布式系统-Consistency/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/如何画架构图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/如何画架构图/" itemprop="url">如何画架构图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  202
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <ol>
+<li>图是给什么角色看的(客户 运维/实施 &amp; 开发), 即决定了用途, 要表达什么? 对方关注什么, 应该给对方看什么</li>
+<li>组件(实体)是什么: 物理硬件、实际集群、中间件（服务）、业务服务 （考虑架构是基于SaaS or PasS平台？ 来决定图中的每个实体是什么）</li>
+<li>..</li>
+</ol>
+<h1 id="➤-逻辑视图1-业务向"><a href="#➤-逻辑视图1-业务向" class="headerlink" title="➤ 逻辑视图1(业务向)"></a>➤ 逻辑视图1(业务向)</h1><p><img src="/images/diagram-逻辑视图-业务向.png" alt="diagram-逻辑视图-业务向"></p>
+<h1 id="➤-逻辑视图2-技术向"><a href="#➤-逻辑视图2-技术向" class="headerlink" title="➤ 逻辑视图2(技术向)"></a>➤ 逻辑视图2(技术向)</h1><p><img src="/images/diagram-逻辑视图1.png" alt="diagram-逻辑视图1"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/如何画架构图/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -3585,7 +3620,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">460</span>
+                  <span class="site-state-item-count">458</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3607,7 +3642,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">399</span>
+                  <span class="site-state-item-count">404</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

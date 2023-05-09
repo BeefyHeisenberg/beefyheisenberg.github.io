@@ -278,358 +278,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-04a-锁概念/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/32.Database/MySQL-04a-锁概念/" itemprop="url">MySQL-04a-锁概念</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/32-Database/" itemprop="url" rel="index">
-                    <span itemprop="name">32.Database</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,009
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="锁的概念"><a href="#锁的概念" class="headerlink" title="锁的概念"></a>锁的概念</h2><p>@toc:</p>
-<ul>
-<li>全局锁/表级锁/行锁;</li>
-<li>共享锁/排他锁;</li>
-<li>意向锁;</li>
-<li>两段锁协议;</li>
-</ul>
-<p>➤ 按锁的范围分: 全局锁(数据库锁), 表级锁(表锁, meta锁), 行锁;</p>
-<ul>
-<li>全局锁: 锁住整个数据库实例, 例如<code>Flush tables with read lock</code> 整个数据库处于只读状态, 常用于全库备份;</li>
-<li>表级锁: 分为 <strong>表锁</strong> 和 <strong>元数据锁</strong><ul>
-<li>表锁需要显式加锁: 例如 <code>lock table t1 write</code> 即给表t1加写锁, 允许读不允许写;</li>
-<li>元数据锁(MDL) 不需要显式加,<ul>
-<li>当增删改查时, 数据库自动给表加MDL读锁, 可以增删改查数据, 但对修改表结构互斥;</li>
-<li>当修改表结构时, 数据库自动给表加MDL写锁;</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>行锁: 行锁分为S锁/X锁 (类似读写锁), 根据数据库当前隔离级别的不同, 以及sql语句的不同, 加的锁也不同;<ul>
-<li>Serializable级别: 读加S锁, 写加X锁</li>
-<li>RR/RC级别: 读不加锁(MVCC), 写可能加 X锁 和 间隙锁</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/32.Database/MySQL-04a-锁概念/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-04b-SQL加锁分析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/32.Database/MySQL-04b-SQL加锁分析/" itemprop="url">MySQL-04b-SQL加锁分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/32-Database/" itemprop="url" rel="index">
-                    <span itemprop="name">32.Database</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  745
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>在MySQL/InnoDB中，所谓的读不加锁，并不适用于所有的情况，而是隔离级别相关的。Serializable隔离级别，读不加锁就不再成立，所有的读操作，都是当前读。<br>分析SQL语句加锁情况，还要考虑几种情况：当前用什么引擎（InnoDB/MyISAM）？你要当前系统的隔离级别是什么？ id列是不是主键？ id列如果不是主键，那么id列上有索引吗？id列上如果有二级索引，那么这个索引是唯一索引吗？</p>
-</blockquote>
-<p>➤ SQL语句在不同隔离级别的加锁分析:</p>
-<ul>
-<li>如果是 Serializable 级别, 防止了脏读, 读加S锁, 写加X锁;</li>
-<li>如果是RC级别, 当前读允许有幻读, 所以上面的”非唯一索引的情形没有加Gap锁;</li>
-<li>如果是RR级别: (RR级别解决了幻读问题, 事务中两次当前读, 读出来的数目一致), 以 <code>update T1 set id = 100 where name = ‘d’</code> 为例, 下面为了简化分析, 只考虑 <code>where =</code>的更新, 不考虑 <code>where between</code>范围更新 :<ul>
-<li>如果 where条件是<code>=主键</code>: 聚簇索引上加X锁, 由于主键索引的唯一性, 只有一行加X锁;</li>
-<li>如果 where条件是<code>=唯一索引</code>, 但非主键: 普通索引上加X锁(只有一行),  聚簇索引对应的行加X锁;</li>
-<li>如果 where条件是<code>=非唯一索引</code>, 但非主键: 由于where索引是非唯一, where索引上可能有多行符合条件, 每行都需要加X锁, 同时行之间还需要加 <strong>Gap锁</strong> (间隙锁, 解决幻读), 聚簇索引对应的行都要加X锁;</li>
-<li>如果 where条件上没有索引: 会导致聚簇索引上每行都加X锁( <strong>相当于锁住了整个表</strong>), 并且聚簇索引每行之间都加 Gap锁;</li>
-<li>综上, update语句的条件是<code>where=主键</code>时, 需要的锁最少, 如果 update语句的 where条件是无索引列, 会引起整个主键索引树的每行都加X锁, 性能消耗非常大</li>
-</ul>
-</li>
-</ul>
-<p>➤ 锁优化建议</p>
-<ol>
-<li>合理设计索引，让 InnoDB 在索引键上面加锁的时候尽可能准确，尽可能的缩小锁定范围，避免造成不必要的锁定而影响其他 Query 的执行。</li>
-<li>尽可能减少基于范围的数据检索过滤条件，避免因为间隙锁带来的负面影响而锁定了不该锁定的记录。</li>
-<li>尽量控制事务的大小，减少锁定的资源量和锁定时间长度。</li>
-<li>在业务环境允许的情况下，尽量使用较低级别的事务隔离，以减少 MySQL 因为实现事务隔离级别所带来的附加成本。</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/32.Database/MySQL-04b-SQL加锁分析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-05架构-日志/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3511,6 +3159,329 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/前端笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/41.Uncategorized/前端笔记/" itemprop="url">前端笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
+                    <span itemprop="name">41.Uncategorized</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,554
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Todo"><a href="#Todo" class="headerlink" title="Todo"></a>Todo</h1><ul>
+<li>Javascript绝对简明教程 <a href="http://wiki.woodpecker.org.cn/moin/jsInAWord" target="_blank" rel="noopener">http://wiki.woodpecker.org.cn/moin/jsInAWord</a></li>
+<li>对Web标准的理解, 浏览器差异</li>
+<li>HTML / CSS / JavaScript(基础, JS面向对象实现原理/闭包机制/作用域)</li>
+<li>AngularJS / Ember.js / jQuery</li>
+<li>Jade / Swig / Handlebars / Mustache 或者其它模板引擎</li>
+<li>SASS 或者其它 CSS 预处理器</li>
+<li>Js代码混淆 grunt/uglify</li>
+</ul>
+<h1 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type"></a>Content-Type</h1><ul>
+<li>各浏览器对常用或者错误的 Content-Type 类型处理方式 <a href="http://w3help.org/zh-cn/causes/CH9001" target="_blank" rel="noopener">http://w3help.org/zh-cn/causes/CH9001</a> or <a href="http://www.w3help.org/zh-cn/causes/CH9002" target="_blank" rel="noopener">http://www.w3help.org/zh-cn/causes/CH9002</a></li>
+</ul>
+<h1 id="P3P-Cookie"><a href="#P3P-Cookie" class="headerlink" title="P3P Cookie"></a>P3P Cookie</h1>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/41.Uncategorized/前端笔记/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/41.Uncategorized/安全笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/41.Uncategorized/安全笔记/" itemprop="url">安全笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/41-Uncategorized/" itemprop="url" rel="index">
+                    <span itemprop="name">41.Uncategorized</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  235
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h1><p><a href="../30MinsToturial/Java Tutorials.md">参考 Java Tutorials.md - (十七)安全</a></p>
+<blockquote>
+<p>Blowfish是1993年布鲁斯·施奈尔(Bruce Schneier)开发的对称密钥区块加密算法，区块长为64位，密钥为1至448位的可变长度。与DES等算法相比，其处理速度较快。因为其无须授权即可使用，作为一种自由授权的加密方式在SSH、文件加密软件等被广泛地使用</p>
+</blockquote>
+<p>bcrypt是根据Blowfish加密算法所设计的密码散列函数</p>
+<h1 id="Salt"><a href="#Salt" class="headerlink" title="Salt"></a>Salt</h1>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/41.Uncategorized/安全笔记/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -3565,7 +3536,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">460</span>
+                  <span class="site-state-item-count">458</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3587,7 +3558,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">399</span>
+                  <span class="site-state-item-count">404</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
