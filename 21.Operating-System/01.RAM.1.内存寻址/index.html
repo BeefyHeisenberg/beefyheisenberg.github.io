@@ -128,7 +128,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/mm-2-paging.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/mm-5-paging.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/01.RAM.1.%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80-2023-04-29-1.png">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.681Z">
+<meta property="og:updated_time" content="2023-05-19T02:43:31.448Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01.RAM.1.内存寻址">
 <meta name="twitter:description" content="内存寻址(Memory Addressing): 分段机制把 逻辑地址 转换为 线性地址, 分页机制进一步把该 线性地址 再转换为 物理地址. 段式内存管理 内存可寻址范围总是跟”地址总线宽度”和”寄存器宽度”相关  实模式的诞生（16位处理器及寻址） 在8086处理器诞生之前, 内存寻址方式就是直接访问物理地址. 8086处理器为了寻址1M的内存空间, 把地址总线扩展到了20位. 但是, 一个尴">
@@ -357,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,513
+                  3,651
                 </span>
               
 
@@ -459,12 +459,21 @@
 <hr>
 <p>64 位 Linux 4 级分页：</p>
 <ul>
-<li>一级页表：Page Global Dir，简称 PGD</li>
-<li>二级页表：Page Upper Dir，简称 PUD</li>
-<li>三级页表：Page Mid Dir，简称 PMD</li>
-<li>四级页表：Page Table，简称 PTE</li>
+<li>一级页表（47-39）：Page Global Dir，简称 PGD</li>
+<li>二级页表（38-30）：Page Upper Dir，简称 PUD</li>
+<li>三级页表（29-21）：Page Mid Dir，简称 PMD</li>
+<li>四级页表（20-12）：Page Table，简称 PTE</li>
 </ul>
 <p><img src="/images/01.RAM.1.%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80-2023-04-29-1.png" alt="../_images/01.RAM.1.内存寻址-2023-04-29-1.png"></p>
+<h2 id="页帧-amp-页框"><a href="#页帧-amp-页框" class="headerlink" title="页帧 &amp; 页框"></a>页帧 &amp; 页框</h2><p>四级页表（PTE）里每一项，都指向一个4K大小的内存页，内存页在不同语境翻译可能不一样：页框/ 页帧/ page frame</p>
+<ul>
+<li>内存页：可能更偏向于虚拟内存里的最小单位；</li>
+<li>页框 / 页帧/ page frame：倾向于描述物理内存的最小单位；</li>
+</ul>
+<p>对于这个4K大小的单位（无论是虚拟内存层面 or 物理内存层面），Linux 内核中使用 <code>struct page</code>表示</p>
+<blockquote>
+<p>区分缓冲IO里的 “page cache”</p>
+</blockquote>
 <h2 id="TLB"><a href="#TLB" class="headerlink" title="TLB"></a>TLB</h2><p>存储计算值的高速缓存称为 Translation Look-Aside Buffer（TLB）。它通常是一个小缓存，但是它必须非常快。如果 TLB 查找未命中，处理器必须执行页表遍历；这可能相当昂贵。<a href="https://lrita.github.io/2022/04/01/programmer-should-know-about-memory-2/" target="_blank" rel="noopener">每个程序员都应该了解的内存知识4 - 虚拟内存</a></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://blog.xiaohansong.com/linux-segment.html" target="_blank" rel="noopener">Linux内存寻址之分段机制 - Sharehub</a></li>
@@ -597,7 +606,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -608,7 +617,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -687,7 +696,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#段式内存管理"><span class="nav-text">段式内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实模式的诞生（16位处理器及寻址）"><span class="nav-text">实模式的诞生（16位处理器及寻址）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保护模式的诞生（32位处理器及寻址）"><span class="nav-text">保护模式的诞生（32位处理器及寻址）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IA32的内存寻址机制"><span class="nav-text">IA32的内存寻址机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IA32的三种地址"><span class="nav-text">IA32的三种地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MMU"><span class="nav-text">MMU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IA32的段寄存器"><span class="nav-text">IA32的段寄存器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IA32-硬件-分段机制的实现"><span class="nav-text">IA32(硬件)分段机制的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#段描述符"><span class="nav-text">段描述符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#段描述符表"><span class="nav-text">段描述符表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux系统-软件-分段机制的实现"><span class="nav-text">Linux系统(软件)分段机制的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#特权等级-CPU-Rings-和分段机制"><span class="nav-text">特权等级(CPU Rings)和分段机制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#页式内存管理"><span class="nav-text">页式内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#硬件分页"><span class="nav-text">硬件分页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两级分页"><span class="nav-text">两级分页</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-中的分页机制"><span class="nav-text">Linux 中的分页机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TLB"><span class="nav-text">TLB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#段式内存管理"><span class="nav-text">段式内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实模式的诞生（16位处理器及寻址）"><span class="nav-text">实模式的诞生（16位处理器及寻址）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保护模式的诞生（32位处理器及寻址）"><span class="nav-text">保护模式的诞生（32位处理器及寻址）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IA32的内存寻址机制"><span class="nav-text">IA32的内存寻址机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IA32的三种地址"><span class="nav-text">IA32的三种地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MMU"><span class="nav-text">MMU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IA32的段寄存器"><span class="nav-text">IA32的段寄存器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IA32-硬件-分段机制的实现"><span class="nav-text">IA32(硬件)分段机制的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#段描述符"><span class="nav-text">段描述符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#段描述符表"><span class="nav-text">段描述符表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux系统-软件-分段机制的实现"><span class="nav-text">Linux系统(软件)分段机制的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#特权等级-CPU-Rings-和分段机制"><span class="nav-text">特权等级(CPU Rings)和分段机制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#页式内存管理"><span class="nav-text">页式内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#硬件分页"><span class="nav-text">硬件分页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两级分页"><span class="nav-text">两级分页</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-中的分页机制"><span class="nav-text">Linux 中的分页机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#页帧-amp-页框"><span class="nav-text">页帧 &amp; 页框</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TLB"><span class="nav-text">TLB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>

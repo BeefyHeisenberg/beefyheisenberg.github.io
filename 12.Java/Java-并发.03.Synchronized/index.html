@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Java,Java并发," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Synchronized使用(1) synchronized 方法: public class Bank &amp;#123;  public synchronized void transfer() &amp;#123;    while(!resource_is_available) // 进入代码块,此时持有对象锁      wait(); // 放弃锁，并在对象上等待      // 重新获得锁, doS">
+<meta name="keywords" content="Java,Java并发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java-并发.03.Synchronized">
+<meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Java-并发.03.Synchronized/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="Synchronized使用(1) synchronized 方法: public class Bank &amp;#123;  public synchronized void transfer() &amp;#123;    while(!resource_is_available) // 进入代码块,此时持有对象锁      wait(); // 放弃锁，并在对象上等待      // 重新获得锁, doS">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.Object.MarkWord64.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/java_monitor.gif">
+<meta property="og:updated_time" content="2023-05-24T10:10:50.129Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java-并发.03.Synchronized">
+<meta name="twitter:description" content="Synchronized使用(1) synchronized 方法: public class Bank &amp;#123;  public synchronized void transfer() &amp;#123;    while(!resource_is_available) // 进入代码块,此时持有对象锁      wait(); // 放弃锁，并在对象上等待      // 重新获得锁, doS">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.Object.MarkWord64.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/12.Java/Java-并发.03.Synchronized/"/>
+
+
+
+
+
+  <title>Java-并发.03.Synchronized | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-并发.03.Synchronized/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java-并发.03.Synchronized</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,054
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h1><h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>(1) synchronized 方法:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">transfer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(!resource_is_available) <span class="comment">// 进入代码块,此时持有对象锁</span></span><br><span class="line">      wait(); <span class="comment">// 放弃锁，并在对象上等待</span></span><br><span class="line">      <span class="comment">// 重新获得锁, doSomething...</span></span><br><span class="line">      notifyAll(); <span class="comment">// 通知其他等待该对象锁的线程</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(2) synchronized 块:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Object object = <span class="keyword">new</span> Object();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transfer</span><span class="params">(<span class="keyword">long</span> userID, <span class="keyword">double</span> amount)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">synchronized</span>(object) &#123;</span><br><span class="line">      <span class="comment">// doSomething ..</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每个类对象都有从 Object 继承的”对象锁”, synchronized 方法利用这个对象锁保护方法内的代码片段.</li>
+<li>对于同步方法，锁是当前实例对象。</li>
+<li>对于静态同步方法，锁是当前对象的 Class 对象。</li>
+<li>对于同步方法块，锁是 Synchonized 括号里配置的对象。</li>
+</ul>
+<blockquote>
+<p><strong>同步方法</strong> 和 <strong>同步代码块</strong> 都是用了进入/退出 Monitor 对象来实现的, 但两者的实现细节不一样</p>
+</blockquote>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><ul>
+<li>在 synchronized 代码块前后增加的 <code>monitorenter</code> 和 <code>monitorexist</code> 两个 JVM 字节码指令,指令的参数是 this 引用。</li>
+<li>synchronized 关键字起到的作用是设置一个独占访问临界区，在进入这个临界区前要先获取对应的监视器锁，任何 Java 对象都可以成为监视器锁，声明在静态方法上时监视器锁是当前类的 Class 对象，实例方法上是当前实例。</li>
+<li>synchronized 提供了原子性、可见性和防止重排序的保证。</li>
+<li>JMM 中定义监视器锁的释放操作 happen-before 于后续的同一个监视器锁获取操作。再结合程序顺序规则就可以形成内存传递可见性保证。</li>
+</ul>
+<p>下面以一段 Java 代码为例:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestSynchronize</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> count;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">inc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> TestSynchronize().inc();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>javap 查看 <code>inc()</code> 方法的实现:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private void inc();</span><br><span class="line">   descriptor: ()V</span><br><span class="line">   flags: ACC_PRIVATE</span><br><span class="line">   Code:</span><br><span class="line">     stack=3, locals=3, args_size=1</span><br><span class="line">        0: aload_0</span><br><span class="line">        1: dup</span><br><span class="line">        2: astore_1</span><br><span class="line">        3: monitorenter                     // monitor 1</span><br><span class="line">        4: aload_0</span><br><span class="line">        5: dup</span><br><span class="line">        6: getfield      #2                  // Field count:I</span><br><span class="line">        9: iconst_1</span><br><span class="line">       10: iadd</span><br><span class="line">       11: putfield      #2                  // Field count:I</span><br><span class="line">       14: aload_1</span><br><span class="line">       15: monitorexit                      // monitor 2</span><br><span class="line">       16: goto          24</span><br><span class="line">       19: astore_2</span><br><span class="line">       20: aload_1</span><br><span class="line">       21: monitorexit                     // monitor 3</span><br><span class="line">       22: aload_2</span><br><span class="line">       23: athrow</span><br><span class="line">       24: return</span><br><span class="line">     Exception table:</span><br><span class="line">        from    to  target type</span><br><span class="line">            4    16    19   any</span><br><span class="line">           19    22    19   any</span><br><span class="line">     LineNumberTable:</span><br><span class="line">       line 14: 0</span><br><span class="line">       line 15: 4</span><br></pre></td></tr></table></figure>
+<p>在 synchronized 代码块前后增加的 <code>monitorenter</code> 和 <code>monitorexist</code> 两个 JVM 字节码指令,指令的参数是 this 引用。</p>
+<p>hotspot 中对于 <code>monitor_enter</code> 字节码指令的实现(注，不同 JDK 版本代码可能不同)：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">IRT_ENTRY_NO_ASYNC(<span class="keyword">void</span>, InterpreterRuntime::monitorenter(JavaThread* thread, BasicObjectLock* elem))</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> ASSERT</span></span><br><span class="line">  thread-&gt;last_frame().interpreter_frame_verify_monitor(elem);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">  <span class="keyword">if</span> (PrintBiasedLockingStatistics) &#123;</span><br><span class="line">    Atomic::inc(BiasedLocking::slow_path_entry_count_addr());</span><br><span class="line">  &#125;</span><br><span class="line">  Handle h_obj(thread, elem-&gt;obj());</span><br><span class="line">  assert(Universe::heap()-&gt;is_in_reserved_or_null(h_obj()),</span><br><span class="line">         <span class="string">"must be NULL or an object"</span>); </span><br><span class="line">  <span class="comment">// 是否使用偏向锁  JVM 启动时设置的偏向锁-XX:-UseBiasedLocking=false/true</span></span><br><span class="line">  <span class="keyword">if</span> (UseBiasedLocking) &#123;</span><br><span class="line">    <span class="comment">// Retry fast entry if bias is revoked to avoid unnecessary inflation</span></span><br><span class="line">    ObjectSynchronizer::fast_enter(h_obj, elem-&gt;lock(), <span class="literal">true</span>, CHECK);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 轻量级锁</span></span><br><span class="line">    ObjectSynchronizer::slow_enter(h_obj, elem-&gt;lock(), CHECK);</span><br><span class="line">  &#125;</span><br><span class="line">  assert(Universe::heap()-&gt;is_in_reserved_or_null(elem-&gt;obj()),</span><br><span class="line">         <span class="string">"must be NULL or an object"</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> ASSERT</span></span><br><span class="line">  thread-&gt;last_frame().interpreter_frame_verify_monitor(elem);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">IRT_END</span><br></pre></td></tr></table></figure>
+<p>从上面的 <code>monitorenter</code> 代码可以看到先尝试偏向锁（fast_enter），若失败则改为使用轻量级锁（slow_enter），在轻量级锁的代码中如果也失败，最后兜底方案是膨胀为重量级锁：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> ObjectSynchronizer::slow_enter(Handle obj, BasicLock* lock, TRAPS) &#123;</span><br><span class="line">    <span class="comment">//获取上锁对象头部标记信息</span></span><br><span class="line">  markOop mark = obj-&gt;mark();</span><br><span class="line">  assert(!mark-&gt;has_bias_pattern(), <span class="string">"should not see bias pattern here"</span>);</span><br><span class="line">    <span class="comment">//如果对象处于无锁状态</span></span><br><span class="line">  <span class="keyword">if</span> (mark-&gt;is_neutral()) &#123;</span><br><span class="line">    <span class="comment">//将对象头部保存在lock对象中</span></span><br><span class="line">    lock-&gt;set_displaced_header(mark);</span><br><span class="line">    <span class="comment">//通过cmpxchg进入自旋替换对象头为lock对象地址，如果替换成功则直接返回，表明获得了轻量级锁，不然继续自旋</span></span><br><span class="line">    <span class="keyword">if</span> (mark == (markOop) Atomic::cmpxchg_ptr(lock, obj()-&gt;mark_addr(), mark)) &#123;</span><br><span class="line">      TEVENT (slow_enter: release stacklock) ;</span><br><span class="line">      <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 否则判断当前对象是否上锁，并且当前线程是否是锁的占有者，如果是markword的指针指向栈帧中的LR，则重入</span></span><br><span class="line">  &#125; <span class="keyword">else</span></span><br><span class="line">  <span class="keyword">if</span> (mark-&gt;has_locker() &amp;&amp; THREAD-&gt;is_lock_owned((address)mark-&gt;locker())) &#123;</span><br><span class="line">    assert(lock != mark-&gt;locker(), <span class="string">"must not re-lock the same lock"</span>);</span><br><span class="line">    assert(lock != (BasicLock*)obj-&gt;mark(), <span class="string">"don't relock with same BasicLock"</span>);</span><br><span class="line">    lock-&gt;set_displaced_header(<span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">​</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></span><br><span class="line">  <span class="comment">// The following optimization isn't particularly useful.</span></span><br><span class="line">  <span class="keyword">if</span> (mark-&gt;has_monitor() &amp;&amp; mark-&gt;monitor()-&gt;is_entered(THREAD)) &#123;</span><br><span class="line">    lock-&gt;set_displaced_header (<span class="literal">NULL</span>) ;</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">​</span><br><span class="line">  <span class="comment">// 代码执行到这里，说明有多个线程竞争轻量级锁，轻量级锁通过`inflate`进行膨胀升级为重量级锁</span></span><br><span class="line">  lock-&gt;set_displaced_header(markOopDesc::unused_mark());</span><br><span class="line">  ObjectSynchronizer::inflate(THREAD, obj())-&gt;enter(THREAD);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="对象锁的升级"><a href="#对象锁的升级" class="headerlink" title="对象锁的升级"></a>对象锁的升级</h2><p>上面的代码看到了 r` 的大致流程，偏向锁（fast_enter）-》轻量级锁（slow_enter）-》重量级锁,前两者的实现都使用了 Java 对象的 Mark Word 来实现。</p>
+<p>Java SE1.6 为了减少获得锁和释放锁所带来的性能消耗，引入了“偏向锁”和“轻量级锁”，<br>所以在 Java SE1.6里 <code>对象锁</code> 一共有四种状态，<strong>无锁状态</strong>，<strong>偏向锁状态</strong>，<strong>轻量级锁状态</strong> 和 <strong>重量级锁状态</strong>，<br>它会随着竞争情况逐渐升级。锁可以升级但不能降级，意味着偏向锁升级成轻量级锁后不能降级成偏向锁。</p>
+<p>随着锁的升级， Java 对象头里的 <code>Mark Word</code> 存储的内容也会变化。</p>
+<blockquote>
+<p>回顾 Java 对象的内存结构:<br>在 64 位 JVM 环境, Java 对象对象头中，前 64bit 是”Mark Word”, 存储了 hashCode, 锁信息, 以及分代信息等, </p>
+</blockquote>
+<p>MarkWord <strong>低 2 位</strong>是锁标记, 加上 1 位的偏向锁标记，一共对应 4 种锁:</p>
+<p><img src="/images/Advanced-Java.Object.MarkWord64.png" alt="../_images/Advanced-Java.Object.MarkWord64.png"><br>图来自 <a href="https://juejin.cn/post/6844904114061590535#heading-5" target="_blank" rel="noopener">https://juejin.cn/post/6844904114061590535#heading-5</a></p>
+<h3 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h3><p>无锁状态下, 对象 Mark Word 锁标志也是 01(同偏向锁一样)；</p>
+<p>在无锁状态下，当有线程尝试获取对象锁，会将对象的 Mark Word CAS 替换为自己的线程 ID，这时候对象锁进入<strong>偏向锁</strong>；</p>
+<h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h3><p>偏向锁状态下，线程尝试进入同步块的过程如下：</p>
+<ul>
+<li>检查 Mark Word 中的 ThreadID 是否等于自己的，如果是则直接进入同步块；</li>
+<li>如果不等于自己的 ThreadID，获取偏向锁失败</li>
+</ul>
+<p>所以，对于很少出现竞争的同步块，偏向锁的效率很高（只是简单检查）</p>
+<p>偏向锁不会立刻撤销，而是等到下次<strong>全局安全点</strong>（safe point，当前 JVM 没有正在执行的字节码），JVM 会检查持有偏向锁的线程是否还活着，</p>
+<ul>
+<li>如果否，会设置 Mark Word 为无锁状态，随后偏向新的线程；</li>
+<li>如果是，已持有偏向锁的线程继续执行，竞争失败的线程开始自旋+CAS（<strong>轻量级锁</strong>）</li>
+</ul>
+<p>可以看到偏向锁是一直等到有竞争才会释放，偏向锁的撤销需要等到下个 safe point。</p>
+<p>是否要用偏向锁，取决于：</p>
+<ol>
+<li>偏向锁在 JDK 6及以后的 JVM 里是默认启用的。可以通过 JVM 参数关闭偏向锁：<code>-XX:-UseBiasedLocking=false</code>；</li>
+<li>如果对象已经调用过 hashCode 方法，Mark Word 中会存储 hashcode 的值，这种对象就无法转换为偏向锁了，而是直接从无锁转换为轻量级锁，但这对轻量锁和重量所没关系，因为这两种锁会各自保存 HashCode（前者会保存在栈帧中的 Lock Record，后者保存在 Monitor 对象中）@ref: <a href="/12.Java/Advanced-Java.05.对象内存结构/" title="Advanced-Java.05.对象内存结构">Advanced-Java.05.对象内存结构</a></li>
+</ol>
+<p>偏向锁中的 epoch 解析： <a href="https://www.itqiankun.com/article/bias-lock-epoch-effect" target="_blank" rel="noopener">偏向锁里面的epoch作用_Java多线程-IT乾坤技术博客</a></p>
+<h3 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h3><p>上面提到，如果线程 A 已经持有了偏向锁，线程 B 尝试解锁的时候会使用 CAS，也即进入了轻量级锁，轻量级锁的实现是自旋+CAS，</p>
+<ul>
+<li>竞争线程会在自己的栈帧中创建 Lock Record（锁记录），并将对象头中的 Mark Word 复制到 Lock Record</li>
+<li>竞争线程使用 CAS，尝试将对象头的 Mark Word 替换为指向 Lock Record 的指针</li>
+<li>CAS 失败则自旋获取锁，自旋超过一定次数，对象锁升级为<strong>重量级锁</strong></li>
+</ul>
+<p>上面的自旋次数默认是10次，可以使用-XX:PreBlockSpin 来更改，自旋锁在JDK1.4.2中引入，使用-XX:+UseSpinning来开启。JDK 6中变为默认开启，并且引入了自适应的自旋锁（适应性自旋锁）。</p>
+<p>@doubt: 当是偏向锁时，另一个线程 B 尝试 CAS，CAS 的 exceptVal 是“无锁状态下的 MarkWord”？那么在 B 中如何获取“无锁状态下的 MarkWord”？</p>
+<h3 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h3><p>对象锁升级为重量级锁：Mark Word 的锁标记设置为 00，Mark Word 中指向 Lock Record 的指针被替换为指向重量级锁的指针，</p>
+<h1 id="Monitor-重量级锁解析"><a href="#Monitor-重量级锁解析" class="headerlink" title="Monitor 重量级锁解析"></a>Monitor 重量级锁解析</h1><p>上面提到了轻量级锁在自旋失败后，会膨胀为重量级锁，重量级锁是由 ObjectMonitor 对象实现的，每个 Java 对象升级到重量级锁后，Mark Word 内会存储指向 ObjectMonitor 对象的指针。</p>
+<p>先看 ObjectMonitor 的主要成员：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ObjectMonitor() &#123;  </span><br><span class="line">    _recursions   = 0;       // 线程重入次数  </span><br><span class="line">    _owner        = NULL;    // 指向拥有该 monitor 的线程  </span><br><span class="line">    _WaitSet      = NULL;    // 等待线程 双向循环链表_WaitSet 指向第一个节点  </span><br><span class="line">    _EntryList    = NULL ;   // _owner 从该双向循环链表中唤醒线程，  </span><br><span class="line"></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>_recursions</code>：如果线程 a 已经持有 monitor 锁的情况下，再次加锁，recursions+1（类似 ReentrantLock 的 State 计数器）</li>
+<li><code>_owner</code>：初始时为 NULL。当有线程占有该 monitor 时 owner 标记为该线程的 ID。当线程释放 monitor 时 owner 恢复为 NULL。<code>_owner</code> 是一个临界资源 JVM 是通过 <strong>CAS</strong> 操作来保证其线程安全的（类似 ReentrantLock 的 exclusiveOwnerThread）</li>
+<li><code>_EntryList</code>： 竞争队列，因抢锁失败的线程会进入这个队列（类似 ReentratLock 的“同步队列”）</li>
+<li><code>_WaitSet</code>: 等待队列，因调用 wait 方法而被阻塞的线程会被放在该队列中（ 类似 Condition 对象的“等待队列”）</li>
+</ul>
+<p>【图】 Monitor 模型:</p>
+<ol>
+<li>抢锁的线程先进入 Entry Set</li>
+<li>EntrySet 队列中的线程尝试 acquire() 锁，成功后改写 Owner 为线程自己，</li>
+<li>持有锁的线程调用了 wait()，会释放锁并进入 Wait Set</li>
+<li>Wait Set 中的线程，被其他线程 notify()唤醒后，会尝试 acquire()锁</li>
+<li>持有锁的线程释放锁<br><img src="/images/java/java_monitor.gif" alt="Monitor模型"></li>
+</ol>
+<p>↑ 只有 acquire 成功的线程是活动的（深色表示），其他的现场都是等待状态（浅色）</p>
+<p>ObjectMonitor 的 C++代码实现参考 @ref: <a href="https://xiaomi-info.github.io/2020/03/24/synchronized/" target="_blank" rel="noopener">synchronized 实现原理 | 小米信息部技术团队</a></p>
+<p>➤ 回到开头的例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">transfer</span><span class="params">()</span> </span>&#123; <span class="comment">// (1)</span></span><br><span class="line">    <span class="keyword">while</span>(!resource_is_available)&#123;</span><br><span class="line">      wait();  <span class="comment">// (2)</span></span><br><span class="line">    &#125;</span><br><span class="line">    notifyAll();  <span class="comment">// (3)</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>执行到（1）进入 sync 代码块，当前线程 A 获得了对象锁；</li>
+<li>执行（2）wait 后，线程会释放锁，进入 waitSet 队列，并调用 park 让出 CPU</li>
+<li>另一个线程 B 再尝试获取锁，如果成功且调用了 （3）notifyAll，A 线程被唤醒，然后尝试抢锁；</li>
+<li>假设有线程 C 尝试获取锁失败，C 线程会 park，然后进入 cxq 队列，当有线程释放锁时，会尝试从 cxq 中删除线程 C 的节点，然后把 C 加入 entrySet，C 再尝试抢锁</li>
+</ul>
+<p>需要注意的：</p>
+<ul>
+<li>调用 wait 后，线程会放弃锁，其他线程可以尝试抢锁；</li>
+<li>waitSet 是调用 wait 的线程的队列，cxq 是抢锁失败的线程的队列</li>
+<li>notify：先 wait 的线程，先被唤醒；</li>
+<li>notifyAll：最后 wait 的线程，先被唤醒；</li>
+<li>wait 可以响应 InterruptedException 异常</li>
+</ul>
+<p>@ref： <a href="http://lovestblog.cn/blog/2016/03/27/object-wait-notify/" target="_blank" rel="noopener">http://lovestblog.cn/blog/2016/03/27/object-wait-notify/</a></p>
+<h1 id="对象锁的优化-消除-amp-粗化"><a href="#对象锁的优化-消除-amp-粗化" class="headerlink" title="对象锁的优化-消除&amp;粗化"></a>对象锁的优化-消除&amp;粗化</h1><p><strong>锁粗化</strong>：如果在代码中，连续对同一个对象加锁，JIT（不确定）会把这块代码加入到一个同步块中；</p>
+<p><strong>锁消除</strong>：是虚拟机另外一种锁的优化，这种优化更彻底，Java 虚拟机在 JIT 编译时(可以简单理解为当某段代码即将第一次被执行时进行编译，又称即时编译)，通过对运行上下文的扫描，去除不可能存在共享资源竞争的锁，通过这种方式消除没有必要的锁，可以节省毫无意义的请求锁时间，如下 StringBuffer 的 append 是一个同步方法，但是在 add 方法中的 StringBuffer 属于一个局部变量，并且不会被其他线程所使用，因此 StringBuffer 不可能存在共享资源竞争的情景，JVM 会自动将其锁消除。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 参考自 https://blog.csdn.net/javazejian/article/details/72828483</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringBufferRemoveSync</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(String str1, String str2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//StringBuffer是线程安全,由于sb只会在append方法中使用,不可能被其他线程引用</span></span><br><span class="line">        <span class="comment">//因此sb属于不可能共享的资源,JVM会自动消除内部的锁</span></span><br><span class="line">        StringBuffer sb = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">        sb.append(str1).append(str2);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        StringBufferRemoveSync rmsync = <span class="keyword">new</span> StringBufferRemoveSync();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000000</span>; i++) &#123;</span><br><span class="line">            rmsync.add(<span class="string">"abc"</span>, <span class="string">"123"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Java并发/" rel="tag"># Java并发</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Java-并发.02.ThreadLocal/" rel="next" title="Java-并发.02.ThreadLocal">
+                <i class="fa fa-chevron-left"></i> Java-并发.02.ThreadLocal
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Java-并发.04.Volatile/" rel="prev" title="Java-并发.04.Volatile">
+                Java-并发.04.Volatile <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">403</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Synchronized"><span class="nav-text">Synchronized</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-text">实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象锁的升级"><span class="nav-text">对象锁的升级</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#无锁"><span class="nav-text">无锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#偏向锁"><span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#轻量级锁"><span class="nav-text">轻量级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重量级锁"><span class="nav-text">重量级锁</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Monitor-重量级锁解析"><span class="nav-text">Monitor 重量级锁解析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象锁的优化-消除-amp-粗化"><span class="nav-text">对象锁的优化-消除&amp;粗化</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/12.Java/Java-并发.03.Synchronized/';
+          this.page.identifier = '12.Java/Java-并发.03.Synchronized/';
+          this.page.title = 'Java-并发.03.Synchronized';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

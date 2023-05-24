@@ -117,13 +117,13 @@
 
 
 
-<meta name="description" content="索引原理B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B 树的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点  数据">
+<meta name="description" content="B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B 树的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点 数据  B 树的特点：">
 <meta name="keywords" content="后端架构,数据库,MySQL,索引">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL-03b-索引-BTree">
 <meta property="og:url" content="https://beefyheisenberg.github.io/32.Database/MySQL-02b-BTree索引原理/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="索引原理B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B 树的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点  数据">
+<meta property="og:description" content="B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B 树的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点 数据  B 树的特点：">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/b-tree.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-1.png">
@@ -139,10 +139,10 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-3.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-4.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-5.png">
-<meta property="og:updated_time" content="2023-05-09T08:57:24.306Z">
+<meta property="og:updated_time" content="2023-05-19T02:43:31.877Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL-03b-索引-BTree">
-<meta name="twitter:description" content="索引原理B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B 树的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点  数据">
+<meta name="twitter:description" content="B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B 树的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点 数据  B 树的特点：">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/b-tree.png">
 
 
@@ -368,7 +368,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,907
+                  3,084
                 </span>
               
 
@@ -393,22 +393,22 @@
       
 
       
-        <h1 id="索引原理"><a href="#索引原理" class="headerlink" title="索引原理"></a>索引原理</h1><h2 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B-Tree"></a>B-Tree</h2><p>B-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 <strong>M 阶的 B-Tree </strong> 满足以下条件：</p>
+        <h2 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B-Tree"></a>B-Tree</h2><p>B-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 <strong>M 阶的 B-Tree </strong> 满足以下条件：</p>
 <p>B 树的节点包含两部分：</p>
 <ol>
-<li>关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点 </li>
+<li>关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点</li>
 <li>数据</li>
 </ol>
 <p>B 树的特点：</p>
 <ul>
-<li>树的根，孩子节点数量子在 2- M 之间；</li>
-<li>除根外，每个非叶子节点数量在 M/2 - M 之间；</li>
-<li>所有叶子节点都在相同的深度，且叶子节点不包含<strong>关键字</strong>；</li>
-<li>一个非叶子节点如果包含 k 个关键字，那么它有 k+1 个孩子节点；</li>
+<li>树的 <strong>根节点</strong> 拥有的子节点数量子在 2- M 之间；</li>
+<li>除根外，每个 <strong>非叶子节点</strong> 拥有的子节点数量在 M/2 - M 之间；</li>
+<li>一个 <strong>非叶子节点</strong> 如果包含 k 个关键字，那么它有 k+1 个子节点；</li>
+<li>所有叶子节点都在相同的深度，且叶子节点不包含<strong>关键字</strong>信息；</li>
 </ul>
 <p>一个 4 阶 B 树：</p>
 <p><img src="/images/b-tree.png" alt="../_images/b-tree.png"></p>
-<h2 id="插入过程"><a href="#插入过程" class="headerlink" title="插入过程"></a>插入过程</h2><p>针对 m 阶高度 h 的 B 树，插入一个元素时，首先在 B 树中是否存在，如果不存在，即在叶子结点处结束，然后在叶子结点中插入该新的元素。</p>
+<h3 id="插入过程"><a href="#插入过程" class="headerlink" title="插入过程"></a>插入过程</h3><p>针对 m 阶高度 h 的 B 树，插入一个元素时，首先在 B 树中是否存在，如果不存在，即在叶子结点处结束，然后在叶子结点中插入该新的元素。</p>
 <ul>
 <li>若该节点元素个数小于m-1，直接插入；</li>
 <li>若该节点元素个数等于m-1，引起节点分裂；以该节点中间元素为分界，取中间元素（偶数个数，中间两个随机选取）插入到父节点中；</li>
@@ -418,11 +418,11 @@
 <p>（1）5 阶 B 树，插入前：<br><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-1.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-1.png"></p>
 <p>（2）插入 19，引起 14、16、17、18 的节点分裂，把中间元素【17】上移到父节点中，但是情况来了，父节点中空间已经满了，所以也要进行分裂，将父节点中的中间元素【13】上移到新形成的根结点中，这样具体插入操作的完成。</p>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-2.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-2.png"></p>
-<h2 id="删除过程"><a href="#删除过程" class="headerlink" title="删除过程"></a>删除过程</h2><p>首先，查找 B 树中需删除的元素，如果该元素在 B 树中存在，则将该元素在其节点中进行删除；删除该元素后，首先判断该元素是否有左右孩子节点， 如果有，则上移孩子节点中的某相近元素（「左孩子最右边的节点」或「右孩子最左边的节点」）到父节点中，然后是移动之后的情况；如果没有，直接删除。</p>
+<h3 id="删除过程"><a href="#删除过程" class="headerlink" title="删除过程"></a>删除过程</h3><p>首先，查找 B 树中需删除的元素，如果该元素在 B 树中存在，则将该元素在其节点中进行删除；删除该元素后，首先判断该元素是否有左右孩子节点， 如果有，则上移孩子节点中的某相近元素（「左孩子最右边的节点」或「右孩子最左边的节点」）到父节点中，然后是移动之后的情况；如果没有，直接删除。</p>
 <ol>
-<li>某节点中元素数目小于 m/2-1，m/2 向上取整，则需要看其某相邻兄弟节点是否丰满。</li>
-<li>如果丰满（节点中元素个数大于 m/2-1），则向父节点借一个元素来满足条件。</li>
-<li>如果其相邻兄弟都不丰满，即其节点数目等于 m/2-1，则该节点与其相邻的某一兄弟节点进行「合并」成一个节点。</li>
+<li>某节点中元素数目小于 m/2-1、m/2 向上取整，则需要看其相邻兄弟节点是否丰满。</li>
+<li>如果其相邻兄弟都不丰满，即其节点数目刚好等于 m/2-1，则该节点与其相邻的某一兄弟节点进行「合并」成一个节点。</li>
+<li>如果其相邻兄弟丰满（节点中元素个数大于 m/2-1），则向父节点借一个元素来满足条件。</li>
 </ol>
 <p>接下来用一个 5 阶 B 树为例，详细讲解删除的操作。</p>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-6.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-6.png"><br>如图所示，接下来要依次删除 8，20，18，5。 首先要删除元素 8。先查找到元素 8 在叶子节点中，删除 8 后叶子节点的元素个数为 2，符合 B 树的规则。然后需要把元素 11 和 12 都向前移动一位。完成后如图所示。</p>
@@ -439,26 +439,43 @@
 <p>但是这里观察到父节点只包含了一个元素 7，这就没有达标（因为非根节点包括叶子节点的元素数量 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" title="K"> 必须满足于[2, 4] <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" title="K=1">）。如果这个问题节点的相邻兄弟比较丰满，则可以向父节点借一个元素。而此时兄弟节点元素刚好为 2，刚刚满足，只能进行合并，而根节点中的唯一元素 13 下移到子节点。这样，树的高度减少一层。</p>
 <p>所以最终的效果如下图。</p>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-12.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-12.png"></p>
-<h2 id="B-Tree-的复杂度分析"><a href="#B-Tree-的复杂度分析" class="headerlink" title="B-Tree 的复杂度分析"></a>B-Tree 的复杂度分析</h2><p>B 树高度的证明过程：</p>
+<h3 id="B-Tree-的复杂度分析"><a href="#B-Tree-的复杂度分析" class="headerlink" title="B-Tree 的复杂度分析"></a>B-Tree 的复杂度分析</h3><p>B 树高度的证明过程：</p>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-3.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-3.png"></p>
 <p><strong>结论</strong> 对于一颗数阶=M, 高度=h, 索引了 N 个元素的 B 树:</p>
 <ul>
-<li>树高 h 的上限:  $\log_M ((N+1)/2)$</li>
-<li>查找一个元素 的时间复杂度为: $O\log_M N$</li>
-<li>插入复杂度: 插入会发生结点的分裂操作。分裂操作可以认为是常数级别, 所以插入时间复杂度基本等于 $O\log_M N$, 当然这是 B-Tree 节点都在内存中的情况</li>
-<li>删除复杂度: 理想情况下 $O\log_M N$,</li>
-<li>删除操作的磁盘 IO 次数:  B-Tree 的删除会发生结点合并操作。最坏情况下磁盘访问次数是 3h ＝（找到包含被删除元素需要 h 次读访问）+（获取第 2 至 h 层的最相邻兄弟需要 h-1 次读访问）+（在第 3 至 h 层的合并需要 h-2 次写访问）+（对修改过的根节点和第 2 层的两个节点进行3次写访问）</li>
+<li><p>树高 h 的上限:  $\log_M ((N+1)/2)$</p>
+</li>
+<li><p>查找一个元素的时间复杂度为: $O\log_M N$</p>
+</li>
+<li><p>插入复杂度:</p>
+<ul>
+<li>先查找 $O\log_M N$</li>
+<li>插入会发生结点的分裂操作, 分裂操作可以认为是常数级别, 最坏情况引起 root 以下所有节点分裂</li>
+<li>所以插入时间复杂度一般情况下等于 $O\log_M N$</li>
 </ul>
-<p>实际情况下, 数据库的 B-Tree 的节点并不都是在内存中, <strong>插入操作</strong>会引起磁盘 IO, 所以分析 MySQL 的 B-Tree 的插入代价还有考虑磁盘 IO: 当插入操作引起了 s 个节点的分裂时，磁盘访问的次数为 <code>h(读取搜索路径上的节点)＋2s(更新两个分裂出的新节点)＋1（回写新的根节点或插入后没有导致分裂的节点）</code>。因此，所需要的磁盘访问次数是 h+2 s+1，最多可达到 3 h+1。因此插入的代价是很大的。</p>
+</li>
+<li><p>删除复杂度:</p>
+<ul>
+<li>先查找 $O\log_M N$</li>
+<li>删除会引起合并操作, 分析同插入情形</li>
+<li>所以插入时间复杂度一般情况下等于 $O\log_M N$</li>
+</ul>
+</li>
+</ul>
+<p>上面的分析都是基于所有节点都在内存中, 没有访问硬盘. 但实际上基于外部存储的 B-Tree 最耗时的是磁盘的 IO 次数. 如果从磁盘 IO 的角度分析插入和删除的耗时：</p>
+<ul>
+<li>删除操作的磁盘 IO 次数:  如果删除引起了节点合并, 最坏情况下磁盘访问次数是 3h ＝（找到包含被删除元素需要 h 次读访问）+（获取第 2 至 h 层的最相邻兄弟需要 h-1 次读访问）+（在第 3 至 h 层的合并需要 h-2 次写访问）+（对修改过的根节点和第 2 层的两个节点进行3次写访问）</li>
+<li>插入操作引起的磁盘 IO: 当插入操作引起了 s 个节点的分裂时，磁盘访问的次数为 <code>h(读取搜索路径上的节点)＋2s(更新两个分裂出的新节点)＋1（回写新的根节点或插入后没有导致分裂的节点）</code>。因此，所需要的磁盘访问次数是 h+2s+1，最多可达到 3h+1。因此插入的代价是很大的。</li>
+</ul>
 <blockquote>
-<p>一般实际应用中，M 是非常大的数字，通常超过 100，因此 h 非常小（通常不超过 3），业界公认 MySQL 单表容量在 1KW 以下是最佳状态，因为这时它的 BTREE 索引树高在3~5之间。</p>
+<p>一般实际应用中，M 是非常大的数字，通常超过 100，因此 h 非常小（通常不超过 3），业界公认 MySQL 单表容量在 1KW 以下是最佳状态，因为这时它的 BTREE 索引树高 h = 3~5之间。</p>
 </blockquote>
 <h2 id="B-Tree-1"><a href="#B-Tree-1" class="headerlink" title="B+Tree"></a>B+Tree</h2><p>与B-Tree相比，B+Tree有以下不同点：</p>
 <ul>
 <li>有 k 个子树的中间节点包含有 k 个关键字（B 树中是 k-1个）@doubt</li>
 <li>非叶子节点没有 data, 只存储关键字和关键字对应的指针（非叶子节点仅存索引）;</li>
 <li>叶子节点存储了所有的关键字和关键字对应的 data（叶子节点包含所有的关键字和数据）；</li>
-<li>相邻的叶子节点按顺序形成单链表（叶子节点在一条链表中）;</li>
+<li>相邻的叶子节点按顺序形成单链表（叶子节点在一条链表中）; // @duobt: 单向链表 还是 双向链表？</li>
 </ul>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-4.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-4.png"></p>
 <p>各种资料上 B+树的定义各有不同，上面的定义方式是关键字个数和孩子结点个数相同，这里我们采取维基百科上所定义的方式，即关键字个数比孩子结点个数小1，这种方式是和B树基本等价的（<a href="https://en.wikipedia.org/wiki/B%2B_tree" target="_blank" rel="noopener">B+ tree - Wikipedia</a>）：<br><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-5.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-5.png"></p>
@@ -479,9 +496,19 @@
 <li><p>非聚集索引，叶子节点存储的内容不是真实行数据，而是主键的值表，所以数据存储顺序与索引顺序无关。通过非聚簇索引查询要再回主键的 B 树查询才能得到数据（<strong>回表</strong>）, 所以也叫<strong>二级索引</strong></p>
 </li>
 </ul>
+<p>查询非聚集索引也有不需回表的情况：</p>
+<p>覆盖索引（covering index ）：<strong>即查询使用的索引，恰好覆盖了查询需求</strong>，这种情况下不必再回表</p>
+<p>例如：</p>
+<ul>
+<li>select 查询的列是主键</li>
+<li>select 查询的列 =  where 条件的列，且这个列上有索引</li>
+<li>使用联合索引的情况：例如 A，B 两个列组成联合索引，查询的需求恰好被这个联合索引覆盖（如 <code>select A, B</code>  ），这种情况下不需要回表，但是如果 <code>select A,B,C</code> 的情况，联合索引就无法覆盖了</li>
+</ul>
 <h2 id="MyISAM和InnoDB索引区别"><a href="#MyISAM和InnoDB索引区别" class="headerlink" title="MyISAM和InnoDB索引区别"></a>MyISAM和InnoDB索引区别</h2><ul>
-<li>MyISAM的 主键or非主键索引, 叶子节点存储的都是数据的地址, 因此，MyISAM中索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。</li>
-<li>InnoDB: 主键的索引B+Tree, 叶子节点存储的数据即一条完整记录(聚集索引), InnoDB的辅助索引的叶子节点存储的是 <strong>主键的值</strong> (非聚集索引)</li>
+<li><p>InnoDB: 主键的索引 B+Tree, 叶子节点存储的数据即<strong>一行完整数据</strong>(聚集索引), InnoDB 的辅助索引的叶子节点存储的是 <strong>主键的值</strong> (非聚集索引)</p>
+</li>
+<li><p>MyISAM 的主键和非主键索引, 叶子节点存储的<strong>都是数据行的地址</strong></p>
+</li>
 </ul>
 <hr>
 <p>@ref:</p>
@@ -629,7 +656,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -640,7 +667,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -719,7 +746,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引原理"><span class="nav-text">索引原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#B-Tree"><span class="nav-text">B-Tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入过程"><span class="nav-text">插入过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除过程"><span class="nav-text">删除过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-Tree-的复杂度分析"><span class="nav-text">B-Tree 的复杂度分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-Tree-1"><span class="nav-text">B+Tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL如何使用索引"><span class="nav-text">MySQL如何使用索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyISAM和InnoDB索引区别"><span class="nav-text">MyISAM和InnoDB索引区别</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#B-Tree"><span class="nav-text">B-Tree</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入过程"><span class="nav-text">插入过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除过程"><span class="nav-text">删除过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-Tree-的复杂度分析"><span class="nav-text">B-Tree 的复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-Tree-1"><span class="nav-text">B+Tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL如何使用索引"><span class="nav-text">MySQL如何使用索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyISAM和InnoDB索引区别"><span class="nav-text">MyISAM和InnoDB索引区别</span></a></li></ol></div>
             
 
           </div>

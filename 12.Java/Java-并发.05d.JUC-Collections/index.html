@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Java,Java并发,JUC,集合," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="旧的线程安全的集合: 任何集合类都可以通过使用同步包装器变成线程安全的： List&amp;lt;E&amp;gt; synchArrayList = Collections.synchronizedList(new ArrayList&amp;lt;E&amp;gt;());Map&amp;lt;K,V&amp;gt; synchMap = Collections.synchronizedList(new HasMap&amp;lt;K,V&amp;gt;(">
+<meta name="keywords" content="Java,Java并发,JUC,集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java-并发.05c.JUC-Collections（并发集合）">
+<meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Java-并发.05d.JUC-Collections/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="旧的线程安全的集合: 任何集合类都可以通过使用同步包装器变成线程安全的： List&amp;lt;E&amp;gt; synchArrayList = Collections.synchronizedList(new ArrayList&amp;lt;E&amp;gt;());Map&amp;lt;K,V&amp;gt; synchMap = Collections.synchronizedList(new HasMap&amp;lt;K,V&amp;gt;(">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Java-%E5%B9%B6%E5%8F%91.05d.JUC-Collections-ConcurrentHashMap1.7.png">
+<meta property="og:updated_time" content="2023-05-24T10:10:50.158Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java-并发.05c.JUC-Collections（并发集合）">
+<meta name="twitter:description" content="旧的线程安全的集合: 任何集合类都可以通过使用同步包装器变成线程安全的： List&amp;lt;E&amp;gt; synchArrayList = Collections.synchronizedList(new ArrayList&amp;lt;E&amp;gt;());Map&amp;lt;K,V&amp;gt; synchMap = Collections.synchronizedList(new HasMap&amp;lt;K,V&amp;gt;(">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Java-%E5%B9%B6%E5%8F%91.05d.JUC-Collections-ConcurrentHashMap1.7.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/12.Java/Java-并发.05d.JUC-Collections/"/>
+
+
+
+
+
+  <title>Java-并发.05c.JUC-Collections（并发集合） | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-并发.05d.JUC-Collections/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java-并发.05c.JUC-Collections（并发集合）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  5,332
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>旧的线程安全的集合: 任何集合类都可以通过使用同步包装器变成线程安全的：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;E&gt; synchArrayList = Collections.synchronizedList(<span class="keyword">new</span> ArrayList&lt;E&gt;());</span><br><span class="line">Map&lt;K,V&gt; synchMap = Collections.synchronizedList(<span class="keyword">new</span> HasMap&lt;K,V&gt;());</span><br></pre></td></tr></table></figure>
+<p><code>java.util.concurrent</code>包提供了线程安全的集合, 继承关系如下:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">阻塞队列</span><br><span class="line">  |- BlockingQueue（单向队列）</span><br><span class="line">       |- ArrayBlockingQueue: 一个由数组结构组成的有界阻塞队列</span><br><span class="line">       |- LinkedBlockingQueue: 一个由链表结构组成的有界阻塞队列</span><br><span class="line">       |- PriorityBlockingQueue: 一个支持优先级排序的无界阻塞队列</span><br><span class="line">       |- LinkedBlockingDeque: 一个由链表结构组成的双向阻塞队列</span><br><span class="line">  |- BlockingDeque（双向队列）</span><br><span class="line">       |- LinkedBlockingDeque: 一个由链表结构组成的双向阻塞队列</span><br><span class="line"></span><br><span class="line">非阻塞队列</span><br><span class="line">  |- ConcurrentLinkedQueue</span><br><span class="line">  |- ConcurrentLinkedDeque</span><br><span class="line"></span><br><span class="line">Map</span><br><span class="line">  |- ConcurrentHashMap</span><br><span class="line">  |- ConcurrentSkipListMap</span><br><span class="line"></span><br><span class="line">Set</span><br><span class="line">  |- ConcurrentSkipListSet</span><br></pre></td></tr></table></figure>
+<h1 id="Queue-amp-Deque"><a href="#Queue-amp-Deque" class="headerlink" title="Queue &amp; Deque"></a>Queue &amp; Deque</h1><table>
+<thead>
+<tr>
+<th style="text-align:left">Name</th>
+<th style="text-align:center">是否阻塞</th>
+<th style="text-align:center">是否有界</th>
+<th style="text-align:center">队列长度</th>
+<th style="text-align:center">内部实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">ArrayBlockingQueue</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">有界</td>
+<td style="text-align:center">构造器指定</td>
+<td style="text-align:center">循环数组,FIFO</td>
+</tr>
+<tr>
+<td style="text-align:left">LinkedBlockingQueue</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">有界</td>
+<td style="text-align:center">构造器指定, 默认Int.Max</td>
+<td style="text-align:center">链表,FIFO</td>
+</tr>
+<tr>
+<td style="text-align:left">LinkedBlockingDeque</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">有界</td>
+<td style="text-align:center">构造器指定, 默认Int.Max</td>
+<td style="text-align:center">双向链表,FIFO</td>
+</tr>
+<tr>
+<td style="text-align:left">SynchronousQueue</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">有界</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">PriorityBlockingQueue</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">无界</td>
+<td style="text-align:center">构造器指定, 默认11, 无限扩容</td>
+<td style="text-align:center">二叉堆</td>
+</tr>
+<tr>
+<td style="text-align:left">DelayQueue</td>
+<td style="text-align:center">阻塞</td>
+<td style="text-align:center">无界</td>
+<td style="text-align:center">初始empty, 无限扩容</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">ConcurrentLinkedQueue</td>
+<td style="text-align:center">非阻塞</td>
+<td style="text-align:center">无界</td>
+<td style="text-align:center">初始empty, 无限扩容</td>
+<td style="text-align:center">单向链表</td>
+</tr>
+<tr>
+<td style="text-align:left">ConcurrentLinkedDeque</td>
+<td style="text-align:center">非阻塞</td>
+<td style="text-align:center">无界</td>
+<td style="text-align:center">初始empty, 无限扩容</td>
+<td style="text-align:center">双向链表</td>
+</tr>
+</tbody>
+</table>
+<p>线程安全的队列可以分为 <strong>阻塞队列</strong> , <strong>非阻塞队列</strong>, 按照是否可无限扩容分为 <strong>有界队列</strong> , <strong>无界队列</strong> :</p>
+<p>阻塞队列: </p>
+<ul>
+<li>当队列是空的时，从队列中获取元素的操作将会被阻塞，或者当队列是满时，往队列里添加元素的操作会被阻塞。</li>
+<li>阻塞队列一般是用锁(例如 <code>BlockingQueue</code>)来实现,阻塞队列继承自接口<code>BlockingQueue</code>, 常用的有: <code>ArrayBlockingQueue</code>, <code>LinkedBlockingQueue</code>, <code>PriorityBlockingQueue</code>, <code>LinkedBlockingDeque</code>;</li>
+</ul>
+<p>非阻塞队列是指:</p>
+<ul>
+<li>非阻塞队列一般是用 <code>CAS</code> 实现的”Lock-Free”方法,</li>
+<li>非阻塞队列主要有: <code>ConcurrentLinkedQueue</code>, <code>ConcurrentLinkedDeque</code>;</li>
+</ul>
+<p>有界/无界: 无界队列可以无限扩容，一般链表实现的队列属于无界</p>
+<h2 id="阻塞队列"><a href="#阻塞队列" class="headerlink" title="阻塞队列"></a>阻塞队列</h2><p>阻塞队列一般使用condition实现消费者和生产者的”通讯”。<br>比如当生产者往满的队列里添加元素时会阻塞住，当消费者消费了队列中的元素后，会通过condition通知生产者当前队列可用。</p>
+<p>BlockingQueue接口方法有put/take：</p>
+<p><strong>阻塞方法：</strong></p>
+<ul>
+<li>put(E o)：将元素添加到此队列尾，如果队列满将一直阻塞，可以响应中断。</li>
+<li>take()：检索并移除此队列的头部，如果队列为空则一直阻塞，可以响应中断。</li>
+</ul>
+<p><strong>不阻塞且抛异常的方法：</strong></p>
+<ul>
+<li>add(E o)：将元素添加到此队列中，如果队列已满不会阻塞，直接抛出 IllegalStateException</li>
+<li>remove()： 移除队列头部的元素，如果队列为空不会阻塞，直接抛出 IllegalStateException</li>
+</ul>
+<p><strong>不阻塞且带返回值的方法：</strong></p>
+<ul>
+<li>offer(E o)： 将元素添加到队列，不阻塞，成功返回true，失败返回false；</li>
+<li>offer(E o, long timeout, TimeUnit unit)： 带等待时间的offer方法，如果队列已满，将等待指定的时间；</li>
+<li>poll(long timeout, TimeUnit unit)： 返回队列的头部并移除，如果队列为空，则等待指定等待的时间。如果取不到返回null；</li>
+</ul>
+<p>其他方法：</p>
+<ul>
+<li><code>drainTo(Collection&lt;? super E&gt; c)</code>： 移除此队列中所有可用的元素，并将它们添加到给定 collection 中。</li>
+<li><code>drainTo(Collection&lt;? super E&gt; c,int maxElements)</code>： 最多从此队列中移除给定数量的可用元素，并将这些元素添加到给定 collection 中</li>
+<li><code>remainingCapacity()</code>： 返回在无阻塞的理想情况下（不存在内存或资源约束）此队列能接受的元素数量；如果没有内部限制，则返回 Integer.MAX_VALUE。</li>
+</ul>
+<h3 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h3><ul>
+<li><p>ArrayBlockingQueue 是一个用数组实现的有界阻塞队列。此队列按照先进先出（FIFO）的原则对元素进行排序</p>
+</li>
+<li><p>构造器 <code>ArrayBlockingQueue(int)</code> 都要指定数组初始大小，并且大小不再扩展。</p>
+</li>
+<li><p>默认情况下 ArrayBlockingQueue 不保证访问者公平的访问队列，所谓“公平访问队列”是指：当队列可用时，可以按照阻塞的先后顺序访问队列。我们可以使用以下代码创建一个“公平的”阻塞队列：<code>ArrayBlockingQueue fairQueue = new  ArrayBlockingQueue(1000,true);</code></p>
+</li>
+<li><p>ArrayBlockingQueue 内部实现： </p>
+<ul>
+<li>一个 ReentrantLock，阻塞方法，无论读写都是用这个 lock；</li>
+<li>两个 Condition(notFull、notEmpty) 管理队列满或空时的阻塞状态；</li>
+</ul>
+<p>在「生产者」+「消费者」情景下，因为读写都是共用同一个锁对象，由此也意味着两者无法真正并行运行，ArrayBlockingQueue 的吞吐量不如 LinkedBlockingQueue</p>
+</li>
+</ul>
+<h3 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h3><ul>
+<li>LinkedBlockingQueue 是链表实现的“有界”的阻塞队列。构造函数可以指定最大长度，如果不指定则最大长度默认为 <code>Integer.MAX_VALUE</code></li>
+<li>内部基于链表实现，<ul>
+<li>两个指针：head 和 last 指向链表头尾；</li>
+<li>由两个锁（takeLock 与 putLock），出队和入队时加锁</li>
+<li>两个 Condition(notFull、notEmpty) ，管理队列满或空时的阻塞状态。</li>
+</ul>
+</li>
+</ul>
+<p>由于生产者端和消费者端分别采用了独立的锁来控制数据同步，这也意味着在高并发的情况下生产者和消费者可以并行地操作队列中的数据，以此来提高整个队列的并发性能。</p>
+<p>入队代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 在队尾插入指定的元素.</span></span><br><span class="line"><span class="comment"> * 如果队列已满，则阻塞线程.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(E e)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (e == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="keyword">int</span> c = -<span class="number">1</span>;</span><br><span class="line">    Node&lt;E&gt; node = <span class="keyword">new</span> Node&lt;E&gt;(e);</span><br><span class="line">    <span class="keyword">final</span> ReentrantLock putLock = <span class="keyword">this</span>.putLock;</span><br><span class="line">    <span class="keyword">final</span> AtomicInteger count = <span class="keyword">this</span>.count;</span><br><span class="line">    putLock.lockInterruptibly();            <span class="comment">// 获取“入队锁”</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (count.get() == capacity) &#123;   <span class="comment">// 队列已满, 则线程在notFull上等待</span></span><br><span class="line">            notFull.await();</span><br><span class="line">        &#125;</span><br><span class="line">        enqueue(node);                      <span class="comment">// 将新结点添加到到“链表尾”</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * count 表示的队列中元素个数.</span></span><br><span class="line"><span class="comment">         * getAndIncrement 返回旧值，并+1</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        c = count.getAndIncrement();      <span class="comment">// c表示入队前，链表中元素个数</span></span><br><span class="line">        <span class="keyword">if</span> (c + <span class="number">1</span> &lt; capacity) </span><br><span class="line">            notFull.signal();             <span class="comment">// 入队后，链表队列未满, 则唤醒一个“入队线程”</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        putLock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (c == <span class="number">0</span>)                    <span class="comment">// c是添加该元素前，链表中元素的数量</span></span><br><span class="line">        signalNotEmpty();          <span class="comment">// 如果之前c=0，有线程可能阻塞在get上，需要唤醒</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以入队为例，新元素入队后，</p>
+<ul>
+<li>如果链表还没满，需要唤醒 notFull 条件上的“入队线程”；</li>
+<li>如果新元素入队前，链表中元素数量为 0，说明可能有读线程阻塞在 get 方法（也即 notEmpty 条件）；</li>
+</ul>
+<h3 id="LinkedBlockingDeque"><a href="#LinkedBlockingDeque" class="headerlink" title="LinkedBlockingDeque"></a>LinkedBlockingDeque</h3><ul>
+<li>LinkedBlockingDeque是一个由链表结构组成的双向阻塞队列。构造函数可以指定最大长度，队列的默认和最大长度为<code>Integer.MAX_VALUE</code></li>
+<li>相比其他的阻塞单向队列，LinkedBlockingDeque多了addFirst，addLast，offerFirst，offerLast，peekFirst，peekLast等方法</li>
+</ul>
+<h3 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h3><p>SynchronousQueue 特性，在某次添加元素后必须等待其他线程取走后才能继续添加，可以认为 SynchronousQueue 是一个缓存值为1的阻塞队列（虽然是属于无界的）；</p>
+<p>但是 isEmpty()方法永远返回是true，remainingCapacity() 方法永远返回是0，remove()和removeAll() 方法永远返回是false，iterator()方法永远返回空，peek()方法永远返回null。</p>
+<p>SynchronousQueue 没有使用 lock，而是使用了 CAS（一种名为“<a href="https://link.segmentfault.com/?enc=Tj6XDSrrCjTPHQgG%2FqNn1g%3D%3D.PcsHG44N43bT7Gbg1A%2FzsHpv9c1PLBoMIphV424sQob%2BH9QvvDu3Gni0Xpo5W9o0BCLXPuODRuePgFV32u7rTRtugAU2PjTgpe9R6yebEM4%3D" target="_blank" rel="noopener">Dual stack and Dual queue</a>”的无锁算法实现。）</p>
+<p>SynchronousQueue 有两种不同的模式：公平模式 or 非公平模式（默认），</p>
+<ul>
+<li>如果采用公平模式：这种模式下 transferer 被初始化<strong>队列</strong>，如果队列为空，先发起 get 的线程可以先从阻塞中被通知；</li>
+<li>如果是非公平模式：这种模式下 transferer 被初始化<strong>栈</strong>，如果队列为空，先发起 get 的线程后通知；</li>
+</ul>
+<p>@ref: <a href="https://segmentfault.com/a/1190000016359551" target="_blank" rel="noopener">Java多线程进阶（三五）—— J.U.C之collections框架：SynchronousQueue - 透彻理解Java并发编程 - SegmentFault 思否</a></p>
+<h3 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h3><p>PriorityBlockingQueue 是一种<strong>无界阻塞队列</strong>，在构造的时候可以指定队列的初始容量。具有如下特点：</p>
+<ul>
+<li><p>PriorityBlockingQueue 与之前介绍的阻塞队列最大的不同之处就是：它是一种<strong>优先级队列</strong>，也就是说元素并不是以 FIFO 的方式出/入队，而是以按照权重大小的顺序出队，所以队列中的元素必须是可以比较的，元素必须实现 <code>Comparable</code> 接口；</p>
+</li>
+<li><p>PriorityBlockingQueue 是真正的无界队列（仅受内存大小限制），它不像 ArrayBlockingQueue 那样构造时必须指定最大容量，也不像 LinkedBlockingQueue 默认最大容量为 <code>Integer.MAX_VALUE</code>，虽然 PriorityBlockingQueue 也支持构造函数指定大小，但因为自动扩容所以元素数量不会受限制；</p>
+</li>
+<li><p>由于 PriorityBlockingQueue 无界队列，所以<strong>插入元素</strong>永远不会阻塞线程；但是当队列为空时，取出操作（take）会阻塞线程； </p>
+</li>
+</ul>
+<p>内部实现：</p>
+<ul>
+<li>PriorityBlockingQueue 底层是一种<strong>基于数组实现的堆结构</strong>，排序等功能的实现与 PriorityQueue 类似；</li>
+<li>一个 ReentrantLock 锁对象，一个 notEmpty 条件对象</li>
+</ul>
+<p>@ref <a href="https://segmentfault.com/a/1190000016353839" target="_blank" rel="noopener">Java多线程进阶（三四）—— J.U.C之collections框架：PriorityBlockingQueue - SegmentFault 思否</a></p>
+<h3 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h3><p><code>DelayQueue</code> 是 JDK1.5时，随着J.U.C 包一起引入的一种阻塞队列，它实现了 BlockingQueue 接口，底层基于已有的<strong>PriorityBlockingQueue</strong>实现：</p>
+<ul>
+<li>队列中的元素必须实现 <strong>Delayed</strong> 接口，在创建元素时可以指定多久才能从队列中获取当前元素。只有在延迟期满时才能从队列中提取元素。 Delayed 接口继承了 <strong>Comparable</strong> 接口，必须实现 compareTo 来指定元素的顺序。</li>
+<li>由于DelayQueue内部委托了PriorityBlockingQueue对象来实现所有方法，所以能以堆的结构维护元素顺序，这样剩余时间最小的元素就在堆顶，<strong>每次出队其实就是删除剩余时间≤0的最小元素</strong>。</li>
+</ul>
+<p>我们可以将 DelayQueue 运用在以下应用场景：</p>
+<ul>
+<li>定时任务调度。使用 DelayQueue 保存当天将会执行的任务和执行时间，一旦从 DelayQueue 中获取到任务就开始执行，从比如 TimerQueue 就是使用 DelayQueue 实现的。</li>
+</ul>
+<p>实现：</p>
+<ul>
+<li>DelayQueue 的主要成员：<ul>
+<li>ReentrantLock lock： 保证线程安全</li>
+<li>Thread leader：最早调用 get 并阻塞的线程</li>
+<li>Condition available：条件对象，get 并阻塞的线程在此等待</li>
+</ul>
+</li>
+<li>因为是最小堆，所以堆顶是剩余时间最小的元素，每次 take 时：<ul>
+<li>如果堆顶时间未到，调用 get 的线程阻塞在 available；</li>
+<li>如果堆顶元素时间到了，则取出堆顶；</li>
+</ul>
+</li>
+</ul>
+<p>实际的 put / take 更复杂，因为涉及到 Leader-Follower 机制：</p>
+<ul>
+<li>leader 是最早调用 take 并阻塞的线程；loader 阻塞在 available（条件对象），调用的是带超时时间的 <code>awaitNanos(delay)</code> </li>
+<li>其他后续来 take 的线程也在 available 阻塞，用的是无限阻塞；</li>
+<li>loader 醒来后，先检测队头的节点是否到期，如果是则取走队头，并唤醒其他在 available 上的第一个线程，线程醒来（是在 take 函数的 <code>await()</code>），</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 队首出队元素.</span></span><br><span class="line"><span class="comment"> * 如果队首元素（堆顶）未到期或队列为空, 则阻塞线程.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">take</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">this</span>.lock;</span><br><span class="line">    lock.lockInterruptibly();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (; ; ) &#123;</span><br><span class="line">            E first = q.peek();     <span class="comment">// 读取队首元素</span></span><br><span class="line">            <span class="keyword">if</span> (first == <span class="keyword">null</span>)      <span class="comment">// CASE1: 队列为空, 直接阻塞</span></span><br><span class="line">                available.await();</span><br><span class="line">            <span class="keyword">else</span> &#123;                  <span class="comment">// CASE2: 队列非空</span></span><br><span class="line">                <span class="keyword">long</span> delay = first.getDelay(NANOSECONDS);</span><br><span class="line">                <span class="keyword">if</span> (delay &lt;= <span class="number">0</span>)      <span class="comment">// CASE2.0: 队首元素已过期</span></span><br><span class="line">                    <span class="keyword">return</span> q.poll();  <span class="comment">// 取走队头元素，还要进入第2个finally</span></span><br><span class="line"></span><br><span class="line">                <span class="comment">// 执行到此处说明队列非空, 且队首元素未过期</span></span><br><span class="line">                first = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">if</span> (leader != <span class="keyword">null</span>)         <span class="comment">// CASE2.1: 已存在leader线程</span></span><br><span class="line">                    available.await();      <span class="comment">// 非 leader线程，无限期 await</span></span><br><span class="line">                <span class="keyword">else</span> &#123;                      <span class="comment">// CASE2.2: 不存在leader线程</span></span><br><span class="line">                    Thread thisThread = Thread.currentThread();</span><br><span class="line">                    leader = thisThread;    <span class="comment">// 将当前线程置为leader线程</span></span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        available.awaitNanos(delay); <span class="comment">// leader使用带时间的 await</span></span><br><span class="line">                    &#125; <span class="keyword">finally</span> &#123; <span class="comment">// 第 1 个 finally</span></span><br><span class="line">                        <span class="keyword">if</span> (leader == thisThread)</span><br><span class="line">                            leader = <span class="keyword">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123; <span class="comment">// 第 2 个 finally</span></span><br><span class="line">        <span class="keyword">if</span> (leader == <span class="keyword">null</span> &amp;&amp; q.peek() != <span class="keyword">null</span>) <span class="comment">// 不存在leader线程, 则唤醒一个其它出队线程</span></span><br><span class="line">            available.signal();</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="非阻塞队列"><a href="#非阻塞队列" class="headerlink" title="非阻塞队列"></a>非阻塞队列</h2><h3 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h3><ul>
+<li>ConcurrentLinkedQueue是一个基于链接节点的无边界的线程安全队列，它采用FIFO原则对元素进行排序。采用“wait-free”算法（即CAS）来实现的。</li>
+<li>ConcurrentLinkedQueue的结构是单向链表和head/tail两个指针，因为入队时需要修改队尾元素的next指针，以及修改tail指向新入队的元素两个CAS动作无法原子，所以需要的特殊的算法，见：<br><a href="https：//www.ibm.com/developerworks/cn/java/j-jtp04186/">Java 理论与实践： 非阻塞算法简介</a></li>
+</ul>
+<h3 id="ConcurrentLinkedDeque"><a href="#ConcurrentLinkedDeque" class="headerlink" title="ConcurrentLinkedDeque"></a>ConcurrentLinkedDeque</h3><ul>
+<li>ConcurrentLinkedDeque是一种基于双向链表的无界链表。</li>
+<li>与大多数集合类型不同，其size方法不是一个常量操作。因为链表的异步性质，确定当前元素的数量需要遍历所有的元素，所以如果在遍历期间有其他线程修改了这个集合，size方法就可能会报告不准确的结果。</li>
+<li>批量的操作：包括添加、删除或检查多个元素，比如addAll()、removeIf()或者removeIf() 或forEach()方法，这个类型并不保证以原子方式执行。由此可见如果想保证原子访问，不得使用批量操作的方法。</li>
+</ul>
+<h1 id="List"><a href="#List" class="headerlink" title="List"></a>List</h1><h2 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h2><p>ArrayList 底层使用数组，实现了 List 接口，并且提供了 get(i) set(i)这种随机访问的方法，<br>线程安全的版本是 Vector，通过 Synchronized 整个方法实现了线程安全，但是性能太差，<br>CopyOnWriteArrayList 是一种线程安全的 ArrayList，更适合读多写少的场景</p>
+<p>实现：</p>
+<ul>
+<li>主要成员：Object 数组、ReentrantLock 锁</li>
+<li>get：不加锁</li>
+<li>add/remove：这些会更改数组的方法，都是用 ReentrantLock 加锁，使用 <code>Arrays.copyOf</code> 将旧内容拷贝入新数组，然后替换掉旧数组</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">this</span>.lock;</span><br><span class="line">    lock.lock();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Object[] elements = getArray();     <span class="comment">// 旧数组</span></span><br><span class="line">        <span class="keyword">int</span> len = elements.length;</span><br><span class="line">        Object[] newElements = Arrays.copyOf(elements, len + <span class="number">1</span>);    <span class="comment">// 复制并创建新数组</span></span><br><span class="line">        newElements[len] = e;               <span class="comment">// 将元素插入到新数组末尾</span></span><br><span class="line">        setArray(newElements);              <span class="comment">// 内部array引用指向新数组</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>写操作因为要 copy 整个旧数组，代价还是较高，适用于写非常少的场景</p>
+<p>@ref:</p>
+<ul>
+<li><a href="https://juejin.im/post/5aeeb55f5188256715478c21" target="_blank" rel="noopener">并发容器之CopyOnWriteArrayList - 掘金</a></li>
+<li><a href="https://blog.csdn.net/h525483481/article/details/80347485" target="_blank" rel="noopener">实现一个简单的阻塞队列_Java_h525483481的专栏-CSDN博客</a></li>
+</ul>
+<h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><h2 id="ConcurrentSkipListSet"><a href="#ConcurrentSkipListSet" class="headerlink" title="ConcurrentSkipListSet"></a>ConcurrentSkipListSet</h2><p>ConcurrentSkipListSet的实现非常简单，其内部引用了一个ConcurrentSkipListMap对象，所有API方法都是调用了ConcurrentSkipListMap。<br>ConcurrentSkipListSet和TreeSet，它们虽然都是有序的集。但是：<br>第一，它们的线程安全机制不同，TreeSet是非线程安全的，而ConcurrentSkipListSet是线程安全的；<br>第二，ConcurrentSkipListSet是通过ConcurrentSkipListMap实现的，而TreeSet是通过TreeMap实现的；</p>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><h2 id="ConcurrentHashMap（JDK-1-8）"><a href="#ConcurrentHashMap（JDK-1-8）" class="headerlink" title="ConcurrentHashMap（JDK 1.8）"></a>ConcurrentHashMap（JDK 1.8）</h2><p>在 JDK1.7之前，ConcurrentHashMap 是通过分段锁机制来实现的，所以其最大并发度受 Segment 的个数限制。因此，在 JDK1.8中，ConcurrentHashMap 的实现原理摒弃了这种设计，而是选择了与 HashMap 类似的数组+链表+红黑树的方式实现，而加锁则采用 CAS 和 synchronized 实现。</p>
+<p>1.8 中 ConcurrentHashMap 使用了 CAS + Synchronized 两种方式，put 流程如下：</p>
+<ul>
+<li>计算 index，方式同 HashMap： index = hash &amp; (n -1 )，==思考这样做的好处是？==</li>
+<li>如果 table[i] = null, CAS 插入这个位置</li>
+<li>如果 table[i] 是链表 or 红黑树，则 synchronized 锁住 table[i]，也即此处的 Node 对象 </li>
+<li>如果 table[i].hash = MOVED, 说明此为 ForwardingNode 节点，则调用 transfer 进行迁移</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 实际的插入操作</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> onlyIfAbsent true:仅当key不存在时,才插入</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(K key, V value, <span class="keyword">boolean</span> onlyIfAbsent)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span> || value == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="keyword">int</span> hash = spread(key.hashCode());  <span class="comment">// 再次计算hash值</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用链表保存时，binCount记录table[i]这个桶中所保存的结点数；</span></span><br><span class="line"><span class="comment">     * 使用红黑树保存时，binCount==2，保证put后更改计数值时能够进行扩容检查，同时不触发红黑树化操作</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">int</span> binCount = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (Node&lt;K, V&gt;[] tab = table; ; ) &#123;  <span class="comment">// 自旋插入结点，直到成功</span></span><br><span class="line">        Node&lt;K, V&gt; f;</span><br><span class="line">        <span class="keyword">int</span> n, i, fh;</span><br><span class="line">        <span class="keyword">if</span> (tab == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>) <span class="comment">// CASE1: 首次初始化table —— 懒加载</span></span><br><span class="line">            tab = initTable();</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ((f = tabAt(tab, i = (n - <span class="number">1</span>) &amp; hash)) == <span class="keyword">null</span>) &#123; <span class="comment">// CASE2:table[i]无数据</span></span><br><span class="line">            <span class="comment">// 注意下上面table[i]的索引i的计算方式：key的hash值 &amp; (table.length-1)</span></span><br><span class="line">            <span class="keyword">if</span> (casTabAt(tab, i, <span class="keyword">null</span>, <span class="keyword">new</span> Node&lt;K, V&gt;(hash, key, value, <span class="keyword">null</span>))) </span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((fh = f.hash) == MOVED)  <span class="comment">// CASE3: 发现ForwardingNode结点，说明此时table正在扩容，则尝试协助数据迁移</span></span><br><span class="line">            tab = helpTransfer(tab, f);</span><br><span class="line">        <span class="keyword">else</span> &#123;  <span class="comment">// CASE4: 出现hash冲突,也就是table[i]桶中已经有了结点</span></span><br><span class="line">            V oldVal = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">synchronized</span> (f) &#123;              <span class="comment">// 锁住table[i]结点</span></span><br><span class="line">                <span class="keyword">if</span> (tabAt(tab, i) == f) &#123;   <span class="comment">// 再判断一下table[i]是不是第一个结点, 防止其它线程的写修改</span></span><br><span class="line">                    <span class="keyword">if</span> (fh &gt;= <span class="number">0</span>) &#123;          <span class="comment">// CASE4.1: table[i]是链表结点</span></span><br><span class="line">                        binCount = <span class="number">1</span>;</span><br><span class="line">                        <span class="keyword">for</span> (Node&lt;K, V&gt; e = f; ; ++binCount) &#123;</span><br><span class="line">                            K ek;</span><br><span class="line">                            <span class="comment">// 找到“相等”的结点，判断是否需要更新value值</span></span><br><span class="line">                            <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((ek = e.key) == key || (ek != <span class="keyword">null</span> &amp;&amp; key.equals(ek)))) &#123;</span><br><span class="line">                                oldVal = e.val;</span><br><span class="line">                                <span class="keyword">if</span> (!onlyIfAbsent)</span><br><span class="line">                                    e.val = value;</span><br><span class="line">                                <span class="keyword">break</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                            Node&lt;K, V&gt; pred = e;</span><br><span class="line">                            <span class="keyword">if</span> ((e = e.next) == <span class="keyword">null</span>) &#123;     <span class="comment">// “尾插法”插入新结点</span></span><br><span class="line">                                pred.next = <span class="keyword">new</span> Node&lt;K, V&gt;(hash, key,</span><br><span class="line">                                    value, <span class="keyword">null</span>);</span><br><span class="line">                                <span class="keyword">break</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (f <span class="keyword">instanceof</span> TreeBin) &#123;  <span class="comment">// CASE4.2: table[i]是红黑树结点</span></span><br><span class="line">                        Node&lt;K, V&gt; p;</span><br><span class="line">                        binCount = <span class="number">2</span>;</span><br><span class="line">                        <span class="keyword">if</span> ((p = ((TreeBin&lt;K, V&gt;) f).putTreeVal(hash, key, value)) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            oldVal = p.val;</span><br><span class="line">                            <span class="keyword">if</span> (!onlyIfAbsent)</span><br><span class="line">                                p.val = value;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (binCount != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD) <span class="comment">// 链表长度 &gt; 8</span></span><br><span class="line">                    treeifyBin(tab, i);     <span class="comment">// 链表 -&gt; 红黑树 转换</span></span><br><span class="line">                <span class="keyword">if</span> (oldVal != <span class="keyword">null</span>)         <span class="comment">// 表明本次put操作只是替换了旧值，不用更改计数值</span></span><br><span class="line">                    <span class="keyword">return</span> oldVal;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    addCount(<span class="number">1L</span>, binCount);             <span class="comment">// 计数值加1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>➤ 扩容 tryPresize() 实现：</p>
+<ul>
+<li>通过 CAS 保证只能由一个线程进行桶数组的扩容；</li>
+<li>对链表进行红黑树转换的时候（触发阈值 8 ）, 如果桶数组小于 64，则不进行红黑树转换，而是进行扩容，把数组长度扩大到原来的两倍。</li>
+</ul>
+<p>➤ 迁移 transfer() 的实现：</p>
+<ul>
+<li>transfer 可以多个线程并发执行；</li>
+<li>因为桶数组和计算 index（参考 hashMap ）的特性，扩容前和扩容后的位置只有 2 种可能，在原位置 or 原位置+oldCap，这种处理方式非常利于扩容时多个线程同时进行的数据迁移操作，因为旧 table 的各个桶中的结点迁移不会互相影响，所以就可以用分治的方式，将整个 table 数组划分为很多部分，每一部分包含一定区间的桶，每个数据迁移线程处理各自区间中的结点；</li>
+</ul>
+<p>➤ 计算元素个数 sum() 的实现：</p>
+<ul>
+<li>类似 LongAdder，一个 long 型的 base，另外是 cell[] 数组，</li>
+<li>如果 CAS base 成功，直接在 base 上累加，如果 CAS 失败了，也即发生冲突，线程会根据自己的 hash，找到 cell[i]，然后对该 cell 进行 CAS+1</li>
+<li>计算 sum 时，和 LongAdder 一样，也是一个瞬时值</li>
+</ul>
+<p>@ref：</p>
+<ul>
+<li><a href="https://segmentfault.com/a/1190000016096542" target="_blank" rel="noopener">Java多线程进阶（二三）—— J.U.C之collections框架：ConcurrentHashMap(1) 原理 - 透彻理解Java并发编程 - SegmentFault 思否</a></li>
+<li><a href="https://segmentfault.com/a/1190000016124883" target="_blank" rel="noopener">Java多线程进阶（二四）—— J.U.C之collections框架：ConcurrentHashMap(2) 扩容 - 透彻理解Java并发编程 - SegmentFault 思否</a></li>
+</ul>
+<h2 id="ConcurrentHashMap（JDK-1-7）"><a href="#ConcurrentHashMap（JDK-1-7）" class="headerlink" title="ConcurrentHashMap（JDK 1.7）"></a>ConcurrentHashMap（JDK 1.7）</h2><ul>
+<li>数据分段存储，每个段有一个写锁（分段锁），当一个线程占用某个段的锁时，其他段也可以正常访问，有效分散了阻塞的概率，而且没有读锁；</li>
+<li>没有读锁是因为put/remove动作是个原子动作(比如put是一个对数组元素/Entry 指针的赋值操作)，读操作不会看到一个更新动作的中间状态；</li>
+<li>每次扩容为原来容量的2倍，ConcurrentHashMap不会对整个容器进行扩容，而只对某个segment进行扩容；</li>
+<li>在获取size操作的时候，不是直接把所有segment的count相加就可以可到整个ConcurrentHashMap大小，也不是在统计size的时候把所有的segment的put、remove、clean方法全部锁住，这种方法太低效。<br>在累加count操作过程中，之前累加过的count发生变化的几率非常小，所有ConcurrentHashMap的做法是先尝试2（RETRIES_BEFORE_LOCK）次通过不锁住Segment的方式统计各个Segment大小，如果统计的过程中，容器的count发生了变化，再采用加锁的方式来统计所有的Segment的大小。</li>
+<li>putIfAbsent(k,v)：当k已经存在时返回已存在的v。</li>
+</ul>
+<p><img src="/images/Java-%E5%B9%B6%E5%8F%91.05d.JUC-Collections-ConcurrentHashMap1.7.png" alt="../_images/Java-并发.05d.JUC-Collections-ConcurrentHashMap1.7.png"></p>
+<p>➤ 内部实现:</p>
+<ul>
+<li><code>concurrencyLevel</code>: 并行级别、也是Segment 数，默认是 16，也就是说 ConcurrentHashMap 有 16 个 Segments，所以理论上，最多可以同时支持 16 个线程并发写，只要它们的操作分别分布在不同的 Segment 上。这个值可以在初始化的时候设置为其他值，但是一旦初始化以后，它是不可以扩容的。</li>
+</ul>
+<ul>
+<li>实例化ConcurrentHashMap时带参数时，会根据参数调整table的大小，假设参数为100，最终会调整成256，确保table的大小总是2的幂次方, 为什么?</li>
+<li>put操作:<br>  计算桶位置:  i = (table.size-1) &amp; hash<br>  如果 table[i] == null : 用自旋+CAS 改变 table[i] 的值<br>  如果 f = table[i] != null : Synchronized(f)锁住f节点</li>
+<li>size的实现: 类似 LongAdder</li>
+</ul>
+<h2 id="ConcurrentSkipListMap"><a href="#ConcurrentSkipListMap" class="headerlink" title="ConcurrentSkipListMap"></a>ConcurrentSkipListMap</h2><ul>
+<li>JDK6新增的并发优化的SortedMap，以SkipList实现。SkipList是红黑树的一种简化替代方案，是个流行的有序集合算法。Concurrent包选用它是因为它支持基于CAS的无锁算法，而红黑树则没有好的无锁算法。</li>
+<li>ConcurrentSkipListMap 的key是有序的；</li>
+<li>与ConcurrentHashMap相比，ConcurrentSkipListMap 支持更高的并发。ConcurrentSkipListMap 的存取时间是log(n)，和线程数几乎无关。也就是说在数据量一定的情况下，并发的线程越多，ConcurrentSkipListMap越能体现出优势。</li>
+<li>它的size()比较特殊，需要遍历所有元素；</li>
+</ul>
+<h1 id="Deprecated-Vector-amp-HashTable"><a href="#Deprecated-Vector-amp-HashTable" class="headerlink" title="Deprecated: Vector &amp; HashTable"></a>Deprecated: Vector &amp; HashTable</h1><p>Vector和HashTable已经被弃用，取而代之的是ArrayList和HashMap，如果要使用线程安全的容器，可以用Collections转换：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;E&gt; syncList = Collections.synchronzedList(<span class="keyword">new</span> ArrayList&lt;E&gt;());</span><br><span class="line">Map&lt;K,V&gt; syncMap = Collections.synchronizedMap(<span class="keyword">new</span> HashMap&lt;K,V&gt;());</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Java并发/" rel="tag"># Java并发</a>
+          
+            <a href="/tags/JUC/" rel="tag"># JUC</a>
+          
+            <a href="/tags/集合/" rel="tag"># 集合</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Java-并发.05c.JUC-Sync/" rel="next" title="Java-并发.05d.JUC-Sync（同步器）">
+                <i class="fa fa-chevron-left"></i> Java-并发.05d.JUC-Sync（同步器）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Java-并发.06a.JUC-线程池/" rel="prev" title="Java-并发.06a.JUC-执行器-线程池">
+                Java-并发.06a.JUC-执行器-线程池 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">403</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Queue-amp-Deque"><span class="nav-text">Queue &amp; Deque</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#阻塞队列"><span class="nav-text">阻塞队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayBlockingQueue"><span class="nav-text">ArrayBlockingQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedBlockingQueue"><span class="nav-text">LinkedBlockingQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedBlockingDeque"><span class="nav-text">LinkedBlockingDeque</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SynchronousQueue"><span class="nav-text">SynchronousQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PriorityBlockingQueue"><span class="nav-text">PriorityBlockingQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DelayQueue"><span class="nav-text">DelayQueue</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞队列"><span class="nav-text">非阻塞队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentLinkedQueue"><span class="nav-text">ConcurrentLinkedQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentLinkedDeque"><span class="nav-text">ConcurrentLinkedDeque</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#List"><span class="nav-text">List</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CopyOnWriteArrayList"><span class="nav-text">CopyOnWriteArrayList</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set"><span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentSkipListSet"><span class="nav-text">ConcurrentSkipListSet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Map"><span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap（JDK-1-8）"><span class="nav-text">ConcurrentHashMap（JDK 1.8）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap（JDK-1-7）"><span class="nav-text">ConcurrentHashMap（JDK 1.7）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentSkipListMap"><span class="nav-text">ConcurrentSkipListMap</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Deprecated-Vector-amp-HashTable"><span class="nav-text">Deprecated: Vector &amp; HashTable</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/12.Java/Java-并发.05d.JUC-Collections/';
+          this.page.identifier = '12.Java/Java-并发.05d.JUC-Collections/';
+          this.page.title = 'Java-并发.05c.JUC-Collections（并发集合）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

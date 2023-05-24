@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Java,Java并发,JUC," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="FutureCallable 接口类似于 Runnable，但是 Runnable 不会返回结果，并且无法抛出返回结果的异常，Callable 功能更强大一些，被线程执行后，可以返回结果。  Callable 有些类似 Runnable, 它们都是接口, 前者需要实现 V call(), 后者需要实现 void run(); Callable 需要用 FutureTask 包装一下, Future">
+<meta name="keywords" content="Java,Java并发,JUC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java-并发.06b.JUC-执行器-Future">
+<meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Java-并发.06b.JUC-Future/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="FutureCallable 接口类似于 Runnable，但是 Runnable 不会返回结果，并且无法抛出返回结果的异常，Callable 功能更强大一些，被线程执行后，可以返回结果。  Callable 有些类似 Runnable, 它们都是接口, 前者需要实现 V call(), 后者需要实现 void run(); Callable 需要用 FutureTask 包装一下, Future">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2023-05-24T10:10:50.169Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java-并发.06b.JUC-执行器-Future">
+<meta name="twitter:description" content="FutureCallable 接口类似于 Runnable，但是 Runnable 不会返回结果，并且无法抛出返回结果的异常，Callable 功能更强大一些，被线程执行后，可以返回结果。  Callable 有些类似 Runnable, 它们都是接口, 前者需要实现 V call(), 后者需要实现 void run(); Callable 需要用 FutureTask 包装一下, Future">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/12.Java/Java-并发.06b.JUC-Future/"/>
+
+
+
+
+
+  <title>Java-并发.06b.JUC-执行器-Future | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-并发.06b.JUC-Future/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java-并发.06b.JUC-执行器-Future</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,794
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h2><p><code>Callable</code> 接口类似于 Runnable，但是 Runnable 不会返回结果，并且无法抛出返回结果的异常，<code>Callable</code> 功能更强大一些，被线程执行后，可以返回结果。</p>
+<ul>
+<li><code>Callable</code> 有些类似 <code>Runnable</code>, 它们都是接口, 前者需要实现 <code>V call()</code>, 后者需要实现 <code>void run()</code>;</li>
+<li><code>Callable</code> 需要用 <code>FutureTask</code> 包装一下, <code>FutureTask</code> 提供了 <code>get()</code> 方法, 可以获取执行结果;</li>
+</ul>
+<ul>
+<li>FutureTask 需要通过 Thread 执行: 通过构造器 <code>Thread(FutureTask)</code> 创建 Thread 对象</li>
+</ul>
+<ul>
+<li>结果通过 <code>FutureTask.get</code> 获取,  <code>FutureTask</code> 实现了 <code>Future</code> 接口, 通过 <code>FutureTask</code> 和 <code>Future</code> 类型引用都可以调用 <code>get()</code> , <code>cancel()</code> , <code>isDone()</code> , <code>isCancelled()</code> 等方法;</li>
+<li><code>Callable</code> 也可以放入线程池,  <code>ExecutorService.submit(Callable)</code> 把 Callable 提交到线程池并返回 Future ;</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FutureAndFutureTaskExample</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">     * FutureTask 示例1:</span></span><br><span class="line"><span class="comment">     * 由FutureTask直接创建线程,并执行</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">futureTaskExample</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建Callable实现类</span></span><br><span class="line">        Callable callable = <span class="keyword">new</span> Callable&lt;Integer&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Integer <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Random().nextInt(<span class="number">100</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建FutureTask</span></span><br><span class="line">        FutureTask futureTask = <span class="keyword">new</span> FutureTask(callable);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建Thread 并开始执行</span></span><br><span class="line">        <span class="keyword">new</span> Thread(futureTask).start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 阻塞在此, 直到任务完成:</span></span><br><span class="line">        Integer result = futureTask.get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">     * Future 示例2:</span></span><br><span class="line"><span class="comment">     * Callable 提交到线程池执行</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">futureExample</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Lambda创建Callable实现类</span></span><br><span class="line">        Callable&lt;Integer&gt; callable = () -&gt; &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Random().nextInt(<span class="number">100</span>);</span><br><span class="line">        &#125; ;</span><br><span class="line"></span><br><span class="line">        ExecutorService executorService = Executors.newCachedThreadPool();</span><br><span class="line">        Future&lt;Integer&gt; future = executorService.submit(callable);</span><br><span class="line"></span><br><span class="line">        Integer result = future.get();</span><br><span class="line">        <span class="comment">// 或取消线程</span></span><br><span class="line">        future.cancel(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>问题: <code>FutureTask.cancel()</code> 和 <code>Thread.interrupt()</code> 有什么区别?<br>通过查看 <code>cancel()</code> 的源码发现, 实际 <code>cancel()</code> 最终还是调用了 <code>Thread.interrupt()</code>,<br>所以, 要通过 <code>FutureTask.cancel()</code> 停止异步任务, 那么还需要在 <code>Runnable</code> 或 <code>Callable</code> 的主循环里捕捉 InterruptException 异常.</p>
+<h2 id="ListenableFuture-Guava"><a href="#ListenableFuture-Guava" class="headerlink" title="ListenableFuture(Guava)"></a>ListenableFuture(Guava)</h2><p>Guava 的 Listenable Future 对 Future 做了改进，支持注册一个任务执行结束后回调函数。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建一个 ListenableFuture</span></span><br><span class="line">ListenableFuture&lt;String&gt; listenableFuture =</span><br><span class="line">listeningExecutor.submit(<span class="keyword">new</span> Callable&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过addCallback() 给 ListenableFuture增加回调</span></span><br><span class="line">Futures.addCallback(ListenableFuture, <span class="keyword">new</span> FutureCallback&lt;Object&gt;() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccess</span><span class="params">(Object result)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// do something on success</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Throwable thrown)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// do something on failure</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="CompletableFuture-Java8"><a href="#CompletableFuture-Java8" class="headerlink" title="CompletableFuture(Java8)"></a>CompletableFuture(Java8)</h2><p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html" target="_blank" rel="noopener">Future</a> 是 Java 5添加的类，用来描述一个异步计算的结果。你可以使用 <code>isDone</code> 方法检查计算是否完成，或者使用 <code>get</code> 阻塞住调用线程，直到计算完成返回结果，你也可以使用 <code>cancel</code> 方法停止任务的执行。</p>
+<p>虽然<code>Future</code>以及相关使用方法提供了异步执行任务的能力，但是对于结果的获取却是很不方便，只能通过阻塞或者轮询的方式得到任务的结果。阻塞的方式显然和我们的异步编程的初衷相违背，轮询的方式又会耗费无谓的CPU资源，而且也不能及时地得到计算结果，为什么不能用观察者设计模式当计算结果完成及时通知监听者呢？</p>
+<p>在Java 8中, 新增加了一个包含50个方法左右的类: <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html" target="_blank" rel="noopener">CompletableFuture</a>，提供了非常强大的Future的扩展功能，可以帮助我们简化异步编程的复杂性，提供了函数式编程的能力，可以通过回调的方式处理计算结果，并且提供了转换和组合CompletableFuture的方法。</p>
+<h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><p>Java8 的 CompletableFuture 参考了 Guava 的 ListenableFuture 的思路，CompletableFuture 能够将回调放到与任务不同的线程中执行，也能将回调作为继续执行的同步函数，在与任务相同的线程中执行。</p>
+<p>CompletableFuture 弥补了 Future 模式的缺点。在异步的任务完成后，需要用其结果继续操作时，无需等待。可以直接通过 thenAccept、thenApply、thenCompose 等方式将前面异步处理的结果交给另外一个异步事件处理线程来处理。</p>
+<p>与 Guava ListenableFuture 相比，CompletableFuture 不仅可以在任务完成时注册回调通知，而且可以指定任意线程，实现了真正的异步非阻塞。</p>
+<p><strong>▶ 创建一个 CompletableFuture:</strong><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CompletableFuture&lt;Void&gt; <span class="title">runAsync</span><span class="params">(Runnable runnable)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CompletableFuture&lt;Void&gt; <span class="title">runAsync</span><span class="params">(Runnable runnable, Executor executor)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> &lt;U&gt; CompletableFuture&lt;U&gt; <span class="title">supplyAsync</span><span class="params">(Supplier&lt;U&gt; supplier)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> &lt;U&gt; CompletableFuture&lt;U&gt; <span class="title">supplyAsync</span><span class="params">(Supplier&lt;U&gt; supplier, Executor executor)</span></span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>runAsync 方法不支持返回值/supplyAsync 可以支持返回值<br>没有指定 Executor 的方法会使用 ForkJoinPool.commonPool() 作为它的线程池执行异步代码。如果指定线程池，则使用指定的线程池运行。以下所有的方法都类同。</p>
+</blockquote>
+<p><strong>▶ 使用 thenApply 串行任务:</strong><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;U&gt; <span class="function">CompletableFuture&lt;U&gt; <span class="title">thenApply</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends U&gt; fn)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> &lt;U&gt; CompletableFuture&lt;U&gt; <span class="title">thenApplyAsync</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends U&gt; fn)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> &lt;U&gt; CompletableFuture&lt;U&gt; <span class="title">thenApplyAsync</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends U&gt; fn, Executor executor)</span></span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>当一个线程依赖另一个线程时，可以使用 thenApply 方法来把这两个线程串行化。<br>T：上一个任务返回结果的类型<br>U：当前任务的返回值类型</p>
+</blockquote>
+<p><strong>▶使用 thenAccept 消费处理结果:</strong><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> CompletionStage&lt;Void&gt; <span class="title">thenAccept</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; action)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> CompletionStage&lt;Void&gt; <span class="title">thenAcceptAsync</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; action)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> CompletionStage&lt;Void&gt; <span class="title">thenAcceptAsync</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; action,Executor executor)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>▶ 使用 thenCombine 合并任务:</strong><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;U,V&gt; <span class="function">CompletionStage&lt;V&gt; <span class="title">thenCombine</span><span class="params">(CompletionStage&lt;? extends U&gt; other, BiFunction&lt;? <span class="keyword">super</span> T, ? <span class="keyword">super</span> U, ? extends V&gt; fn)</span></span>;</span><br><span class="line"><span class="keyword">public</span> &lt;U,V&gt; <span class="function">CompletionStage&lt;V&gt; <span class="title">thenCombineAsync</span><span class="params">(CompletionStage&lt;? extends U&gt; other,BiFunction&lt;? <span class="keyword">super</span> T,? <span class="keyword">super</span> U,? extends V&gt; fn)</span></span>;</span><br><span class="line"><span class="keyword">public</span> &lt;U,V&gt; <span class="function">CompletionStage&lt;V&gt; <span class="title">thenCombineAsync</span><span class="params">(CompletionStage&lt;? extends U&gt; other,BiFunction&lt;? <span class="keyword">super</span> T,? <span class="keyword">super</span> U,? extends V&gt; fn,Executor executor)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>thenCombine 会把两个 CompletionStage 的任务都执行完成后，把两个任务的结果一块交给 thenCombine 来处理。</p>
+</blockquote>
+<p><strong>▶ 使用 thenCompose 流水化处理任务:</strong><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;U&gt; <span class="function">CompletableFuture&lt;U&gt; <span class="title">thenCompose</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends CompletionStage&lt;U&gt;&gt; fn)</span></span>;</span><br><span class="line"><span class="keyword">public</span> &lt;U&gt; <span class="function">CompletableFuture&lt;U&gt; <span class="title">thenComposeAsync</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends CompletionStage&lt;U&gt;&gt; fn)</span> </span>;</span><br><span class="line"><span class="keyword">public</span> &lt;U&gt; <span class="function">CompletableFuture&lt;U&gt; <span class="title">thenComposeAsync</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends CompletionStage&lt;U&gt;&gt; fn, Executor executor)</span> </span>;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>thenCompose 方法允许你对两个 CompletionStage 进行流水线操作，第一个操作完成时，将其结果作为参数传递给第二个操作。</p>
+</blockquote>
+<p><strong>▶ 代码示例 1: thenApply/whenComplete/exceptionally</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">example</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    CompletableFuture&lt;Long&gt; future = CompletableFuture.supplyAsync(<span class="keyword">new</span> Supplier&lt;Long&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Long <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">long</span> result = <span class="keyword">new</span> Random().nextInt(<span class="number">100</span>);</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).thenApply(<span class="keyword">new</span> Function&lt;Long, Long&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Long <span class="title">apply</span><span class="params">(Long t)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">long</span> result = t*<span class="number">5</span>;</span><br><span class="line">            System.out.println(<span class="string">"result2="</span>+result);</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    future.whenComplete(<span class="keyword">new</span> BiConsumer&lt;Void, Throwable&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(Void t, Throwable action)</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"执行完成！"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line">    future.exceptionally(<span class="keyword">new</span> Function&lt;Throwable, Void&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Void <span class="title">apply</span><span class="params">(Throwable t)</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"执行失败！"</span>+t.getMessage());</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>▶ anyOf / allOf</strong><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CompletableFuture&lt;Object&gt; <span class="title">anyOf</span><span class="params">(CompletableFuture&lt;?&gt;... cfs)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CompletableFuture&lt;Void&gt; <span class="title">allOf</span><span class="params">(CompletableFuture&lt;?&gt;... cfs)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>anyOf: 当任意一个 CompletableFuture 完成后，创建一个完成的 CompletableFuture<br>allOf: 当所有的阶段完成后, 创建一个完成的 CompletableFuture</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CompletableFuture&lt;List&gt; <span class="title">example</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    CompletableFuture&lt;Double&gt; future1 = rpcService1.invoke();</span><br><span class="line">    CompletableFuture&lt;Double&gt; future2 = rpcService2.invoke();</span><br><span class="line">    <span class="keyword">return</span> CompletableFuture</span><br><span class="line">        .allOf(future1, future2)</span><br><span class="line">        .thenApply(v -&gt; &#123;</span><br><span class="line">            Double d1 = future1.get();</span><br><span class="line">            Double d2 = future2.get();</span><br><span class="line">            <span class="keyword">return</span> Arrays.asList(d1, d2);</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本节参考:</p>
+<blockquote>
+<ul>
+<li><a href="https://colobu.com/2016/02/29/Java-CompletableFuture/" target="_blank" rel="noopener">Java CompletableFuture 详解 | 鸟窝</a></li>
+<li><a href="https://colobu.com/2018/03/12/20-Examples-of-Using-Java%E2%80%99s-CompletableFuture/" target="_blank" rel="noopener">[译]20个使用 Java CompletableFuture 的例子 | 鸟窝</a></li>
+</ul>
+</blockquote>
+<h3 id="Timeout"><a href="#Timeout" class="headerlink" title="Timeout"></a>Timeout</h3><ul>
+<li><p>@ref <a href="https://www.thinbug.com/q/23575067" target="_blank" rel="noopener">Java 8 CompletableFuture中的默认值超时 - Thinbug</a><br>似乎是翻译的 Stack Overflow …</p>
+</li>
+<li><p>@ref <a href="http://iteratrlearning.com/java9/2016/09/13/java9-timeouts-completablefutures.html" target="_blank" rel="noopener">Asynchronous timeouts with CompletableFutures in Java 8 and Java 9</a><br>超时 &amp; CompletableFutures<br>如果直接对 CompletableFutures 使用 Future.get(1, TimeUnit.SECONDS) 作为超时, 这样做仍旧阻塞 main 线程;<br>在 Java9 中的支持: completeOnTimeout 或者 orTimeout</p>
+</li>
+</ul>
+<h3 id="vs-ParallelStream"><a href="#vs-ParallelStream" class="headerlink" title="vs ParallelStream"></a>vs ParallelStream</h3><p>@ref: <a href="https://www.jdon.com/idea/java/java-8-completablefuture-vs-parallel-stream.html" target="_blank" rel="noopener">Java8的completablefuture和parallel stream比较 -解道Jdon</a></p>
+<ul>
+<li>可以上面的代码,  ParallelStream 使用的 forkJoinPool, 处理过程会回到主线程调用 task（因为 forkJoinPool 使用了分治+递归，要回到主线程）</li>
+<li>CompletableFuture 默认也是使用 forkJoinPool 的线程池, 但没有回到主线程</li>
+<li>因为 CompletableFuture 默认使用 forkJoinPool 线程池，所以线程池大小有限制 = processor 的数量，当然 CompletableFuture 也可以自己指定线程池，如果不是 CPU 密集而是 IO 密集的任务，最好是指定自己的线程池（ CPU Processor 的 2~3 倍 ）</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Java并发/" rel="tag"># Java并发</a>
+          
+            <a href="/tags/JUC/" rel="tag"># JUC</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Java-并发.06a.JUC-线程池/" rel="next" title="Java-并发.06a.JUC-执行器-线程池">
+                <i class="fa fa-chevron-left"></i> Java-并发.06a.JUC-执行器-线程池
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Java-并发.08.多线程设计模式/" rel="prev" title="Java-并发.08.多线程设计模式">
+                Java-并发.08.多线程设计模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">403</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Future"><span class="nav-text">Future</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ListenableFuture-Guava"><span class="nav-text">ListenableFuture(Guava)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CompletableFuture-Java8"><span class="nav-text">CompletableFuture(Java8)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用示例"><span class="nav-text">使用示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Timeout"><span class="nav-text">Timeout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vs-ParallelStream"><span class="nav-text">vs ParallelStream</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/12.Java/Java-并发.06b.JUC-Future/';
+          this.page.identifier = '12.Java/Java-并发.06b.JUC-Future/';
+          this.page.title = 'Java-并发.06b.JUC-执行器-Future';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

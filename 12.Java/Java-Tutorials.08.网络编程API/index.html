@@ -104,7 +104,7 @@
 
 
 
-  <meta name="keywords" content="Java基础," />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -118,14 +118,14 @@
 
 
 <meta name="description" content="Server/Client的Socket API介绍. ServerServerSocket server = new ServerSocket(9090);Socket client = server.accept(); // 阻塞InputStream  input  = client.getInputStream();OutputStream output = client.getOutpu">
-<meta name="keywords" content="Java基础">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java Tutorials-08-网络编程API">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.08.网络编程API/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="Server/Client的Socket API介绍. ServerServerSocket server = new ServerSocket(9090);Socket client = server.accept(); // 阻塞InputStream  input  = client.getInputStream();OutputStream output = client.getOutpu">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.492Z">
+<meta property="og:updated_time" content="2023-05-19T02:43:31.224Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Tutorials-08-网络编程API">
 <meta name="twitter:description" content="Server/Client的Socket API介绍. ServerServerSocket server = new ServerSocket(9090);Socket client = server.accept(); // 阻塞InputStream  input  = client.getInputStream();OutputStream output = client.getOutpu">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  244
+                  301
                 </span>
               
 
@@ -387,9 +387,11 @@
 <li>boolean isOutputShutdown():</li>
 <li>boolean isInputShutdown():</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Socket socket = <span class="keyword">new</span> Socket(host, port);</span><br><span class="line">OutputStream out = socket.getOutputStream();</span><br><span class="line">InputStream in = socket.getInputStream();</span><br><span class="line"><span class="comment">// 向out写入一些数据, 写入完毕, 半关闭socket的输出</span></span><br><span class="line">socket.shutdownOutput();</span><br><span class="line"><span class="comment">// 此时socket仍可以从InputStream读取...</span></span><br><span class="line">socket.shutdown();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Socket socket = <span class="keyword">new</span> Socket(host, port);</span><br><span class="line">OutputStream out = socket.getOutputStream();</span><br><span class="line">InputStream in = socket.getInputStream();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 向out写入一些数据, 写入完毕, 半关闭socket的输出</span></span><br><span class="line">socket.shutdownOutput();</span><br><span class="line"><span class="comment">// 此时socket仍可以从InputStream读取, 直到shutdown...</span></span><br><span class="line">socket.shutdown();</span><br></pre></td></tr></table></figure>
+<p>shutdownOutput 实际是发送了 FIN 报文给对方，意思是己方不再发送数据 [[../22.Network-Protocol/网络协议2-TCP#三次握手、四次挥手]]</p>
 <h2 id="可中断套接字"><a href="#可中断套接字" class="headerlink" title="可中断套接字"></a>可中断套接字</h2><p>当连接到一个套接字时，当前线程将会被阻塞直到建立连接或产生超时为止。java.nio包提供的一个特性——SocketChannel类，与上面的Socket不同，SocketChannel是可以中断的<br>如果发生中断, 下面的操作不会阻塞, 而是抛出异常</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">SocketChannel channel = SocketChannel.open();</span><br><span class="line">channel.socket().connect(<span class="keyword">new</span> InetSocketAddress(<span class="string">"localhost"</span>, <span class="number">8080</span>));</span><br><span class="line">Scanner in = <span class="keyword">new</span> Scanner(channel);</span><br><span class="line"><span class="keyword">while</span> (!Thread.currentThread().isInterrupted())</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">if</span> (in.hasNextLine())</span><br><span class="line">     String line = in.nextLine();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="KeepAlive"><a href="#KeepAlive" class="headerlink" title="KeepAlive"></a>KeepAlive</h2><p>参考： [[../22.Network-Protocol/网络协议2a-TCP的KeepAlive]]</p>
 
       
     </div>
@@ -407,7 +409,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java基础/" rel="tag"># Java基础</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
         </div>
       
@@ -420,8 +422,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/12.Java/Java-Tutorials.07z.多线程设计模式/" rel="next" title="Java Tutorials-07z-并发-多线程设计模式">
-                <i class="fa fa-chevron-left"></i> Java Tutorials-07z-并发-多线程设计模式
+              <a href="/12.Java/Java-Tutorials.05.IO/" rel="next" title="Java Tutorials-05-IO">
+                <i class="fa fa-chevron-left"></i> Java Tutorials-05-IO
               </a>
             
           </div>
@@ -523,7 +525,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -534,7 +536,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -613,7 +615,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Server"><span class="nav-text">Server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Client"><span class="nav-text">Client</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#半关闭"><span class="nav-text">半关闭</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可中断套接字"><span class="nav-text">可中断套接字</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Server"><span class="nav-text">Server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Client"><span class="nav-text">Client</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#半关闭"><span class="nav-text">半关闭</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可中断套接字"><span class="nav-text">可中断套接字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KeepAlive"><span class="nav-text">KeepAlive</span></a></li></ol></div>
             
 
           </div>

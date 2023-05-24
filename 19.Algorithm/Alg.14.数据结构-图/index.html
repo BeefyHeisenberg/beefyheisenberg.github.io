@@ -132,7 +132,12 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%844-%E5%9B%BE-2023-05-08-6.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%844-%E5%9B%BE-2023-05-08-7.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%844-%E5%9B%BE-2023-05-08-8.png">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.644Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/Alg.14.数据结构-图-DFS-vs-BFS.gif">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/dijkstra.gif">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/bellman-ford.gif">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/prim.gif">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/kruskal.gif">
+<meta property="og:updated_time" content="2023-05-19T02:43:31.414Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Alg.14.数据结构-图">
 <meta name="twitter:description" content="图的概念在图中的数据元素通常称为结点，V 是所有顶点的集合，E 是所有边的集合。如果两个顶点 v, w，只能由 v 向 w，而不能由 w 向 v，那么我们就把这种情况叫做一个从 v 到 w 的有向边。v 也被称做初始点，w 也被称为终点。这种图就被称做有向图。 如果v和w是没有顺序的，从v到达w和从w到达v是完全相同的，这种图就被称为无向图。 假如，图中的结点个数为 n，那么在一个无向图，假设每对">
@@ -361,7 +366,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,079
+                  2,755
                 </span>
               
 
@@ -394,12 +399,21 @@
 <p>有时图的边具有与它相关的数，这种与图的边相关的数就叫做<strong>权</strong>。例如，从A地到B地的车票是80块钱，那这个80就是这条路上的耗费，我们如果把这样的交通网做成一个图，就变成了一个<strong>带权有向图</strong>。这种图也被称为<strong>网络</strong>。</p>
 <p>一个顶点如果有多个边与其相联，那么这些相联的边数就称为点的<strong>度</strong>。如果是有向图，那么初始点就有<strong>出度</strong>，而终点则有<strong>入度</strong>。</p>
 <p><img src="/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%844-%E5%9B%BE-2023-05-08-1.png" alt="../_images/Alg.01.数据结构4-图-2023-05-08-1.png"></p>
-<h3 id="图的表达-amp-邻接表"><a href="#图的表达-amp-邻接表" class="headerlink" title="图的表达 &amp; 邻接表"></a>图的表达 &amp; 邻接表</h3><h4 id="邻接矩阵"><a href="#邻接矩阵" class="headerlink" title="邻接矩阵"></a>邻接矩阵</h4><p>使用二维数组来表示一个图：</p>
+<h3 id="图的表达"><a href="#图的表达" class="headerlink" title="图的表达"></a>图的表达</h3><h4 id="邻接矩阵"><a href="#邻接矩阵" class="headerlink" title="邻接矩阵"></a>邻接矩阵</h4><p>使用二维数组来表示一个图：</p>
 <p>对于图 G，假如其中有 n 个结点，我们可以定义一个二维数组 <code>A[n][n]</code>，如果顶点 Vi 和顶点 Vj 之间存在边 Eij，那么就将 <code>A[i][j]</code> 设为1，否则设为0。就称二维数组 A 是图 G 的<strong>邻接矩阵</strong>。</p>
 <p><img src="/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%844-%E5%9B%BE-2023-05-08-5.png" alt="../_images/Alg.01.数据结构4-图-2023-05-08-5.png"></p>
 <p>如果图 G 是无向图，那么，如果 <code>A[i][j]</code> 为1，可以推知 <code>A[j][i]</code> 也为1（对称）。如果 G 是有向图（见下图），则不存在这个规律。</p>
 <p><img src="/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%844-%E5%9B%BE-2023-05-08-4.png" alt="../_images/Alg.01.数据结构4-图-2023-05-08-4.png"></p>
 <p>如果 G 的边上有权重，图 G 是一个带权有向图，顶点顶点 Vi 和顶点 Vj 之间存在边 Eij，且 Eij 的权重为 Wij，就令 <code>A[i][j]</code> 的值为 Wij。如果两个顶点 Vi 和顶点 Vj 之间不存在边，那么就记 <code>A[k][l]</code>为无穷大。在实际的实现中可以使用整型的最大值代替。</p>
+<p>➤ <strong>复杂度分析</strong>：</p>
+<ul>
+<li><p>在邻接矩阵中查询两个顶点是否相连的复杂度是O(1)_.</p>
+</li>
+<li><p>空间复杂度如何呢? 将图保存为邻接矩阵的空间复杂度是 O(n^2)，其中 n 是顶点的数目。也可表示为 O(|V|2)。</p>
+</li>
+<li><p>添加一个顶点的运行时间如何呢？顶点被保存在 VxV 矩阵中。因此，每次添加顶点时，矩阵必须被重构为新的(V+1)x(V+1)，在邻接矩阵中添加顶点的复杂度是 O(|V|^2)</p>
+</li>
+</ul>
 <h4 id="邻接表"><a href="#邻接表" class="headerlink" title="邻接表"></a>邻接表</h4><p>显然，用邻接矩阵并不适合表达一个稀疏图，不仅有空间上的浪费，另外二维数组的时间 &amp; 空间复杂度都是 N^2</p>
 <p>另外一种比较直接的思路就是使用多向链表。<br>用一个结构体表示图的一个节点，结构体中包含数据域和多个指针，其中数据域存储该顶点的信息，指针指向有连接的其他节点。</p>
 <p>这样做的一个缺点是，由于图中各个节点的<strong>度数</strong>各不相同，最大度数和最小度数可能相差很多，因此，若按度数最大的顶点设计结点结构，则会浪费很多存储单元。而如果按照每个顶点自己的度数设计不同的结点结构，所带来的编程的复杂度得不偿失。</p>
@@ -407,6 +421,13 @@
 <p>在邻接表中，图中的每一个节点都用一个链表表示。设链表 i 对应节点 i，链表 i 中每个元素都表示节点 i 的一条边。<br>链表中的每个结点都由 3 个域组成：链表中的每个结点都由3个域组成，其中邻接点域表示与vi 相邻的点，例如与vi相 邻的vj，这个结点就是vj；链(nextArc)代表顶点i与顶点j之间的边eij；数据域(info)存储和边 相关的信息，例如权重等。</p>
 <p>例如下面一个图：<br><img src="/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%844-%E5%9B%BE-2023-05-08-2.png" alt="../_images/Alg.01.数据结构4-图-2023-05-08-2.png"></p>
 <p>用邻接表表示则为：<br><img src="/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%844-%E5%9B%BE-2023-05-08-3.png" alt="../_images/Alg.01.数据结构4-图-2023-05-08-3.png"></p>
+<p>➤ <strong>复杂度分析</strong>：</p>
+<ul>
+<li><p>给定邻接表中两个节点是否相连的复杂度是 O(n), 其中 n 代表顶点的数量. 也可以写为 O(|V|). 你可以想象, 如果你想知道一个节点与另一个节点是否相连, 你必须遍历这个列表.</p>
+</li>
+<li><p>那么空间复杂度又如何呢? 将图存储为邻接表的空间复杂度是 O(n), 其中 n 是顶点数与边数的和. 也可以表示为 O(|V| + |E|).</p>
+</li>
+</ul>
 <p>上面这种实现方法为图中的每一个顶点（左边部分）都建立了一个单链表（右边部分）。这样我们就可以通过遍历每个顶点的链表，从而得到该顶点所有的边了。</p>
 <p>通过邻接表可以获得从某个顶点出发能够到达的顶点，从而省去了对不相连顶点的存储空间。然而上面的邻接表只能表示顶点的“出度”，但没有表示“入度”。</p>
 <p>这个问题很好解决，那就是增加一个表用来存储能够到达某个顶点的相邻顶点。这个表称作逆邻接表。</p>
@@ -433,13 +454,60 @@
 <li><a href="https://zhuanlan.zhihu.com/p/26810667" target="_blank" rel="noopener">图算法：图的表达</a></li>
 <li><a href="https://developer.aliyun.com/article/333511" target="_blank" rel="noopener">图的存储结构之邻接表(详解)-阿里云开发者社区</a></li>
 </ul>
-<h2 id="图的遍历"><a href="#图的遍历" class="headerlink" title="图的遍历"></a>图的遍历</h2><ul>
-<li><a href="https://zhuanlan.zhihu.com/p/27829340" target="_blank" rel="noopener">图的非递归遍历</a></li>
+<h2 id="深度优先和广度优先"><a href="#深度优先和广度优先" class="headerlink" title="深度优先和广度优先"></a>深度优先和广度优先</h2><p><img src="/images/alg/Alg.14.数据结构-图-DFS-vs-BFS.gif" alt=""></p>
+<p><strong>深度优先搜索</strong></p>
+<ul>
+<li>深度优先算法是一种优先遍历子节点而不是回溯的算法。</li>
+<li>时间复杂度: <code>O(|V| + |E|)</code></li>
 </ul>
-<h2 id="深度优先和广度优先"><a href="#深度优先和广度优先" class="headerlink" title="深度优先和广度优先"></a>深度优先和广度优先</h2><ul>
+<p><strong>广度优先搜索</strong></p>
+<ul>
+<li>广度优先搜索是优先遍历邻居节点而不是子节点的图遍历算法。</li>
+<li>时间复杂度: <code>O(|V| + |E|)</code></li>
+</ul>
+<ul>
 <li><a href="https://zhuanlan.zhihu.com/p/26987139" target="_blank" rel="noopener">图的深度优先搜索</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/26855400" target="_blank" rel="noopener">图的广度优先搜索</a></li>
 </ul>
+<h2 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h2><ul>
+<li>拓扑排序是对于有向图节点的线性排序，如果存在某条从 u 到 v 的边，则认为 u 的下标先于 v。</li>
+<li>时间复杂度: <code>O(|V| + |E|)</code></li>
+</ul>
+<h2 id="Dijkstra-算法"><a href="#Dijkstra-算法" class="headerlink" title="Dijkstra 算法"></a>Dijkstra 算法</h2><ul>
+<li><strong>Dijkstra 算法</strong> 用于计算有向图中单源最短路径问题。</li>
+<li>时间复杂度: <code>O(|V|^2)</code></li>
+</ul>
+<p><img src="/images/alg/dijkstra.gif" alt=""></p>
+<h2 id="Bellman-Ford-算法"><a href="#Bellman-Ford-算法" class="headerlink" title="Bellman-Ford 算法"></a>Bellman-Ford 算法</h2><ul>
+<li><strong>Bellman-Ford 算法</strong>是在带权图中计算从单一源点出发到其他节点的最短路径的算法。</li>
+<li>尽管算法复杂度大于 Dijkstra 算法，但是它适用于包含了负值边的图。</li>
+<li>时间复杂度:<ul>
+<li>最优时间: <code>O(|E|)</code></li>
+<li>最坏时间: <code>O(|V||E|)</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/alg/bellman-ford.gif" alt=""></p>
+<h2 id="Floyd-Warshall-算法"><a href="#Floyd-Warshall-算法" class="headerlink" title="Floyd-Warshall 算法"></a>Floyd-Warshall 算法</h2><ul>
+<li><strong>Floyd-Warshall 算法</strong> 能够用于在无环带权图中寻找任意节点的最短路径。</li>
+<li>时间复杂度:<ul>
+<li>最优时间: <code>O(|V|^3)</code></li>
+<li>最坏时间: <code>O(|V|^3)</code></li>
+<li>平均时间: <code>O(|V|^3)</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="Prim-算法"><a href="#Prim-算法" class="headerlink" title="Prim 算法"></a>Prim 算法</h2><ul>
+<li><strong>Prim 算法</strong>是用于在带权无向图中计算最小生成树的贪婪算法。换言之，Prim 算法能够在图中抽取出连接所有节点的边的最小代价子集。</li>
+<li>时间复杂度: <code>O(|V|^2)</code></li>
+</ul>
+<p><img src="/images/alg/prim.gif" alt=""></p>
+<h2 id="Kruskal-算法"><a href="#Kruskal-算法" class="headerlink" title="Kruskal 算法"></a>Kruskal 算法</h2><ul>
+<li><strong>Kruskal 算法</strong>同样是计算图的最小生成树的算法，与 Prim 的区别在于并不需要图是连通的。</li>
+<li>时间复杂度: <code>O(|E|log|V|)</code></li>
+</ul>
+<p><img src="/images/alg/kruskal.gif" alt=""></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>[[../_attachments/图数据结构入门 - 技术翻译 - OSCHINA 社区.pdf]]</p>
 
       
     </div>
@@ -474,8 +542,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/19.Algorithm/Alg.20.算法概述/" rel="prev" title="Alg.20.算法概述">
-                Alg.20.算法概述 <i class="fa fa-chevron-right"></i>
+              <a href="/19.Algorithm/Alg.15.数据结构-堆/" rel="prev" title="Alg.15.数据结构-堆">
+                Alg.15.数据结构-堆 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -567,7 +635,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -578,7 +646,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -657,7 +725,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#图的概念"><span class="nav-text">图的概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#图的表达-amp-邻接表"><span class="nav-text">图的表达 &amp; 邻接表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#邻接矩阵"><span class="nav-text">邻接矩阵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#邻接表"><span class="nav-text">邻接表</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图的遍历"><span class="nav-text">图的遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深度优先和广度优先"><span class="nav-text">深度优先和广度优先</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#图的概念"><span class="nav-text">图的概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#图的表达"><span class="nav-text">图的表达</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#邻接矩阵"><span class="nav-text">邻接矩阵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#邻接表"><span class="nav-text">邻接表</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深度优先和广度优先"><span class="nav-text">深度优先和广度优先</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓扑排序"><span class="nav-text">拓扑排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dijkstra-算法"><span class="nav-text">Dijkstra 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bellman-Ford-算法"><span class="nav-text">Bellman-Ford 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Floyd-Warshall-算法"><span class="nav-text">Floyd-Warshall 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prim-算法"><span class="nav-text">Prim 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kruskal-算法"><span class="nav-text">Kruskal 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>

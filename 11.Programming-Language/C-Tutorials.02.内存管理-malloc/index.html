@@ -124,7 +124,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="深入理解mallocvoid *ptr = malloc(N) 之后发生了什么? 从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。 1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。  内核中使用 start_">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.276Z">
+<meta property="og:updated_time" content="2023-05-19T02:43:31.095Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C Tutorials-02-内存管理（深入理解 malloc）">
 <meta name="twitter:description" content="深入理解mallocvoid *ptr = malloc(N) 之后发生了什么? 从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。 1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。  内核中使用 start_">
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,426
+                  1,287
                 </span>
               
 
@@ -381,26 +381,26 @@
 <p>从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。</p>
 <p>1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存<br>2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。</p>
 <blockquote>
-<p>内核中使用 start_brk 标识堆的起始位置，brk 标识堆当前的结束位置。当堆申请新的内存空间时，只需要将 brk 指针增加对应的大小，回收地址时减少对应的大小即可。</p>
+<p>内核中使用 start_brk 标识<strong>堆</strong>的起始位置，brk 标识堆当前的结束位置。当堆申请新的内存空间时，只需要将 brk 指针增加对应的大小，回收地址时减少对应的大小即可。</p>
 </blockquote>
 <p>这两种方式分配的都是虚拟内存，没有分配物理内存。在第一次访问已分配的虚拟地址空间的时候，发生缺页中断，操作系统负责分配物理内存，然后建立虚拟内存和物理内存之间的映射关系。</p>
-<p>▷ 情况 1：malloc 小于128k 的内存，会调用 <code>do_brk()</code> 进行分配内存，将 brk 指针往高地址推，给进程分配了 N bytes 的线性地址区域(VM)  ，此时系统并没有随即分配页框(RAM), 进程也没有占用 N bytes 的物理内存. // 这也表明了, 你时常在使用 top 的时候 VIRT 值增大, 而 RES 值却不变的原因.</p>
-<blockquote>
-<p>Linux 管理虚存内存的最小单位是页（在内核中用 struct page 结构表示），一内存页大小是 4K。为了换入、换出的方便，物理内存也按大小分成若干个块。由于物理内存中的块空间是用来容纳虚拟页的容器，所以物理内存中的块叫做<strong>页框</strong>。</p>
-</blockquote>
+<p>▷ 情况 1：malloc 小于128k 的内存，会调用 <code>do_brk()</code> 进行分配内存，将 brk 指针往高地址推，给进程分配了 N bytes 的线性地址区域(VM)  ，此时系统并没有随即分配物理内存, 进程也没有占用 N bytes 的物理内存. // 这也表明了, 你时常在使用 top 的时候 VIRT 值增大, 而 RES 值却不变的原因.</p>
 <p>但是  <code>do_brk()</code>  也不一定每次都上推 brk 指针，如果在 start_brk - brk 地址之间有未使用的内存块（这些内存块可能是被 free 过了，但是页框没有被回收，参考 free），会优先使用这部分内存块；</p>
-<p>当第一次通过指针使用此内存页, 在 RAM 中找不到与之相对应的页框. 发生 <strong>缺页异常</strong>, 系统灵敏地捕获这一异常, 进入缺页异常处理阶段：接下来, 系统会分配一个页框(RAM)映射给它, 我们把这种情况(被访问的页还没有被放在任何一个页框中, 内核分配一新的页框并适当初始化来满足调用请求)称为 Demand Paging.</p>
-<p>过了很长一段时间, 通过 <code>*ptr</code> 再次引用内存第一页. 若系统在 RAM 找不到它映射的页框(可能交换至磁盘了). 也会发生缺页异常, 进入缺页异常处理：系统会分配一页页框(RAM), 找到备份在磁盘的那“页”, 并将它换入内存(其实因为换入操作比较昂贵, 所以预换入多页. 这也表明某些文档说：”vmstat 某时出现不少 si 并不能意味着物理内存不足”).</p>
-<p>通过指针使用到了 N bytes 的第二页. 参见第一次访问 N bytes 第一页, “Demand Paging”</p>
-<p>凡是类似这种会迫使进程去睡眠(很可能是由于当前磁盘数据填充至页框(RAM)所花的时间), 阻塞当前进程的缺页异常处理称为主缺页(major falut), 也称为 <code>大缺页</code>. 相反, 不会阻塞进程的缺页, 称为次缺页(minor fault).</p>
+<p>当第一次通过指针使用此内存页, 在 RAM 中找不到与之相对应的 <strong>页框</strong>（page frame，也即物理内存）. 发生 <strong>缺页异常</strong>, 系统灵敏地捕获这一异常, 进入缺页异常处理阶段：接下来, 系统会分配一个<strong>页框</strong>映射给它, 我们把这种情况(被访问的页还没有被放在任何一个页框中, 内核分配一新的页框并适当初始化来满足调用请求) 称为 Demand Paging.</p>
 <blockquote>
-<p>内存页每页大小为 4K，一页大小的内存块在内核中用 struct page 结构体来进行管理，struct page 中封装了每页内存块的状态信息，比如：组织结构，使用信息，统计信息，以及与其他结构的关联映射信息等。</p>
+<p>页框：对应4K大小的物理页，详见 [[01.RAM.1.内存寻址.md]] 「页帧」</p>
 </blockquote>
+<p>过了很长一段时间, 通过 <code>*ptr</code> 再次引用内存第一页. 若系统在 RAM 找不到它映射的页框(可能交换至磁盘了). 也会发生缺页异常, 进入缺页异常处理：系统会分配页框(page frame), 找到备份在磁盘的那“页”, 并将它换入内存(其实因为换入操作比较昂贵, 所以预换入多页. 这也表明某些文档说：”vmstat 某时出现不少 si 并不能意味着物理内存不足”).</p>
+<p>通过指针使用到了 N bytes 的第二页. 参见第一次访问 N bytes 第一页, “Demand Paging”</p>
+<p>凡是类似这种会迫使进程去睡眠(很可能是由于当前磁盘数据填充至页框所花的时间), 阻塞当前进程的缺页异常处理称为主缺页(major falut), 也称为 <code>大缺页</code>. 相反, 不会阻塞进程的缺页, 称为次缺页(minor fault).</p>
 <p>▷ 情况 2：malloc 函数分配内存大于128K（可由 M_MMAP_THRESHOLD 选项调节），那就不是去推 brk 指针了，而是利用 mmap 系统调用，从堆和栈的中间分配一块虚拟内存（也即内存映射区）。内存映射区即 Mapping Area : [[../21.Operating-System/APUE.03b.进程的虚拟内存管理]]</p>
 <p>▷ free 的过程：</p>
 <ul>
 <li>如果是在内存映射区分配的内存（大于 128K），指针对应的虚拟内存和物理内存一起释放；</li>
-<li>如果是在堆区分配的内存（小于 128K），这时情况会变得不同，如果用 <code>malloc</code> 依次申请了 a、b、c 三块内存（这时候 brk 指针指向的是 c 的末端），如果 <code>free(b)</code>，这时候 b 的虚拟内存和物理内存都没有被释放，因为 c 内存块还在使用中所以无法直接移动 brk 指针，这样就产生了<strong>内存碎片</strong>。<br>如果这时又新 malloc 了一块内存，b 还可以重复使用，如果 b 比这次 malloc 分配的区域小，那么原来 b 区域要分裂为两块，此时还是有碎片。<br>在 free 的时候，发现最大地址空闲内存超过128K（可由 M_TRIM_THRESHOLD 选项调节），执行内存紧缩操作（trim）</li>
+<li><p>如果是在堆区分配的内存（小于 128K），这时情况会变得不同，如果用 <code>malloc</code> 依次申请了 a、b、c 三块内存（这时候 brk 指针指向的是 c 的末端），如果 <code>free(b)</code>，这时候 b 的虚拟内存和物理内存都没有被释放，因为 c 内存块还在使用中所以无法直接移动 brk 指针，这样就产生了<strong>内存碎片</strong>。</p>
+<p>如果这时又新 malloc 了一块内存，b 还可以重复使用，如果 b 比这次 malloc 分配的区域小，那么原来 b 区域要分裂为两块，此时还是有碎片。</p>
+<p>在 free 的时候，发现最大地址空闲内存超过128K（可由 M_TRIM_THRESHOLD 选项调节），执行内存紧缩操作（trim）</p>
+</li>
 </ul>
 <p>因为 Heap 区都是小于128k 的细碎内存块, 上面的链表可以防止反复申请/释放带来的内存碎片, 但 mmap 对应的区域都是大块(大于128K)的内存, 所以不用采用上面的机制.</p>
 <p>▷ 主缺页异常处理过程示意图,参见 <a href="https://www.slideshare.net/guestb7dc8e/handling-page-fault" target="_blank" rel="noopener">Handling Page Fault</a>, 当系统进入缺页异常流程后（do_page_fault），最终会调用 <code>alloc_pages</code> 申请真正的物理内存页 @link 伙伴系统</p>
@@ -536,7 +536,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -547,7 +547,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

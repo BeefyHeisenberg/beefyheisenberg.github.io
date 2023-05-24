@@ -104,7 +104,7 @@
 
 
 
-  <meta name="keywords" content="Java进阶," />
+  <meta name="keywords" content="JVM," />
 
 
 
@@ -117,19 +117,19 @@
 
 
 
-<meta name="description" content="class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。class文件中的每个数据项都有它的固定">
-<meta name="keywords" content="Java进阶">
+<meta name="description" content="class文件结构概述class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。class文件中的">
+<meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Advanced Java-05-class文件结构">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.05.class文件结构/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。class文件中的每个数据项都有它的固定">
+<meta property="og:description" content="class文件结构概述class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。class文件中的">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-Class-Struct.png">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.368Z">
+<meta property="og:updated_time" content="2023-05-24T10:10:50.027Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-05-class文件结构">
-<meta name="twitter:description" content="class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。class文件中的每个数据项都有它的固定">
+<meta name="twitter:description" content="class文件结构概述class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。class文件中的">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/java/JVM-Class-Struct.png">
 
 
@@ -355,7 +355,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,515
+                  1,263
                 </span>
               
 
@@ -380,7 +380,7 @@
       
 
       
-        <p>class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。<br>class文件中的每个数据项都有它的固定长度， 数据项的不同长度分别用u1，u2，u4，u8表示，长度分别是byte、short、int、long。<br>class文件中存在以下数据项(该图表参考自《深入Java虚拟机》)：</p>
+        <h2 id="class文件结构概述"><a href="#class文件结构概述" class="headerlink" title="class文件结构概述"></a>class文件结构概述</h2><p>class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。<br>class文件中的每个数据项都有它的固定长度， 数据项的不同长度分别用u1，u2，u4，u8表示，长度分别是byte、short、int、long。<br>class文件中存在以下数据项(该图表参考自《深入Java虚拟机》)：</p>
 <table>
 <thead>
 <tr>
@@ -472,18 +472,35 @@
 </tr>
 </tbody>
 </table>
-<p>下图参考自: <a href="https://blog.csdn.net/luanlouis/article/details/39960815" target="_blank" rel="noopener">《Java虚拟机原理图解》 Class文件中的常量池详解</a> @ref<br><img src="/images/java/JVM-Class-Struct.png" alt=""></p>
 <p><strong>class文件每个区域的说明：</strong></p>
 <ul>
-<li><code>magic</code>和<code>version</code>: magic也即魔数(固定值0xCAFEBABE)占用4字节, class文件版本号占用4字节, 不同版本的javac编译器编译的class文件, 版本号可能不同;</li>
-<li>常量池数量<code>constant_pool_count</code>, class文件中的项constant_pool_count的值为1, 说明每个类都只有一个常量池。 常量池中的数据也是一项一项的， 没有间隙的依次排放。常量池中各个数据项通过索引来访问， 有点类似与数组， 只不过常量池中的第一项的索引为1, 而不为0, 如果class文件中的其他地方引用了索引为0的常量池项， 就说明它不引用任何常量池项。</li>
-<li>常量池(<code>constant_pool</code>)存储的内容主要包括<code>符号引用</code>和<code>字面量</code>, 常量池中除了存放了常量字符串，final常量值，还包括 <strong>符号引用</strong>（包括当前类的类名， 字段名， 方法名， 各个字段和方法的描述符， 对当前类的字段和方法的引用信息， 当前类中对其他类的引用信息等等）。<br>class文件中的很多其他部分都是对常量池中的数据项的引用，比如后面要讲到的<code>this_class</code>, <code>super_class</code>, <code>field_info</code>, <code>attribute_info</code>等，<br>另外字节码指令中也存在对常量池的引用， 这个对常量池的引用当做字节码指令的一个操作数。此外， 常量池中各个项也会相互引用。<ul>
-<li><strong>a. 字面量</strong>: 主要包括字符串常量和final常量值;</li>
-<li><strong>b. 符号引用</strong>: 包括 类继承的超类, 接口的全限定名, 及描述符（包括fields的名称和描述符, methods的名称及描述符）<ol>
-<li>类和接口的全限定名: 例如一个类的权限定名是<code>org/kshan/corej/TestClass</code>;</li>
+<li><p><code>magic</code> 和 <code>version</code>: magic 也即魔数(固定值0xCAFEBABE)占用4字节, class 文件版本号占用4字节, 不同版本的 javac 编译器编译的 class 文件, 版本号可能不同;</p>
+</li>
+<li><p><strong>常量池数量</strong> <code>constant_pool_count</code>, 等于实际常量池中项目的数量+1，因为常量池计数器是从1开始计数的，将第0项常量空出来是有特殊考虑的，索引值为0代表“不引用任何一个常量池项”。</p>
+</li>
+<li><p><strong>常量池</strong>(<code>constant_pool</code>)存储的内容主要包括 <strong>符号引用</strong> 和 <strong>字面量</strong>;</p>
+</li>
+<li><p><code>access_flag</code>, 在常量池之后的两个字节, 这个标志用于识别一些类或接口层次的访问信息</p>
+</li>
+<li><p><code>this_class</code>/<code>super_class</code>/<code>interfaces</code>: 类索引（<code>this_class</code>）和父类索引（<code>super_class</code>）都是一个 u2 类型的数据,而接口索引集合（<code>interfaces</code>）则是一组 u2 类型的数据集合, Class 文件中由这三项数据来确定这个类的继承关系;</p>
+</li>
+<li><p><code>field_info</code>字段表</p>
+</li>
+<li><p><code>method_info</code>方法表</p>
+</li>
+<li><p><code>attribute_info</code>属性表</p>
+</li>
+<li><p>方法字节码…</p>
+</li>
+</ul>
+<h2 id="class文件常量池"><a href="#class文件常量池" class="headerlink" title="class文件常量池"></a>class文件常量池</h2><p><strong>常量池</strong>(<code>constant_pool</code>)存储的内容主要包括 <strong>符号引用</strong> 和 <strong>字面量</strong>:</p>
+<ul>
+<li>字面量: 主要包括字符串常量和 final 常量值;</li>
+<li>符号引用: 包括类继承的超类, 接口的全限定名, 及描述符（包括 fields 的名称和描述符, methods 的名称及描述符）<ul>
+<li>类和接口的全限定名: 例如一个类的权限定名是 <code>org/kshan/corej/TestClass</code>;</li>
 <li>字段的名称和描述符:<ul>
 <li>字段名称: 当类被加载后的链接阶段, 这些符号引用被替换为直接引用;</li>
-<li>字段描述符: 用来描述字段的类型比如二维数组<code>int [][]</code>被记录为<code>[[I</code>, <code>String[]</code>被记录为<code>[Ljava/lang/String</code>;</li>
+<li>字段描述符: 用来描述字段的类型比如二维数组 <code>int [][]</code> 被记录为 <code>[[I</code>, <code>String[]</code> 被记录为 <code>[Ljava/lang/String</code>;</li>
 </ul>
 </li>
 <li>方法的名称和描述符:<ul>
@@ -491,22 +508,16 @@
 <li>方法描述符: 用来描述方法的形参/返回值, 例如方法<code>int getIndex(String name,char[] tgc,int start,int end,char target)</code>的描述符为<code>(Ljava/lang/String[CIIC) I</code>;</li>
 </ul>
 </li>
-</ol>
-</li>
 </ul>
 </li>
-<li><code>access_flag</code>, 在常量池之后的两个字节, 这个标志用于识别一些类或接口层次的访问信息</li>
-<li><code>this_class</code>/<code>super_class</code>/<code>interfaces</code>: 类索引（<code>this_class</code>）和父类索引（<code>super_class</code>）都是一个 u2 类型的数据,而接口索引集合（<code>interfaces</code>）则是一组 u2 类型的数据集合, Class 文件中由这三项数据来确定这个类的继承关系;</li>
-<li><code>field_info</code>字段表</li>
-<li><code>method_info</code>方法表</li>
-<li><code>attribute_info</code>属性表</li>
-<li>方法字节码</li>
 </ul>
-<h2 id="class文件常量池"><a href="#class文件常量池" class="headerlink" title="class文件常量池"></a>class文件常量池</h2><p>注意不要与JVM内存模型中的”运行时常量池”混淆, Class文件中常量池主要存储了字面量以及符号引用，其中<br>字面量主要包括字符串，final常量的值或者某个属性的初始值等等，<br>符号引用主要存储类和接口的全限定名称，字段的名称以及描述符，方法的名称以及描述符，<br>JVM内存模型中有堆，方法区，栈，而方法区中又存在一块区域叫运行时常量池，运行时常量池中存放的其实也是各种字面量以及符号引用， 只不过运行时常量池具有动态性，它可以在运行的时候向其中增加其它的常量进去，最具代表性的就是<code>String.intern</code>方法。</p>
+<p>class 文件中的很多其他部分都是对常量池中的数据项的引用，比如后面要讲到的 <code>this_class</code>, <code>super_class</code>, <code>field_info</code>, <code>attribute_info</code> 等，另外字节码指令中也存在对常量池的引用，这个对常量池的引用当做字节码指令的一个操作数。此外，常量池中各个项也会相互引用。</p>
+<p>注意不要与JVM内存模型中的”运行时常量池”混淆, Class文件中常量池主要存储了字面量以及符号引用，其中<br>字面量主要包括字符串，final 常量的值或者某个属性的初始值等等，</p>
+<p>下图参考自: <a href="https://blog.csdn.net/luanlouis/article/details/39960815" target="_blank" rel="noopener">《Java虚拟机原理图解》 Class文件中的常量池详解</a> @ref<br><img src="/images/java/JVM-Class-Struct.png" alt=""></p>
 <h2 id="实例分析class文件常量池"><a href="#实例分析class文件常量池" class="headerlink" title="实例分析class文件常量池"></a>实例分析class文件常量池</h2><p>Java测试类:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CJEntry</span> <span class="keyword">extends</span> <span class="title">CJBaseClass</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> thatIsConstVar = <span class="number">5</span>; <span class="comment">// 整形常量</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> thatIsStaticVar = <span class="keyword">true</span>; <span class="comment">// 静态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> thatIsInstanceVar;  <span class="comment">// 实例变量</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">thatIsInstanceMethod</span><span class="params">(String input)</span> </span>&#123; <span class="comment">// 实例方法</span></span><br><span class="line">        <span class="keyword">return</span> Integer.parseInt(input); <span class="comment">// 调用静态方法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>编译后使用javap分析class文件: <code>javac org/kshan/corej/CJEntry.java &amp;&amp; javap -v org.kshan.corej.CJEntry</code>, 只截取输出的”Constant pool” :</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> #1 = Methodref          #5.#23         // org/kshan/corej/CJBaseClass.&quot;&lt;init&gt;&quot;:()V  ## 构造方法的符号引用</span><br><span class="line"> #2 = Methodref          #24.#25        // java/lang/Integer.parseInt:(Ljava/lang/String;)I  ## Integer.parseInt()的符号引用</span><br><span class="line"> #3 = Fieldref           #4.#26         // org/kshan/corej/CJEntry.thatIsStaticVar:Z  ## 静态field的符号引用</span><br><span class="line"> #4 = Class              #27            // org/kshan/corej/CJEntry  ## 父类符号引用</span><br><span class="line"> #5 = Class              #28            // org/kshan/corej/CJBaseClass ## 接口符号引用</span><br><span class="line"> #7 = Utf8               thatIsConstVar  ##static final常量名字</span><br><span class="line">#10 = Integer            5  ## static final常量值</span><br><span class="line">#11 = Utf8               thatIsStaticVar  ## 变量名字</span><br><span class="line">#13 = Utf8               thatIsInstanceVar ## 变量名字</span><br><span class="line">#14 = Utf8               &lt;init&gt; ##</span><br><span class="line">#15 = Utf8               ()V  ##</span><br><span class="line">#18 = Utf8               thatIsInstanceMethod</span><br><span class="line">#19 = Utf8               (Ljava/lang/String;)I</span><br><span class="line">#23 = NameAndType        #14:#15  // &quot;&lt;init&gt;&quot;:()V  ## 构造方法的NameAndType, &lt;init&gt;是构造方法的名字, ()V表示无参返回Void</span><br><span class="line">#24 = Class              #30      // java/lang/Integer</span><br><span class="line">#25 = NameAndType        #31:#19        // parseInt:(Ljava/lang/String;)I  ## 静态方法名字:描述符`(形参列表)返回值`的格式</span><br><span class="line">#26 = NameAndType        #11:#12        // thatIsStaticVar:Z</span><br><span class="line">#27 = Utf8               org/kshan/corej/CJEntry</span><br><span class="line">#28 = Utf8               org/kshan/corej/CJBaseClass</span><br><span class="line">#29 = Utf8               java/io/Serializable</span><br><span class="line">#30 = Utf8               java/lang/Integer</span><br><span class="line">#31 = Utf8               parseInt</span><br></pre></td></tr></table></figure>
+<p>编译后使用 javap 分析 class 文件: <code>javac org/mk/corej/CJBaseClass.java &amp;&amp; javap -v org.mk.corej.CJBaseClass</code>, 只截取输出的”Constant pool” 部分:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#1 = Methodref          #5.#23         // org/kshan/corej/CJBaseClass.&quot;&lt;init&gt;&quot;:()V  ## 构造方法的符号引用</span><br><span class="line">#2 = Methodref          #24.#25        // java/lang/Integer.parseInt:(Ljava/lang/String;)I  ## Integer.parseInt()的符号引用</span><br><span class="line">#3 = Fieldref           #4.#26         // org/kshan/corej/CJEntry.thatIsStaticVar:Z  ## 静态field的符号引用</span><br><span class="line">#4 = Class              #27            // org/kshan/corej/CJEntry  ## 父类符号引用</span><br><span class="line">#5 = Class              #28            // org/kshan/corej/CJBaseClass ## 接口符号引用</span><br><span class="line">#7 = Utf8               thatIsConstVar  ##static final常量名字</span><br><span class="line">#10 = Integer            5  ## static final常量值</span><br><span class="line">#11 = Utf8               thatIsStaticVar  ## 变量名字</span><br><span class="line">#13 = Utf8               thatIsInstanceVar ## 变量名字</span><br><span class="line">#14 = Utf8               &lt;init&gt; ##</span><br><span class="line">#15 = Utf8               ()V  ##</span><br><span class="line">#18 = Utf8               thatIsInstanceMethod</span><br><span class="line">#19 = Utf8               (Ljava/lang/String;)I</span><br><span class="line">#23 = NameAndType        #14:#15  // &quot;&lt;init&gt;&quot;:()V  ## 构造方法的NameAndType, &lt;init&gt;是构造方法的名字, ()V表示无参返回Void</span><br><span class="line">#24 = Class              #30      // java/lang/Integer</span><br><span class="line">#25 = NameAndType        #31:#19        // parseInt:(Ljava/lang/String;)I  ## 静态方法名字:描述符`(形参列表)返回值`的格式</span><br><span class="line">#26 = NameAndType        #11:#12        // thatIsStaticVar:Z</span><br><span class="line">#27 = Utf8               org/kshan/corej/CJEntry</span><br><span class="line">#28 = Utf8               org/kshan/corej/CJBaseClass</span><br><span class="line">#29 = Utf8               java/io/Serializable</span><br><span class="line">#30 = Utf8               java/lang/Integer</span><br><span class="line">#31 = Utf8               parseInt</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>@ref: <a href="https://coolshell.cn/articles/9229.html" target="_blank" rel="noopener">实例分析Java Class的文件结构 | | 酷 壳 - CoolShell</a></p>
 </blockquote>
@@ -527,7 +538,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java进阶/" rel="tag"># Java进阶</a>
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
           
         </div>
       
@@ -550,8 +561,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/12.Java/Advanced-Java.05.对象内存模型/" rel="prev" title="Advanced Java-05-对象内存模型">
-                Advanced Java-05-对象内存模型 <i class="fa fa-chevron-right"></i>
+              <a href="/12.Java/Advanced-Java.05.对象内存结构/" rel="prev" title="Advanced Java-05-对象内存结构">
+                Advanced Java-05-对象内存结构 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -643,7 +654,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -654,7 +665,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -733,7 +744,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#class文件常量池"><span class="nav-text">class文件常量池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例分析class文件常量池"><span class="nav-text">实例分析class文件常量池</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#class文件结构概述"><span class="nav-text">class文件结构概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#class文件常量池"><span class="nav-text">class文件常量池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例分析class文件常量池"><span class="nav-text">实例分析class文件常量池</span></a></li></ol></div>
             
 
           </div>

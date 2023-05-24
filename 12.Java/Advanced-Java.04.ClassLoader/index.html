@@ -104,7 +104,7 @@
 
 
 
-  <meta name="keywords" content="Java进阶," />
+  <meta name="keywords" content="JVM," />
 
 
 
@@ -118,20 +118,20 @@
 
 
 <meta name="description" content="类的加载过程加载 – 链接 – 初始化, 以上三个阶段涉及到的 JVM 内存区域:   在加载阶段, 创建的 class 对象存储在堆(Heap); 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
-<meta name="keywords" content="Java进阶">
+<meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Advanced Java-04-ClassLoader">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.04.ClassLoader/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="类的加载过程加载 – 链接 – 初始化, 以上三个阶段涉及到的 JVM 内存区域:   在加载阶段, 创建的 class 对象存储在堆(Heap); 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-Load-Class.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.04.ClassLoader-2023-05-10-2.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-ClassLoader-Tree.png">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.363Z">
+<meta property="og:updated_time" content="2023-05-24T10:10:50.022Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-04-ClassLoader">
 <meta name="twitter:description" content="类的加载过程加载 – 链接 – 初始化, 以上三个阶段涉及到的 JVM 内存区域:   在加载阶段, 创建的 class 对象存储在堆(Heap); 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
-<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/java/JVM-Load-Class.png">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.04.ClassLoader-2023-05-10-2.png">
 
 
 
@@ -356,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,729
+                  5,989
                 </span>
               
 
@@ -389,30 +389,35 @@
 <li>在初始化阶段, 初始化 static 成员, 也在堆;</li>
 </ol>
 </blockquote>
-<p><img src="/images/java/JVM-Load-Class.png" alt=""></p>
+<p><img src="/images/Advanced-Java.04.ClassLoader-2023-05-10-2.png" alt="../_images/Advanced-Java.04.ClassLoader-2023-05-10-2.png"></p>
 <h3 id="①加载-Loading"><a href="#①加载-Loading" class="headerlink" title="①加载(Loading)"></a>①加载(Loading)</h3><ul>
 <li>由对应的 ClassLoader 从磁盘读取.class 文件字节 // 这里的类加载器可以自定义</li>
-<li>由 <code>ClassLoader.defineClass()</code> 方法创建一个 java.lang.Class 的对象, 对象存储在堆(Heap),</li>
+<li>ClassLoader 的 loadClass 最终通过 <code>ClassLoader.defineClass()</code> 方法创建一个 java.lang.Class 的对象, 对象存储在堆(Heap),</li>
 </ul>
-<h3 id="②链接-Linking"><a href="#②链接-Linking" class="headerlink" title="②链接(Linking)"></a>②链接(Linking)</h3><ol>
-<li>验证(Verification): 验证加载类的字节码, 验证成功则载入到方法区(Method Area), 验证项包括如下:<ul>
+<h3 id="②链接-Linking"><a href="#②链接-Linking" class="headerlink" title="②链接(Linking)"></a>②链接(Linking)</h3><p>链接阶段还分 3 个步骤：</p>
+<ul>
+<li><p>1 验证(Verification): 验证加载类的字节码, 验证成功则载入到<strong>方法区(Method Area)</strong>, 验证项包括如下:</p>
+<ul>
 <li>变量使用前要初始化</li>
 <li>方法调用与对象引用之间类型要匹配</li>
 <li>访问私有数据和方法的规则没有违反</li>
 <li>运行时堆栈没有溢出</li>
 </ul>
 </li>
-<li>准备(Preparation): 这一阶段在方法区(Method Area)分配<ul>
+<li><p>2 准备(Preparation): 这一阶段在<strong>方法区(Method Area)</strong>分配</p>
+<ul>
 <li>为类的 static 变量分配空间, 并赋 <strong>默认值</strong>, 比如 <code>public static int value = 3</code>, 这一阶段 value 被赋值为 0, static 字段的初始化要到下个”初始化”阶段才开始执行;</li>
 <li>为类的 final 常量分配空间, 赋 <strong>指定的值</strong>, 比如 <code>public static final int value = 3</code>, 在准备阶段虚拟机就会根据 ConstantValue 的设置将 value 赋值为3;</li>
 <li>除了分配内存外，部分 Java 虚拟机还会在此阶段构造其他跟类层次相关的数据结构，比如说用来实现虚方法的动态绑定的 <strong>方法表</strong>。</li>
 </ul>
 </li>
-<li>解析(Resolution): 把类中的符号引用转换为直接引用, 对于一个方法调用，编译器会生成一个包含目标方法所在类的名字、目标方法的名字、接收参数类型以及返回值类型的符号引用，来指代所要调用的方法。<br>解析阶段的目的，正是将这些符号引用解析成为实际引用。如果符号引用指向一个未被加载的类，或者未被加载类的字段或方法，那么解析将触发这个类的加载（但未必触发这个类的链接以及初始化。）</li>
-</ol>
-<h3 id="③初始化-Initialization"><a href="#③初始化-Initialization" class="headerlink" title="③初始化(Initialization)"></a>③初始化(Initialization)</h3><p>主要对类变量(非 final 非 static)进行初始化, 对于 static 的 Object 类型(非基本类型)的成员也是在这个时候进行初始化,</p>
-<p>这一阶段会执行 <code>&lt; clinit &gt;</code> 方法,<br><code>&lt; clinit &gt;</code> 是编译期生成的, <strong>static 代码块</strong> ,类变量直接赋值的代码都会被放入 <code>&lt; clinit &gt;</code>, 顺序与在 java 代码里出现顺序一致.<br>Java 虚拟机会通过加锁来确保类的 <code>&lt; clinit &gt;</code> 方法仅被执行一次。</p>
-<p>JVM 规范枚举了下述多种触发初始化的情况(但不限于这几种):</p>
+<li><p>3 解析(Resolution): 把类中的符号引用转换为直接引用, 对于一个方法调用，编译器会生成一个包含目标方法所在类的名字、目标方法的名字、接收参数类型以及返回值类型的符号引用，来指代所要调用的方法。</p>
+<ul>
+<li>解析阶段的目的，正是将这些符号引用解析成为实际引用。<strong>如果符号引用指向一个未被加载的类，或者未被加载类的字段或方法，那么解析将触发这个类的加载（但未必触发这个类的链接以及初始化）</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="③初始化-Initialization"><a href="#③初始化-Initialization" class="headerlink" title="③初始化(Initialization)"></a>③初始化(Initialization)</h3><p>JVM 规范枚举了下述多种<strong>触发初始化</strong>的情况(但不限于这几种):</p>
 <ol>
 <li>Java 虚拟机启动时, 被标明为启动类(有 main 方法)会被初始化</li>
 <li>初始化一个类的时候如果发现其父类还没用初始化, 则先初始化其父类, 这种属于 <strong>被动初始化</strong>;</li>
@@ -421,11 +426,13 @@
 <li>首次调用类的 static 方法, 对应字节码指令: <code>invokestatic</code></li>
 <li>调用 <code>Class.forName(&quot;xxx&quot;)</code>;</li>
 </ol>
-<p>比较四种指令 <code>new</code>, <code>getstatic</code>, <code>putstatic</code>, <code>invokestatic</code>:</p>
+<p>初始化阶段, 主要对类变量(非 final 非 static)进行初始化, 对于 static 的 Object 类型(非基本类型)的成员也是在这个时候进行初始化,</p>
+<p>这一阶段会执行 <code>&lt; clinit &gt;</code> 方法, <code>&lt; clinit &gt;</code> 是编译期生成的,<br><strong>static 代码块</strong> / 类变量直接赋值等….代码都会被放入 <code>&lt; clinit &gt;</code>, 顺序与在 java 代码里出现顺序一致.<br>Java 虚拟机会通过加锁来确保类的 <code>&lt; clinit &gt;</code> 方法仅被执行一次。</p>
+<p>➤ 比较四种指令 <code>new</code>, <code>getstatic</code>, <code>putstatic</code>, <code>invokestatic</code>:</p>
 <blockquote>
 <p>除了 <code>new</code> 是主动初始化, 后面三种都是被动初始化.</p>
 </blockquote>
-<p>比较 <code>Class.forName(&quot;xxx&quot;)</code> 和 <code>ClassLoader.loadClass()</code>:</p>
+<p>➤ 比较 <code>Class.forName(&quot;xxx&quot;)</code> 和 <code>ClassLoader.loadClass()</code>:</p>
 <blockquote>
 <p>作用都是返回 Class 对象;<br>Class.forName()只能通过应用加载器(AppClassLoader)创建 Class 对象, 还会调用类的 static 代码块;<br>ClassLoader.loadClass()可以通过自定义 ClassLoader 创建 Class 对象,</p>
 </blockquote>
@@ -435,116 +442,163 @@
 </ul>
 <p>通过内部类实现单例:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="ClassLoader"><a href="#ClassLoader" class="headerlink" title="ClassLoader"></a>ClassLoader</h2><p>JVM 在加载(Loading)阶段依靠 ClassLoader 完成, ClassLoader 的加载类过程主要使用 <code>ClassLoader.loadClass(String name)</code> 方法，<br>该方法中封装了中加载机制 <strong>双亲委派模式</strong> ：每当一个类加载器接收到加载请求时，它会先将请求转发给父类加载器。在父类加载器没有找到所请求的类的情况下，该类加载器才会尝试去加载。<br>加载完成后, 虚拟机外部的二进制字节流就按照虚拟机所需的格式存储在方法区之中, 在 JVM 堆中也创建一个 java.lang.Class 类的对象.</p>
-<h3 id="ClassLoader-分类"><a href="#ClassLoader-分类" class="headerlink" title="ClassLoader 分类"></a>ClassLoader 分类</h3><p>Java 中的类加载器大致可以分成两类，一类是系统提供的”系统提供的 ClassLoader”，另外一类则是由应用开发者编写的”应用程序类 ClassLoader”。</p>
+<h2 id="ClassLoader"><a href="#ClassLoader" class="headerlink" title="ClassLoader"></a>ClassLoader</h2><p>JVM 在加载(Loading)阶段依靠 ClassLoader 完成, ClassLoader 的加载类过程主要使用 <code>ClassLoader.loadClass(String name)</code> 方法，</p>
+<p>每当一个类加载器接收到加载请求时，它会先检查类是否被加载过，如果否则将请求转发给父类加载器。如果父类加载器也无法加载此类，再尝试使用自己的findClass 加载。</p>
+<p>加载完成后, 虚拟机外部的二进制字节流就按照虚拟机所需的格式存储在方法区之中, 在 JVM 堆中也创建一个 java.lang.Class 类的对象.</p>
+<p>每个 Java 类都维护着一个指向定义它的类加载器的引用，通过 <code>object.getClass().getClassLoader()</code> 方法就可以获取到此引用。</p>
+<h3 id="ClassLoader-分类"><a href="#ClassLoader-分类" class="headerlink" title="ClassLoader 分类"></a>ClassLoader 分类</h3><p>Java 中的类加载器大致可以分成3类：</p>
 <ul>
-<li>系统类类加载器（System ClassLoader）: 系统提供的类加载器主要有下面三个：<ul>
-<li>启动类加载器(Bootstrap ClassLoader): 它负责加载存放在 JDK\jre\lib\rt.jar 里 <code>java.*</code> 开头的类;</li>
-<li>扩展类加载器(Extension ClassLoader): 该加载器由 <code>sun.misc.Launcher$ExtClassLoader</code> 实现,它负责加载 JDK\jre\lib\ext 目录中所有类库(如 <code>javax.*</code> 开头的类),开发者可以直接使用扩展类加载器</li>
-<li><del>系统类加载器(System ClassLoader）</del>：它根据 Java 应用的类路径（CLASSPATH）来加载 Java 类。一般来说，它加载 classpath 路径下的 jar 包和 class 文件。可以通过 <code>ClassLoader.getSystemClassLoader()</code> 来获取它。</li>
-</ul>
-</li>
-<li>应用程序类加载器（Application ClassLoader): 该类加载器由 <code>sun.misc.Launcher$AppClassLoader</code> 来实现,它负责加载用户类路径 CLASSPATH 所指定的类,开发者可以直接使用该类加载器,如果应用程序中没有自定义过自己的类加载器,一般情况下这个就是程序中默认的类加载器。<br>每个 Java 类都维护着一个指向定义它的类加载器的引用，通过 <code>object.getClass().getClassLoader()</code> 方法就可以获取到此引用。</li>
+<li><strong>启动类加载器</strong>(Bootstrap ClassLoader): 它负责加载存放在 <code>JDK\jre\lib\rt.jar</code> 里 <code>java.*</code> 开头的类;</li>
 </ul>
 <blockquote>
-<p>Class.forName() 默认了应用程序加载器(Laucher$AppClassLoader);<br>除了启动类加载器之外，其他的类加载器都是 java.lang.ClassLoader 的子类;</p>
+<p>谁加载了java.lang.ClassLoader本身? 答案就是 Bootstrap ClassLoader <a href="https://stackoverflow.com/questions/18214174/how-is-the-java-bootstrap-classloader-loaded" target="_blank" rel="noopener">How is the Java Bootstrap Classloader loaded? - Stack Overflow</a></p>
 </blockquote>
-<h3 id="ClassLoader-树状组织结构"><a href="#ClassLoader-树状组织结构" class="headerlink" title="ClassLoader 树状组织结构"></a>ClassLoader 树状组织结构</h3><p>除了 Bootstrap ClassLoader, 所有的类加载器都有一个父加载器(<strong>注意这里的”父子”关系并不是指继承关系</strong>)。通过 <code>classLoader.getParent()</code> 方法可以得到。</p>
 <ul>
-<li>System ClassLoader 的父加载器是 Extension ClassLoader，而 Extension ClassLoader 的父加载器是 Bootstrap ClassLoader</li>
-<li>开发者编写的 Application ClassLoader 和普通 Java 类一样, 也需要另一个 ClassLoader 加载, 这个 ClassLoader 就是其父加载器, 一般来说，开发人员编写的类加载器的父类加载器是 System ClassLoader。</li>
-</ul>
-<p>类加载器通过这种方式组织起来形成树状结构。树的根节点就是 Bootstrap ClassLoader。如下图所示：<br>虚线上方的三种 ClassLoader 都是 JDK 核心类库提供的, 虚线下方是 Application ClassLoader 和用户自定义 ClassLoader;</p>
-<p><img src="/images/java/JVM-ClassLoader-Tree.png" alt=""></p>
-<h3 id="双亲委派模式"><a href="#双亲委派模式" class="headerlink" title="双亲委派模式"></a>双亲委派模式</h3><blockquote>
-<p>在介绍代理模式之前，首先需要说明一下 Java 虚拟机是如何判定两个 Java 类是相同的。<br>Java 虚拟机不仅要看类的全名是否相同，还要看加载此类的类加载器是否一样。只有两者都相同的情况，才认为两个类是相同的。即便是同样的字节代码，被不同的类加载器加载之后所得到的类，也是不同的。</p>
-</blockquote>
-<p>ClassLoader 的加载类过程主要使用 <code>loadClass(String, boolean)</code> 方法，该方法中使用了了 <strong>双亲委派模式</strong>（= delegation hierarchy algorithm ？）:</p>
-<p><code>loadClass(String, boolean)</code> 方法的双亲委派模式实现如下:</p>
-<ol>
-<li>首先，检查一下指定名称的类是否已经加载过，如果加载过了，就不需要再加载，直接返回。</li>
-<li>如果此类没有加载过，那么再判断一下是否有父加载器：<br>如果有父加载器，则由父加载器加载（即调用 <code>parent.loadClass(name, false);</code>）；<br>如果无父加载器，调用 bootstrap 类加载器来加载；</li>
-<li>如果父加载器及bootstrap 类加载器都没有找到指定的类，那么调用当前类加载器的 <code>findClass()</code> 方法来完成类加载</li>
-</ol>
-<p>所以一个类加载的时候，尝试使用 classLoader 的顺序是: Bootstrap, Extendsions, System, 自定义 ClassLoader。</p>
-<p>因为 Bootstrap, Extendsions 等 Cl 各自有负责加载的职责，所以一个用户自定义的类是不会被 Bootstrap 和 Extention 加载器加载的。</p>
-<p>➤ 为什么需要双亲委派？</p>
-<ul>
-<li>以 <code>java.lang.Object</code> 类的加载为例, 如果这个加载过程由 Java 应用自己的类加载器来完成的话, 很可能就存在多个版本的 java.lang.Object 类, 通过代理模式, 对于 Java 核心库的类的加载工作由 Bootstrap ClassLoader 来统一完成, 保证了 Java 应用所使用的都是同一个版本的 Java 核心库的类</li>
-<li>避免类的重复加载，当父加载器已经加载过某一个类时，子加载器就不会再重新加载这个类。</li>
-<li>通过双亲委派的方式，还保证了安全性。因为 Bootstrap ClassLoader 在加载的时候，只会加载 JAVA_HOME 中的 jar 包里面的类，如 java.lang.Integer，那么这个类是不会被随意替换的，除非有人跑到你的机器上，破坏你的 JDK。</li>
-</ul>
-<p>➤ 如何主动破坏双亲委派机制？<br>因为他的双亲委派过程都是在 loadClass 方法中实现的，那么想要破坏这种机制，那么就自定义一个类加载器，重写其中的 loadClass 方法，使其不进行双亲委派即可。</p>
-<p>@ref: <a href="https://www.cnblogs.com/hollischuang/p/14260801.html" target="_blank" rel="noopener">你确定你真的理解”双亲委派”了吗？！ - HollisChuang - 博客园</a></p>
-<h3 id="类加载器与-Web-容器"><a href="#类加载器与-Web-容器" class="headerlink" title="类加载器与 Web 容器"></a>类加载器与 Web 容器</h3><p>对于运行在 Java EE™容器中的 Web 应用来说，类加载器的实现方式与一般的 Java 应用有所不同。</p>
-<p>为什么 Tomcat 要破坏双亲委派: Tomcat 的类加载机制：为了实现隔离性，优先加载 Web 应用自己定义的类，所以没有遵照双亲委派的约定，每一个应用自己的类加载器——WebAppClassLoader 负责加载本身的目录下的 class 文件，加载不到时再交给 CommonClassLoader 加载，这和双亲委派刚好相反<br>@ref: <a href="https://www.cnblogs.com/hollischuang/p/14260801.html" target="_blank" rel="noopener">https://www.cnblogs.com/hollischuang/p/14260801.html</a></p>
-<h3 id="ClassLoader-API-介绍"><a href="#ClassLoader-API-介绍" class="headerlink" title="ClassLoader API 介绍"></a>ClassLoader API 介绍</h3><table>
-<thead>
-<tr>
-<th style="text-align:left">method</th>
-<th style="text-align:left">desc</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><code>getParent()</code></td>
-<td style="text-align:left">返回该类加载器的父类加载器。</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>loadClass(String name)</code></td>
-<td style="text-align:left">加载名称为 name 的类，实现了双亲委派，返回的结果是 java.lang.Class 类的实例。</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>findClass(String name)</code></td>
-<td style="text-align:left">查找名称为 name 的类，返回的结果是 java.lang.Class 类的实例。</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>findLoadedClass(String name)</code></td>
-<td style="text-align:left">查找名称为 name 的已经被加载过的类，返回的结果是 java.lang.Class 类的实例。</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>resolveClass(Class&lt;？&gt; c)</code></td>
-<td style="text-align:left">链接指定的 Java 类。</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>defineClass(String name, byte[] b, int off, int len)</code></td>
-<td style="text-align:left">把字节数组 b 中的内容转换成 Java 类，返回的结果是 java.lang.Class 类的实例。这个方法被声明为 final 的。</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>getResources(String path)</code></td>
-<td style="text-align:left">获取 classpath 下面的文件, path 是包名路径（例如 <code>com/sina/ml</code>）, 返回的是 classpath 绝对路径的 URL 封装</td>
-</tr>
-</tbody>
-</table>
-<p>比较 loadClass 和 defineClass 方法:</p>
-<ul>
-<li>loadClass：主要进行类加载的方法，默认的双亲委派机制就实现在这个方法中。<br>启动类的加载过程是通过调用 <code>loadClass()</code> 来实现的, <code>loadClass()</code> 被称为类的“初始加载器”(initiating loader), <code>loadClass()</code> 里封装了前面提到的代理模式的实现;</li>
-<li>findClass：JDK1.2之后已不再提倡用户直接覆盖 loadClass()方法，而是建议把自己的类加载逻辑实现到 findClass()方法中；</li>
-<li>真正完成类的加载工作是通过调用 <code>defineClass()</code> 来实现的, <code>defineClass()</code> 被称为类的“定义加载器”(defining loader), 如果要自定义一个 ClassLoader, 需要重写 findClass, 最后调用 defineClass;</li>
-<li>loadClass 抛出 ClassNotFoundException 异常;</li>
-<li>defineClass 抛出 NoClassDefFoundError 异常;</li>
-</ul>
-<h3 id="实现一个-ClassLoader"><a href="#实现一个-ClassLoader" class="headerlink" title="实现一个 ClassLoader"></a>实现一个 ClassLoader</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1继承CLassLoader</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 2重写findClass</span></span><br><span class="line">   <span class="keyword">protected</span> Class&lt;?&gt; findClass(String classFullName) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">      String path = classFullName.repace(<span class="string">"."</span>, File.separatorChar) + <span class="string">".class"</span>; <span class="comment">// 装换为路径.class</span></span><br><span class="line">      InputStream ins = <span class="keyword">new</span> FileInputStream(path);</span><br><span class="line">      ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">      <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</span><br><span class="line"></span><br><span class="line">      <span class="keyword">int</span> bytesNumRead = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">while</span> ((bytesNumRead = ins.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">          baos.write(buffer, <span class="number">0</span>, bytesNumRead);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">byte</span>[] bytes =  classBytes baos.toByteArray();</span><br><span class="line">      <span class="keyword">return</span> defineClass(name, classData, <span class="number">0</span>, classData.length); <span class="comment">// 3 defineClass抛出NoClassDefFoundError异常</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 测试classLoader</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">      MyClassLoader loader1 = <span class="keyword">new</span> MyClassLoader();  <span class="comment">// 自定义的加载器</span></span><br><span class="line">      MyClassLoader loader2 = Thread.currentThread().getContextClassLoader(); <span class="comment">// `Launcher$AppClassLoader`</span></span><br><span class="line"></span><br><span class="line">      Class&lt;?&gt; class1 = loader1.loadClass(<span class="string">"com.example.Sample"</span>); <span class="comment">// 4 loadClass抛出ClassNotFoundException异常</span></span><br><span class="line">      Class&lt;?&gt; class2 = loader2.loadClass(<span class="string">"com.example.Sample"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(class1 == class2) &#123; <span class="comment">// true, class1, class2指向同一个引用</span></span><br><span class="line">        System.out.println(<span class="string">"class1 == class2"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>参考原文： <a href="https://blog.csdn.net/jiyiqinlovexx/article/details/51090751" target="_blank" rel="noopener">https://blog.csdn.net/jiyiqinlovexx/article/details/51090751</a></p>
-<h3 id="显示加载和隐式加载"><a href="#显示加载和隐式加载" class="headerlink" title="显示加载和隐式加载"></a>显示加载和隐式加载</h3><ul>
-<li>显式加载：调用 <code>ClassLoader.loadClass(className)</code> 与 <code>Class.forName(className)</code></li>
-<li>隐式加载：<ul>
-<li>创建类对象</li>
-<li>使用类的静态域</li>
-<li>创建子类对象</li>
-<li>使用子类的静态域</li>
-</ul>
+<li><p><strong>扩展类加载器</strong>(Extension ClassLoader): 它负责加载 <code>JDK\jre\lib\ext</code> 目录中所有类库(如 <code>javax.*</code> 开头的类);</p>
+</li>
+<li><p><strong>应用程序类加载器</strong>(Application ClassLoader): 它负责加载 <code>-classpath</code> 或 <code>-cp</code> 路径下的类, 开发者可以直接使用该类加载器, 如果应用程序中没有自定义过自己的类加载器, 一般情况下用的都是 Application ClassLoader , ps 有些资料也把它翻译为系统类加载器“System ClassLoader”</p>
+</li>
+<li><p><strong>用户定义类加载器</strong>（User Defined ClassLoader），需要继承 ClassLoader，它的 parent 是 Application ClassLoader</p>
 </li>
 </ul>
-<p>注意还有其他特殊的隐式加载：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printClassLoaders</span><span class="params">()</span> <span class="keyword">throws</span> ClassNotFoundException </span>&#123;</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">"Classloader of this class:"</span></span><br><span class="line">        + MyClass.class.getClassLoader());</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">"Classloader of DriverManager:"</span></span><br><span class="line">        + DriverManager.class.getClassLoader());</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">"Classloader of ArrayList:"</span></span><br><span class="line">        + ArrayList.class.getClassLoader());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行上面的代码，可以看到返回的3个 Cl 分别是：</p>
 <ul>
-<li>在 JVM 启动时，BootStrapLoader 会加载一些 JVM 自身运行所需的 class</li>
-<li>在 JVM 启动时，ExtClassLoader 会加载指定目录下一些特殊的 class</li>
-<li>在 JVM 启动时，AppClassLoader 会加载 classpath 路径下的 class，以及 main 函数所在的类的 class 文件。</li>
+<li><code>jdk.internal.loader.ClassLoaders$AppClassLoader</code></li>
+<li><code>jdk.internal.loader.ClassLoaders$PlatformClassLoader</code></li>
+<li><code>null</code></li>
 </ul>
-<h3 id="JVM-如何判断两个类是否相同"><a href="#JVM-如何判断两个类是否相同" class="headerlink" title="JVM 如何判断两个类是否相同"></a>JVM 如何判断两个类是否相同</h3><p>JVM 在判定两个 class 是否相同时，不仅要判断两个类名是否相同，而且要判断是否由同一个类加载器实例加载的。<br>只有两者同时满足的情况下，JVM 才认为这两个 class 是相同的。就算两个 class 是同一份 class 字节码，如果被两个不同的 ClassLoader 实例所加载，JVM 也会认为它们是两个不同 class。<br>比如网络上的一个 Java 类 <code>org.classloader.simple.NetClassLoaderSimple</code>，javac 编译之后生成字节码文件 NetClassLoaderSimple.class，<br>ClassLoaderA 和 ClassLoaderB 这两个类加载器并读取了 NetClassLoaderSimple.class 文件，并分别定义出了 java.lang.Class 实例来表示这个类，对于 JVM 来说，它们是两个不同的实例对象，但它们确实是同一份字节码文件，如果试图将这个 Class 实例生成具体的对象进行转换时，就会抛运行时异常 java.lang.ClassCaseException</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewworkClassLoaderTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//测试加载网络中的class文件</span></span><br><span class="line">            String rootUrl = <span class="string">"http://localhost:8080/httpweb/classes"</span>;</span><br><span class="line">            String className = <span class="string">"org.classloader.simple.NetClassLoaderSimple"</span>;</span><br><span class="line">            NetworkClassLoader ncl1 = <span class="keyword">new</span> NetworkClassLoader(rootUrl);</span><br><span class="line">            NetworkClassLoader ncl2 = <span class="keyword">new</span> NetworkClassLoader(rootUrl);</span><br><span class="line">            Class&lt;?&gt; clazz1 = ncl1.loadClass(className);</span><br><span class="line">            Class&lt;?&gt; clazz2 = ncl2.loadClass(className);</span><br><span class="line">            Object obj1 = clazz1.newInstance();</span><br><span class="line">            Object obj2 = clazz2.newInstance();</span><br><span class="line">            clazz1.getMethod(<span class="string">"setNetClassLoaderSimple"</span>, Object.class).invoke(obj1, obj2);  <span class="comment">// 抛出 ClassCaseException</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>@todo:<br>实际代码测试结果: 相同的 CL 类, 不同的 CL 实例, 创建的 class 实例是==的</p>
+<p>也即上面提到的 Application ClassLoader、Extension ClassLoader、Bootstrap ClassLoader，可是为什么最后一个是null ？ 因为 Bootstrap ClassLoader 是C++实现的而非Java，所以没有一个Java 的 “Class”。</p>
+<p>另，在Java 9 之后，扩展类加载器变为了 PlatformClassLoader。</p>
+<h3 id="ClassLoader是否是继承关系？"><a href="#ClassLoader是否是继承关系？" class="headerlink" title="ClassLoader是否是继承关系？"></a>ClassLoader是否是继承关系？</h3><p>User defined ClassLoader 的 parent 是 App ClassLoader；<br>App ClassLoader 的 parent 是 Ext ClassLoader；<br>…<br>Bootstrap ClassLoader 作为其他所有 ClassLoader 的 parent；</p>
+<p>以上 4类加载器通过这种方式组织起来形成树状结构，如下图所示（图中的 System Class Loader 即 App ClassLoader），虚线上方是 JDK 提供的 Cl，下方是用户自定义的Cl</p>
+<p><img src="/images/java/JVM-ClassLoader-Tree.png" alt=""></p>
+<p>在Java 12上测试：</p>
+<ul>
+<li>用户自定义的加载器，getParent()返回的是 AppClassLoader；</li>
+<li>AppClassLoader.getParent() 返回的是 PlatformClassLoader；</li>
+<li>PlatformClassLoader.getParent() 返回 Null？</li>
+</ul>
+<p>Bootstrap class loader serves as the parent of all the other ClassLoader instances <a href="https://www.baeldung.com/java-classloaders" target="_blank" rel="noopener">https://www.baeldung.com/java-classloaders</a></p>
+<p>A ClassLoader with a null parent ClassLoader appears to only have visibility into the java.base module. In Java 8 and earlier, such a ClassLoader would have visibility to all of the classes comprising the Java platform. <a href="https://bugs.openjdk.org/browse/JDK-8161269" target="_blank" rel="noopener">https://bugs.openjdk.org/browse/JDK-8161269</a></p>
+<p>三种层次的 ClassLoader <strong>并不是继承关系（Inheritance）</strong>，子ClassLoader 通过是 <strong>组合（Composite）</strong>的方式复用父 ClassLoader的代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line">    <span class="comment">// The parent class loader for delegation</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ClassLoader parent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>组合模式（Composite Pattern），又叫部分整体模式，是用于把一组相似的对象当作一个单一的对象。组合模式依据树形结构来组合对象，用来表示部分以及整体层次。</p>
+</blockquote>
+<h3 id="ClassLoader-如何工作？双亲委派机制"><a href="#ClassLoader-如何工作？双亲委派机制" class="headerlink" title="ClassLoader 如何工作？双亲委派机制"></a>ClassLoader 如何工作？双亲委派机制</h3><p>使用自定 ClassLoader 加载 class，并创建实例对象：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">MyClassLoader cl = <span class="keyword">new</span> MyClassLoader();</span><br><span class="line">Class&lt;?&gt; clazz = cl.loadClass(<span class="string">"org.mk.corej.Test"</span>);</span><br><span class="line"></span><br><span class="line">Test test = (Test)clazz.newInstance();</span><br></pre></td></tr></table></figure>
+<p>在  <code>ClassLoader.loadClass()</code> 方法内实现了双亲委派：</p>
+<ol>
+<li>先检查类是否被加载过</li>
+<li>如果否则将请求转发给父类加载器</li>
+<li>如果父类加载器也无法加载此类，再尝试使用自己的findClass 加载</li>
+</ol>
+<p>概括双亲委派就是 <strong>总是向上委托</strong>、<strong>可见性原则</strong>（每个加载器总是负责加载自己可见的类）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; loadClass(String name, <span class="keyword">boolean</span> resolve)</span><br><span class="line">        <span class="keyword">throws</span> ClassNotFoundException</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (getClassLoadingLock(name)) &#123;</span><br><span class="line">            <span class="comment">// First, check if the class has already been loaded</span></span><br><span class="line">            Class&lt;?&gt; c = findLoadedClass(name);</span><br><span class="line">            <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">long</span> t0 = System.nanoTime();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        c = parent.loadClass(name, <span class="keyword">false</span>);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        c = findBootstrapClassOrNull(name);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">                    <span class="comment">// ClassNotFoundException thrown if class not found</span></span><br><span class="line">                    <span class="comment">// from the non-null parent class loader</span></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="comment">// If still not found, then invoke findClass in order</span></span><br><span class="line">                    <span class="comment">// to find the class.</span></span><br><span class="line">                    <span class="keyword">long</span> t1 = System.nanoTime();</span><br><span class="line">                    c = findClass(name);</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// this is the defining class loader; record the stats</span></span><br><span class="line">                    sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0);</span><br><span class="line">                    sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1);</span><br><span class="line">                    sun.misc.PerfCounter.getFindClasses().increment();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (resolve) &#123;</span><br><span class="line">                resolveClass(c);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> c;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这样做的好处是可以保证类的唯一性，例如 可以确保 Java 核心类的唯一性，因为向上委托的模式下，核心类总是由 Bootstrap 加载的。</p>
+<blockquote>
+<p>ps：外文资料里一般都写 “<strong>Parents delegate</strong>”，国内资料大都默认了翻译成“双亲”，这是一种词不达意的翻译，理解起来好像是要委托2个父 ClassLoader，其实本意是“委托给 parents 一级的 ClassLoader”。</p>
+</blockquote>
+<p>再看 ClassLoader 的几个方法：</p>
+<ul>
+<li><p><code>Class&lt;?&gt; loadClass(String cn, boolean resolve)</code>：如上分析，loadClass 里实现了 <strong>双亲委派</strong>，并最终调用了 findClass，抛出 ClassNotFoundException 异常；</p>
+</li>
+<li><p><code>Class&lt;?&gt; findClass(String cn)</code>：findClass 里一般是加载.class的字节流然后调用 defineClass，例如 URLClassLoader.findClass 里实现的是通过URI获取.class的字节流，抛出 NoClassDefFoundError 异常；</p>
+</li>
+<li><p><code>Class&lt;?&gt; defineClass(String name, byte[] b, int off, int len)</code>：defineClass 把字节码转化为Class对象；</p>
+</li>
+</ul>
+<h3 id="实现自定义-ClassLoader"><a href="#实现自定义-ClassLoader" class="headerlink" title="实现自定义 ClassLoader"></a>实现自定义 ClassLoader</h3><p>从 ClassLoader 的层级关系可知，我们自定义的 ClassLoader 的 parent 是 App ClassLoader；</p>
+<p>从上面 ClassLoader 方法的介绍可知，如果我们的自定义 Cl 需要改变双亲委派机制，那么重写 loadClass 方法，如果不想改变，则只需重写 findClass 即可：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1继承CLassLoader</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 2重写findClass</span></span><br><span class="line">   <span class="keyword">protected</span> Class&lt;?&gt; findClass(String classFullName) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">      String path = classFullName.repace(<span class="string">"."</span>, File.separatorChar) + <span class="string">".class"</span>; <span class="comment">// 装换为路径.class</span></span><br><span class="line">      InputStream ins = <span class="keyword">new</span> FileInputStream(path);</span><br><span class="line">      ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">      <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</span><br><span class="line"></span><br><span class="line">      <span class="keyword">int</span> bytesNumRead = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">while</span> ((bytesNumRead = ins.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">          baos.write(buffer, <span class="number">0</span>, bytesNumRead);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">byte</span>[] bytes =  classBytes baos.toByteArray();</span><br><span class="line">      <span class="keyword">return</span> defineClass(name, classData, <span class="number">0</span>, classData.length); <span class="comment">// 3 defineClass抛出NoClassDefFoundError异常</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 测试classLoader</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">      MyClassLoader loader1 = <span class="keyword">new</span> MyClassLoader();  <span class="comment">// 自定义的加载器</span></span><br><span class="line">      MyClassLoader loader2 = Thread.currentThread().getContextClassLoader(); <span class="comment">// `Launcher$AppClassLoader`</span></span><br><span class="line"></span><br><span class="line">      Class&lt;?&gt; class1 = loader1.loadClass(<span class="string">"com.example.Sample"</span>); <span class="comment">// 4 loadClass抛出ClassNotFoundException异常</span></span><br><span class="line">      Class&lt;?&gt; class2 = loader2.loadClass(<span class="string">"com.example.Sample"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(class1 == class2) &#123; <span class="comment">// true, class1, class2指向同一个引用</span></span><br><span class="line">        System.out.println(<span class="string">"class1 == class2"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="可见性（Visibility）"><a href="#可见性（Visibility）" class="headerlink" title="可见性（Visibility）"></a>可见性（Visibility）</h3><p>子类加载器对父类加载器加载的类是可见的。<br>例如，System Cl 加载的类，对 Ext Cl 和 Bootstrap Cl 加载的类具有可见性，但反之则不然。</p>
+<p>为了说明这一点，如果类A由 App Cl 加载，而类B由 Ext Cl 加载，则就由 App Cl 加载的其他类而言，A和B类都是可见的。<br>然而，类B是唯一对 Ext Cl 加载的其他类可见的类。</p>
+<p>原文： <a href="https://www.baeldung.com/java-classloaders#visibility" target="_blank" rel="noopener">Visibility</a></p>
+<p>In addition, <strong>children class loaders are visible to classes loaded by their parent class loaders</strong>.</p>
+<p>For instance, classes loaded by the system class loader have visibility into classes loaded by the extension and bootstrap class loaders, but not vice-versa.</p>
+<p>To illustrate this, if Class A is loaded by the application class loader, and class B is loaded by the extensions class loader, then both A and B classes are visible as far as other classes loaded by the application class loader are concerned.</p>
+<p>Class B, however, is the only class visible to other classes loaded by the extension class loader.</p>
+<p>可见性的另一个例子见下面的「ConextClassLoader」一节</p>
+<h3 id="上下文类加载器（ConextClassLoader）"><a href="#上下文类加载器（ConextClassLoader）" class="headerlink" title="上下文类加载器（ConextClassLoader）"></a>上下文类加载器（ConextClassLoader）</h3><p>有时当JVM核心类需要动态加载应用程序开发人员提供的类或资源时，我们可能会遇到问题。<br>例如在JNDI中，核心功能由rt.jar中的引导类实现。但这些JNDI类可能会加载由第三方厂商实现的 JNDI Provider 库(这些库放在应用的 classpath 中)。此场景要求 Bootstrap 加载器(父类加载器)加载“对应用程序加载器(子类加载器)可见”的类。</p>
+<p>这些类对于 Bootstrap 来说，是<strong>不可见</strong>的，双亲委派机制在这里也不起作用（双亲委派是 ClassLoader.loadClass 实现的，在 Bootstrap 没有实现这个机制，且 Bootstrap 也没有 parent loader），要绕过这个问题，我们需要找到类加载的替代方法，这可以使用<strong>线程上下文加载器</strong>来实现。</p>
+<p>Thread类有一个方法 <code>getContextClassLoader()</code>，该方法返回特定线程的 “<strong>ConextClassLoader</strong>”。</p>
+<p>ConextClassLoader 由线程的创建者在加载资源和类时提供。如果未设置该值，则默认为父线程的类加载器上下文。「The ContextClassLoader is provided by the creator of the thread when loading resources and classes. If the value isn’t set, then it defaults to the class loader context of the parent thread.」</p>
+<p>@ref: <a href="https://www.baeldung.com/java-classloaders#context-classloaders" target="_blank" rel="noopener">https://www.baeldung.com/java-classloaders#context-classloaders</a></p>
+<hr>
+<p>ConextClassLoader 的实际应用：</p>
+<p>以 JDBC.DriverManager 创建连接为例</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String url = &quot;jdbc:mysql://xxxx:xxxx/xxxx&quot;;</span><br><span class="line">Connection conn = DriverManager.getConnection(url,username,password);</span><br></pre></td></tr></table></figure>
+<p>JDBC 定义了接口 java.sql.Driver，具体的实现都是由数据库厂商来提供的。</p>
+<p>DriverManager 是由 PlatformClassLoader 加载，根据 Cl 的职责，它只能加载 JDK 扩展包，那数据库厂商提供的 Jar 是如何加载到的呢？</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Connection <span class="title">getConnection</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        String url, java.util.Properties info, Class&lt;?&gt; caller)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">    ensureDriversInitialized();</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ensureDriversInitialized</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    AccessController.doPrivileged(<span class="keyword">new</span> PrivilegedAction&lt;Void&gt;() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> Void <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            ServiceLoader&lt;Driver&gt; loadedDrivers = ServiceLoader.load(Driver.class);</span><br><span class="line">            Iterator&lt;Driver&gt; driversIterator = loadedDrivers.iterator();</span><br><span class="line"></span><br><span class="line">            <span class="comment">/* Load these drivers, so that they can be instantiated.</span></span><br><span class="line"><span class="comment">             * It may be the case that the driver class may not be there</span></span><br><span class="line"><span class="comment">             * i.e. there may be a packaged driver with the service class</span></span><br><span class="line"><span class="comment">             * as implementation of java.sql.Driver but the actual class</span></span><br><span class="line"><span class="comment">             * may be missing. In that case a java.util.ServiceConfigurationError</span></span><br><span class="line"><span class="comment">             * will be thrown at runtime by the VM trying to locate</span></span><br><span class="line"><span class="comment">             * and load the service.</span></span><br><span class="line"><span class="comment">             *</span></span><br><span class="line"><span class="comment">             * Adding a try catch block to catch those runtime errors</span></span><br><span class="line"><span class="comment">             * if driver not available in classpath but it's</span></span><br><span class="line"><span class="comment">             * packaged as service and that service is there in classpath.</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">while</span> (driversIterator.hasNext()) &#123;</span><br><span class="line">                    driversIterator.next();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">                <span class="comment">// Do nothing</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    println(<span class="string">"DriverManager.initialize: jdbc.drivers = "</span> + drivers);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码可以看到，getConnection 最后是由 ServiceLoader 来加载数据库的 Driver，其 <code>load</code> 方法如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;S&gt; <span class="function">ServiceLoader&lt;S&gt; <span class="title">load</span><span class="params">(Class&lt;S&gt; service)</span> </span>&#123;</span><br><span class="line">        ClassLoader cl = Thread.currentThread().getContextClassLoader();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ServiceLoader&lt;&gt;(Reflection.getCallerClass(), service, cl);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建了一个 <code>Thread.currentThread().getContextClassLoader()</code>，然后这个 contextClassLoader 被赋值给了 <code>ServiceLoader.load</code> 成员变量</li>
+<li>…</li>
+<li>在 <code>driversIterator.hasNext()</code> 里，会搜索 classpath 下以及 jar 包中所有的 <code>META-INF/services</code> 目录下的 <code>java.sql.Driver</code> 文件，并找到文件中的实现类的名字，此时并没有实例化具体的实现类</li>
+<li>接着在 <code>driversIterator.next()</code> 里，根据实现类的全名创建 Class 对象。这里是用了 <code>Class.forName(cn, false, loader)</code> 来创建，第三个参数 loader 即第一步创建的 <strong>contextClassLoader</strong></li>
+</ul>
+<p>@ref: <a href="https://pdai.tech/md/java/advanced/java-advanced-spi.html#jdbc%e6%8e%a5%e5%8f%a3%e5%ae%9a%e4%b9%89" target="_blank" rel="noopener">Java常用机制 - SPI机制详解 | Java 全栈知识体系</a></p>
+<h3 id="不适用双亲委派的场景"><a href="#不适用双亲委派的场景" class="headerlink" title="不适用双亲委派的场景"></a>不适用双亲委派的场景</h3><h4 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h4><p>Tomcat 作为一个 Servlet 容器，一个 Tomcat 实例（一个 JVM 进程）可以同时运行多个 Java Web Application（WAR 包），不同的 WAR 可能会依赖同一个第三方类库的不同版本， JDK 的 App ClassLoader 无法实现这个机制，所以 Tomcat 使用自己的 WebApp ClassLoader。[[../13.JavaEE-Framework/JavaEE.Tomcat#ClassLoader]]</p>
+<p>WebApp ClassLoader 的加载顺序和双亲委派相反：</p>
+<ul>
+<li>首先用 WebApp ClassLoader 加载应用自己 <code>/WEB-INF</code>下的 class文件</li>
+<li>WebApp ClassLoader 无法加载的交给 App ClassLoader （CLASSPATH下的class）</li>
+<li>再加载不到的，最后交给 Common ClassLoader（加载 CATALINA 下面的lib）</li>
+</ul>
+<blockquote>
+<p>可以认为每个不同的 web 应用都有各自的 CLASS_PATH，如果默认使用 App ClassLoader 无法实现 CP 的隔离</p>
+</blockquote>
+<h4 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h4><p>SPI（Service Provider Interface），是 JDK 内置的一种服务提供发现机制，由此机制，JDK 的核心类可以加载并使用第三方厂商提供的类。</p>
+<p>JNDI、 JDBC DriveManager 都使用了这种机制来加载三方厂商的类库，<br>二者各自被 Bootstrap 和 Ext ClassLoader 加载，但这两种 ClassLoader 都无法加载三方厂商的类库——因为它们是属于 App ClassLoader 的管辖范围，对 Bootstrap &amp; Ext ClassLoader 来说不可见。</p>
+<p>以 JDBC DriveManager  为例，它使用 <code>java.util.ServiceLoader</code> 完成 SPI 机制，ServiceLoader 实现的原理一个是延后加载，一个是使用 ConextClassLoader，具体见上面的「ConextClassLoader」一节。</p>
+<h4 id="OSGI"><a href="#OSGI" class="headerlink" title="OSGI"></a>OSGI</h4><p><strong>OSGi(Open Service Gateway Initiative)</strong></p>
+<p>OSGi 是 Java 技术栈下的动态模块系统。OSGi 中的每个模块（bundle）都包含 Java 包和类。<br>模块可以声明它所依赖的需要导入的其它模块的 Java 包和类（通过 Import-Package），也可以声明导出自己的包和类，供其它模块使用（通过 Export-Package）。</p>
+<p>这是通过 OSGi 特有的类加载器机制来实现的。<strong>OSGi 中的每个模块都有对应的一个类加载器</strong>。它负责加载模块自己包含的 Java 类。当它需要加载 Java 核心库的类时，它会代理给父类加载器（通常是启动类加载器）来完成。当它需要加载其他模块导入的 Java 类时，它会代理给「导出此 Java 类的模块」来完成加载。</p>
+<p>假设有两个模块 bundleA 和 bundleB，它们都有自己对应的类加载器 classLoaderA 和 classLoaderB。</p>
+<ul>
+<li>在 bundleA 中包含类 com.bundleA.Sample，并且该类被声明为导出的，也就是说可以被其它模块所使用的。</li>
+<li>bundleB 声明了导入 bundleA 提供的类 com.bundleA.Sample，并包含一个类 com.bundleB.NewSample 继承自 com.bundleA.Sample。</li>
+<li>在 bundleB 启动的时候，其类加载器 classLoaderB 需要加载类 com.bundleB.NewSample，进而需要加载类 com.bundleA.Sample。由于 bundleB 声明了类 com.bundleA.Sample 是导入的，classLoaderB 把加载类 com.bundleA.Sample 的工作代理给导出该类的 bundleA 的类加载器 classLoaderA。</li>
+<li>classLoaderA 在其模块内部查找类 com.bundleA.Sample 并定义它，所得到的类 com.bundleA.Sample 实例就可以被所有声明导入了此类的模块使用。</li>
+</ul>
+<p>OSGi 模块的这种类加载器结构，使得一个类的不同版本可以共存在 Java 虚拟机中，带来了很大的灵活性。</p>
+<p>不过它的这种不同，也会给开发人员带来一些麻烦，尤其当模块需要使用第三方提供的库的时候。下面提供几条比较好的建议：</p>
+<ol>
+<li>如果一个类库只有一个模块使用，把该类库的 jar 包放在模块中，在 Bundle-ClassPath 中指明即可。</li>
+<li>如果一个类库被多个模块共用，可以为这个类库单独的创建一个模块，把其它模块需要用到的 Java 包声明为导出的。其它模块声明导入这些类。</li>
+<li>如果类库提供了 SPI 接口，并且利用线程上下文类加载器来加载 SPI 实现的 Java 类，有可能会找不到 Java 类。如果出现了 NoClassDefFoundError 异常，首先检查当前线程的上下文类加载器是否正确。通过 Thread.currentThread().getContextClassLoader()就可以得到该类加载器。该类加载器应该是该模块对应的类加载器。如果不是的话，可以首先通过 class.getClassLoader()来得到模块对应的类加载器，再通过 Thread.currentThread().setContextClassLoader()来设置当前线程的上下文类加载器。</li>
+</ol>
+<h4 id="Java-9-引入模块化之后"><a href="#Java-9-引入模块化之后" class="headerlink" title="Java 9 引入模块化之后"></a>Java 9 引入模块化之后</h4><p>整个 JDK 都基于模块化进行构建，以前的 rt.jar, tool.jar 被拆分成数十个模块，<br>编译的时候只编译实际用到的模块，所以 App ClassLoader 中调用的 loadClass 逻辑已经发生改变（见下面的代码）</p>
+<p>先尝试通过模块的 ClassLoader 进行加载，找不到模块 ClassLoader 才进行双亲委派。loadClass的工作模式不再总是“<strong>向上委托</strong>”了</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; loadClassOrNull(String cn, <span class="keyword">boolean</span> resolve) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (getClassLoadingLock(cn)) &#123;</span><br><span class="line">            <span class="comment">// check if already loaded</span></span><br><span class="line">            Class&lt;?&gt; c = findLoadedClass(cn);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 找到当前类属于哪个模块</span></span><br><span class="line">                LoadedModule loadedModule = findLoadedModule(cn);</span><br><span class="line">                <span class="keyword">if</span> (loadedModule != <span class="keyword">null</span>) &#123;</span><br><span class="line"></span><br><span class="line">                    <span class="comment">//获取当前模块的类加载器</span></span><br><span class="line">                    BuiltinClassLoader loader = loadedModule.loader();</span><br><span class="line">                    <span class="comment">//进行类加载</span></span><br><span class="line">                    c = findClassInModuleOrNull(loadedModule, cn);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// 找不到模块信息才会进行双亲委派</span></span><br><span class="line">                    <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        c = parent.loadClassOrNull(cn);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="JVM-如何判断两个类是否相同"><a href="#JVM-如何判断两个类是否相同" class="headerlink" title="JVM 如何判断两个类是否相同"></a>JVM 如何判断两个类是否相同</h3><p><a href="https://wiki.sei.cmu.edu/confluence/display/java/OBJ09-J.+Compare+classes+and+not+class+names" target="_blank" rel="noopener">OBJ09-J. Compare classes and not class names - SEI CERT Oracle Coding Standard for Java - Confluence</a></p>
+<p>In a Java Virtual Machine (JVM), “Two classes are the same class (and consequently the same type) if they are loaded by the same class loader and they have the same fully qualified name” [JVMSpec 1999]. Two classes with the same name but different package names are distinct, as are two classes with the same fully qualified name loaded by different class loaders.</p>
+<p>在 Java 虚拟机(JVM)中，“如果两个类由相同的类加载器加载，并且它们具有相同的完全限定名，则它们是相同的类(因此是相同的类型)”[JVMSpec 1999]</p>
+<p>It could be necessary to check whether a given object has a specific class type or whether two objects have the same class type associated with them, for example, when implementing the equals() method. If the comparison is performed incorrectly, the code could assume that the two objects are of the same class when they are not. As a result, class names must not be compared.</p>
+<p>例如，在实现equals()方法时，可能需要检查给定对象是否具有特定的类类型，或者两个对象是否具有与其关联的相同类类型。如果比较执行得不正确，代码可能会假定这两个对象属于同一类，但实际上并不是。因此，不能比较类名</p>
+<hr>
+<p>JVM 在判定两个 class 是否相同时，不仅要判断两个类名是否相同，而且要判断是否由同一个类加载器实例加载的。<br>只有两者同时满足的情况下，JVM 才认为这两个 class 是相同的。就算两个 class 是同一份 class 字节码，如果被两个不同的 ClassLoader 实例所加载，JVM 也会认为它们是两个不同 class。</p>
+<p>比如网络上的一个 Java 类 <code>org.classloader.simple.NetClassLoaderSimple</code>，javac 编译之后生成字节码文件 NetClassLoaderSimple.class，<br>ClassLoaderA 和 ClassLoaderB 这两个类加载器并读取了 NetClassLoaderSimple.class 文件，并分别定义出了 java.lang.Class 实例来表示这个类，对于 JVM 来说，虽然都来自一份.class，但它们是两个不同的实例对象，如果试图将这个 Class 实例生成具体的对象进行转换时，就会抛运行时异常 java.lang.ClassCaseException</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewworkClassLoaderTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 测试加载网络中的class文件</span></span><br><span class="line">            String rootUrl = <span class="string">"http://localhost:8080/httpweb/classes"</span>;</span><br><span class="line">            String className = <span class="string">"org.classloader.simple.NetClassLoaderSimple"</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 定义2个Loader，并分别创建两个 class对象</span></span><br><span class="line">            NetworkClassLoader ncl1 = <span class="keyword">new</span> NetworkClassLoader(rootUrl);</span><br><span class="line">            NetworkClassLoader ncl2 = <span class="keyword">new</span> NetworkClassLoader(rootUrl);</span><br><span class="line"></span><br><span class="line">            Class&lt;?&gt; clazz1 = ncl1.loadClass(className);</span><br><span class="line">            Class&lt;?&gt; clazz2 = ncl2.loadClass(className);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 测试两个class 对象是否指向一个内存</span></span><br><span class="line">            System.out.println(clazz1.equals(clazz2)); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 用2个class 分别创建2个 obj</span></span><br><span class="line">            Object obj1 = clazz1.newInstance();</span><br><span class="line">            Object obj2 = clazz2.newInstance();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 测试 2个 obj 在反射机制内是否被认为是同一个类型</span></span><br><span class="line">            clazz1.getMethod(<span class="string">"setNetClassLoaderSimple"</span>, Object.class).invoke(obj1, obj2);  </span><br><span class="line">            <span class="comment">// false，invoke 抛出 ClassCaseException</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>setNetClassLoaderSimple() 实现也很简单，只有一个强制转换+赋值：<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">this</span>.instance = (NetClassLoaderSimple)object;</span><br></pre></td></tr></table></figure></p>
+<p>PS:  加载类（NetClassLoaderSimple）不要放在 IDE 的工程目录内，因为 IDE 在 run 的时候会先将工程中的所有.class 都用 AppClassLoader 加载，输出结果是 true</p>
+<p>结论，ClassLoader 对判断类是否相同的影响：</p>
+<ul>
+<li>使用不同的ClassLoader， <code>loadClass()</code>创建出来的 class 对象不同（不 equals，说明不是一个 class对象）</li>
+<li>使用不同的 class 对象， <code>newInstance()</code>创建出来的 obj 对象也不同，反射调用失败</li>
+</ul>
+<hr>
+<p>@ref：</p>
+<ul>
+<li><a href="https://github.com/Lord-X/awesome-it-blog/blob/master/java/%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90Java%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8E%9F%E7%90%86.md" target="_blank" rel="noopener">awesome-it-blog/深入分析Java类加载器原理.md at master · Lord-X/awesome-it-blog · GitHub</a></li>
+</ul>
+<h3 id="ClassLoader-面试八股文"><a href="#ClassLoader-面试八股文" class="headerlink" title="ClassLoader 面试八股文"></a>ClassLoader 面试八股文</h3><p><a href="https://www.cnblogs.com/hollischuang/p/14260801.html" target="_blank" rel="noopener">你确定你真的理解”双亲委派”了吗？！ - HollisChuang - 博客园</a></p>
+<blockquote>
+<p>1、什么是双亲委派？ 2、为什么需要双亲委派，不委派有什么问题？ 3、”父加载器”和”子加载器”之间的关系是继承的吗？ 4、双亲委派是怎么实现的？ 5、我能不能主动破坏这种双亲委派机制？怎么破坏？ 6、为什么重写loadClass方法可以破坏双亲委派，这个方法和findClass（）、defineClass（）区别是什么？ 7、说一说你知道的双亲委派被破坏的例子吧 8、为什么JNDI、JDBC等需要破坏双亲委派？ 9、为什么TOMCAT要破坏双亲委派？ 10、谈谈你对模块化技术的理解吧！</p>
+</blockquote>
 
       
     </div>
@@ -562,7 +616,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java进阶/" rel="tag"># Java进阶</a>
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
           
         </div>
       
@@ -678,7 +732,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -689,7 +743,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -768,7 +822,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的加载过程"><span class="nav-text">类的加载过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#①加载-Loading"><span class="nav-text">①加载(Loading)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#②链接-Linking"><span class="nav-text">②链接(Linking)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#③初始化-Initialization"><span class="nav-text">③初始化(Initialization)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部类的初始化"><span class="nav-text">内部类的初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ClassLoader"><span class="nav-text">ClassLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-分类"><span class="nav-text">ClassLoader 分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-树状组织结构"><span class="nav-text">ClassLoader 树状组织结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派模式"><span class="nav-text">双亲委派模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器与-Web-容器"><span class="nav-text">类加载器与 Web 容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-API-介绍"><span class="nav-text">ClassLoader API 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现一个-ClassLoader"><span class="nav-text">实现一个 ClassLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示加载和隐式加载"><span class="nav-text">显示加载和隐式加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM-如何判断两个类是否相同"><span class="nav-text">JVM 如何判断两个类是否相同</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的加载过程"><span class="nav-text">类的加载过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#①加载-Loading"><span class="nav-text">①加载(Loading)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#②链接-Linking"><span class="nav-text">②链接(Linking)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#③初始化-Initialization"><span class="nav-text">③初始化(Initialization)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部类的初始化"><span class="nav-text">内部类的初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ClassLoader"><span class="nav-text">ClassLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-分类"><span class="nav-text">ClassLoader 分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader是否是继承关系？"><span class="nav-text">ClassLoader是否是继承关系？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-如何工作？双亲委派机制"><span class="nav-text">ClassLoader 如何工作？双亲委派机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现自定义-ClassLoader"><span class="nav-text">实现自定义 ClassLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可见性（Visibility）"><span class="nav-text">可见性（Visibility）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文类加载器（ConextClassLoader）"><span class="nav-text">上下文类加载器（ConextClassLoader）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不适用双亲委派的场景"><span class="nav-text">不适用双亲委派的场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tomcat"><span class="nav-text">Tomcat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SPI"><span class="nav-text">SPI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OSGI"><span class="nav-text">OSGI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-9-引入模块化之后"><span class="nav-text">Java 9 引入模块化之后</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM-如何判断两个类是否相同"><span class="nav-text">JVM 如何判断两个类是否相同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-面试八股文"><span class="nav-text">ClassLoader 面试八股文</span></a></li></ol></li></ol></div>
             
 
           </div>

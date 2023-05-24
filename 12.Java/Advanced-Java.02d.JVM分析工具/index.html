@@ -104,7 +104,7 @@
 
 
 
-  <meta name="keywords" content="Java进阶," />
+  <meta name="keywords" content="JVM," />
 
 
 
@@ -118,7 +118,7 @@
 
 
 <meta name="description" content="JDK提供的命令行 以下每个工具都可以 cmd --help的方式查看说明  jps查看当前用户启动jvm进程  jps -m: 显示传递给Main方法的参数 jps -l: 显示Java进程的完整包名 jps -v: 显示JVM的参数 jps -lvm">
-<meta name="keywords" content="Java进阶">
+<meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Advanced Java-02d-JVM分析工具">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.02d.JVM分析工具/index.html">
@@ -127,7 +127,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmap-histo-live.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVisualVM.png">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.346Z">
+<meta property="og:updated_time" content="2023-05-24T10:10:50.006Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-02d-JVM分析工具">
 <meta name="twitter:description" content="JDK提供的命令行 以下每个工具都可以 cmd --help的方式查看说明  jps查看当前用户启动jvm进程  jps -m: 显示传递给Main方法的参数 jps -l: 显示Java进程的完整包名 jps -v: 显示JVM的参数 jps -lvm">
@@ -356,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,906
+                  3,150
                 </span>
               
 
@@ -441,6 +441,7 @@
 <h4 id="jstatd"><a href="#jstatd" class="headerlink" title="jstatd"></a>jstatd</h4><p>jstatd是一个 RMI的server，它可以监控 Hotspot的JVM的启动和结束，同时提供接口可以让远程机器连接到JVM。 比如 jstat / JVisualVM 都可以通过jstatd来远程观察JVM的运行情况。<br>在远程服务器上启动jstatd: <code>nohup jstatd -J-Djava.security.policy=/home/xxx/jstatd.all.policy -J-Djava.rmi.server.hostname=192.168.0.2 -p 1099 &amp;</code> , 1099是jstatd的默认端口</p>
 <p>jstatd.all.policy内容如下:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">grant codebase &quot;file:$&#123;java.home&#125;/../lib/tools.jar&quot; &#123;</span><br><span class="line">    permission java.security.AllPermission;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>查看jvm进程的线程状态, 也可以做线程的dump,<br><code>jstack pid</code> : 查看当前所有线程的运行栈, 包括线程当前状态(blocked, waitting), 线程占用了哪个对象锁, 线程在等待哪个对象锁;</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ jstack 18303 |more</span><br><span class="line">Picked up JAVA_TOOL_OPTIONS: -Duser.language=en</span><br><span class="line">2023-05-17 23:20:41</span><br><span class="line">Full thread dump OpenJDK 64-Bit Server VM (11.0.15+10-b2043.56 mixed mode):</span><br><span class="line"></span><br><span class="line">&quot;Finalizer&quot; #3 daemon prio=8 os_prio=31 cpu=385.10ms elapsed=657893.45s tid=0x00007feb5f0b2000 nid=0x4103 in Object.wait()  [0x000070000d3db000]</span><br><span class="line">   java.lang.Thread.State: WAITING (on object monitor)</span><br><span class="line">        at java.lang.Object.wait(java.base@11.0.15/Native Method)</span><br><span class="line">        - waiting on &lt;no object reference available&gt;</span><br><span class="line">        at java.lang.ref.ReferenceQueue.remove(java.base@11.0.15/ReferenceQueue.java:155)</span><br><span class="line">        - waiting to re-lock in wait() &lt;0x00000007c047ac10&gt; (a java.lang.ref.ReferenceQueue$Lock)</span><br><span class="line">        at java.lang.ref.ReferenceQueue.remove(java.base@11.0.15/ReferenceQueue.java:176)</span><br><span class="line">        at java.lang.ref.Finalizer$FinalizerThread.run(java.base@11.0.15/Finalizer.java:170)</span><br><span class="line"></span><br><span class="line">&quot;Signal Dispatcher&quot; #4 daemon prio=9 os_prio=31 cpu=3.19ms elapsed=657893.40s tid=0x00007feb5e80d800 nid=0x5703 runnable  [0x0000000000000000]</span><br><span class="line">   java.lang.Thread.State: RUNNABLE</span><br><span class="line"></span><br><span class="line">&quot;Service Thread&quot; #5 daemon prio=9 os_prio=31 cpu=141.17ms elapsed=657893.39s tid=0x00007feb5f0c5800 nid=0x5803 runnable  [0x0000000000000000]</span><br><span class="line">   java.lang.Thread.State: RUNNABLE</span><br><span class="line"></span><br><span class="line">&quot;C2 CompilerThread0&quot; #6 daemon prio=9 os_prio=31 cpu=1165586.22ms elapsed=657893.39s tid=0x00007feb5f0cd000 nid=0x5b03 waiting on condition  [0x0000000000000000]</span><br><span class="line">   java.lang.Thread.State: RUNNABLE</span><br><span class="line">   No compile task</span><br><span class="line"></span><br><span class="line">&quot;C1 CompilerThread0&quot; #7 daemon prio=9 os_prio=31 cpu=127074.31ms elapsed=657893.39s tid=0x00007feb6003b800 nid=0x5c03 waiting on condition  [0x0000000000000000]</span><br><span class="line">   java.lang.Thread.State: RUNNABLE</span><br><span class="line">   No compile task</span><br></pre></td></tr></table></figure>
 <h3 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h3><p>查看堆内存的情况, 也可以生成堆内存的dump信息,<br>jmap dump会触发Full GC, 所以在生产环境要小心使用.</p>
 <ul>
 <li><code>jmap -heap pid</code>: 打印Heap(新生代/老年代/永久代等等..)的size参数和实际占用</li>
@@ -558,7 +559,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java进阶/" rel="tag"># Java进阶</a>
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
           
         </div>
       
@@ -674,7 +675,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -685,7 +686,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

@@ -104,7 +104,7 @@
 
 
 
-  <meta name="keywords" content="Java基础," />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -118,7 +118,7 @@
 
 
 <meta name="description" content="数据类型基本数据类型Java的基本类型有: char(2字节), byte(1字节), short(2字节), int(4字节), long(8字节), float(4字节), double(8字节), boolean(-),Java没有bit类型, 但可以使用BitSet类代替.  byte: 1字节, 范围-128~127 short: 2字节, 范围-32768~32767, 为什么最小是-">
-<meta name="keywords" content="Java基础">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java Tutorials-01-基础">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.01.基础/index.html">
@@ -129,7 +129,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/exception-tostring.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/java_lang_package.gif">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/java_util_package.gif">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.395Z">
+<meta property="og:updated_time" content="2023-05-19T02:43:31.197Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Tutorials-01-基础">
 <meta name="twitter:description" content="数据类型基本数据类型Java的基本类型有: char(2字节), byte(1字节), short(2字节), int(4字节), long(8字节), float(4字节), double(8字节), boolean(-),Java没有bit类型, 但可以使用BitSet类代替.  byte: 1字节, 范围-128~127 short: 2字节, 范围-32768~32767, 为什么最小是-">
@@ -358,7 +358,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  9,184
+                  9,371
                 </span>
               
 
@@ -399,6 +399,15 @@
 <h2 id="BitSet"><a href="#BitSet" class="headerlink" title="BitSet"></a>BitSet</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">BitSet bits = <span class="keyword">new</span> BitSet(<span class="number">16</span>); <span class="comment">// 初始大小对性能的影响</span></span><br><span class="line">bits.set(index, <span class="keyword">true</span>);</span><br><span class="line">bits.get(index)</span><br></pre></td></tr></table></figure>
 <h2 id="包装器"><a href="#包装器" class="headerlink" title="包装器"></a>包装器</h2><h3 id="包装器API"><a href="#包装器API" class="headerlink" title="包装器API"></a>包装器API</h3><p>基本类型对应包装器为 Character, Byte, Short, Integer, Long, Float, Double, 包装器与基本类型互转:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Integer ii = Integer.valueOf(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">int</span> i = ii.intValue();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Integer 可以直接与int比较 */</span></span><br><span class="line"><span class="keyword">if</span>(ii == i) &#123;</span><br><span class="line">  <span class="comment">// yes</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// String &lt;-&gt; int</span></span><br><span class="line">String s = String.valueOf(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">int</span> i2 = Integer.parseInt(<span class="string">"1011"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 坑</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">new</span> Long(<span class="number">1</span>).equals(<span class="number">1</span>)) &#123;</span><br><span class="line">  printf(<span class="string">"true"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">上面并没有打印出True, 因为`equals(obj)`方法自动把int的1装箱为"Integer"类型,</span></span><br><span class="line"><span class="comment">在equals里第一步check类型就返回false了:(</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>Integer 的相等比较：</p>
+<ul>
+<li>如果比较 2 个 Integer 的值，需要用 <code>equals</code> 而不是 <code>==</code></li>
+</ul>
+<p>Float 的相等比较：</p>
+<ul>
+<li>计算 abs(f1 - f2) ，然后与一个极小 diff 比较</li>
+</ul>
+<p><strong>Integer 和 Long 不同类型慎用 equals</strong>！详见 Long.equals 的解析</p>
 <p>Double类的一些方法:</p>
 <ul>
 <li><code>Double.compareTo(Double)</code> : 大于小于直接比较, =的判断是把double转成一个LongBit? Native方法, 需要看一下浮点数的内存</li>
@@ -443,19 +452,19 @@
 </blockquote>
 <h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><ul>
 <li>Java中数组本质上也是对象, 拥有所有Object的方法, 不同于int/double等基本类型.<ul>
-<li>Java对象在内存里前几个字节是”对象头”, 非数组对象的的对象头占用2字节, 数组对象的对象头占用3字节, 多的1字节用来存储对象长度</li>
-<li>数组可以通过属性<code>length</code>获取长度, 遍历数组: <code>for(int i = 0; i &lt; array.length; i++)</code></li>
+<li>Java 对象在内存里前几个字节是”对象头”, 非数组对象的的对象头占用2字节, 数组对象的对象头占用3字节, 多的1字节用来存储对象长度</li>
+<li>数组可以通过属性 <code>length</code> 获取长度, 遍历数组: <code>for(int i = 0; i &lt; array.length; i++)</code></li>
 </ul>
 </li>
 <li>数组创建后会记住元素类型和大小, 所以:<ul>
-<li><code>A[]</code>类型的数组可以强转换为<code>Object[]</code>, 但不能反过来执行;</li>
-<li>用<code>new A[1]</code>方式创建的数组, 只能向内存储<code>A</code>类型或者<code>A的派生类</code>的对象, 试图存入其他类型对象会抛ArrayStoreException;</li>
+<li><code>A[]</code> 类型的数组可以强转换为 <code>Object[]</code>, 但不能反过来执行;</li>
+<li>用 <code>new A[1]</code> 方式创建的数组, 只能向内存储 <code>A</code> 类型或者 <code>A的派生类</code> 的对象, 试图存入其他类型对象会抛 ArrayStoreException;</li>
 <li>数组创建后不再能改变长度;</li>
 </ul>
 </li>
 </ul>
 <p>▶ 数组如果作为形参 or 返回值, 可以使用<code>Object</code>, 而不是用<code>Object[]</code> :</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反射方式创建新数组</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">copyOfGenericArray</span><span class="params">(Object src, <span class="keyword">int</span> newLength)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">assert</span> newLength&gt;<span class="number">0</span> : <span class="string">"assert length failed"</span>;</span><br><span class="line">  <span class="keyword">if</span>(!src.getClass().isArray()) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  Class cl = src.getClass().getComponentType();</span><br><span class="line">  Object newArray = Array.newInstance(cl, newLength);</span><br><span class="line">  <span class="keyword">int</span> length = Array.getLength(src);</span><br><span class="line">  System.arraycopy(src, <span class="number">0</span>, newArray, <span class="number">0</span>, Math.min(length, newLength));</span><br><span class="line">  <span class="keyword">return</span> newArray;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 反射方式创建新数组</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">copyOfGenericArray</span><span class="params">(Object src, <span class="keyword">int</span> newLength)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">assert</span> newLength&gt;<span class="number">0</span> : <span class="string">"assert length failed"</span>;</span><br><span class="line">  <span class="keyword">if</span>(!src.getClass().isArray()) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  Class clz = src.getClass().getComponentType();</span><br><span class="line">  Object newArray = Array.newInstance(clz, newLength);</span><br><span class="line">  <span class="keyword">int</span> length = Array.getLength(src);</span><br><span class="line">  System.arraycopy(src, <span class="number">0</span>, newArray, <span class="number">0</span>, Math.min(length, newLength));</span><br><span class="line">  <span class="keyword">return</span> newArray;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>▶ 数组与list互转:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//list -&gt; array</span></span><br><span class="line">List&lt;Object&gt; list = <span class="keyword">new</span> ArrayList&lt;Object&gt;();</span><br><span class="line">Object[] objArray = list.toArray();</span><br><span class="line"></span><br><span class="line"><span class="comment">// array -&gt; list</span></span><br><span class="line">List&lt;Object&gt; newList = Arrays.asList(objArray);</span><br></pre></td></tr></table></figure>
 <h3 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h3><p>Java核心类库有两个Arrays类:</p>
@@ -500,7 +509,7 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 一个基本的枚举:</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> COLOR &#123;</span><br><span class="line">  RED(<span class="number">1</span>),</span><br><span class="line">  GREEN(<span class="number">2</span>) <span class="comment">// GREEN后面没有分号哟...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个带属性和构造器的枚举:</span></span><br><span class="line"><span class="keyword">public</span> emum ApiUrl &#123;</span><br><span class="line">    REGIST(<span class="string">"http://changyan.com/api/open/reg"</span>,<span class="number">1</span>),</span><br><span class="line">    LOGIN(<span class="string">"http://changyan.com/api/open/validate"</span>,<span class="number">2</span>),</span><br><span class="line">    SSO(<span class="string">"http://changyan.com/api/open/set-cookie"</span>,<span class="number">3</span>); <span class="comment">// 分号</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String url; <span class="comment">// 私有的属性</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> index;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">ApiUrl</span><span class="params">(String url, <span class="keyword">int</span> index)</span> </span>&#123; <span class="comment">// 私有的构造器!!!</span></span><br><span class="line">        <span class="keyword">this</span>.url = url;</span><br><span class="line">        <span class="keyword">this</span>.index = index;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">getUrl</span><span class="params">()</span> </span>&#123; ...&#125; <span class="comment">// Getter</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123; <span class="comment">// 重写</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.index + <span class="string">"_"</span> + <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">ApiUrl apiUrl = ApiUrl.REGIST; <span class="comment">// 初始化枚举变量</span></span><br><span class="line">System.out.print(ApiUrl.REGIST.toString());</span><br></pre></td></tr></table></figure>
 <h1 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h1><ul>
-<li>赋值: 类实例的赋值操作<code>a=b</code>实际是把b这个”对象引用”指向了a的指向的对象, 如果b原来的对象的引用数为0, 在一定条件下会被JVM销毁.</li>
+<li><strong>类实例的赋值</strong>操作 <code>a=b</code> 实际是把 b 这个”对象引用”指向了 a 的指向的对象, 如果 b 原来的对象的引用数为0, 在一定条件下会被 JVM 销毁.</li>
 <li>对于基本数据类型, <code>==</code>判断的是值, 而不是”是否指向同一个引用”;</li>
 <li>用<code>==</code>比较Object, 如果a和b是否指向的是同一块内存则为true</li>
 <li>判断两个字符串的内容是否相同不能用<code>if(str1==str2)</code>, 要用<code>str1.equals(str2)</code>方法.</li>
@@ -534,14 +543,19 @@
 <li>Java的<code>if</code>, <code>for</code>, <code>while</code>, <code>do-while</code>, <code>if...else if</code>和C++完全一样, 此外Java还多了foreach:  <code>for(int i : integerArray) {...}</code></li>
 <li><code>switch</code>语句支持String类型和<code>enum</code>类型</li>
 </ul>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><ul>
-<li>Java的参数传递为<code>值传递</code>. 也就是说, 当我们传递一个参数时, 方法内将获得该参数的一个拷贝.</li>
-<li>基本类型(int/char等)的参数传递, 方法内获得是一个拷贝. Java方法对变量的修改不会影响到原变量.</li>
-<li>对象类型作为形参传递, 函数内获得一个引用的拷贝.</li>
-<li><a href="http://segmentfault.com/q/1010000000332606" target="_blank" rel="noopener">Java不能实现C/C++中的swap功能</a></li>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p>Java 的参数传递为 <code>值传递</code>. 也就是说, 当我们传递一个参数时, 方法内将获得实参的一个拷贝.</p>
+<ul>
+<li><p>基本类型(int/char 等)的参数传递, 方法内获得是一个拷贝. Java 方法对变量的修改不会影响到原变量.</p>
+</li>
+<li><p>对象变量在 java 中实际是一个引用（可以理解为 C++的内存地址）, 对象变量作为参数传递, 函数内获得一个引用地址的拷贝. </p>
+<ul>
+<li>在函数内修改这个对象变量的值, 不会影响到函数外, 因为函数内修改的只是这个拷贝. </li>
+<li>在函数内修改这个对象变量的成员, 会影响到函数外的对象</li>
+</ul>
+</li>
 </ul>
 <blockquote>
-<p>对象类型都是通过引用拷贝(跟C++中引用不同)传参, 通过该引用能够更改其指向的对象内部值, 如果只是更改该引用值, 仅对函数内部可见, 函数外部的实参依然没有改变;</p>
+<p>@ref： <a href="https://segmentfault.com/a/1190000016773324" target="_blank" rel="noopener">这一次，彻底解决Java的值传递和引用传递 - 个人文章 - SegmentFault 思否</a></p>
 </blockquote>
 <h2 id="Swap"><a href="#Swap" class="headerlink" title="Swap"></a>Swap</h2><p>Java对普通类型的变量 or 引用类型的变量, 都无法简单通过<code>=</code>赋值实现 Swap,</p>
 <p>折中的做法有: 1)使用数组, 2)作为成员变量</p>
@@ -560,8 +574,8 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> List Loans = <span class="keyword">new</span> ArrayList();</span><br><span class="line">list.add(<span class="string">"home loan"</span>);  <span class="comment">//valid</span></span><br><span class="line">list.add(<span class="string">"personal loan"</span>); <span class="comment">//valid</span></span><br><span class="line">loans = <span class="keyword">new</span> Vector();  <span class="comment">//not valid</span></span><br></pre></td></tr></table></figure>
 <p>下面总结了一些使用 final 关键字的好处:</p>
 <ul>
-<li>final 关键字提高了性能, JVM 和 Java 应用都会缓存 final 变量. @doubt </li>
-<li>final 变量可以安全的在多线程环境下进行共享, 而不需要额外的同步开销. @link ==CPU Cache Line 的伪共享==</li>
+<li>final 关键字提高了性能, JVM 和 Java 应用都会缓存 final 变量. @doubt</li>
+<li>final 变量可以安全的在多线程环境下进行共享, 而不需要额外的同步开销.  </li>
 <li>使用 final 关键字, JVM 会对方法/变量及类进行优化.</li>
 </ul>
 <blockquote>
@@ -582,9 +596,14 @@
 <p>所以伪码如下:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if super.equals==false false</span><br><span class="line">if this==obj true</span><br><span class="line">if obj==null false</span><br><span class="line">if class!=obj.class false</span><br><span class="line">if [!obj instanceof this] false</span><br><span class="line">其他的属性比较...</span><br></pre></td></tr></table></figure>
 <h3 id="hashCode方法"><a href="#hashCode方法" class="headerlink" title="hashCode方法"></a>hashCode方法</h3><p><code>hashCode()</code>返回int类型, 返回值可以看成是对象的”消息摘要”</p>
-<p>默认的hasCode()返回的并不是内存地址, hasCode()内部调用了native方法, 不同的JVM实现可能不一样, OpenJDK的实现如下:</p>
+<p>Object 默认的 hasCode()返回的并不是内存地址, hasCode()内部调用了 native 方法, 不同的 JVM 实现可能不一样, OpenJDK 的实现如下:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mark = monitor-&gt;header();</span><br><span class="line"></span><br><span class="line">hash = mark-&gt;hash();</span><br><span class="line">if (hash == 0) &#123;</span><br><span class="line">  hash = get_next_hash(Self, obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果第一次hashCode, 则通过get_next_hash 重新获取一个随机值, 并保存在对象头</p>
+<p>如果第一次hashCode, 则通过<code>get_next_hash</code> 重新获取一个随机值, 并保存在对象头</p>
+<blockquote>
+<p>生成 hash 的最终函数 <a href="http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/87ee5ee27509/src/share/vm/runtime/synchronizer.cpp#l555" target="_blank" rel="noopener">get_next_hash</a>，这个函数提供了 6 种生成 hash 值的方法。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0. A randomly generated number.</span><br><span class="line">1. A function of memory address of the object.</span><br><span class="line">2. A hardcoded 1 (used for sensitivity testing.)</span><br><span class="line">3. A sequence.</span><br><span class="line">4. The memory address of the object, cast to int.</span><br><span class="line">5. Thread state combined with xorshift (https://en.wikipedia.org/wiki/Xorshift)</span><br></pre></td></tr></table></figure>
+<p>那么默认用哪一个呢？根据 <a href="http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/87ee5ee27509/src/share/vm/runtime/globals.hpp#l1127" target="_blank" rel="noopener">globals.hpp</a>，OpenJDK8默认采用第五种方法。而 <a href="http://hg.openjdk.java.net/jdk7u/jdk7u/hotspot/file/5b9a416a5632/src/share/vm/runtime/globals.hpp#l1100" target="_blank" rel="noopener">OpenJDK7</a> 和 <a href="http://hg.openjdk.java.net/jdk6/jdk6/hotspot/file/5cec449cc409/src/share/vm/runtime/globals.hpp#l1128" target="_blank" rel="noopener">OpenJDK6</a> 都是使用第一种方法，即 <a href="http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/87ee5ee27509/src/share/vm/runtime/os.cpp#l814" target="_blank" rel="noopener">随机数生成器</a>。</p>
 <p>@ref: <a href="https://cloud.tencent.com/developer/article/1622192" target="_blank" rel="noopener">java默认的hashcode方法到底得到的是什么？ - 云+社区 - 腾讯云</a></p>
 <h3 id="equals-vs-hashCode"><a href="#equals-vs-hashCode" class="headerlink" title="equals vs hashCode"></a>equals vs hashCode</h3><ul>
 <li>如果重新了equals方法, 就必须重写hashCode方法, 以便可以将对象插入到HashMap中(摘自Java核心技术卷1, 为什么?)</li>
@@ -685,8 +704,8 @@
 <li>外部类不一定有内部类实例, 但内部类一定有对应的外部类,</li>
 <li>内部类的成员不能是static, 也不能有static代码块(但内部类可以是static的, 嵌套类)</li>
 <li>外部类和内部类可以 <strong>互相访问</strong> 所有成员(包括private);<ul>
-<li>外部类可以访问内部类的一切成员, 无论这个内部类是public还是private的, 无论内部类的成员是public还是private的, 外部类通过<code>内部类实例.成员名</code>访问内部类的成员;</li>
-<li>内部类可以访问外部类的一切成员, 包括外部类的private成员, 访问方式是<code>外部类类名.this.func()</code>, 或者也可以”直接调用”外部类的成员.</li>
+<li>外部类可以访问内部类的一切成员, 无论这个内部类是 public 还是 private 的, 无论内部类的成员是 public 还是 private 的, 外部类通过 <code>内部类实例.成员名</code> 访问内部类的成员;</li>
+<li>内部类可以访问外部类的一切成员, 包括外部类的 private 成员, 访问方式是 <code>外部类类名.this.func()</code>, 或者也可以”直接调用”外部类的成员.</li>
 </ul>
 </li>
 <li>在编译成功后, 会出现这样两个class文件: <code>Outer.class</code>和<code>Outer$Inner.class</code>;</li>
@@ -708,7 +727,6 @@
 <h3 id="内部类的必要性"><a href="#内部类的必要性" class="headerlink" title="内部类的必要性?"></a>内部类的必要性?</h3><ol>
 <li>Java不允许多重继承, 使用内部类可以”继承”外部类的方法, 并且内部类可以独立的继承自另一个抽象类或者接口.</li>
 <li>把实现细节放在内部类, 相当于是对外隐藏细节, 封装.</li>
-<li>事件监听大量用到匿名内部类.</li>
 <li>使用内部类最吸引人的原因是：每个内部类都能独立地继承一个（接口的）实现, 所以无论外围类是否已经继承了某个（接口的）实现, 对于内部类都没有影响[Think in Java]</li>
 </ol>
 <h3 id="局部内部类-amp-匿名类"><a href="#局部内部类-amp-匿名类" class="headerlink" title="局部内部类 &amp; 匿名类"></a>局部内部类 &amp; 匿名类</h3><ul>
@@ -721,12 +739,12 @@
 <p>UI中大量使用的事件callback:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">button.setOnClickListener(<span class="keyword">new</span> OnClickListener() &#123;</span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
 <h3 id="嵌套内部类"><a href="#嵌套内部类" class="headerlink" title="嵌套内部类"></a>嵌套内部类</h3><ul>
-<li>static的内部类被称为嵌套类, 嵌套内部类不需要由外部类创建, 也就没有隐藏的外部类引用</li>
-<li>不能调用非static的外部类成员, 也不能访问<code>Outter.this.property</code>;</li>
+<li>static的内部类被称为<strong>嵌套类</strong>, 嵌套内部类不需要由外部类创建, 也就没有隐藏的外部类引用</li>
+<li>不能调用非 static 的外部类成员, 即不能访问 <code>Outter.this.property</code>;</li>
 <li>外部类初始化的时候, 不会触发嵌套内部类的初始化.</li>
 </ul>
 <blockquote>
-<p>静态内部类的初始化的时机( 初始化时会执行static代码块, 初始化static成员变量, JVM会把这些操作放在一个叫 <code>clint</code>的方法中执行 ):</p>
+<p>静态内部类的初始化的时机：<br>初始化时会初始化 static 成员变量,  执行 static 代码块, JVM 会把这些操作放在一个叫 <code>clint</code> 的方法中执行</p>
 </blockquote>
 <h1 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h1><ul>
 <li>String是一个特殊的类, 不需要构造函数就可以创建实例<code>String s = &quot;hello world&quot;</code>;</li>
@@ -771,7 +789,11 @@
 <h1 id="常用类"><a href="#常用类" class="headerlink" title="常用类"></a>常用类</h1><h2 id="String-amp-StringBuffer"><a href="#String-amp-StringBuffer" class="headerlink" title="String &amp; StringBuffer"></a>String &amp; StringBuffer</h2><p>见 <a href="#字符串">字符串</a></p>
 <h2 id="包装类"><a href="#包装类" class="headerlink" title="包装类"></a>包装类</h2><p>见 <a href="#数据类型">数据类型</a></p>
 <h2 id="Math类"><a href="#Math类" class="headerlink" title="Math类"></a>Math类</h2><p>@todo</p>
-<h2 id="日期类"><a href="#日期类" class="headerlink" title="日期类"></a>日期类</h2><blockquote>
+<h2 id="日期类"><a href="#日期类" class="headerlink" title="日期类"></a>日期类</h2><ul>
+<li>SimpleDateFormat 不是线程安全的</li>
+<li>JDK8 的 DateTimeFormatter 线程安全</li>
+</ul>
+<blockquote>
 <p>使用 DateTimeFormatter 替换 SimpleDateFormat: <a href="https://zhuanlan.zhihu.com/p/51695220" target="_blank" rel="noopener">你真的会使用SimpleDateFormat吗？ - 知乎</a></p>
 </blockquote>
 <h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>图-Java异常类的层次结构:<br><img src="/images/java/java_exception.png" alt="Java Exception"></p>
@@ -784,24 +806,24 @@
 </ul>
 </li>
 </ul>
-<h2 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Throwable</span><br><span class="line">    Error: 也算是&quot;不受检&quot;</span><br><span class="line">      OutOfMemoryError</span><br><span class="line">      ThreadDeath</span><br><span class="line">    Exception:</span><br><span class="line">      UserDefinedException: 用户自定义异常继承者Exception</span><br><span class="line">      ClassNotFoundException: 调用Class.forName时</span><br><span class="line">      InstantiationException: 调用Class.NewInstance时</span><br><span class="line">      IOException: 有一大堆派生自IOException的异常...</span><br><span class="line">      EOFException: 抛出此类异常，表示连接丢失，也就是说网络连接的另一端非正常关闭连接（可能是主机断电、网线出现故障等导致）</span><br><span class="line">      ConnectException：connection refused connect.</span><br><span class="line">      BindException：address already in use</span><br><span class="line">      RuntimeException (不受检异常):</span><br><span class="line">        NullPointerException: 最著名的不受检异常</span><br><span class="line">        IndexOutOfBoundsException: 数组越界</span><br><span class="line">        IllegalArgumentException: 调用方法时参数异常</span><br><span class="line">        IllegalAccessException: 方法对类没有访问权限</span><br><span class="line">        ArithmeticException: 数学算数异常</span><br><span class="line">        ArrayStoreException: 试图向数组存入不支持的类型</span><br><span class="line">        ClassCastException: 调用Class.cast(Object)时</span><br><span class="line">        NotSerializableException: 尝试对没有声明 Serializable接口的类进行序列化</span><br></pre></td></tr></table></figure>
+<h2 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Throwable</span><br><span class="line">    Error: 也算是&quot;不受检&quot;</span><br><span class="line">      OutOfMemoryError</span><br><span class="line">      StackOverflowError</span><br><span class="line">      ThreadDeath</span><br><span class="line">    Exception:</span><br><span class="line">      UserDefinedException: 用户自定义异常继承者Exception</span><br><span class="line">      ClassNotFoundException: 调用Class.forName时</span><br><span class="line">      InstantiationException: 调用Class.NewInstance时</span><br><span class="line">      IOException: 有一大堆派生自IOException的异常...</span><br><span class="line">      EOFException: 抛出此类异常，表示连接丢失，也就是说网络连接的另一端非正常关闭连接（可能是主机断电、网线出现故障等导致）</span><br><span class="line">      ConnectException: connection refused connect.</span><br><span class="line">      BindException: address already in use</span><br><span class="line">      RuntimeException: (不受检异常)</span><br><span class="line">        NullPointerException: 最著名的不受检异常</span><br><span class="line">        IndexOutOfBoundsException: 数组越界</span><br><span class="line">        IllegalArgumentException: 调用方法时参数异常</span><br><span class="line">        IllegalAccessException: 方法对类没有访问权限</span><br><span class="line">        ArithmeticException: 数学算数异常</span><br><span class="line">        ArrayStoreException: 试图向数组存入不支持的类型</span><br><span class="line">        ClassCastException: 调用Class.cast(Object)时</span><br><span class="line">        NotSerializableException: 尝试对没有声明 Serializable接口的类进行序列化</span><br></pre></td></tr></table></figure>
 <h2 id="try-catch"><a href="#try-catch" class="headerlink" title="try-catch"></a>try-catch</h2><p>如果该异常被 catch 代码块捕获，finally 代码块则在 catch 代码块之后运行。<br>在某些不幸的情况下，catch 代码块也触发了异常，那么 finally 代码块同样会运行，并会抛出 catch 代码块触发的异常。<br>在某些极端不幸的情况下，finally 代码块也触发了异常，那么只好中断当前 finally 代码块的执行，并往外抛异常。</p>
 <h2 id="try语句中的return"><a href="#try语句中的return" class="headerlink" title="try语句中的return"></a>try语句中的return</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// x返回多少? 会打印出什么?</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">testTryCatch</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ++x;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        ++x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>结果：返回 2</p>
 <p>解析：</p>
 <ul>
-<li>当执行到 return ++x;时，jvm 在执行完++x 后会在局部变量表里另外分配一个空间来保存当前 x 的值。</li>
-<li>继续执行 finally 语句里的语句。等执行完后再把之前保存的值(是2不是 x)返回给 y</li>
+<li>当执行到 return ++x;时，jvm 在执行完++x 后会在局部变量表里另外分配一个空间来保存当前 x 的值（2）。</li>
+<li>继续执行 finally 语句里的语句。等执行完后再把之前保存的值(返回之前保存的2)返回给 y</li>
 </ul>
-<p>如果 try 语句里有 return，那么代码的行为如下：</p>
-<p>   1.如果有返回值，就把返回值保存到局部变量中<br>   2.执行 jsr 指令跳到 finally 语句里执行<br>   3.执行完 finally 语句后，返回之前保存在局部变量表里的值</p>
+<p>总结：如果 try 语句里有 return，那么代码的行为如下（见 <a href="https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.10.2.5" target="_blank" rel="noopener">Chapter 4. The class File Format</a> 的「 Exceptions and finally」）：</p>
+<p>   1.如果有返回值，就把返回值保存到局部变量中（a local variable）<br>   2.执行 jsr 指令跳到 finally 语句里执行<br>   3.执行完 finally 语句后，返回之前保存在局部变量表里的值</p>
+<p>假设在 finally 里也用了 return 语句，比如 return +x。那么 y 会是 3。因为规范规定了，当 try 和 finally 里都有 return 时，会忽略 try 的 return，而使用 finally 的 return。</p>
 <p>如果 x 不是基础类型，而是引用，那么…</p>
-<p>假设在 finally 里也用了 return 语句，比如 return +x。那么 y 会是3。因为规范规定了，当 try 和 finally 里都有 return 时，会忽略 try 的 return，而使用 finally 的 return。</p>
 <blockquote>
-<p>转自: <a href="http://blogread.cn/it/article/7423" target="_blank" rel="noopener">“你真的了解try{ return }finally{}中的return？</a></p>
+<p>转自: <a href="https://www.cnblogs.com/averey/p/4379646.html?spm=a2c6h.12873639.article-detail.14.505b5272dyUZoJ" target="_blank" rel="noopener">“你真的了解try{ return }finally{}中的return？</a></p>
 </blockquote>
 <h2 id="getMessage-vs-toString"><a href="#getMessage-vs-toString" class="headerlink" title="getMessage vs toString"></a>getMessage vs toString</h2><p><img src="/images/java/exception-tostring.png" alt="Exception_toString"></p>
-<p>如代码所示,<br><code>e.toString()</code>获取的信息包括异常类型和异常详细消息，而<code>e.getMessage()</code>只是获取了异常的详细消息字符串,<br>所以推荐在Catch中使用<code>e.toString()</code></p>
+<p>如代码所示,<br><code>e.toString()</code> 获取的信息包括异常类型和异常详细消息，而<code>e.getMessage()</code>只是获取了异常的详细消息字符串,<br>所以推荐在Catch中使用<code>e.toString()</code></p>
 <h2 id="常见异常及解释"><a href="#常见异常及解释" class="headerlink" title="常见异常及解释"></a>常见异常及解释</h2><blockquote>
 <p><a href="http://www.importnew.com/16725.html" target="_blank" rel="noopener">Java常见异常及解释 - ImportNew</a></p>
 </blockquote>
@@ -833,16 +855,12 @@
 <li>@ref <a href="https://www.cnblogs.com/zhangziqiu/archive/2011/03/30/ComputerCode.html" target="_blank" rel="noopener">原码, 反码, 补码 详解</a></li>
 <li>@ref <a href="https://www.douban.com/note/223507364/" target="_blank" rel="noopener">原码、反码和补码</a></li>
 </ul>
-<h1 id="附录-运算符"><a href="#附录-运算符" class="headerlink" title="附录:运算符"></a>附录:运算符</h1><ul>
-<li><code>/</code> 整数除法 15/2 = 7</li>
-<li><code>%</code> 取余, 或者叫取模</li>
+<h2 id="取余-amp-取模"><a href="#取余-amp-取模" class="headerlink" title="取余 &amp; 取模"></a>取余 &amp; 取模</h2><ul>
+<li>取余：<code>x%y</code></li>
+<li>取模：<code>Math.floorMod(x, y)</code></li>
 </ul>
-<h2 id="C-里的函数"><a href="#C-里的函数" class="headerlink" title="C++里的函数"></a>C++里的函数</h2><ul>
-<li><code>mod(a, b)</code>: 等同于<code>a%b</code>, 取余</li>
-<li><code>floor(a)</code>: 返回小于等于a的整数, <code>floor(2.5)=2</code>, <code>floor(-3.5)=-3</code></li>
-<li><code>ceil(a)</code>: 返回大于等于a的整数, <code>ceil(2.5)=3</code></li>
-</ul>
-<h2 id="位运算符-java"><a href="#位运算符-java" class="headerlink" title="位运算符(java)"></a>位运算符(java)</h2><ul>
+<p>取余和取模的区别 =》 [[../19.Algorithm/Alg.数学基础]] 的「取余 &amp; 取模」</p>
+<h2 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h2><ul>
 <li><code>&amp;</code> 符号位</li>
 <li><code>|</code> 符号位</li>
 <li><code>~</code> 符号位</li>
@@ -877,7 +895,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java基础/" rel="tag"># Java基础</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
         </div>
       
@@ -890,8 +908,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/12.Java/Advanced-Java.08.编译/" rel="next" title="Advanced Java-08-编译">
-                <i class="fa fa-chevron-left"></i> Advanced Java-08-编译
+              <a href="/11.Programming-Language/make-and-cmake/" rel="next" title="make and cmake">
+                <i class="fa fa-chevron-left"></i> make and cmake
               </a>
             
           </div>
@@ -900,8 +918,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/12.Java/Java-Tutorials.02.集合/" rel="prev" title="Java Tutorials-02-集合">
-                Java Tutorials-02-集合 <i class="fa fa-chevron-right"></i>
+              <a href="/12.Java/Java-Tutorials.05.IO/" rel="prev" title="Java Tutorials-05-IO">
+                Java Tutorials-05-IO <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -993,7 +1011,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1004,7 +1022,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1083,7 +1101,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据类型"><span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本数据类型"><span class="nav-text">基本数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浮点数的比较"><span class="nav-text">浮点数的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BitSet"><span class="nav-text">BitSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包装器"><span class="nav-text">包装器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#包装器API"><span class="nav-text">包装器API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#装箱拆箱的实现"><span class="nav-text">装箱拆箱的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#慎用-Long-equals"><span class="nav-text">慎用 Long.equals()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BigInteger-BigDecimal"><span class="nav-text">BigInteger, BigDecimal</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组"><span class="nav-text">数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Arrays"><span class="nav-text">Arrays</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-Arrays"><span class="nav-text">java.util.Arrays</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-lang-reflect-Array"><span class="nav-text">Java.lang.reflect.Array</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#枚举"><span class="nav-text">枚举</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运算符"><span class="nav-text">运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#左右结合"><span class="nav-text">左右结合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#位移运算"><span class="nav-text">位移运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java-lang-Math"><span class="nav-text">java.lang.Math</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#控制流程和语句"><span class="nav-text">控制流程和语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法"><span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Swap"><span class="nav-text">Swap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变参函数"><span class="nav-text">变参函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#final-关键字"><span class="nav-text">final 关键字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#static-关键字"><span class="nav-text">static 关键字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象"><span class="nav-text">面向对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Object的一些默认方法"><span class="nav-text">Object的一些默认方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#equals方法"><span class="nav-text">equals方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hashCode方法"><span class="nav-text">hashCode方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#equals-vs-hashCode"><span class="nav-text">equals vs hashCode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clone"><span class="nav-text">clone</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cloneable接口"><span class="nav-text">Cloneable接口</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造和销毁"><span class="nav-text">构造和销毁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#继承和构造顺序"><span class="nav-text">继承和构造顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认构造方法"><span class="nav-text">默认构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#销毁"><span class="nav-text">销毁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#this关键字"><span class="nav-text">this关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问控制权限"><span class="nav-text">访问控制权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#继承"><span class="nav-text">继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多重继承"><span class="nav-text">多重继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象类和接口"><span class="nav-text">抽象类和接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多态-polymorphism"><span class="nav-text">多态(polymorphism)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-和-C-实现多态的对比"><span class="nav-text">Java 和 C++实现多态的对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口"><span class="nav-text">接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部类"><span class="nav-text">内部类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一般内部类"><span class="nav-text">一般内部类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#外部类如何访问内部类"><span class="nav-text">外部类如何访问内部类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他类如何访问内部类"><span class="nav-text">其他类如何访问内部类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内部类的必要性"><span class="nav-text">内部类的必要性?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局部内部类-amp-匿名类"><span class="nav-text">局部内部类 &amp; 匿名类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌套内部类"><span class="nav-text">嵌套内部类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串"><span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String一些方法和实现"><span class="nav-text">String一些方法和实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-不可被继承"><span class="nav-text">String 不可被继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比较StringBuffer"><span class="nav-text">比较StringBuffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-char-byte的互转"><span class="nav-text">String,char,byte的互转</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用类"><span class="nav-text">常用类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String-amp-StringBuffer"><span class="nav-text">String &amp; StringBuffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包装类"><span class="nav-text">包装类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Math类"><span class="nav-text">Math类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日期类"><span class="nav-text">日期类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异常处理"><span class="nav-text">异常处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Error-amp-Exception"><span class="nav-text">Error &amp; Exception</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#继承关系"><span class="nav-text">继承关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#try-catch"><span class="nav-text">try-catch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#try语句中的return"><span class="nav-text">try语句中的return</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getMessage-vs-toString"><span class="nav-text">getMessage vs toString</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见异常及解释"><span class="nav-text">常见异常及解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#断言"><span class="nav-text">断言</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Native-Method"><span class="nav-text">Native Method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现一个Native方法"><span class="nav-text">实现一个Native方法:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录-JDK常用类"><span class="nav-text">附录:JDK常用类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#java-lang📦继承关系图"><span class="nav-text">java.lang📦继承关系图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java-util📦继承关系图"><span class="nav-text">java.util📦继承关系图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录-补码-反码"><span class="nav-text">附录:补码,反码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录-运算符"><span class="nav-text">附录:运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-里的函数"><span class="nav-text">C++里的函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#位运算符-java"><span class="nav-text">位运算符(java)</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据类型"><span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本数据类型"><span class="nav-text">基本数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浮点数的比较"><span class="nav-text">浮点数的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BitSet"><span class="nav-text">BitSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包装器"><span class="nav-text">包装器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#包装器API"><span class="nav-text">包装器API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#装箱拆箱的实现"><span class="nav-text">装箱拆箱的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#慎用-Long-equals"><span class="nav-text">慎用 Long.equals()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BigInteger-BigDecimal"><span class="nav-text">BigInteger, BigDecimal</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组"><span class="nav-text">数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Arrays"><span class="nav-text">Arrays</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-Arrays"><span class="nav-text">java.util.Arrays</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-lang-reflect-Array"><span class="nav-text">Java.lang.reflect.Array</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#枚举"><span class="nav-text">枚举</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运算符"><span class="nav-text">运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#左右结合"><span class="nav-text">左右结合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#位移运算"><span class="nav-text">位移运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java-lang-Math"><span class="nav-text">java.lang.Math</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#控制流程和语句"><span class="nav-text">控制流程和语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法"><span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Swap"><span class="nav-text">Swap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变参函数"><span class="nav-text">变参函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#final-关键字"><span class="nav-text">final 关键字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#static-关键字"><span class="nav-text">static 关键字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象"><span class="nav-text">面向对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Object的一些默认方法"><span class="nav-text">Object的一些默认方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#equals方法"><span class="nav-text">equals方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hashCode方法"><span class="nav-text">hashCode方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#equals-vs-hashCode"><span class="nav-text">equals vs hashCode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clone"><span class="nav-text">clone</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cloneable接口"><span class="nav-text">Cloneable接口</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造和销毁"><span class="nav-text">构造和销毁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#继承和构造顺序"><span class="nav-text">继承和构造顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认构造方法"><span class="nav-text">默认构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#销毁"><span class="nav-text">销毁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#this关键字"><span class="nav-text">this关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问控制权限"><span class="nav-text">访问控制权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#继承"><span class="nav-text">继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多重继承"><span class="nav-text">多重继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象类和接口"><span class="nav-text">抽象类和接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多态-polymorphism"><span class="nav-text">多态(polymorphism)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-和-C-实现多态的对比"><span class="nav-text">Java 和 C++实现多态的对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口"><span class="nav-text">接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部类"><span class="nav-text">内部类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一般内部类"><span class="nav-text">一般内部类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#外部类如何访问内部类"><span class="nav-text">外部类如何访问内部类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他类如何访问内部类"><span class="nav-text">其他类如何访问内部类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内部类的必要性"><span class="nav-text">内部类的必要性?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局部内部类-amp-匿名类"><span class="nav-text">局部内部类 &amp; 匿名类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌套内部类"><span class="nav-text">嵌套内部类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串"><span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String一些方法和实现"><span class="nav-text">String一些方法和实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-不可被继承"><span class="nav-text">String 不可被继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比较StringBuffer"><span class="nav-text">比较StringBuffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-char-byte的互转"><span class="nav-text">String,char,byte的互转</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用类"><span class="nav-text">常用类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String-amp-StringBuffer"><span class="nav-text">String &amp; StringBuffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包装类"><span class="nav-text">包装类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Math类"><span class="nav-text">Math类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日期类"><span class="nav-text">日期类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异常处理"><span class="nav-text">异常处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Error-amp-Exception"><span class="nav-text">Error &amp; Exception</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#继承关系"><span class="nav-text">继承关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#try-catch"><span class="nav-text">try-catch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#try语句中的return"><span class="nav-text">try语句中的return</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getMessage-vs-toString"><span class="nav-text">getMessage vs toString</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见异常及解释"><span class="nav-text">常见异常及解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#断言"><span class="nav-text">断言</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Native-Method"><span class="nav-text">Native Method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现一个Native方法"><span class="nav-text">实现一个Native方法:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录-JDK常用类"><span class="nav-text">附录:JDK常用类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#java-lang📦继承关系图"><span class="nav-text">java.lang📦继承关系图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java-util📦继承关系图"><span class="nav-text">java.util📦继承关系图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录-补码-反码"><span class="nav-text">附录:补码,反码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#取余-amp-取模"><span class="nav-text">取余 &amp; 取模</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#位运算符"><span class="nav-text">位运算符</span></a></li></ol></li></ol></div>
             
 
           </div>

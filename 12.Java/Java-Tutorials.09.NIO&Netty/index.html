@@ -104,7 +104,7 @@
 
 
 
-  <meta name="keywords" content="Java基础," />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -118,22 +118,23 @@
 
 
 <meta name="description" content="@toc:  NIO API（Channel/Buffer/Selector, 网络/文件/堆外内存） NIO 高性能的实现（异步非阻塞 I/O + 堆外内存） 网络编程中两种高性能 I/O 设计模式（多路复用）：Reactor 和 Proactor  从 BIO 到 NIO BIO 即阻塞 I/O，不管是磁盘 I/O 还是网络 I/O，数据在写入 OutputStream 或者从 InputSt">
-<meta name="keywords" content="Java基础">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java Tutorials-09-NIO &amp; Netty">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.09.NIO&Netty/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="@toc:  NIO API（Channel/Buffer/Selector, 网络/文件/堆外内存） NIO 高性能的实现（异步非阻塞 I/O + 堆外内存） 网络编程中两种高性能 I/O 设计模式（多路复用）：Reactor 和 Proactor  从 BIO 到 NIO BIO 即阻塞 I/O，不管是磁盘 I/O 还是网络 I/O，数据在写入 OutputStream 或者从 InputSt">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Java-Tutorials.09.NIO&Netty-2023-05-12-1.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/Reactor-Single-Thread.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/Reactor-Work-Thread-Pool.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/Reactor-Multiple-Thread.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Java-Tutorials.09.NIO&Netty-2023-05-04-1.png">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.498Z">
+<meta property="og:updated_time" content="2023-05-19T02:43:31.229Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Tutorials-09-NIO &amp; Netty">
 <meta name="twitter:description" content="@toc:  NIO API（Channel/Buffer/Selector, 网络/文件/堆外内存） NIO 高性能的实现（异步非阻塞 I/O + 堆外内存） 网络编程中两种高性能 I/O 设计模式（多路复用）：Reactor 和 Proactor  从 BIO 到 NIO BIO 即阻塞 I/O，不管是磁盘 I/O 还是网络 I/O，数据在写入 OutputStream 或者从 InputSt">
-<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/java/Reactor-Single-Thread.png">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Java-Tutorials.09.NIO&Netty-2023-05-12-1.png">
 
 
 
@@ -358,7 +359,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5,972
+                  6,123
                 </span>
               
 
@@ -425,27 +426,37 @@
 <li>(2) NIO 里新增了 Selector，用于监听多个 Channel 的事件，当 Channel 产生可读写事件后, 用 ByteBuffer 读取数据。<br>Selector 允许一个单一线程监听多个 Channel 输入。我们可以注册多个 Channel 到 Selector 上，然后然后用一个线程来挑出一个处于可读或者可写状态的 Channel。Selector 机制使得单线程管理过个 Channel 变得容易。</li>
 <li>(3) NIO 的提供了 <code>Path</code> 和 <code>Files</code> 来取代 io 包中的 <code>File</code>, <code>Path</code> 的实例指代一个目录或文件，<code>Files</code> 则提供了对目录或文件的基本操作（exists, copy, move, delete）</li>
 </ul>
-<h2 id="NIO-ByteBuffer"><a href="#NIO-ByteBuffer" class="headerlink" title="NIO ByteBuffer"></a>NIO ByteBuffer</h2><p>ByteBuffer 的属性、方法:</p>
+<h2 id="NIO-ByteBuffer"><a href="#NIO-ByteBuffer" class="headerlink" title="NIO ByteBuffer"></a>NIO ByteBuffer</h2><p>ByteBuffer (参考官方文档 <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/Buffer.html" target="_blank" rel="noopener">Buffer (Java Platform SE 8 )</a> )的属性、方法:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">使用Buffer读写数据一般遵循以下四个步骤：</span><br><span class="line"></span><br><span class="line">1.  写入数据到Buffer</span><br><span class="line">2.  调用flip()方法</span><br><span class="line">3.  从Buffer中读取数据</span><br><span class="line">4.  调用clear()方法或者compact()方法，准备再次写入</span><br></pre></td></tr></table></figure>
 <ul>
-<li>属性 capacity &gt;= limit &gt;= position &gt;= mark<ul>
-<li><code>capacity</code>: 指定数组大小, Buffer 创建后就不可改变;</li>
-<li><code>limit</code>: 最大可以读的到位置, 初始值等于 capacity, 调用 flip()方法后 limit=position</li>
-<li><code>position</code>: 当前的读写位置, 初始值 0, 每次写入一个字节 position+1, 每次读都是从 position++位置读一个字节</li>
-<li><code>mark</code>: 初始值-1, 备忘位置, 参加 mark()/reset()方法</li>
-</ul>
-</li>
 <li><code>ByteBuffer.allocate(int)</code>: 创建 buff 并初始化大小</li>
 <li><code>put(byte)</code>, <code>put(byte[])</code>: 向 buff 存储数据</li>
-<li><code>get()</code>, 返回 position 位置的一个 byte</li>
-<li><code>flip()</code>, 向 Buffer 写完数据开始读数据前要调用一次, 把 position 的值赋给 limit, 然后 position=0, 然后可以调用 get()从 position 读出字节;</li>
+<li><p><code>get()</code>, 返回 position 位置的一个 byte</p>
+</li>
+<li><p>属性 capacity &gt;= limit &gt;= position &gt;= mark</p>
+<ul>
+<li><code>capacity</code>: 指定数组大小, Buffer 创建后就不可改变;</li>
+<li><code>position</code>: 下一个要读或要写的位置, 初始值 0, 每次写入 or 读取一个字节 position++</li>
+<li><code>limit</code>: 缓冲区的终点, 不可操作 limit 后面的元素, <ul>
+<li>buffer 刚创建还未写入数据时, limit 初始值等于 capacity,</li>
+<li>开始写数据, position ++</li>
+<li>开始读数据, 调用 flip()方法后 limit=position, 然后 position=0, 意思是 buff 可读取的范围是 position~limit</li>
+</ul>
+</li>
+<li><code>mark</code>: 初始值-1, 备忘位置, 参见 mark()/reset()方法</li>
+</ul>
+</li>
+<li><p><code>flip()</code>: 向 Buffer 写完数据, 开始读数据前要调用一次, 把 position 的值赋给 limit, 然后 position=0, 然后可以调用 get()从 position 读出字节, 读的上限是在 limit 处;</p>
+</li>
+<li><code>clear()</code>: limit 置为 capacity, position 置为 0, mark 置为-1,  这时可以写 buffer 了;</li>
+<li><code>compact()</code>: 清除读过的数据, 将所有未读的数据拷贝到 buffer 起始处, position 指向未读的末尾, limit 置为 capacity, 又可以再次对 buffer 进行写入了;</li>
 <li><code>rewind()</code>, position=0, mark=-1, 不改变 limit 的值, 可以再读一遍[0~limit]的字节</li>
-<li><code>mark()</code>: mark=position, 调用 mark()来记录当前 position</li>
-<li><code>reset()</code>: position=mark, 调用 reset()让 position 置为 mark 的值, 一次 reset()对应一次 mark()</li>
-<li><code>clear()</code>: limit,position,mark 置为初始值;</li>
-<li><code>compact()</code>: 清除未读的数据, 将所有未读的数据拷贝到 buffer 起始处</li>
+<li><code>mark()</code>:  调用后, 使 mark=position,  使用mark()来记录当前 position</li>
+<li><code>reset()</code>: 调用后, 使 position=mark, 使用 reset()让 position 置为 mark 的值, 一次 reset()对应一次 mark()</li>
 <li><code>equals()</code>: 比较两个 buff 剩余未读的字节数, 比较剩余的每一个字节</li>
 <li><code>compareTo()</code>: ..</li>
 </ul>
+<p><img src="/images/Java-Tutorials.09.NIO&amp;Netty-2023-05-12-1.png" alt="../_images/Java-Tutorials.09.NIO&amp;Netty-2023-05-12-1.png"><br>图来自 <a href="https://www.baeldung.com/java-bytebuffer" target="_blank" rel="noopener">https://www.baeldung.com/java-bytebuffer</a></p>
 <blockquote>
 <p>ByteBuffer 内部是由一个数组实现的, 所以 capacity 理论最大值受 <code>MAX_Integer</code> 和 <code>-Xmx</code> 限制</p>
 </blockquote>
@@ -576,7 +587,7 @@
 <ul>
 <li><p>NIO 的读写函数可以立刻返回（用 <code>Channel.configureBlocking(false)</code> 设置该通道为非阻塞），如果一个连接不能读写（<code>socket.read()</code> 返回 0 或者 <code>socket.write()</code> 返回 0），我们可以把这件事记下来，记录的方式通常是在 Selector 上注册标记位，然后切换到其它就绪的连接（channel）继续进行读写。</p>
 </li>
-<li><p>Java 的 <code>Selector</code> 对于 Linux 系统来说，有一个致命限制：同一个 channel 的 select 不能被并发的调用。因此，如果有多个 I/O 线程，必须保证：一个 socket 只能属于一个 IoThread，而一个 IoThread 可以管理多个 socket。</p>
+<li><p>Java 的 <code>Selector</code> ：同一个 channel 的 select 不能被并发的调用。因此，如果有多个 I/O 线程，必须保证：一个 socket 只能属于一个 IoThread，而一个 IoThread 可以管理多个 socket。</p>
 </li>
 </ul>
 <p>（2）使用 DirectBuffer 减少 IO 时数据拷贝次数：</p>
@@ -713,7 +724,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java基础/" rel="tag"># Java基础</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
         </div>
       
@@ -736,8 +747,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/12.Java/Java-Tutorials.10.注解/" rel="prev" title="Java Tutorials-10-注解">
-                Java Tutorials-10-注解 <i class="fa fa-chevron-right"></i>
+              <a href="/12.Java/Java-并发.06c.JUC-Fork&Join/" rel="prev" title="Java-并发.06c.JUC-执行器-Fork/Join框架">
+                Java-并发.06c.JUC-执行器-Fork/Join框架 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -829,7 +840,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -840,7 +851,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

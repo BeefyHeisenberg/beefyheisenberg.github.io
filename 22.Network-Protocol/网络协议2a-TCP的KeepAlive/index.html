@@ -124,7 +124,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="TCP 协议的KeepAliveKeepAlive 并不是 TCP 协议规范的一部分，但在几乎所有的 TCP/IP 协议栈（不管是 Linux 还是 Windows）中，都实现了 KeepAlive 功能。参考 [RFC1122 #TCP Keep-Alives] @ref TCP 协议栈与 KeepAlive 相关的参数有:  tcp_keepalive_time: KeepAlive 的空闲时">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.810Z">
+<meta property="og:updated_time" content="2023-05-19T02:43:31.554Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络协议2a-TCP的KeepAlive">
 <meta name="twitter:description" content="TCP 协议的KeepAliveKeepAlive 并不是 TCP 协议规范的一部分，但在几乎所有的 TCP/IP 协议栈（不管是 Linux 还是 Windows）中，都实现了 KeepAlive 功能。参考 [RFC1122 #TCP Keep-Alives] @ref TCP 协议栈与 KeepAlive 相关的参数有:  tcp_keepalive_time: KeepAlive 的空闲时">
@@ -387,7 +387,7 @@
 <blockquote>
 <p>以上参数都可以通过 sysctl 命令修改内核参数实现修改:  <code>sysctl -w net.ipv4.tcp_keepalive_time = 7500</code>,<br>更多 sysctl 使用参考 [[../21.Operating-System/Linux.04a.Sysctl]]</p>
 </blockquote>
-<p>KeepAlive 默认情况下是关闭的，可以被上层应用开启和关闭, 下面介绍在 Java、C 语言和 Nginx 中如何设置 KeepAlive</p>
+<p>KeepAlive 默认情况下是关闭的，可以被<strong>上层应用</strong>开启和关闭, 下面介绍在 Java、C 语言和 Nginx 中如何设置 KeepAlive</p>
 <h2 id="代码和应用程序如何设置-Keepalive"><a href="#代码和应用程序如何设置-Keepalive" class="headerlink" title="代码和应用程序如何设置 Keepalive"></a>代码和应用程序如何设置 Keepalive</h2><h3 id="Java-Netty-设置-KeepAlive"><a href="#Java-Netty-设置-KeepAlive" class="headerlink" title="Java(Netty)设置 KeepAlive"></a>Java(Netty)设置 KeepAlive</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ServerBootstrap b = <span class="keyword">new</span> ServerBootstrap();</span><br><span class="line">    b.group(bossGroup, workerGroup)</span><br><span class="line">            .channel(NioServerSocketChannel.class)</span><br><span class="line">            .option(ChannelOption.SO_BACKLOG, <span class="number">100</span>)</span><br><span class="line">            .childOption(ChannelOption.SO_KEEPALIVE, <span class="keyword">true</span>)</span><br><span class="line">            .handler(<span class="keyword">new</span> LoggingHandler(LogLevel.INFO));</span><br></pre></td></tr></table></figure>
 <p>Java 程序只能做到设置 <code>SO_KEEPALIVE</code> 选项，其他配置项只能依赖于 sysctl 配置，系统进行读取。</p>
 <h3 id="C-语言-socket-编程设置-KeepAlive"><a href="#C-语言-socket-编程设置-KeepAlive" class="headerlink" title="C 语言 socket 编程设置 KeepAlive"></a>C 语言 socket 编程设置 KeepAlive</h3><p>setsockopt 函数原型:<br><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setsockopt</span><span class="params">(<span class="keyword">int</span> socket, <span class="keyword">int</span> level, <span class="keyword">int</span> option_name,</span></span></span><br><span class="line"><span class="function"><span class="params">      <span class="keyword">const</span> <span class="keyword">void</span> *option_value, <span class="keyword">socklen_t</span> option_len)</span></span>;</span><br></pre></td></tr></table></figure></p>
@@ -544,7 +544,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -555,7 +555,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

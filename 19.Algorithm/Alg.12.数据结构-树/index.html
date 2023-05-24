@@ -117,24 +117,25 @@
 
 
 
-<meta name="description" content="简单二叉树二叉树遍历 先序(preOrder): 中-左-右 中序(inOrder): 后序(postOrder):  ➤ 先序遍历(递归): public void preOrder(Node&amp;lt;T&amp;gt; n) &amp;#123;    System.out.println(n.data);  // 先序    if (n.left != null)        preOrder(n.left">
+<meta name="description" content="简单二叉树二叉树遍历 先序(preOrder): 中-左-右 中序(inOrder): 左-中-右 后序(postOrder): 左-右-中  图来自 http://www.crystaltenn.com/2020/04/binary-trees-traversal-recursive-vs.html ➤ 先序遍历(递归):">
 <meta name="keywords" content="二叉树,BST,AVL,红黑树,B-Tree">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Alg.12.数据结构-树">
 <meta property="og:url" content="https://beefyheisenberg.github.io/19.Algorithm/Alg.12.数据结构-树/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="简单二叉树二叉树遍历 先序(preOrder): 中-左-右 中序(inOrder): 后序(postOrder):  ➤ 先序遍历(递归): public void preOrder(Node&amp;lt;T&amp;gt; n) &amp;#123;    System.out.println(n.data);  // 先序    if (n.left != null)        preOrder(n.left">
+<meta property="og:description" content="简单二叉树二叉树遍历 先序(preOrder): 中-左-右 中序(inOrder): 左-中-右 后序(postOrder): 左-右-中  图来自 http://www.crystaltenn.com/2020/04/binary-trees-traversal-recursive-vs.html ➤ 先序遍历(递归):">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Binary_tree_traversal.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/bwwf75vdyg.gif">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/25stotndte.gif">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/Tree_Rebalancing.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/rbtree.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%842-%E6%A0%91-2023-05-08-2.png">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.626Z">
+<meta property="og:updated_time" content="2023-05-19T02:43:31.399Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Alg.12.数据结构-树">
-<meta name="twitter:description" content="简单二叉树二叉树遍历 先序(preOrder): 中-左-右 中序(inOrder): 后序(postOrder):  ➤ 先序遍历(递归): public void preOrder(Node&amp;lt;T&amp;gt; n) &amp;#123;    System.out.println(n.data);  // 先序    if (n.left != null)        preOrder(n.left">
-<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/bwwf75vdyg.gif">
+<meta name="twitter:description" content="简单二叉树二叉树遍历 先序(preOrder): 中-左-右 中序(inOrder): 左-中-右 后序(postOrder): 左-右-中  图来自 http://www.crystaltenn.com/2020/04/binary-trees-traversal-recursive-vs.html ➤ 先序遍历(递归):">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Binary_tree_traversal.png">
 
 
 
@@ -359,7 +360,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,930
+                  4,962
                 </span>
               
 
@@ -386,17 +387,18 @@
       
         <h2 id="简单二叉树"><a href="#简单二叉树" class="headerlink" title="简单二叉树"></a>简单二叉树</h2><h3 id="二叉树遍历"><a href="#二叉树遍历" class="headerlink" title="二叉树遍历"></a>二叉树遍历</h3><ul>
 <li>先序(preOrder): 中-左-右</li>
-<li>中序(inOrder):</li>
-<li>后序(postOrder):</li>
+<li>中序(inOrder): 左-中-右</li>
+<li>后序(postOrder): 左-右-中</li>
 </ul>
+<p><img src="/images/Binary_tree_traversal.png" alt="../_images/Binary_tree_traversal.png"><br>图来自 <a href="http://www.crystaltenn.com/2020/04/binary-trees-traversal-recursive-vs.html" target="_blank" rel="noopener">http://www.crystaltenn.com/2020/04/binary-trees-traversal-recursive-vs.html</a></p>
 <p>➤ 先序遍历(递归):</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(Node&lt;T&gt; n)</span> </span>&#123;</span><br><span class="line">    System.out.println(n.data);  <span class="comment">// 先序</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (n.left != <span class="keyword">null</span>)</span><br><span class="line">        preOrder(n.left);</span><br><span class="line">    <span class="keyword">if</span> (n.right != <span class="keyword">null</span>)</span><br><span class="line">        preOrder(n.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(Node&lt;T&gt; n)</span> </span>&#123;</span><br><span class="line">    System.out.println(n.data);  <span class="comment">// 先序</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (n.left != <span class="keyword">null</span>)</span><br><span class="line">        preOrder(n.left);</span><br><span class="line">    <span class="comment">// System.out.println(n.data);  // 中序</span></span><br><span class="line">    <span class="keyword">if</span> (n.right != <span class="keyword">null</span>)</span><br><span class="line">        preOrder(n.right);</span><br><span class="line">    <span class="comment">// System.out.println(n.data);  // 后序</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>➤ 先序-非递归, 最简单的一种:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Stack s = <span class="keyword">new</span> Stack();</span><br><span class="line">    s.push(root);</span><br><span class="line">    <span class="keyword">while</span>(!s.isEmpty()) &#123;</span><br><span class="line">        Node n = s.pop(); <span class="comment">// 刚开始就pop了, 这种只能用来做先序</span></span><br><span class="line">        System.out.println(n.data); <span class="comment">// 先序</span></span><br><span class="line">        <span class="keyword">if</span>(n.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">            s.push(n.right);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">            s.push(n.left);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>➤ ✨先序-非递归(方法 2), 使用栈模拟递归:</p>
+<p>➤ 先序-非递归(方法 2), 使用栈模拟递归:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack s = <span class="keyword">new</span> Stack();</span><br><span class="line">    <span class="keyword">while</span>(!s.isEmpty() || root != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.println(root.data); <span class="comment">// 先序</span></span><br><span class="line">            s.push(root);</span><br><span class="line">            root = root.left;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            root = s.pop();</span><br><span class="line">            <span class="comment">// System.out.println(root.data); // 中序</span></span><br><span class="line">            root = root.right;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>➤ 中序-非递归与上面类似</p>
-<p>➤ ✨后序-非递归(需要辅助栈):</p>
+<p>➤ 后序-非递归(需要辅助栈):</p>
 <ul>
 <li>Push 根结点到第一个栈 s1中。</li>
 <li>从第一个栈 s1 中 Pop 出一个结点，并将其 Push 到第二个栈 output 中。</li>
@@ -404,8 +406,8 @@
 <li>重复过程 2 和 3 直到栈 s 为空。</li>
 <li>完成后，所有结点已经 Push 到栈 output 中，且按照后序遍历的顺序存放，直接全部 Pop 出来即是二叉树后序遍历结果。</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postOrder</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack s1 = <span class="keyword">new</span> Stack();</span><br><span class="line">    Stack s2 = <span class="keyword">new</span> Stack();</span><br><span class="line"></span><br><span class="line">    s1.push(root);</span><br><span class="line">    <span class="keyword">while</span>(!s1.isEmpty) &#123;</span><br><span class="line">        Node curr = s1.pop();</span><br><span class="line"></span><br><span class="line">        s2.push(curr);</span><br><span class="line">        <span class="keyword">if</span>(curr.left !=<span class="keyword">null</span>) &#123;</span><br><span class="line">            s1.push(curr.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(curr.right !=<span class="keyword">null</span>) &#123;</span><br><span class="line">            s1.push(curr.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(!s2.isEmpty()) &#123;</span><br><span class="line">        Node curr = s2.pop();</span><br><span class="line">        System.out.println(cur.data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>➤ ✨层序遍历（非递归算法）:<br>第一个队列 currentLevel 用于存储当前层的结点，第二个队列 nextLevel 用于存储下一层的结点。当前层 currentLevel 为空时，表示这一层已经遍历完成，可以打印换行符了。<br>然后将第一个空的队列 currentLevel 与队列 nextLevel 交换，然后重复该过程直到结束。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postOrder</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack s1 = <span class="keyword">new</span> Stack();</span><br><span class="line">    Stack s2 = <span class="keyword">new</span> Stack();</span><br><span class="line"></span><br><span class="line">    s1.push(root);</span><br><span class="line">        <span class="keyword">while</span>(!s1.isEmpty) &#123;</span><br><span class="line">        Node curr = s1.pop();</span><br><span class="line"></span><br><span class="line">        s2.push(curr);</span><br><span class="line">        <span class="keyword">if</span>(curr.left !=<span class="keyword">null</span>) &#123;</span><br><span class="line">            s1.push(curr.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(curr.right !=<span class="keyword">null</span>) &#123;</span><br><span class="line">            s1.push(curr.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(!s2.isEmpty()) &#123;</span><br><span class="line">        Node curr = s2.pop();</span><br><span class="line">        System.out.println(cur.data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>➤ 层序遍历（非递归算法）:<br>第一个队列 currentLevel 用于存储当前层的结点，第二个队列 nextLevel 用于存储下一层的结点。当前层 currentLevel 为空时，表示这一层已经遍历完成，可以打印换行符了。<br>然后将第一个空的队列 currentLevel 与队列 nextLevel 交换，然后重复该过程直到结束。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">levelOrder</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Queue&lt;Node&gt; currentLevel = <span class="keyword">new</span> Queue();</span><br><span class="line">    Queue&lt;Node&gt; nextLevel = <span class="keyword">new</span> Queue();</span><br><span class="line"></span><br><span class="line">    currentLevel.offer(root);</span><br><span class="line">    <span class="keyword">while</span>(!currentLevel.isEmpty()) &#123;</span><br><span class="line">        currNode = currentLevel.poll();</span><br><span class="line">        <span class="keyword">if</span>(currNode) &#123;</span><br><span class="line">            print(currNode);</span><br><span class="line">            nextLevel.offer(currNode.left);</span><br><span class="line">            nextLevel.offer(currNode.right);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(currentLevel.isEmpty()) &#123;</span><br><span class="line">            print(<span class="string">"/n"</span>);</span><br><span class="line">            swap(currentLevel, nextLevel);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p><a href="https://blog.csdn.net/sgbfblog/article/details/7773103" target="_blank" rel="noopener">https://blog.csdn.net/sgbfblog/article/details/7773103</a></p>
@@ -535,13 +537,13 @@
 </ul>
 <p>B-Tree 效率总结： 由于考虑磁盘储存结构，B 树的查找、删除、插入的代价都远远要小于任何二叉结构树(读写磁盘次数的降低)。</p>
 <p>@ref: <a href="https://blog.csdn.net/keda8997110/article/details/45057081" target="_blank" rel="noopener">https://blog.csdn.net/keda8997110/article/details/45057081</a></p>
-<h2 id="字典树"><a href="#字典树" class="headerlink" title="字典树"></a>字典树</h2><p><strong>字典树的构建</strong>：</p>
+<h2 id="字典树（Trie）"><a href="#字典树（Trie）" class="headerlink" title="字典树（Trie）"></a>字典树（Trie）</h2><p><strong>字典树的构建</strong>：</p>
 <ul>
 <li>节点包含一个 size=26 的数组，下标对应 az，值是指向后续字符的指针，此外节点还有一个 flag 标识字符串是否结束（可选）</li>
 <li>根节点不表示任何字符，但根节点的数组是指向子节点的；</li>
 <li>每个子节点表示一个字符（有空间的浪费），改进方案是一个节点可以存储多个字符（压缩）</li>
 </ul>
-<p>下图是一个带压缩的字典树：<br><img src="/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%842-%E6%A0%91-2023-05-08-2.png" alt="../_images/Alg.01.数据结构2-树-2023-05-08-2.png"></p>
+<p>下图是一个字典树：<br><img src="/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%842-%E6%A0%91-2023-05-08-2.png" alt="../_images/Alg.01.数据结构2-树-2023-05-08-2.png"></p>
 <p><strong>复杂度分析</strong>：</p>
 <ul>
 <li>空间：O(n) </li>
@@ -713,7 +715,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -724,7 +726,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -803,7 +805,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单二叉树"><span class="nav-text">简单二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二叉树遍历"><span class="nav-text">二叉树遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点删除-插入"><span class="nav-text">节点删除/插入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AVL-树"><span class="nav-text">AVL 树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#旋转"><span class="nav-text">旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑树"><span class="nav-text">红黑树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入和删除"><span class="nav-text">插入和删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析-1"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-树-amp-B-树"><span class="nav-text">B 树 &amp; B+树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#•-BST、AVL、RB-树、B-树复杂度比较"><span class="nav-text">• BST、AVL、RB 树、B 树复杂度比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字典树"><span class="nav-text">字典树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线段树"><span class="nav-text">线段树</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优先队列-堆"><span class="nav-text">优先队列(堆)</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单二叉树"><span class="nav-text">简单二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二叉树遍历"><span class="nav-text">二叉树遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点删除-插入"><span class="nav-text">节点删除/插入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AVL-树"><span class="nav-text">AVL 树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#旋转"><span class="nav-text">旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑树"><span class="nav-text">红黑树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入和删除"><span class="nav-text">插入和删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析-1"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-树-amp-B-树"><span class="nav-text">B 树 &amp; B+树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#•-BST、AVL、RB-树、B-树复杂度比较"><span class="nav-text">• BST、AVL、RB 树、B 树复杂度比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字典树（Trie）"><span class="nav-text">字典树（Trie）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线段树"><span class="nav-text">线段树</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优先队列-堆"><span class="nav-text">优先队列(堆)</span></a></div>
             
 
           </div>

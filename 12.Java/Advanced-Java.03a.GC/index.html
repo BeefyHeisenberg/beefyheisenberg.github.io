@@ -104,7 +104,7 @@
 
 
 
-  <meta name="keywords" content="Java进阶," />
+  <meta name="keywords" content="JVM," />
 
 
 
@@ -118,7 +118,7 @@
 
 
 <meta name="description" content="Minor/Major/Full GC我们把新生代 / 老年代 / 全部堆空间(包括新生代,老年代)对应的 GC, 分别称为 Minor GC / Major GC / Full GC,三个不同内存区域的 GC 细节如下: ① Minor GC: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 Minor GC，或 Young GC  触发条件:">
-<meta name="keywords" content="Java进阶">
+<meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Advanced Java-03a-GC">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a.GC/index.html">
@@ -133,7 +133,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-ZGC-Pause-Time-Test.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-GC-Minor-Parallel.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-GC-Full-Parallel.png">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.352Z">
+<meta property="og:updated_time" content="2023-05-24T10:10:50.013Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-03a-GC">
 <meta name="twitter:description" content="Minor/Major/Full GC我们把新生代 / 老年代 / 全部堆空间(包括新生代,老年代)对应的 GC, 分别称为 Minor GC / Major GC / Full GC,三个不同内存区域的 GC 细节如下: ① Minor GC: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 Minor GC，或 Young GC  触发条件:">
@@ -668,9 +668,7 @@
 </blockquote>
 </li>
 </ul>
-<blockquote>
 <p>@ref 参考: <a href="https://mp.weixin.qq.com/s/Ukm3xcp4YLHDMJF-hVTczw" target="_blank" rel="noopener">JVM 之 ParNew 和 CMS 日志分析</a></p>
-</blockquote>
 <p><strong>有 GC 问题的日志例子:</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">106.641: [GC 106.641: [ParNew (promotion failed): 14784 K-&gt;14784 K(14784 K), 0.0370328 secs]106.678: [CMS 106.715: [CMS-concurrent-mark: 0.065/0.103 secs] [Times: user=0.17 sys=0.00, real=0.11 secs]</span><br><span class="line"># ParNew (promotion failed) 表示新生代 GC 过程中, 对象晋升到老年代失败, 因为需要晋升至老年代的对象超过了老年代的可用大小</span><br><span class="line"># 这种情况下会触发 Full GC, 见下</span><br><span class="line"></span><br><span class="line">0.195: [GC 0.195: [ParNew: 2986 K-&gt;2986 K(8128 K), 0.0000083 secs]0.195: [CMS 0.212: [CMS-concurrent-preclean: 0.011/0.031 secs] [Times: user=0.03 sys=0.02, real=0.03 secs]</span><br><span class="line">(concurrent mode failure): 56046 K-&gt;138 K(57344 K), 0.0271519 secs] 59032 K-&gt;138 K(65472 K), [CMS Perm : 2079 K-&gt;2078 K(12288 K)], 0.0273119 secs] [Times: user=0.03 sys=0.00, real=0.03 secs]</span><br><span class="line"># 第二行表示在 cms-preclean 阶段发生了 concurrent mode failure,</span><br><span class="line"># CMS 失败往往意味着 JVM 会退回到 Serial Old 收集器进行回收, 造成较长的 STW</span><br></pre></td></tr></table></figure>
 <p>上面是因为执行 ParNew GC 的时候, 因为需要晋升至老年代的对象超过了老年代的可用大小, 所以 promotion failed, 而触发了 Full GC,<br>还存在一种情况, 老年代大小足够的情况下仍然会触发 promotion failed, 可以通过 <code>-XX:UseCMSCompactAtFullCollection -XX:CMSFullGCBeforeCompaction=5</code> 参数, 在 5 次 Full GC 后进行一次 Compaction 操作避免内存碎片.</p>
@@ -707,7 +705,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java进阶/" rel="tag"># Java进阶</a>
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
           
         </div>
       
@@ -823,7 +821,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -834,7 +832,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

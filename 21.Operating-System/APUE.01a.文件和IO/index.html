@@ -117,21 +117,29 @@
 
 
 
-<meta name="description" content="page cache（页缓冲）@Inbox 缓存 I/O vs 直接 I/O内核将文件的 IO 操作根据是否使用内核缓冲区（页高速缓存 page cache），将文件 IO 分为：Buffered IO 和 Direct IO 两种类型。进程在通过系统调用 open() 打开文件的时候，可以通过将参数 flags 赋值为 O_DIRECT 来指定文件操作为 Direct IO。默认情况下为 Buf">
+<meta name="description" content="文件系统分层 另一张图，侧重点是编程实体（库、函数）在 Linux 存储中的位置：  page cache（页缓冲）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="APUE.01a.文件和IO">
 <meta property="og:url" content="https://beefyheisenberg.github.io/21.Operating-System/APUE.01a.文件和IO/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="page cache（页缓冲）@Inbox 缓存 I/O vs 直接 I/O内核将文件的 IO 操作根据是否使用内核缓冲区（页高速缓存 page cache），将文件 IO 分为：Buffered IO 和 Direct IO 两种类型。进程在通过系统调用 open() 打开文件的时候，可以通过将参数 flags 赋值为 O_DIRECT 来指定文件操作为 Direct IO。默认情况下为 Buf">
+<meta property="og:description" content="文件系统分层 另一张图，侧重点是编程实体（库、函数）在 Linux 存储中的位置：  page cache（页缓冲）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/operating_system/Linux-DirectIO-vs-BufferIO.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/THE-LINUX-STORAGE-STACK-DIAGRAM.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/LINUX-STORAGE-IO-STACK.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-04-29-1.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-04-29-2.png">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.697Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-2.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-3.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/operating_system/Linux-DirectIO-vs-BufferIO.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-4.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-5.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-6.png">
+<meta property="og:updated_time" content="2023-05-19T02:43:31.462Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="APUE.01a.文件和IO">
-<meta name="twitter:description" content="page cache（页缓冲）@Inbox 缓存 I/O vs 直接 I/O内核将文件的 IO 操作根据是否使用内核缓冲区（页高速缓存 page cache），将文件 IO 分为：Buffered IO 和 Direct IO 两种类型。进程在通过系统调用 open() 打开文件的时候，可以通过将参数 flags 赋值为 O_DIRECT 来指定文件操作为 Direct IO。默认情况下为 Buf">
-<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/operating_system/Linux-DirectIO-vs-BufferIO.png">
+<meta name="twitter:description" content="文件系统分层 另一张图，侧重点是编程实体（库、函数）在 Linux 存储中的位置：  page cache（页缓冲）">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/THE-LINUX-STORAGE-STACK-DIAGRAM.png">
 
 
 
@@ -356,7 +364,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,660
+                  3,653
                 </span>
               
 
@@ -381,7 +389,10 @@
       
 
       
-        <h2 id="page-cache（页缓冲）"><a href="#page-cache（页缓冲）" class="headerlink" title="page cache（页缓冲）"></a>page cache（页缓冲）</h2><p>@Inbox</p>
+        <h2 id="文件系统分层"><a href="#文件系统分层" class="headerlink" title="文件系统分层"></a>文件系统分层</h2><p><img src="/images/THE-LINUX-STORAGE-STACK-DIAGRAM.png" alt="../_images/THE-LINUX-STORAGE-STACK-DIAGRAM.png"></p>
+<p>另一张图，侧重点是编程实体（库、函数）在 Linux 存储中的位置：</p>
+<p><img src="/images/LINUX-STORAGE-IO-STACK.png" alt="../_images/LINUX-STORAGE-IO-STACK.png"></p>
+<h2 id="page-cache（页缓冲）"><a href="#page-cache（页缓冲）" class="headerlink" title="page cache（页缓冲）"></a>page cache（页缓冲）</h2><p>@Inbox</p>
 <h2 id="缓存-I-O-vs-直接-I-O"><a href="#缓存-I-O-vs-直接-I-O" class="headerlink" title="缓存 I/O vs 直接 I/O"></a>缓存 I/O vs 直接 I/O</h2><p>内核将文件的 IO 操作根据是否使用内核缓冲区（<strong>页高速缓存</strong> page cache），将文件 IO 分为：Buffered IO 和 Direct IO 两种类型。进程在通过系统调用 open() 打开文件的时候，可以通过将参数 flags 赋值为 O_DIRECT 来指定文件操作为 Direct IO。默认情况下为 Buffered IO。</p>
 <p><strong>缓存 I/O</strong>：对数据的读写，实际上是对内核的缓冲区直接进行读写</p>
 <ul>
@@ -393,19 +404,6 @@
 <li>直接 IO 的优点：减少一次从内核缓冲区到用户程序缓存的数据复制。比如说数据库管理系统这类应用，它们更倾向于选择它们自己的缓存机制，因为数据库管理系统往往比操作系统更了解数据库中存放的数据，数据库管理系统可以提供一种更加有效的缓存机制来提高数据库中数据的存取性能。以及在文件随机读写时，也会用直接 IO</li>
 <li>直接 IO 的缺点：如果访问的数据不在应用程序缓存中，那么每次数据都会直接从磁盘加载，这种直接加载会非常缓存。通常直接 IO 与异步 IO 结合使用，会得到比较好的性能。（异步 IO：当访问数据的线程发出请求之后，线程会接着去处理其他事，而不是阻塞等待）</li>
 </ul>
-<h2 id="fwrite-amp-fflush-amp-fsync"><a href="#fwrite-amp-fflush-amp-fsync" class="headerlink" title="fwrite &amp; fflush &amp; fsync"></a>fwrite &amp; fflush &amp; fsync</h2><ul>
-<li><p>fwrite &amp; fflush：标准 IO 函数（如 fread，fwrite 等）会在内存（用户空间）中建立缓冲，该函数刷新用户空间的内存缓冲，将内容写入内核缓冲，要想将其真正写入磁盘，还需要调用 fsync。（即先调用 fflush 然后再调用 fsync，否则不会起作用）。fflush 以指定的文件流描述符为参数（对应以 fopen 等函数打开的文件流），仅仅是把上层缓冲区中的数据刷新到内核缓冲区就返回。</p>
-</li>
-<li><p>write 函数，默认使用 Buffered IO 方式，该函数只是把用户 buff 内的数据写入文件的<strong>页缓存（page cache）</strong></p>
-</li>
-<li><p>sync 函数只是将所有修改过的块缓冲区排入写队列，然后就返回，它并不等待实际写磁盘操作结束。通常称为 update 的系统守护进程会周期性地（一般每隔 30 秒）调用 sync 函数。这就保证了定期冲洗内核的块缓冲区。命令 sync(1)也调用 sync 函数。</p>
-</li>
-<li>fsync 函数只对由文件描述符 filedes 指定的单一文件起作用，并且等待写磁盘操作结束，然后返回。 fsync 可用于数据库这样的应用程序，这种应用程序需要确保将修改过的块立即写到磁盘上。</li>
-<li>fdatasync 函数类似于 fsync，但它只影响文件的数据部分。而除数据外，fsync 还会同步更新文件的属性。对于提供事务支持的数据库，在事务提交时，都要确保事务日志（包含该事务所有的修改操作以及一个提交记录）完全写到硬盘上，才认定事务提交成功并返回给应用层。</li>
-</ul>
-<p>下图中的 stdio buff 即 <code>fwrite</code> 在用户空间使用的缓冲：<br><img src="/images/operating_system/Linux-DirectIO-vs-BufferIO.png" alt=""></p>
-<p>借助 GDB 即可看到 fflush 时的调用栈:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(gdb) bt</span><br><span class="line"></span><br><span class="line">#0  0x00007ffff72e0840 in **write** () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#1  0x00007ffff726cfb3 in _IO_new_file_write () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#2  0x00007ffff726e41c in __GI__IO_do_write () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#3  0x00007ffff726c810 in **__GI_****_IO_file_sync** () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#4  0x00007ffff72620a2 in **fflush** () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#5  0x00000000004007bd in main () at ggg.cpp:12</span><br></pre></td></tr></table></figure></p>
-<h2 id="mmap"><a href="#mmap" class="headerlink" title="mmap"></a>mmap</h2><p>@Inbox</p>
 <h2 id="文件系统：inode-和-dentry"><a href="#文件系统：inode-和-dentry" class="headerlink" title="文件系统：inode 和 dentry"></a>文件系统：inode 和 dentry</h2><p>➤ Linux 文件系统会为每个文件分配两个数据结构：<strong>索引节点（<em>index node</em>）和目录项（<em>directory entry</em>）</strong>，它们主要用来记录文件的元信息和目录层次结构。</p>
 <ul>
 <li>索引节点，也就是 inode，用来记录文件的元信息，比如 inode 编号、文件大小、访问权限、创建时间、修改时间、<strong>数据在磁盘的位置</strong>等等。索引节点是文件的<strong>唯一</strong>标识，它们之间一一对应，也同样都会被存储在硬盘中，所以<strong>索引节点同样占用磁盘空间</strong>。</li>
@@ -447,6 +445,44 @@
 <li>通过使文件和管理数据尽可能接近，减少了磁头寻道和旋转，这可以提高文件系统的性能。</li>
 </ul>
 <p>不过，Ext2 的后续版本采用了稀疏技术。该做法是，超级块和块组描述符表不再存储到文件系统的每个块组中，而是只写入到块组 0、块组 1 和其他 ID 可以表示为 3、 5、7 的幂的块组中。</p>
+<h2 id="IO-系统调用解析"><a href="#IO-系统调用解析" class="headerlink" title="IO 系统调用解析"></a>IO 系统调用解析</h2><h3 id="open"><a href="#open" class="headerlink" title="open"></a>open</h3><p><code>open</code> 负责在内核生成与文件相对应的 <code>struct file</code> 元数据结构，并且与文件系统中该文件的 <code>struct inode</code> 进行关联，装载对应文件系统的操作回调函数，然后返回一个 <code>int fd</code> 给用户进程。后续用户对该文件的相关操作，会涉及到其相关的 <code>struct file</code>、<code>struct inode</code>、<code>inode-&gt;i_op</code>、<code>inode-&gt;i_fop</code> 和 <code>inode-&gt;i_mapping-&gt;a_ops</code> 等。</p>
+<p><em>注：文件操作对应的偏移存储于<code>struct file</code>中，每个<code>open</code>的文件单独维护一份，同一个文件的读写操作共享同一个偏移。</em></p>
+<p>其整个内核逻辑流程可以用下图来表示：<br><img src="/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-1.png" alt="../_images/APUE.01a.文件和IO-2023-05-10-1.png"></p>
+<h3 id="write"><a href="#write" class="headerlink" title="write"></a>write</h3><p><code>write</code> 的写逻辑路径有好几条，最常使用的就是利用 <code>pagecache</code> 延迟写的这条路径，所以主要分析这个。在 <code>write</code> 调用的调用、返回之间，其负责分配新的 <code>pagecache</code>，将数据写入 <code>pagecache</code>，同时根据系统参数，判断 <code>pagecache</code> 中的脏数据占比来确定是否要触发回写逻辑。其详细的代码分析可以参考：<a href="https://lrita.github.io/images/posts/filesystem/Linux.Kernel.Write.Procedure.pdf" target="_blank" rel="noopener">《Linux 内核写文件过程》</a>和 <a href="https://lrita.github.io/images/posts/filesystem/Linux.Kernel.Delay.Write.pdf" target="_blank" rel="noopener">《Linux 内核延迟写机制》</a>。</p>
+<p>其整个内核逻辑流程可以用下图来表示：</p>
+<p><img src="/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-2.png" alt="../_images/APUE.01a.文件和IO-2023-05-10-2.png"></p>
+<h3 id="read"><a href="#read" class="headerlink" title="read"></a>read</h3><p><code>read</code> 的读逻辑中包含预期 <code>readahead</code> 的逻辑，其可以通过与 <code>fadvise</code> 的配合达到文件预取的效果。这部分的代码分析可以参考：<a href="https://lrita.github.io/images/posts/filesystem/Linux.Kernel.Read.Procedure.pdf" target="_blank" rel="noopener">《Linux 内核读文件过程》</a></p>
+<p>其整个内核逻辑流程可以用下图来表示：</p>
+<p><img src="/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-3.png" alt="../_images/APUE.01a.文件和IO-2023-05-10-3.png"></p>
+<h3 id="fwrite-amp-fflush-amp-fsync"><a href="#fwrite-amp-fflush-amp-fsync" class="headerlink" title="fwrite &amp; fflush &amp; fsync"></a>fwrite &amp; fflush &amp; fsync</h3><ul>
+<li><p>fwrite &amp; fflush：标准 IO 函数（如 fread，fwrite 等）会在内存（用户空间）中建立缓冲，该函数刷新用户空间的内存缓冲，将内容写入内核缓冲，要想将其真正写入磁盘，还需要调用 fsync。（即先调用 fflush 然后再调用 fsync，否则不会起作用）。fflush 以指定的文件流描述符为参数（对应以 fopen 等函数打开的文件流），仅仅是把上层缓冲区中的数据刷新到内核缓冲区就返回。</p>
+</li>
+<li><p>write 函数，默认使用 Buffered IO 方式，该函数只是把用户 buff 内的数据写入文件的<strong>页缓存（page cache）</strong></p>
+</li>
+<li><p>sync 函数只是将所有修改过的块缓冲区排入写队列，然后就返回，它并不等待实际写磁盘操作结束。通常称为 update 的系统守护进程会周期性地（一般每隔 30 秒）调用 sync 函数。这就保证了定期冲洗内核的块缓冲区。命令 sync(1)也调用 sync 函数。</p>
+</li>
+<li><p>fsync 函数只对由文件描述符 filedes 指定的单一文件起作用，并且等待写磁盘操作结束，然后返回。 fsync 可用于数据库这样的应用程序，这种应用程序需要确保将修改过的块立即写到磁盘上。</p>
+</li>
+<li><p>fdatasync 函数类似于 fsync，但它只影响文件的数据部分。而除数据外，fsync 还会同步更新文件的属性。对于提供事务支持的数据库，在事务提交时，都要确保事务日志（包含该事务所有的修改操作以及一个提交记录）完全写到硬盘上，才认定事务提交成功并返回给应用层。</p>
+</li>
+</ul>
+<p>下图中的 stdio buff 即 <code>fwrite</code> 在用户空间使用的缓冲：<br><img src="/images/operating_system/Linux-DirectIO-vs-BufferIO.png" alt=""></p>
+<p>借助 GDB 即可看到 fflush 时的调用栈:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(gdb) bt</span><br><span class="line"></span><br><span class="line">#0  0x00007ffff72e0840 in **write** () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#1  0x00007ffff726cfb3 in _IO_new_file_write () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#2  0x00007ffff726e41c in __GI__IO_do_write () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#3  0x00007ffff726c810 in **__GI_****_IO_file_sync** () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#4  0x00007ffff72620a2 in **fflush** () from /lib64/libc.so.6</span><br><span class="line"></span><br><span class="line">#5  0x00000000004007bd in main () at ggg.cpp:12</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-4.png" alt="../_images/APUE.01a.文件和IO-2023-05-10-4.png"></p>
+<h3 id="mmap"><a href="#mmap" class="headerlink" title="mmap"></a>mmap</h3><p>用户调用 <code>mmap</code> 将文件映射到内存时，内核进行一系列的参数检查，然后创建对应的 <code>vma</code>，然后给该 <code>vma</code> 绑定 <code>vma_ops</code>。当用户访问到 <code>mmap</code> 对应的内存时，CPU 会触发 <code>page fault</code>，在 <code>page fault</code> 回调中，将申请 <code>pagecache</code> 中的匿名页，读取文件到其物理内存中，然后将 <code>pagecache</code> 中所属的物理页与用户进程的 <code>vma</code> 进行映射。</p>
+<p>其整个内核逻辑流程可以用下图来表示，其中 <code>page fault</code> 部分比较简略，可以参考 <a href="https://lrita.github.io/2019/03/07/linux-page-fault/" target="_blank" rel="noopener">Linux Page Fault(缺页异常)</a>：</p>
+<p><img src="/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-5.png" alt="../_images/APUE.01a.文件和IO-2023-05-10-5.png"></p>
+<h3 id="io-submit"><a href="#io-submit" class="headerlink" title="io_submit"></a>io_submit</h3><p>对于非 <code>O_DIRECT</code> 标记打开的文件，其内部逻辑与 <code>write</code> 流程基本一致，最终将数据拷贝到 <code>pagecache</code> 中，整个调用实际都是同步阻塞的。</p>
+<p>对于<code>O_DIRECT</code>标记打开的文件，在文件系统层(<code>vfs/ext4</code>等)仍然是同步的，在一些文件系统日志、文件系统数据块与磁盘映射、<a href="https://zhuanlan.zhihu.com/p/100026388" target="_blank" rel="noopener">bio 请求队列满</a>等情况下，仍然会被同步阻塞。当经过文件系统层后，被封装成一个<code>bio</code>请求时，且 bio 请求队列未满时，该请求进入 bio 请求队列后即刻返回，从而形成一个异步写事件。</p>
+<p>目前异步 IO 使用最多的是 <code>linux native aio</code>，不幸的是，其存在着诸多约束（<a href="https://mp.weixin.qq.com/s?__biz=MzUxNjE3MTcwMg==&amp;mid=2247484448&amp;idx=1&amp;sn=29e791cf602b8614c9d288c1859407f7&amp;chksm=f9aa36f9ceddbfef2a28f3593f69dffedb71a85342dc28764aa728a4ea3290bd86761abf6445&amp;mpshare=1&amp;scene=23&amp;srcid=0708pSauI4c7ShmXbZrQlqUl&amp;sharer_sharetime=1594175513526&amp;sharer_shareid=0d25aaa0141cb845ff5dc57c13b23352%23rd" target="_blank" rel="noopener">io_uring 新异步 IO 机制，性能提升超 150%，堪比 SPDK</a>）：</p>
+<ul>
+<li>最大的限制无疑是仅支持 direct io。而 <code>O_DIRECT</code> 存在 bypass 缓存和 size 对齐等限制，直接影响了 aio 在很多场景的使用。而针对 buffered io，其表现为同步。</li>
+<li>即使满足了所有异步 IO 的约束，有时候还是可能会被阻塞。例如，等待元数据 IO，或者等待 block 层 request 的分配等。</li>
+<li>存在额外的拷贝开销，每个 IO 提交需要拷贝 64+8 字节(<code>iocb</code> 64 字节，<code>iocbpp</code> 指针 8 字节)，每个 IO 完成需要拷贝 32 字节，这 104 字节的拷贝在大量小 IO 的场景下影响很可观。同时，需要非常小心地使用完成事件以避免丢事件。</li>
+<li>IO 需要至少 2 个系统调用（submit + wait-for-completion)，这在 spectre/meltdown 开启的前提下性能下降非常严重。</li>
+</ul>
+<p><img src="/images/APUE.01a.%E6%96%87%E4%BB%B6%E5%92%8CIO-2023-05-10-6.png" alt="../_images/APUE.01a.文件和IO-2023-05-10-6.png"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://lrita.github.io/2019/03/13/the-internal-of-file-syscall/#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8" target="_blank" rel="noopener">文件IO系统调用内幕 — 源代码</a></p>
 
       
     </div>
@@ -574,7 +610,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">462</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -585,7 +621,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -664,7 +700,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#page-cache（页缓冲）"><span class="nav-text">page cache（页缓冲）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存-I-O-vs-直接-I-O"><span class="nav-text">缓存 I/O vs 直接 I/O</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fwrite-amp-fflush-amp-fsync"><span class="nav-text">fwrite &amp; fflush &amp; fsync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mmap"><span class="nav-text">mmap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统：inode-和-dentry"><span class="nav-text">文件系统：inode 和 dentry</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统：块组和块结构"><span class="nav-text">文件系统：块组和块结构</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统分层"><span class="nav-text">文件系统分层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#page-cache（页缓冲）"><span class="nav-text">page cache（页缓冲）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存-I-O-vs-直接-I-O"><span class="nav-text">缓存 I/O vs 直接 I/O</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统：inode-和-dentry"><span class="nav-text">文件系统：inode 和 dentry</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统：块组和块结构"><span class="nav-text">文件系统：块组和块结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO-系统调用解析"><span class="nav-text">IO 系统调用解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#open"><span class="nav-text">open</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write"><span class="nav-text">write</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#read"><span class="nav-text">read</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fwrite-amp-fflush-amp-fsync"><span class="nav-text">fwrite &amp; fflush &amp; fsync</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mmap"><span class="nav-text">mmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#io-submit"><span class="nav-text">io_submit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
