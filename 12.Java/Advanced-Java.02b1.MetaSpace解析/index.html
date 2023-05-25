@@ -117,21 +117,21 @@
 
 
 
-<meta name="description" content="Metaspace 中有什么？Metaspace 分为 Klass 和 Non-Klass 两个区域：  Klass：每个 Java 类都对应一个 Klass（是一个 C++对象），Klass 里主要保存了类的 vtable 和 itable 和其他等待，这部分数据大都是指针类型，例如 vtable 保存了指向方法的指针； Non-Klass：这部分可以理解为 Klass 的数据区，存储了比较大的">
+<meta name="description" content="Metaspace 中有什么？Metaspace 分为 Klass 和 Non-Klass 两个区域：  Klass：每个 Java 类都对应一个 Klass（是一个 C++对象），Klass 里主要保存了类的 vtable 和 itable 和其他，这部分数据大都是指针类型，例如 vtable 保存了指向方法的指针； Non-Klass：这部分可以理解为 Klass 的数据区，存储了比较大的元数">
 <meta name="keywords" content="JVM,MetaSpace">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Advanced-Java.02b1.MetaSpace解析">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.02b1.MetaSpace解析/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="Metaspace 中有什么？Metaspace 分为 Klass 和 Non-Klass 两个区域：  Klass：每个 Java 类都对应一个 Klass（是一个 C++对象），Klass 里主要保存了类的 vtable 和 itable 和其他等待，这部分数据大都是指针类型，例如 vtable 保存了指向方法的指针； Non-Klass：这部分可以理解为 Klass 的数据区，存储了比较大的">
+<meta property="og:description" content="Metaspace 中有什么？Metaspace 分为 Klass 和 Non-Klass 两个区域：  Klass：每个 Java 类都对应一个 Klass（是一个 C++对象），Klass 里主要保存了类的 vtable 和 itable 和其他，这部分数据大都是指针类型，例如 vtable 保存了指向方法的指针； Non-Klass：这部分可以理解为 Klass 的数据区，存储了比较大的元数">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.02b1.MetaSpace%E8%A7%A3%E6%9E%90-2023-05-23-1.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.02b1.MetaSpace%E8%A7%A3%E6%9E%90-2023-05-23-2.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.02b1.MetaSpace%E8%A7%A3%E6%9E%90-2023-05-23-3.png">
-<meta property="og:updated_time" content="2023-05-24T10:45:10.016Z">
+<meta property="og:updated_time" content="2023-05-25T11:08:57.905Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced-Java.02b1.MetaSpace解析">
-<meta name="twitter:description" content="Metaspace 中有什么？Metaspace 分为 Klass 和 Non-Klass 两个区域：  Klass：每个 Java 类都对应一个 Klass（是一个 C++对象），Klass 里主要保存了类的 vtable 和 itable 和其他等待，这部分数据大都是指针类型，例如 vtable 保存了指向方法的指针； Non-Klass：这部分可以理解为 Klass 的数据区，存储了比较大的">
+<meta name="twitter:description" content="Metaspace 中有什么？Metaspace 分为 Klass 和 Non-Klass 两个区域：  Klass：每个 Java 类都对应一个 Klass（是一个 C++对象），Klass 里主要保存了类的 vtable 和 itable 和其他，这部分数据大都是指针类型，例如 vtable 保存了指向方法的指针； Non-Klass：这部分可以理解为 Klass 的数据区，存储了比较大的元数">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.02b1.MetaSpace%E8%A7%A3%E6%9E%90-2023-05-23-1.png">
 
 
@@ -357,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,723
+                  1,950
                 </span>
               
 
@@ -384,18 +384,18 @@
       
         <h2 id="Metaspace-中有什么？"><a href="#Metaspace-中有什么？" class="headerlink" title="Metaspace 中有什么？"></a>Metaspace 中有什么？</h2><p>Metaspace 分为 Klass 和 Non-Klass 两个区域：</p>
 <ul>
-<li><strong>Klass</strong>：每个 Java 类都对应一个 Klass（是一个 C++对象），Klass 里主要保存了类的 vtable 和 itable 和其他等待，这部分数据大都是指针类型，例如 vtable 保存了指向方法的指针；</li>
+<li><strong>Klass</strong>：每个 Java 类都对应一个 Klass（是一个 C++对象），Klass 里主要保存了类的 vtable 和 itable 和其他，这部分数据大都是指针类型，例如 vtable 保存了指向方法的指针；</li>
 <li><strong>Non-Klass</strong>：这部分可以理解为 Klass 的数据区，存储了比较大的元数据，主要包括了常量池（constant pool）、字节码等等 @enhanced</li>
 </ul>
 <p>在 Heap 中，每个 Java 类都有一个 Class 对象（区分上面的 Klass），这是一个 Java 对象，从.class 文件加载出的大多数数据都保存在 MetaSpace（如上所说），所以 Heap 中的 Class 对象可以认为是一个“与 Klass 交互的接口”；</p>
-<p>此外，每次 new 都会创建类的对象（Object），每个对象在内存中都有一个“<strong>对象头</strong>”，包括 <strong>Mark Word</strong> 和指向 Klass 对象的指针，在 64 位机器上，指针默认大小是 64bit，所以会占用很大的内存，可以开启<strong>压缩指针</strong>减少内存消耗（开启后这个 Klass 指针就是 32bits），32 位指针最多能管理的 2^32 = 4G 内存，所以开启压缩指针的情况下，MetaSpace 中的 Klass 区也不能超过这个 4G 上限，否则 32 位指针无法管理这么大的内存区。</p>
+<p>此外，每次 new 都会在 Heap 创建类的对象（Object），每个对象在内存中都有一个“<strong>对象头</strong>”，包括 <strong>Mark Word</strong> 和指向 Klass 对象的指针，在 64 位机器上，指针默认大小是 64bit，所以会占用很大的内存，可以开启<strong>压缩指针</strong>减少内存消耗（开启后这个 Klass 指针就是 32bits），32 位指针最多能管理的 2^32 = 4G 内存，所以开启压缩指针的情况下，MetaSpace 中的 Klass 区也不能超过这个 4G 上限，否则 32 位指针无法管理这么大的内存区。</p>
 <p>JVM 提供了 <code>-XX:UseCompressedClassPointers</code> 来指定是否开启<strong>压缩指针</strong>，只有在开启这个参数的情况下，Metaspace 才会有 <strong>Klass 区</strong>；<br>默认情况下这个参数是打开的，如果我们把-Xmx 设置大于 32G 的话，因为内存很充足，所以就没必要开压缩指针，MetaSpace 中也就不再有<strong>Klass 区</strong>了；</p>
 <p>下图是堆中的 Object 对象、Metaspace 中的 Klass 对象、Non-Klass 对象之间的关系：<br><img src="/images/Advanced-Java.02b1.MetaSpace%E8%A7%A3%E6%9E%90-2023-05-23-1.png" alt="../_images/Advanced-Java.02b1.MetaSpace解析-2023-05-23-1.png"><br>【图】来自 <a href="https://juejin.cn/post/7225879698952486972#heading-1" target="_blank" rel="noopener">全网最硬核 JVM 内存解析 - 7.元空间存储的元数据 - 掘金</a></p>
 <p><a href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fopenjdk%2Fjdk%2Fblob%2Fjdk-21%2B3%2Fsrc%2Fhotspot%2Fshare%2Foops%2Fklass.hpp" title=" https://github.com/openjdk/jdk/blob/jdk-21+3/src/hotspot/share/oops/klass.hpp" target="_blank" rel="noopener"><code>Klass</code></a>：其实就是 Java 类的实例（每个 Java 的 class 有一个对应的对象实例，用来反射访问，这个就是那个对象实例），即 Java 对象头的类型指针指向的实例：</p>
 <ul>
 <li><a href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fopenjdk%2Fjdk%2Fblob%2Fjdk-21%2B3%2Fsrc%2Fhotspot%2Fshare%2Foops%2FinstanceKlass.hpp" title=" https://github.com/openjdk/jdk/blob/jdk-21+3/src/hotspot/share/oops/instanceKlass.hpp" target="_blank" rel="noopener"><code>InstanceKlass</code></a>：普通对象类的 Klass：<ul>
-<li>vtable：</li>
-<li>itable：</li>
+<li>vtable：虚拟函数表，保存了该类的所有函数（static、final 除外）</li>
+<li>itable：接口函数表，保存了该类实现的接口的函数</li>
 <li><a href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fopenjdk%2Fjdk%2Fblob%2Fjdk-21%2B3%2Fsrc%2Fhotspot%2Fshare%2Foops%2FinstanceRefKlass.hpp" title=" https://github.com/openjdk/jdk/blob/jdk-21+3/src/hotspot/share/oops/instanceRefKlass.hpp" target="_blank" rel="noopener"><code>InstanceRefKlass</code></a>：<code>java.lang.ref.Reference</code> 类以及子类对应的 Klass</li>
 <li><a href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fopenjdk%2Fjdk%2Fblob%2Fjdk-21%2B3%2Fsrc%2Fhotspot%2Fshare%2Foops%2FinstanceClassLoaderKlass.hpp" title=" https://github.com/openjdk/jdk/blob/jdk-21+3/src/hotspot/share/oops/instanceClassLoaderKlass.hpp" target="_blank" rel="noopener"><code>InstanceClassLoaderKlass</code></a>：Java 类加载器对应的 Klass</li>
 <li><a href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fopenjdk%2Fjdk%2Fblob%2Fjdk-21%2B3%2Fsrc%2Fhotspot%2Fshare%2Foops%2FinstanceMirrorKlass.hpp" title=" https://github.com/openjdk/jdk/blob/jdk-21+3/src/hotspot/share/oops/instanceMirrorKlass.hpp" target="_blank" rel="noopener"><code>InstanceMirrorKlass</code></a>：<code>java.lang.Class</code> 对应的 Klass</li>
@@ -421,6 +421,9 @@
 <blockquote>
 <p>注意，老版本中， UseCompressedClassPointers 取决于 UseCompressedOops，即压缩对象指针如果没开启，那么压缩类指针也无法开启。但是从 Java 15 Build 23 开始， UseCompressedClassPointers 已经不再依赖 UseCompressedOops 了，两者在大部分情况下已经独立开来。除非在 x86 的 CPU 上面启用 JVM Compiler Interface（例如使用 GraalVM）。</p>
 </blockquote>
+<h3 id="vtable-amp-itable"><a href="#vtable-amp-itable" class="headerlink" title="vtable &amp; itable"></a>vtable &amp; itable</h3><p>➤ vtable 是 Java 虚拟函数表，Klass 通过虚函数表 vtable，来实现运行期的方法分派，也可以叫动态绑定；<br>C++对象中的 vtable 只有虚函数，但 Java 中没有虚函数一说，所有函数都是动态绑定的，JVM 中的 Klass 的 vtable 包括所有函数（static、final 除外）；<br>Java 的 vtable 与 C++的另一个区别：C++是每个对象都有 vtable，Java 只在 Klass 对象保存了 vtable；</p>
+<p>➤ itable 是 Java 接口函数表，为了方便查找某个接口对应的方法实现。itable 的结构比 vtable 复杂，除了记录方法地址外还得记录该方法所属的接口类 klass。</p>
+<p>more ref： <a href="https://www.cnblogs.com/mazhimazhi/p/13456515.html" target="_blank" rel="noopener">第6.3篇-klassVtable与klassItable类的介绍 - 鸠摩（马智） - 博客园</a></p>
 <h2 id="Metaspace-中类加载和卸载"><a href="#Metaspace-中类加载和卸载" class="headerlink" title="Metaspace 中类加载和卸载"></a>Metaspace 中类加载和卸载</h2><p>➤ Metaspace 中的元数据（Klass &amp; Non-Klass）何时被加载？<br>在 ClassLoader 加载.class，在“准备”的阶段，类的元数据被载入 MetaSpace，这些元数据归加载它们的 ClassLoader 所有；</p>
 <p><img src="/images/Advanced-Java.02b1.MetaSpace%E8%A7%A3%E6%9E%90-2023-05-23-2.png" alt="../_images/Advanced-Java.02b1.MetaSpace解析-2023-05-23-2.png"></p>
 <p>➤ Metaspace 中的元数据何时卸载？<br>在 GC 时，当 ClassLoader 加载的全部对象都被标为“不活动”，那么接下来这个 ClassLoader 对象也会被释放，最后会卸载掉 MetaSpace 中的元数据（参见：jls12.7-类和接口的卸载）</p>
@@ -428,7 +431,7 @@
 <h2 id="Metaspace-相关的-VM-参数"><a href="#Metaspace-相关的-VM-参数" class="headerlink" title="Metaspace 相关的 VM 参数"></a>Metaspace 相关的 VM 参数</h2><p><strong>MetaspaceSize</strong><br>默认 20.8M 左右(x86 下开启 c2 模式)，主要是控制 metaspaceGC 发生的初始阈值，也是最小阈值，但是触发 metaspaceGC 的阈值是不断变化的，与之对比的主要是指 Klass Metaspace 与 NoKlass Metaspace 两块 committed 的内存和。</p>
 <p><strong>MaxMetaspaceSize</strong><br>默认基本是无穷大，但是我还是建议大家设置这个参数，因为很可能会因为没有限制而导致 metaspace 被无止境使用(一般是内存泄漏)而被 OS Kill。这个参数会限制 metaspace(包括了 Klass Metaspace 以及 NoKlass Metaspace)被 committed 的内存大小，会保证 committed 的内存不会超过这个值，一旦超过就会触发 GC，这里要注意和 MaxPermSize 的区别，MaxMetaspaceSize 并不会在 jvm 启动的时候分配一块这么大的内存出来，而 MaxPermSize 是会分配一块这么大的内存的。</p>
 <p><strong>CompressedClassSpaceSize</strong><br>默认 1G，这个参数主要是设置 Klass Metaspace 的大小，不过这个参数设置了也不一定起作用，前提是能开启压缩指针，假如-Xmx 超过了 32G，压缩指针是开启不来的。如果有 Klass Metaspace，那这块内存是和 Heap 连着的。</p>
-<h2 id="jstat-中-MetaSpace-字段"><a href="#jstat-中-MetaSpace-字段" class="headerlink" title="jstat 中 MetaSpace 字段"></a>jstat 中 MetaSpace 字段</h2><ul>
+<h2 id="jstat-中-Metaspace-字段"><a href="#jstat-中-Metaspace-字段" class="headerlink" title="jstat 中 Metaspace 字段"></a>jstat 中 Metaspace 字段</h2><ul>
 <li>MC 表示 Klass Metaspace 以及 NoKlass Metaspace 两者总共 committed 的内存大小，单位是 KB，虽然从上面的定义里我们看到了是 capacity，但是实质上计算的时候并不是 capacity，而是 committed</li>
 <li>MU 表示是 Klass Metaspace 以及 NoKlass Metaspace 两者已经使用了的内存大小</li>
 <li>CCSC 表示的是 Klass Metaspace 的已经被 commit 的内存大小，单位也是 KB</li>
@@ -437,7 +440,7 @@
 <li>CCSMX 表示 Klass Metaspace reserved 的内存大小</li>
 </ul>
 <blockquote>
-<p>区分内存分配的 reserve &amp; commit:</p>
+<p>区分内存分配的 <strong>reserve</strong> &amp; <strong>commit</strong>:</p>
 <ul>
 <li>reserve 动作：只是向 OS 申请内存，但 OS 并没有实际分配物理内存，对应 OpenJDK 的 <code>os::reserve_memory</code> 函数，reserve 最终是通过 <code>mmap(2)</code> 实现的；</li>
 <li>commit 动作：从已经 reserved 的内存区域中，commit 一部分出来，同时 commited 的内存也可以 uncommit 释放，对应 OpenJDK <code>os::commit_memory</code> 函数；</li>
@@ -674,7 +677,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Metaspace-中有什么？"><span class="nav-text">Metaspace 中有什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Metaspace-中类加载和卸载"><span class="nav-text">Metaspace 中类加载和卸载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Metaspace-相关的-VM-参数"><span class="nav-text">Metaspace 相关的 VM 参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jstat-中-MetaSpace-字段"><span class="nav-text">jstat 中 MetaSpace 字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Metaspace-中有什么？"><span class="nav-text">Metaspace 中有什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vtable-amp-itable"><span class="nav-text">vtable &amp; itable</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Metaspace-中类加载和卸载"><span class="nav-text">Metaspace 中类加载和卸载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Metaspace-相关的-VM-参数"><span class="nav-text">Metaspace 相关的 VM 参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jstat-中-Metaspace-字段"><span class="nav-text">jstat 中 Metaspace 字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>

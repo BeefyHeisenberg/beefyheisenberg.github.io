@@ -3307,7 +3307,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,839
+                  4,284
                 </span>
               
 
@@ -3473,7 +3473,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,723
+                  1,950
                 </span>
               
 
@@ -3501,11 +3501,11 @@
         
           <h2 id="Metaspace-中有什么？"><a href="#Metaspace-中有什么？" class="headerlink" title="Metaspace 中有什么？"></a>Metaspace 中有什么？</h2><p>Metaspace 分为 Klass 和 Non-Klass 两个区域：</p>
 <ul>
-<li><strong>Klass</strong>：每个 Java 类都对应一个 Klass（是一个 C++对象），Klass 里主要保存了类的 vtable 和 itable 和其他等待，这部分数据大都是指针类型，例如 vtable 保存了指向方法的指针；</li>
+<li><strong>Klass</strong>：每个 Java 类都对应一个 Klass（是一个 C++对象），Klass 里主要保存了类的 vtable 和 itable 和其他，这部分数据大都是指针类型，例如 vtable 保存了指向方法的指针；</li>
 <li><strong>Non-Klass</strong>：这部分可以理解为 Klass 的数据区，存储了比较大的元数据，主要包括了常量池（constant pool）、字节码等等 @enhanced</li>
 </ul>
 <p>在 Heap 中，每个 Java 类都有一个 Class 对象（区分上面的 Klass），这是一个 Java 对象，从.class 文件加载出的大多数数据都保存在 MetaSpace（如上所说），所以 Heap 中的 Class 对象可以认为是一个“与 Klass 交互的接口”；</p>
-<p>此外，每次 new 都会创建类的对象（Object），每个对象在内存中都有一个“<strong>对象头</strong>”，包括 <strong>Mark Word</strong> 和指向 Klass 对象的指针，在 64 位机器上，指针默认大小是 64bit，所以会占用很大的内存，可以开启<strong>压缩指针</strong>减少内存消耗（开启后这个 Klass 指针就是 32bits），32 位指针最多能管理的 2^32 = 4G 内存，所以开启压缩指针的情况下，MetaSpace 中的 Klass 区也不能超过这个 4G 上限，否则 32 位指针无法管理这么大的内存区。</p>
+<p>此外，每次 new 都会在 Heap 创建类的对象（Object），每个对象在内存中都有一个“<strong>对象头</strong>”，包括 <strong>Mark Word</strong> 和指向 Klass 对象的指针，在 64 位机器上，指针默认大小是 64bit，所以会占用很大的内存，可以开启<strong>压缩指针</strong>减少内存消耗（开启后这个 Klass 指针就是 32bits），32 位指针最多能管理的 2^32 = 4G 内存，所以开启压缩指针的情况下，MetaSpace 中的 Klass 区也不能超过这个 4G 上限，否则 32 位指针无法管理这么大的内存区。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/12.Java/Advanced-Java.02b1.MetaSpace解析/#more" rel="contents">

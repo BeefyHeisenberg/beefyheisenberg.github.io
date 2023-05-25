@@ -691,7 +691,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  7,200
+                  8,366
                 </span>
               
 
@@ -717,10 +717,9 @@
 
       
         
-          <h1 id="Minor-Major-Full-GC"><a href="#Minor-Major-Full-GC" class="headerlink" title="Minor/Major/Full GC"></a>Minor/Major/Full GC</h1><p>我们把新生代 / 老年代 / 全部堆空间(包括新生代,老年代)对应的 GC, 分别称为 Minor GC / Major GC / Full GC,<br>三个不同内存区域的 GC 细节如下:</p>
-<p><strong>① Minor GC</strong>: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 <strong>Minor GC</strong>，或 <strong>Young GC</strong></p>
+          <h1 id="Minor-Major-Full-GC"><a href="#Minor-Major-Full-GC" class="headerlink" title="Minor/Major/Full GC"></a>Minor/Major/Full GC</h1><p><strong>① Minor GC</strong>: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 <strong>Minor GC</strong>，或 <strong>Young GC</strong></p>
 <ul>
-<li>触发条件: 无法为一个新的对象分配空间时，比如 <em>Eden 区满了</em> 。所以分配率越高，越频繁执行 Minor GC。</li>
+<li>触发条件: 各种 GC 收集器的触发 Minor GC 的条件都是 <em>Eden 区满了</em> </li>
 <li>STW: Minor GC 会 Stop the World，如果 Eden 区大部分对象都要被 GC（这也是正常情形）Minor GC 耗时可以基本不记，但是如果 Eden 区大部分对象都不符合 GC 条件，暂停时间将会长很多。</li>
 <li>GC 过程: 一般使用 Copy GC, 具体步骤如下<ul>
 <li>用 new 或者 newInstance 等方式创建的对象默认都是存放在 Eden 区，Eden 满了触发 Minor GC，把存活的对象放入 S 0，并清空 Eden；</li>
@@ -730,6 +729,9 @@
 </li>
 </ul>
 <p><img src="/images/java/jvm-gc-minor-gc.png" alt></p>
+<blockquote>
+<p>↑ Minor GC 图例: 左边是 Minor GC 前(黄色是垃圾对象, 红色是存活对象), 右边是 Minor GC 后</p>
+</blockquote>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/12.Java/Advanced-Java.03a.GC/#more" rel="contents">
@@ -1940,7 +1942,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  9,371
+                  9,350
                 </span>
               
 

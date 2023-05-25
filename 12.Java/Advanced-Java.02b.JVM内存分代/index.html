@@ -128,7 +128,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-Memory-Model-Generation.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-HEAP-EDEN-TLAB.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jvm-gensize-experience-point.png">
-<meta property="og:updated_time" content="2023-05-24T10:45:10.005Z">
+<meta property="og:updated_time" content="2023-05-25T11:08:57.901Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-02b-JVM内存分代">
 <meta name="twitter:description" content="JDK6 时期 如上图, JDK6 时代的 JVM 内存分为下面几个部分:  堆区(Heap Space): 这部分被所有线程共享(除了 #TLAB ), 包括: 年轻代: eden:s0:s1 的默认比例是 8:1:1,  可见 eden 区大部分对象都是要被回收的; 老年代: 老年代:年轻代 的比例默认是 2:1 , 也就是说默认情况下堆区的 2/3 都属于老年代,   栈区(Stack Sp">
@@ -357,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,839
+                  4,284
                 </span>
               
 
@@ -461,7 +461,7 @@
 </ul>
 <p>JDK 1.6 时期，HotSpot 的永久代包括:</p>
 <ol>
-<li>Runtime Constant Pool, <strong>运行时常量池</strong>, 详见 「Java 中的常量池」</li>
+<li>Runtime Constant Pool, <strong>运行时常量池</strong></li>
 <li>String Pool: <strong>字符串常量池</strong>, 以”Hello”字面量方式创建的字符串会存储在这里. 详见 「字符串在内存中的存储」</li>
 </ol>
 <p>如果运行时有大量的类产生，可能会导致方法区被填满直至溢出。报出 java.lang.OutOfMemoryError: PermGen space，常见的应用场景如：</p>
@@ -470,7 +470,7 @@
 <li>大量 JSP 或动态产生 JSP 文件的应用（JSP 第一次运行时需要编译为 Java 类）。</li>
 <li>基于 OSGi 的应用（即使是同一个类文件，被不同的类加载器加载也会视为不同的类）。</li>
 </ul>
-<h1 id="JDK7-时期"><a href="#JDK7-时期" class="headerlink" title="JDK7 时期"></a>JDK7 时期</h1><p>String Pool （字符串常量池）被从 PermGen 里移除了, 放在了 Heap 里, 并且可以通过 <code>-XX:StringTableSize</code> 指定其大小，这部分的变化参考 [[#字符串在内存中的存储]]</p>
+<h1 id="JDK7-时期"><a href="#JDK7-时期" class="headerlink" title="JDK7 时期"></a>JDK7 时期</h1><p>String Pool （字符串常量池）被从 PermGen 里移除了, 这部分字符串对象放在了 Heap 里, 并且可以通过 <code>-XX:StringTableSize</code> 指定其大小，这部分的变化参考 [[#字符串在内存中的存储]]</p>
 <p>此外 JDK7 的内存模型基本和 6 一样;</p>
 <h1 id="•JDK6-7-的-VM-参数总结"><a href="#•JDK6-7-的-VM-参数总结" class="headerlink" title="•JDK6~7 的 VM 参数总结"></a>•JDK6~7 的 VM 参数总结</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">             &lt;JVM 6 &amp; 7 Memory options&gt;</span><br><span class="line">+-----------------+-----------------+--------------</span><br><span class="line">|     PC          |                 |</span><br><span class="line">|-----------------|-----------------+-------------</span><br><span class="line">|    Stack &amp;      |                 |</span><br><span class="line">|  Native Stack   |                 |  -Xss</span><br><span class="line">+-----------------+-----------------+---------------</span><br><span class="line">|   Method Area   |  String Pool &amp;  |</span><br><span class="line">|   (PermGen)     |    Runtime-     | -XX:MaxPermSize</span><br><span class="line">|                 |  Constant Pool  | -XX:PermSize</span><br><span class="line">+-----------------+-----------------+-------+-------+---</span><br><span class="line">|    OldGen       |                 |       |       |</span><br><span class="line">|  (TenuredGen)   |                 |       | -Xmx  |</span><br><span class="line">+-----------------+-----------------+-------+       |</span><br><span class="line">|                 |  To Survivor    |       |       | Heap</span><br><span class="line">|    YoungGen     |-----------------| -Xmn  |       |</span><br><span class="line">|                 |  From Survivor  |       | -Xms  |</span><br><span class="line">|                 |-----------------|       |       |</span><br><span class="line">|                 |     Eden        |       |       |</span><br><span class="line">+-----------------+-----------------+-------+-------+---</span><br></pre></td></tr></table></figure>
 <h1 id="JDK8-时期-MetaSpace"><a href="#JDK8-时期-MetaSpace" class="headerlink" title="JDK8 时期(MetaSpace)"></a>JDK8 时期(MetaSpace)</h1><p>在 HotSpot JDK7以及更早的版本里, 永久代最大大小由 <code>-XX:MaxPermSize</code> 指定, 一旦超过这个大小就不能再扩展, 假如加载的类过多会导致 Medhod Area 过大而导致 OOM,</p>
@@ -479,8 +479,7 @@
 <p>JDK7 移除了 PermGen 的「字符串常量池」;<br>JDK8 移除了整个 PermGen, 类的元信息被放在 MateSpace; </p>
 </blockquote>
 <p>更多关于 MetaSpace -&gt; <a href="/12.Java/Advanced-Java.02b1.MetaSpace解析/" title="Advanced-Java.02b1.MetaSpace解析">Advanced-Java.02b1.MetaSpace解析</a></p>
-<h1 id="JVM-分代设置大小"><a href="#JVM-分代设置大小" class="headerlink" title="JVM 分代设置大小"></a>JVM 分代设置大小</h1><p>经验值:</p>
-<ul>
+<h1 id="JVM-分代设置大小建议"><a href="#JVM-分代设置大小建议" class="headerlink" title="JVM 分代设置大小建议"></a>JVM 分代设置大小建议</h1><ul>
 <li>堆区的默认值最大 size 是256MB, 永久代默认最大 size 是64MB, <code>堆:永久代</code> 大约是是 <code>4:1</code> （Test @ JDK6 + Windows 32 bit）</li>
 <li>每个分代大小比例(经验值): <code>Eden : Survivor0 : Survivor1 : OldGen : PermGen = 8 : 1 : 1 : 20 : 5</code></li>
 <li>每个分代具体设置多大, 还可以根据 <strong>JVM 活跃数据</strong> 的大小进行估算:</li>
@@ -491,47 +490,77 @@
 <p><img src="/images/java/jvm-gensize-experience-point.png" alt="JVM_GenSize_Experience_Point"></p>
 <p>例如，根据 GC 日志获得老年代的活跃数据大小为 300M，那么各分区大小可以设为：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">总堆：1200MB = 300MB × 4</span><br><span class="line">新生代：450MB = 300MB × 1.5</span><br><span class="line">老年代： 750MB = 1200MB - 450MB</span><br></pre></td></tr></table></figure>
-<h1 id="对象在内存中的存储"><a href="#对象在内存中的存储" class="headerlink" title="对象在内存中的存储"></a>对象在内存中的存储</h1><p><strong>堆区</strong>(年轻代/老年代):</p>
+<h1 id="变量在JVM内存中的存储"><a href="#变量在JVM内存中的存储" class="headerlink" title="变量在JVM内存中的存储"></a>变量在JVM内存中的存储</h1><p>不同方式创建的变量 &amp; 常量，在 JVM 存储的位置：</p>
+<p><strong>Stack（栈区）</strong>：</p>
 <ul>
-<li><ol>
-<li>每个类在被 ClassLoader 载入时会创建该类的 <code>Class对象</code>, 存放在堆区;</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>类的 <code>static members</code>:<ul>
-<li>如果是基本类型(int,float 等)的 static members, 在方法区跟类型信息在一起;</li>
-<li>如果类类型的 static members, 被 new 创建的对象本身在堆区, 引用(内存地址)还是在方法区;</li>
+<li>局部变量，保存在每个方法的栈帧中的“局部变量表”中</li>
+<li>如果局部变量是类引用，引用本身也在局部变量表，引用指向的 object 在Heap</li>
 </ul>
-</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>字符串常量(字面量): 字符串常量池在 JDK7 之后移到了堆区;</li>
-</ol>
-</li>
-</ul>
-<p><strong>方法区</strong>(永久代): JDK8 之后方法区被移动到了 Native Memory 中的 <strong>Meta space(元空间)</strong></p>
+<p><strong>Heap（堆区）</strong>:</p>
 <ul>
-<li><ol>
-<li>类的元信息:<ul>
-<li>类的完整有效名, 类的直接父类的完整有效名, 方法的形参类型以及返回类型,</li>
-<li>类的方法字节码(bytecodes)</li>
-<li>类的加载器的引用(ClassLoader)</li>
+<li>每个 Object 对应的 Class Object</li>
+<li>Object 的普通成员变量（除 static、final 之外的）</li>
+<li>Object 的 static 成员：在堆</li>
+<li>Object 的 final 成员： <ul>
+<li>基本类型的 final（int、double）：在 Metaspace 的常量池</li>
+<li>引用类型的 final：</li>
 </ul>
 </li>
-</ol>
-</li>
-<li><ol start="2">
-<li>运行时常量池 <code>Runtime Constant Pool</code></li>
-</ol>
-</li>
+<li>字符串常量(字面量): 字符串常量池在 JDK7 之后移到了堆区</li>
 </ul>
+<p><a href="https://www.baeldung.com/jvm-static-storage" target="_blank" rel="noopener">JVM Storage for Static Members | Baeldung</a>：</p>
 <blockquote>
-<p>类信息在方法区的内存布局有些类似 <code>.class</code> 文件结构, 参考后面的 “class 文件结构”一节 @ <a href="/12.Java/Advanced-Java.05.class文件结构/" title="Advanced-Java.05.class文件结构">Advanced-Java.05.class文件结构</a></p>
+<p>Before Java 8, <strong>PermGen stores static members</strong> like static methods and static variables. Additionally, PermGen also stores interned strings.<br>As we’ve already discussed, <a href="https://www.baeldung.com/java-permgen-metaspace" target="_blank" rel="noopener">PermGen space is replaced with Metaspace in Java 8</a>, resulting in a change for memory allocation of the static members.<br>Since Java 8, Metaspace only stores the class metadata, and <strong>heap memory keeps the static members</strong>. Furthermore, the heap memory also provides storage for interned strings.</p>
 </blockquote>
-<h1 id="字符串在内存中的存储"><a href="#字符串在内存中的存储" class="headerlink" title="字符串在内存中的存储"></a>字符串在内存中的存储</h1><p>String pool: 全局字符串池里的内容是在类加载完成，经过验证，准备阶段之后在堆中生成字符串对象实例，然后将该字符串对象实例的引用值存到 string pool 中（记住：string pool 中存的是引用值而不是具体的实例对象，具体的实例对象是在堆中开辟的一块空间存放的）。</p>
-<p>在 HotSpot VM 里实现的 string pool 功能的是一个 StringTable 类，它是一个哈希表，里面存的是驻留字符串(也就是我们常说的用双引号括起来的)的引用（而不是驻留字符串实例本身），也就是说在堆中的某些字符串实例被这个 StringTable 引用之后就等同被赋予了”驻留字符串”的身份。这个 StringTable 在每个 HotSpot VM 的实例只有一份，被所有的类共享。</p>
-<h2 id="String-Pool-与-String-intern"><a href="#String-Pool-与-String-intern" class="headerlink" title="String Pool 与 String.intern()"></a>String Pool 与 String.intern()</h2><p>Java 并不要求常量只在编译期产生, 并非只有 class 文件常量池的内容才能进入方法区的”运行时常量池”,<br>运行期间可以添加常量进入常量池, 比如 <code>String.intern()</code> 方法;<br>运行 <code>str.intern()</code> 后, “首先在 String Pool 里查找是否有 equals 的字符串, 如果没有则在 String Pool 创建一个字面量字符串, 并返回其引用”<br>JDK6 和 JDK7 的 intern 方法实现有差异, 具体看下面.</p>
+<p><strong>MateSpace</strong>:<br>这部分存储的内容参考 <a href="/12.Java/Advanced-Java.02b1.MetaSpace解析/" title="Advanced-Java.02b1.MetaSpace解析">Advanced-Java.02b1.MetaSpace解析</a></p>
+<blockquote>
+<p>对象在内存中的结构 @ref <a href="/12.Java/Advanced-Java.05.对象内存结构/" title="Advanced-Java.05.对象内存结构">Advanced-Java.05.对象内存结构</a></p>
+</blockquote>
+<h1 id="字符串在JVM内存中的存储"><a href="#字符串在JVM内存中的存储" class="headerlink" title="字符串在JVM内存中的存储"></a>字符串在JVM内存中的存储</h1><p>1.6之前的不管了，只看1.7及之后的：</p>
+<ul>
+<li>双引号创建的 <code>String s = &quot;hello&quot;</code>，存储在堆中，但是”hello”会被放入 Sring Pool</li>
+<li><code>String s = new String(&quot;hello&quot;)</code> 涉及到两个 string 对象：构造方法创建的存储在 Heap，另一个双引号创建的在 String Pool；</li>
+</ul>
+<h2 id="String-Pool-与-String-intern"><a href="#String-Pool-与-String-intern" class="headerlink" title="String Pool 与 String.intern()"></a>String Pool 与 String.intern()</h2><p><del>Java 并不要求常量只在编译期产生, 并非只有 class 文件常量池的内容才能进入方法区的”运行时常量池”,<br>运行期间可以添加常量进入常量池, 比如 <code>String.intern()</code> 方法</del>;</p>
+<p>intern() 的作用是将该字符串驻留在 String Pool 中，如果 String Pool 中已存在当前字符串，就会直接返回当前字符串引用. 如果常量池中没有此字符串, 会将此字符串放入 Pool 中后再返回；<br>但要注意： </p>
+<ul>
+<li>String Pool 中保存的是地址, 指向 Heap 中的 String 对象；</li>
+<li>String Pool 是 C++实现的 HashTable，也就是 HashTable 对象是在 vm 的 Native 内存，而不是在 Heap，但指向的 String 在 Heap；</li>
+<li>JDK7之后的 String Pool 是一个固定大小的 HashTable（通过 vm 参数 <code>-XX:StringTableSize</code> 指定大小），因为 HashTable 大小固定，一旦 intern 的字符串数量过多，会导致链表过长，intern 性能下降，</li>
+<li>这时 HashTable 也会 rehash，但不会扩容，而是重新生成 hash 的 seed 减少碰撞。但因为没有扩容，所以对于非常满的 HashTable，rehash 后效果不大；</li>
+</ul>
+<p>JDK7之后 String Pool 的实现在 <code>\openjdk7\hotspot\src\share\vm\classfile\symbolTable.cpp</code> ：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">oop StringTable::intern(Handle string_or_null, jchar* name, <span class="keyword">int</span> len, TRAPS) &#123; </span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> hashValue = java_lang_String::hash_string(name, len); </span><br><span class="line">  <span class="keyword">int</span> index = the_table()-&gt;hash_to_index(hashValue); </span><br><span class="line">  oop <span class="built_in">string</span> = the_table()-&gt;lookup(index, name, len, hashValue); </span><br><span class="line">  <span class="comment">// Found </span></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">string</span> != <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="built_in">string</span>; </span><br><span class="line">  <span class="comment">// Otherwise, add to symbol to table </span></span><br><span class="line">  <span class="keyword">return</span> the_table()-&gt;basic_add(index, string_or_null, name, len, hashValue, CHECK_NULL); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主要做的是 lookup 和 basic_add ，如果 hashTable 冲突严重导致链表过长，lookup 耗时也会增加；</p>
+<p>➤ intern 使用场景：</p>
+<ul>
+<li>如果产生很多相同的字符串，intern 可以减少 string 对象的内存占用，但响应的增加了 intern 的耗时——主要是在 HashTable 的查找上</li>
+<li><p>对于大量但重复的字符串，可以使用 intern 放入 String pool，并使用 intern 获取  ：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String symbol = <span class="keyword">new</span> String(character).intern();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>除了 Java 代码中可以调用，VM 的 C++代码也可以调用 intern，例如 Thread.currentThread().getStackTrace()，获取类名和方法名是通过 intern 获取：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">oop classname = StringTable::intern((<span class="keyword">char</span>*) str, CHECK_0);  </span><br><span class="line">oop methodname = StringTable::intern(method-&gt;name(), CHECK_0);  </span><br><span class="line">oop filename = StringTable::intern(source, CHECK_0);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>➤ intern 使用建议：</p>
+<ul>
+<li>如果创建的重复字符串很多，intern 可以减少内存使用</li>
+<li>String Pool 大小由 vm 参数指定，不可动态修改，也不会扩容，1是根据自身需要调整 <code>StringTableSize</code>，2是代码中谨慎使用 intern</li>
+</ul>
+<p>➤ GC 和 intern 的问题：</p>
+<ul>
+<li>YGC 时需要扫描 String Pool，防止其中的在 YoungGen 分配的 string 对象被回收 <ul>
+<li>@doubt：在 String Pool 中的 string 如果晋升 or 内存地址发生变化，需要同步修改 String Pool? </li>
+<li>@doubt: oldGC 是不是也需要扫描 String Pool？</li>
+</ul>
+</li>
+<li>既然 YGC 是需要扫描 String Pool 的，那么过于庞大的 String Pool 也会影响 YGC 时间</li>
+</ul>
+<p>@ref:</p>
+<ul>
+<li><a href="https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html" target="_blank" rel="noopener">深入解析String#intern - 美团技术团队</a></li>
+<li><a href="http://lovestblog.cn/blog/2016/11/06/string-intern/" target="_blank" rel="noopener">JVM源码分析之String.intern()导致的YGC不断变长 - 你假笨</a></li>
+</ul>
 <h2 id="JDK6-7-8-的-String-Pool"><a href="#JDK6-7-8-的-String-Pool" class="headerlink" title="JDK6,7,8 的 String Pool"></a>JDK6,7,8 的 String Pool</h2><ol>
 <li>JDK6: GermGen 的大小在64位机器上一般为96MB, 由 <code>-XX:MaxPermSize</code> 指定, String Pool(主要是个 C++描述的 StringTable)的大小默认是 1009(StringTable “桶”的大小), 且这个大小不能扩展, StringTable 的实现原理类似 HashMap, hash 值相同的会放进同一个桶的链表里. 如果太多调用了 <code>String.intern()</code>, 会导致这个 StringTable 性能下降.</li>
 <li>JDK7: String Pool 从 PermGen 移到 Heap, 并且增加了 <code>-XX:StringTableSize</code> 参数可以配置 String Pool 的大小, <code>-XX:StringTableSize=1000003</code>.</li>
@@ -577,7 +606,6 @@
 <li><code>String s4 = &quot;11&quot;</code> 这种方式创建是指明在 String Pool 里创建, 但是 String Pool 里已经存在一个”11”的引用了, 那么 s4 直接指向这个引用. 所以 s3 和 s4 指向的都是 Heap 里的”11”, 故 <code>s3== s4</code> 输出 true；</li>
 </ul>
 </blockquote>
-<p>以上参考自<a href="http://www.importnew.com/14142.html" target="_blank" rel="noopener">深入解析String#intern - ImportNew</a> @ref</p>
 <h1 id="•内存分区可能抛出的错误"><a href="#•内存分区可能抛出的错误" class="headerlink" title="•内存分区可能抛出的错误"></a>•内存分区可能抛出的错误</h1><ul>
 <li>Stack : <code>StackOverflowError</code> &amp; <code>OutOfMemoryError</code></li>
 <li>Heap: <code>OutOfMemoryError</code></li>
@@ -808,7 +836,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK6-时期"><span class="nav-text">JDK6 时期</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Heap"><span class="nav-text">Heap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#YoungGen-新生代"><span class="nav-text">YoungGen(新生代)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Eden-区的-TLAB"><span class="nav-text">Eden 区的 TLAB</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OldGen-老年代"><span class="nav-text">OldGen(老年代)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stack"><span class="nav-text">Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Method-Area"><span class="nav-text">Method Area</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK7-时期"><span class="nav-text">JDK7 时期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#•JDK6-7-的-VM-参数总结"><span class="nav-text">•JDK6~7 的 VM 参数总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK8-时期-MetaSpace"><span class="nav-text">JDK8 时期(MetaSpace)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM-分代设置大小"><span class="nav-text">JVM 分代设置大小</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象在内存中的存储"><span class="nav-text">对象在内存中的存储</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串在内存中的存储"><span class="nav-text">字符串在内存中的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String-Pool-与-String-intern"><span class="nav-text">String Pool 与 String.intern()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK6-7-8-的-String-Pool"><span class="nav-text">JDK6,7,8 的 String Pool</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#•内存分区可能抛出的错误"><span class="nav-text">•内存分区可能抛出的错误</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK6-时期"><span class="nav-text">JDK6 时期</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Heap"><span class="nav-text">Heap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#YoungGen-新生代"><span class="nav-text">YoungGen(新生代)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Eden-区的-TLAB"><span class="nav-text">Eden 区的 TLAB</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OldGen-老年代"><span class="nav-text">OldGen(老年代)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stack"><span class="nav-text">Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Method-Area"><span class="nav-text">Method Area</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK7-时期"><span class="nav-text">JDK7 时期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#•JDK6-7-的-VM-参数总结"><span class="nav-text">•JDK6~7 的 VM 参数总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK8-时期-MetaSpace"><span class="nav-text">JDK8 时期(MetaSpace)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM-分代设置大小建议"><span class="nav-text">JVM 分代设置大小建议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量在JVM内存中的存储"><span class="nav-text">变量在JVM内存中的存储</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串在JVM内存中的存储"><span class="nav-text">字符串在JVM内存中的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String-Pool-与-String-intern"><span class="nav-text">String Pool 与 String.intern()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK6-7-8-的-String-Pool"><span class="nav-text">JDK6,7,8 的 String Pool</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#•内存分区可能抛出的错误"><span class="nav-text">•内存分区可能抛出的错误</span></a></li></ol></div>
             
 
           </div>
