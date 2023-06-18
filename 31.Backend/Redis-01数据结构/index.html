@@ -127,7 +127,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/redis/redis_all_type.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/redis/redis-skiplist-model.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/redis/redis-skiplist-memory.png">
-<meta property="og:updated_time" content="2023-06-18T08:42:44.657Z">
+<meta property="og:updated_time" content="2023-06-18T14:37:20.937Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis-01数据结构">
 <meta name="twitter:description" content="Redis是一个K-V的数据库，“V” 的数据类型分为：String、Hash、List、Set、Sorted Set。  StringString 数据结构是简单的 key-value 类型，value 不仅可以是 String，也可以是数字（当数字类型用 Long 可以表示的时候encoding 就是整型，其他都存储在 sdshdr 当做字符串）。  sds是在Redis中被广泛使用的字符串结">
@@ -356,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,143
+                  2,161
                 </span>
               
 
@@ -484,7 +484,10 @@
 <li><code>ZCOUNT key min max</code>： 返回有序集 key 中， score值在 min和 max之间(默认包括)的成员的数量。时间复杂度：O(log(N))， N 为有序集的基数。</li>
 <li><code>ZCARD key</code>：返回key对应的集合的长度。</li>
 </ul>
-<h3 id="Sorted-Set的实现"><a href="#Sorted-Set的实现" class="headerlink" title="Sorted Set的实现"></a>Sorted Set的实现</h3><p>简化的 SkipList结构模型(横向每层都是一条链表, 层数从上到下 n-1):<br><img src="/images/redis/redis-skiplist-model.png" alt="Redis_SkipList_Model"></p>
+<h3 id="Sorted-Set的实现"><a href="#Sorted-Set的实现" class="headerlink" title="Sorted Set的实现"></a>Sorted Set的实现</h3><blockquote>
+<p>HBase 的 MemStore 使用了JDK 中的跳表 <code>ConcurrentSkipListMap</code> @ref: <a href="https://juejin.cn/post/7084811033549733902" target="_blank" rel="noopener">https://juejin.cn/post/7084811033549733902</a></p>
+</blockquote>
+<p>简化的 SkipList结构模型(横向每层都是一条链表, 层数从上到下 n-1):<br><img src="/images/redis/redis-skiplist-model.png" alt="Redis_SkipList_Model"></p>
 <p>▶ 插入一个Key, 首先计算在哪一层插入, 层数的计算代码:</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ZSKIPLIST_MAXLEVEL 32 <span class="comment">//最大层数</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ZSKIPLIST_P 0.25 <span class="comment">//P</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">zslRandomLevel</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> level = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((random()&amp;<span class="number">0xFFFF</span>) &lt; (ZSKIPLIST_P * <span class="number">0xFFFF</span>))</span><br><span class="line">        level += <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> (level&lt;ZSKIPLIST_MAXLEVEL) ? level : ZSKIPLIST_MAXLEVEL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>跳表最上层(最稀疏)是第1层, 层数初始值=1,<br><code>random()&amp;0xFFFF</code> 表示在 0 ~ 0xFFFF范围内随机数,<br>如果随机数出现在 0 ~ <code>ZSKIPLIST_P * 0xFFFF</code>, 则层数++, 所以每次循环中层数++的概率是 <code>ZSKIPLIST_P</code>, 这里是 0.25,<br>所以, 层数i = 1,2,3,… 的概率分别是 <code>3/4</code>, <code>1/4 * 3/4</code>, <code>1/4 * 1/4 * 3/4</code>, 每加一层, 出现在该层的概率就乘以 0.25,<br>简化一下:</p>

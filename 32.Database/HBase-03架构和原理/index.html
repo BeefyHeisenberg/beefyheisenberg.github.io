@@ -131,8 +131,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase-memstore-skiplist-chunck.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase_hfile_tree.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase-hfile-data-index.png">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase-compaction.png">
-<meta property="og:updated_time" content="2023-06-18T08:42:44.890Z">
+<meta property="og:updated_time" content="2023-06-18T14:37:21.298Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HBase-03架构和原理">
 <meta name="twitter:description" content="HBase 架构简介 HBase包含3个重要组件：Zookeeper、HMaster和 HRegionServer。  （1）Zookeeper： 为整个 HBase集群提供协助服务，包括： a. 存放整个 HBase集群的元数据以及集群的状态信息。 b. 实现 HMaster主从节点的 failover。     ZooKeeper为 HBase集群提供协调服务，它管理着 HMaster和 HR">
@@ -361,7 +360,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5,779
+                  7,916
                 </span>
               
 
@@ -451,7 +450,6 @@
 <p>每个 Region Server 都会创建一个 ephemeral 节点。HMaster 会监控这些节点来发现可用的 Region Servers，同样它也会监控这些节点是否出现故障。</p>
 <p>HMaster 们会竞争创建 ephemeral 节点，而 Zookeeper 决定谁是第一个作为在线 HMaster，保证线上只有一个 HMaster。在线 HMaster（<strong>active HMaster</strong>） 会给 Zookeeper 发送心跳，不在线的待机 HMaster （<strong>inactive HMaster</strong>） 会监听 active HMaster 可能出现的故障并随时准备上位。</p>
 <p>如果有一个 Region Server 或者 HMaster 出现故障或各种原因导致发送心跳失败，它们与 Zookeeper 的 session 就会过期，这个 ephemeral 节点就会被删除下线，监听者们就会收到这个消息。Active HMaster 监听的是 region servers 下线的消息，然后会恢复故障的 region server 以及它所负责的 region 数据。而 Inactive HMaster 关心的则是 active HMaster 下线的消息，然后竞争上线变成 active HMaster。</p>
-<p>此外，Zook<br>zk 中的 /hbase/meta-region-server</p>
 <h2 id="META-表"><a href="#META-表" class="headerlink" title="META 表"></a>META 表</h2><p>当 Client 发起的每个 RPC 请求，实际上都需要发送到对应的 RegionServer 上执行，所以第一步是通过 Table 和 Rowkey <strong>定位 Region</strong> ，对应关系存储在 <code>hbase:meta</code> 表：</p>
 <p><code>hbase:meta</code> 是一个比较特殊的 hbase 表，也叫<strong>元数据表</strong>（不能切分，只保存在一台 RegionServer 上）</p>
 <p>在0.96之后元数据的查询模型由3层结构变成2层，即：</p>
@@ -521,8 +519,9 @@
 <h2 id="HLog-WAL"><a href="#HLog-WAL" class="headerlink" title="HLog (WAL)"></a>HLog (WAL)</h2><p>HLog 是 WAL(Write-Ahead-Log)的具体实现，数据的更新首先被写入 HLog，在 Region Server 宕机时可以通过回放 Hlog 实现 Crash-safe</p>
 <p>HLog 实现细节：</p>
 <ul>
-<li>每个 Region Server 可以有一个 or 多个 HLog，一个 Hlog 可以被多个 Region（子表）共享；</li>
-<li>HLog 中，一个基本数据单元为 HLogKey + WALEdit<ul>
+<li>每个 Region Server 可以有一个 or 多个 HLog 文件（默认只有1个，1.x 版本可以开启 MultiWAL 功能，允许多个 HLog） // @doubt: 这几个 HLog 文件是顺序的？</li>
+<li>一个 HLog 是被多个 Region（子表）共享的，也即当前所有子表的写入，都落到一个 HLog 文件中；</li>
+<li>HLog 中，一个基本数据单元为 <strong>HLogKey</strong> + <strong>WALEdit</strong><ul>
 <li>HLogKey：包含 table name、region name、sequenceid 等</li>
 <li>WALEdit：WALEdit用来表示一个事务中的更新集合，一次行级事务可以原子操作同一行中的多个列。上图中WALEdit包含多个KeyValue</li>
 </ul>
@@ -534,9 +533,9 @@
 <p>下图是中三个 Region（A、B、C）共享一个 HLog，日志最小单元是 HlogKey + WALEdit：<br><img src="/images/HBase-Region-WAL.png" alt="../_images/HBase-Region-WAL.png"></p>
 <p>@ref: <a href="http://hbasefly.com/2017/07/02/hbase-sequenceid/" target="_blank" rel="noopener">HBase原理－要弄懂的sequenceId – 有态度的HBase/Spark/BigData</a></p>
 <h2 id="MemStore"><a href="#MemStore" class="headerlink" title="MemStore"></a>MemStore</h2><ul>
-<li>一个子表可能包括多个列族，一个 Region 可能包括多个 <strong>MemStore</strong></li>
-<li><strong>MemStore</strong> 和列族是一一对应的</li>
-<li>当 <strong>MemStore</strong>（默认 64MB）写满之后，会 flush 到 HDFS 上生成 StoreFile，<strong>MemStore</strong> 相当于 LSM-Tree 结构中的 C0层</li>
+<li>一个子表可能包括多个列族，一个 Region 可能包括多个 <strong>MemStore</strong>；</li>
+<li><strong>MemStore</strong> 和列族是一一对应的；</li>
+<li>当 <strong>MemStore</strong>（默认 64MB）写满之后，会 flush 到 HDFS 上生成 StoreFile，<strong>MemStore</strong> 相当于 LSM-Tree 结构中的 C0层；</li>
 </ul>
 <p>HBase 的 MemStore 基于 <code>ConcurrentSkipListMap</code> 跳表实现，由于 KeyValue 是存储于内存中的，对于很多写入吞吐量几万每秒的业务来说，每秒就会有几万个内存对象产生，这些对象会在内存中存在很长一段时间，对应的会晋升到老生代，一旦执行了 flush 操作，老生代的这些对象会被 GC 回收掉，导致 JVM 的 GC 压力非常大。</p>
 <p>GC 压力主要来源于：这些内存对象一旦晋升到老生代，执行完 OldGen GC 后会存在大量的非常小的内存碎片（例如老年代的回收器 CMS，是不带内存压缩的），这些内存碎片会引起频繁的 Full GC，而且每次 Full GC 的时间会异常的长。</p>
@@ -591,9 +590,22 @@
 <li><a href="http://hbasefly.com/2016/03/25/hbase-hfile/" target="_blank" rel="noopener">HBase – 存储文件HFile结构解析 – 有态度的HBase/Spark/BigData</a></li>
 <li><a href="http://hbasefly.com/2016/04/03/hbase_hfile_index/" target="_blank" rel="noopener">HBase – 探索HFile索引机制 – 有态度的HBase/Spark/BigData</a></li>
 </ul>
-<h2 id="HFile-Minor-amp-Major-Compact"><a href="#HFile-Minor-amp-Major-Compact" class="headerlink" title="HFile Minor &amp; Major Compact"></a>HFile Minor &amp; Major Compact</h2><p>当一个 Store 中的 StoreFile 达到一定的阈值后，就会进行一次合并(major compact)，将对同一个 key 的修改合并到一起，形成一个大的 StoreFile，当 StoreFile 的大小达到一定阈值后，又会对 StoreFile 进行分割(split)，等分为两个 StoreFile。</p>
-<p>其中，minor compaction 是自动将相关的小文件做一些适当的紧凑，但不彻底；<br>而 major compaction 则是放在午夜跑的定时任务，将文件做最大化的紧凑。这时候 LSM 树的磁盘树数量很少, 被并入一个大的树</p>
-<p><img src="/images/hbase/hbase-compaction.png" alt="hbase_compaction"></p>
+<h2 id="Minor-Major-Compaction"><a href="#Minor-Major-Compaction" class="headerlink" title="Minor/Major Compaction"></a>Minor/Major Compaction</h2><p>HBase 会自动合并一些小的 HFile，重写成少量更大的 HFiles。这个过程被称为 <strong>Minor Compaction</strong>。它使用归并排序算法，将小文件合并成大文件，有效减少 HFile 的数量。</p>
+<p><strong>Major Compaction</strong> 合并每个 Column Family 下的<strong>所有的</strong> HFiles，生成<strong>一个大的 HFile</strong>，在这个过程中，被删除的和过期的 cell 会被真正删除。因为 major compaction 会重写所有的 HFile，会产生大量的硬盘 I/O 和网络开销。这被称为<strong>写放大</strong>（<strong>Write Amplification</strong>）。</p>
+<p>Major 是 Minor 升级而来的。如果本次 Minor Compaction 包含所有文件，且达到了足够的时间间隔，则会被升级为 Major Compaction。判断时间间隔根据以下两个配置项：</p>
+<ul>
+<li>hbase.hregion.majorcompaction：major Compaction 发生的周期，单位是毫秒，默认值是7天。</li>
+<li>hbase.hregion.majorcompaction.jitter majorCompaction：周期抖动参数，0~1.0的一个指数。调整这个参数可以让 Major Compaction 的发生时间更灵活，默认值是0.5。</li>
+</ul>
+<p>因为 Major Compaction 存在 write amplification 的问题，所以major compaction 一般都安排在周末和半夜。Major compaction 还能将因为 RegionServer crash 或者 Balance 导致的数据迁移重新移回到与 RegionServer 相同的节点，这样就能恢复 <strong>data locality</strong>。</p>
+<p>下图直观描述了 Flush 与 Compaction 流程：</p>
+<p>![[../_images/HFile-Compact.png]]</p>
+<p>HBase Compaction 的触发条件有三种：MemStore Flush、后台线程周期性检查、手动触发；</p>
+<ul>
+<li>MemStore flush：MemStore 的 size 达到一定阈值或其他条件时就会触发 flush 刷写到磁盘生成 HFile 文件， HFile 文件越来越多则触发 compact。HBase 每次 flush 之后，都会判断是否要进行 compaction，一旦满足 minor compaction 或 major compaction 的条件便会触发执行。</li>
+<li>后台线程周期性检查： 后台线程 CompactionChecker 会定期检查是否需要执行 compaction，检查周期为 <code>hbase.server.thread.wakefrequency*hbase.server.compactchecker.interval.multiplier</code>，这里主要考虑的是一段时间内没有写入请求仍然需要做 compact 检查。其中参数 <code>hbase.server.thread.wakefrequency</code> 默认值 10000 即 10s，是 HBase 服务端线程唤醒时间间隔，用于 log roller、memstore flusher 等操作周期性检查；参数 <code>hbase.server.compactchecker.interval.multiplier</code> 默认值1000，是 compaction 操作周期性检查乘数因子。<code>10 * 1000 s</code> 时间上约等于2小时46分钟。</li>
+<li>手动触发：是指通过 HBase Shell、Master Web UI 或者 HBase API 等任一种方式执行 compact、major_compact 等命令。</li>
+</ul>
 <h2 id="查询流程"><a href="#查询流程" class="headerlink" title="查询流程"></a>查询流程</h2><ul>
 <li><p>（1）<strong>查询 meta 表</strong>：Client 发送请求给 Zk, 获取 hbase:meta 表在哪个 RegionServer，hbase:meta 存储了每个表在每个 Region 上的 start/end Key， Client 向该 RegionServer 发送请求, 查询 meta 表, 获取 Key 在哪个 Region 上, 同时也确定了 RegionServer</p>
 <ul>
@@ -622,28 +634,126 @@
 <li>（2）put 请求到 Region Server ，数据被写入 WAL 后，会被加入到 MemStore 即写缓存。然后服务端就可以向客户端返回 ack 表示写数据完成。<ul>
 <li>每个 RegionServer 一般只有一个 WAL，不同子表、不同列族的数据都被写入这一个 WAL, 同时 WAL 中每个最小单元都有唯一递增的seqId @ref: [[#HLog (WAL)]]</li>
 <li>每个 Column Family 都有一个 MemStore，不同的列族被写入其对应的 MemStore，在 MemStore 中按 Rowkey 进行排序；</li>
-<li>当某个 Column Family 的 MemStore 中，累积了足够多的的数据后，整个有序数据集就会被写入一个新的 HFile 文件到 HDFS 上，每个 Column Family 都有自，同时；</li>
-<li></li>
+<li>当某个 Column Family 的 MemStore 中，累积了足够多的的数据后，整个有序数据集就会被写入一个新的 HFile 文件到 HDFS；</li>
+<li>当 HFile 越来越多，会触发 Compact 合并操作，把过多的 HFile 合并成一个大的 HFile;</li>
+<li>当 Region 越来越大，达到阈值后，还会触发 Split；</li>
 </ul>
 </li>
 </ul>
-<h2 id="Region拆分策略"><a href="#Region拆分策略" class="headerlink" title="Region拆分策略"></a>Region拆分策略</h2><p>HBase的表由多个子表(Regions)组成，这些 Regions分布在多个 Region Server上面。<br>Region的拆分逻辑是通过CompactSplitThread线程的requestSplit方法来触发的，每当执行MemstoreFlush操作时都会调用该方法进行判断，看是否有必要对目标Region进行拆分。Region的拆分有三种策略：</p>
-<ol>
-<li>ConstantSizeRegionSplitPolicy：在0.94之前只有这个策略。当region中的一个store（对应一个columnfamily的一个storefile）超过了配置参数hbase.hregion.max.filesize时拆分成两个，该配置参数默认为10GB。region拆分线是最大storefile的中间rowkey。</li>
-<li>IncreasingToUpperBoundRegionSplitPolicy：0.94默认策略。拆分阈值是<code>Min (R^2 * “hbase.hregion.memstore.flush.size”, “hbase.hregion.max.filesize”)</code>，其中R是一张表中位于同一个regionserver的region的数目。<code>hbase.hregion.memstore.flush.size</code>默认是128MB，后一个参数默认是10GB。因此，如果region没有预拆分，默认的行为是，表的第一个region会位于一个regionserver上，然后当达到<code>1^2*128MB=128MB</code>，region被拆分成2个，它们仍然位于同一个regionserver上，因此，随着region的增加，拆分阈值也增加：128MB、512MB、1152MB、2GB、3.2GB、4.6GB、6.2GB，依次类推，直至达到9个region之后，拆分阈值就恒定为10GB。这可以控制一个regionserver拥有的region个数在小数据量的时候不会太少，在大的数据量时候不会太多。region拆分线是最大storefile的中间rowkey。</li>
-<li>KeyPrefixRegionSplitPolicy：你可以配置用来对你的rowkey进行分组所依赖的前缀长度，然后该策略保证region的拆分线不会在一组拥有相同前缀的rowkey的中间，也就是说，拆分后的region中，相同前缀的rowkey会一直位于同一个region上。其他的拆分策略与IncreasingToUpperBoundRegionSplitPolicy是一样的。</li>
-</ol>
-<p><strong>如何配置策略？</strong><br>通过配置参数<code>hbase.regionserver.region.split.policy</code>来配置，这是全局的。可以针对单独的表进行配置，用表的API<code>HTableDescriptor.setValue()</code>可以配置。另外，后一种配置还可以使用自定义的拆分策略类。</p>
-<h2 id="HBase-高可用"><a href="#HBase-高可用" class="headerlink" title="HBase 高可用"></a>HBase 高可用</h2><p>TODO: 一个 HBase 集群有多个 RS, 每个 RS 负责一部分 Key, 当一个 RS 宕机 …</p>
+<p>@ref:</p>
 <ul>
-<li>HDFS 的大文件被分为多个 Block, 每个 Block 都存在在3台不同机器上, 实现3副本;</li>
-<li>HBase 写数据的 WAL 机制: 先写 HLog, 再写缓存, 缓存满了一起落盘, HLog 可以作为宕机后的恢复依据;</li>
-<li>每个 RegionServer 会周期性给 zk 发送心跳信息, 当 RS 断开连接, 超过一定时间(zk 的 sessionTimeout), zk 认为这台 RS 宕机, 并将消息通知给 Master,</li>
-<li>Master 将这台 RegionServer 上所有的 Region 转移到其他 RS 上. 再将 HLog 日志分发给其他 RS 进行回放. // RS 已经宕机, master 如何从 RS 上获取 Log ?</li>
+<li><a href="https://bbs.huaweicloud.com/blogs/132194" target="_blank" rel="noopener">一条数据的HBase之旅，简明HBase入门教程-Write全流程-云社区-华为云</a></li>
 </ul>
-<blockquote>
-<p>@ref <a href="https://zhuanlan.zhihu.com/p/28475168" target="_blank" rel="noopener">HBase–RegionServer宕机恢复原理 - 知乎</a></p>
-</blockquote>
+<h2 id="高可用-amp-宕机恢复"><a href="#高可用-amp-宕机恢复" class="headerlink" title="高可用 &amp; 宕机恢复"></a>高可用 &amp; 宕机恢复</h2><p>HBase 的高可用是通过 Zookeeper 实现，见「Zookeeper」一节：</p>
+<ul>
+<li>Master 的宕机发现 &amp; 选主；</li>
+<li>Region Server 宕机发现；</li>
+</ul>
+<p>HDFS 的多副本机制保证 HFile 在不同的 Region Server 上存在冗余副本；</p>
+<p><strong>Region Server 宕机恢复：</strong></p>
+<ul>
+<li>Region Server 因某些原因宕机，与 Zk 失去心跳，超时后临时节点被移除；</li>
+<li>HMaster 检测到 Region Server 临时节点被移除，开始执行宕机恢复，切分 Region Server 的 HLog（WAL），分发给其他 Region Server 进行回放。HFile 中保存了该 File 中最大的 seqId，所以只需要找到宕机 RS 上 HFile 最大的 seqId，回放大于该 seqId 的日志记录；</li>
+</ul>
+<p>HLog 的切分和回放，有如下几种策略，LogSplitting、Distributed Log Splitting、Distributed Log Replay</p>
+<p>（1）LogSplitting 策略，HLog 的切分和落盘完全由 HMaster 完成：</p>
+<ul>
+<li>HMaster 启动一个读线程依次顺序读出每个 HLog 中所有 <code>&lt;HLogKey,WALEdit&gt;</code> 数据对，根据 HLogKey 中包含的 Region 字段，将不同的 Region 数据写入不同的内存 buffer 中，HLog 一节已经介绍过，HLog 文件可以有多个，且当前所有 Region 子表的写入，都落到一个 HLog 文件中；</li>
+<li>HMaster 为每个 buffer 会对应启动一个写线程，负责将 buffer 中的数据写入 hdfs 中，每个 hdfs 文件对应一个 Region（子表），然后把 hdfs 文件分配给存活的 Region Server 进行回放；</li>
+</ul>
+<p>这种日志切分可以完成最基本的任务，但是只有 HMaster 进行 HLog 的切分和落盘，在某些场景下（集群整体宕机）进行恢复可能需要 N 个小时！也因为恢复效率太差，所以开发了 Distributed Log Splitting 策略</p>
+<p>（2）Distributed Log Splitting 策略，利用了所有 Region Server 的算力对 HLog 进行切分，效率更高</p>
+<ul>
+<li>Master 会将待切分日志路径发布到 Zookeeper 节点上（/hbase/splitWAL），每个日志作为一个任务，每个任务都会有对应状态，起始状态为 TASK_UNASSIGNED；</li>
+<li>所有 RegionServer 启动之后都注册在这个节点上等待新任务，一旦 Master 发布任务之后，RegionServer 就会抢占该任务；</li>
+<li>RegionServer 抢占任务成功之后，会分发给 hlogsplitter 线程切分处理，切分策略同上，也是将 HLog 中的数据按 Region 分类，写入不同的 hdfs 文件中；</li>
+<li>Region Server 被分配到不同的 hdfs 文件（对应不同的 Region）,进行回放；</li>
+</ul>
+<p>Distributed Log Splitting 策略利用 RS 的算力加快故障恢复进程，可以将故障恢复时间降到分钟级别。但会产生很多小文件。小文件数量 = HLog 文件数量 x 宕机 RS 上 Region 个数，例如一台 region server 上有200个 region，90个 hlog 文件。恢复过程会在 hdfs 上创建18000个小文件。</p>
+<p>（3）Distributed Log Replay: 在（2）文件的写入，而是读取出数据后直接进行回放</p>
+<p>@doubt 遗留问题：</p>
+<ul>
+<li>宕机恢复过程中，meta 表如何更新？</li>
+<li>Distributed Log Replay 策略中，RS 抢到某个 HLog 的切分任务，切分后并没有落盘，那么这个 RS 要独自承担这个 HLog 文件中所有 region 的回放？</li>
+</ul>
+<hr>
+<p>@ref：</p>
+<ul>
+<li><a href="http://hbasefly.com/2016/10/29/hbase-regionserver-recovering/" target="_blank" rel="noopener">HBase原理－RegionServer宕机数据恢复 – 有态度的HBase/Spark/BigData</a></li>
+<li><a href="https://segmentfault.com/a/1190000037554205" target="_blank" rel="noopener">HBase宕机恢复 - 个人文章 - SegmentFault 思否</a></li>
+</ul>
+<h2 id="Region-拆分"><a href="#Region-拆分" class="headerlink" title="Region 拆分"></a>Region 拆分</h2><p>HBase 中，一张表由多个子表(regions)组成，这些 regions 分布在多个 Region Server 上面，如果一个表有多个列族，那么每个 region 还分为多个 store，每个 store 对应一个列族。</p>
+<p>一旦 Region 的负载过大或者超过阈值时，它就会被分裂成两个新的 Region。Region 的拆分分为自动拆分和手动拆分。自动拆分可以采用不同的策略。</p>
+<p>Region 的拆分过程是由 Region Server 完成的，其拆分流程如下：</p>
+<ol>
+<li>将需要拆分的 Region 下线，客户端对该 Region 的请求会被拒绝，Master 会检测到 Region 的状态为 SPLITTING；</li>
+<li>开始拆分 Region，原 Region 被均分为2个子 Region；</li>
+<li>完成子 Region 创建后，向 Meta 表发送新产生的 Region 的元数据信息；</li>
+<li>将 Region 的拆分信息更新到 HMaster，并且每个 Region 进入可用状态；</li>
+</ol>
+<p>@doubt： 拆分后的子 Region ，还是在原来的 RS 上提供服务，拆分并不能起到降低 RS 负载的作用？</p>
+<p>Region 的 <strong>自动拆分</strong>主要根据拆分策略进行，Region 的拆分逻辑是通过 CompactSplitThread 线程的 requestSplit 方法来触发的，每当执行 Memstore Flush 操作时都会调用该方法进行判断，看是否有必要对目标 Region 进行拆分。</p>
+<p>➤ 自动拆分的触发有三种策略：</p>
+<ul>
+<li><strong>ConstantSizeRegionSplitPolicy</strong>：在0.94之前只有这个策略。当 region 中的一个 store（对应一个 columnfamily 的一个 storefile）超过了配置参数 <code>hbase.hregion.max.filesize</code> 时拆分成两个，该配置参数默认为10GB。region 拆分线是最大 storefile 的中间 rowkey。从字面意思来看，当 region 大小大于某个阈值（hbase.hregion.max.filesize）之后就会触发切分，实际上并不是这样，真正实现中这个阈值是对于某个 store 来说的，即一个 region 中最大 store 的大小大于设置阈值之后才会触发切分。</li>
+</ul>
+<ul>
+<li><strong>IncreasingToUpperBoundRegionSplitPolicy</strong> 0.94版本~2.0版本默认切分策略。总体来看和ConstantSizeRegionSplitPolicy思路相同，一个region中最大store大小大于设置阈值就会触发切分。但是这个阈值并不是固定值，而是会在一定条件下不断调整，调整规则和region所属表在当前regionserver上的region个数有关系.</li>
+</ul>
+<ul>
+<li><strong>SteppingSplitPolicy</strong>: 2.0版本默认切分策略。这种切分策略的切分阈值又发生了变化，相比 IncreasingToUpperBoundRegionSplitPolicy 简单了一些，依然和待分裂 region 所属表在当前 regionserver 上的 region 个数有关系，如果 region 个数等于1，切分阈值为 flush size x 2，否则为 MaxRegionFileSize。这种切分策略对于大集群中的大表、小表会比 IncreasingToUpperBoundRegionSplitPolicy 更加友好，小表不会再产生大量的小 region，而是适可而止。</li>
+</ul>
+<p>➤ 手动拆分：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">split &apos;regionName&apos; # format: &apos;tableName,startKey,id&apos;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>@ref:</p>
+<ul>
+<li><a href="http://hbasefly.com/2017/08/27/hbase-split/" target="_blank" rel="noopener">HBase原理 – 所有Region切分的细节都在这里了 – 有态度的HBase/Spark/BigData</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/2005289" target="_blank" rel="noopener">【万字长文】Hbase最全知识点整理（建议收藏）-腾讯云开发者社区-腾讯云</a></li>
+</ul>
+<h2 id="Region-合并"><a href="#Region-合并" class="headerlink" title="Region 合并"></a>Region 合并</h2><p>目前只有手动合并，当删除大量数据后，HBase 中会存在数量很多的小 Region，MemStore 的数量也会变多，数据频繁从内存 Flush 到 HFile，影响用户请求，可能阻塞该 Region 服务器上的更新操作。</p>
+<p><strong>合并过程</strong></p>
+<ol>
+<li>客户端发起 Region 合并处理，并发送 Region 合并请求给 Master。</li>
+<li>Master 在 Region 服务器上把 Region 移到一起，并发起一个 Region 合并操作的请求。</li>
+<li>Region 服务器将准备合并的 Region下线，然后进行合并。</li>
+<li>从 Meta 表删除被合并的 Region 元数据，新的合并了的 Region 的元数据被更新写入 Meta 表中。</li>
+<li>合并的 Region 被设置为上线状态并接受访问，同时更新 Region 信息到 Master。</li>
+</ol>
+<h2 id="Region-负载均衡"><a href="#Region-负载均衡" class="headerlink" title="Region 负载均衡"></a>Region 负载均衡</h2><p>当 Region 进行拆分之后，Region Server 之间可能会出现 Region 数量 不均衡的问题，Master 便会执行负载均衡来调整部分 Region 的位置，使每个 Region 服务器的 Region 数量保持在合理范围之内，负载均衡会引起 Region 的重新定位，使涉及的 Region 不具备数据本地性。</p>
+<p>Region 的负载均衡由 Master 来完成，Master 有一个内置的负载均衡器，在默认情况下，均衡器每 5 分钟运行一次，用户可以配置。负载均衡操作分为两步进行：首先生成负载均衡计划表， 然后按照计划表执行 Region 的分配。</p>
+<p>执行负载均衡前要明确，在以下几种情况时，Master 是不会执行负载均衡的。</p>
+<ul>
+<li>均衡负载开关关闭。</li>
+<li>Master 没有初始化。</li>
+<li>当前有 Region 处于拆分状态。</li>
+<li>当前集群中有 Region 服务器出现故障。</li>
+</ul>
+<p>Master 内部使用一套集群负载评分的算法，来评估 HBase 某一个表的 Region 是否需要进行重新分配。这套算法分别从 Region 服务器中 Region 的数目、表的 Region 数、MenStore 大小、 StoreFile 大小、数据本地性等几个维度来对集群进行评分，评分越低代表集群的负载越合理。</p>
+<p>确定需要负载均衡后，再根据不同策略选择 Region 进行分配，负载均衡策略有三种，如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>原理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RandomRegionPicker</td>
+<td>随机选出两个 Region 服务器下的 Region 进行交换</td>
+</tr>
+<tr>
+<td>LoadPicker</td>
+<td>获取 Region 数目最多或最少的两个 Region 服务器，使两个 Region 服务器最终的 Region 数目更加平均</td>
+</tr>
+<tr>
+<td>LocalityBasedPicker</td>
+<td>选择本地性最强的 Region</td>
+</tr>
+</tbody>
+</table>
+<p>根据上述策略选择分配 Region 后再继续对整个表的所有 Region 进行评分，如果依然未达到标准，循环执行上述操作直至整个集群达到负载均衡的状态。</p>
 
       
     </div>
@@ -861,7 +971,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase-架构简介"><span class="nav-text">HBase 架构简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS"><span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper"><span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#META-表"><span class="nav-text">META 表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HMaster"><span class="nav-text">HMaster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HRegion-Server"><span class="nav-text">HRegion Server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HLog-WAL"><span class="nav-text">HLog (WAL)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MemStore"><span class="nav-text">MemStore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HFile"><span class="nav-text">HFile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HFile-Minor-amp-Major-Compact"><span class="nav-text">HFile Minor &amp; Major Compact</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询流程"><span class="nav-text">查询流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写入流程"><span class="nav-text">写入流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region拆分策略"><span class="nav-text">Region拆分策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase-高可用"><span class="nav-text">HBase 高可用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase-架构简介"><span class="nav-text">HBase 架构简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS"><span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper"><span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#META-表"><span class="nav-text">META 表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HMaster"><span class="nav-text">HMaster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HRegion-Server"><span class="nav-text">HRegion Server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HLog-WAL"><span class="nav-text">HLog (WAL)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MemStore"><span class="nav-text">MemStore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HFile"><span class="nav-text">HFile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Minor-Major-Compaction"><span class="nav-text">Minor/Major Compaction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询流程"><span class="nav-text">查询流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写入流程"><span class="nav-text">写入流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高可用-amp-宕机恢复"><span class="nav-text">高可用 &amp; 宕机恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region-拆分"><span class="nav-text">Region 拆分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region-合并"><span class="nav-text">Region 合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region-负载均衡"><span class="nav-text">Region 负载均衡</span></a></li></ol></div>
             
 
           </div>

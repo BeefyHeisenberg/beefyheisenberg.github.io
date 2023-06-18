@@ -124,7 +124,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="安装 &amp;amp; 部署 Hadoop &amp;amp; HBase Hadoop集群: 1x NameNode, 2x DataNode, 共7T HBase集群: 1x Master, 2x RegionServer   服务分布情况: ip6 : hbase master, hadoop name_node, Zookeeper ip7 : hbase region ip8 : hbase regi">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-06-18T08:42:44.885Z">
+<meta property="og:updated_time" content="2023-06-18T14:37:21.289Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HBase-02运维和部署">
 <meta name="twitter:description" content="安装 &amp;amp; 部署 Hadoop &amp;amp; HBase Hadoop集群: 1x NameNode, 2x DataNode, 共7T HBase集群: 1x Master, 2x RegionServer   服务分布情况: ip6 : hbase master, hadoop name_node, Zookeeper ip7 : hbase region ip8 : hbase regi">
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  654
+                  527
                 </span>
               
 
@@ -402,16 +402,19 @@
 <h3 id="zk"><a href="#zk" class="headerlink" title="zk"></a>zk</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">touch /data1/zookeeper/myid &amp;&amp; echo 1 &gt; /data1/zookeeper/myid</span><br><span class="line">/data0/zookeeper-3.4.12/bin/zkServer.sh start</span><br></pre></td></tr></table></figure>
 <h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><p><strong>① Server端优化:</strong></p>
 <ul>
-<li>JVM内存优化: <code>export HBASE_REGIONSERVER_OPT=&quot;-Xmx8g -Xms8g -Xmn128m -XX:+UseParNewGC -XX:UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=70 -verbose:gc -XX:+printGCDetails -XX:+PrintGCTimeStamps -Xloggc:${HBASE_HOME}/logs/gc-${hostname}-hbase.log&quot;</code></li>
-<li>使用压缩: GZIP, LZO, Zippy/Snappy, 创建表的时候指定列族的压缩格式：<code>create &#39;testtable&#39;,{NAME =&gt; &#39;colfam1&#39;,COMPRESSION =&gt; &#39;GZ&#39;}</code></li>
-<li>预分Region: 在建表的时候预先创建多个Region, 并规定好每个Region存储的Rowkey范围, 通过对数据的特性进行分析预先创建分区可以有效的解决HBase中的数据倾斜问题</li>
-<li>防止拆分/合并风暴:<ul>
-<li>考虑这种情况：拆分之后的两个子region都已恒定的速率增大，导致在同一时刻进行拆分，但是如果两个region拆分之后继续以恒定的速率增长导致子子region又一起拆分，这种情况被称为拆分/合并风暴，这将导致磁盘IO的飙升。这种情况下，与其依赖HBase的自动拆分，用户不如手动使用split和major_compact命令来管理，因为手动管理的话可以将这些region的拆分/合并时机分割开来，尽量分散IO负载。</li>
-<li>碰到这种情况的时候不要忘记把配置文件中的<code>hbase.hregion.max.filesize</code>设置为非常大（但是major_compat时会耗时很长, 尽量在维护期间做major_compat）</li>
+<li><p>JVM 内存优化: <code>export HBASE_REGIONSERVER_OPT=&quot;-Xmx8g -Xms8g -Xmn128m -XX:+UseParNewGC -XX:UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=70 -verbose:gc -XX:+printGCDetails -XX:+PrintGCTimeStamps -Xloggc:${HBASE_HOME}/logs/gc-${hostname}-hbase.log&quot;</code></p>
+</li>
+<li><p>使用压缩: GZIP, LZO, Zippy/Snappy, 创建表的时候指定列族的压缩格式：<code>create &#39;testtable&#39;,{NAME =&gt; &#39;colfam1&#39;,COMPRESSION =&gt; &#39;GZ&#39;}</code></p>
+</li>
+<li><p>预分 Region: 在建表的时候预先创建多个 Region, 并规定好每个 Region 存储的 Rowkey 范围, 通过对数据的特性进行分析预先创建分区可以有效的解决 HBase 中的数据倾斜问题 @ref: <a href="/32.Database/HBase-03架构和原理/" title="HBase-03架构和原理">HBase-03架构和原理</a></p>
+</li>
+<li><p>防止<strong>拆分风暴</strong>:</p>
+<ul>
+<li>Hbase 自动处理 region 拆分，一旦达到阀值 region 将会拆分成两个。当用户的 region 大小以恒定的速度保持增长时，region 拆分会在同一时间发生，因为同时需要压缩 region 中的存储文件，这个过程或重写拆分后的 region，导致磁盘 IO 上升。这种情况被称为<strong>拆分风暴</strong></li>
+<li>如何防止：与其依赖 HBase 的自动拆分，还不如手动使用 split 和 major_compact 命令来管理，因为手动管理的话可以将这些 region 的拆分/ HFile 的合并时机分割开来，尽量分散 IO 负载。可以设置 <code>hbase.hregion.max.filesize</code> 为非常大，避免触发自动拆分的阈值。</li>
 </ul>
 </li>
-<li><p>region热点问题: 通过合理设计row key解决;</p>
-<p>  Major Compaction是指将所有的StoreFile合并成一个StoreFile，这个过程还会清理三类无意义数据：被删除的数据、TTL过期数据、版本号超过设定版本号的数据。<br>  另外，一般情况下，Major Compaction时间会持续比较长，整个过程会消耗大量系统资源，对上层业务有比较大的影响。因此线上业务都会将关闭自动触发Major Compaction功能，改为手动在业务低峰期触发。</p>
+<li><p>region 热点问题: 通过合理设计 row key 解决; @ref: <a href="/32.Database/HBase-04行键设计/" title="HBase-04行键设计">HBase-04行键设计</a></p>
 </li>
 </ul>
 <p><strong>② 客户端API优化:</strong></p>
