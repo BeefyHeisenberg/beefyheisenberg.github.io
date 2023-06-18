@@ -117,25 +117,25 @@
 
 
 
-<meta name="description" content="架构简介 HBase包含3个重要组件：Zookeeper、HMaster和 HRegionServer。  （1）Zookeeper： 为整个 HBase集群提供协助服务，包括： a. 存放整个 HBase集群的元数据以及集群的状态信息。 b. 实现 HMaster主从节点的 failover。     ZooKeeper为 HBase集群提供协调服务，它管理着 HMaster和 HRegionS">
+<meta name="description" content="HBase 架构简介 HBase包含3个重要组件：Zookeeper、HMaster和 HRegionServer。  （1）Zookeeper： 为整个 HBase集群提供协助服务，包括： a. 存放整个 HBase集群的元数据以及集群的状态信息。 b. 实现 HMaster主从节点的 failover。     ZooKeeper为 HBase集群提供协调服务，它管理着 HMaster和 HR">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HBase-03架构和原理">
 <meta property="og:url" content="https://beefyheisenberg.github.io/32.Database/HBase-03架构和原理/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="架构简介 HBase包含3个重要组件：Zookeeper、HMaster和 HRegionServer。  （1）Zookeeper： 为整个 HBase集群提供协助服务，包括： a. 存放整个 HBase集群的元数据以及集群的状态信息。 b. 实现 HMaster主从节点的 failover。     ZooKeeper为 HBase集群提供协调服务，它管理着 HMaster和 HRegionS">
+<meta property="og:description" content="HBase 架构简介 HBase包含3个重要组件：Zookeeper、HMaster和 HRegionServer。  （1）Zookeeper： 为整个 HBase集群提供协助服务，包括： a. 存放整个 HBase集群的元数据以及集群的状态信息。 b. 实现 HMaster主从节点的 failover。     ZooKeeper为 HBase集群提供协调服务，它管理着 HMaster和 HR">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase_arch.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase-memstore-cache.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/HBase-RS-Storage-Machinery.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/HBase-Region-WAL.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase-memstore-skiplist-chunck.png">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase_hfile.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase_hfile_tree.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase-hfile-data-index.png">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase-memstore-cache.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase-compaction.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.702Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.890Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HBase-03架构和原理">
-<meta name="twitter:description" content="架构简介 HBase包含3个重要组件：Zookeeper、HMaster和 HRegionServer。  （1）Zookeeper： 为整个 HBase集群提供协助服务，包括： a. 存放整个 HBase集群的元数据以及集群的状态信息。 b. 实现 HMaster主从节点的 failover。     ZooKeeper为 HBase集群提供协调服务，它管理着 HMaster和 HRegionS">
+<meta name="twitter:description" content="HBase 架构简介 HBase包含3个重要组件：Zookeeper、HMaster和 HRegionServer。  （1）Zookeeper： 为整个 HBase集群提供协助服务，包括： a. 存放整个 HBase集群的元数据以及集群的状态信息。 b. 实现 HMaster主从节点的 failover。     ZooKeeper为 HBase集群提供协调服务，它管理着 HMaster和 HR">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/hbase/hbase_arch.png">
 
 
@@ -361,7 +361,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,788
+                  5,779
                 </span>
               
 
@@ -386,7 +386,7 @@
       
 
       
-        <h2 id="架构简介"><a href="#架构简介" class="headerlink" title="架构简介"></a>架构简介</h2><p><img src="/images/hbase/hbase_arch.png" alt=""></p>
+        <h2 id="HBase-架构简介"><a href="#HBase-架构简介" class="headerlink" title="HBase 架构简介"></a>HBase 架构简介</h2><p><img src="/images/hbase/hbase_arch.png" alt=""></p>
 <p>HBase包含3个重要组件：Zookeeper、HMaster和 HRegionServer。</p>
 <ul>
 <li>（1）Zookeeper： 为整个 HBase集群提供协助服务，包括：<ul>
@@ -415,60 +415,166 @@
 </ul>
 </li>
 </ul>
-<h2 id="HMaster"><a href="#HMaster" class="headerlink" title="HMaster"></a>HMaster</h2><p>@todo</p>
-<h2 id="HRegion-Server"><a href="#HRegion-Server" class="headerlink" title="HRegion Server"></a>HRegion Server</h2><p>RegionServer:<br><img src="/images/hbase/HBase-RS-Storage-Machinery.png" alt=""></p>
-<p>➤ 从架构看 HRegion Server:</p>
+<h2 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h2><p>底层的存储都是基于 Hadoop HDFS 的：</p>
 <ul>
-<li>一个RS包括: <code>1 * BlockCache</code> + <code>1 * HLog</code> + <code>n * HRegion</code></li>
-<li>BlockCache: Region Server的读缓存。保存使用最频繁的数据，使用 <strong>LRU</strong> 算法换出不需要的数据;</li>
-<li>HLog: WAL(Write-Ahead-Log), 为数据提供 Crash-Safe, 以及读一致性及undo/redo 回滚等数据恢复操作;</li>
-<li>HRegion: 子表, 每个子表都关联一个<code>[StartKey, EndKey]</code>的存储区间, 每个 HRegion Server管理多个”子表”;</li>
-<li>HStore: 每个 Region包括多个 HStore, 每个 HStore由 <code>1 * MemStore</code> + <code>n * StoreFile</code>组成(LSM-Tree的C0..Ck层)<ul>
-<li>MemStore: LSM-Tree的 C0层, 存储于内存的有序K-V结构, 使用<code>ConcurrentSkipList</code>实现, 当 MemStore（默认 64MB）写满之后，会开始 flush 到磁盘上的 StoreFile</li>
-<li>StoreFile: LSM-Tree的Ck层, StoreFile是对 HFile做了一层简单封装</li>
+<li><p>Hadoop NameNode 维护了所有 HDFS 物理 Data block 的元信息。</p>
+</li>
+<li><p>Hadoop DataNode 负责存储 Region Server 所管理的数据。所有的 HBase 数据都存储在 HDFS 文件中。Region Server 和 HDFS DataNode 往往是一起部署的，这样 Region Server 就能够实现数据本地化（data locality）</p>
+</li>
+</ul>
+<p>在 Region 的监控页面，可以看到一个监控指标 “<strong>Locality（本地化率）</strong>”，是一个百分比，表示 region 管理的数据即位于本地的百分比（“本地”指：数据所在的 HDFS DataNode 和 Region Server 在一个节点 ）</p>
+<p>本地化率低产生的问题：因为大量 HFile 数据和 Region 不在同一个节点上，会产生大量的网络 IO，导致读请求延迟较高；</p>
+<p>引起 RegionServer 数据本地化率低的几种可能原因：</p>
+<ul>
+<li>1) Balance 引起的：当数据持续写入，单个 region 的大小达到 hbase.hregion.max.filesize(默认值10GB)会自动进行 Split,假如一直向 RegionA 持续写入数据，当 RegionA 大小超过10GB，会分离成两个子 RegionB、RegionC，如果我们集群开启了负载均衡，当前节点 Region 比较多，其他节点 Region 数量少的时候就会把 RegionB 或 RegionC 迁移到 Region 相对比较少的节点上去。</li>
+<li>2) RegionServer 宕机，手动 move 使 region 迁移到其他节点，导致数据本地化率降低。</li>
+</ul>
+<p><strong>Region 迁移如何导致 Locality 下降</strong>：</p>
+<blockquote>
+<p>在 hadoop 生产环境中， hdfs 通常为设置为三个副本，假如当前 RegionA 处于 datanode1，<br>当数据 a 通过从 Memstore 中 Flush 到 HFile 时,三副本分别在(datanode1,datanode2,datanode3),<br>数据 b 写入三副本：(datanode1,datanode3,datanode5),<br>数据 c 写入三副本：(datanode1,datanode4,datanode6),<br>可以看出来 a、b、c 三份数据写入的时候肯定会在本地 datanode1上写入一份，其他两份按照 datanode 的写入机制进行分配;数据都在本地可以读到，因此数据本地率是100%。<br>现在假设 RegionA 被迁移到了 datanode2上，只有数据 a 有一份数据在该节点上，其他数据(b 和 c)读取只能远程跨节点读，本地率就为33% (假设 a，b 和 c 的数据大小相同)。</p>
+</blockquote>
+<p>如何提高 RegionServer 数据的本地化率：</p>
+<ul>
+<li>RegionServer 重启后，手动 move 到原来节点（如果生产 region 比较多，这个操作比较繁琐）</li>
+<li>定期执行 major compaction（尤其对于 Locality 低的 RegionServer，如果不做 major compaction 会非常影响读写性能 ）</li>
+</ul>
+<p>@ref: <a href="https://product.hubspot.com/blog/healing-hbase-locality-at-scale" target="_blank" rel="noopener">Healing HBase Locality At Scale</a></p>
+<p>HDFS 三副本机制 @link [[../33.Bigdata/Hadoop#副本机制]]</p>
+<blockquote>
+<ul>
+<li>1）第一个副本块保存在 HDFS Client 同一个的 DataNode ；</li>
+<li>2）第二个副本块保存在 HDFS Client 所在 DataNode 同机架的其他 DataNode ；</li>
+<li>3）第三个副本块保存不同机架的某个 DataNode ；</li>
+</ul>
+</blockquote>
+<h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><p>Zookeeper 用来协调分布式系统中集群状态信息的共享。Region Servers 和在线 HMaster（active HMaster）和 Zookeeper 保持会话（session）。Zookeeper 通过心跳检测来维护所有<strong>临时节点</strong>（ephemeral nodes）。</p>
+<p>每个 Region Server 都会创建一个 ephemeral 节点。HMaster 会监控这些节点来发现可用的 Region Servers，同样它也会监控这些节点是否出现故障。</p>
+<p>HMaster 们会竞争创建 ephemeral 节点，而 Zookeeper 决定谁是第一个作为在线 HMaster，保证线上只有一个 HMaster。在线 HMaster（<strong>active HMaster</strong>） 会给 Zookeeper 发送心跳，不在线的待机 HMaster （<strong>inactive HMaster</strong>） 会监听 active HMaster 可能出现的故障并随时准备上位。</p>
+<p>如果有一个 Region Server 或者 HMaster 出现故障或各种原因导致发送心跳失败，它们与 Zookeeper 的 session 就会过期，这个 ephemeral 节点就会被删除下线，监听者们就会收到这个消息。Active HMaster 监听的是 region servers 下线的消息，然后会恢复故障的 region server 以及它所负责的 region 数据。而 Inactive HMaster 关心的则是 active HMaster 下线的消息，然后竞争上线变成 active HMaster。</p>
+<p>此外，Zook<br>zk 中的 /hbase/meta-region-server</p>
+<h2 id="META-表"><a href="#META-表" class="headerlink" title="META 表"></a>META 表</h2><p>当 Client 发起的每个 RPC 请求，实际上都需要发送到对应的 RegionServer 上执行，所以第一步是通过 Table 和 Rowkey <strong>定位 Region</strong> ，对应关系存储在 <code>hbase:meta</code> 表：</p>
+<p><code>hbase:meta</code> 是一个比较特殊的 hbase 表，也叫<strong>元数据表</strong>（不能切分，只保存在一台 RegionServer 上）</p>
+<p>在0.96之后元数据的查询模型由3层结构变成2层，即：</p>
+<ul>
+<li>首先查询 zk 获取 hbase:meta 所在的 regionserver；</li>
+<li>然后去对应的 RegionServer 上查询表对应的 region 信息。region 信息中会包含开始的 rowkey，regionserver 的地址等信息。</li>
+</ul>
+<p><code>hbase:meta</code> 表中的一个 Rowkey 就代表了一个 region。Rowkey 主要由以下几部分组成：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">table_name,start_rowkey,create_timestamp.EncodedName.</span><br><span class="line"></span><br><span class="line">table_name: 表名</span><br><span class="line"></span><br><span class="line">start_rowkey 是table 在 Region上的 起始rowkey，为空的，说明这是该table的第一个region。若对应region中startkey为空的话，表明这个table只有一个region；</span><br><span class="line"></span><br><span class="line">create_timestamp ： region 创建时间；</span><br></pre></td></tr></table></figure>
+<p>meta 表只有一个列簇 info，并且包含四列：  </p>
+<ol>
+<li>regioninfo ：当前 region 的 startKey 与 endKey，name 等 </li>
+<li>seqnumDuringOpen：  </li>
+<li>server：region 所在服务器及端口  </li>
+<li>serverstartcode：服务开始的时候的 timestamp</li>
+</ol>
+<p>为了避免每次 Client 执行 RPC 都要查询 Zk，Client 会缓存 meta 的数据：</p>
+<blockquote>
+<p><strong>Meta 缓存</strong>的数据结构采用了 copy on write 的思想，自定义了一个 CopyOnWriteArrayMap。<br>copy on write 即可以支持并发读，当写的时候采用拷贝引用的方式快速变更。<br>HBase 自定义了一个数组 Map，其中数组结构第一层为表，数组部分的查询采用二分查找；第二层是 startkey；当有 RegionLocation 信息需要更新时，采用 System.arraycopy 实现快速拷贝更新。</p>
+</blockquote>
+<p>图: 通过 table 和 rowkey 快速定位到对应的 Region:<br><img src="/images/hbase/hbase-memstore-cache.png" alt="hbase_memstore_cache"></p>
+<p>@ref: </p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/92103602" target="_blank" rel="noopener">HBase源码：Region的定位与优化 - 知乎</a></li>
+<li><a href="https://www.jianshu.com/p/ea7e03cfbfe0" target="_blank" rel="noopener">HBase meta表介绍 - 简书</a></li>
+<li><a href="https://segmentfault.com/a/1190000040267826" target="_blank" rel="noopener">HBase Meta表结构组成 - 个人文章 - SegmentFault 思否</a></li>
+</ul>
+<h2 id="HMaster"><a href="#HMaster" class="headerlink" title="HMaster"></a>HMaster</h2><p>HMaster 负责 Region 的分配，DDL（创建，删除表）等操作：</p>
+<p>统筹协调所有 region server：</p>
+<ul>
+<li>启动时分配 regions，在故障恢复和负载均衡时<strong>重分配</strong> regions </li>
+<li>监控集群中所有 Region Server 实例（从 Zookeeper 获取通知信息）</li>
+</ul>
+<p>管理员功能：</p>
+<ul>
+<li>提供创建，删除和更新 HBase Table 的接口</li>
+</ul>
+<h2 id="HRegion-Server"><a href="#HRegion-Server" class="headerlink" title="HRegion Server"></a>HRegion Server</h2><p>RegionServer:<br><img src="/images/hbase/HBase-RS-Storage-Machinery.png" alt=""></p>
+<p>➤ HRegion Server 的构成：</p>
+<ul>
+<li><p><strong>BlockCache</strong>: Region Server 的读缓存。保存使用最频繁的数据，使用 <strong>LRU</strong> 算法换出不需要的数据;</p>
+</li>
+<li><p><strong>HLog</strong>: WAL(Write-Ahead-Log), 为数据提供 Crash-Safe, 以及读一致性及 undo/redo 回滚等数据恢复操作;</p>
+</li>
+<li><p><strong>HRegion</strong>: 即<strong>子表</strong>, 每个子表都关联一个 <code>[StartKey, EndKey]</code> 的存储区间, 每个 HRegion Server 管理多个”子表”;</p>
+</li>
+<li><p><strong>HStore</strong>: 每个 Region 包括多个 HStore, 每个 HStore 由 <code>1 * MemStore</code> + <code>n * StoreFile</code> 组成 (LSM-Tree 的 C0..Ck 层)</p>
+<ul>
+<li><strong>MemStore</strong>: LSM-Tree的 C0层, 存储于内存的有序K-V结构, 使用<code>ConcurrentSkipList</code>实现, 当 MemStore（默认 64MB）写满之后，会开始 flush 到磁盘上的 StoreFile</li>
+<li><strong>StoreFile（HFile）</strong>: LSM-Tree 的 Ck 层, StoreFile 是对 HFile 做了一层简单封装</li>
 </ul>
 </li>
 </ul>
-<blockquote>
-<p>LSM-Tree:</p>
-<ul>
-<li>每个 RegionServer都有一个 HLog (WAL)</li>
-<li>每个 Region都有1个 MemStore (C0层) 和 N个 StoreFile (C1..Ck层)</li>
-<li>MemStore: 跳表实现, MemStore的数据超过阈值(默认64MB)后会刷写到磁盘, 生成 StoreFile</li>
-</ul>
-</blockquote>
-<p>有关LSM-Tree, 参考: <a href="/32.Database/LSM-Tree理论基础/" title="LSM-Tree理论基础">LSM-Tree理论基础</a></p>
 <p>➤ 从逻辑存储看 HRegion Server:</p>
 <ul>
-<li>HBase表的逻辑存储: Table, Family, Qualifier</li>
-<li>每个 HRegion存储一张 Table的 某个Key区间 // 问题, 一个RS下所有 HRegion的区间是连续的一个段?</li>
-<li>每个 HStore存储一个 Family(列族)的 某个Key区间</li>
+<li>HBase 表的逻辑存储: Table, Family, Qualifier</li>
+<li>每个 HRegion 存储一张 Table 的一段 Key 区间</li>
+<li>每个 HStore 存储一个 Family(列族)的一段 Key 区间</li>
 </ul>
-<h3 id="Region-Server-高可用"><a href="#Region-Server-高可用" class="headerlink" title="Region Server 高可用"></a>Region Server 高可用</h3><p>TODO: 一个HBase集群有多个 RS, 每个RS负责一部分 Key, 当一个 RS宕机 …</p>
+<p>➤ HBase 如何实现 LSM-Tree:</p>
 <ul>
-<li>HDFS的大文件被分为多个Block, 每个Block都存在在3台不同机器上, 实现3副本;</li>
-<li>HBase写数据的 WAL机制: 先写 HLog, 再写缓存, 缓存满了一起落盘, HLog可以作为宕机后的恢复依据;</li>
-<li>每个 RegionServer 会周期性给zk发送心跳信息, 当RS断开连接, 超过一定时间(zk的 sessionTimeout), zk认为这台RS宕机, 并将消息通知给 Master,</li>
-<li>Master将这台 RegionServer 上所有的 Region 转移到其他 RS上. 再将 HLog 日志分发给其他RS进行回放. // RS已经宕机, master如何从 RS上获取 Log ?</li>
+<li>每个 HStore 都有1个 MemStore (C0层) 和 N 个 StoreFile (C1..Ck 层)</li>
+<li>MemStore: 跳表实现, MemStore 的数据超过阈值(默认64MB)后会刷写到磁盘, 生成 StoreFile</li>
+<li>StoreFile(HFile): HBase 会自动合并一些小的 HFile，重写成少量更大的 HFiles。这个过程被称为 <strong>Minor Compaction</strong>。它使用归并排序算法，将小文件合并成大文件，有效减少 HFile 的数量。<strong>Major Compaction</strong> 合并重写每个 Column Family 下的所有的 HFiles，成为一个单独的大 HFile，在这个过程中，被删除的和过期的 cell 会被真正从物理上删除，这能提高读的性能。</li>
+</ul>
+<p>有关LSM-Tree, 参考: <a href="/32.Database/LSM-Tree理论基础/" title="LSM-Tree理论基础">LSM-Tree理论基础</a></p>
+<h2 id="HLog-WAL"><a href="#HLog-WAL" class="headerlink" title="HLog (WAL)"></a>HLog (WAL)</h2><p>HLog 是 WAL(Write-Ahead-Log)的具体实现，数据的更新首先被写入 HLog，在 Region Server 宕机时可以通过回放 Hlog 实现 Crash-safe</p>
+<p>HLog 实现细节：</p>
+<ul>
+<li>每个 Region Server 可以有一个 or 多个 HLog，一个 Hlog 可以被多个 Region（子表）共享；</li>
+<li>HLog 中，一个基本数据单元为 HLogKey + WALEdit<ul>
+<li>HLogKey：包含 table name、region name、sequenceid 等</li>
+<li>WALEdit：WALEdit用来表示一个事务中的更新集合，一次行级事务可以原子操作同一行中的多个列。上图中WALEdit包含多个KeyValue</li>
+</ul>
+</li>
+<li>由上可知，HLog 中每个基本单元代表一次事务中的所有更新集合，HLogKey 中的 sequenceid 是单增整数，可以认为是一次<strong>行级事务</strong>的自增 ID</li>
+<li>HBase 为每个 Region （实际是每个 Store，对应某个列族）维护了一个 oldestUnflushedSequenceId，最新未落盘的 sequenceid，每次 MemStore flush 到 HFlie 后，更新每个 Region 的 oldestUnflushedSequenceId</li>
+<li>在 Region Server 的情况下，HLog 中哪些日志需要回放，哪些需要 skip？ 因为 Region Server 已经宕机，所以 Region 对应的 oldestUnflushedSequenceId 也无法获取，实际上每次 HFile 落盘时，会把 oldestUnflushedSequenceId 以元数据的形式写入 HFile，所以在宕机迁移时，只需要重新读取 HFile 中的元数据即可恢复出这个核心变量oldestUnflushedSequenceId</li>
+</ul>
+<p>下图是中三个 Region（A、B、C）共享一个 HLog，日志最小单元是 HlogKey + WALEdit：<br><img src="/images/HBase-Region-WAL.png" alt="../_images/HBase-Region-WAL.png"></p>
+<p>@ref: <a href="http://hbasefly.com/2017/07/02/hbase-sequenceid/" target="_blank" rel="noopener">HBase原理－要弄懂的sequenceId – 有态度的HBase/Spark/BigData</a></p>
+<h2 id="MemStore"><a href="#MemStore" class="headerlink" title="MemStore"></a>MemStore</h2><ul>
+<li>一个子表可能包括多个列族，一个 Region 可能包括多个 <strong>MemStore</strong></li>
+<li><strong>MemStore</strong> 和列族是一一对应的</li>
+<li>当 <strong>MemStore</strong>（默认 64MB）写满之后，会 flush 到 HDFS 上生成 StoreFile，<strong>MemStore</strong> 相当于 LSM-Tree 结构中的 C0层</li>
+</ul>
+<p>HBase 的 MemStore 基于 <code>ConcurrentSkipListMap</code> 跳表实现，由于 KeyValue 是存储于内存中的，对于很多写入吞吐量几万每秒的业务来说，每秒就会有几万个内存对象产生，这些对象会在内存中存在很长一段时间，对应的会晋升到老生代，一旦执行了 flush 操作，老生代的这些对象会被 GC 回收掉，导致 JVM 的 GC 压力非常大。</p>
+<p>GC 压力主要来源于：这些内存对象一旦晋升到老生代，执行完 OldGen GC 后会存在大量的非常小的内存碎片（例如老年代的回收器 CMS，是不带内存压缩的），这些内存碎片会引起频繁的 Full GC，而且每次 Full GC 的时间会异常的长。</p>
+<p>一个 KV 在 MemStore 中的写入过程：</p>
+<ol>
+<li>在 ChunkPool 中申请一个 Chunk（2M），在 Chunk 中分配一段与 KV 相同大小的内存空间将 KV 拷贝进去。一旦 Chunk 写满，再申请下一个 Chunk;</li>
+<li>生成一个 Cell 对象，该对象包含指向 Chunk 中对应数据块的指针、offsize 以及 length;</li>
+<li>将这个 Cell 对象分别作为 Key 和 Value 插入到 <code>ConcurrentSkipListMap</code> 跳表中；</li>
+</ol>
+<p><img src="/images/hbase/hbase-memstore-skiplist-chunck.png" alt="hbase_memstore_skiplist_chunck"></p>
+<p>HBase 在 MemStore 设计中的改进 @ref : <a href="http://hbasefly.com/2019/10/18/hbase-memstore-evolution/" target="_blank" rel="noopener">HBase内存管理之MemStore进化论 – 有态度的HBase/Spark/BigData</a></p>
+<h2 id="HFile"><a href="#HFile" class="headerlink" title="HFile"></a>HFile</h2><p>HFile 是 HBase 存储数据的文件组织形式，参考 BigTable 的 SSTable 和 Hadoop 的 TFile 实现。</p>
+<p>从 HBase 开始到现在，HFile 经历了<strong>三个版本</strong>，其中 V2在0.92引入，V3在0.98引入。<br>HFileV1版本的在实际使用过程中发现它占用内存多，HFile V2版本针对此进行了优化，HFile V3版本基本和 V2版本相同，只是在 cell 层面添加了 Tag 数组的支持。</p>
+<p>➤ V1的 HFile，参考了 Bigtable 的 SSTable 以及 Hadoop 的 TFile(HADOOP-3315)：</p>
+<p>![[../_images/hbase-hfile-v1-1.png]]</p>
+<ul>
+<li>Data Block：每个 Data 块默认为<strong>64KB</strong>，存储 KV 数据，由于 KV 数据在 MemStore 已经进行排序，所以 Data Block 中的 KV 也是有序的</li>
+<li>Data Block Index：这部分存储了每一个 Data Block 的索引信息 {Offset，Size，FirstKey}</li>
+<li>Meta Block：主要是 <strong>Bloom Filter</strong>，用来快速定位 Key 是否在 HFile</li>
+<li>Meta Block Index： 每个 Meta Block 的索引</li>
+<li>Tailer：存储了上面几个段的索引，例如 Data Block Index 的索引信息，{Data Index Offset, Data Block Count}</li>
 </ul>
 <blockquote>
-<p>@ref <a href="https://zhuanlan.zhihu.com/p/28475168" target="_blank" rel="noopener">HBase–RegionServer宕机恢复原理 - 知乎</a></p>
+<p>HDFS 中定义的 Block size 是 <strong>64~128MB</strong>，HFile 中的 Block 大小 = <strong>64KB</strong>，区别 Linux 文件系统（Ext4等）定义的块大小 = <strong>4KB</strong> ；</p>
 </blockquote>
-<h2 id="MemStore"><a href="#MemStore" class="headerlink" title="MemStore"></a>MemStore</h2><p>@ref: <a href="http://hbasefly.com/2019/10/18/hbase-memstore-evolution/" target="_blank" rel="noopener">HBase内存管理之MemStore进化论 – 有态度的HBase/Spark/BigData</a></p>
-<p><img src="/images/hbase/hbase-memstore-skiplist-chunck.png" alt="hbase_memstore_skiplist_chunck"></p>
-<h2 id="StoreFile-HFile"><a href="#StoreFile-HFile" class="headerlink" title="StoreFile(HFile)"></a>StoreFile(HFile)</h2><p><img src="/images/hbase/hbase_hfile.png" alt="HFile结构-图1"></p>
-<p>HFile 的文件长度是变长的，仅 FILE INFO/Trailer 部分是定长，Trailer 中有指针指向其他数据块的起始点。而 Index 数据块则记录了每个 Data 块和 Meta 块的起始点。Data 块和 Meta 块都是可有可无的，但对于大多数 HFile，都有 Data 块。</p>
+<p>下图更直观的表达出了 HFile V1中的数据组织结构：</p>
+<p>![[../_images/hbase-hfile-v1-2.png]]</p>
+<p>V1 的设计简单、直观。但缺点也很明显，HFile 中的 Bloom Filter 包括了该 HFile 中所有的 KV，加载一个 HFile 需要占用很大的内存来存储  Bloom Filter、Data Block Index。<br>Region Open 的时候，需要加载所有的 Data Block Index 数据，另外，第一次读取时需要加载所有的 Bloom Filter 数据到内存中。一个 HFile 中的 Bloom Filter 的数据大小可达百 MB 级别，一个 RegionServer 启动时可能需要加载数 GB 的 Data Block Index 数据。这在一个大数据量的集群中，几乎无法忍受。</p>
+<p>➤ <strong>HFile V2 的改进</strong>：</p>
+<p>在 V2中，无论是 Data Block Index 还是 Bloom Filter，都采用了<strong>分层索引</strong>的设计。</p>
+<p>Data Block 的索引，在 HFile V2中做多可支持三层索引，每层的索引都在单独的 Block 中存储：Root Data Index -&gt; Intermediate Index Block -&gt; Leaf Index Block，<br>最底层的 Data Block Index 称之为 Leaf Index Block，可直接索引到 Data Block；</p>
+<p>索引逻辑为：由 Root Data Index 索引到 Intermediate Block Index，再由 Intermediate Block Index 索引到 Leaf Index Block，最后由 Leaf Index Block 查找到对应的 Data Block。<br>在实际场景中，<strong>Intermediate Block Index 基本上不会存在</strong>，因此，索引逻辑被简化为：由 Root Data Index 直接索引到 Leaf Index Block，再由 Leaf Index Block 查找到的对应的 Data Block。</p>
+<p>Root Data index 存放在一个称之为”<strong>Load-on-open Section</strong>“区域，在 Region Open 时会被加载到内存中，而 Intermediate &amp;  Leaf Index Block 则按需加载。</p>
+<p>Bloom Block 也采用了分层设计，整个 HFile 的 Bloom Filter 也被拆成了多个 Bloom Block ，在”Load-on-open Section”区域中存放了所有 <strong>Bloom Block 的索引</strong>，而 Bloom Block （数据块）按需加载。</p>
+<p><strong>总结</strong>：V2通过分层索引，无论是 Data Block 的索引数据，还是 Bloom Filter 数据，都被拆成了多个 Block 当中，可以<strong>按需读取</strong>，避免在 Region Open 阶段或读取阶段一次读入大量的数据，降低了阶段耗时，也解决了 V1内存占用高的问题。</p>
+<p>图-HFile V2的 Block 组织，右边是 Data Index 的<strong>三层索引</strong>结构：</p>
 <p><img src="/images/hbase/hbase_hfile_tree.png" alt="HFile结构-图2"></p>
-<p>图2 的说明: HFile分为trailer，索引块，数据块，bloom过滤器。</p>
-<ul>
-<li>Data Block主要存储用户的key-value数据 // 1个Data Block默认为64kb</li>
-<li>Index Block: 存储了每一个Data Block的索引信息{Offset，Size，FirstKey}, 如上图,Index Block 是三层索引</li>
-<li>Trailer主要记录 Data Index的索引信息{Data Index Offset, Data Block Count}</li>
-<li>Bloom filter主要用来快速定位Key是否在HFile。// Bloom Block 的数据是在启动的时候就已经加载到内存里，除了 Block Cache 和 MemStore 以外，这个也对 HBase 随机读性能的优化起着至关重要的作用。生成 HFile 的时候，会将 key 经过三次 hash 最终落到 Bloom Block 位数组的某三位上，并将其由0更改成1，以此标记该 key 的确存在这个 HFile 文件之中，查询的时候不需要将文件打开并检索，避免了一次 I/O 操作。然而随着 HFile 的膨胀，Bloom Block会越来越大。</li>
-<li>不同管理粒度的”块”: ext3文件系统的 block size=4K, HDFS文件系统的 blockSize=64MB</li>
-<li>参考BigTable的SSTable和Hadoop的TFile实现 @todo</li>
-</ul>
-<h3 id="HFile-的-Data-Index"><a href="#HFile-的-Data-Index" class="headerlink" title="HFile 的 Data Index"></a>HFile 的 Data Index</h3><p><img src="/images/hbase/hbase-hfile-data-index.png" alt="hbase_hfile_data_index"></p>
+<p>➤ <strong>Data Block Index 的三层索引</strong>：<br><img src="/images/hbase/hbase-hfile-data-index.png" alt="hbase_hfile_data_index"></p>
 <p>图中上面三层为索引层，在数据量不大的时候只有最上面一层，数据量大了之后开始分裂为多层，最多三层，如图所示。最下面一层为数据层，存储用户的实际 keyvalue数据。这个索引树结构类似于 InnoSQL的聚集索引，只是 HBase并没有辅助索引的概念。</p>
 <p>图中红线表示一次查询的索引过程（HBase中相关类为 HFileBlockIndex和 HFileReaderV2），基本流程可以表示为：</p>
 <ol>
@@ -477,20 +583,50 @@
 <li>同理，将索引’d’指向的中间节点索引块加载到内存，一样通过二分查找定位找到fb在index ‘f’和’g’之间，最后需要访问索引’f’指向的数据块节点。</li>
 <li>将索引’f’指向的数据块加载到内存，通过遍历的方式找到对应的keyvalue。</li>
 </ol>
-<p>上述流程中因为 <strong>中间节点</strong>、 <strong>叶子节点</strong> 和 <strong>数据块</strong> 都需要加载到内存，所以io次数正常为3次。但是实际上HBase为block提供了缓存机制，可以将频繁使用的block缓存在内存中，可以进一步加快实际读取过程。所以，在HBase中，通常一次随机读请求最多会产生3次io，如果数据量小（只有一层索引），数据已经缓存到了内存，就不会产生io。</p>
-<h2 id="ROOT-amp-META表"><a href="#ROOT-amp-META表" class="headerlink" title="ROOT &amp; META表"></a>ROOT &amp; META表</h2><p>早期的设计（0.96.0）之前是被称之为三层查询架构: <code>ROOT</code>  -&gt; <code>META</code>  -&gt; Region.</p>
-<p><code>-ROOT-</code>和<code>.META.</code>是两个特殊的表。其中<code>.META.</code> 表记录 Region 分区信息，同时，<code>.META.</code> 也可以有多个 Region 分区，同时<code>-ROOT-</code>表又记录<code>.META.</code> 表的 Region 信息，但<code>-ROOT-</code>只有一个 Region，而<code>-ROOT-</code>表的位置由 Hbase 的集群管控框架，即 Zookeeper 记录。</p>
+<p>上述流程中因为 <strong>中间节点</strong>、 <strong>叶子节点</strong> 和 <strong>数据块</strong> 都需要加载到内存，所以 IO 次数最大为3次。但是实际上 HBase 为 block 提供了缓存机制，可以将频繁使用的 block 缓存在内存中，可以进一步加快实际读取过程。所以，在 HBase 中，通常一次随机读请求最多会产生3次 io，如果数据量小（只有一层索引），数据已经缓存到了内存，就不会产生 io。</p>
+<hr>
+<p>@ref:</p>
 <ul>
-<li>-ROOT-：记录.META.表的Region信息。</li>
-<li>.META.：记录用户表的Region信息。</li>
+<li><a href="https://bbs.huaweicloud.com/blogs/133730" target="_blank" rel="noopener">HBase高性能随机查询之道 – HFile原理解析-云社区-华为云</a></li>
+<li><a href="http://hbasefly.com/2016/03/25/hbase-hfile/" target="_blank" rel="noopener">HBase – 存储文件HFile结构解析 – 有态度的HBase/Spark/BigData</a></li>
+<li><a href="http://hbasefly.com/2016/04/03/hbase_hfile_index/" target="_blank" rel="noopener">HBase – 探索HFile索引机制 – 有态度的HBase/Spark/BigData</a></li>
 </ul>
-<p>从0.96版本以后，三层架构被改为二层架构，<code>-ROOT-</code>表被去掉了。直接把<code>.META.</code>表所在的RegionServer信息存储到了 zk中的 /hbase/meta-region-server。再后来引入了namespace，<code>.META.</code>表这样别扭的名字被修改成了<code>hbase:meta</code>。</p>
-<h2 id="META表的缓存设计"><a href="#META表的缓存设计" class="headerlink" title="META表的缓存设计"></a>META表的缓存设计</h2><p>@ref: <a href="https://zhuanlan.zhihu.com/p/92103602" target="_blank" rel="noopener">HBase源码：Region的定位与优化 - 知乎</a></p>
-<p>Meta缓存的数据结构设计的很巧妙，首先采用了copy on write的思想，自定义了一个CopyOnWriteArrayMap。copy on write即可以支持并发读，当写的时候采用拷贝引用的方式快速变更。HBase自定义了一个数组Map，其中数组结构第一层为表，数组部分的查询采用二分查找；第二层是startkey；当有RegionLocation信息需要更新时，采用System.arraycopy实现快速拷贝更新。</p>
-<p>图: 通过table和rowkey快速定位到对应的Region(复杂度是多少?):<br><img src="/images/hbase/hbase-memstore-cache.png" alt="hbase_memstore_cache"></p>
-<h2 id="Minor-amp-Major-Compact"><a href="#Minor-amp-Major-Compact" class="headerlink" title="Minor &amp; Major Compact"></a>Minor &amp; Major Compact</h2><p>当一个Store中的StoreFile达到一定的阈值后，就会进行一次合并(major compact)，将对同一个key的修改合并到一起，形成一个大的StoreFile，当StoreFile的大小达到一定阈值后，又会对 StoreFile进行分割(split)，等分为两个StoreFile。</p>
-<p>其中，minor compaction是自动将相关的小文件做一些适当的紧凑，但不彻底；<br>而major compaction则是放在午夜跑的定时任务，将文件做最大化的紧凑。这时候LSM树的磁盘树数量很少, 被并入一个大的树</p>
+<h2 id="HFile-Minor-amp-Major-Compact"><a href="#HFile-Minor-amp-Major-Compact" class="headerlink" title="HFile Minor &amp; Major Compact"></a>HFile Minor &amp; Major Compact</h2><p>当一个 Store 中的 StoreFile 达到一定的阈值后，就会进行一次合并(major compact)，将对同一个 key 的修改合并到一起，形成一个大的 StoreFile，当 StoreFile 的大小达到一定阈值后，又会对 StoreFile 进行分割(split)，等分为两个 StoreFile。</p>
+<p>其中，minor compaction 是自动将相关的小文件做一些适当的紧凑，但不彻底；<br>而 major compaction 则是放在午夜跑的定时任务，将文件做最大化的紧凑。这时候 LSM 树的磁盘树数量很少, 被并入一个大的树</p>
 <p><img src="/images/hbase/hbase-compaction.png" alt="hbase_compaction"></p>
+<h2 id="查询流程"><a href="#查询流程" class="headerlink" title="查询流程"></a>查询流程</h2><ul>
+<li><p>（1）<strong>查询 meta 表</strong>：Client 发送请求给 Zk, 获取 hbase:meta 表在哪个 RegionServer，hbase:meta 存储了每个表在每个 Region 上的 start/end Key， Client 向该 RegionServer 发送请求, 查询 meta 表, 获取 Key 在哪个 Region 上, 同时也确定了 RegionServer</p>
+<ul>
+<li>查询 hbase:meta 表的步骤可以在 Client 本地进行缓存, 不必每次都去查 Zk；</li>
+</ul>
+</li>
+<li><p>（2）<strong>从 RegionServer 进行合并读</strong>：</p>
+<ul>
+<li>尝试从 BlockCache 查询（最近读取的 KeyValue 都被缓存在这里，这是 一个 LRU 缓存）</li>
+<li>尝试从 MemStore 查询（即写缓存，包含了最近更新的数据）</li>
+<li>从 StoreFile（HFile） 查询： 尝试从内存中已加载的 Data Block 索引和布隆过滤器中查询</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>每个列族的 MemStore 可能对应多个 HFile，所以一次查询可能会需要读取多个 HFile，这被称为<strong>读放大</strong>（<strong>read amplification</strong>），尤其是不满足 data locality 时（Region Server 和 HFile 在不同的节点），读放大带来的影响会更严重</p>
+</blockquote>
+<p>@ref：</p>
+<ul>
+<li><a href="http://hbasefly.com/2016/12/21/hbase-getorscan/" target="_blank" rel="noopener">HBase原理－数据读取流程解析 – 有态度的HBase/Spark/BigData</a></li>
+<li><a href="http://hbasefly.com/2017/06/11/hbase-scan-2/" target="_blank" rel="noopener">HBase原理－迟到的‘数据读取流程’部分细节 – 有态度的HBase/Spark/BigData</a></li>
+<li><a href="http://hbasefly.com/2016/04/03/hbase_hfile_index/" target="_blank" rel="noopener">HBase – 探索HFile索引机制 – 有态度的HBase/Spark/BigData</a></li>
+</ul>
+<h2 id="写入流程"><a href="#写入流程" class="headerlink" title="写入流程"></a>写入流程</h2><ul>
+<li>（1）Region Server 定位过程与度读流程类似；</li>
+<li>（2）put 请求到 Region Server ，数据被写入 WAL 后，会被加入到 MemStore 即写缓存。然后服务端就可以向客户端返回 ack 表示写数据完成。<ul>
+<li>每个 RegionServer 一般只有一个 WAL，不同子表、不同列族的数据都被写入这一个 WAL, 同时 WAL 中每个最小单元都有唯一递增的seqId @ref: [[#HLog (WAL)]]</li>
+<li>每个 Column Family 都有一个 MemStore，不同的列族被写入其对应的 MemStore，在 MemStore 中按 Rowkey 进行排序；</li>
+<li>当某个 Column Family 的 MemStore 中，累积了足够多的的数据后，整个有序数据集就会被写入一个新的 HFile 文件到 HDFS 上，每个 Column Family 都有自，同时；</li>
+<li></li>
+</ul>
+</li>
+</ul>
 <h2 id="Region拆分策略"><a href="#Region拆分策略" class="headerlink" title="Region拆分策略"></a>Region拆分策略</h2><p>HBase的表由多个子表(Regions)组成，这些 Regions分布在多个 Region Server上面。<br>Region的拆分逻辑是通过CompactSplitThread线程的requestSplit方法来触发的，每当执行MemstoreFlush操作时都会调用该方法进行判断，看是否有必要对目标Region进行拆分。Region的拆分有三种策略：</p>
 <ol>
 <li>ConstantSizeRegionSplitPolicy：在0.94之前只有这个策略。当region中的一个store（对应一个columnfamily的一个storefile）超过了配置参数hbase.hregion.max.filesize时拆分成两个，该配置参数默认为10GB。region拆分线是最大storefile的中间rowkey。</li>
@@ -498,14 +634,15 @@
 <li>KeyPrefixRegionSplitPolicy：你可以配置用来对你的rowkey进行分组所依赖的前缀长度，然后该策略保证region的拆分线不会在一组拥有相同前缀的rowkey的中间，也就是说，拆分后的region中，相同前缀的rowkey会一直位于同一个region上。其他的拆分策略与IncreasingToUpperBoundRegionSplitPolicy是一样的。</li>
 </ol>
 <p><strong>如何配置策略？</strong><br>通过配置参数<code>hbase.regionserver.region.split.policy</code>来配置，这是全局的。可以针对单独的表进行配置，用表的API<code>HTableDescriptor.setValue()</code>可以配置。另外，后一种配置还可以使用自定义的拆分策略类。</p>
-<h2 id="HBase读取流程解析"><a href="#HBase读取流程解析" class="headerlink" title="HBase读取流程解析"></a>HBase读取流程解析</h2><ul>
-<li>Client 发送请求给Zk, 获取 hbase:meta表在哪个 RegionServer;</li>
-<li>hbase:meta存储了 每个表在每个 Region 上的 start/end Key</li>
-<li>Client 向该 RegionServer发送请求, 查询 meta 表, 获取Key在哪个 Region上, 同时也确定了 RegionServer;</li>
-<li>Client 可以缓存 meta表, 每次不必去查 Zk</li>
+<h2 id="HBase-高可用"><a href="#HBase-高可用" class="headerlink" title="HBase 高可用"></a>HBase 高可用</h2><p>TODO: 一个 HBase 集群有多个 RS, 每个 RS 负责一部分 Key, 当一个 RS 宕机 …</p>
+<ul>
+<li>HDFS 的大文件被分为多个 Block, 每个 Block 都存在在3台不同机器上, 实现3副本;</li>
+<li>HBase 写数据的 WAL 机制: 先写 HLog, 再写缓存, 缓存满了一起落盘, HLog 可以作为宕机后的恢复依据;</li>
+<li>每个 RegionServer 会周期性给 zk 发送心跳信息, 当 RS 断开连接, 超过一定时间(zk 的 sessionTimeout), zk 认为这台 RS 宕机, 并将消息通知给 Master,</li>
+<li>Master 将这台 RegionServer 上所有的 Region 转移到其他 RS 上. 再将 HLog 日志分发给其他 RS 进行回放. // RS 已经宕机, master 如何从 RS 上获取 Log ?</li>
 </ul>
 <blockquote>
-<p>@ref <a href="https://zhuanlan.zhihu.com/p/92103602" target="_blank" rel="noopener">HBase源码：Region的定位与优化 - 知乎</a></p>
+<p>@ref <a href="https://zhuanlan.zhihu.com/p/28475168" target="_blank" rel="noopener">HBase–RegionServer宕机恢复原理 - 知乎</a></p>
 </blockquote>
 
       
@@ -541,8 +678,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/32.Database/HBase-04应用/" rel="prev" title="HBase-04应用">
-                HBase-04应用 <i class="fa fa-chevron-right"></i>
+              <a href="/32.Database/HBase-04行键设计/" rel="prev" title="HBase-04行键(Rowkey)设计">
+                HBase-04行键(Rowkey)设计 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -634,7 +771,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -656,7 +793,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -724,7 +861,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#架构简介"><span class="nav-text">架构简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HMaster"><span class="nav-text">HMaster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HRegion-Server"><span class="nav-text">HRegion Server</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Region-Server-高可用"><span class="nav-text">Region Server 高可用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MemStore"><span class="nav-text">MemStore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StoreFile-HFile"><span class="nav-text">StoreFile(HFile)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HFile-的-Data-Index"><span class="nav-text">HFile 的 Data Index</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROOT-amp-META表"><span class="nav-text">ROOT &amp; META表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#META表的缓存设计"><span class="nav-text">META表的缓存设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Minor-amp-Major-Compact"><span class="nav-text">Minor &amp; Major Compact</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region拆分策略"><span class="nav-text">Region拆分策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase读取流程解析"><span class="nav-text">HBase读取流程解析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase-架构简介"><span class="nav-text">HBase 架构简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS"><span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper"><span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#META-表"><span class="nav-text">META 表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HMaster"><span class="nav-text">HMaster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HRegion-Server"><span class="nav-text">HRegion Server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HLog-WAL"><span class="nav-text">HLog (WAL)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MemStore"><span class="nav-text">MemStore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HFile"><span class="nav-text">HFile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HFile-Minor-amp-Major-Compact"><span class="nav-text">HFile Minor &amp; Major Compact</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询流程"><span class="nav-text">查询流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写入流程"><span class="nav-text">写入流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region拆分策略"><span class="nav-text">Region拆分策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase-高可用"><span class="nav-text">HBase 高可用</span></a></li></ol></div>
             
 
           </div>

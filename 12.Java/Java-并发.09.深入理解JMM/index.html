@@ -131,7 +131,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmm-volatile-barriers_store.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmm-volatile-barriers_load.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmm-cas-and-volatile.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.105Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.319Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java-并发.09.《深入理解Java内存模型》笔记">
 <meta name="twitter:description" content="@ref: 《深入理解Java内存模型》  @tldr:  并发编程模型 并发编程模型要解决的两个问题: 通信和同步 两种并发编程模型的: 基于共享内存, 基于消息   Java内存模型的抽象 Java 内存模型（JMM）的抽象: 主内存和线程的”本地内存” happens-before规则 该规则是 JSR-133 内存模型(JDK 层面定义的)中提出的概念, happens-before 并不">
@@ -360,7 +360,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  8,033
+                  8,104
                 </span>
               
 
@@ -530,7 +530,11 @@
 <li>原子性：对任意单个 volatile 变量的读/写具有原子性，但类似于 <code>volatile++</code> 这种”依赖当前值”的复合操作不具有原子性，所以仅仅使用 volatile 变量当做同步手段(比如当做锁的计数器) 是不可以的。线程安全的计数器请使用 <code>AtomicInteger</code></li>
 </ul>
 <blockquote>
-<p>扩展阅读: long 和 double 读写的原子性:<br>JMM 不保证对 64 位的 long 型和 double 型变量的读/写操作具有原子性,<br>在一些 32 位的处理器上，如果要求对 64 位数据的读/写操作具有原子性，会有比较大的开销。为了照顾这种处理器，java 语言规范鼓励但不强求 JVM 对 64 位的 long 型变量和 double 型变量的读/写具有原子性。<br>当 JVM 在这种处理器上运行时，会把一个 64 位 long/ double 型变量的读/写操作拆分为两个 32 位的读/写操作来执行。<strong>这两个 32 位的读/写操作可能会被分配到不同的总线事务中执行</strong>，此时对这个 64 位变量的读/写将不具有原子性。</p>
+<p>扩展阅读: long 和 double 读写的 #原子性 :<br>JMM 不保证对 64 位的 long 型和 double 型变量的读/写操作具有原子性,</p>
+<ul>
+<li>在一些 32 位的处理器上，如果要求对 64 位数据的读/写操作具有原子性，会有比较大的开销。为了照顾这种处理器，java 语言规范鼓励但不强求 JVM 对 64 位的 long 型变量和 double 型变量的读/写具有原子性。当 JVM 在这种处理器上运行时，会把一个 64 位 long/ double 型变量的读/写操作拆分为两个 32 位的读/写操作来执行。<strong>这两个 32 位的读/写操作可能会被分配到不同的总线事务中执行</strong>，此时对这个 64 位变量的读/写将不具有原子性。</li>
+<li>JMM 可以保证 64位环境，volatile long 的原子性：</li>
+</ul>
 </blockquote>
 <h3 id="volatile-读写建立的-happens-before-关系"><a href="#volatile-读写建立的-happens-before-关系" class="headerlink" title="volatile 读写建立的 happens before 关系"></a>volatile 读写建立的 happens before 关系</h3><p><strong>从 JSR-133 开始，volatile 变量的写-读可以实现线程之间的通信</strong>。看代码：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VolatileExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 线程A执行writer():</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        a = <span class="number">1</span>;               <span class="comment">//1</span></span><br><span class="line">        flag = <span class="keyword">true</span>;         <span class="comment">//2</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 线程B执行read():</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;          <span class="comment">//3</span></span><br><span class="line">            <span class="keyword">int</span> i =  a;      <span class="comment">//4</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -560,7 +564,7 @@
 </li>
 <li>在每个 <strong>volatile 读</strong> 操作的 <strong>后面</strong> 再插入一个 <code>LoadStore</code> 屏障。</li>
 </ul>
-<p><strong>① volatile 写插入的内存屏障：</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">普通读/写操作</span><br><span class="line">StoreStore屏障 //禁止上面的普通写和下面的 Volatile写 重排序</span><br><span class="line">volatile写</span><br><span class="line">StoreLoad屏障  //禁止上面的Volatile写和下面有可能的 Volatile读写 重排序</span><br></pre></td></tr></table></figure></p>
+<p><strong>① volatile 写插入的内存屏障：</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">普通读/写操作</span><br><span class="line">StoreStore屏障 //禁止上面的普通写和下面的 Volatile写 重排序</span><br><span class="line">volatile写   // 因为v的写一般作为change标志位，所以v写之前的写，不能排到v写之后</span><br><span class="line">StoreLoad屏障  //禁止上面的Volatile写和下面有可能的 Volatile读写 重排序</span><br></pre></td></tr></table></figure></p>
 <p><img src="/images/java/jmm-volatile-barriers_store.png" alt="jmm-volatile-read-barriers"></p>
 <ul>
 <li><p>StoreStore 屏障可以保证在 volatile 写之前，其前面的所有普通写操作已经对任意处理器可见了。这是因为 StoreStore 屏障将保障上面所有的普通写在 volatile 写之前刷新到主内存。</p>
@@ -568,7 +572,7 @@
 <li><p>这里比较有意思的是 volatile 写后面的 StoreLoad 屏障。为了保证能正确实现 volatile 的内存语义，在每个 volatile 写的后面或在每个 volatile 读的前面插入一个 StoreLoad 屏障。从整体执行效率的角度考虑，JMM 选择了在每个 volatile 写的后面插入一个 StoreLoad 屏障。因为 volatile 写 - 读内存语义的常见使用模式是：一个写线程写 volatile 变量，多个读线程读同一个 volatile 变量。当读线程的数量大大超过写线程时，选择在 volatile 写之后插入 StoreLoad 屏障将带来可观的执行效率的提升。</p>
 </li>
 </ul>
-<p><strong>② volatile 读插入的内存屏障：</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">volatile读</span><br><span class="line">LoadLoad屏障  // 禁止下面的普通读和上面的 Volatile读 重排序</span><br><span class="line">LoadStore屏障 // 禁止下面的普通写和上面的 Volatile读 重排序</span><br><span class="line">普通读/写</span><br></pre></td></tr></table></figure></p>
+<p><strong>② volatile 读插入的内存屏障：</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">volatile读   // v读一般作为检测标志，也就要求后面的普通读，不能先于v读之前</span><br><span class="line">LoadLoad屏障  // 禁止下面的普通读和上面的 Volatile读 重排序</span><br><span class="line">LoadStore屏障 // 禁止下面的普通写和上面的 Volatile读 重排序</span><br><span class="line">普通读/写</span><br></pre></td></tr></table></figure></p>
 <p><img src="/images/java/jmm-volatile-barriers_load.png" alt="jmm-volatile-write-barriers"></p>
 <h2 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h2><p>有关 Synchronized 的实现, 请参考👉 <a href="https://whatsrtos.github.io/30MinsTutorial/Java%20Tutorials/#Synchronized" target="_blank" rel="noopener">《Java Tutorials》</a></p>
 <h3 id="Synchronized-的释放-获取建立的-happens-before-关系"><a href="#Synchronized-的释放-获取建立的-happens-before-关系" class="headerlink" title="Synchronized 的释放-获取建立的 happens before 关系"></a>Synchronized 的释放-获取建立的 happens before 关系</h3><p>线程 A 在释放锁之前所有可见的共享变量，在线程 B 获取同一个锁之后，将立刻变得对 B 线程可见。</p>
@@ -802,7 +806,7 @@ T 是一个外部类, T 被初始化的时候, 其静态内部类 Inner 不会�
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -824,7 +828,7 @@ T 是一个外部类, T 被初始化的时候, 其静态内部类 Inner 不会�
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

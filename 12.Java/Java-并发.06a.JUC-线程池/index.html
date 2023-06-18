@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="线程池相关类和方法 ExecutorService: Java线程池的接口, 提供了如下方法: void execute(Runnable command) 执行 Ruannable 类型的任务 Future&amp;lt;?&amp;gt; submit(Runnable task) 可用来提交 Callable 或 Runnable 任务，并返回代表此任务的 Future 对象 Future&amp;lt;T&amp;gt;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.082Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.298Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java-并发.06a.JUC-执行器-线程池">
 <meta name="twitter:description" content="线程池相关类和方法 ExecutorService: Java线程池的接口, 提供了如下方法: void execute(Runnable command) 执行 Ruannable 类型的任务 Future&amp;lt;?&amp;gt; submit(Runnable task) 可用来提交 Callable 或 Runnable 任务，并返回代表此任务的 Future 对象 Future&amp;lt;T&amp;gt;">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,075
+                  3,290
                 </span>
               
 
@@ -413,8 +413,8 @@
 <li><p><strong>workQueue</strong>: 一个阻塞队列，用来存储等待执行的任务。当线程数已经大于 corePoolSize 时, 再向线程池添加任务，会把任务放入该队列中。阻塞队列有以下几种选择：</p>
 <ul>
 <li><code>ArrayBlockingQueue</code>：基于数组结构的 <strong>有界阻塞队列</strong>，此队列按 FIFO（先进先出）排序元素。因为入队/出队操作的同步都用同一个 lock 对象，所以生产者和消费者无法同时进行，所以吞吐量低；</li>
-<li><code>LinkedBlockingQueue</code>：一个基于链表结构的 <strong>无界阻塞队列</strong>，此队列按 FIFO （先进先出） 排序元素，吞吐量通常要高于 <code>ArrayBlockingQueue</code>。 <strong>Executors.newFixedThreadPool()</strong> 使用了这个队列。</li>
-<li><code>SynchronousQueue</code>：一个不存储元素的 <strong>有界阻塞队列</strong>。每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态（可以这样来理解：生产者和消费者互相等待对方，握手然后一起离开），吞吐量通常要高于 <code>LinkedBlockingQueue</code>。<strong>Executors.newCachedThreadPool()</strong> 使用了这个队列。</li>
+<li><code>LinkedBlockingQueue</code>：一个基于链表结构的 <strong>有界阻塞队列</strong>，如果队列不指定 size，默认长度是 Integer.MAX，此队列按 FIFO （先进先出）排序元素，吞吐量通常要高于 <code>ArrayBlockingQueue</code>（因为使用了两个 lock，读写不冲突）。 <strong>Executors.newFixedThreadPool()</strong> 使用了这个队列。</li>
+<li><code>SynchronousQueue</code>：一个不存储元素的 <strong>有界阻塞队列</strong>。每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态（可以这样来理解：生产者和消费者互相等待对方，握手然后一起离开）。<strong>Executors.newCachedThreadPool()</strong> 使用了这个队列。</li>
 <li><code>PriorityBlockingQueue</code>：一个具有优先级的 <strong>无限阻塞队列</strong>，此队列按优先级排序元素。</li>
 </ul>
 </li>
@@ -437,12 +437,6 @@
 </ul>
 </li>
 </ul>
-<p>➤ 区分 coreSize、queueSize、maxSize，当提交一个新任务到线程池时，线程池的处理流程如下：</p>
-<ol>
-<li>首先线程池判断<strong>基本线程池（corePoolSize）</strong> 是否已满？没满，创建一个工作线程来执行任务。满了，则进入下个流程。</li>
-<li>其次线程池判断<strong>工作队列（workQueue）</strong> 是否已满？这一步尝试队列能否 offer 进新任务，如果 offer 失败（队列满），则进入下个流程。</li>
-<li>最后线程池判断<strong>整个线程池（maximumPoolSize）</strong> 是否已满？没满，则创建一个新的工作线程来执行任务，满了，则交给饱和策略来处理这个任务。</li>
-</ol>
 <p>➤ 再回过来看 Executors 提供的几种工厂方法:</p>
 <blockquote>
 <ul>
@@ -456,7 +450,19 @@
 <li>使用 <code>newCachedThreadPool()</code> 的问题在于, 如果没有控制好任务大小(所有线程一直在忙) 线程数会一直增长（<code>maxPoolSize</code> 是 <code>Integer.MAX_VALUE</code>). 只有线程空闲的时候才有机会减少线程数.</li>
 <li>使用 <code>newFixedThreadPool()</code> 的问题在于, 虽然工作线程数是固定的, 但是等待队列大小是 <code>Integer.MAX_VALUE</code>,</li>
 </ul>
-<p>这两种线程池都有可能因为创建大量线程导致 OOM. 所以<strong>不建议使用 Executors 直接创建线程池</strong></p>
+<p>这两种线程池都有可能因为创建大量线程导致 OOM. 所以<strong>不建议使用 Executors 提供的方法直接创建线程池</strong></p>
+<h2 id="提交任务"><a href="#提交任务" class="headerlink" title="提交任务"></a>提交任务</h2><p>当提交一个新任务到线程池时（<code>execute</code> or <code>submit</code>），线程池的处理流程如下：</p>
+<ol>
+<li>首先线程池判断<strong>基本线程池（corePoolSize）</strong> 是否已满？没满，创建一个工作线程来执行任务。满了，则进入下个流程。</li>
+<li>其次线程池判断<strong>工作队列（workQueue）</strong> 是否已满？这一步尝试队列能否 offer 进新任务，如果 offer 失败（队列满），则进入下个流程。</li>
+<li>最后线程池判断<strong>整个线程池（maximumPoolSize）</strong> 是否已满？没满，则创建一个新的工作线程来执行任务，满了，则交给饱和策略来处理这个任务。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable command)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">if</span> (command == <span class="keyword">null</span>)  </span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();  </span><br><span class="line"></span><br><span class="line">    <span class="comment">// ctl 是 Atomic类型</span></span><br><span class="line">    <span class="comment">// 32位，高3位=线程池状态 ,后29位=当前运行worker的数量</span></span><br><span class="line">    <span class="keyword">int</span> c = ctl.get();  </span><br><span class="line"></span><br><span class="line">    <span class="comment">// (1) corePoolSize</span></span><br><span class="line">    <span class="keyword">if</span> (workerCountOf(c) &lt; corePoolSize) &#123;  </span><br><span class="line">        <span class="keyword">if</span> (addWorker(command, <span class="keyword">true</span>))  <span class="comment">// 创建新线程</span></span><br><span class="line">            <span class="keyword">return</span>;  </span><br><span class="line">        c = ctl.get();  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="comment">// (2) taskQueue.offer</span></span><br><span class="line">    <span class="keyword">if</span> (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;  </span><br><span class="line">        <span class="keyword">int</span> recheck = ctl.get();  </span><br><span class="line">        <span class="keyword">if</span> (! isRunning(recheck) &amp;&amp; remove(command))  </span><br><span class="line">            reject(command);  </span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (workerCountOf(recheck) == <span class="number">0</span>)  </span><br><span class="line">            addWorker(<span class="keyword">null</span>, <span class="keyword">false</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="comment">// (3) 大于coresize 且 queue满，再尝试增加线程数量到maximumPoolSize</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (!addWorker(command, <span class="keyword">false</span>))  </span><br><span class="line">        reject(command);  <span class="comment">// 拒绝</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>提交任务时，使用的是 TaskQueue 的 <code>offer()</code> 方法，不会阻塞调用线程；</p>
+</blockquote>
+<p><code>submit</code> 方法在 AbstractExecutorService 中的实现：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Future&lt;?&gt; submit(Runnable task) &#123; </span><br><span class="line">    <span class="keyword">if</span> (task == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(); </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 通过 submit 方法提交的 Callable 任务会被封装成了一个 FutureTask 对象</span></span><br><span class="line">    RunnableFuture&lt;Void&gt; ftask = newTaskFor(task, <span class="keyword">null</span>); </span><br><span class="line">    execute(ftask); </span><br><span class="line">    <span class="keyword">return</span> ftask; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="工作线程"><a href="#工作线程" class="headerlink" title="工作线程"></a>工作线程</h2><p>流程： <code>execute –&gt; addWorker() –&gt;runWorker()</code></p>
 <p>向线程池提交 Runnable,  会调用到线程池的 <code>addWorker()</code>，这个方法里会将工作线程封装成 Worker 类，<br>在 ReentrantLock 锁的保证下，把 Woker 实例插入到 HashSet 后，并启动 Woker 中的线程。<br>从 Woker 类的构造方法实现可以发现: 线程工厂在创建线程 thread 时，将 Woker 实例本身 this 作为参数传入，当执行 start 方法启动线程 thread 时，本质是执行了 Worker 的 runWorker 方法。 </p>
 <p>Worker 在执行完任务(firstTask)后，还会通过 <code>runWorker()</code> 无限循环获取工作队列里的任务来执行:</p>
@@ -648,7 +654,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -670,7 +676,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -738,7 +744,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程池相关类和方法"><span class="nav-text">线程池相关类和方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程池的实现"><span class="nav-text">线程池的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#构造方法"><span class="nav-text">构造方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作线程"><span class="nav-text">工作线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭线程池"><span class="nav-text">关闭线程池</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优化线程池"><span class="nav-text">优化线程池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#监控线程池"><span class="nav-text">监控线程池</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程池相关类和方法"><span class="nav-text">线程池相关类和方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程池的实现"><span class="nav-text">线程池的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#构造方法"><span class="nav-text">构造方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交任务"><span class="nav-text">提交任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作线程"><span class="nav-text">工作线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭线程池"><span class="nav-text">关闭线程池</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优化线程池"><span class="nav-text">优化线程池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#监控线程池"><span class="nav-text">监控线程池</span></a></li></ol></div>
             
 
           </div>

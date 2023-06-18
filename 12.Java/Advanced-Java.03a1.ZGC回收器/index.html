@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="ZGC（The Z Garbage Collector）是 JDK 11中推出的一款低延迟垃圾回收器，它的设计目标包括：  停顿时间不超过10ms（低延迟，最大特点）； 停顿时间不会随着堆的大小，或者活跃对象的大小而增加； 支持8MB~4TB 级别的堆（未来支持16TB）  STW 对吞吐量的影响 部分上游业务要求风控服务65ms 内返回结果，并且可用性要达到99.99%。但因为 GC 停顿，我们">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Advanced-Java.03a1.ZGC回收器详解">
+<meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a1.ZGC回收器/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="ZGC（The Z Garbage Collector）是 JDK 11中推出的一款低延迟垃圾回收器，它的设计目标包括：  停顿时间不超过10ms（低延迟，最大特点）； 停顿时间不会随着堆的大小，或者活跃对象的大小而增加； 支持8MB~4TB 级别的堆（未来支持16TB）  STW 对吞吐量的影响 部分上游业务要求风控服务65ms 内返回结果，并且可用性要达到99.99%。但因为 GC 停顿，我们">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-3.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.ZGC-Regions.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-2.png">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.135Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Advanced-Java.03a1.ZGC回收器详解">
+<meta name="twitter:description" content="ZGC（The Z Garbage Collector）是 JDK 11中推出的一款低延迟垃圾回收器，它的设计目标包括：  停顿时间不超过10ms（低延迟，最大特点）； 停顿时间不会随着堆的大小，或者活跃对象的大小而增加； 支持8MB~4TB 级别的堆（未来支持16TB）  STW 对吞吐量的影响 部分上游业务要求风控服务65ms 内返回结果，并且可用性要达到99.99%。但因为 GC 停顿，我们">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-3.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a1.ZGC回收器/"/>
+
+
+
+
+
+  <title>Advanced-Java.03a1.ZGC回收器详解 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a1.ZGC回收器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Advanced-Java.03a1.ZGC回收器详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/12-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">12.Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,815
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://wiki.openjdk.java.net/display/zgc/Main" target="_blank" rel="noopener">ZGC</a>（The Z Garbage Collector）是 JDK 11中推出的一款低延迟垃圾回收器，它的设计目标包括：</p>
+<ul>
+<li>停顿时间不超过10ms（<strong>低延迟</strong>，最大特点）；</li>
+<li>停顿时间不会随着堆的大小，或者活跃对象的大小而增加；</li>
+<li>支持8MB~4TB 级别的堆（未来支持16TB）</li>
+</ul>
+<h2 id="STW-对吞吐量的影响"><a href="#STW-对吞吐量的影响" class="headerlink" title="STW 对吞吐量的影响"></a>STW 对吞吐量的影响</h2><blockquote>
+<p>部分上游业务要求风控服务65ms 内返回结果，并且可用性要达到99.99%。但因为 GC 停顿，我们未能达到上述可用性目标。当时使用的是 CMS 垃圾回收器，单次 Young GC 40ms，一分钟10次，接口平均响应时间30ms。</p>
+</blockquote>
+<p>受影响的请求分2部分：1是 GC 持续时间内的（30ms），2是 GC 发生前30ms 内到来的请求（40ms），所以一次 YGC 受影响的请求持续时间是70ms，一分钟10次 YGC，那么就是一分钟内，有700ms 的请求会受影响（这个比例按照持续时间计算，是70ms / 60000ms = 1.12%），这段时间内的请求，其耗时会增加0~40ms 不等，最差就是多等40ms，也就是 GC 发生前30ms ~ GC 刚开始的时候到来的请求（30ms），这些请求的耗时会多出整整40ms；</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+40ms     | +0~40ms  |      -无影响-      |</span><br><span class="line">  req     |   STW    |   req    |   req   |</span><br><span class="line">--------► ---------► --------► --------►</span><br><span class="line">| 30ms   |   40ms    |  30ms    |  30ms   |</span><br></pre></td></tr></table></figure>
+<h2 id="G1停顿时间瓶颈"><a href="#G1停顿时间瓶颈" class="headerlink" title="G1停顿时间瓶颈"></a>G1停顿时间瓶颈</h2><p>G1的混合回收过程可以分为标记阶段、清理阶段和复制阶段。</p>
+<p><img src="/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-3.png" alt="../_images/Advanced-Java.03a1.ZGC回收器-2023-06-06-3.png"></p>
+<blockquote>
+<p>初始标记(STW), 并发标记, 再标记(STW), 清理(STW),  初始转移(STW), 并发转移</p>
+</blockquote>
+<p><strong>标记阶段停顿分析</strong></p>
+<ul>
+<li>初始标记阶段：初始标记阶段是指从GC Roots出发标记全部直接子节点的过程，该阶段是STW的。由于GC Roots数量不多，通常该阶段耗时非常短。</li>
+<li>并发标记阶段：并发标记阶段是指从GC Roots开始对堆中对象进行可达性分析，找出存活对象。该阶段是并发的，即应用线程和GC线程可以同时活动。并发标记耗时相对长很多，但因为不是STW，所以我们不太关心该阶段耗时的长短。</li>
+<li>再标记阶段：重新标记那些在并发标记阶段发生变化的对象。该阶段是STW的。</li>
+</ul>
+<p><strong>清理阶段停顿分析</strong></p>
+<ul>
+<li>清理阶段清点出有存活对象的分区和没有存活对象的分区，该阶段不会清理垃圾对象，也不会执行存活对象的复制。该阶段是STW的。</li>
+</ul>
+<p><strong>复制阶段停顿分析</strong></p>
+<ul>
+<li>复制算法中的<strong>转移阶段</strong>需要分配新内存和复制对象的成员变量。转移阶段是STW的，其中内存分配通常耗时非常短，但对象成员变量的复制耗时有可能较长，这是因为复制耗时与存活对象数量与对象复杂度成正比。对象越复杂，复制耗时越长。</li>
+</ul>
+<p>四个 STW 过程中，初始标记因为只标记 GC Roots，耗时较短。再标记因为对象数少，耗时也较短。清理阶段因为内存分区数量少，耗时也较短。转移阶段要处理所有存活的对象，耗时会较长。因此，G1停顿时间的瓶颈主要是标记-复制中的转移阶段 STW。为什么转移阶段不能和标记阶段一样并发执行呢？主要是 G1未能解决转移过程中准确定位对象地址的问题。</p>
+<p>G1的 Young GC 和 CMS 的 Young GC，其标记-复制全过程 STW，这里不再详细阐述。</p>
+<h2 id="ZGC-细节"><a href="#ZGC-细节" class="headerlink" title="ZGC 细节"></a>ZGC 细节</h2><p>ZCG 不再有 CMS、G1的分代概念，同时采用基于 Region 的堆内存布局（与 Shenandoah 和 G1一样），但与它们不同的是， ZGC 的 Region 具有动态性 ：</p>
+<ul>
+<li>动态创建</li>
+<li>动态销毁</li>
+<li>以及动态的区域容量大小</li>
+</ul>
+<p>ZGC 的 Region 可以具有大、中、小三类容量:</p>
+<ul>
+<li>Small Region：2MB，主要用于放置小于 256 KB 的小对象。</li>
+<li>Medium Region：32MB，主要用于放置大于等于 256 KB 小于 4 MB 的对象。</li>
+<li>Large Region：N * 2MB,这个类型的 Region 是可以动态变化的，不过必须是 2MB 的整数倍，最小支持 4 MB。每个 Large Region 只放置一个大对象，并且是不会被重分配的。</li>
+</ul>
+<p><img src="/images/Advanced-Java.03a1.ZGC-Regions.png" alt="../_images/Advanced-Java.03a1.ZGC-Regions.png"></p>
+<p>ZGC 采用 <strong>「标记-压缩」</strong> 策略来回收 Java 堆：ZGC 首先会并发标记( concurrent mark )堆中的活跃对象，然后并发转移( concurrent relocate )将部分区域的活跃对象整理到一起。</p>
+<p>ZGC 是如何做到并发标记和转移呢？这就要提到 ZGC 背后的核心技术——<strong>读屏障</strong>（ load barrier ）和<strong>染色指针</strong>（ colored pointer ）</p>
+<h3 id="ZGC-低延迟的实现"><a href="#ZGC-低延迟的实现" class="headerlink" title="ZGC 低延迟的实现"></a>ZGC 低延迟的实现</h3><p>ZGC 在标记、转移和重定位阶段几乎都是并发的，这是 ZGC 实现停顿时间小于10ms 目标的最关键原因。</p>
+<p>ZGC 只有三个 STW 阶段：<strong>初始标记</strong>，<strong>再标记</strong>，<strong>初始转移</strong>。其中，初始标记和初始转移分别都只需要扫描所有 GC Roots，其处理时间和 GC Roots 的数量成正比，一般情况耗时非常短；再标记阶段 STW 时间很短，最多1ms，超过1ms 则再次进入并发标记阶段。即，ZGC 几乎所有暂停都只依赖于 GC Roots 集合大小，停顿时间不会随着堆的大小或者活跃对象的大小而增加。<br>与 ZGC 对比，G1的<strong>转移阶段</strong>完全 STW 的（ZGC 只有初始转移的短暂STW），且停顿时间随存活对象的大小增加而增加。</p>
+<p>➤ ZGC 通过<strong>指针着色</strong> 和 <strong>读屏障</strong> 来实现的并发标记和并发转移：</p>
+<p>（1）<strong>指针着色：</strong><br>ZGC 仅支持64位系统，对象指针占用空间=64bit，其中真正作为地址的是0-41位，42-45存储指针着色，高18位不使用（42+4+18）；</p>
+<p><img src="/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-1.png" alt="../_images/Advanced-Java.03a1.ZGC回收器-2023-06-06-1.png"></p>
+<p>对比过去的 GC，对象的存活信息是放在对象头的 Mark Word 中，而 ZGC 将对象存活信息存储在对象指针的4bits 中，少了一次读内存的操作。</p>
+<blockquote>
+<p>传统的垃圾回收器需要进行一次内存访问，并将对象存活信息放在对象头中；而在 ZGC 中，只需要设置对象指针的第42~45位即可，并且因为是寄存器访问，所以速度比访问内存更快。</p>
+</blockquote>
+<p>（2）<strong>读屏障：</strong></p>
+<p>即在“读操作”之后加入一小段代码，这段代码会修改指针的着色，这里的读操作指仅“从堆中读取对象引用”，无论<strong>GC 标记线程</strong> 和 <strong>应用线程</strong> 对这些引用的读取，都会被加入读屏障。</p>
+<p>读屏障示例：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Object o = obj.FieldA // 从堆中读取引用，需要加入屏障</span><br><span class="line">&lt;Load barrier&gt;</span><br><span class="line"></span><br><span class="line">Object p = o    // 无需加入屏障，因为不是从堆中读取引用</span><br><span class="line">o.dosomething() // 无需加入屏障，因为不是从堆中读取引用</span><br><span class="line">int i = obj.FieldB //无需加入屏障，因为不是对象引用</span><br></pre></td></tr></table></figure></p>
+<p>接下来详细介绍 ZGC 一次垃圾回收周期中地址视图的切换过程（这里的几种视图可以理解为几种不同的指针着色标记）：</p>
+<ul>
+<li><strong>初始化</strong>：ZGC初始化之后，整个内存空间的地址视图被设置为Remapped。程序正常运行，在内存中分配对象，满足一定条件后垃圾回收启动，此时进入标记阶段。</li>
+<li><strong>并发标记阶段</strong>：第一次进入标记阶段时视图为M0，如果对象被GC标记线程或者应用线程访问过，那么就将对象的地址视图从Remapped调整为M0。所以，在标记阶段结束之后，对象的地址要么是M0视图，要么是Remapped。如果对象的地址是M0视图，那么说明对象是活跃的；如果对象的地址是Remapped视图，说明对象是不活跃的。</li>
+<li><strong>并发转移阶段</strong>：标记结束后就进入转移阶段，此时地址视图再次被设置为Remapped。如果对象被GC转移线程或者应用线程访问过，那么就将对象的地址视图从M0调整为Remapped。</li>
+</ul>
+<p>其实，在标记阶段存在两个地址视图 M0和 M1，上面的过程显示只用了一个地址视图。之所以设计成两个，是为了区别前一次标记和当前标记。也即，第二次进入并发标记阶段后，地址视图调整为 M1，而非 M0。</p>
+<p><img src="/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-2.png" alt="../_images/Advanced-Java.03a1.ZGC回收器-2023-06-06-2.png"></p>
+<h3 id="ZGC-线上效果"><a href="#ZGC-线上效果" class="headerlink" title="ZGC 线上效果"></a>ZGC 线上效果</h3><p>美团的案例：</p>
+<p>（1）可显著降低 TP999 和 TP99耗时，ZGC 在低延迟（TP999 &lt; 200ms）场景中收益较大：</p>
+<ul>
+<li><strong>TP999</strong>：下降12~142ms，下降幅度18%~74%。</li>
+<li><strong>TP99</strong>：下降5~28ms，下降幅度10%~47%。</li>
+</ul>
+<p>但超低延迟（TP999 &lt; 20ms）和高延迟（TP999 &gt; 200ms）服务收益不大，原因是这些服务的响应时间瓶颈不是 GC，而是外部依赖的性能。</p>
+<blockquote>
+<p>TP(Top Percentile)是一项衡量系统延迟的指标：TP999表示99.9%请求都能被响应的最小耗时；TP99表示99%请求都能被响应的最小耗时。</p>
+</blockquote>
+<p>（2）低延迟的代价是<strong>吞吐下降</strong>：</p>
+<p>对吞吐量优先的场景，ZGC 可能并不适合。例如，Zeus 某离线集群原先使用 CMS，升级 ZGC 后，系统吞吐量明显降低。究其原因有二：</p>
+<ul>
+<li>第一，ZGC 是单代垃圾回收器，而 CMS 是分代垃圾回收器。单代垃圾回收器每次处理的对象更多，更耗费 CPU 资源；</li>
+<li>第二，ZGC 使用读屏障，读屏障操作需耗费额外的计算资源。</li>
+</ul>
+<blockquote>
+<p><strong>吞吐量</strong>: 系统的生命周期内，应用程序所花费的时间和系统总运行时间的比值。系统总运行时间 = 应用程序耗时 + 总 GC 耗时。<br>for example:如果系统运行了 100 分钟，全部 GC 耗时 1 分钟，则系统吞吐量=99% <em>注意区别系统设计中的“Thoughput”</em></p>
+</blockquote>
+<h2 id="ZGC-调优实践"><a href="#ZGC-调优实践" class="headerlink" title="ZGC 调优实践"></a>ZGC 调优实践</h2><ul>
+<li><p><strong>-Xms -Xmx</strong>：堆的最大内存和最小内存，这里都设置为10G，程序的堆内存将保持10G 不变。</p>
+</li>
+<li><p><strong>-XX:+UnlockExperimentalVMOptions -XX:+UseZGC</strong>：启用 ZGC 的配置。</p>
+</li>
+<li><p><strong>-XX:ConcGCThreads</strong>：并发回收垃圾的线程。默认是总核数的12.5%，8核 CPU 默认是1。调大后 GC 变快，但会占用程序运行时的 CPU 资源，吞吐会受到影响。</p>
+</li>
+<li><p><strong>-XX:ParallelGCThreads</strong>：STW 阶段使用线程数，默认是总核数的60%。</p>
+</li>
+<li><p><strong>-XX:ZCollectionInterval</strong>：ZGC 发生的最小时间间隔，单位秒。</p>
+</li>
+<li><p><strong>-XX:ZAllocationSpikeTolerance</strong>：ZGC 触发自适应算法的修正系数，默认2，数值越大，越早的触发 ZGC。</p>
+</li>
+<li><p><strong>-XX:+UnlockDiagnosticVMOptions -XX:-ZProactive</strong>：是否启用主动回收，默认开启，这里的配置表示关闭。</p>
+</li>
+<li><p><strong>-Xlog</strong>：设置 GC 日志中的内容、格式、位置以及每个日志的大小。</p>
+</li>
+</ul>
+<h2 id="ZGC-日志分析"><a href="#ZGC-日志分析" class="headerlink" title="ZGC 日志分析"></a>ZGC 日志分析</h2><p><a href="https://tech.meituan.com/2020/08/06/new-zgc-practice-in-meituan.html" target="_blank" rel="noopener">https://tech.meituan.com/2020/08/06/new-zgc-practice-in-meituan.html</a></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://tech.meituan.com/2020/08/06/new-zgc-practice-in-meituan.html" target="_blank" rel="noopener">新一代垃圾回收器ZGC的探索与实践 - 美团技术团队</a></li>
+<li><a href="https://developer.aliyun.com/article/787955?spm=a2c6h.12873639.0.0.4c22933a9M2Gx3&amp;groupCode=aliyun_linux" target="_blank" rel="noopener">丝般顺滑！全新垃圾回收器 ZGC 原理与调优｜龙蜥技术-阿里云开发者社区</a></li>
+<li><a href="https://mikechen.cc/16719.html" target="_blank" rel="noopener">Java ZGC垃圾收集器(算法及回收原理详解) – mikechen</a></li>
+<li><a href="https://www.zhihu.com/question/287945354/answer/458761494" target="_blank" rel="noopener">ZGC 原理是什么，它为什么能做到低延时？ - 知乎</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/12.Java/Advanced-Java.03a1.G1回收器/" rel="next" title="Advanced-Java.03a1.G1回收器详解">
+                <i class="fa fa-chevron-left"></i> Advanced-Java.03a1.G1回收器详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/12.Java/Advanced-Java.03b.GC案例分析/" rel="prev" title="Advanced Java-03b-GC案例分析">
+                Advanced Java-03b-GC案例分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#STW-对吞吐量的影响"><span class="nav-text">STW 对吞吐量的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#G1停顿时间瓶颈"><span class="nav-text">G1停顿时间瓶颈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZGC-细节"><span class="nav-text">ZGC 细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ZGC-低延迟的实现"><span class="nav-text">ZGC 低延迟的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZGC-线上效果"><span class="nav-text">ZGC 线上效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZGC-调优实践"><span class="nav-text">ZGC 调优实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZGC-日志分析"><span class="nav-text">ZGC 日志分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a1.ZGC回收器/';
+          this.page.identifier = '12.Java/Advanced-Java.03a1.ZGC回收器/';
+          this.page.title = 'Advanced-Java.03a1.ZGC回收器详解';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

@@ -117,22 +117,23 @@
 
 
 
-<meta name="description" content="二叉堆 结构性：二叉堆是一个完全填满的二叉树（叶子节点都集中在左边）； 堆序性：父节点的键值总是大于或等于（小于或等于）任何一个子节点的键值；  所以二叉堆可以通过数组实现：对于任意一个位置 i，其结点的左孩子在2i 的位置，右孩子在2i+1的位置上，父子的位置关系可以如下表示：  leftNo = parentNo*2+1 rightNo = parentNo*2+2 parentNo = (n">
+<meta name="description" content="二叉堆 结构性：二叉堆是一个完全填满的二叉树（叶子节点都集中在左边）； 堆序性：父节点的键值总是大于或等于（小于或等于）任何一个子节点的键值：如果父节点的键值总是小于或等于子节点（根节点的值是最小的）, 那么称为小顶堆（min heap），反正择称为大顶堆（max heap）  二叉堆一般用数组来表示。如果根节点在数组中的位置是1，第_n_个位置的子节点分别在2_n_和 2_n_+1。因此，第1个">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Alg.15.数据结构-堆">
 <meta property="og:url" content="https://beefyheisenberg.github.io/19.Algorithm/Alg.15.数据结构-堆/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="二叉堆 结构性：二叉堆是一个完全填满的二叉树（叶子节点都集中在左边）； 堆序性：父节点的键值总是大于或等于（小于或等于）任何一个子节点的键值；  所以二叉堆可以通过数组实现：对于任意一个位置 i，其结点的左孩子在2i 的位置，右孩子在2i+1的位置上，父子的位置关系可以如下表示：  leftNo = parentNo*2+1 rightNo = parentNo*2+2 parentNo = (n">
+<meta property="og:description" content="二叉堆 结构性：二叉堆是一个完全填满的二叉树（叶子节点都集中在左边）； 堆序性：父节点的键值总是大于或等于（小于或等于）任何一个子节点的键值：如果父节点的键值总是小于或等于子节点（根节点的值是最小的）, 那么称为小顶堆（min heap），反正择称为大顶堆（max heap）  二叉堆一般用数组来表示。如果根节点在数组中的位置是1，第_n_个位置的子节点分别在2_n_和 2_n_+1。因此，第1个">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%840-Quick%20View-2023-05-09-1.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.15.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%A0%86-2023-05-18-1.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.15.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%A0%86-2023-05-18-2.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.15.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%A0%86-2023-05-18-3.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.15.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%A0%86-2023-05-18-4.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.227Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.429Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Alg.15.数据结构-堆">
-<meta name="twitter:description" content="二叉堆 结构性：二叉堆是一个完全填满的二叉树（叶子节点都集中在左边）； 堆序性：父节点的键值总是大于或等于（小于或等于）任何一个子节点的键值；  所以二叉堆可以通过数组实现：对于任意一个位置 i，其结点的左孩子在2i 的位置，右孩子在2i+1的位置上，父子的位置关系可以如下表示：  leftNo = parentNo*2+1 rightNo = parentNo*2+2 parentNo = (n">
-<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Alg.15.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%A0%86-2023-05-18-1.png">
+<meta name="twitter:description" content="二叉堆 结构性：二叉堆是一个完全填满的二叉树（叶子节点都集中在左边）； 堆序性：父节点的键值总是大于或等于（小于或等于）任何一个子节点的键值：如果父节点的键值总是小于或等于子节点（根节点的值是最小的）, 那么称为小顶堆（min heap），反正择称为大顶堆（max heap）  二叉堆一般用数组来表示。如果根节点在数组中的位置是1，第_n_个位置的子节点分别在2_n_和 2_n_+1。因此，第1个">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%840-Quick%20View-2023-05-09-1.png">
 
 
 
@@ -357,7 +358,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,170
+                  1,781
                 </span>
               
 
@@ -384,21 +385,30 @@
       
         <h2 id="二叉堆"><a href="#二叉堆" class="headerlink" title="二叉堆"></a>二叉堆</h2><ul>
 <li>结构性：二叉堆是一个完全填满的二叉树（叶子节点都集中在左边）；</li>
-<li>堆序性：父节点的键值总是大于或等于（小于或等于）任何一个子节点的键值；</li>
+<li>堆序性：父节点的键值总是大于或等于（小于或等于）任何一个子节点的键值：如果父节点的键值总是小于或等于子节点（根节点的值是最小的）, 那么称为小顶堆（min heap），反正择称为大顶堆（max heap）</li>
 </ul>
-<p>所以二叉堆可以通过数组实现：对于任意一个位置 i，其结点的左孩子在2i 的位置，右孩子在2i+1的位置上，父子的位置关系可以如下表示：</p>
-<ul>
-<li><code>leftNo = parentNo*2+1</code></li>
-<li><code>rightNo = parentNo*2+2</code></li>
-<li><code>parentNo = (nodeNo-1)/2</code></li>
-</ul>
-<p>（1）插入操作需要维持堆序性，下图是向堆插入 14 的过程：<br><img src="/images/Alg.15.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%A0%86-2023-05-18-1.png" alt="../_images/Alg.15.数据结构-堆-2023-05-18-1.png"></p>
+<p>二叉堆一般用数组来表示。如果根节点在数组中的位置是1，第_n_个位置的子节点分别在2_n_和 2_n_+1。因此，第1个位置的子节点在2和3，第2个位置的子节点在4和5。以此类推。这种基于1的数组存储方式便于寻找父节点和子节点。</p>
+<p>如果存储数组的下标基于0，那么下标为 _i_ 的节点的子节点是 <em>2i + 1</em> 与 <em>2i + 2</em> ；其父节点的下标是 <em>floor((i − 1) ∕ 2)</em>。函数 <em>floor(x)</em> 的功能是“向下取整”，或者说“向下舍入”，即取不大于 _x_ 的最大整数（与“四舍五入”不同，向下取整是直接取按照数轴上最接近要求值的左边值，即不大于要求值的最大的那个值）。比如 <em>floor(1.1)</em>、<em>floor(1.9)</em> 都返回1。</p>
+<p>如下图的两个堆：</p>
+<p><img src="/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%840-Quick%20View-2023-05-09-1.png" alt="../_images/Alg.01.数据结构0-Quick View-2023-05-09-1.png"></p>
+<p>将这两个堆保存在以1开始的数组中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">位置:  1  2  3  4  5  6  7  8  9 10 11</span><br><span class="line">左图:  1  2  3  4  5  6  7  8  9 10 11</span><br><span class="line">右图: 11  9 10  5  6  7  8  1  2  3  4</span><br></pre></td></tr></table></figure>
+<p>对于一个很大的堆，使用连续数组这种存储是低效的。因为节点的子节点很可能在另外一个内存页中。<a href="https://zh.wikipedia.org/wiki/B-heap" title="B-heap" target="_blank" rel="noopener">B-heap</a>是一种效率更高的存储方式，把每个子树放到同一内存页。</p>
+<p>如果用指针链表存储堆，那么需要能访问叶节点的方法。可以对二叉树“穿线”(threading)方式，来依序遍历这些节点。</p>
+<p>@ref: <a href="https://zh.wikipedia.org/zh-sg/%E4%BA%8C%E5%8F%89%E5%A0%86" target="_blank" rel="noopener">二叉堆 - 维基百科，自由的百科全书</a></p>
+<h3 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h3><blockquote>
+<p>在数组的最末尾插入新节点。然后自下而上调整子节点与父节点（称作 up-heap 或 bubble-up, percolate-up, sift-up, trickle up, heapify-up, cascade-up 操作）：比较当前节点与父节点，不满足”堆性质”则交换。从而使得当前子树满足二叉堆的性质。复杂度 = O(logn)</p>
+</blockquote>
+<p>插入操作需要维持堆序性，下图是向堆插入 14 的过程：<br><img src="/images/Alg.15.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%A0%86-2023-05-18-1.png" alt="../_images/Alg.15.数据结构-堆-2023-05-18-1.png"></p>
 <ul>
 <li>为将一个元素 X 插入到堆中，我们在下一个可用位置创建一个空穴，否则该堆将不是完全树。</li>
 <li>如果 X 可以放在该空穴中而不破坏堆的序，那么插入完成。否则，我们把空穴的父节点上的元素移入该空穴中，这样，空穴就朝着根的方向上冒一步。继续改过程直到 X 能被放入空穴中为止。</li>
 <li>这种实现过程称之为<strong>上滤</strong>：新元素在堆中上滤直到找出正确的插入位置。</li>
 </ul>
-<p>（2）删除操作以小顶堆为例，找到的最小元素非常容易，但删除堆顶后还需要维持完全树，下图是删除堆顶 13 元素的过程：</p>
+<h3 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h3><blockquote>
+<p>对于最大堆，删除根节点就是删除最大值；对于最小堆，是删除最小值。然后，把堆存储的最后那个节点移到填在根节点处。再从上而下调整父节点与它的子节点：对于最大堆，父节点如果小于具有最大值的子节点，则交换二者。这一操作称作down-heap或bubble-down, percolate-down, sift-down, trickle down, heapify-down, cascade-down,extract-min/max等。直至当前节点与它的子节点满足“堆性质”为止。</p>
+</blockquote>
+<p>删除操作以小顶堆为例，找到的最小元素非常容易，但删除堆顶后还需要维持完全树，下图是删除堆顶 13 元素的过程：</p>
 <p><img src="/images/Alg.15.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%A0%86-2023-05-18-2.png" alt="../_images/Alg.15.数据结构-堆-2023-05-18-2.png"></p>
 <ul>
 <li>首先我们删除根元素13,建立一个空穴,之后判断元素31是否可以放入这个空穴中, 也即先判断最右叶子，如果能直接移动最好，无需再维护完全树</li>
@@ -556,7 +566,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -578,7 +588,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -646,7 +656,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉堆"><span class="nav-text">二叉堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PriorityQueue-源码分析"><span class="nav-text">PriorityQueue 源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#offer"><span class="nav-text">offer()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#poll"><span class="nav-text">poll()</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉堆"><span class="nav-text">二叉堆</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入操作"><span class="nav-text">插入操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除操作"><span class="nav-text">删除操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PriorityQueue-源码分析"><span class="nav-text">PriorityQueue 源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#offer"><span class="nav-text">offer()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#poll"><span class="nav-text">poll()</span></a></li></ol></li></ol></div>
             
 
           </div>

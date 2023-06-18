@@ -127,7 +127,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Java-%E5%B9%B6%E5%8F%91.05c.JUC-Sync-2023-05-21-2.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Java-%E5%B9%B6%E5%8F%91.05c.JUC-Sync-2023-05-21-3.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.071Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.288Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java-并发.05d.JUC-Sync（同步器）">
 <meta name="twitter:description" content="CountDownLatch、CyclicBarrier、Semaphore 在 java1.5 被引入，它们也都是基于 AQS 实现的，  ReentrantLock 是基于 Exclusive（独占），只有一个线程可以执行； CountDownLatch、CyclicBarrier、Semaphore 基于 Share(共享)，多个线程可同时执行；  计数器 CountDownLatchCou">
@@ -356,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,772
+                  3,816
                 </span>
               
 
@@ -396,9 +396,6 @@
 <li>在 CountDownLatch 中，同步状态 State 表示 CountDownLatch 的计数器的初始值，当 <code>State==0</code> 时，表示无锁状态，且一旦 State 变为 0，就永远处于无锁状态了，此时所有线程在 await 上等待的线程都可以继续执行。  </li>
 <li>而在 ReentrantLock 中，<code>State==0</code> 时，虽然也表示无锁状态，但是只有一个线程可以重置 State 的值。这就是<strong>共享锁</strong>的含义。</li>
 </ul>
-<blockquote>
-<p>其他参考: <a href="http://www.importnew.com/15731.html" target="_blank" rel="noopener">什么时候使用CountDownLatch - ImportNew</a> @ref</p>
-</blockquote>
 <h2 id="信号量-Semaphore"><a href="#信号量-Semaphore" class="headerlink" title="信号量 Semaphore"></a>信号量 Semaphore</h2><p>Semaphore 翻译成字面意思为 “信号量”，Semaphore 可以控同时访问的任务个数，通过 acquire(int) 获取n个许可，如果没有就等待； release(int) 释放n个许可。</p>
 <ul>
 <li>如果线程 acquire 不到指定资源数（资源=0 或 acquire 的大于剩余资源），线程阻塞</li>
@@ -468,7 +465,7 @@
 <p>参考：</p>
 <ul>
 <li><a href="https://www.jianshu.com/p/0c8255ede7bc" target="_blank" rel="noopener">Java多线程10 同步工具类CyclicBarrier - 简书</a></li>
-<li><a href="https://www.jianshu.com/p/0c8255ede7bc" target="_blank" rel="noopener">Java多线程10 同步工具类CyclicBarrier - 简书</a></li>
+<li><a href="https://segmentfault.com/a/1190000015888316" target="_blank" rel="noopener">Java多线程进阶（十九）—— J.U.C之synchronizer框架：CyclicBarrier - 透彻理解Java并发编程 - SegmentFault 思否</a></li>
 </ul>
 <h2 id="Phaser"><a href="#Phaser" class="headerlink" title="Phaser"></a>Phaser</h2><p><code>Phaser</code> 是<strong>JDK1.7</strong>开始引入的一个同步工具类，适用于一些需要分阶段的任务的处理。它的功能与 <strong>CyclicBarrier</strong>和<strong>CountDownLatch</strong>有些类似，类似于一个多阶段的栅栏，比较三者：</p>
 <table>
@@ -520,6 +517,12 @@
 <p><img src="/images/Java-%E5%B9%B6%E5%8F%91.05c.JUC-Sync-2023-05-21-3.png" alt="../_images/Java-并发.05c.JUC-Sync-2023-05-21-3.png"></p>
 <p>可以看到，上述 Phasers 其实构成了一颗多叉树，如果任务数继续增多，还可以将 Phaser 的叶子结点继续分裂，然后将分裂出的子结点供工作线程使用。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PhaserTest4</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TASKS_PER_PHASER = <span class="number">4</span>;      <span class="comment">// 每个Phaser对象对应的工作线程（任务）数</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> repeats = <span class="number">3</span>;    <span class="comment">// 指定任务最多执行的次数</span></span><br><span class="line">        Phaser phaser = <span class="keyword">new</span> Phaser() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">onAdvance</span><span class="params">(<span class="keyword">int</span> phase, <span class="keyword">int</span> registeredParties)</span> </span>&#123;</span><br><span class="line">                System.out.println(<span class="string">"---------------PHASE["</span> + phase + <span class="string">"],Parties["</span> + registeredParties + <span class="string">"] ---------------"</span>);</span><br><span class="line">                <span class="keyword">return</span> phase + <span class="number">1</span> &gt;= repeats || registeredParties == <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        Tasker[] taskers = <span class="keyword">new</span> Tasker[<span class="number">10</span>];</span><br><span class="line">        build(taskers, <span class="number">0</span>, taskers.length, phaser);       <span class="comment">// 根据任务数,为每个任务分配Phaser对象</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; taskers.length; i++) &#123;          <span class="comment">// 执行任务</span></span><br><span class="line">            Thread thread = <span class="keyword">new</span> Thread(taskers[i]);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">build</span><span class="params">(Tasker[] taskers, <span class="keyword">int</span> lo, <span class="keyword">int</span> hi, Phaser phaser)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (hi - lo &gt; TASKS_PER_PHASER) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = lo; i &lt; hi; i += TASKS_PER_PHASER) &#123;</span><br><span class="line">                <span class="keyword">int</span> j = Math.min(i + TASKS_PER_PHASER, hi);</span><br><span class="line">                build(taskers, i, j, <span class="keyword">new</span> Phaser(phaser));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = lo; i &lt; hi; ++i)</span><br><span class="line">                taskers[i] = <span class="keyword">new</span> Tasker(i, phaser);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Task4</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Phaser phaser;</span><br><span class="line"></span><br><span class="line">    Task4(Phaser phaser) &#123;</span><br><span class="line">        <span class="keyword">this</span>.phaser = phaser;</span><br><span class="line">        <span class="keyword">this</span>.phaser.register();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (!phaser.isTerminated()) &#123;   <span class="comment">//只要Phaser没有终止, 各个线程的任务就会一直执行</span></span><br><span class="line">            <span class="keyword">int</span> i = phaser.arriveAndAwaitAdvance();     <span class="comment">// 等待其它参与者线程到达</span></span><br><span class="line">            <span class="comment">// do something</span></span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">": 执行完任务"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@ref：</p>
+<ul>
+<li><a href="https://segmentfault.com/a/1190000015979879" target="_blank" rel="noopener">Java多线程进阶（二二）—— J.U.C之synchronizer框架：Phaser - 透彻理解Java并发编程 - SegmentFault 思否</a></li>
+<li><a href="https://pdai.tech/md/java/thread/java-thread-x-juc-tool-phaser.html" target="_blank" rel="noopener">JUC工具类: Phaser详解 | Java 全栈知识体系</a></li>
+</ul>
+
       
     </div>
     
@@ -656,7 +659,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -678,7 +681,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

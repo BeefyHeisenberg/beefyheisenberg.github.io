@@ -131,7 +131,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/Tree_Rebalancing.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/rbtree.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%842-%E6%A0%91-2023-05-08-2.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.205Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.410Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Alg.12.数据结构-树">
 <meta name="twitter:description" content="简单二叉树二叉树遍历 先序(preOrder): 中-左-右 中序(inOrder): 左-中-右 后序(postOrder): 左-右-中  图来自 http://www.crystaltenn.com/2020/04/binary-trees-traversal-recursive-vs.html ➤ 先序遍历(递归):">
@@ -360,7 +360,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,962
+                  4,959
                 </span>
               
 
@@ -440,15 +440,15 @@
 </ul>
 <p>图: 四种情况的旋转(Root 是失去平衡树的根节点，Pivot 是旋转后重新平衡树的根节点),<br>可以看到需要<strong>1~2 次</strong>旋转即可使不平衡节点重新平衡:<br><img src="/images/alg/Tree_Rebalancing.png" alt="Rotate"></p>
 <h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><ul>
-<li><p>查找: 可以像普通二叉查找树一样的进行，所以耗费 O(log n)时间，因为 AVL 树总是保持平衡的</p>
+<li><p>查找: 可以像普通二叉查找树一样的进行，所以耗费 <code>O(log n)</code>时间，因为 AVL 树总是保持平衡的</p>
 </li>
 <li><p>插入: 向 AVL 树插入，可以透过如同它是未平衡的二叉查找树一样，把给定的值插入树中，接着自底往上向根节点折回，于在插入期间成为不平衡的所有节点(平衡因子&gt;1, 即左右子树高度差)上进行旋转来完成。上面分析了四种情况, 旋转1~2次即可完成, 所以也是 <code>O(log n)</code></p>
 </li>
 </ul>
 <ul>
 <li>删除:<ul>
-<li>先看二叉查找树(BST)的删除操作: 当删除一个结点 P，首先需要定位到这个结点 P，这个过程需要一个查找的代价。然后稍微改变一下树的形态。如果被删除结点的左、右子树只有一个存在，则改变形态的代价仅为 O(1)。如果被删除结点的左、右子树均存在，只需要将当 P 的左孩子的右孩子的右孩子的…的右叶子结点与 P 互换(左的右右右, 也即比 P 小但是 p 最大的孩子 )，在改变一些左右子树即可。因此删除操作的时间复杂度最大不会超过 <code>O(logN)</code>。</li>
-<li>从 AVL 树中删除，AVL 删除结点的算法可以参见上面 BST 的删除结点，但是删除之后必须检查从删除结点开始到根结点路径上的所有结点的平衡因子。因此删除的代价稍微要大一些。每一次删除操作最多需要 O(logN)次旋转。因此，删除操作的时间复杂度为 O(2logN)</li>
+<li>先看二叉查找树(BST)的删除操作: 当删除一个结点 P，首先需要定位到这个结点 P，这个过程需要一个查找的代价。然后稍微改变一下树的形态。如果被删除结点的左、右子树只有一个存在，则改变形态的代价仅为 O(1)。如果被删除结点的左、右子树均存在，只需要将当 P 的左孩子的右孩子的右孩子的…的右叶子结点与 P 互换(左的右右右, 也即比 P 小但是 P 最大的孩子 )，再改变一些左右子树即可。因此删除操作的时间复杂度最大不会超过 <code>O(logN)</code>。</li>
+<li>如果从 AVL 树中删除，AVL 删除结点的算法可以参见上面 BST 的删除结点，但是删除之后必须检查从删除结点开始到根结点路径上的所有结点的平衡因子。因此删除的代价稍微要大一些。每一次删除操作最多需要 O(logN)次旋转。因此，删除操作的时间复杂度最大为 O(2logN)</li>
 </ul>
 </li>
 </ul>
@@ -466,10 +466,9 @@
 <p>红黑树通过将结点进行红黑着色，使得原本高度平衡的树结构被稍微打乱，平衡程度降低。红黑树不追求完全平衡，只要求达到部分平衡。这是一种折中的方案，大大提高了结点删除和插入的效率。C++中的 STL 就常用到红黑树作为底层的数据结构。</p>
 <p>下图中，”叶结点” 或着叫”NULL 结点”，它不包含数据而只充当树在此结束的指示，这些节点在绘图中经常被省略<br><img src="/images/alg/rbtree.png" alt="RBTree"></p>
 <h3 id="插入和删除"><a href="#插入和删除" class="headerlink" title="插入和删除"></a>插入和删除</h3><p>@ref: <a href="https://github.com/julycoding/The-Art-Of-Programming-By-July-2nd/blob/master/ebook/zh/03.01.md" target="_blank" rel="noopener">https://github.com/julycoding/The-Art-Of-Programming-By-July-2nd/blob/master/ebook/zh/03.01.md</a></p>
-<h3 id="复杂度分析-1"><a href="#复杂度分析-1" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><p>正是红黑树的这5条性质，使得一棵 n 个结点是红黑树始终保持了logn 的高度，从而也就解释了上面我们所说的“红黑树的查找、插入、删除的时间复杂度最坏为 O(log n)”这一结论的原因</p>
+<h3 id="复杂度分析-1"><a href="#复杂度分析-1" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><p>正是红黑树的这5条性质，使得一棵 n 个结点是红黑树始终保持了logn 的高度，从而也就解释了上面我们所说的“红黑树的查找、插入、删除的时间复杂度最坏为 <code>O(log n)</code>”这一结论的原因</p>
 <h2 id="B-树-amp-B-树"><a href="#B-树-amp-B-树" class="headerlink" title="B 树 &amp; B+树"></a>B 树 &amp; B+树</h2><p>[[../32.Database/MySQL-02b-BTree索引原理]]</p>
-<h2 id="•-BST、AVL、RB-树、B-树复杂度比较"><a href="#•-BST、AVL、RB-树、B-树复杂度比较" class="headerlink" title="• BST、AVL、RB 树、B 树复杂度比较"></a>• BST、AVL、RB 树、B 树复杂度比较</h2><p>➤ 二叉查找树 (Binary Search Tree) ：</p>
-<p>BST 的操作代价分析：</p>
+<h2 id="•BST、AVL、RB-树、B-树复杂度比较"><a href="#•BST、AVL、RB-树、B-树复杂度比较" class="headerlink" title="•BST、AVL、RB 树、B 树复杂度比较"></a>•BST、AVL、RB 树、B 树复杂度比较</h2><p>➤ 二叉查找树 (Binary Search Tree) 的操作代价分析：</p>
 <ul>
 <li><p>(1) 查找代价： 任何一个数据的查找过程都需要从根结点出发，沿某一个路径朝叶子结点前进。因此查找中数据比较次数与树的形态密切相关。</p>
 <p>当树中每个结点左右子树高度大致相同时，树高为 logN。则平均查找长度与 logN 成正比，查找的平均时间复杂度在 O(logN)数量级上。</p>
@@ -504,9 +503,9 @@
 <li>AVL 树在执行每个插入操作时最多需要 1 次旋转，其时间复杂度在 O(logN)左右。</li>
 <li>AVL 树<strong>在执行删除时代价稍大</strong>，执行每个删除操作的时间复杂度需要 O(2logN)。</li>
 </ul>
-<p>➤ 红黑树 (Red-Black Tree )：</p>
+<p>➤ 红黑树 (Red-Black Tree)：</p>
 <blockquote>
-<p>二叉平衡树的严格平衡策略以牺牲建立查找结构(插入，删除操作)的代价，换来了稳定的 O(logN) 的查找时间复杂度。但是这样做是否值得呢？ 能不能找一种折中策略，即不牺牲太大的建立查找结构的代价，也能保证稳定高效的查找效率呢？ 答案就是：红黑树。</p>
+<p>二叉平衡树的严格平衡策略，以牺牲插入、删除操作的代价，换来了稳定的 O(logN) 的查找时间复杂度。但是这样做是否值得呢？ 能不能找一种折中策略，即不牺牲太大的建立查找结构的代价，也能保证稳定高效的查找效率呢？ 答案就是：红黑树。</p>
 </blockquote>
 <p>RBT 的操作代价分析：</p>
 <ul>
@@ -715,7 +714,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -737,7 +736,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -805,7 +804,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单二叉树"><span class="nav-text">简单二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二叉树遍历"><span class="nav-text">二叉树遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点删除-插入"><span class="nav-text">节点删除/插入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AVL-树"><span class="nav-text">AVL 树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#旋转"><span class="nav-text">旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑树"><span class="nav-text">红黑树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入和删除"><span class="nav-text">插入和删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析-1"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-树-amp-B-树"><span class="nav-text">B 树 &amp; B+树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#•-BST、AVL、RB-树、B-树复杂度比较"><span class="nav-text">• BST、AVL、RB 树、B 树复杂度比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字典树（Trie）"><span class="nav-text">字典树（Trie）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线段树"><span class="nav-text">线段树</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优先队列-堆"><span class="nav-text">优先队列(堆)</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单二叉树"><span class="nav-text">简单二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二叉树遍历"><span class="nav-text">二叉树遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点删除-插入"><span class="nav-text">节点删除/插入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AVL-树"><span class="nav-text">AVL 树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#旋转"><span class="nav-text">旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑树"><span class="nav-text">红黑树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入和删除"><span class="nav-text">插入和删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析-1"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-树-amp-B-树"><span class="nav-text">B 树 &amp; B+树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#•BST、AVL、RB-树、B-树复杂度比较"><span class="nav-text">•BST、AVL、RB 树、B 树复杂度比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字典树（Trie）"><span class="nav-text">字典树（Trie）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线段树"><span class="nav-text">线段树</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优先队列-堆"><span class="nav-text">优先队列(堆)</span></a></div>
             
 
           </div>

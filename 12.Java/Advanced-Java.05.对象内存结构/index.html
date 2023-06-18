@@ -128,7 +128,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-Object-Memory.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmm-object-memory-head.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.Object.MarkWord64.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:57.943Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.156Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-05-对象内存结构">
 <meta name="twitter:description" content="HotSpot 虚拟机中，对象在 Heap 中存储的布局可以分为三块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。  对象头在HotSpot里对象头包括3部分(如果此对象不是数组，则只包括前2部分):  Mark Word: 用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间">
@@ -357,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,003
+                  1,072
                 </span>
               
 
@@ -394,8 +394,9 @@
 <h3 id="对象头中的-Mark-Word"><a href="#对象头中的-Mark-Word" class="headerlink" title="对象头中的 Mark Word"></a>对象头中的 Mark Word</h3><p><img src="/images/Advanced-Java.Object.MarkWord64.png" alt="../_images/Advanced-Java.Object.MarkWord64.png"></p>
 <p>对于 64bit 的 JVM，Mark Word 的大小是 64bit（8 字节），根据对象的不同状态，对象的 Mark Word 存储的内容也不同：</p>
 <ul>
-<li>无锁状态下，保存的是对象 hashCode 和 GC 的分代年龄</li>
-<li>如果使用了该对象的同步锁（对该对象使用了 Synchronized 代码块），对象的 Mark Word 会存储锁相关的信息，这部分参考 @ref <a href="/12.Java/Java-并发.03.Synchronized/" title="Java-并发.03.Synchronized">Java-并发.03.Synchronized</a></li>
+<li><strong>tag=01</strong>：无锁状态下，保存的是对象 hashCode 和 GC 的分代年龄</li>
+<li><strong>tag=01、00、10</strong>：如果使用了该对象的同步锁（对该对象使用了 Synchronized 代码块），对象的 Mark Word 会存储锁相关的信息，这部分参考 @ref <a href="/12.Java/Java-并发.03.Synchronized/" title="Java-并发.03.Synchronized">Java-并发.03.Synchronized</a></li>
+<li><strong>tag=11</strong>：GC 标记，例如 forwarding pointer 等 @ref <a href="/12.Java/Advanced-Java.03a.GC/" title="Advanced-Java.03a.GC">Advanced-Java.03a.GC</a></li>
 </ul>
 <p>如果对象调用过 hashCode 方法，计算出的 hash 值缓存在 Mark Word</p>
 <blockquote>
@@ -408,6 +409,7 @@
 </ol>
 </blockquote>
 <p>分代年龄，是该对象经历的 Young GC 次数，超过 <code>-XX:MaxTenuringThreshold=n</code> 的对象会被晋升至老年代，因为这个分代年龄只有 4bit，所以最大值是 15，上面提到的 MaxTenuringThreshold 不能超过 15（默认也是 15）// 关于对象的动态年龄计算，参考 <a href="/12.Java/Advanced-Java.03b.GC案例分析/" title="Advanced-Java.03b.GC案例分析">Advanced-Java.03b.GC案例分析</a></p>
+<p>GC 标记：使用带有“整理”功能的 GC，即 GC 前后对象地址可能发生变化，就需要这部分存储 “forwarding pointer”  参考  <a href="/12.Java/Advanced-Java.03a.GC/" title="Advanced-Java.03a.GC">Advanced-Java.03a.GC</a> /Copying GC 和 Mark-Compact</p>
 <h3 id="对象头中的-Class-Pointer"><a href="#对象头中的-Class-Pointer" class="headerlink" title="对象头中的 Class Pointer"></a>对象头中的 Class Pointer</h3><p>指向对象实的 Class 的指针。Java 7 之前指向的区域位于持久代（Permanent Generation），Java 8 之后，持久代废弃，引入了元数据区的概念（Metaspace），所以 Java 8 之后指向的是这个元数据区。</p>
 <p>这个指针可能是被压缩的，就是压缩指针（Compressed OOPs）。当开启对象压缩时占用4字节（JVM 默认开启），关闭时占用8字节。</p>
 <p>如果字节对齐 <code>-XX:ObjectAlignmentInBytes</code> 设置为 8，那么堆超过 32G 时，压缩指针会失效；</p>
@@ -547,7 +549,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -569,7 +571,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

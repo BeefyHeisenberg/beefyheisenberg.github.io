@@ -127,7 +127,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jmap-histo-live.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVisualVM.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:57.917Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.115Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-02d-JVM分析工具">
 <meta name="twitter:description" content="JDK提供的命令行 以下每个工具都可以 cmd --help的方式查看说明  jps查看当前用户启动jvm进程  jps -m: 显示传递给Main方法的参数 jps -l: 显示Java进程的完整包名 jps -v: 显示JVM的参数 jps -lvm">
@@ -356,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,150
+                  3,237
                 </span>
               
 
@@ -505,13 +505,18 @@
 <li>启动Java程序</li>
 <li>编写Btrace代码, 用注解指定要切入的类和方法</li>
 <li>用btracec编译上面的代码</li>
-<li>用btrace命令把agent 动态attach到运行中的Java进程, 并由agent修改运行中Java程序的类</li>
+<li>用btrace命令把 agent.jar attach到运行中的Java进程, agent.jar启动端口, Btrece Client 使用这个端口发送命令和.class字节码</li>
 </ol>
 <p>更多BTrace使用例子:</p>
 <ul>
 <li><a href="https://github.com/btraceio/btrace/tree/master/samples" target="_blank" rel="noopener">btrace/samples at master · btraceio/btrace</a></li>
 </ul>
-<h3 id="Btrace用到的技术介绍"><a href="#Btrace用到的技术介绍" class="headerlink" title="Btrace用到的技术介绍"></a>Btrace用到的技术介绍</h3><p>Btrace使用 <strong>Java Complier API</strong> 编译切入代码,<br>再使用 <strong>Attach API</strong> 把agent.jar附加到目标JVM上。<br>并使用asm来重写被切入类的字节码（CGLIB代理也用到了asm）, 再使用 <strong>Instrumentation API</strong> 在不重启程序的情况下实现对原有类的替换。</p>
+<h3 id="Btrace用到的技术介绍"><a href="#Btrace用到的技术介绍" class="headerlink" title="Btrace用到的技术介绍"></a>Btrace用到的技术介绍</h3><p>Btrace 使用 <strong>Java Complier API</strong> 编译切入代码, 生成.class文件；</p>
+<p>再使用 <strong>Attach API</strong> 把 agent.jar 附加到目标JVM上，agent 启动端口，接受来自 Client的指令和class字节码，<br>当agent接收到监控命令后，主要有以下两部分工作：</p>
+<ul>
+<li>重写类：遍历当前所有的class,根据正则找到匹配的类，使用asm重写被切入类的字节码（CGLIB代理也用到了asm）</li>
+<li>替换类：使用替换掉原来的class，使用了 <strong>Instrumentation API</strong> ，instrumentation的retransformClasses方法将原始字节码替换掉</li>
+</ul>
 <blockquote>
 <p><strong>Attach API</strong> 和 <strong>Instrumentation API</strong> 都是<strong>JVM Tool Interface</strong> (JVMTI)里提供的工具类;<br>有关JVMTI相关的链接:</p>
 <blockquote>
@@ -520,7 +525,7 @@
 </blockquote>
 <p>参考:</p>
 <ul>
-<li><a href="http://www.rowkey.me/blog/2016/09/20/btrace/" target="_blank" rel="noopener">BTrace原理浅析</a></li>
+<li><a href="https://developer.aliyun.com/article/465070" target="_blank" rel="noopener">BTrace原理浅析-阿里云开发者社区</a></li>
 <li><a href="https://www.ibm.com/developerworks/cn/views/java/libraryview.jsp?search_by=深入%20Java%20调试体系" target="_blank" rel="noopener">深入 Java 调试体系</a><ul>
 <li>第 1 部分，JPDA 体系概览</li>
 <li>第 2 部分: JVMTI 和 Agent 实现</li>
@@ -675,7 +680,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -697,7 +702,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -130,7 +130,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/operating_system/Linux-IO-Async.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.07b.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8epoll-2023-05-04-2.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/APUE.07b.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8epoll-2023-05-04-1.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.345Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.513Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="APUE.07b.网络编程-多路复用">
 <meta name="twitter:description" content="五种 I/O 模型 阻塞 IO: 调用 read, 如果内核数据未就绪, 调用 read 的进程进入阻塞状态。应用程序调用一个 IO 函数，导致应用程序阻塞并等待数据准备就绪。如果数据没有准备好，一直等待。如果数据准备好了，则从内核拷贝到用户空间拷贝数据，IO 函数返回成功指示。 非阻塞 IO: nonblocking IO 的特点是用户进程需要不断的主动询问 kernel 数据是否准备好. 当所">
@@ -359,7 +359,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,783
+                  4,808
                 </span>
               
 
@@ -512,13 +512,12 @@
 <p>这两个词曾经是电子信号领域的一个专有名词。如果，用时序图来标示一个数字电信号“010”，应该是类似下图所示：</p>
 <p><img src="/images/APUE.07b.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8epoll-2023-05-04-1.png" alt="../_images/APUE.07b.网络编程-多路复用epoll-2023-05-04-1.png"></p>
 <ul>
-<li>低电平表示0，高电平表示1。</li>
-<li>0向1变化的竖线就是上升沿，1向0变化的竖线就是下降沿。</li>
+<li>低电平表示0，高电平表示1</li>
+<li>0向1变化的竖线就是上升沿，1向0变化的竖线就是下降沿</li>
 <li>在0或者1的情况下触发的信号就是 LT（Level Triggered，水平触发）</li>
 <li>在0向1、1向0变化的过程中触发的信号就是 和 ET（Edge Triggered，边沿触发）</li>
 </ul>
-<p>0或1都是一个状态，而0向1、1向0变化则只是一个事件。</p>
-<p>我们很直观的就可以得出结论，LT是一个持续的状态，ET是个事件性的一次性状态。</p>
+<p>0或1都是一个状态，在 epoll 中，0表示缓冲区无数据，1表示缓冲区有数据，从无数据→有数据即上升沿，也即边缘触发（ET），我们很直观的就可以得出结论，LT 是一个持续的状态，ET 是个事件性的一次性状态。</p>
 <p>二者的差异在于：</p>
 <ul>
 <li><p>Level Triggered 模式下只要某个 socket 处于 readable/writable 状态，无论什么时候进行 epoll_wait 都会返回该 socket；</p>
@@ -656,7 +655,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -678,7 +677,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

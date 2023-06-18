@@ -126,7 +126,7 @@
 <meta property="og:description" content="Hadoop 安装 &amp;amp; 配置Hadoop &amp;amp; Yarn安装步骤参考: Apache Hadoop 2.9.2 – Hadoop Cluster Setup  /etc/hosts, ssh登录 // 使slave可以ssh到master /etc/hosts: 所有slave可互相ping hostname authorized_keys : master可以ssh任意slave">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Hadoop_logo.svg/2000px-Hadoop_logo.svg.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.784Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.968Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop">
 <meta name="twitter:description" content="Hadoop 安装 &amp;amp; 配置Hadoop &amp;amp; Yarn安装步骤参考: Apache Hadoop 2.9.2 – Hadoop Cluster Setup  /etc/hosts, ssh登录 // 使slave可以ssh到master /etc/hosts: 所有slave可互相ping hostname authorized_keys : master可以ssh任意slave">
@@ -355,7 +355,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  828
+                  1,807
                 </span>
               
 
@@ -442,26 +442,64 @@
 <li>参考: <a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-common/CommandsManual.html" target="_blank" rel="noopener">Apache Hadoop 2.7.3 – Hadoop Commands Guide</a></li>
 <li>hadoop dfs: 针对dfs的命令, 已经Deprecated, 推荐使用<code>hdfs dfs</code></li>
 <li>hadoop fs: 本地与dfs交互的命令<ul>
-<li>hadoop fs -cat file:///file3 /user/hadoop/file4</li>
-<li>hadoop fs -cp /user/hadoop/file1 /user/hadoop/file2</li>
-<li>hadoop dfs -df /user/hadoop/dir1</li>
-<li>hadoop fs -du -h /user/hadoop/dir1 hdfs://nn.example.com/user/hadoop/dir1</li>
-<li>hadoop fs -put <localsrc> … <dst></dst></localsrc></li>
+<li><code>hadoop fs -cat file:///file3 /user/hadoop/file4</code></li>
+<li><code>hadoop fs -cp /user/hadoop/file1 /user/hadoop/file2</code></li>
+<li><code>hadoop dfs -df /user/hadoop/dir1</code></li>
+<li><code>hadoop fs -du -h /user/hadoop/dir1 hdfs://nn.example.com/user/hadoop/dir1</code></li>
+<li><code>hadoop fs -put &lt;localsrc&gt; ... &lt;dst&gt;</code></li>
 </ul>
 </li>
-<li>hadoop version</li>
-<li>hadoop jar <jar> [mainClass] arg</jar></li>
+<li>查看版本： <code>hadoop version</code></li>
+<li>在 Hadoop 集群提交 MR 作业： <code>hadoop jar &lt;jar&gt; [mainClass] arg</code></li>
 </ul>
 <h2 id="HDFS命令"><a href="#HDFS命令" class="headerlink" title="HDFS命令"></a>HDFS命令</h2><ul>
 <li>参考: <a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/HDFSCommands.html" target="_blank" rel="noopener">Apache Hadoop 2.7.3 – HDFS Commands Guide</a></li>
 </ul>
 <h2 id="Yarn命令"><a href="#Yarn命令" class="headerlink" title="Yarn命令"></a>Yarn命令</h2><p>*　参考: <a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-yarn/hadoop-yarn-site/YarnCommands.html" target="_blank" rel="noopener">Apache Hadoop 2.7.3 – YARN Commands</a></p>
-<h1 id="HDFS文件系统解析"><a href="#HDFS文件系统解析" class="headerlink" title="HDFS文件系统解析"></a>HDFS文件系统解析</h1><ul>
-<li><a href="http://flyingdutchman.iteye.com/blog/1874518" target="_blank" rel="noopener">Hadoop深入学习：HDFS分布式文件系统的体系结构</a></li>
+<h1 id="HDFS-文件系统解析"><a href="#HDFS-文件系统解析" class="headerlink" title="HDFS 文件系统解析"></a>HDFS 文件系统解析</h1><h2 id="Block-size"><a href="#Block-size" class="headerlink" title="Block size"></a>Block size</h2><p>操作系统中都有文件块(Block)的概念，稳健以块的形式存储在磁盘中，文件块是系统读写操作的最小的单位。<br>HDFS 中的 Block 是一种抽象的概念，它比操作系统中的文件块大很多：</p>
+<ul>
+<li>从2.7.3版本开始 block size 的默认大小为128M，之前版本的默认值是64M.</li>
+<li>可以通过修改 hdfs-site.xml 文件中的 dfs.blocksize 对应的值。</li>
+<li>在实际应用中，hdfs block 块的大小设置为多少合适呢？为什么有的是64M，有的是128M、256M、512呢？</li>
 </ul>
-<blockquote>
-<p>NameNode的FSImage和Edit log工作方式: FSImage中保存着某一时刻的HDFS文件目录树、元数据和数据块索引等信息，而后续的对这信息系的修改则保存在Edit log中<br>Secondary NameNode和NameNode的区别在于他不接受或记录HDFS的任何实时变化，只是根据集群配置的时间间隔不停的获取HDFS的某一个时间节点的FSImage和编辑日志，合并得到一个新的命名空间镜像FSImage，然后该镜像会上传到NameNode，替换原有的镜像文件，并清空编辑日志。<br>DataNode: 客户端操作文件块Block时，先由NameNode节点告知客户端诗句块所在的节点的位置，然后客户端直接与DataNode节点通信，处理与数据块对应的Linux上的本地文件。</p>
-</blockquote>
+<p>概念：</p>
+<ul>
+<li>寻址时间：HDFS 中找到目标文件 block 块所花费的时间。</li>
+<li>传输时间：</li>
+<li>文件块越大，寻址时间越短，但磁盘传输时间越长；文件块越小，寻址时间越长，但磁盘传输时间越短。</li>
+</ul>
+<p>block 不能设置过大，也不要能设置过小</p>
+<ul>
+<li>如果块设置过大，一方面从磁盘传输数据的时间会明显大于寻址时间，导致程序在处理这块数据时，变得非常慢；另一方面，MapReduce 中的 map 任务通常一次只处理一个块中的数据，如果块过大运行速度也会很慢。</li>
+<li>如果设置过小，一方面存放大量小文件会占用 NameNode 中大量内存来存储元数据，而 NameNode 的内存是有限的，不可取；另一方面块过小，寻址时间增长，导致程序一直在找 block 的开始位置。因此，块适当设置大一些，减少寻址时间，那么传输一个有多个块组成的文件的时间主要取决于磁盘的传输速度。</li>
+</ul>
+<p>block 多大合适？</p>
+<p>1）HDFS 中平均寻址时间大概为10ms；</p>
+<p>2）经过大量测试发现，寻址时间为传输时间的1%时，为最佳状态，所以最佳传输时间为：10ms/0.01=1000s=1s</p>
+<p>3）目前磁盘的传输速度普遍为100MB/s，最佳 block 大小计算：100MB/s*1s=100MB, 所以我们设置 block 大小为128MB.</p>
+<p>4）实际中，磁盘传输速率为200MB/s 时，一般设定 block 大小为256MB;磁盘传输速率为400MB/s 时，一般设定 block 大小为512MB.</p>
+<p>@ref: <a href="https://www.cnblogs.com/realman9527/p/13364398.html" target="_blank" rel="noopener">Hdfs block数据块大小的设置规则 - 学习大数据入门到放弃 - 博客园</a></p>
+<h2 id="副本机制"><a href="#副本机制" class="headerlink" title="副本机制"></a>副本机制</h2><p>HDFS 的机架感知（rack awareness），又叫机架策略（rack-aware replica placement policy），用来决定副本存放位置，以默认的副本数=3为例：</p>
+<ul>
+<li>1）第一个副本块保存在 HDFS Client 同一个的 DataNode ；</li>
+<li>2）第二个副本块保存在 HDFS Client 所在 DataNode 同机架的其他 DataNode ；</li>
+<li>3）第三个副本块保存不同机架的某个 DataNode ；</li>
+</ul>
+<p>@ref:</p>
+<ul>
+<li>Data Replication: <a href="https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html#Data+Replication" target="_blank" rel="noopener">HDFS Architecture Guide</a></li>
+<li><a href="https://data-flair.training/blogs/rack-awareness-hadoop-hdfs/" target="_blank" rel="noopener">Rack Awareness in Hadoop HDFS - An Introductory Guide - DataFlair</a></li>
+</ul>
+<h2 id="NameNode-amp-DataNode"><a href="#NameNode-amp-DataNode" class="headerlink" title="NameNode &amp; DataNode"></a>NameNode &amp; DataNode</h2><p>（1）<strong>NameNode</strong> 节点是 HDFS 中主节点，维护整个 HDFS 文件系统的文件目录树、元数据信息和文件的数据块索引，即每个文件对应的数据块列表。这些信息以 FSImage 和 Edit Log 来组织。</p>
+<p>FSImage 中保存着某一时刻的 HDFS 文件目录树、元数据和数据块索引等信息，后续的对这信息系的修改则保存在编辑日志 Edit Log 中；</p>
+<p>除了维护 FSImage 和 Edit Log， NameNode 节点还提供对客户端的请求响应。</p>
+<p>（2）<strong>Secondary NameNode：</strong> 主要用于定期合并 NameNode 节点上的 FSImage 和 Edit Log ，每个集群都有一个 Secondary NameNode 的独立节点。  </p>
+<p>Secondary NameNode 和 NameNode 的区别在于：它不接受或记录 HDFS 的任何实时变化，只是根据集群配置的时间间隔不停的获取 HDFS 的某一个时间节点的 FSImage 和 Edit Log，合并得到一个新的镜像 FSImage，然后该镜像会上传到 NameNode，替换原有的镜像文件，并清空 Edit Log。</p>
+<p>NameNode 节点是 HDFS 集群中的单一故障点，通过 Secondary NameNode 的检查点，可以减少停机时间并减低 NameNode 节点中元数据丢失的风险。但是 Secondary NameNode 不支持 NameNode 节点的故障自动恢复，须手人工干预。</p>
+<p>（3）<strong>DataNode</strong> 是 HDFS 集群中的数据节点，所用数据块都存储在 DataNode 节点上，客户端从 DataNode 节点存储或读取数据。在客户端操作文件块 Block 时，先由 NameNode 节点告知客户端数据块所在的 DataNode，然后客户端直接与 DataNode 节点通信，</p>
+<p>DataNode 节点还会和其他 DataNode 进行通信，复制数据块，保证数据的冗余。  </p>
+<p>DataNode 作为从节点，会不断地通过“心跳”向 NameNode 节点报告其上的数据信息。</p>
+<p>@ref: <a href="http://flyingdutchman.iteye.com/blog/1874518" target="_blank" rel="noopener">Hadoop深入学习：HDFS分布式文件系统的体系结构</a></p>
 
       
     </div>
@@ -607,7 +645,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -629,7 +667,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -697,7 +735,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop-安装-amp-配置"><span class="nav-text">Hadoop 安装 &amp; 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop-amp-Yarn安装步骤"><span class="nav-text">Hadoop &amp; Yarn安装步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些重要参数"><span class="nav-text">一些重要参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端-API-amp-命令行"><span class="nav-text">客户端 API &amp; 命令行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop命令"><span class="nav-text">Hadoop命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS命令"><span class="nav-text">HDFS命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yarn命令"><span class="nav-text">Yarn命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS文件系统解析"><span class="nav-text">HDFS文件系统解析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop-安装-amp-配置"><span class="nav-text">Hadoop 安装 &amp; 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop-amp-Yarn安装步骤"><span class="nav-text">Hadoop &amp; Yarn安装步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些重要参数"><span class="nav-text">一些重要参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端-API-amp-命令行"><span class="nav-text">客户端 API &amp; 命令行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop命令"><span class="nav-text">Hadoop命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS命令"><span class="nav-text">HDFS命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yarn命令"><span class="nav-text">Yarn命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS-文件系统解析"><span class="nav-text">HDFS 文件系统解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Block-size"><span class="nav-text">Block size</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#副本机制"><span class="nav-text">副本机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NameNode-amp-DataNode"><span class="nav-text">NameNode &amp; DataNode</span></a></li></ol></li></ol></div>
             
 
           </div>

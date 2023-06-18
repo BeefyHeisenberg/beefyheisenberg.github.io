@@ -130,7 +130,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/Reactor-Work-Thread-Pool.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/Reactor-Multiple-Thread.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Java-Tutorials.09.NIO&Netty-2023-05-04-1.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:57.999Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.214Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Tutorials-09-NIO &amp; Netty">
 <meta name="twitter:description" content="@toc:  NIO API（Channel/Buffer/Selector, 网络/文件/堆外内存） NIO 高性能的实现（异步非阻塞 I/O + 堆外内存） 网络编程中两种高性能 I/O 设计模式（多路复用）：Reactor 和 Proactor  从 BIO 到 NIO BIO 即阻塞 I/O，不管是磁盘 I/O 还是网络 I/O，数据在写入 OutputStream 或者从 InputSt">
@@ -359,7 +359,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6,123
+                  6,131
                 </span>
               
 
@@ -683,7 +683,7 @@
 </ul>
 <p>EventLoop 串行执行 pipeline 上的 Handler：<br><img src="/images/Java-Tutorials.09.NIO&amp;Netty-2023-05-04-1.png" alt="../_images/Java-Tutorials.09.NIO&amp;Netty-2023-05-04-1.png"></p>
 <p>➤ 用 Netty 实现多线程 Reactor(伪码)，这里使用的是<strong>主从 Reactor + 多线程模型</strong>:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">NioEventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup(<span class="number">1</span>);  </span><br><span class="line"></span><br><span class="line">NioEventLoopGroup workerGroup = <span class="keyword">new</span> NioEventLoopGroup(); </span><br><span class="line"></span><br><span class="line">ServerBootstrap bootstrap = <span class="keyword">new</span> ServerBootstrap(); <span class="comment">// 创建netty 服务器</span></span><br><span class="line"></span><br><span class="line">bootstrap.group(bossGroup,workerGroup)</span><br><span class="line">        .channel(NioServerSocketChannel.class)</span><br><span class="line">        .option(ChannelOption.TCP_NODELAY, <span class="keyword">true</span>) <span class="comment">// TCP参数</span></span><br><span class="line">        .option(ChannelOption.SO_BACKLOG, <span class="number">1024</span>)  <span class="comment">// TCP参数</span></span><br><span class="line">        .handler(<span class="keyword">new</span> LoggingHandler(LogLevel.INFO))</span><br><span class="line">        .childHandler(<span class="keyword">new</span> ServerHandlerInitializer&lt;SocketChannel&gt;()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                ChannelPipeline p = ch.pipeline();</span><br><span class="line">                <span class="keyword">if</span> (sslCtx != <span class="keyword">null</span>) p.addLast(sslCtx.newHandler(ch.alloc()));</span><br><span class="line">                p.addLast(serverHandler);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Start the server:</span></span><br><span class="line">ChannelFuture f = b.bind(PORT).sync();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">NioEventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup(<span class="number">1</span>);  <span class="comment">// 主Reactor线程</span></span><br><span class="line"></span><br><span class="line">NioEventLoopGroup workerGroup = <span class="keyword">new</span> NioEventLoopGroup(); <span class="comment">// 从Reactor线程</span></span><br><span class="line"></span><br><span class="line">ServerBootstrap bootstrap = <span class="keyword">new</span> ServerBootstrap(); <span class="comment">// 创建netty 服务器</span></span><br><span class="line"></span><br><span class="line">bootstrap.group(bossGroup,workerGroup)</span><br><span class="line">        .channel(NioServerSocketChannel.class)</span><br><span class="line">        .option(ChannelOption.TCP_NODELAY, <span class="keyword">true</span>) <span class="comment">// TCP参数</span></span><br><span class="line">        .option(ChannelOption.SO_BACKLOG, <span class="number">1024</span>)  <span class="comment">// TCP参数</span></span><br><span class="line">        .handler(<span class="keyword">new</span> LoggingHandler(LogLevel.INFO))</span><br><span class="line">        .childHandler(<span class="keyword">new</span> ServerHandlerInitializer&lt;SocketChannel&gt;()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                ChannelPipeline p = ch.pipeline();</span><br><span class="line">                <span class="keyword">if</span> (sslCtx != <span class="keyword">null</span>) p.addLast(sslCtx.newHandler(ch.alloc()));</span><br><span class="line">                p.addLast(serverHandler);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Start the server:</span></span><br><span class="line">ChannelFuture f = b.bind(PORT).sync();</span><br></pre></td></tr></table></figure>
 <ul>
 <li>Netty Server 创建两个 <code>NioEventLoopGroup</code>: <strong>bossGroup</strong>（main Reactor） 和 <strong>workerGroup</strong>（sub Reactor）;</li>
 </ul>
@@ -691,7 +691,7 @@
 <li>bossGroup 线程组通常只有一个 <code>EventLoop</code> 线程(Boss 线程), 这个线程作为 <strong>Main Reactor Thread</strong>, 负责 select 监听端口的 accept 事件并进行后续处理(创建 SocketChannel.. );</li>
 </ul>
 <ul>
-<li>boss 的 <code>EventLoop</code> 线程会把创建的 SocketChannel, 顺序分发给 workerGroup 线程组中的每一个 Worker 线程(类似轮询);</li>
+<li>bossGroup 的 <code>EventLoop</code> 线程会把创建的 SocketChannel, 顺序分发给 workerGroup 线程组中的每一个 Worker 线程(类似轮询);</li>
 </ul>
 <ul>
 <li>workerGroup 线程组, 通常包含 cpu core 数量的 1-2倍个 <code>EventLoop</code> 线程(Worker 线程), 这些 Worker 线程作为 <strong>Sub Reactor Threads</strong>, Worker 线程内使用 Selector 监听 SocketChannel 的读写事件; </li>
@@ -840,7 +840,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -862,7 +862,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -124,7 +124,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="@toc:  Session; 临时Znode; 持久Znode; Watcher; Leader/Follower/Observer; zxid; ZAB;  ➤ Zk中的重要概念:  Session(会话): Session 是客户端和Zk的一个长连接, 每个客户端的Session 都有一个 唯一id, 客户端定时向zk发送heart_beat , Session在创建的时候可以指定一个ses">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.599Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.783Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zookeeper-01基础概念">
 <meta name="twitter:description" content="@toc:  Session; 临时Znode; 持久Znode; Watcher; Leader/Follower/Observer; zxid; ZAB;  ➤ Zk中的重要概念:  Session(会话): Session 是客户端和Zk的一个长连接, 每个客户端的Session 都有一个 唯一id, 客户端定时向zk发送heart_beat , Session在创建的时候可以指定一个ses">
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  924
+                  1,297
                 </span>
               
 
@@ -389,28 +389,60 @@
 </ul>
 <p>➤ Zk中的重要概念:</p>
 <ul>
-<li>Session(会话): Session 是客户端和Zk的一个长连接, 每个客户端的Session 都有一个 唯一id, 客户端定时向zk发送heart_beat , Session在创建的时候可以指定一个<code>sessionTimeout</code>, 如果超时则会断开该Session;</li>
-<li>ZNode是zk存储数据的节点, ZNode 分为永久节点和临时节点<ul>
-<li>持久节点是指一旦这个ZNode被创建了，除非主动进行ZNode的移除操作，否则这个ZNode将一直保存在Zookeeper上。</li>
-<li>临时节点的生命周期和客户端会话(Session)绑定，一旦客户端会话失效，那么这个客户端创建的所有临时节点都会被移除。</li>
-<li>创建节点时可以指定 SEQUENTIAL 属性, zk会在创建这个节点的时候加上递增整形序号, 序号递增是由父节点维护的</li>
+<li><p>Session(会话): Session 是客户端和Zk的一个长连接, 每个客户端的Session 都有一个 唯一id, 客户端定时向zk发送heart_beat , Session在创建的时候可以指定一个<code>sessionTimeout</code>, 如果超时则会断开该Session;</p>
+</li>
+<li><p>ZNode是zk存储数据的节点, ZNode 分为<strong>永久节点</strong>和<strong>临时节点</strong></p>
+<ul>
+<li><strong>持久节点</strong>是指一旦这个 ZNode 被创建了，除非主动进行 ZNode 的移除操作，否则这个 ZNode 将一直保存在 Zookeeper 上。</li>
+<li><strong>临时节点</strong>的生命周期和客户端会话(Session)绑定，一旦客户端会话失效，那么这个客户端创建的所有临时节点都会被移除。</li>
 </ul>
 </li>
-<li>Watcher（事件监听器）: ，是Zookeeper中的一个很重要的特性。Zookeeper允许用户在指定节点上注册一些Watcher，并且在一些特定事件触发的时候，ZooKeeper服务端会将事件通知到感兴趣的客户端上去，该机制是Zookeeper实现分布式协调服务的重要特性。</li>
-<li>Zxid (Zookeeper Transaction Id): Zookeeper给每次更新操作都分配一个全局唯一递增编号, 这个编号反映了所有操作的先后顺序, 可以实现更高层次的同步原语;</li>
-<li>Zk集群中的节点的角色: Leader, Follower, Observer:<ul>
+</ul>
+<blockquote>
+<p>Zookeeper 将所有数据存储在内存中，数据模型是一棵树（Znode Tree)，由斜杠（/）的进行分割的路径，就是一个 Znode，例如/foo/path1。每个上都会保存自己的数据内容，同时还会保存一系列属性信息。</p>
+</blockquote>
+<blockquote>
+<p>对应于每个 ZNode，Zookeeper 都会为其维护一个叫作 <strong>Stat</strong> 的数据结构，Stat 中记录了这个 ZNode 的三个数据版本，分别是 version（当前 ZNode 的版本）、cversion（当前 ZNode 子节点的版本）和 cversion（当前 ZNode 的 ACL 版本）。</p>
+</blockquote>
+<blockquote>
+<p>Zookeeper 采用 ACL（AccessControlLists）策略来进行权限控制，类似于 UNIX 文件系统的权限控制。Zookeeper 定义了如下5种权限：</p>
+<ul>
+<li>Create：创建子节点权限；</li>
+<li>READ：读取节点数据、获取子节点列表权限；</li>
+<li>WRITE：更新节点数据权限；</li>
+<li>DELETE：删除子节点权限；</li>
+<li>ADMIN：设置节点 ACL 的权限</li>
+</ul>
+</blockquote>
+<ul>
+<li>创建节点时可以指定 SEQUENTIAL 属性（有序节点，既可以是临时节点也可以是持久节点）, zk 会在创建这个节点的时候加上递增整形序号。当创建一个有序节点时，系统会自动添加一个10位长度的数字来代替原节点。比如创建/sequence，那么系统会自动替换成/sequence0000000001，继续创建/sequence 会生成 /sequence0000000002</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; zk.create(&apos;/walker/b&apos;, value=&apos;node data&apos;, acl=None, ephemeral=False, sequence=True)   </span><br><span class="line">u&apos;/walker/b0000000001&apos;  </span><br><span class="line">&gt;&gt;&gt; zk.create(&apos;/walker/b&apos;, value=&apos;node data&apos;, acl=None, ephemeral=False, sequence=True)  </span><br><span class="line">u&apos;/walker/b0000000002&apos;  </span><br><span class="line">&gt;&gt;&gt; zk.create(&apos;/walker/a&apos;, value=&apos;node data&apos;, acl=None, ephemeral=False, sequence=True)   </span><br><span class="line">u&apos;/walker/a0000000003&apos;  </span><br><span class="line">&gt;&gt;&gt; zk.create(&apos;/walker/a/du&apos;, value=&apos;node data&apos;, acl=None, ephemeral=False, sequence=True)     </span><br><span class="line">u&apos;/walker/a/du0000000000&apos;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>Watcher（事件监听器）: Zookeeper 允许用户在指定节点上注册一些 Watcher，并且在一些特定事件触发的时候，ZooKeeper 服务端会将事件通知到感兴趣的客户端上去，该机制是 Zookeeper 实现分布式协调服务的重要特性。</p>
+</li>
+<li><p>Zxid: Zookeeper 给每次更新操作都分配一个全局唯一递增编号, 这个编号反映了所有操作的先后顺序, 可以实现更高层次的同步原语，应用程序可以使用 ZooKeeper 这个特性来实现更高层次的同步原语。zxid 即 Zookeeper Transaction Id</p>
+</li>
+<li><p>Zk集群中的节点的角色: Leader, Follower, Observer:</p>
+<ul>
 <li>Leader 可以提供读/写服务;</li>
-<li>Follower 和 Observer 都只提供读服务, 不同的是Follower 参与Leader的选举, Observer不参与选举, 也不参与写的时候”超过半数节点写成功则写入成功”的策略, 可以认为 Obverser的作用是提高集群的读性能, 且不影响写入性能;</li>
-</ul>
-</li>
-<li>ZAB(Zookeeper Atomic Broadcast): Zookeeper通过ZAB协议实现了分布式数据的一致性(顺序一致性), 另外ZAB还提供了崩溃恢复(Leader选举);</li>
-<li>Paxos算法 和 Zab协议: 「ZooKeeper 并没有完全采用 Paxos算法 ，而是使用 ZAB 协议作为其保证数据一致性的核心算法。另外，在ZooKeeper的官方文档中也指出，ZAB协议并不像 Paxos 算法那样，是一种通用的分布式一致性算法，它是一种特别为Zookeeper设计的崩溃可恢复的原子消息广播算法。」</li>
-<li>Zab协议中定义的两种集群状态:<ul>
-<li>崩溃恢复: 当集群在启动过程/Leader网络断开/异常重启时, ZAB协议进入崩溃恢复模式, 进行leader选举, 然后Folower节点与Leader节点进行数据同步, <strong>当过半的Folower节点都同步完成</strong>, ZAB协议退出崩溃恢复模式, 进入消息广播状态;</li>
-<li>消息广播: 在此状态下, 只允许一台 Leader服务器进行事务请求的处理, 如果Follower节点接收到客户端的事务请求也应当转发给 Leader. Leader收到事务请求后, 会对事务进行提案并进行一轮新的广播</li>
+<li>Follower 和 Observer 都<strong>只提供读服务</strong>, 不同的是 Follower 参与 Leader 的选举, Observer 不参与选举, 也不参与写的时候”超过半数节点写成功则写入成功”的策略, 可以认为 Obverser 的作用是提高集群的读性能, 且不影响写入性能;</li>
 </ul>
 </li>
 </ul>
+<ul>
+<li><p>Paxos 算法和 Zab 协议: 「ZooKeeper 并没有完全采用 Paxos 算法，而是使用 ZAB 协议作为其保证数据一致性的核心算法。另外，在 ZooKeeper 的官方文档中也指出，ZAB 协议并不像 Paxos 算法那样，是一种通用的分布式一致性算法，它是一种特别为 Zookeeper 设计的崩溃可恢复的原子消息广播算法。」</p>
+</li>
+<li><p>ZAB(Zookeeper Atomic Broadcast): Zookeeper 通过 ZAB 协议实现了分布式数据的一致性(顺序一致性), 另外 ZAB 还提供了崩溃恢复(Leader 选举);</p>
+</li>
+<li><p>Zab协议中定义的两种集群状态:</p>
+<ul>
+<li>崩溃恢复: 当集群在启动过程/Leader 网络断开/异常重启时, ZAB 协议进入崩溃恢复模式, 进行 leader 选举, 然后 Folower 节点与 Leader 节点进行数据同步, <strong>当过半的 Folower 节点都同步完成</strong>, ZAB 协议退出崩溃恢复模式, 进入<strong>消息广播</strong>状态;</li>
+<li>消息广播: 在此状态下, 只允许一台 Leader 服务器进行事务请求的处理, 如果 Follower 节点接收到客户端的事务请求也应当转发给 Leader. Leader 收到事务请求后, 会对事务进行提案并进行一轮新的广播</li>
+</ul>
+</li>
+</ul>
+<hr>
 <p>➤ Zk的以下特性使得其可以作为 1集群管理(Znode watch集群节点状态), 2分布式存储(Zk的数据一致性) 3分布式锁(操作的原子性, Watch特性), 具体使用场景有:</p>
 <ul>
 <li>Kafka的 Broker节点状态监控利用了 Znode和 Watch;</li>
@@ -538,7 +570,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -560,7 +592,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

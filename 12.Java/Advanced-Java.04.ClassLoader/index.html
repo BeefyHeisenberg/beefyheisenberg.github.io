@@ -117,20 +117,20 @@
 
 
 
-<meta name="description" content="类的加载过程加载 – 链接 – 初始化, 以上三个阶段涉及到的 JVM 内存区域:   在加载阶段, 创建的 class 对象存储在堆(Heap); 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
+<meta name="description" content="类的加载过程一个 Java Obj 被创建的完整过程：加载 – 链接 – 初始化,   在加载阶段, 创建的 class 对象存储在堆(Heap)、以及 Metaspace 的 Klass、Non-Klass 对象; 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
 <meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Advanced Java-04-ClassLoader">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.04.ClassLoader/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="类的加载过程加载 – 链接 – 初始化, 以上三个阶段涉及到的 JVM 内存区域:   在加载阶段, 创建的 class 对象存储在堆(Heap); 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
+<meta property="og:description" content="类的加载过程一个 Java Obj 被创建的完整过程：加载 – 链接 – 初始化,   在加载阶段, 创建的 class 对象存储在堆(Heap)、以及 Metaspace 的 Klass、Non-Klass 对象; 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.04.ClassLoader-2023-05-10-2.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-ClassLoader-Tree.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:57.934Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.147Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-04-ClassLoader">
-<meta name="twitter:description" content="类的加载过程加载 – 链接 – 初始化, 以上三个阶段涉及到的 JVM 内存区域:   在加载阶段, 创建的 class 对象存储在堆(Heap); 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
+<meta name="twitter:description" content="类的加载过程一个 Java Obj 被创建的完整过程：加载 – 链接 – 初始化,   在加载阶段, 创建的 class 对象存储在堆(Heap)、以及 Metaspace 的 Klass、Non-Klass 对象; 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.04.ClassLoader-2023-05-10-2.png">
 
 
@@ -356,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5,989
+                  6,367
                 </span>
               
 
@@ -381,10 +381,10 @@
       
 
       
-        <h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><p>加载 – 链接 – 初始化, 以上三个阶段涉及到的 JVM 内存区域:</p>
+        <h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><p>一个 Java Obj 被创建的完整过程：加载 – 链接 – 初始化,</p>
 <blockquote>
 <ol>
-<li>在加载阶段, 创建的 class 对象存储在堆(Heap);</li>
+<li>在加载阶段, 创建的 class 对象存储在堆(Heap)、以及 Metaspace 的 Klass、Non-Klass 对象;</li>
 <li>在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间);</li>
 <li>在初始化阶段, 初始化 static 成员, 也在堆;</li>
 </ol>
@@ -394,6 +394,9 @@
 <li>由对应的 ClassLoader 从磁盘读取.class 文件字节 // 这里的类加载器可以自定义</li>
 <li>ClassLoader 的 loadClass 最终通过 <code>ClassLoader.defineClass()</code> 方法创建一个 java.lang.Class 的对象, 对象存储在堆(Heap),</li>
 </ul>
+<blockquote>
+<p>这一步除了创建 Class 对象，还会在 Metaspace 创建 Klass 对象等… @ref: <a href="/12.Java/Advanced-Java.02b1.MetaSpace解析/" title="Advanced-Java.02b1.MetaSpace解析">Advanced-Java.02b1.MetaSpace解析</a></p>
+</blockquote>
 <h3 id="②链接-Linking"><a href="#②链接-Linking" class="headerlink" title="②链接(Linking)"></a>②链接(Linking)</h3><p>链接阶段还分 3 个步骤：</p>
 <ul>
 <li><p>1 验证(Verification): 验证加载类的字节码, 验证成功则载入到<strong>方法区(Method Area)</strong>, 验证项包括如下:</p>
@@ -404,20 +407,27 @@
 <li>运行时堆栈没有溢出</li>
 </ul>
 </li>
-<li><p>2 准备(Preparation): 这一阶段在<strong>方法区(Method Area)</strong>分配</p>
+<li><p>2 准备(Preparation): </p>
 <ul>
-<li>为类的 static 变量分配空间, 并赋 <strong>默认值</strong>, 比如 <code>public static int value = 3</code>, 这一阶段 value 被赋值为 0, static 字段的初始化要到下个”初始化”阶段才开始执行;</li>
-<li>为类的 final 常量分配空间, 赋 <strong>指定的值</strong>, 比如 <code>public static final int value = 3</code>, 在准备阶段虚拟机就会根据 ConstantValue 的设置将 value 赋值为3;</li>
-<li>除了分配内存外，部分 Java 虚拟机还会在此阶段构造其他跟类层次相关的数据结构，比如说用来实现虚方法的动态绑定的 <strong>方法表</strong>。</li>
-</ul>
-</li>
-<li><p>3 解析(Resolution): 把类中的符号引用转换为直接引用, 对于一个方法调用，编译器会生成一个包含目标方法所在类的名字、目标方法的名字、接收参数类型以及返回值类型的符号引用，来指代所要调用的方法。</p>
-<ul>
-<li>解析阶段的目的，正是将这些符号引用解析成为实际引用。<strong>如果符号引用指向一个未被加载的类，或者未被加载类的字段或方法，那么解析将触发这个类的加载（但未必触发这个类的链接以及初始化）</strong></li>
-</ul>
+<li>为静态字段分配内存，这一步仅是分配内存但并未对其初始化；</li>
+<li><p>除了分配内存外，部分 Java 虚拟机还会在此阶段构造其他跟类层次相关的数据结构，比如说用来实现虚方法的动态绑定的 <strong>方法表</strong> /<em>方法表分为 vtable 和 itable，前者是非私的“实例方法”，后者是接口方法</em>/;</p>
+<blockquote>
+<p>JDK8 移除了方法区，类的元数据移到了 Native 内存的 Metaspace，类的 static 成员在堆区 <a href="https://stackoverflow.com/questions/8387989/where-are-static-methods-and-static-variables-stored-in-java" target="_blank" rel="noopener">jvm - Where are static methods and static variables stored in Java? - Stack Overflow</a></p>
+</blockquote>
 </li>
 </ul>
-<h3 id="③初始化-Initialization"><a href="#③初始化-Initialization" class="headerlink" title="③初始化(Initialization)"></a>③初始化(Initialization)</h3><p>JVM 规范枚举了下述多种<strong>触发初始化</strong>的情况(但不限于这几种):</p>
+</li>
+<li><p>3 解析(Resolution): 把类中的 <strong>符号引用</strong> 转换为 <strong>直接引用</strong>: </p>
+<ul>
+<li>对于一个方法调用，编译器会生成一个包含目标方法所在类的名字、目标方法的名字、接收参数类型以及返回值类型的符号引用，来指代所要调用的方法。解析阶段的目的，正是将这些符号引用解析成为实际引用。对于 Java 来说，大部分方法调用都是通过 invokevirtual 字节码调用的实例方法，这类方法调用被解析为在 vtable 位置的索引；</li>
+<li>如果符号引用指向一个未被加载的类，或者未被加载类的字段或方法，那么解析将触发这个类的加载（但未必触发这个类的链接以及初始化）</li>
+</ul>
+</li>
+</ul>
+<h3 id="③初始化-Initialization"><a href="#③初始化-Initialization" class="headerlink" title="③初始化(Initialization)"></a>③初始化(Initialization)</h3><p>类加载的最后一步是初始化，为标记为常量值的字段赋值，以及执行 &lt; clinit &gt; 方法的过程。</p>
+<p>在 Java 代码中，如果要初始化一个静态字段，我们可以在声明时直接赋值，也可以在静态代码块中对其赋值。如果直接赋值的静态字段被 final 所修饰，并且它的类型是基本类型或字符串时，那么该字段便会被 Java 编译器标记成常量值（ConstantValue），其初始化直接由 Java 虚拟机完成。<br>除此之外的直接赋值操作，以及所有静态代码块中的代码，则会被 Java 编译器置于同一方法中，并把它命名为 <code>clinit</code>。</p>
+<p>初始化阶段, 主要对类变量(非 final 非 static)进行初始化, 对于 static 的 Object 类型(非基本类型)的成员也是在这个时候进行初始化, 这一阶段会执行 <code>&lt; clinit &gt;</code> 方法, <code>&lt; clinit &gt;</code> 是编译期生成的, <strong>static 代码块</strong> / 类变量直接赋值等….代码都会被放入 <code>&lt; clinit &gt;</code>, 顺序与在 java 代码里出现顺序一致.<br>Java 虚拟机会通过加锁来确保类的 <code>&lt; clinit &gt;</code> 方法仅被执行一次。</p>
+<p>JVM 规范枚举了下述多种<strong>触发初始化</strong>的情况(但不限于这几种):</p>
 <ol>
 <li>Java 虚拟机启动时, 被标明为启动类(有 main 方法)会被初始化</li>
 <li>初始化一个类的时候如果发现其父类还没用初始化, 则先初始化其父类, 这种属于 <strong>被动初始化</strong>;</li>
@@ -425,9 +435,8 @@
 <li>首次对类的 static (同时必须满足非 final)的成员属性进行读写, 一般是调 getter/setter 方法的时候, 对应字节码指令: <code>getstatic</code>, <code>putstatic</code></li>
 <li>首次调用类的 static 方法, 对应字节码指令: <code>invokestatic</code></li>
 <li>调用 <code>Class.forName(&quot;xxx&quot;)</code>;</li>
+<li>…</li>
 </ol>
-<p>初始化阶段, 主要对类变量(非 final 非 static)进行初始化, 对于 static 的 Object 类型(非基本类型)的成员也是在这个时候进行初始化,</p>
-<p>这一阶段会执行 <code>&lt; clinit &gt;</code> 方法, <code>&lt; clinit &gt;</code> 是编译期生成的,<br><strong>static 代码块</strong> / 类变量直接赋值等….代码都会被放入 <code>&lt; clinit &gt;</code>, 顺序与在 java 代码里出现顺序一致.<br>Java 虚拟机会通过加锁来确保类的 <code>&lt; clinit &gt;</code> 方法仅被执行一次。</p>
 <p>➤ 比较四种指令 <code>new</code>, <code>getstatic</code>, <code>putstatic</code>, <code>invokestatic</code>:</p>
 <blockquote>
 <p>除了 <code>new</code> 是主动初始化, 后面三种都是被动初始化.</p>
@@ -442,8 +451,16 @@
 </ul>
 <p>通过内部类实现单例:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="ClassLoader"><a href="#ClassLoader" class="headerlink" title="ClassLoader"></a>ClassLoader</h2><p>JVM 在加载(Loading)阶段依靠 ClassLoader 完成, ClassLoader 的加载类过程主要使用 <code>ClassLoader.loadClass(String name)</code> 方法，</p>
-<p>每当一个类加载器接收到加载请求时，它会先检查类是否被加载过，如果否则将请求转发给父类加载器。如果父类加载器也无法加载此类，再尝试使用自己的findClass 加载。</p>
+<h2 id="ClassLoader"><a href="#ClassLoader" class="headerlink" title="ClassLoader"></a>ClassLoader</h2><h3 id="使用Classloader-创建-Class对象"><a href="#使用Classloader-创建-Class对象" class="headerlink" title="使用Classloader 创建 Class对象"></a>使用Classloader 创建 Class对象</h3><p>JVM 在加载(Loading)阶段依靠 ClassLoader 完成, ClassLoader 的加载类过程主要使用 <code>ClassLoader.loadClass(String name)</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">MyClassLoader cl = new MyClassLoader();</span><br><span class="line"></span><br><span class="line">Class&lt;?&gt; clazz = cl.loadClass(&quot;org.mk.corej.Test&quot;);</span><br><span class="line"></span><br><span class="line">Test test = (Test)clazz.newInstance();</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>loadClass()</code>：它会先检查类是否被加载过，如果否则将请求转发给父类加载器。如果父类加载器也无法加载此类，再尝试使用自己的findClass 加载；</li>
+<li><code>findClass()</code>：从文件or网络流..，加载字节码，并可能对字节码进行预处理（例如解密等），然后调用 <code>defineClass()</code>创建Class的对象；</li>
+<li><code>defineClass()</code>：最终调用了<code>defineClass1()</code>，是一个native 方法，返回Class 类型的对象</li>
+</ul>
+<blockquote>
+<p>获得 Class类型的对象后，就可以使用 newInstance()创建实例对象，以及通过反射中的方法获取class 的方法 <a href="/12.Java/Java-Tutorials.03.反射(Reflection)/" title="Java-Tutorials.03.反射(Reflection)">Java-Tutorials.03.反射(Reflection)</a></p>
+</blockquote>
 <p>加载完成后, 虚拟机外部的二进制字节流就按照虚拟机所需的格式存储在方法区之中, 在 JVM 堆中也创建一个 java.lang.Class 类的对象.</p>
 <p>每个 Java 类都维护着一个指向定义它的类加载器的引用，通过 <code>object.getClass().getClassLoader()</code> 方法就可以获取到此引用。</p>
 <h3 id="ClassLoader-分类"><a href="#ClassLoader-分类" class="headerlink" title="ClassLoader 分类"></a>ClassLoader 分类</h3><p>Java 中的类加载器大致可以分成3类：</p>
@@ -470,19 +487,23 @@
 </ul>
 <p>也即上面提到的 Application ClassLoader、Extension ClassLoader、Bootstrap ClassLoader，可是为什么最后一个是null ？ 因为 Bootstrap ClassLoader 是C++实现的而非Java，所以没有一个Java 的 “Class”。</p>
 <p>另，在Java 9 之后，扩展类加载器变为了 PlatformClassLoader。</p>
-<h3 id="ClassLoader是否是继承关系？"><a href="#ClassLoader是否是继承关系？" class="headerlink" title="ClassLoader是否是继承关系？"></a>ClassLoader是否是继承关系？</h3><p>User defined ClassLoader 的 parent 是 App ClassLoader；<br>App ClassLoader 的 parent 是 Ext ClassLoader；<br>…<br>Bootstrap ClassLoader 作为其他所有 ClassLoader 的 parent；</p>
-<p>以上 4类加载器通过这种方式组织起来形成树状结构，如下图所示（图中的 System Class Loader 即 App ClassLoader），虚线上方是 JDK 提供的 Cl，下方是用户自定义的Cl</p>
+<h3 id="ClassLoader是否是继承关系？"><a href="#ClassLoader是否是继承关系？" class="headerlink" title="ClassLoader是否是继承关系？"></a>ClassLoader是否是继承关系？</h3><p>三种层次的 ClassLoader <strong>并不是继承关系（Inheritance）</strong>，子 ClassLoader 通过是 <strong>组合（Composite）</strong> 的方式复用父 ClassLoader 的代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line">    <span class="comment">// The parent class loader for delegation</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ClassLoader parent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>User defined ClassLoader 的 parent 是 App ClassLoader；</li>
+<li>App ClassLoader 的 parent 是 Ext ClassLoader；</li>
+<li>Bootstrap ClassLoader 作为其他所有 ClassLoader 的 parent；</li>
+</ul>
+<p>以上 4类加载器通过这种方式组织起来形成树状结构，如下图所示（图中的 System Class Loader 即 App ClassLoader），虚线上方是 JDK 提供的 Cl，下方是用户自定义的 Cl：</p>
 <p><img src="/images/java/JVM-ClassLoader-Tree.png" alt=""></p>
 <p>在Java 12上测试：</p>
 <ul>
 <li>用户自定义的加载器，getParent()返回的是 AppClassLoader；</li>
 <li>AppClassLoader.getParent() 返回的是 PlatformClassLoader；</li>
-<li>PlatformClassLoader.getParent() 返回 Null？</li>
+<li>PlatformClassLoader.getParent() 返回 Null，因为 Bootstrap Cl 并不是一个 Java 类，而是一个 Native 类；</li>
 </ul>
 <p>Bootstrap class loader serves as the parent of all the other ClassLoader instances <a href="https://www.baeldung.com/java-classloaders" target="_blank" rel="noopener">https://www.baeldung.com/java-classloaders</a></p>
 <p>A ClassLoader with a null parent ClassLoader appears to only have visibility into the java.base module. In Java 8 and earlier, such a ClassLoader would have visibility to all of the classes comprising the Java platform. <a href="https://bugs.openjdk.org/browse/JDK-8161269" target="_blank" rel="noopener">https://bugs.openjdk.org/browse/JDK-8161269</a></p>
-<p>三种层次的 ClassLoader <strong>并不是继承关系（Inheritance）</strong>，子ClassLoader 通过是 <strong>组合（Composite）</strong>的方式复用父 ClassLoader的代码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line">    <span class="comment">// The parent class loader for delegation</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ClassLoader parent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>组合模式（Composite Pattern），又叫部分整体模式，是用于把一组相似的对象当作一个单一的对象。组合模式依据树形结构来组合对象，用来表示部分以及整体层次。</p>
 </blockquote>
@@ -732,7 +753,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -754,7 +775,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -822,7 +843,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的加载过程"><span class="nav-text">类的加载过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#①加载-Loading"><span class="nav-text">①加载(Loading)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#②链接-Linking"><span class="nav-text">②链接(Linking)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#③初始化-Initialization"><span class="nav-text">③初始化(Initialization)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部类的初始化"><span class="nav-text">内部类的初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ClassLoader"><span class="nav-text">ClassLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-分类"><span class="nav-text">ClassLoader 分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader是否是继承关系？"><span class="nav-text">ClassLoader是否是继承关系？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-如何工作？双亲委派机制"><span class="nav-text">ClassLoader 如何工作？双亲委派机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现自定义-ClassLoader"><span class="nav-text">实现自定义 ClassLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可见性（Visibility）"><span class="nav-text">可见性（Visibility）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文类加载器（ConextClassLoader）"><span class="nav-text">上下文类加载器（ConextClassLoader）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不适用双亲委派的场景"><span class="nav-text">不适用双亲委派的场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tomcat"><span class="nav-text">Tomcat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SPI"><span class="nav-text">SPI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OSGI"><span class="nav-text">OSGI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-9-引入模块化之后"><span class="nav-text">Java 9 引入模块化之后</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM-如何判断两个类是否相同"><span class="nav-text">JVM 如何判断两个类是否相同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-面试八股文"><span class="nav-text">ClassLoader 面试八股文</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的加载过程"><span class="nav-text">类的加载过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#①加载-Loading"><span class="nav-text">①加载(Loading)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#②链接-Linking"><span class="nav-text">②链接(Linking)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#③初始化-Initialization"><span class="nav-text">③初始化(Initialization)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部类的初始化"><span class="nav-text">内部类的初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ClassLoader"><span class="nav-text">ClassLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Classloader-创建-Class对象"><span class="nav-text">使用Classloader 创建 Class对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-分类"><span class="nav-text">ClassLoader 分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader是否是继承关系？"><span class="nav-text">ClassLoader是否是继承关系？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-如何工作？双亲委派机制"><span class="nav-text">ClassLoader 如何工作？双亲委派机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现自定义-ClassLoader"><span class="nav-text">实现自定义 ClassLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可见性（Visibility）"><span class="nav-text">可见性（Visibility）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文类加载器（ConextClassLoader）"><span class="nav-text">上下文类加载器（ConextClassLoader）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不适用双亲委派的场景"><span class="nav-text">不适用双亲委派的场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tomcat"><span class="nav-text">Tomcat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SPI"><span class="nav-text">SPI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OSGI"><span class="nav-text">OSGI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-9-引入模块化之后"><span class="nav-text">Java 9 引入模块化之后</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM-如何判断两个类是否相同"><span class="nav-text">JVM 如何判断两个类是否相同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader-面试八股文"><span class="nav-text">ClassLoader 面试八股文</span></a></li></ol></li></ol></div>
             
 
           </div>

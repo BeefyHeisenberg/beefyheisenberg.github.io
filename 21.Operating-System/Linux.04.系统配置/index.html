@@ -124,7 +124,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="profile相关  bashrc是在系统启动后就会自动运行。 profile是在用户登录后才会运行。 进行设置后，可运用source bashrc命令更新bashrc，也可运用source profile命令更新profile。    /etc/profile: 中设定的变量(全局)的可以作用于任何用户 ~/.bashrc: 等中设定的变量(局部)只能继承/etc/profile中的变量 ~/.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.380Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.563Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux.05.系统配置">
 <meta name="twitter:description" content="profile相关  bashrc是在系统启动后就会自动运行。 profile是在用户登录后才会运行。 进行设置后，可运用source bashrc命令更新bashrc，也可运用source profile命令更新profile。    /etc/profile: 中设定的变量(全局)的可以作用于任何用户 ~/.bashrc: 等中设定的变量(局部)只能继承/etc/profile中的变量 ~/.">
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,434
+                  2,429
                 </span>
               
 
@@ -396,7 +396,7 @@
 <p>0 停机，关机<br>1 单用户，无网络连接，不运行守护进程，不允许非超级用户登录<br>2 多用户，无网络连接，不运行守护进程<br>3 多用户，正常启动系统<br>4 用户自定义<br>5 多用户，带图形界面<br>6 重启</p>
 <p>除了模式 0,1,6外, 每种 Unix 和 Unix-like 系统对运行模式的定义不太一样。通常在 /etc/inittab 文件中定义了各种运行模式的工作范围。<br>当前绝大多数Linux发行版已经基于新的systemd，systemd一般不再使用/etc/inittab文件。</p>
 <h3 id="init-sysvinit-和-systemd"><a href="#init-sysvinit-和-systemd" class="headerlink" title="init,sysvinit 和 systemd"></a>init,sysvinit 和 systemd</h3><p>大多数 Linux 发行版的 init 系统是和 System V 相兼容的，被称为 sysvinit。这是人们最熟悉的 init 系统。<br>Ubuntu 采用 upstart 替代了传统的 sysvinit，<br>RHEL 采用 systemd替代 sysvinit。</p>
-<p>关于 System V，参考 <a href="/21.Operating-System/APUE.00.从Unix到Linux（Gnu、Posix是什么）/" title="APUE.00.从Unix到Linux（Gnu、Posix是什么）">APUE.00.从Unix到Linux（Gnu、Posix是什么）</a> </p>
+<p>关于 System V，参考 [[APUE.00.从Unix到Linux]]</p>
 <h3 id="sysvinit"><a href="#sysvinit" class="headerlink" title="sysvinit"></a>sysvinit</h3><blockquote>
 <p>本节参考:</p>
 <ul>
@@ -436,8 +436,8 @@
 </ul>
 <p>@ref:</p>
 <ul>
-<li><a href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html" target="_blank" rel="noopener">Systemd 入门教程：命令篇 - 阮一峰的网络日志</a> </li>
-<li><a href="https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/" target="_blank" rel="noopener">浅析Linux初始化init系统, 第3部分: Systemd</a> </li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html" target="_blank" rel="noopener">Systemd 入门教程：命令篇 - 阮一峰的网络日志</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/" target="_blank" rel="noopener">浅析Linux初始化init系统, 第3部分: Systemd</a></li>
 </ul>
 <h4 id="systemctl-命令"><a href="#systemctl-命令" class="headerlink" title="systemctl 命令"></a>systemctl 命令</h4><p><code>systemctl</code>是 Systemd 的主命令，用于管理系统。//区别 <code>sysctl</code> 命令，用于修改 Kernel参数</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 重启系统</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl reboot</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭系统，切断电源</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl poweroff</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> CPU停止工作</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl halt</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 暂停系统</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl <span class="built_in">suspend</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 让系统进入冬眠状态</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl hibernate</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 让系统进入交互式休眠状态</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl hybrid-sleep</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动进入救援状态（单用户状态）</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl rescue</span></span><br></pre></td></tr></table></figure>
@@ -656,7 +656,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -678,7 +678,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

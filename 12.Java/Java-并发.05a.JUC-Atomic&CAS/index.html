@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="一些概念（乐观锁、CAS）▷ 原子操作:  对int变量赋值的操作是原子的吗？ - 知乎  ▷ CAS:  CAS(Compare And Swap)：比较并替换。CAS 需要有 3 个操作数：内存地址 V，旧的预期值 A，即将要更新的目标值 B。 CAS 指令执行时，当且仅当内存地址 V 的值与预期值 A 相等时，将内存地址 V 的值修改为 B 并返回 True，否则就什么都不做并返回 Fals">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.053Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.273Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java-并发.05a.JUC-Atomic（原子操作）&amp; CAS">
 <meta name="twitter:description" content="一些概念（乐观锁、CAS）▷ 原子操作:  对int变量赋值的操作是原子的吗？ - 知乎  ▷ CAS:  CAS(Compare And Swap)：比较并替换。CAS 需要有 3 个操作数：内存地址 V，旧的预期值 A，即将要更新的目标值 B。 CAS 指令执行时，当且仅当内存地址 V 的值与预期值 A 相等时，将内存地址 V 的值修改为 B 并返回 True，否则就什么都不做并返回 Fals">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,659
+                  2,786
                 </span>
               
 
@@ -428,8 +428,20 @@
 </blockquote>
 <p>上面的第 2 点和第 3 点所具有的内存屏障效果，JUC 的 Atomic.CAS 操作 足以同时实现 volatile 读和 volatile 写的内存语义。</p>
 <p>@ref: <a href="https://www.cnblogs.com/huansky/p/15746624.html" target="_blank" rel="noopener">https://www.cnblogs.com/huansky/p/15746624.html</a></p>
-<h3 id="AtomicStampedReference-解决-ABA-问题"><a href="#AtomicStampedReference-解决-ABA-问题" class="headerlink" title="AtomicStampedReference 解决 ABA 问题"></a>AtomicStampedReference 解决 ABA 问题</h3><p>AtomicReference 的通用模式：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">AtomicReference&lt;Object&gt; ref = <span class="keyword">new</span> AtomicReference&lt;&gt;(<span class="keyword">new</span> Object());</span><br><span class="line">Object oldCache = ref.get();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对缓存oldCache做一些操作</span></span><br><span class="line">Object newCache  =  someFunctionOfOld(oldCache); </span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果期间没有其它线程改变了缓存值，则更新</span></span><br><span class="line"><span class="keyword">boolean</span> success = ref.compareAndSet(oldCache , newCache);</span><br></pre></td></tr></table></figure>
+<h3 id="AtomicReference"><a href="#AtomicReference" class="headerlink" title="AtomicReference"></a>AtomicReference</h3><p>AtomicReference：原子性更新引用</p>
+<p>实现：</p>
+<ul>
+<li><code>AtomicReference&lt;T&gt;</code> 有一个 T 类型的 value 成员，使用这个成员来保存引用</li>
+<li>在 static 代码块中，计算 value 在内存中的 offset</li>
+<li>compareAndSet 即对 value 进行CAS</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;  </span><br><span class="line">    <span class="keyword">try</span> &#123;  </span><br><span class="line">        valueOffset = unsafe.objectFieldOffset  </span><br><span class="line">            (AtomicReference.class.getDeclaredField(<span class="string">"value"</span>));  </span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception ex) &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Error(ex); &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span><span class="params">(V expect, V update)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">return</span> unsafe.compareAndSwapObject(<span class="keyword">this</span>, valueOffset, expect, update);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="AtomicReferenceFieldUpdater"><a href="#AtomicReferenceFieldUpdater" class="headerlink" title="AtomicReferenceFieldUpdater"></a>AtomicReferenceFieldUpdater</h3><p>AtomicReferenceFieldUpdater：原子性更新引用中的field</p>
+<ul>
+<li><code>AtomicReferenceFieldUpdater&lt;T, V&gt;</code>：T 即持有 field 的类型，V 即 field 的类型</li>
+</ul>
+<h3 id="AtomicStampedReference-解决-ABA-问题"><a href="#AtomicStampedReference-解决-ABA-问题" class="headerlink" title="AtomicStampedReference 解决 ABA 问题"></a>AtomicStampedReference 解决 ABA 问题</h3><p>AtomicReference 的通用工作模式：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">AtomicReference&lt;Object&gt; ref = <span class="keyword">new</span> AtomicReference&lt;&gt;(<span class="keyword">new</span> Object());</span><br><span class="line">Object oldVal = ref.get();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对旧对象做一些更新，得到新对象</span></span><br><span class="line">Object newVal  =  someFunctionOfOld(oldVal); </span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果期间没有其它线程改变了缓存值，则更新</span></span><br><span class="line"><span class="keyword">boolean</span> success = ref.compareAndSet(oldVal , newVal);</span><br></pre></td></tr></table></figure>
 <p>但是上面的模式会有 ABA 问题：</p>
 <ul>
 <li>线程 1 获取 Atomic 的 oldVal = A，但是因为某些原因让出了 CPU</li>
@@ -438,7 +450,7 @@
 <li>线程 1 恢复，CAS（A，B）也成功了</li>
 </ul>
 <p>Java 中的 <code>AtomicStampedReference&lt;E&gt;</code> 通过版本号避免了 ABA 问题，它通过包装 <code>[E,Integer]</code> 的 Pair 来对对象标记版本戳 stamp，从而避免 ABA 问题：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">AtomicStampedReference&lt;Object&gt;  ref = <span class="keyword">new</span> AtomicStampedReference&lt;&gt;(<span class="keyword">new</span> Object(),<span class="number">0</span>);  <span class="comment">// 创建AtomicStampedReference对象，持有Obj引用，版本为0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span>[] stamp = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">1</span>];</span><br><span class="line">Object oldVal = ref.get(stamp); <span class="comment">// get 方法获取 ref 和 stamp</span></span><br><span class="line"><span class="keyword">int</span> oldStamp=stamp[<span class="number">0</span>];          <span class="comment">// stamp[0]保存的是上次的版本号</span></span><br><span class="line"></span><br><span class="line">ref.compareAndSet(oldVal, <span class="keyword">new</span> Object(), oldStamp, oldStamp + <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">AtomicStampedReference&lt;Object&gt;  ref = <span class="keyword">new</span> AtomicStampedReference&lt;&gt;(<span class="keyword">new</span> Object(),<span class="number">0</span>);  <span class="comment">// 创建AtomicStampedReference对象，持有Obj引用，版本为0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span>[] stamp = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">1</span>];</span><br><span class="line">Object oldVal = ref.get(stamp); <span class="comment">// get 方法，一次调用获取 ref 和 stamp</span></span><br><span class="line"><span class="keyword">int</span> oldStamp=stamp[<span class="number">0</span>];          <span class="comment">// stamp[0] 保存的是上次的版本号</span></span><br><span class="line"></span><br><span class="line">ref.compareAndSet(oldVal, <span class="keyword">new</span> Object(), oldStamp, oldStamp + <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <p>@ref： <a href="https://segmentfault.com/a/1190000015831791" target="_blank" rel="noopener">Java多线程进阶（十四）—— J.U.C之atomic框架：AtomicReference - 透彻理解Java并发编程 - SegmentFault 思否</a></p>
 <h3 id="LongAdder"><a href="#LongAdder" class="headerlink" title="LongAdder"></a>LongAdder</h3><p>已经有 <code>AtomicLong.addAndGet(l)</code> 的情况下, 为什么还要设计 <code>LongAdder</code>?  </p>
 <p>AtomicLong 是使用 “自旋+CAS”实现, 面对大量并发的情况下有性能瓶颈：</p>
@@ -608,7 +620,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -630,7 +642,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -698,7 +710,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些概念（乐观锁、CAS）"><span class="nav-text">一些概念（乐观锁、CAS）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Atomic"><span class="nav-text">Atomic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicInteger-的-CAS-实现"><span class="nav-text">AtomicInteger 的 CAS 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicStampedReference-解决-ABA-问题"><span class="nav-text">AtomicStampedReference 解决 ABA 问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LongAdder"><span class="nav-text">LongAdder</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些概念（乐观锁、CAS）"><span class="nav-text">一些概念（乐观锁、CAS）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Atomic"><span class="nav-text">Atomic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicInteger-的-CAS-实现"><span class="nav-text">AtomicInteger 的 CAS 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicReference"><span class="nav-text">AtomicReference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicReferenceFieldUpdater"><span class="nav-text">AtomicReferenceFieldUpdater</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicStampedReference-解决-ABA-问题"><span class="nav-text">AtomicStampedReference 解决 ABA 问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LongAdder"><span class="nav-text">LongAdder</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -117,18 +117,19 @@
 
 
 
-<meta name="description" content="➤ TOC:  从 LSM-Tree到 BigTable LSM-Tree vs B+Tree; LSM-Tree原理;  ➤ Google BigTable → LSM-Tree  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生，用于解决 Google 内部不同产品在对数据存储的容量和响应时延需求的差异化，力">
+<meta name="description" content="LSM-Tree 概览➤ What’s LSM-Tree： Log Structured Merge Trees(LSM) ➤ Google BigTable → LSM-Tree @ref: 全面了解大数据“三驾马车”的开源实现大数据李智慧_InfoQ精选文章  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LSM Tree">
 <meta property="og:url" content="https://beefyheisenberg.github.io/32.Database/LSM-Tree理论基础/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="➤ TOC:  从 LSM-Tree到 BigTable LSM-Tree vs B+Tree; LSM-Tree原理;  ➤ Google BigTable → LSM-Tree  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生，用于解决 Google 内部不同产品在对数据存储的容量和响应时延需求的差异化，力">
+<meta property="og:description" content="LSM-Tree 概览➤ What’s LSM-Tree： Log Structured Merge Trees(LSM) ➤ Google BigTable → LSM-Tree @ref: 全面了解大数据“三驾马车”的开源实现大数据李智慧_InfoQ精选文章  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/database/LSM-Tree-Model.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.719Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/database/LevelDB-LSM-Tree.png">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.908Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LSM Tree">
-<meta name="twitter:description" content="➤ TOC:  从 LSM-Tree到 BigTable LSM-Tree vs B+Tree; LSM-Tree原理;  ➤ Google BigTable → LSM-Tree  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生，用于解决 Google 内部不同产品在对数据存储的容量和响应时延需求的差异化，力">
+<meta name="twitter:description" content="LSM-Tree 概览➤ What’s LSM-Tree： Log Structured Merge Trees(LSM) ➤ Google BigTable → LSM-Tree @ref: 全面了解大数据“三驾马车”的开源实现大数据李智慧_InfoQ精选文章  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/database/LSM-Tree-Model.png">
 
 
@@ -354,7 +355,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  731
+                  1,350
                 </span>
               
 
@@ -379,50 +380,74 @@
       
 
       
-        <p>➤ TOC:</p>
-<ul>
-<li>从 LSM-Tree到 BigTable</li>
-<li>LSM-Tree vs B+Tree;</li>
-<li>LSM-Tree原理;</li>
-</ul>
-<p>➤ Google BigTable → LSM-Tree</p>
+        <h2 id="LSM-Tree-概览"><a href="#LSM-Tree-概览" class="headerlink" title="LSM-Tree 概览"></a>LSM-Tree 概览</h2><p>➤ <strong>What’s LSM-Tree</strong>： Log Structured Merge Trees(LSM)</p>
+<p>➤ <strong>Google BigTable → LSM-Tree</strong></p>
+<p>@ref: <a href="https://www.infoq.cn/article/x8qufv7vtujnov*xqu4t" target="_blank" rel="noopener">全面了解大数据“三驾马车”的开源实现<em>大数据</em>李智慧_InfoQ精选文章</a></p>
 <blockquote>
 <p>作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生，用于解决 Google 内部不同产品在对数据存储的容量和响应时延需求的差异化，力求在确保能够容纳大量数据的同时减少数据的查询耗时。<br>论文中很多很酷的方面之一就是它所使用的文件组织方式，这个方法更一般的名字叫 Log Structured-Merge Tree。<br>@ref: <a href="https://static.usenix.org/events/osdi06/tech/chang/chang_html/?em_x=22" target="_blank" rel="noopener">Bigtable: A Distributed Storage System for Structured Data - OSDI ‘06 Paper</a></p>
 </blockquote>
 <blockquote>
 <p>在BigTable里， SSTable(Sorted Strings Table)是一个基本的单元。每个Tablet有若干个SSTable。论文里面并没有提到SSTable是怎么样实现的。但是根据对开源的LevelDB的代码，可以看出SSTable是LSM-Tree的一种实现。<br>论文→ [Patrick O’Neil, Edward Cheng, Dieter Gawlick, and Elizabeth (Betty) O’Neil, “The Log-Structured Merge-Tree,” patent granted to Digital Equipment Corporation, December 1993; appeared in ActaInformatica 33, pp. 351-385, June 1996].</p>
 </blockquote>
-<p>➤ LSM-Tree vs B+Tree</p>
+<p>➤ <strong>LSM-Tree vs B+Tree</strong></p>
 <ul>
-<li>传统数据库使用B-Tree或B+Tree等多叉树实现, 具有较好的随机读, 但是随机写性能比较差(数据在逻辑上相离很近但物理却可能相隔很远), 写耗时远大于读耗时;</li>
-<li>优化写耗时, 一般使用基于日志的顺序存储, 但是这种结构的随机读性能太差, 只适用于WAL, 或者通过offset顺序读(类似kafka)</li>
+<li><p>传统数据库使用 B-Tree 或 B+Tree 等多叉树实现, 具有较好的随机读, 但是随机写性能比较差(数据在逻辑上相离很近但物理却可能相隔很远), 写耗时远大于读耗时;</p>
+</li>
+<li><p>LSM-Tree 优化了随机写, 最新写入的 KV 在内存中进行排序，为了防止宕机而丢失内存中的数据，LSM-Tree 还使用了 WAL 日志机制，新写入的数据同时还会写入磁盘的 WAL 日志中，用于宕机后的数据恢复。WAL 一般使用磁盘顺序写入，可以提供非常好的写操作性能，大约等于磁盘的理论速度，也就是200~300 MB/s</p>
+<ul>
+<li>在内存中排好序的数据，会写入磁盘，与下层的文件合并为更大的文件；</li>
+<li>所以说 LSM-Tree 写效率提高，也是有代价的：多了文件的合并操作（compaction），同时上下层的磁盘文件有冗余数据；</li>
 </ul>
-<blockquote>
-<p>@ref <a href="https://www.zhihu.com/question/19887265/answer/78839142" target="_blank" rel="noopener">https://www.zhihu.com/question/19887265/answer/78839142</a></p>
-</blockquote>
-<p>➤ LSM（The Log-Structured Merge-Tree） 即 <strong>日志结构合并树</strong>, 有两个特性: 日志结构 + 合并树.  <a href="https://static.usenix.org/events/osdi06/tech/chang/chang_html/" target="_blank" rel="noopener">OSDI ‘06 Paper</a></p>
+</li>
+</ul>
+<h2 id="LSM-Tree-特性解析"><a href="#LSM-Tree-特性解析" class="headerlink" title="LSM-Tree 特性解析"></a>LSM-Tree 特性解析</h2><p>➤ LSM（The Log-Structured Merge-Tree） 即 <strong>日志结构合并树</strong>, 有两个特性: 日志结构 + 合并树.  <a href="https://static.usenix.org/events/osdi06/tech/chang/chang_html/" target="_blank" rel="noopener">OSDI ‘06 Paper</a></p>
 <ul>
 <li>日志:<ul>
-<li>数据被插入时, 首先写WAL(Write Ahead Log), WAL是磁盘顺序写, 写入速度很快</li>
+<li>数据被插入时, 首先写 WAL(Write Ahead Log), WAL 是磁盘顺序写, 写入速度很快</li>
 </ul>
 </li>
 <li>合并树:<ul>
-<li>LSM-Tree的树结构分两部分, 存储于内存中的C0层, 以及存储于磁盘的C1..Ck层;</li>
-<li>C0层一般使用 RB-Tree 或 SkipList实现, WAL里的数据首先被写入C0树, C0树按照Key有序存储;</li>
-<li>当C0层的大小超过阈值, 会与下一层的C1层进行合并(Compaction), 成为新的C1层, 同时清空C0层, 合并过程类似归并排序中的”归并”;</li>
-<li>同样C1层超过大小阈值也会与C2树进行合并… 从C0-Ck每层树结构容量逐层增大;</li>
-<li>C1..Ck层可能使用B+Tree实现, 或SortedFile;</li>
+<li>LSM-Tree 的树结构分两部分, 存储于内存中的 C0层, 以及存储于磁盘的 C1..Ck 层;</li>
+<li>C0层一般使用 RB-Tree 或 SkipList 实现, WAL 里的数据首先被写入 C0树, C0树按照 Key 有序存储;</li>
+<li>当 C0层的大小超过阈值, 会与下一层的 C1层进行合并(Compaction), 成为新的 C1层, 同时清空 C0层, 合并过程类似归并排序中的“归并”过程;</li>
+<li>同样 C1层超过大小阈值也会与 C2层的文件进行合并… 所以从 C0-Ck 每层的文件容量逐层增大;</li>
+<li>C1..Ck 层一般用有序文件（sstable)实现;</li>
 </ul>
 </li>
-<li>写入过程: C0层总是最新写入的数据, Ck层则包含最旧的数据, 当上下两层合并时, 上层的新数据会覆盖掉下次的旧数据, C0…Ck层的数据可能存在重复;</li>
-<li>查询过程: 从C0层开始查询, 如果找不到就在下一层查找, 所以相比较B+Tree, LSM-Tree的读性能会差一些;</li>
-<li>删除过程: 在C0层插入一个带有删除标记的Entry …</li>
-<li>Scan过程: @todo</li>
 </ul>
+<p><strong>写入过程</strong>: C0层总是最新写入的数据, Ck 层则包含最旧的数据, 当更新一个 K 对应的 val 时，只会写入最上层, 下层的旧数据并不会更新，而是当上下两层合并时, 上层的新数据会覆盖掉下次的旧数据 ;</p>
+<p><strong>查询过程</strong>: 从 C0层开始查询, 如果找不到就在下一层查找, 所以相比较 B+Tree, LSM-Tree 的读性能会差一些;</p>
+<p><strong>删除过程</strong>: 仅在 C0层插入一个带有删除标记的 Entry，并不真正删除下层文件中的数据，而是等待合并时  …</p>
+<p><strong>Scan过程</strong>: @todo</p>
 <p><img src="/images/database/LSM-Tree-Model.png" alt=""></p>
-<blockquote>
-<p>@ref: <a href="http://www.cse.cuhk.edu.hk/~mcyang/csci5550/2020S/Lec09%20Persistent%20Key-Value%20Stores.pdf" target="_blank" rel="noopener">http://www.cse.cuhk.edu.hk/~mcyang/csci5550/2020S/Lec09%20Persistent%20Key-Value%20Stores.pdf</a></p>
-</blockquote>
+<h2 id="LevelDB-如何实现-LSM-Tree"><a href="#LevelDB-如何实现-LSM-Tree" class="headerlink" title="LevelDB 如何实现 LSM-Tree"></a>LevelDB 如何实现 LSM-Tree</h2><p>LevelDB is a key-value store based on LSM-trees:</p>
+<p><img src="/images/database/LevelDB-LSM-Tree.png" alt="LevelDB实现的LSM-Tree模型"></p>
+<p>LevelDB 是如何实现 LSM-Tree 的:</p>
+<ul>
+<li>LevelDB 的 WAL（图中1）</li>
+<li><p>内存中的 MemTable 层：</p>
+<ul>
+<li>WAL 的数据首先被写入 memtable, 当 memtable 的数据超过阈值, memtable 变为 immutable memtable(不可写入的), 新创建一个 memtable 用于写入新数据, immutable memtable 中的数据 flush 写入磁盘的 L0层;</li>
+<li>把内存里面不可变的 immutable memtable flush 到硬盘上的 SSTable 层中，此步骤也称为 Minor Compaction，这里需要注意在 L0层的 SSTable 是没有进行合并的，所以这里的 key range 在多个 SSTable 中可能会出现重叠，在层数大于 0 层之后的 SSTable，不存在重叠 key。</li>
+</ul>
+</li>
+<li><p>磁盘中的 SSTable 层：</p>
+<ul>
+<li>图中的 L0..L6, 每层都由数个 SStable （Sorted String Table）组成, 每层的总大小是上一层的10倍（图中4~5）, SSTable 的概念来自 google 《BigTable》的论文,  [[../_attachments/Persistent Key-Value Stores.pdf|Persistent Key-Value Stores]], 按 Key 顺序存储的键值对集合</li>
+<li>此步骤也称为Major Compaction，这个阶段会真正的清除掉被标记删除掉的数据以及多版本数据的合并，避免浪费空间，注意由于 SSTable 都是有序的，我们可以直接采用 merge sort 进行高效合并。</li>
+</ul>
+</li>
+</ul>
+<p><strong>Write &amp; Compaction</strong>:<br>![[../_images/LevelDB-LSM-Tree2.png]]</p>
+<p><strong>Search</strong>:<br>![[../_images/LevelDB-LSM-Tree3.png]]</p>
+<p>图参考自：<a href="http://www.cse.cuhk.edu.hk/~mcyang/csci5550/2020S/Lec09%20Persistent%20Key-Value%20Stores.pdf" target="_blank" rel="noopener">http://www.cse.cuhk.edu.hk/~mcyang/csci5550/2020S/Lec09%20Persistent%20Key-Value%20Stores.pdf</a></p>
+<p><strong>Delete</strong>：<br>目前的 LSM-Tree 写入的时候，会写一条记录，删除的时候，标志一个 tombstone （类似 leveldb 的 type）</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>@ref: </p>
+<ul>
+<li><a href="https://www.zhihu.com/question/19887265/answer/78839142" target="_blank" rel="noopener">LSM 算法的原理是什么？ - 知乎</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/501568860" target="_blank" rel="noopener">LSM-Tree 的应用及原理 - 知乎</a></li>
+<li>[[../_attachments/Persistent Key-Value Stores.pdf|Persistent Key-Value Stores]]</li>
+</ul>
 
       
     </div>
@@ -457,8 +482,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/32.Database/LevelDB-如何实现LSM-Tree/" rel="prev" title="LevelDB 实现 LSM-Tree">
-                LevelDB 实现 LSM-Tree <i class="fa fa-chevron-right"></i>
+              <a href="/32.Database/MongoDB/" rel="prev" title="MongoDB">
+                MongoDB <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -521,8 +546,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -541,7 +575,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -563,7 +597,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -621,6 +655,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LSM-Tree-概览"><span class="nav-text">LSM-Tree 概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSM-Tree-特性解析"><span class="nav-text">LSM-Tree 特性解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDB-如何实现-LSM-Tree"><span class="nav-text">LevelDB 如何实现 LSM-Tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

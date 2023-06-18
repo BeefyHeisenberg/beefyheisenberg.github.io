@@ -133,7 +133,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE2-TCP-2023-05-02-3.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE2-TCP-2023-05-02-4.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/network_protocol/tcp_state_machine.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.408Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.596Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络协议：TCP&#x2F;IP">
 <meta name="twitter:description" content="OSI 七层模型回顾参考: 网络协议1-网络分层模型 TCP 报头  Source Port，Destination Port：TCP 的包是没有 IP 地址的，那是 IP 层上的事。但是有源端口和目标端口。 Sequence Number 是发出包的序号，用来解决网络包乱序（reordering）问题。 Acknowledgement Number：就是回复 ACK 序号，占 32 位，只有 A">
@@ -362,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6,009
+                  5,934
                 </span>
               
 
@@ -486,7 +486,7 @@
 <p>Linux 下给了一个叫 <code>tcp_syncookies</code> 的参数来应对这个问题 —— 当 SYN 队列满了后，TCP 会通过源地址端口、目标地址端口和时间戳打造出一个特别的 Sequence Number 发回去（又叫 cookie），如果是攻击者则不会有响应，如果是正常连接，则会把这个 SYN Cookie 发回来，然后服务端可以通过 cookie 建连接（即使 Client 不在 SYN 队列中）。请注意，请先千万别用 <code>tcp_syncookies</code> 来处理正常的大负载的连接的情况。因为，<code>synccookies</code> 是妥协版的 TCP 协议，并不严谨。</p>
 <p>一般情况下为了防范 SYN 攻击，有三个 TCP 参数可供你选择，第一个是：<code>tcp_synack_retries</code> 来减少重试次数；第二个是：<code>tcp_max_syn_backlog</code> 可以增大 SYN 连接数；第三个是：<code>tcp_abort_on_overflow</code> 处理不过来干脆就直接拒绝连接了。</p>
 <blockquote>
-<p><strong>为什么要有半连接队列</strong>？ 因为服务端要确保自己的 SYN+ACK 送达客户端，所以 SYN+ACK  会有重发机制，所以就需要暂存半连接。<br>如果半连接队列满了，且 tcp_syncookies = 1，这时会启用 syn cookie 的机制：服务端根据双方 IP、时间戳、MSS 等创建一个 cookie，并附在 SYN+ACK（二次握手）里，客户端返回的 ACK 需要携带此 cookie 才能成功完成三次握手；<br>但因为服务端并没有像半连接队列那样暂存客户端的信息，所以 syn cookie 机制没有重发功能；<br>虽然 tcp_syncookies 看似解决了 SYN 攻击，但是客户端（攻击者）可以采用另一种策略：伪造第三次的 ACK（里面是无效 cookie），让服务端解码无效的 cookie 浪费 CPU；</p>
+<p><strong>为什么要有半连接队列</strong>？ 因为服务端要确保自己的 SYN+ACK 送达客户端，所以 SYN+ACK  会有重发机制，所以就需要暂存半连接。<br><strong>tcp_syncookies 的作用和局限性</strong>？ 如果半连接队列满了，且 tcp_syncookies = 1，这时会启用 syn cookie 的机制：服务端根据双方 IP、时间戳、MSS 等创建一个 cookie，并附在 SYN+ACK（二次握手）里，客户端返回的 ACK 需要携带此 cookie 才能成功完成三次握手；<br>但因为服务端并没有像半连接队列那样暂存客户端的信息，所以 syn cookie 机制没有重发功能；<br>虽然 tcp_syncookies 看似解决了 SYN 攻击，但是客户端（攻击者）可以采用另一种策略：伪造第三次的 ACK（里面是无效 cookie），让服务端解码无效的 cookie 浪费 CPU；</p>
 </blockquote>
 <h2 id="重传机制"><a href="#重传机制" class="headerlink" title="重传机制"></a>重传机制</h2><p>@ref: <a href="https://coolshell.cn/articles/11564.html" target="_blank" rel="noopener">TCP 的那些事儿（上） | 酷 壳 - CoolShell</a></p>
 <p>发送端发了 Seq Num = 1,2,3,4,5一共五份数据，接收端收到了1，2，于是回 ack 3，然后收到了4（注意此时3没收到），此时的 TCP 会怎么办？</p>
@@ -532,13 +532,6 @@
 <h2 id="流控、拥塞控制"><a href="#流控、拥塞控制" class="headerlink" title="流控、拥塞控制"></a>流控、拥塞控制</h2><p>@ref： <a href="https://coolshell.cn/articles/11609.html" target="_blank" rel="noopener">TCP 的那些事儿（下） | 酷 壳 - CoolShell</a></p>
 <p>@tldr：</p>
 <ul>
-<li>重传的机制：<ul>
-<li>超时重传：超出 RTO</li>
-<li>快速重传：触发条件-3 个 ACK</li>
-</ul>
-</li>
-<li>快速重传的问题——如果数据包乱序到达，接收端如何正确告知发送端，哪些已经收到，哪些没有收到？SACK 机制和 D-SACK 机制</li>
-<li>动态 RTO（Retransmission TimeOut）的计算… 平滑 RTT （Round Trip Time）采样</li>
 <li>流控：<ul>
 <li>实现方式-滑动窗口（<strong>swnd</strong>）</li>
 <li>流控目的？发送方需要控制给（每个 sock）的对端发送的数据快慢</li>
@@ -575,8 +568,8 @@
 <li>接收端在给发送端回 ACK 中会汇报自己的 AdvertisedWindow = MaxRcvBuffer – LastByteRcvd – 1;</li>
 <li>而发送方会根据这个窗口来控制发送数据的大小，以保证接收方可以处理。</li>
 </ul>
-<p>下面我们来看一下发送方的滑动窗口示意图：<br><img src="/images/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE2-TCP-2023-05-02-3.png" alt="../_images/网络协议2-TCP-2023-05-02-3.png"></p>
-<p>其中那个黑框就是滑动窗口，<code>#1</code> - <code>#4</code> 分别为：</p>
+<p>下面我们来看一下<strong>发送方</strong>的滑动窗口示意图：<br><img src="/images/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE2-TCP-2023-05-02-3.png" alt="../_images/网络协议2-TCP-2023-05-02-3.png"></p>
+<p>其中那个黑框就是的滑动窗口，<code>#1</code> - <code>#4</code> 数据段分别为：</p>
 <ul>
 <li>Category  <code>#1</code> 已收到 ack 确认的数据。</li>
 <li>Category  <code>#2</code> 发还没收到 ack 的。</li>
@@ -732,7 +725,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -754,7 +747,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -130,7 +130,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/javaee/javaee_spring_mvc_aop.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/JavaEE.SpringMVC-2023-05-08-1.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/javaee/javaee_spring_mvc_dispacher.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.140Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.352Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring MVC">
 <meta name="twitter:description" content="Spring Framework 框架图下图是 Spring 官网的一个架构图，介绍下其组成部分：  核心容器由spring-core、spring-beans、spring-context、spring-context-support和spring-expression模块组成：">
@@ -516,16 +516,15 @@
 <ul>
 <li>连接点（Jointpoint）连接点是能够插入切面的一个点，连接点可能是类初始化，可以是调某方法时，抛出异常时，修改某字段时</li>
 <li>切入点（Pointcut）：一组连接点集合</li>
-<li>通知（Advice）：定义在连接点上“要做什么”，以及“何时去做”<ul>
-<li>包括前置通知（before advice）、后置通知(after advice)、环绕通知（around advice）</li>
-</ul>
+<li>通知（Advice）：定义在连接点上“要做什么”，以及“何时去做”，包括前置通知（before advice）、后置通知(after advice)、环绕通知（around advice）</li>
+<li><p>切面（Aspect）：可以认为是”通知”和”切入点”的集合</p>
 </li>
-<li>切面（Aspect）：可以认为是”通知”和”切入点”的集合</li>
-</ul>
-<ul>
-<li>目标对象（Target Object）：需要被织入横切关注点的对象，即该对象是切入点选择的对象，需要被通知的对象，从而也可称为“被通知对象”；由于Spring AOP 通过代理模式实现，从而这个对象永远是被代理对象，在AOP中表示为“对谁做”；</li>
-<li>AOP代理（AOP Proxy）：AOP框架使用代理模式创建的对象，从而实现在连接点处插入通知（即应用切面），就是通过代理来对目标对象应用切面。在Spring中，AOP代理可以用JDK动态代理或CGLIB代理实现，而通过拦截器模型应用切面。</li>
-<li>织入（Weaving）：织入是一个过程，是将切面应用到目标对象从而创建出AOP代理对象的过程，织入可以在编译期、类装载期、运行期进行。</li>
+<li><p>目标对象（Target Object）：需要被织入横切关注点的对象，即该对象是切入点选择的对象，需要被通知的对象，从而也可称为“被通知对象”；由于Spring AOP 通过代理模式实现，从而这个对象永远是被代理对象，在AOP中表示为“对谁做”；</p>
+</li>
+<li><p>AOP代理（AOP Proxy）：AOP框架使用代理模式创建的对象，从而实现在连接点处插入通知（即应用切面），就是通过代理来对目标对象应用切面。在Spring中，AOP代理可以用JDK动态代理或CGLIB代理实现，而通过拦截器模型应用切面。</p>
+</li>
+<li><p>织入（Weaving）：织入是一个过程，是将切面应用到目标对象从而创建出AOP代理对象的过程，织入可以在编译期、类装载期、运行期进行。</p>
+</li>
 <li>引入（inter-type declaration）：为已有的类添加额外新的字段或方法，Spring 允许引入新的接口（必须对应一个实现）到所有被代理对象（目标对象）, 在 AOP 中表示为“做什么”；</li>
 </ul>
 <h2 id="基于XML配置aspect"><a href="#基于XML配置aspect" class="headerlink" title="基于XML配置aspect"></a>基于XML配置aspect</h2><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"aspect"</span> <span class="attr">class</span>=<span class="string">"cn.javass.spring.chapter6.aop.HelloWorldAspect"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 定义了一个id="pointcut"的切点, 范围是com.javass包下的所有类 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">id</span>=<span class="string">"pointcut"</span> <span class="attr">expression</span>=<span class="string">"execution(* cn.javass..*.*(..))"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 定义切面的集合, ref="aspect"表示要引入"aspect"这个bean --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:aspect</span> <span class="attr">ref</span>=<span class="string">"aspect"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 定义一个切点, 包括用哪些切点, 以及在切点处要插入aspect.beforeAdvice()方法 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:before</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut"</span> <span class="attr">method</span>=<span class="string">"beforeAdvice"</span>/&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 定义另一个切点, 在切点处要插入aspect.afterFinallyAdvice()方法 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:after</span> <span class="attr">pointcut</span>=<span class="string">"execution(* cn.javass..*.*(..))"</span> <span class="attr">method</span>=<span class="string">"afterFinallyAdvice"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:aspect</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -662,7 +661,7 @@
 </blockquote>
 <h3 id="DI-注解-Autowired-Resource-Inject-Primary"><a href="#DI-注解-Autowired-Resource-Inject-Primary" class="headerlink" title="DI 注解: @Autowired, @Resource, @Inject, @Primary"></a>DI 注解: @Autowired, @Resource, @Inject, @Primary</h3><ul>
 <li>@Autowired: 可以写在属性上, 和 setter 方法上, 或者构造函数上, 默认按照类型进行装配</li>
-<li>@Autowired 和@Inject: 通过 <code>AutowiredAnnotationBeanPostProcessor</code> 来实现依赖注入, 顺序:<ol>
+<li>@Autowired 和 @Inject: 通过 <code>AutowiredAnnotationBeanPostProcessor</code> 来实现依赖注入, 顺序:<ol>
 <li>按照类型匹配</li>
 <li>使用限定符进行类型限定</li>
 <li>按照名称匹配</li>
@@ -957,7 +956,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -979,7 +978,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

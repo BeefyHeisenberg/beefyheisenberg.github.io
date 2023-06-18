@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="4种引用对比 强引用: 只要强引用还在就不会被 GC，JVM 宁愿抛出 OutOfMemoryError 错误也不会回收；  软引用(SoftReference): 用来描述非必需对象, GC 时发现内存不够时（Heap 内存超阈值）将会被回收。当垃圾回收器决定对其回收时，会先清空它的 SoftReference，也就是说 SoftReference 的 get() 方法将会返回 null，然后再">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-05-25T11:08:58.019Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.235Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Tutorials-13-引用">
 <meta name="twitter:description" content="4种引用对比 强引用: 只要强引用还在就不会被 GC，JVM 宁愿抛出 OutOfMemoryError 错误也不会回收；  软引用(SoftReference): 用来描述非必需对象, GC 时发现内存不够时（Heap 内存超阈值）将会被回收。当垃圾回收器决定对其回收时，会先清空它的 SoftReference，也就是说 SoftReference 的 get() 方法将会返回 null，然后再">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,655
+                  1,659
                 </span>
               
 
@@ -438,8 +438,8 @@
 <li>key 对象只有一个弱引用关联（弱可达），所以会被 GC 掉，同时 GC 线程把 Key 关联的弱引用，放入 WeakHashMap 对象的 queue；</li>
 </ul>
 <p>那么WeakHashMap 是如何回收value的?</p>
-<p>在<code>get</code>, <code>put</code>, <code>size</code> 方法里都会先调用一个<code>expungeStaleEntries()</code>方法,<br>此方法遍历 ReferenceQueue 取出每个弱引用（因为 Entry 继承自 WeakReference），把 Entry.val 设置为 null 帮助回收：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">expungeStaleEntries</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="keyword">for</span> (Object x; (x = queue.poll()) != <span class="keyword">null</span>; ) &#123;</span><br><span class="line">         <span class="keyword">synchronized</span> (queue) &#123;</span><br><span class="line">             <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">             Entry&lt;K,V&gt; e = (Entry&lt;K,V&gt;) x; <span class="comment">// （1）</span></span><br><span class="line"></span><br><span class="line">             <span class="keyword">int</span> i = indexFor(e.hash, table.length);</span><br><span class="line"></span><br><span class="line">             Entry&lt;K,V&gt; prev = table[i];</span><br><span class="line">             Entry&lt;K,V&gt; p = prev;</span><br><span class="line">             <span class="keyword">while</span> (p != <span class="keyword">null</span>) &#123;</span><br><span class="line">                 Entry&lt;K,V&gt; next = p.next;</span><br><span class="line">                 <span class="keyword">if</span> (p == e) &#123;</span><br><span class="line">                     <span class="keyword">if</span> (prev == e)</span><br><span class="line">                         table[i] = next;</span><br><span class="line">                     <span class="keyword">else</span></span><br><span class="line">                         prev.next = next;</span><br><span class="line">                     <span class="comment">// Must not null out e.next;</span></span><br><span class="line">                     <span class="comment">// stale entries may be in use by a HashIterator</span></span><br><span class="line">                     e.value = <span class="keyword">null</span>; <span class="comment">//（2） Help GC</span></span><br><span class="line">                     size--;</span><br><span class="line">                     <span class="keyword">break</span>;</span><br><span class="line">                 &#125;</span><br><span class="line">                 prev = p;</span><br><span class="line">                 p = next;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>在 <code>get()</code>  <code>put()</code>, <code>size()</code> 方法里都会先调用一个 <code>expungeStaleEntries()</code> 方法,<br>此方法遍历 ReferenceQueue 取出每个弱引用（因为 Entry 继承自 WeakReference），把 Entry.val 设置为 null 帮助回收：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">expungeStaleEntries</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="keyword">for</span> (Object x; (x = queue.poll()) != <span class="keyword">null</span>; ) &#123;</span><br><span class="line">         <span class="keyword">synchronized</span> (queue) &#123;</span><br><span class="line">             <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">             Entry&lt;K,V&gt; e = (Entry&lt;K,V&gt;) x; <span class="comment">// （1）convert Key to Entry？</span></span><br><span class="line"></span><br><span class="line">             <span class="keyword">int</span> i = indexFor(e.hash, table.length);</span><br><span class="line"></span><br><span class="line">             Entry&lt;K,V&gt; prev = table[i];</span><br><span class="line">             Entry&lt;K,V&gt; p = prev;</span><br><span class="line">             <span class="keyword">while</span> (p != <span class="keyword">null</span>) &#123;</span><br><span class="line">                 Entry&lt;K,V&gt; next = p.next;</span><br><span class="line">                 <span class="keyword">if</span> (p == e) &#123;</span><br><span class="line">                     <span class="keyword">if</span> (prev == e)</span><br><span class="line">                         table[i] = next;</span><br><span class="line">                     <span class="keyword">else</span></span><br><span class="line">                         prev.next = next;</span><br><span class="line">                     <span class="comment">// Must not null out e.next;</span></span><br><span class="line">                     <span class="comment">// stale entries may be in use by a HashIterator</span></span><br><span class="line">                     e.value = <span class="keyword">null</span>; <span class="comment">//（2） Help GC</span></span><br><span class="line">                     size--;</span><br><span class="line">                     <span class="keyword">break</span>;</span><br><span class="line">                 &#125;</span><br><span class="line">                 prev = p;</span><br><span class="line">                 p = next;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <p>代码（2）处把 Entry.value 设置为 null 帮助回收 @doubt: <code>Entry&lt;K,V&gt; e = (Entry&lt;K,V&gt;) x</code> ，x 是从 queue 里取出的，也即 Reference<key> 类型，是如何转换为 Entry 类型的？</key></p>
 <hr>
 <p>@ref:</p>
@@ -581,7 +581,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -603,7 +603,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

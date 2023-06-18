@@ -117,13 +117,13 @@
 
 
 
-<meta name="description" content="Minor/Major/Full GC① Minor GC: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 Minor GC，或 Young GC  触发条件: 各种 GC 收集器的触发 Minor GC 的条件都是 Eden 区满了  STW: Minor GC 会 Stop the World，如果 Eden 区大部分对象都要被 GC（这也是">
+<meta name="description" content="Minor/Major/Full GC① Minor GC: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 Minor GC，或 Young GC  触发条件: 各种 GC 收集器的触发 Minor GC 的条件都是 Eden 区满了 STW: Minor GC 会 Stop the World，如果 Eden 区大部分对象都要被 GC（这也是正">
 <meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Advanced Java-03a-GC">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a.GC/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="Minor/Major/Full GC① Minor GC: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 Minor GC，或 Young GC  触发条件: 各种 GC 收集器的触发 Minor GC 的条件都是 Eden 区满了  STW: Minor GC 会 Stop the World，如果 Eden 区大部分对象都要被 GC（这也是">
+<meta property="og:description" content="Minor/Major/Full GC① Minor GC: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 Minor GC，或 Young GC  触发条件: 各种 GC 收集器的触发 Minor GC 的条件都是 Eden 区满了 STW: Minor GC 会 Stop the World，如果 Eden 区大部分对象都要被 GC（这也是正">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jvm-gc-minor-gc.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jvm-gc-root.png">
@@ -133,13 +133,12 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-GC-Generation.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/12.Java-GC-CMS.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a.GC-CMS-OldGen-Cards.png">
-<meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-ZGC-Pause-Time-Test.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-GC-Minor-Parallel.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-GC-Full-Parallel.png">
-<meta property="og:updated_time" content="2023-05-25T11:08:57.925Z">
+<meta property="og:updated_time" content="2023-06-18T08:42:44.123Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-03a-GC">
-<meta name="twitter:description" content="Minor/Major/Full GC① Minor GC: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 Minor GC，或 Young GC  触发条件: 各种 GC 收集器的触发 Minor GC 的条件都是 Eden 区满了  STW: Minor GC 会 Stop the World，如果 Eden 区大部分对象都要被 GC（这也是">
+<meta name="twitter:description" content="Minor/Major/Full GC① Minor GC: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 Minor GC，或 Young GC  触发条件: 各种 GC 收集器的触发 Minor GC 的条件都是 Eden 区满了 STW: Minor GC 会 Stop the World，如果 Eden 区大部分对象都要被 GC（这也是正">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/java/jvm-gc-minor-gc.png">
 
 
@@ -365,7 +364,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  8,366
+                  8,603
                 </span>
               
 
@@ -392,7 +391,7 @@
       
         <h1 id="Minor-Major-Full-GC"><a href="#Minor-Major-Full-GC" class="headerlink" title="Minor/Major/Full GC"></a>Minor/Major/Full GC</h1><p><strong>① Minor GC</strong>: 在年轻代 Young space(包括 Eden 区和 Survivor 区)中的垃圾回收称之为 <strong>Minor GC</strong>，或 <strong>Young GC</strong></p>
 <ul>
-<li>触发条件: 各种 GC 收集器的触发 Minor GC 的条件都是 <em>Eden 区满了</em> </li>
+<li>触发条件: 各种 GC 收集器的触发 Minor GC 的条件都是 <em>Eden 区满了</em></li>
 <li>STW: Minor GC 会 Stop the World，如果 Eden 区大部分对象都要被 GC（这也是正常情形）Minor GC 耗时可以基本不记，但是如果 Eden 区大部分对象都不符合 GC 条件，暂停时间将会长很多。</li>
 <li>GC 过程: 一般使用 Copy GC, 具体步骤如下<ul>
 <li>用 new 或者 newInstance 等方式创建的对象默认都是存放在 Eden 区，Eden 满了触发 Minor GC，把存活的对象放入 S 0，并清空 Eden；</li>
@@ -407,7 +406,7 @@
 </blockquote>
 <p><strong>② Major GC</strong>: 清理老年代（Tenured space）</p>
 <ul>
-<li>触发条件: <ul>
+<li>触发条件:<ul>
 <li>CMS：<em>老年代使用率超过某个阈值,默认大约 90%</em> 通过  <code>-XX:CMSInitiatingOccupancyFraction</code> 设置；</li>
 <li>G1：Heap 使用比例超过某个阈值；</li>
 </ul>
@@ -428,7 +427,7 @@
 <li>GC 过程: 同上</li>
 </ul>
 <blockquote>
-<p>需要明白的一点，我们在 jstat 或 GC 日志中看不到 Minor GC/ Major GC / Full GC 这些名词, 这些术语无论是在 JVM 规范还是在垃圾收集研究论文中都没有正式的定义.</p>
+<p>需要明白的一点，我们在 jstat 或 GC 日志中看不到 Minor GC/ Major GC / Full GC 这些名词, 这些术语无论是在 JVM 规范还是在垃圾收集研究论文中都没有正式的定义.<br>需要注意的是，无论是 jstat 返回还是 GC 日志，其中的 “Full GC” 并不是真正的 Full GC 发生次数, CMS GC 两个阶段(初始标记和 Remark)都会 Stop the World, 这两次 STW 在 jstat 里被视作了两次 Full GC，所以 jstat 的 FGC 更接近于统计 cms “Stop the World”的次数；<br>如果要判断是否真的发生 Full GC，还要看 GC 发生时，是不是三个分代使用率都发生了下降；</p>
 </blockquote>
 <p>@ref: <a href="https://www.zhihu.com/question/41922036" target="_blank" rel="noopener">Major GC和Full GC的区别是什么？触发条件呢？ - 知乎</a></p>
 <h1 id="GC-算法"><a href="#GC-算法" class="headerlink" title="GC 算法"></a>GC 算法</h1><h2 id="对象存活判断"><a href="#对象存活判断" class="headerlink" title="对象存活判断"></a>对象存活判断</h2><p>判断对象存活的两种方法:</p>
@@ -465,7 +464,7 @@
 </blockquote>
 <p>具体的 Copy 实现可以参考 <a href="https://zhuanlan.zhihu.com/p/28197216" target="_blank" rel="noopener">Copy GC(1) : 基本原理 - 知乎</a>、 <a href="https://zhuanlan.zhihu.com/p/28250544" target="_blank" rel="noopener">Copy GC(3) : JVM中的实现 - 知乎</a>，</p>
 <ul>
-<li>分析了对象头的 Mark Word 中 forwarding 指针作用：<ul>
+<li>对象头的 Mark Word 中 forwarding 指针，在 GC 过程中的作用：<ul>
 <li>假设 A 和 B 都使用了 C 对象；</li>
 <li>第一次遍历，通过 A 访问到 C，并 copy C 到 Survivor，假设对象新地址是 C1，还需要把旧对象 C 的 forwarding 指向 C1地址</li>
 <li>通过 B 开始遍历，访问到 C 的时候，发现 C 的 forwarding != null，则 B 需要修改 C 的地址为 C1</li>
@@ -487,8 +486,8 @@
 </ul>
 <p>关于 mark-sweep 的一些细节，参考海纳的 <a href="https://zhuanlan.zhihu.com/p/30175684" target="_blank" rel="noopener">Tracing GC(1) - 知乎</a> 、<a href="https://zhuanlan.zhihu.com/p/30247480" target="_blank" rel="noopener">Tracing GC(2) - 知乎</a>：</p>
 <ul>
-<li>如何对“可达的”对象进行 mark：“在 tracing gc 的情况下，hotspot 仍然复用了这个 mark word，如果一个对象存活，就会在这个 mark word 里，将其 mark word 的最低两位都置为1，也就是0x3了”</li>
-<li>mark-sweep 如何维护空闲内存块的列表，创建一个新对象时，从链表里选择一个何时的 chunk（使用了 first-fit，而不是 best-fit）</li>
+<li>如何对“可达的”对象进行 mark：“在 tracing gc 的情况下，hotspot 仍然复用了这个 mark word，如果一个对象存活，就会在这个 mark word 里，将其 mark word 的最低两位都置为1” //低2位都为11</li>
+<li>清理阶段，直接清理掉不可达的对象，这块内存变为空闲内存，空闲内存块使用一个 free-chunk 链表管理，当下次再创建一个新对象时，从链表里选择一个合适的 chunk（使用了 first-fit，而不是 best-fit）</li>
 <li>对于这个空闲内存块的列表，如何避免并发加锁带来的性能损失，HotSpot 使用了 #TLAB</li>
 </ul>
 <h3 id="Mark-Compact"><a href="#Mark-Compact" class="headerlink" title="Mark-Compact"></a>Mark-Compact</h3><p><strong>标记-整理算法</strong> (Mark-Compact):</p>
@@ -500,7 +499,7 @@
 </ul>
 <p><img src="/images/Advanced-Java.03a.GC-Mark-Compact.png" alt="../_images/Advanced-Java.03a.GC-Mark-Compact.png"></p>
 <p>标记-整理算法是在标记-清除算法的基础上，又进行了对象的移动，需要进行3次扫描，因此吞吐量差一些，但是却解决了内存碎片的问题。<br>如果堆中存在某些对象，它们可以经过多次 GC 而存活下来，那么这些对象就会被整理到堆的头上。所以经过几轮 Compact 以后，堆的头部位置出现空洞的可能性就会很小，这个加速就会很明显 @ref: <a href="https://zhuanlan.zhihu.com/p/30797760" target="_blank" rel="noopener">Tracing GC(3): mark &amp; compaction - 知乎</a></p>
-<h2 id="总结：比较三种-GC"><a href="#总结：比较三种-GC" class="headerlink" title="总结：比较三种 GC"></a>总结：比较三种 GC</h2><ul>
+<h2 id="总结：比较三种-GC-算法"><a href="#总结：比较三种-GC-算法" class="headerlink" title="总结：比较三种 GC 算法"></a>总结：比较三种 GC 算法</h2><ul>
 <li><strong>copy GC</strong>：<ul>
 <li>✔︎仅一次扫描即可完成 copy + 更新 forwarding ，吞吐量大，无碎片</li>
 <li>✘需要额外的 Survivor space，仅适合 YoungGen（因为每次 Young GC 后大部分对象都被销毁，只需要很小的 Survivor）</li>
@@ -571,7 +570,7 @@
 </li>
 <li>特性:<ul>
 <li>使用多线程进行扫描堆并标记对象, 缺点是在 minor 和 full GC 的时候都会 Stop the world</li>
-<li>CMS 等收集器的关注点是尽可能缩短垃圾收集时用户线程的停顿时间，而 Parallel Scavenge 收集器的目标是达到一个可控制的吞吐量（Throughput）。</li>
+<li>CMS 等收集器的关注点是尽可能缩短垃圾收集时用户线程的停顿时间，而 Parallel Scavenge 收集器的目标是达到一个可控制的吞吐量（Throughput）</li>
 </ul>
 </li>
 </ul>
@@ -585,13 +584,23 @@
 </li>
 <li>特性:<ul>
 <li>只适用于老年代 GC, 新生代可以搭配 ParNew 收集器;</li>
-<li>特点是尽可能降低 STW 停顿，但是因为与用户任务一起并发进行 GC，所以吞吐量下降;</li>
 <li>“初始标记”和”重新标记”阶段仍然 Stop the World, 但耗时最长的”并发标记”和”并发清除”过程收集器线程都可以与用户线程一起”并发的”工作;</li>
 <li>因为是 Mark-Sweep 的, GC 后有内存碎片, 所以很多情况下 Old Gen 有足够空间但是仍会由 Minor GC 触发 Major GC;</li>
 <li>当 CMS 失败出现 Concurrent Mode Failure 会转换到 Serial Old, 将导致非常长时间的 Stop The World</li>
+<li>触发 CMS GC 的<a href="https://tech.meituan.com/2020/11/12/java-9-cms-gc.html" target="_blank" rel="noopener">条件可能有</a>：<ul>
+<li>OldGen 使用率大于阈值 <code>CMSInitiatingOccupancyFraction</code></li>
+<li>Young GC 有大量的对象晋升，但 OldGen 空间不够的时候</li>
+<li>PermGen 和 Metaspace 超过初始的阈值扩容也会引起</li>
+<li>Heap的使用量大于 -Xms引起扩容，也会触发CMS GC，建议 -Xms 和 -Xmx 设置为相同的值</li>
+<li>Heap的剩余空间很多也会引起缩容操作，这时也会触发CMS GC</li>
+<li>调用 <code>System.gc()</code></li>
 </ul>
 </li>
-<li>实现步骤:<ol>
+</ul>
+</li>
+</ul>
+<ul>
+<li>GC步骤:<ol>
 <li>初始标记（CMS initial mark）：仅仅只是标记一下 GC Roots 能直接关联到的对象（标记直接被 GC root 引用或者被年轻代存活对象所引用的所有对象），速度很快，<strong>需要“Stop The World”</strong>。</li>
 <li>并发标记（CMS concurrent mark）: 由上一阶段标记过的”可达对象”出发进行标记（遍历老年代），用户任务不停顿;</li>
 <li>重新标记（CMS remark）: 暂停用户任务，对 <strong>整个堆（新生代+老年代）</strong> 开始扫描并标记。因为并发标记阶段是和用户线程并发执行的过程，所以该过程中可能有对象从“不可达”变为“可达”，这个阶段需要重新标记出此类对象，防止在下一阶段被清理掉，<strong>该阶段会“Stop The World”</strong>；<br>特别需要注意一点，这个阶段是 <strong>以新生代中对象为 GC Roots</strong> 来判断对象是否存活的（CMS 只做老年代的 Major GC，但很多 GC Roots 在新生代，又指向了老年代的的对象（这种情况叫<strong>跨代引用</strong>），所以需要以新生代对象为 GC Roots 进行扫描, CMS预清理可以减少这一阶段的耗时。</li>
@@ -600,55 +609,17 @@
 </li>
 </ul>
 <p><img src="/images/12.Java-GC-CMS.png" alt="../_images/12.Java-GC-CMS.png"></p>
-<p>因为阶段3需要扫描整堆，来避免<strong>跨代引用</strong>，但如果此时新生代对象非常多，会增加这一阶段的耗时（此阶段还有 STW），所以 CMS 提供了 <code>CMSScavengeBeforeRemark</code> 参数，在阶段3之前强制一次 Minor GC，减轻整堆扫描的负担，这一步 Minor GC 也叫预清理，在 CMS GC 日志中可以看到“CMS-concurrent-preclean” 就是这一阶段；</p>
-<p>同样 Minor GC 的时候，也会遇到“老年代 -&gt; 新生代”的跨代引用，所以理论上也需要扫描整个堆，但是实际情况“老年代 -&gt; 新生代”的概率很小，经过统计信息显示，老年代持有新生代对象引用的情况不足1%，根据这一特性 JVM 引入了卡表（card table）来实现对这种情况的监控：<br>将老年代的空间分成大小为512B 的若干张卡（card），用一个数组表示这些 card 的状态，如果发生“老年代 -&gt; 新生代”的跨代引用，这个 card 对应的数组元素会被置为脏（卡表还有另外的作用，标识并发标记阶段哪些块被修改过），之后 Minor GC 时通过扫描卡表就可以很快的识别哪些卡中存在老年代指向新生代的引用。这样虚拟机通过空间换时间的方式，避免了 Minor GC 的全堆扫描。</p>
+<p>因为阶段3需要以新生代对象为 Roots 进行整堆扫描，但如果此时新生代对象非常多，会增加这一阶段的耗时（此阶段还有 STW），所以 CMS 提供了 <code>CMSScavengeBeforeRemark</code> 参数，在阶段3之前强制一次 Minor GC，减轻整堆扫描的负担，这一步 Minor GC 也叫预清理，在 CMS GC 日志中可以看到“CMS-concurrent-preclean” 就是这一阶段；</p>
+<p>同样 Minor GC 的时候，也会遇到“老年代 -&gt; 新生代”的跨代引用，所以理论上也需要扫描整个堆，但是实际情况“老年代 -&gt; 新生代”的概率很小，经过统计信息显示，老年代持有新生代对象引用的情况不足1%，根据这一特性 JVM 引入了<strong>卡表</strong>（card table）来实现对这种情况的监控：将老年代的空间分成大小为512B 的若干张卡（card），用一个数组表示这些 card 的状态，如果发生“老年代 -&gt; 新生代”的跨代引用，这个 card 对应的数组元素会被置为脏（卡表还有另外的作用，标识并发标记阶段哪些块被修改过），之后 Minor GC 时通过扫描卡表就可以很快的识别哪些卡中存在老年代指向新生代的引用。这样虚拟机通过空间换时间的方式，避免了 Minor GC 的全堆扫描。</p>
+<blockquote>
+<p>关于卡表（CARD Table）的设计，参考 「卡表」一节</p>
+</blockquote>
 <p><img src="/images/Advanced-Java.03a.GC-CMS-OldGen-Cards.png" alt="../_images/Advanced-Java.03a.GC-CMS-OldGen-Cards.png"></p>
 <p>网上搜索到的很多 GC 优化，都是针对 ParNew + CMS 的组合，正因为老年代+新生代分别使用两种不同的策略，导致二者不能非常好的配合，才不得不处理跨代引用的问题，所以针对 CMS 有非常多的优化案例，更多例子参考下面的「优化案例」一节。</p>
 <p>这种情况在 G1 和 ZGC 出现后有了改观，程序员不再需要过多干预 GC 参数了。</p>
 <p>@ref: <a href="https://tech.meituan.com/2017/12/29/jvm-optimize.html" target="_blank" rel="noopener">从实际案例聊聊Java应用的GC优化 - 美团技术团队</a></p>
-<h2 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h2><p>⑤ <strong>G1 回收器</strong> : 在 JDK 7u4 版本被正式推出，用于逐步替换掉 CMS 收集器, G1 适用于新生代和老年代:</p>
-<ul>
-<li>通过参数<code>-XX:+UseG1 GC</code>来启用</li>
-<li>特性:<ul>
-<li>采用标记整理（Mark-Compact）算法，不会产生内存空间碎片。</li>
-<li>可预测停顿，这是 G1 的另一大优势，降低停顿时间是 G1 和 CMS 的共同关注点，但 G1 除了追求低停顿外，还能建立可预测的停顿时间模型，能让使用者明确指定在一个长度为 N 毫秒的时间片段内，消耗在垃圾收集上的时间不得超过 N 毫秒</li>
-</ul>
-</li>
-<li>实现步骤:<ul>
-<li>G1 将整个 Java 堆划分为多个大小相等的独立区域（Region），虽然还保留新生代和老年代的概念，每个区域都可以充当 Eden 区、Survivor 区或者老年代的一部分。</li>
-<li>建立可预测的停顿时间模型，G1 跟踪各个 Region 里面的垃圾堆积的价值大小（回收所获得的空间大小以及回收所需时间的经验值），在后台维护一个优先列表，每次根据允许的收集时间，优先回收价值最大（死亡对象最多）的 Region（这也就是 Garbage-First 名称的来由）。</li>
-<li>GC 步骤: @todo 重新整理<ul>
-<li>初始标记（Initial Marking） 仅仅只是标记一下 GC Roots 能直接关联到的对象，并且修改 TAMS（Nest Top Mark Start）的值，让下一阶段用户程序并发运行时，能在正确可以的 Region 中创建对象，<strong>此阶段需要 STW</strong>，但耗时很短。</li>
-<li>并发标记（Concurrent Marking） 从 GC Root 开始对堆中对象进行可达性分析，找到存活对象，此阶段耗时较长，但可与用户程序并发执行。</li>
-<li>最终标记（Final Marking） 为了修正在并发标记期间因用户程序继续运作而导致标记产生变动的那一部分标记记录，虚拟机将这段时间对象变化记录在线程的 Remembered Set Logs 里面，最终标记阶段需要把 Remembered Set Logs 的数据合并到 Remembered Set 中，<strong>这阶段需要 STW</strong>。</li>
-<li>筛选回收（Live Data Counting and Evacuation） 首先对各个 Region 中的回收价值和成本进行排序，根据用户所期望的 GC 停顿是时间来制定回收计划。此阶段其实也可以做到与用户程序一起并发执行，但是因为只回收一部分 Region，时间是用户可控制的，而且停顿用户线程将大幅度提高收集效率。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="ZGC"><a href="#ZGC" class="headerlink" title="ZGC"></a>ZGC</h2><p>⑥ <strong>ZCG</strong>: ZGC 是 JDK 11 引入的, 特点是极短的 STW 时间, 无论堆的大小(上 T 级的情况)能保证 10 ms 以下的 JVM 停顿。</p>
-<ul>
-<li>特性:<ul>
-<li>采用标记整理（Mark-Compact）算法</li>
-</ul>
-</li>
-<li>实现细节:<ul>
-<li>ZGC 将堆划分为 Region 作为清理，移动，以及并行 GC 线程工作分配的单位。不过 G1 一开始就把堆划分成固定大小的 Region，而 ZGC 可以有 2 MB，32 MB，N× 2 MB 三种 Size Groups，动态地创建和销毁 Region，动态地决定 Region 的大小。所以 ZGC 能更好的处理大对象的分配。</li>
-<li>ZGC 的堆<strong>没有分代</strong></li>
-<li>与标记对象的传统算法相比，ZGC 在指针上做标记，在访问指针时加入 Load Barrier（读屏障），比如当对象正被 GC 移动，指针上的颜色就会不对，这个屏障就会先把指针更新为有效地址再返回，也就是，永远只有单个对象读取时有概率被减速，而不存在为了保持应用与 GC 一致而粗暴整体的 Stop The World。</li>
-<li>GC 步骤:<ol>
-<li>Pause Mark Start －初始停顿标记</li>
-<li>Concurrent Mark －并发标记</li>
-<li>Relocate － 移动对象: 将被标记的对象（仍在使用的）移动到新的 Region</li>
-<li>Remap － 修正指针</li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-<p>下图是 SPECjbb 2015 基准测试，在 128 G 的大堆下，最大停顿时间只有 1.68 ms, 相比之下 Parallel 和 G1 都超过了 200 ms, 最坏高达800ms<br><img src="/images/java/JVM-ZGC-Pause-Time-Test.png" alt=""></p>
-<p>参考: <a href="https://blog.csdn.net/gupao123456/article/details/82355512" target="_blank" rel="noopener">一文读懂Java 11的ZGC为何如此高效 - CSDN博客</a> @ref</p>
+<h2 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h2><p>⑤ <strong>G1 回收器</strong> : 在 JDK 7u4 版本被正式推出，<strong>JDK 9 成为 default GC</strong>，用于逐步替换掉 CMS 收集器, G1仍然是分代的（年轻代 &amp; 老年代），而 G1最大的优势就在于可预测的停顿时间模型，我们可以自己通过参数-XX:MaxGCPauseMillis 来设置允许的停顿时间(默认200ms) → <a href="/12.Java/Advanced-Java.03a1.G1回收器/" title="G1回收器详解">G1回收器详解</a></p>
+<h2 id="ZGC"><a href="#ZGC" class="headerlink" title="ZGC"></a>ZGC</h2><p>⑥ <strong>ZCG</strong>: ZGC 是 JDK 11 引入的, <strong>在 JDK 15成为 default GC</strong>，特点是极短的 STW 时间, 无论堆的大小(上 T 级的情况)能保证 10 ms 以下的 JVM 停顿。→ <a href="/12.Java/Advanced-Java.03a1.ZGC回收器/" title="ZGC回收器详解">ZGC回收器详解</a></p>
 <h1 id="GC-优化"><a href="#GC-优化" class="headerlink" title="GC 优化"></a>GC 优化</h1><h2 id="GC-评价指标"><a href="#GC-评价指标" class="headerlink" title="GC 评价指标"></a>GC 评价指标</h2><p>GC 策略的评价指标：</p>
 <ol>
 <li><strong>吞吐量</strong>: 系统的生命周期内，应用程序所花费的时间和系统总运行时间的比值。系统总运行时间 = 应用程序耗时 + 总 GC 耗时。for example:如果系统运行了 100 分钟，全部 GC 耗时 1 分钟，则系统吞吐量=99% <em>注意区别系统设计中的“Thoughput”</em></li>
@@ -675,11 +646,15 @@
 <li><a href="https://tech.meituan.com/2017/12/29/jvm-optimize.html" target="_blank" rel="noopener">从实际案例聊聊Java应用的GC优化 - 美团技术团队</a><ul>
 <li>案例 1: Minor GC 非常频繁（新生对象多，导致动态晋升年龄下降，更多的对象进入老年代）这里使用了扩容 eden 降低 Minor GC 频率</li>
 <li>案例 2: CMS 的 remark 阶段耗费非常高（该阶段有 STW，导致接口的响应时间出现非常高的情况）</li>
-<li>案例 3: 出现 Full GC</li>
+<li>案例 3: PermGen 扩容导致出现 CMS GC（full gc）</li>
 </ul>
 </li>
 <li><a href="https://www.jianshu.com/p/5524fce8b08f" target="_blank" rel="noopener">探索StringTable提升YGC性能 - 简书</a><ul>
 <li>StringTable 过大导致的 YGC 时间过长</li>
+</ul>
+</li>
+<li><a href="https://segmentfault.com/a/1190000016036969" target="_blank" rel="noopener">java - 由「Metaspace容量不足触发CMS GC」从而引发的思考</a><ul>
+<li>JDK8环境使用了 CMS，Metaspace 达到扩容阈值导致 CMS GC（full gc）</li>
 </ul>
 </li>
 </ul>
@@ -739,6 +714,22 @@
 <li>直接内存: 在 JDK 1.4 中引入的 NIO 使用 Native 函数库在堆外内存上直接分配内存，但直接内存不足时，也会导致 OOM。</li>
 <li>方法区: 随着 Metaspace 元数据区的引入，方法区的 OOM 错误信息也变成了 “java.lang.OutOfMemoryError:Metaspace”。<br>对于旧版本的 Oracle JDK，由于永久代的大小有限，而 JVM 对永久代的垃圾回收并不积极，如果往永久代不断写入数据，例如 String.Intern()的调用，在永久代占用太多空间导致内存不足，也会出现 OOM 的问题，对应的错误信为 “java.lang.OutOfMemoryError:PermGen space”</li>
 </ul>
+<h1 id="GC-内存设计"><a href="#GC-内存设计" class="headerlink" title="GC 内存设计"></a>GC 内存设计</h1><h2 id="卡表-Card-Table"><a href="#卡表-Card-Table" class="headerlink" title="卡表(Card_Table)"></a>卡表(Card_Table)</h2><p>Minor GC 是回收新生代，但是免不了老年代对象引用新生代，对于这个情况，Hotspot VM 使用了“<strong>卡表</strong>”的方案：<br>该技术将整个堆划分为一个个大小为 512 字节的卡，并且维护一个 byte 型数组，用来存储每张卡的一个标识位。这个标识位代表对应的卡是否可能存有指向新生代对象的引用。如果可能存在这种引用，那么我们就认为这张卡是脏的。<br>然后在进行 Minor GC 时，就可以把“脏卡”中的对象加入进 CG Roots 里；</p>
+<p>用1 byte 表示一个 512B 的内存区，何时更新这个 1byte 的标志位呢？Hotspot 的做法是<strong>截获</strong>每一个更新引用的操作，这里采用了“宁可错杀，不可放过一个”，只要有“更新引用”的操作，不管更新后是不是指向新生代，都会把对应的卡表标志置为脏；</p>
+<p><strong>截获引用的写操作</strong>在解释执行中比较容易实现，但在机器码执行时就不太容易做到了，HotSpot 在这里使用了 <strong>写屏障</strong> 的技术（ 这里要区别 volatile 的写屏障，二者不是一回事），<br>具体做法是，在“引用更新”的机器码后面，插入改写卡表标志的操作：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CARD_TABLE [this address &gt;&gt; 9] = DIRTY;</span><br></pre></td></tr></table></figure>
+<p>右移9位 = 除以512，也正好是卡表的 size，上面的 address 就是“做了引用修改”的对象的地址，<br>这种修改卡表项的操作，只需要2个机器码（一次位移+ 一次保存），效率尚可</p>
+<p>但是在高并发环境下，对卡表标志的写操作，还会有“<strong>伪共享</strong>”的问题（有些地方也翻译为虚共享，英文 false sharing），<br>在对卡表项状态进行写操作时，需要把卡表项数组加载进 CPU 缓存里，CPU 缓存的最小单元是 cache line（缓存行），大小=64byte，也就是说一个 cache line 里能存储 64个卡表项标志位，对应64x512= 32KB 的 JVM 内存；</p>
+<p>假设出现了一个最坏情况，有2个线程 A 和 B，分别运行在2个 CPU1 和 2上，线程 A 需要修改 <code>CARD_TABLE[0]</code>，线程 B 修改 <code>CARD_TABLE[6]</code>，虽然看起来不冲突，但是实际上卡表项的0和6，会被加载进一个 cache line 里（一个 cache line 能容纳64个卡表项，卡表项0~64 都会在一个 cache line），<br>这样 A 线程改完卡表项0，CPU1要向 CPU2 发送总线消息，告诉 CPU2这个 cache line 的数据被改了，需要 CPU2 同步 cache line 的状态（这一步骤是 #MESI 协议里规定的，详情参考 [[../21.Operating-System/01.CPU_Cache]]</p>
+<p>看似2个线程的写操作互不干扰，但实际上因为这2个写都在操作一个 cache line，导致 CPU 做了很多同步工作，这也就是“伪共享”</p>
+<p>为此，HotSpot 引入了一个新的参数 <code>-XX:+UseCondCardMark</code>，来尽量减少写卡表的操作。其伪代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if (CARD_TABLE [this address &gt;&gt; 9] != DIRTY)</span><br><span class="line">  CARD_TABLE [this address &gt;&gt; 9] = DIRTY;</span><br></pre></td></tr></table></figure>
+<p>@ref：</p>
+<ul>
+<li><a href="https://time.geekbang.org/column/article/13137" target="_blank" rel="noopener">12 | 垃圾回收（下）</a></li>
+<li><a href="https://coolshell.cn/articles/20793.html" target="_blank" rel="noopener">与程序员相关的CPU缓存知识 | 酷 壳 - CoolShell</a>）</li>
+</ul>
+<h2 id="记忆集-RSet"><a href="#记忆集-RSet" class="headerlink" title="记忆集(RSet)"></a>记忆集(RSet)</h2><p>Remembered Set，与卡表类似，但 RSet 是一种 points-into 结构,见 <a href="/12.Java/Advanced-Java.03a1.G1回收器/" title="G1回收器详解">G1回收器详解</a></p>
 
       
     </div>
@@ -779,8 +770,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/12.Java/Advanced-Java.03b.GC案例分析/" rel="prev" title="Advanced Java-03b-GC案例分析">
-                Advanced Java-03b-GC案例分析 <i class="fa fa-chevron-right"></i>
+              <a href="/12.Java/Advanced-Java.03a1.G1回收器/" rel="prev" title="Advanced-Java.03a1.G1回收器详解">
+                Advanced-Java.03a1.G1回收器详解 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -872,7 +863,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">462</span>
+                  <span class="site-state-item-count">467</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -894,7 +885,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">402</span>
+                  <span class="site-state-item-count">407</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -962,7 +953,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Minor-Major-Full-GC"><span class="nav-text">Minor/Major/Full GC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC-算法"><span class="nav-text">GC 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象存活判断"><span class="nav-text">对象存活判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Copy-GC-算法"><span class="nav-text">Copy GC 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tracing-GC-算法"><span class="nav-text">Tracing GC 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mark-Sweep"><span class="nav-text">Mark-Sweep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mark-Compact"><span class="nav-text">Mark-Compact</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结：比较三种-GC"><span class="nav-text">总结：比较三种 GC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC-收集器"><span class="nav-text">GC 收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Serial"><span class="nav-text">Serial</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ParNew"><span class="nav-text">ParNew</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Parallel"><span class="nav-text">Parallel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMS"><span class="nav-text">CMS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#G1"><span class="nav-text">G1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZGC"><span class="nav-text">ZGC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC-优化"><span class="nav-text">GC 优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-评价指标"><span class="nav-text">GC 评价指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-优化案例"><span class="nav-text">GC 优化案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC-日志解读"><span class="nav-text">GC 日志解读</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一般-GC-日志格式"><span class="nav-text">一般 GC 日志格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-日志实例分析"><span class="nav-text">GC 日志实例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Serial-收集器"><span class="nav-text">Serial 收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ParNew-CMS-收集器"><span class="nav-text">ParNew + CMS 收集器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC-引起的-Error"><span class="nav-text">GC 引起的 Error</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Minor-Major-Full-GC"><span class="nav-text">Minor/Major/Full GC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC-算法"><span class="nav-text">GC 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象存活判断"><span class="nav-text">对象存活判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Copy-GC-算法"><span class="nav-text">Copy GC 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tracing-GC-算法"><span class="nav-text">Tracing GC 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mark-Sweep"><span class="nav-text">Mark-Sweep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mark-Compact"><span class="nav-text">Mark-Compact</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结：比较三种-GC-算法"><span class="nav-text">总结：比较三种 GC 算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC-收集器"><span class="nav-text">GC 收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Serial"><span class="nav-text">Serial</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ParNew"><span class="nav-text">ParNew</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Parallel"><span class="nav-text">Parallel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMS"><span class="nav-text">CMS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#G1"><span class="nav-text">G1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZGC"><span class="nav-text">ZGC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC-优化"><span class="nav-text">GC 优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-评价指标"><span class="nav-text">GC 评价指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-优化案例"><span class="nav-text">GC 优化案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC-日志解读"><span class="nav-text">GC 日志解读</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一般-GC-日志格式"><span class="nav-text">一般 GC 日志格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-日志实例分析"><span class="nav-text">GC 日志实例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Serial-收集器"><span class="nav-text">Serial 收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ParNew-CMS-收集器"><span class="nav-text">ParNew + CMS 收集器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC-引起的-Error"><span class="nav-text">GC 引起的 Error</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GC-内存设计"><span class="nav-text">GC 内存设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#卡表-Card-Table"><span class="nav-text">卡表(Card_Table)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记忆集-RSet"><span class="nav-text">记忆集(RSet)</span></a></li></ol></li></ol></div>
             
 
           </div>
