@@ -278,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/52.Financing/F71.202211-债券大跌的归因/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.05a.信号/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -297,7 +297,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/52.Financing/F71.202211-债券大跌的归因/" itemprop="url">F71.202211-债券大跌的归因</a></h1>
+                <a class="post-title-link" href="/21.Operating-System/APUE.05a.信号/" itemprop="url">APUE.05a.信号</a></h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/52-Financing/" itemprop="url" rel="index">
-                    <span itemprop="name">52.Financing</span>
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
                   </a>
                 </span>
 
@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,893
+                  1,216
                 </span>
               
 
@@ -377,24 +377,192 @@
 
       
         
-          <p>@link: <a href="/52.Financing/F21d.货币-信用周期/" title="F21d.货币-信用周期">F21d.货币-信用周期</a></p>
-<p>@trdr:</p>
-<ul>
-<li><p>这次债券大跌，今天（11月15日）有上万亿的MLF资金到期了要回笼，因为市场担心央妈是不是要开始收紧钱根，债券基金们开始跑路、抛售债券和同业存单等固收类产品，债券跌了连累到相关的理财产品，投资者看理财跌了掀起赎回潮，又循环反馈给债市，加重卖出压力</p>
-</li>
-<li><p>债券市场收益率快速上行与“非理性抛售”大概率来源于银行理财赎回所造成的恶性循环，并不是因为经济回暖导致的流动性紧缺，没有看到经济数据的明显回升、没有看到明显的通胀压力（CPI同比降了，PPI同比已经转负），没有看到金融数据的企稳（存量社融同比增速继续下行到了10%），</p>
-</li>
-<li><p>利率和债市走势相反：宽货币+紧信用时往往利率下行，债券处于牛市；紧货币+宽信用则债券处于熊市。一句话总结：宽货币时债券表现都不差，宽信用时债券表现都不好。但是此次周期并不明显，第一弱复苏，实体经济看不到实质上的复苏，更像是衰退-复苏的来回摇摆，但是CPI时不时的上涨给央行的政策带来了影响，归根结底还是海外加息周期的外部变量+内部疫情内部变量的不确定性</p>
-</li>
-<li><p>如何观察货币政策的松紧？如何观察信用的松紧？ =&gt; <a href="/52.Financing/F21d.货币-信用周期/" title="F21d.货币-信用周期">F21d.货币-信用周期</a>,<a href="/52.Financing/F27a.同业拆借利率（Shibor）/" title="F27a.同业拆借利率（Shibor）">F27a.同业拆借利率（Shibor）</a></p>
-</li>
-<li>对于某个债基产品： 1机构持有比例不能太高；2如果是低风险的短债，持仓里是否有久期的错配；3杠杆率（=基金总资产/基金净资产）</li>
-</ul>
-<p><img src="/images/2022/2022-12-16.png" alt="2022-12-16"></p>
-<hr>
+          <h2 id="Linux-支持的全部信号"><a href="#Linux-支持的全部信号" class="headerlink" title="Linux 支持的全部信号"></a>Linux 支持的全部信号</h2><p> <code>kill -l</code> 可以查看所有支持的信号和其对应值：<br><img src="/images/21.Operating-System-List-all-Signal.png" alt="../_images/21.Operating-System-List-all-Signal.png"></p>
+<p>Linux 共有 64 种信号，前 32 种为不可靠信号，后 32 种为可靠信号。</p>
+<table>
+<thead>
+<tr>
+<th>信号</th>
+<th>值</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIGHUP</td>
+<td>1</td>
+<td>Term</td>
+<td>终端控制进程结束(终端连接断开)</td>
+</tr>
+<tr>
+<td>SIGINT</td>
+<td>2</td>
+<td>Term</td>
+<td>用户发送 INTR 字符(Ctrl+C)触发</td>
+</tr>
+<tr>
+<td>SIGQUIT</td>
+<td>3</td>
+<td>Core</td>
+<td>用户发送 QUIT 字符(Ctrl+/)触发</td>
+</tr>
+<tr>
+<td>SIGILL</td>
+<td>4</td>
+<td>Core</td>
+<td>非法指令(程序错误、试图执行数据段、栈溢出等)</td>
+</tr>
+<tr>
+<td>SIGABRT</td>
+<td>6</td>
+<td>Core</td>
+<td>调用 abort 函数触发</td>
+</tr>
+<tr>
+<td>SIGFPE</td>
+<td>8</td>
+<td>Core</td>
+<td>算术运行错误(浮点运算错误、除数为零等)</td>
+</tr>
+<tr>
+<td>SIGKILL</td>
+<td>9</td>
+<td>Term</td>
+<td>无条件结束程序(不能被捕获、阻塞或忽略)</td>
+</tr>
+<tr>
+<td>SIGSEGV</td>
+<td>11</td>
+<td>Core</td>
+<td>无效内存引用(试图访问不属于自己的内存空间、对只读内存空间进行写操作)</td>
+</tr>
+<tr>
+<td>SIGPIPE</td>
+<td>13</td>
+<td>Term</td>
+<td>消息管道损坏(FIFO/Socket 通信时，管道未打开而进行写操作)</td>
+</tr>
+<tr>
+<td>SIGALRM</td>
+<td>14</td>
+<td>Term</td>
+<td>时钟定时信号</td>
+</tr>
+<tr>
+<td>SIGTERM</td>
+<td>15</td>
+<td>Term</td>
+<td>结束程序(可以被捕获、阻塞或忽略)</td>
+</tr>
+<tr>
+<td>SIGUSR1</td>
+<td>30,10,16</td>
+<td>Term</td>
+<td>用户保留</td>
+</tr>
+<tr>
+<td>SIGUSR2</td>
+<td>31,12,17</td>
+<td>Term</td>
+<td>用户保留</td>
+</tr>
+<tr>
+<td>SIGCHLD</td>
+<td>20,17,18</td>
+<td>Ign</td>
+<td>子进程结束(由父进程接收)</td>
+</tr>
+<tr>
+<td>SIGCONT</td>
+<td>19,18,25</td>
+<td>Cont</td>
+<td>继续执行已经停止的进程(不能被阻塞)</td>
+</tr>
+<tr>
+<td>SIGSTOP</td>
+<td>17,19,23</td>
+<td>Stop</td>
+<td>停止进程(不能被捕获、阻塞或忽略)</td>
+</tr>
+<tr>
+<td>SIGTSTP</td>
+<td>18,20,24</td>
+<td>Stop</td>
+<td>停止进程(可以被捕获、阻塞或忽略)</td>
+</tr>
+<tr>
+<td>SIGTTIN</td>
+<td>21,21,26</td>
+<td>Stop</td>
+<td>后台程序从终端中读取数据时触发</td>
+</tr>
+<tr>
+<td>SIGTTOU</td>
+<td>22,22,27</td>
+<td>Stop</td>
+<td>后台程序向终端中写数据时触发</td>
+</tr>
+<tr>
+<td>SIGTRAP</td>
+<td>5</td>
+<td>Core</td>
+<td>Trap 指令触发(如断点，在调试器中使用)</td>
+</tr>
+<tr>
+<td>SIGBUS</td>
+<td>0,7,10</td>
+<td>Core</td>
+<td>非法地址(内存地址对齐错误)</td>
+</tr>
+<tr>
+<td>SIGPOLL</td>
+<td></td>
+<td>Term</td>
+<td>Pollable event (Sys V). Synonym for SIGIO</td>
+</tr>
+<tr>
+<td>SIGPROF</td>
+<td>27,27,29</td>
+<td>Term</td>
+<td>性能时钟信号(包含系统调用时间和进程占用 CPU 的时间)</td>
+</tr>
+<tr>
+<td>SIGSYS</td>
+<td>12,31,12</td>
+<td>Core</td>
+<td>无效的系统调用(SVr4)</td>
+</tr>
+<tr>
+<td>SIGURG</td>
+<td>16,23,21</td>
+<td>Ign</td>
+<td>有紧急数据到达 Socket(4.2BSD)</td>
+</tr>
+<tr>
+<td>SIGVTALRM</td>
+<td>26,26,28</td>
+<td>Term</td>
+<td>虚拟时钟信号(进程占用 CPU 的时间)(4.2BSD)</td>
+</tr>
+<tr>
+<td>SIGXCPU</td>
+<td>24,24,30</td>
+<td>Core</td>
+<td>超过 CPU 时间资源限制(4.2BSD)</td>
+</tr>
+<tr>
+<td>SIGXFSZ</td>
+<td>25,25,31</td>
+<td>Core</td>
+<td>超过文件大小资源限制(4.2BSD)</td>
+</tr>
+</tbody>
+</table>
+<p>信号的分类：</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/52.Financing/F71.202211-债券大跌的归因/#more" rel="contents">
+            <a class="btn" href="/21.Operating-System/APUE.05a.信号/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -445,7 +613,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/VSCO滤镜使用指南/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.04a.进程通信(IPC)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -464,7 +632,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/53.Photograph/VSCO滤镜使用指南/" itemprop="url">VSCO滤镜使用指南</a></h1>
+                <a class="post-title-link" href="/21.Operating-System/APUE.04a.进程通信(IPC)/" itemprop="url">APUE.04a.进程通信(IPC)</a></h1>
         
 
         <div class="post-meta">
@@ -487,8 +655,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
                   </a>
                 </span>
 
@@ -518,7 +686,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,402
+                  924
                 </span>
               
 
@@ -544,24 +712,653 @@
 
       
         
-          <p>TLDR：</p>
+          <p>@ref</p>
+<ul>
+<li><a href="https://www.ibm.com/developerworks/cn/linux/l-ipc/index.html" target="_blank" rel="noopener">深刻理解Linux进程间通信（IPC）</a> </li>
+</ul>
+<p>进程间通信（IPC，InterProcess Communication）:<br>Linux 下的进程通信手段基本上是从 Unix 平台上的进程通信手段继承而来的。而对 Unix 发展做出重大贡献的两大主力 AT&amp;T 的贝尔实验室及 BSD（加州大学伯克利分校的伯克利软件发布中心）在进程间通信方面的侧重点有所不同。前者对 Unix 早期的进程间通信手段进行了系统的改进和扩充，形成了“system V IPC”，通信进程局限在单个计算机内；后者则跳过了该限制，形成了基于套接口（socket）的进程间通信机制。Linux 则把两者继承了下来，如图示：</p>
+<p><img src="/images/2022/20220314225200.png" alt><br>最初 Unix IPC 包括：管道、FIFO、信号；<br>System V IPC 包括：System V 消息队列、System V 信号灯、System V 共享内存区；<br>Posix IPC 包括： Posix 消息队列、Posix 信号灯、Posix 共享内存区。</p>
+<p>这里主要介绍 POSIX 标准的 IPC: </p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/APUE.04a.进程通信(IPC)/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.03b.进程的虚拟内存管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/APUE.03b.进程的虚拟内存管理/" itemprop="url">APUE.03b.进程的虚拟内存管理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  696
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@todo： OneNote 笔记 copy 过来（内核如何使用 task_struct -&gt; mm_struct 管理进程内存布局）</p>
+<h2 id="进程的内存布局（32位）"><a href="#进程的内存布局（32位）" class="headerlink" title="进程的内存布局（32位）"></a>进程的内存布局（32位）</h2><p>在32位 Linux 系统中，每个进程都有4GB 的虚拟地址空间，其中0-3GB 是用户空间，3-4GB 是内核空间。每个进程都以为自己独占整个4GB 的地址空间，但实际上1GB 的内核空间是所有进程共享的，独占的3GB 用户空间也只是虚拟的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  </span><br><span class="line"> +---+--------------------+---------------------- 0xFFFF FFFF 高地址</span><br><span class="line">1 GB |   Kernel           |                  内核空间</span><br><span class="line"> +------------------------+---------------------- 0xC000 0000</span><br><span class="line"> |   | Random stack offset|                  用户空间 ↓</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |   Stack↓           | 进程中的所有的线程共享相同的地址空间</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Mem Mapping ↓      | 文件映射,动态链接库（.so文件）</span><br><span class="line"> |   |                    | mmap()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> +   |                    |</span><br><span class="line">3 GB |                    |</span><br><span class="line"> +   +--------------------+</span><br><span class="line"> |   |    Heap↑           | 用户通过 malloc()分配的内存</span><br><span class="line"> |   |                    | </span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Random stack offset|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | BSS Seg.           |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Data Seg. (+rodata)|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Text Seg.          |                  用户空间 ↑</span><br><span class="line"> +---+--------------------+---------------------- 0x00000000 低地址</span><br></pre></td></tr></table></figure>
+<p>内存布局从高地址到低地址:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/APUE.03b.进程的虚拟内存管理/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.03a.进程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/APUE.03a.进程/" itemprop="url">APUE.03a.进程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,089
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="创建进程"><a href="#创建进程" class="headerlink" title="创建进程"></a>创建进程</h2><h3 id="fork"><a href="#fork" class="headerlink" title="fork"></a>fork</h3><ul>
+<li>返回0: 子进程</li>
+<li>返回&gt;0: 父进程, 返回值是子进程pid</li>
+<li>子进程会得到父进程的堆(IO缓存, malloc的内存)、栈(局部变量)、数据空间(Data Segment)的拷贝, 在子进程里修改这些变量并不会影响父进程中的值, 注意这种拷贝是“写时复制”（Copy On Write，COW）;</li>
+<li>fork前打开的文件句柄, 其偏移量会在父子进程间共享, 原因是进程内存中仅保存了文件句柄的fd指针, 指针指向的结构体(也就是文件表,保存了文件标准和位移)是共享的. @doubt 那么”文件表”是存储在哪里的?</li>
+<li>另外需要注意的是, 因为堆内存也将被拷贝(IO缓存在堆里), 所以如果在创建子进程之前这个IO缓存中就有数据, 那么也会带入子进程, 导致子进程的IO缓存里”多”出一些数据.</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// child process because return value zero</span></span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Hello from Child!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// parent process because return value non-zero.</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Hello from Parent!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="vfork"><a href="#vfork" class="headerlink" title="vfork"></a>vfork</h3>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/APUE.03a.进程/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.01a.文件和IO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/APUE.01a.文件和IO/" itemprop="url">APUE.01a.文件和IO</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,584
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="文件系统分层"><a href="#文件系统分层" class="headerlink" title="文件系统分层"></a>文件系统分层</h2><p><img src="/images/THE-LINUX-STORAGE-STACK-DIAGRAM.png" alt="../_images/THE-LINUX-STORAGE-STACK-DIAGRAM.png"></p>
+<p>另一张图，侧重点是编程实体（库、函数）在 Linux 存储中的位置：</p>
+<p><img src="/images/LINUX-STORAGE-IO-STACK.png" alt="../_images/LINUX-STORAGE-IO-STACK.png"></p>
+<h2 id="page-cache（页缓冲）"><a href="#page-cache（页缓冲）" class="headerlink" title="page cache（页缓冲）"></a>page cache（页缓冲）</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/APUE.01a.文件和IO/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.00.从Unix到Linux（Gnu、Posix是什么）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/APUE.00.从Unix到Linux（Gnu、Posix是什么）/" itemprop="url">APUE.00.从Unix到Linux（Gnu、Posix是什么）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,434
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Unix的诞生：从SystemV-到-Unix-like"><a href="#Unix的诞生：从SystemV-到-Unix-like" class="headerlink" title="Unix的诞生：从SystemV 到 Unix-like"></a>Unix的诞生：从SystemV 到 Unix-like</h2><ul>
+<li>UNIX：1969，贝尔实验室的工程师，肯·汤普逊（Ken Thompson）和丹尼斯·里奇，在此时自行开发了Unix。</li>
+<li>当时的UNIX拥有者AT&amp;T公司以低廉甚至免费的许可将Unix源码授权给学术机构做研究或教学之用，最著名的变种之一是由加州大学柏克莱分校开发的伯克利软件套件(BSD)产品</li>
+<li>1983年，AT&amp;T发布了Unix最新版System V，这是一个商业化版本，付费才能使用，并且不得传播源码。</li>
+<li>AT&amp;T同BSD的官司…这场著作权官司一直打到AT&amp;T将自己的Unix系统实验室卖掉，新接手的Novell采取了一种比较开明的做法，允许柏克莱分校自由发布自己的Unix变种</li>
+<li>System V 和 BSD的分化：其他一些公司也开始为其自己的小型机或工作站提供商业版本的UNIX系统，有些选择System V作为基础版本，有些则选择了BSD。4.4 BSD又是所有自由版本Unix的基础。</li>
+<li>Unix除了<strong>System V 和 BSD两大分支</strong>，还有后来的的 Unix-like系统（GNU /Linux）</li>
+</ul>
 <blockquote>
+<p>System V 第四版的发布，其特性成为一些UNIX共同特性的源头，例如 “SysV 初始化脚本” （/etc/init.d），用来控制系统启动和关闭，System V Interface Definition (SVID) 是一个System V 如何工作的标准定义。</p>
 </blockquote>
-<ul>
-<li>A1： 胶片复古，绿色</li>
-<li>A6：“非常适合人像，一定要试一试”</li>
-<li>B2： 黑白，经典</li>
-<li>B5~B6：黑白，情绪</li>
-<li>C1： 海水、天空，粉色</li>
-<li>E1~E2： 表现红色、蓝色</li>
-<li>H1~H3： 多彩夏日</li>
-<li>N1：    明亮的黄色，香蕉</li>
-<li>S1~S3： Clean</li>
-</ul>
-<h2 id="A1-A3"><a href="#A1-A3" class="headerlink" title="A1-A3"></a>A1-A3</h2><p>A1 - A3 主打模拟胶片风格，提高了中间色调的同时有轻微过度曝光，色调比较柔和。官方使用了 Analog（模拟）、Archetype（典范）这两个词来命名，恰当概述了这三款滤镜，可以说是是拍摄肖像、室内和食物的完美选择。下面是这三款预设滤镜的参考作品：</p>
+<h2 id="GNU"><a href="#GNU" class="headerlink" title="GNU"></a>GNU</h2><p>GNU是一个自由的操作系统，其内容软件完全以GPL方式发布。这个操作系统是GNU计划的主要目标，名称来自<strong>GNU is Not Unix</strong>的递归缩写，因为GNU的设计类似Unix，但它不包含具著作权的Unix代码。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/VSCO滤镜使用指南/#more" rel="contents">
+            <a class="btn" href="/21.Operating-System/APUE.00.从Unix到Linux（Gnu、Posix是什么）/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -612,7 +1409,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/film.宾得SPII使用手册/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.RAM.2.内存对齐/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -631,7 +1428,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/53.Photograph/film.宾得SPII使用手册/" itemprop="url">宾得SPII使用说明</a></h1>
+                <a class="post-title-link" href="/21.Operating-System/01.RAM.2.内存对齐/" itemprop="url">01.RAM.2.内存对齐</a></h1>
         
 
         <div class="post-meta">
@@ -654,8 +1451,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
                   </a>
                 </span>
 
@@ -685,7 +1482,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  409
+                  1,753
                 </span>
               
 
@@ -711,1180 +1508,1321 @@
 
       
         
-          <ul>
-<li><a href="http://www3.xitek.com/papers/xixi/spotmatic.htm" target="_blank" rel="noopener">SPOTMATIC历史</a></li>
-<li><a href="http://www.butkus.org/chinon/pentax/pentax_spotmatic/pentax_spotmatic.htm" target="_blank" rel="noopener">在线说明书</a></li>
-<li><a href="http://blog.sina.com.cn/s/blog_64822c3b0100r5fg.html" target="_blank" rel="noopener">M42镜头的光圈顶针</a></li>
-<li><a href="https://site.douban.com/142843/widget/notes/6941749/note/202068292/" target="_blank" rel="noopener">美能达X-700说明</a></li>
+          <p>➤ 从硬件角度说明为什么需要内存对齐</p>
+<p><img src="/images/01.RAM.2.%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90-2023-05-05-1.png" alt="../_images/01.RAM.2.内存对齐-2023-05-05-1.png"></p>
+<p>内存条上的黑色颗粒，被称为 Chip，每个 Chip 内部又是由 8 个 Bank 组成；</p>
+<p><img src="/images/01.RAM.2.%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90-2023-05-05-2.png" alt="../_images/01.RAM.2.内存对齐-2023-05-05-2.png"></p>
+<p>每个 Bank 可以看做是一个矩阵，矩阵上每个元素可以存储1字节（8bit，也就是说包含了8个小电容）</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/01.RAM.2.内存对齐/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.RAM.1.内存寻址/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/01.RAM.1.内存寻址/" itemprop="url">01.RAM.1.内存寻址</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,651
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>内存寻址(Memory Addressing): 分段机制把 <code>逻辑地址</code> 转换为 <code>线性地址</code>, 分页机制进一步把该 <code>线性地址</code> 再转换为 <code>物理地址</code>.</p>
+<h2 id="段式内存管理"><a href="#段式内存管理" class="headerlink" title="段式内存管理"></a>段式内存管理</h2><blockquote>
+<p>内存可寻址范围总是跟”地址总线宽度”和”寄存器宽度”相关</p>
+</blockquote>
+<h3 id="实模式的诞生（16位处理器及寻址）"><a href="#实模式的诞生（16位处理器及寻址）" class="headerlink" title="实模式的诞生（16位处理器及寻址）"></a>实模式的诞生（16位处理器及寻址）</h3><ul>
+<li>在8086处理器诞生之前, 内存寻址方式就是直接访问物理地址. 8086处理器为了寻址1M的内存空间, 把地址总线扩展到了20位. 但是, 一个尴尬的问题出现了, ALU的宽度只有16位, 也就是说, ALU不能计算20位的地址. 为了解决这个问题, 分段机制被引入</li>
+<li>为了支持分段, 8086处理器设置了四个段寄存器：CS, DS, SS, ES每个段寄存器都是16位的, 同时访问内存的指令中的地址也是16位的.<ul>
+<li>在送入地址总线之前(20位), 要将端寄存器(16位)的值与内存地址(16位, 即段内偏移值)相加</li>
+<li>端寄存器的值左移4位, 低位补0, 然后加上内存地址</li>
 </ul>
-<p><img src="/images/pentax-spii-1.png" alt="pentax-spii-1"></p>
-<p><img src="/images/pentax-spii-2.png" alt="pentax-spii-2"></p>
-<p>卷片杆（P）下面的拨盘（O）没有实际作用，只是一个标记，方便记住当前用的什么胶卷（黑白/日光/灯光），还有一个窗能显示20/36的字样，大概是记录胶卷的张数吧，后面的<code>EX.</code> 是exposures的缩写。<br>向上提起卷片杆，胶卷舱门会打开。</p>
-<blockquote>
-<p>如何取出胶卷：</p>
-<ol>
-<li>相机底有一个按钮，要按下去才能倒片。按下去的时候不会听到声音，只是按下去后它不会自己弹起来。</li>
-<li>然后拉出相机机顶左侧卷片杆（P），顺时针方向旋转。手感上会有明显的阻碍感，那是倒片把手带动胶卷暗盒内的片轴拉动整卷胶片回绕。</li>
-<li>最后，当回绕的手感明显变得更顺滑时，胶片已经被回绕进胶卷暗盒。提起倒片把手弹开后背，取出胶卷。</li>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/01.RAM.1.内存寻址/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.CPU是怎么制造出来的/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/01.CPU是怎么制造出来的/" itemprop="url">01.CPU是怎么制造出来的</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  159
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@ref: <a href="https://www.youtube.com/watch?v=7MFly82e46Q" target="_blank" rel="noopener">中兴禁令之芯片为什么这么难做？芯片的基本原理是什么？</a></p>
+<p><img src="/images/2022/20220423225853.png" alt></p>
+<p>PN结：p型和n型半导体之间的接触面即称为PN结<br>    • N型：掺入磷元素(5电子)<br>    • P型：掺入硼元素(3电子)</p>
+<p>PN结特点：只有P加正极，N加负极，电流才能通过</p>
+<p>二极管：二极管就是由一个PN结加上相应的电极引线及管壳封装而成的。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/01.CPU是怎么制造出来的/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.CPU_Context_Switch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/01.CPU_Context_Switch/" itemprop="url">01.上下文切换（Context_Switch）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,707
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="内核态和用户态"><a href="#内核态和用户态" class="headerlink" title="内核态和用户态"></a>内核态和用户态</h2><p>现代的计算机体系结构中存储管理通常都包含保护机制。提供保护的目的，是要避免系统中的一个任务访问属于另外的或属于操作系统的存储区域。如在 IntelX86体系中，就提供了特权级这种保护机制：<br>CPU 的指令分为特权级指令和非特权级指令, 特权级指令通常是一些比较危险的指令（for example？）, Intel X86架构的 CPU 将特权等级分为4个级别：<code>RING0</code>, <code>RING1</code>, <code>RING2</code>, <code>RING3</code>. </p>
+<p>Linux 仅仅使用了 RING0和 RING3，来分别运行内核态（0）和用户态（3），来保证特权级指令不被错误的使用。</p>
+<ul>
+<li>内核态（Ring 0）的进程具有最高权限，可以直接访问所有资源（@doubt 调用内核代码、访问硬件寄存器… ）</li>
+<li>用户态（Ring 3）的进程只能访问受限资源，不能直接访问内存等硬件设备，必须通过<strong>系统调用（System Call）</strong>陷入到内核中，才能访问这些特权资源。</li>
+<li>通过系统调用，用户空间的应用程序就会进入内核空间，由内核代表该进程运行于内核空间，这就涉及到上下文的切换</li>
+<li>在”32 位 Linux 进程内存布局”一章，有些资料会把内存地址高位的 1G 称为“内核空间”</li>
+<li>关于 X 86 系统的细节，请查阅参考资料1 一般的硬件体系机构都提供一种“门”机制。“门”的含义是指在发生了特定事件的时候低特权的应用程序可以通过这些“门”进入高特权的内核空间。</li>
+</ul>
+<p>![[../_images/2023-04-13.png]]</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/01.CPU_Context_Switch/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.CPU_Cache/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/01.CPU_Cache/" itemprop="url">01.CPU缓存相关知识</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  608
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@ref: <a href="https://coolshell.cn/articles/20793.html" target="_blank" rel="noopener">与程序员相关的CPU缓存知识 | 酷 壳 - CoolShell</a></p>
+<h1 id="CPU-Cache基础"><a href="#CPU-Cache基础" class="headerlink" title="CPU Cache基础"></a>CPU Cache基础</h1><ul>
+<li>一般来说, CPU Cache分三级: L1/L2/L3</li>
+<li>CPU Cache大小: L1 &lt; L2 &lt; L3<ul>
+<li>例如：Intel Core i7-8700K ，是一个6核的CPU，每核上的L1是64KB（数据和指令各32KB），L2 是 256K，L3有2MB</li>
+</ul>
+</li>
+<li>读取速度: L1&gt; L2&gt; L3<ul>
+<li>L1 = 4个时钟</li>
+<li>L2 = 11个时钟</li>
+<li>L3 = 39个时钟</li>
+<li>内存= 107个时钟</li>
+</ul>
+</li>
+<li>L1 分指令和数据Cache, 每个Core各一个指令和数据Cache, 每个Core一个L2, 所有Core 共享L3(见下图)</li>
+</ul>
+<p><img src="/images/CPU_CACHE.png" alt="../_images/CPU_CACHE.png"></p>
+<h1 id="CPU-Cache命中"><a href="#CPU-Cache命中" class="headerlink" title="CPU Cache命中"></a>CPU Cache命中</h1>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/01.CPU_Cache/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.CPU_Basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/01.CPU_Basics/" itemprop="url">01.与程序员相关的CPU基础知识</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  913
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ <strong>超线程</strong>(有时又叫对称多线程，SMT)是一种比较特殊的情况，每个线程并不能真正并发地运行。<strong>它们共享着除寄存器外的绝大多数处理资源</strong>。过到目前为止，Intel 的 CPU 最多只有两个线程。CPU 负责对各线程进行时分复用，CPU 可以在当前运行的超线程发生延迟时，调度另一个线程。这种延迟一般由内存访问引起。</p>
+<p>随着 CPU 的核心频率大幅上升，缓存与核心的速度差越拉越大，CPU 的处理开始管线化。也就是说，指令的执行分成若干阶段。首先，对指令进行解码，随后，准备参数，最后，执行它。这样的管线可以很长(例如，Intel 的 Netburst 架构超过了20个阶段)。在管线很长的情况下，一旦发生延误(即指令流中断)，需要很长时间才能恢复速度。管线延误发生在这样的情况下: 下一条指令未能正确预测，或者装载下一条指令耗时过长(例如，需要从内存读取时)</p>
+<p>内存以比 cache line 还小的块从主存储器向缓存传送。如今64位可一次性传送，cache line 的大小为64或128比特。这意味着每个 cache line 需要8或16次传送。内存控制器可以按不同顺序去请求 cache line 中的字。当处理器告诉它，程序需要缓存中具体某个字，即「关键字(critical word)」时，内存控制器就会先请求这个字。一旦请求的字抵达，虽然 cache line 的剩余部分还在传输中，缓存的状态还没有达成一致，但程序已经可以继续运行。这种技术叫做关键字优先及较早重启(Critical Word First &amp; Early Restart)</p>
+<hr>
+<p>➤  <strong>指令缓存</strong><br>随着 CPU 的核心频率大幅上升，缓存与核心的速度差越拉越大，CPU 的处理开始<strong>管线化</strong>。也就是说，指令的执行分成若干阶段。首先，对指令进行解码，随后准备参数，最后执行它。这样的管线可以很长(例如，Intel 的 Netburst 架构超过了20个阶段)。在管线很长的情况下，一旦发生延误(即指令流中断)，需要很长时间才能恢复速度。<br>管线延误发生在这样的情况下: 下一条指令未能正确预测，或者装载下一条指令耗时过长(例如，需要从内存读取时)。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/01.CPU_Basics/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/19.Algorithm/Alg.22.递归/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/19.Algorithm/Alg.22.递归/" itemprop="url">Alg.22.递归</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">19.Algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  155
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>递归特征：</p>
+<ul>
+<li>自身调用：原问题可以分解为子问题，子问题和原问题的求解方法是一致的，即都是调用自身的同一个函数。</li>
+<li>终止条件：递归必须有一个终止的条件，即不能无限循环地调用本身。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int sum(int n) &#123;  </span><br><span class="line">    if (n &lt;= 1) &#123;  </span><br><span class="line">        return 1;  </span><br><span class="line">    &#125;   </span><br><span class="line">    return sum(n - 1) + n;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Alg.22.%E9%80%92%E5%BD%92-2023-05-11-1.png" alt="../_images/Alg.22.递归-2023-05-11-1.png"></p>
+<h2 id="递归经典问题"><a href="#递归经典问题" class="headerlink" title="递归经典问题"></a>递归经典问题</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/19.Algorithm/Alg.22.递归/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/19.Algorithm/Alg.20a.IntroductionToAlgorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/19.Algorithm/Alg.20a.IntroductionToAlgorithm/" itemprop="url">影响程序员发展的十类算法（zz）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">19.Algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  5,990
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <ol>
+<li><strong>基本思想</strong>（时空复杂度，规约，枚举，贪心，分治，递推与递归，构造，模拟）</li>
+<li><strong>排序</strong>（冒泡，选择，插入，归并，堆，快速，桶，基数，希尔，Timsort）（Top K）</li>
+<li><strong>经典数据结构</strong>（栈，队列，链表，哈希，单调队列，优先队列，平衡树，线段树，并查集）</li>
+<li><strong>搜索</strong>（BFS，DFS，A*搜索)</li>
+<li><strong>基础数学算法</strong>（二分查找算法，欧几里得算法，快速幂算法）</li>
+<li><strong>图论基础算法</strong>（拓扑排序，最小生成树算法，最短路径算法）</li>
+<li><strong>动态规划算法</strong>（最长上升子序列，最长公共子序列，最大连续子段和，背包问题）</li>
+<li><strong>计算几何算法</strong>（线段交，凸包，平面最近点对）</li>
+<li><strong>字符串匹配算法</strong>（KMP算法，Trie树）</li>
+<li><strong>网络流算法</strong>（最大流算法，最小费用最大流算法）</li>
 </ol>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/film.宾得SPII使用手册/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/film.胶片测光经验表/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/53.Photograph/film.胶片测光经验表/" itemprop="url">胶片测光经验表</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  238
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@tag: #摄影 #胶片</p>
-<p>以下如果没有特殊说明, 默认是ISO200的胶卷, 快门速度250</p>
-<p>室外：</p>
-<ul>
-<li>白天/晴朗: f16</li>
-<li>白天/多云: f11</li>
-<li>白天/阴影: f5.6, 接近日落,光线变弱的时候f4</li>
-<li>白天/阴天: f4</li>
-</ul>
-<p>室内：</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/film.胶片测光经验表/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/相机manual.TT350s闪光灯/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/53.Photograph/相机manual.TT350s闪光灯/" itemprop="url">相机manual.TT350s闪光灯</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  195
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="📸-TT350s闪光灯使用说明"><a href="#📸-TT350s闪光灯使用说明" class="headerlink" title="📸 TT350s闪光灯使用说明"></a>📸 TT350s闪光灯使用说明</h1><p>@tag: #摄影 #闪光灯 #说明书</p>
-<h2 id="闪光灯按键："><a href="#闪光灯按键：" class="headerlink" title="闪光灯按键："></a>闪光灯按键：</h2><p><code>Mode键</code>：</p>
-<ul>
-<li>短按 在Multi(频闪), TTL, M之间切换</li>
-<li>长按 进入频闪, set设定 3 - 2Hz, 一共闪3次频率2Hz</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/相机manual.TT350s闪光灯/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/相机manual.富士X100F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/53.Photograph/相机manual.富士X100F/" itemprop="url">相机manual.富士X100F</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  494
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="快速使用"><a href="#快速使用" class="headerlink" title="快速使用"></a>快速使用</h2><ul>
-<li>Q键：检查图片尺寸/白平衡/ND/对焦模式…</li>
-<li>ISO默认使用AUTO3方案(最高3200, 快门1/60)</li>
-<li>Fn：是否开启「脸部/眼睛识别」</li>
-<li>长按对焦杆, 锁定 //设置为“OFF”以防止误碰导致AF点移动</li>
-<li>长按MENU键, 锁定</li>
-<li>ND滤镜: 在日光下使用慢快门和大光圈, 可在Q中开启</li>
-</ul>
-<h2 id="自定义按键"><a href="#自定义按键" class="headerlink" title="自定义按键"></a>自定义按键</h2><ul>
-<li>对焦辅助灯：MENU → AF/MF → <code>AF辅助灯</code></li>
-<li>WiFi传输：MENU → 拍摄选项（第3个）→ <code>无线通信</code></li>
-<li>数码变焦(50mm/70mm)：MENU → 拍摄选项（第3个）→ <code>数码远射增距镜</code></li>
-<li>按键设定：<ul>
-<li>MENU键：长按锁定/解除锁定 // 仅对MENU键有效</li>
-<li>对焦杆：长按可进行设置    // 仅对对焦杆有效</li>
-<li>Fn键：是否开启面部/眼睛识别</li>
-<li>▲键：DRIVE（单张/连拍/包围/视频）可开启胶片包围</li>
-<li>▼键：胶片模拟</li>
-<li>◀ 键：白平衡</li>
-<li>▶ 键：ISO</li>
-</ul>
-</li>
-<li>取景器拨杆按钮(Fn2按钮):<ul>
-<li>长按: 设定</li>
-<li>短按: 进入设置功能，当前设置为【控制环设定】</li>
-<li>按住+转动对焦环: 依据设置功能切换</li>
-</ul>
-</li>
-</ul>
-<p><img src="/images/富士X100F/X100F方向键.jpg" alt></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/相机manual.富士X100F/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/相机manual.索尼α7m3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/53.Photograph/相机manual.索尼α7m3/" itemprop="url">相机manual.索尼α7m3</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  425
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@tag: #摄影 #相机 #说明书</p>
-<h2 id="快速使用-amp-自定义按键"><a href="#快速使用-amp-自定义按键" class="headerlink" title="快速使用 &amp; 自定义按键"></a>快速使用 &amp; 自定义按键</h2><ul>
-<li>C1：对焦区域（中间/区域/广域）</li>
-<li>C2：对焦模式（单次/连续/手动）</li>
-<li>C3：测光方式（多重/中心/点测）</li>
-<li>方向键↓：屏幕亮度</li>
-<li>删除键：屏幕触摸On/Off</li>
-<li>菜单-收藏：静音拍摄/AF辅助照明/长曝降噪/防抖</li>
-</ul>
-<h2 id="一般拍摄option"><a href="#一般拍摄option" class="headerlink" title="一般拍摄option"></a>一般拍摄option</h2><ul>
-<li>[ ] 关闭WiFi 和NFC 延长续航</li>
-<li>[ ] 白平衡：偏冷 B1M1  / 偏暖 A2M2</li>
-<li>[ ] 创意风格：清淡（对比+1、饱和-1）or Portrait</li>
-<li>[ ] 曝光：+1/3~2/3</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/相机manual.索尼α7m3/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/怎么拍-拍妹指南/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/53.Photograph/怎么拍-拍妹指南/" itemprop="url">怎么拍-拍妹指南</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  127
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>拍妹只服 <strong>午饭饭</strong>：</p>
-<ul>
-<li><a href="https://www.bilibili.com/video/BV1u64y127YP/" target="_blank" rel="noopener">「糖水日记」99 小唯的魔都阳光半日扫街 腾龙28-75F2.8/70-180F2.8</a></li>
-</ul>
 <hr>
+<h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><h3 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><h3 id="归约"><a href="#归约" class="headerlink" title="归约"></a>归约</h3>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/19.Algorithm/Alg.20a.IntroductionToAlgorithm/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/19.Algorithm/Alg.20.算法概述/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/19.Algorithm/Alg.20.算法概述/" itemprop="url">Alg.20.算法概述</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">19.Algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  803
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@todo:</p>
 <ul>
-<li><a href="https://zhuanlan.zhihu.com/p/23245505" target="_blank" rel="noopener">怎么拍妹子显瘦？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/38437324/answer/91925899" target="_blank" rel="noopener">旅行拍照穿的超好看（上镜）的衣服有哪些？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/19671417/answer/48429099" target="_blank" rel="noopener">拍照时怎样摆姿势好看？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/26954818/answer/36848459" target="_blank" rel="noopener">什么样的灯光和角度下人比较好看？ - 知乎</a></li>
-<li>其他<ul>
-<li><a href="https://www.zhihu.com/question/21422541/answer/73835499" target="_blank" rel="noopener">男性拍照时有哪些不错的姿势可以选择？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/38478558/answer/126802534" target="_blank" rel="noopener">如何用手机拍出一张特别好看的自拍？ - 知乎</a></li>
+<li>算法设计:  排序, 贪心, 分治, 动态规划, 回溯, 随机化</li>
+<li>数学基础: 二分查找, 欧几里得算法, 快速幂算法</li>
+<li>字符串匹配算法: KMP</li>
+<li>图论算法:<ul>
+<li>拓扑顺序</li>
+<li>最短路径: Dijkstra算法, Floyd-Warshall算法</li>
+<li>最小生成树: Prim, Kruskal</li>
 </ul>
 </li>
+<li>搜索算法: BFS, DFS, A*搜索</li>
+<li>几何算法: 向量, 凸包</li>
+<li>快速傅里叶变换(FFT): 离散傅里叶变换</li>
 </ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/怎么拍-风光摄影指南/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/53.Photograph/怎么拍-风光摄影指南/" itemprop="url">怎么拍-风光摄影指南</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  66
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li><a href="https://www.zhihu.com/question/19561587/answer/52648789" target="_blank" rel="noopener">如何拍摄夜晚的星空，需要做哪些准备工作？ - 知乎</a></li>
-<li><a href="https://cn.guidetoiceland.is/the-northern-lights/northern-lights-pictures" target="_blank" rel="noopener">冰岛极光摄影|设备推荐、设置参数、常见问题 | Guide to Iceland</a></li>
-<li><a href="https://www.zhihu.com/question/25695143" target="_blank" rel="noopener">极光的拍摄对于相机和镜头以及参数设置有哪些要求？ - 知乎</a></li>
+<h1 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h1><h2 id="几何级数-amp-算数级数"><a href="#几何级数-amp-算数级数" class="headerlink" title="几何级数 &amp; 算数级数"></a>几何级数 &amp; 算数级数</h2><ul>
+<li>几何级数: $$ 1 + 2^1 + 2^2 + … + 2^N = 2^(N+1) -1 ≈ 2^N $$</li>
+<li>算术级数: $$ 1 + 2 + 3 + … + N = N(N+1)/2  ≈ N^2/2 $$</li>
 </ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/扫街指南/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/53.Photograph/扫街指南/" itemprop="url">扫街指南</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  126
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><img src="/images/Bresson.png" alt></p>
-<ul>
-<li>在杂乱中寻找结构</li>
-<li>在日常中寻找美感</li>
-<li>脚步慢下来，这样可以避免错过的瞬间</li>
-<li>帽子和口罩</li>
-<li>气温不宜高于25摄氏度 or 低于0度，不适宜的天气会扫兴</li>
-</ul>
-<hr>
-<ul>
-<li><a href="http://www.cnu.cc/works/123182" target="_blank" rel="noopener">决定性的瞬间 | 布列松作品精选</a></li>
-<li><a href="https://new.qq.com/rain/a/20210305A0FFIL00" target="_blank" rel="noopener">“我不是摄影师，是谷歌街景截图艺术家”</a></li>
-<li><a href="/53.Photograph/使用谷歌街景进行街拍/" title="使用谷歌街景进行街拍">使用谷歌街景进行街拍</a>
-</li>
-</ul>
-<hr>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/扫街指南/#more" rel="contents">
+            <a class="btn" href="/19.Algorithm/Alg.20.算法概述/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1935,7 +2873,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/索尼α系列PP设置/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/19.Algorithm/Alg.15.数据结构-堆/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -1954,7 +2892,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/53.Photograph/索尼α系列PP设置/" itemprop="url">索尼α系列-PP设置</a></h1>
+                <a class="post-title-link" href="/19.Algorithm/Alg.15.数据结构-堆/" itemprop="url">Alg.15.数据结构-堆</a></h1>
         
 
         <div class="post-meta">
@@ -1977,8 +2915,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
+                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">19.Algorithm</span>
                   </a>
                 </span>
 
@@ -2008,7 +2946,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  843
+                  1,781
                 </span>
               
 
@@ -2034,15 +2972,16 @@
 
       
         
-          <h2 id="PP的配置项说明"><a href="#PP的配置项说明" class="headerlink" title="PP的配置项说明"></a>PP的配置项说明</h2><p>@ref <a href="https://helpguide.sony.net/ilc/1420/v1/zh-cn/contents/TP0000527199.html" target="_blank" rel="noopener">帮助指南 | 图片配置文件</a></p>
-<p>黑色等级</p>
-<ul>
-<li>设定黑色等级。（-15至+15）</li>
+          <h2 id="二叉堆"><a href="#二叉堆" class="headerlink" title="二叉堆"></a>二叉堆</h2><ul>
+<li>结构性：二叉堆是一个完全填满的二叉树（叶子节点都集中在左边）；</li>
+<li>堆序性：父节点的键值总是大于或等于（小于或等于）任何一个子节点的键值：如果父节点的键值总是小于或等于子节点（根节点的值是最小的）, 那么称为小顶堆（min heap），反正择称为大顶堆（max heap）</li>
 </ul>
-<p>伽玛: 选择伽玛曲线。</p>
+<p>二叉堆一般用数组来表示。如果根节点在数组中的位置是1，第_n_个位置的子节点分别在2_n_和 2_n_+1。因此，第1个位置的子节点在2和3，第2个位置的子节点在4和5。以此类推。这种基于1的数组存储方式便于寻找父节点和子节点。</p>
+<p>如果存储数组的下标基于0，那么下标为 _i_ 的节点的子节点是 <em>2i + 1</em> 与 <em>2i + 2</em> ；其父节点的下标是 <em>floor((i − 1) ∕ 2)</em>。函数 <em>floor(x)</em> 的功能是“向下取整”，或者说“向下舍入”，即取不大于 _x_ 的最大整数（与“四舍五入”不同，向下取整是直接取按照数轴上最接近要求值的左边值，即不大于要求值的最大的那个值）。比如 <em>floor(1.1)</em>、<em>floor(1.9)</em> 都返回1。</p>
+<p>如下图的两个堆：</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/索尼α系列PP设置/#more" rel="contents">
+            <a class="btn" href="/19.Algorithm/Alg.15.数据结构-堆/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2093,7 +3032,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/如何评价富士的Classic-Chrome胶片模拟/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/19.Algorithm/Alg.14.数据结构-图/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2112,7 +3051,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/53.Photograph/如何评价富士的Classic-Chrome胶片模拟/" itemprop="url">如何评价富士的classic chrome胶片模拟？</a></h1>
+                <a class="post-title-link" href="/19.Algorithm/Alg.14.数据结构-图/" itemprop="url">Alg.14.数据结构-图</a></h1>
         
 
         <div class="post-meta">
@@ -2135,8 +3074,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
+                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">19.Algorithm</span>
                   </a>
                 </span>
 
@@ -2166,7 +3105,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  186
+                  2,755
                 </span>
               
 
@@ -2192,14 +3131,13 @@
 
       
         
-          <p><a href="https://www.zhihu.com/question/58228287/answer/188459425" target="_blank" rel="noopener">https://www.zhihu.com/question/58228287/answer/188459425</a></p>
-<p>Classic chrome 的饱和度非常低，比Provia/Neg这些都要低，同时也抑制了高光部分的亮度，但是阴影更暗，色彩上蓝色偏青，黄和绿偏橙。</p>
-<p><img src="/images/2022/20220327234625.png" alt></p>
-<p>上面的色调和饱和度坐标图可以看到，Classic chrome的饱和度是最低的， 同时色调稍稍强烈一些。</p>
-<p>富士并没有给早期的机型（X100，x100s等）更新这个胶片模拟，但是可以通过Provia来模拟classic chrome ：</p>
+          <h2 id="图的概念"><a href="#图的概念" class="headerlink" title="图的概念"></a>图的概念</h2><p>在图中的数据元素通常称为结点，<strong>V</strong> 是所有顶点的集合，<strong>E</strong> 是所有边的集合。如果两个顶点 v, w，只能由 v 向 w，而不能由 w 向 v，那么我们就把这种情况叫做一个从 v 到 w 的有向边。v 也被称做初始点，w 也被称为终点。这种图就被称做<strong>有向图</strong>。</p>
+<p>如果v和w是没有顺序的，从v到达w和从w到达v是完全相同的，这种图就被称为<strong>无向图</strong>。</p>
+<p>假如，图中的结点个数为 n，那么在一个无向图，假设每对结点之间只能有一条边，那么这个无向图中的边数最多只有 $ 1/2 n (n-1) $。边数最多的无向图也叫<strong>完全图</strong>。</p>
+<p>同样的，对于有向图，边数最多有 $ n(n-1) $ 个，边数最多的有向图叫<strong>有向完全图</strong>。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/如何评价富士的Classic-Chrome胶片模拟/#more" rel="contents">
+            <a class="btn" href="/19.Algorithm/Alg.14.数据结构-图/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2250,7 +3188,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/53.Photograph/使用谷歌街景进行街拍/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/19.Algorithm/Alg.13a.数据结构-散列函数-MD5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2269,7 +3207,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/53.Photograph/使用谷歌街景进行街拍/" itemprop="url">使用谷歌街景进行街拍</a></h1>
+                <a class="post-title-link" href="/19.Algorithm/Alg.13a.数据结构-散列函数-MD5/" itemprop="url">Alg.13a.数据结构-散列函数-MD5算法原理及实现</a></h1>
         
 
         <div class="post-meta">
@@ -2292,8 +3230,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/53-Photograph/" itemprop="url" rel="index">
-                    <span itemprop="name">53.Photograph</span>
+                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">19.Algorithm</span>
                   </a>
                 </span>
 
@@ -2323,7 +3261,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,190
+                  4,039
                 </span>
               
 
@@ -2349,17 +3287,18 @@
 
       
         
-          <h1 id="Jacqui-Kenny"><a href="#Jacqui-Kenny" class="headerlink" title="Jacqui Kenny"></a>Jacqui Kenny</h1><ul>
-<li><a href="https://www.163.com/dy/article/G4CAJOJJ0545IA3Z.html" target="_blank" rel="noopener">“我不是摄影师，是谷歌街景截图艺术家”_网易订阅</a></li>
-<li><a href="https://www.wowlavie.com/article/ae2001375" target="_blank" rel="noopener">Google地图街景创作！ 英国艺术家Jacqui Kenny截下独特迷人美景</a></li>
-<li>Ins： <a href="https://www.instagram.com/streetview.portraits/" target="_blank" rel="noopener">https://www.instagram.com/streetview.portraits/</a></li>
-</ul>
-<p>居住在伦敦，患有广场恐惧症的艺术家 Jacqui Kenny，选择让它成为自己环游世界的交通工具，和照相机。</p>
-<p>“广场恐惧和焦虑限制了我旅行的能力，于是我找到了另一种看世界的方式。”</p>
-<p>在名为「streetview.portraits」的 Instagram 账号下，Jacqui Kenny 写下这段自我介绍。账号的第一张照片发布于 2016 年，是谷歌街景视角下的蒙古达尔汗城一角。</p>
+          <h2 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h2><p><strong>散列函数，也称作哈希函数，消息摘要函数，单向函数或者杂凑函数</strong>。散列函数主要用于验证数据的完整性。通过散列函数，可以创建消息的“数字指纹”，消息接收方可以通过校验消息的哈希值来验证消息的完整性，防止消息被篡改。散列函数具有以下特性：</p>
+<ol>
+<li>散列函数的运算过程是不可逆的，这个称为散列函数的单向性。</li>
+<li>对于一个已知的消息及其散列值，要找到另外一个消息使其获得相同的散列值是不可能的，这个特性称为散列函数的弱碰撞性。这个特性可以用来防止消息伪造。</li>
+<li>任意两个不同消息的散列值一定不同。</li>
+<li>对原始消息长度没有限制。</li>
+</ol>
+<p>任何消息经过散列函数处理后，都会产生一个唯一的散列值，这个散列值可以用来验证消息的完整性。计算消息散列值的过程被称为“消息摘要”，计算消息散列值的算法被称为消息摘要算法。常使用的消息摘要算法有：MD—消息摘要算法，SHA—安全散列算法，MAC—消息认证码算法。本文主要来了解MD算法。</p>
+<h2 id="MD5算法原理"><a href="#MD5算法原理" class="headerlink" title="MD5算法原理"></a>MD5算法原理</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/53.Photograph/使用谷歌街景进行街拍/#more" rel="contents">
+            <a class="btn" href="/19.Algorithm/Alg.13a.数据结构-散列函数-MD5/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2410,7 +3349,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/54.Trips-and-Exploration/CN.上海/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/19.Algorithm/Alg.13.数据结构-散列表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2429,7 +3368,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/54.Trips-and-Exploration/CN.上海/" itemprop="url">CN上海 / 玩什么</a></h1>
+                <a class="post-title-link" href="/19.Algorithm/Alg.13.数据结构-散列表/" itemprop="url">Alg.13.数据结构-散列表</a></h1>
         
 
         <div class="post-meta">
@@ -2452,8 +3391,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/54-Trips-and-Exploration/" itemprop="url" rel="index">
-                    <span itemprop="name">54.Trips-and-Exploration</span>
+                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">19.Algorithm</span>
                   </a>
                 </span>
 
@@ -2483,7 +3422,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  227
+                  824
                 </span>
               
 
@@ -2509,17 +3448,13 @@
 
       
         
-          <p>@inbox:</p>
-<ul>
-<li><a href="https://www.zhihu.com/question/21901692/answer/210866954" target="_blank" rel="noopener">上海有哪些适合一个人吃饭的餐厅？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/24550268/answer/51911732" target="_blank" rel="noopener">上海有哪些深藏不露的餐馆？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/31208132/answer/51122620" target="_blank" rel="noopener">在上海和喜欢的姑娘在一起有哪些好玩的地方？ - 知乎</a></li>
-</ul>
-<hr>
-<h2 id="徒步路线"><a href="#徒步路线" class="headerlink" title="徒步路线"></a>徒步路线</h2><p><a href="https://www.douban.com/group/topic/4528970/?_i=3855880kQHWhAK" target="_blank" rel="noopener">上海的十条漫步线路</a></p>
+          <p>散列表（Hash table，也叫哈希表），是根据 <strong>键（Key）</strong> 而直接访问在内存储存位置的数据结构。</p>
+<p>散列表通过某一函数将键（Key） 转换为数组的下标，这个映射函数称做<strong>散列函数</strong>，存放记录的数组称做<strong>散列表</strong>。</p>
+<p>散列函数的作用是将键（Key）映射到一个有限的整数空间上。</p>
+<h2 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h2><p>@todo</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/54.Trips-and-Exploration/CN.上海/#more" rel="contents">
+            <a class="btn" href="/19.Algorithm/Alg.13.数据结构-散列表/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2570,7 +3505,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/54.Trips-and-Exploration/CN.北京/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/19.Algorithm/Alg.12.数据结构-树/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2589,7 +3524,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/54.Trips-and-Exploration/CN.北京/" itemprop="url">CN北京 / 玩什么</a></h1>
+                <a class="post-title-link" href="/19.Algorithm/Alg.12.数据结构-树/" itemprop="url">Alg.12.数据结构-树</a></h1>
         
 
         <div class="post-meta">
@@ -2612,8 +3547,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/54-Trips-and-Exploration/" itemprop="url" rel="index">
-                    <span itemprop="name">54.Trips-and-Exploration</span>
+                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">19.Algorithm</span>
                   </a>
                 </span>
 
@@ -2643,7 +3578,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  706
+                  5,096
                 </span>
               
 
@@ -2669,850 +3604,16 @@
 
       
         
-          <p>@toc: 博物馆、旧货市场、话剧、青旅、建筑、城中村</p>
-<hr>
-<p>@inbox</p>
-<ul>
-<li><a href="https://www.zhihu.com/question/25835899/answer/294415971" target="_blank" rel="noopener">北京有什么鲜为人知的、很好玩的地方？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/27893066/answer/38957291" target="_blank" rel="noopener">在北京生活有什么鲜为人知的技巧？ - 知乎</a>：小西天电影资料馆、三联、国博、凡士林润肤露/ 滤水壶…</li>
-<li><a href="https://www.zhihu.com/question/26731916/answer/39744124" target="_blank" rel="noopener">北京海淀区有哪些被埋没的好地方？ - 知乎</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/28447262" target="_blank" rel="noopener">这5家我经常去的旧货市场，都在北京6环内 - 知乎</a>： 孙河市场/大柳树/天宝/新七彩</li>
-<li><a href="https://www.zhihu.com/question/334995780/answer/749427135" target="_blank" rel="noopener">北京哪里商场好逛? - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/31265981" target="_blank" rel="noopener">在北京看话剧，有哪些剧场值得推荐？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/23514293" target="_blank" rel="noopener">北京有哪些青年旅舍值得推荐？ - 知乎</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/22315958" target="_blank" rel="noopener">北京41家博物馆亲身体验攻略手册 - 知乎</a></li>
-<li><a href="https://cn.tripadvisor.com/Attractions-g294212-Activities-c47-t3-Beijing.html" target="_blank" rel="noopener">北京市 10 大建筑物 - Tripadvisor</a></li>
-<li><a href="https://www.zhihu.com/question/22213994" target="_blank" rel="noopener">北京值得观赏的现代的建筑有哪些？ - 知乎</a><ul>
-<li>红砖美术馆、树美术馆、鸿坤美术馆、中央美术学院美术馆、今日美术馆、宋庄美术馆</li>
-<li>篱苑书屋</li>
-<li>北京西站，扩展阅读： [[../63.Culture-and-Arts/Arch.北京建筑上的大屋顶]]</li>
-<li>侨福芳草地</li>
+          <h2 id="简单二叉树"><a href="#简单二叉树" class="headerlink" title="简单二叉树"></a>简单二叉树</h2><h3 id="二叉树遍历"><a href="#二叉树遍历" class="headerlink" title="二叉树遍历"></a>二叉树遍历</h3><ul>
+<li>先序(preOrder): 中-左-右</li>
+<li>中序(inOrder): 左-中-右</li>
+<li>后序(postOrder): 左-右-中</li>
 </ul>
-</li>
-</ul>
-<h2 id="考古系列"><a href="#考古系列" class="headerlink" title="考古系列"></a>考古系列</h2>
+<p><img src="/images/Binary_tree_traversal.png" alt="../_images/Binary_tree_traversal.png"><br>图来自 <a href="http://www.crystaltenn.com/2020/04/binary-trees-traversal-recursive-vs.html" target="_blank" rel="noopener">http://www.crystaltenn.com/2020/04/binary-trees-traversal-recursive-vs.html</a></p>
+<p>➤ 先序遍历(递归):</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/54.Trips-and-Exploration/CN.北京/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/54.Trips-and-Exploration/CN.天津/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/54.Trips-and-Exploration/CN.天津/" itemprop="url">CN天津 / 玩什么</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/54-Trips-and-Exploration/" itemprop="url" rel="index">
-                    <span itemprop="name">54.Trips-and-Exploration</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  5,128
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@inbox</p>
-<ul>
-<li><a href="https://zhuanlan.zhihu.com/p/130230631" target="_blank" rel="noopener">天津｜从北到南走进一本城市编年史 - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/23555326/answer/179780008" target="_blank" rel="noopener">天津有什么好玩的地方? - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/54172441/answer/640747592" target="_blank" rel="noopener">在天津一个人一天去哪玩比较好？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/column/p/37032788" target="_blank" rel="noopener">天津市历代地名牌考（上） - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/30457250/answer/51438813" target="_blank" rel="noopener">天津有哪些深藏不露的餐馆？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/421189996/answer/3046917144" target="_blank" rel="noopener">地道的天津菜馆有哪些推荐？ - 知乎</a><ul>
-<li>玉泉饭庄的白崩鱼丁、白汁鱼肚、软溜鱼扇、扒牛肉条。</li>
-<li>卫鼎轩和天泰轩的罾蹦鲤鱼（全国获奖的津菜）。</li>
-<li>燕春楼的芫爆散丹、红烧牛尾、煎烹大虾。</li>
-<li>来顺成的羊尾。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h1 id="河北区-📍"><a href="#河北区-📍" class="headerlink" title="河北区 📍"></a>河北区 📍</h1><h2 id="王串场"><a href="#王串场" class="headerlink" title="王串场"></a>王串场</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/54.Trips-and-Exploration/CN.天津/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/54.Trips-and-Exploration/CN.香港/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/54.Trips-and-Exploration/CN.香港/" itemprop="url">CN香港 / 玩什么</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/54-Trips-and-Exploration/" itemprop="url" rel="index">
-                    <span itemprop="name">54.Trips-and-Exploration</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  85
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li><a href="https://www.zhihu.com/question/37121661" target="_blank" rel="noopener">香港有哪些经典的城市赏景地？ - 知乎</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/21952404" target="_blank" rel="noopener">Instagram网红才不会告诉你的香港十大建筑拍摄地 - 知乎</a><ul>
-<li>祖尧村, 荔景</li>
-<li>坪石邨，九龙</li>
-<li>西环邨，坚尼地城</li>
-<li>彩虹邨，九龙</li>
-<li>爱民邨，九龙</li>
-<li>励德邨，铜锣湾</li>
-<li>华富邨，薄扶林</li>
-<li>百福花园，北角</li>
-<li>坚尼地城</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/54.Trips-and-Exploration/EURO.希腊/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/54.Trips-and-Exploration/EURO.希腊/" itemprop="url">EURO.希腊 / 玩什么</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/54-Trips-and-Exploration/" itemprop="url" rel="index">
-                    <span itemprop="name">54.Trips-and-Exploration</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  494
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="雅典"><a href="#雅典" class="headerlink" title="雅典"></a>雅典</h2><p>雅典卫城（Ακρόπολη）是希腊最杰出的古建筑群，为宗教政治的中心地。现存的主要建筑有山门、帕特农神庙、伊瑞克提翁神庙等。这些古建筑都是人类遗产和建筑精品，在建筑学史上具有重要地位</p>
-<p>从雅典各个方向都可以看到耸立于雅典卫城山上顶端的帕特农神庙，据说远古这里曾供奉著高达10m的雅典娜神像，是举世闻名的古代七大奇观之一。帕特农神庙建于公元前447年，是著名建筑师和雕刻家菲迪亚斯的杰作</p>
-<p>奥林匹亚宙斯神庙位于雅典卫城东南方500米，始建于公元前515年，但直到公元2世纪哈德良皇帝统治时期才兴建完成，是当时希腊规模最大的神庙。据说原有104根壮观的列柱，目前仅存15根。</p>
-<p><img src="/images/2022/IMG20220923-4.png" alt="雅典卫城- 帕提农神庙"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/54.Trips-and-Exploration/EURO.希腊/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/54.Trips-and-Exploration/EURO.荷兰/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/54.Trips-and-Exploration/EURO.荷兰/" itemprop="url">EURO.荷兰 / 玩什么</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/54-Trips-and-Exploration/" itemprop="url" rel="index">
-                    <span itemprop="name">54.Trips-and-Exploration</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,758
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@inbox:</p>
-<ul>
-<li><a href="https://www.zhihu.com/question/27469267" target="_blank" rel="noopener">在荷兰生活是种什么样的体验？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/24839853" target="_blank" rel="noopener">荷兰是个怎样的国家？ - 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/31620359" target="_blank" rel="noopener">定居荷兰是一种什么样的体验？ - 知乎</a></li>
-</ul>
-<hr>
-<h2 id="阿姆斯特丹"><a href="#阿姆斯特丹" class="headerlink" title="阿姆斯特丹"></a>阿姆斯特丹</h2><ul>
-<li>Van Gogh Museum：梵高美术馆有4层，主要展出的是梵高一生中各个时期的主要作品，作品的数量占到梵高所有作品总量的1/4，《向日葵》、《吃土豆的人》，《盛开的杏树》和多幅梵高自画像都在这里，此外还收藏梵高的素描，以及其与弟弟提奥来往的书信，是世界上最大的一座梵高博物馆<ul>
-<li>从中央火车站乘2/5路有轨电车，在Van Baerlestraat站</li>
-</ul>
-</li>
-<li>Rembrandt House：<a href="https://art.icity.ly/museums/8r504p5" target="_blank" rel="noopener">伦勃朗故居博物馆 - 每日环球展览 - iMuseum</a></li>
-<li>犹太区：<ul>
-<li>犹太历史博物馆（JoodsHistorisch Museum）：其中有一个部分是斯宾诺莎（Baruch Spinoza）</li>
-<li>滑铁卢广场（Waterlooplein）的跳蚤市场</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/54.Trips-and-Exploration/EURO.荷兰/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/54.Trips-and-Exploration/EURO.俄罗斯/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/54.Trips-and-Exploration/EURO.俄罗斯/" itemprop="url">EURO.俄罗斯 / 玩什么</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/54-Trips-and-Exploration/" itemprop="url" rel="index">
-                    <span itemprop="name">54.Trips-and-Exploration</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3,100
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@toc</p>
-<ul>
-<li>加里宁格勒（柯尼斯堡大教堂）</li>
-<li>莫斯科</li>
-<li>彼得堡（冬宫广场、马琳剧院、涅瓦大街、滴血救世主教堂、普希金公寓）</li>
-</ul>
-<hr>
-<h2 id="柯尼斯堡"><a href="#柯尼斯堡" class="headerlink" title="柯尼斯堡"></a>柯尼斯堡</h2><p>即如今俄罗斯加里宁格勒州首府加里宁格勒，位于桑比亚半岛南部，由条顿骑士团北方十字军于1255年建立，先后被条顿骑士团国、普鲁士公国和东普鲁士定为首都或首府。柯尼斯堡曾是德国東部的文化中心之一。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/54.Trips-and-Exploration/EURO.俄罗斯/#more" rel="contents">
+            <a class="btn" href="/19.Algorithm/Alg.12.数据结构-树/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
