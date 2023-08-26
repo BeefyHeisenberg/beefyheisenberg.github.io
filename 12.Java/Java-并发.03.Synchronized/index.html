@@ -128,7 +128,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.Object.MarkWord64.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Java-%E5%B9%B6%E5%8F%91.03.Synchronized-2023-05-28-1.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/java_monitor.gif">
-<meta property="og:updated_time" content="2023-06-18T14:37:20.556Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.131Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java-并发.03.Synchronized">
 <meta name="twitter:description" content="Synchronized使用(1) synchronized 方法: public class Bank &amp;#123;  public synchronized void transfer() &amp;#123;    while(!resource_is_available) // 进入代码块,此时持有对象锁      wait(); // 放弃锁，并在对象上等待      // 重新获得锁, doS">
@@ -357,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,199
+                  3,185
                 </span>
               
 
@@ -416,7 +416,7 @@
 <p>MarkWord <strong>低 2 位</strong>是锁标记, 加上 1 位的偏向锁标记，一共对应 4 种锁:</p>
 <p><img src="/images/Advanced-Java.Object.MarkWord64.png" alt="../_images/Advanced-Java.Object.MarkWord64.png"><br>图来自 <a href="https://juejin.cn/post/6844904114061590535#heading-5" target="_blank" rel="noopener">https://juejin.cn/post/6844904114061590535#heading-5</a></p>
 <h3 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h3><p>无锁状态下, 对象 Mark Word 锁标志也是 01(同偏向锁一样)；</p>
-<h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h3><p>在无锁状态下，当有线程尝试获取对象锁（前提是该对象支持偏向锁），那么会通过 CAS 操作，将对象头的 Mark Word  替换为自己的线程 ID，并把 Mark Word 锁标志置为101，这时候对象锁进入<strong>偏向锁</strong>；</p>
+<h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h3><p>在无锁状态下，当有线程尝试获取对象锁（前提是 JVM 开启了支持偏向锁），那么会通过 CAS 操作，将对象头的 Mark Word  替换为自己的线程 ID，并把 Mark Word 锁标志置为101，这时候对象锁进入<strong>偏向锁</strong>；</p>
 <p>偏向锁状态下，线程尝试进入同步块的过程如下：</p>
 <ul>
 <li>检查 Mark Word 中的 ThreadID 是否等于自己的，如果是则直接进入同步块；</li>
@@ -429,7 +429,6 @@
 <li>如果是，已持有偏向锁的线程继续执行，竞争失败的线程开始自旋+CAS（<strong>轻量级锁</strong>）</li>
 </ul>
 <p>可以看到偏向锁是一直等到有竞争才会释放，偏向锁的撤销需要等到下个 safe point。</p>
-<p>偏向锁的撤销非常繁琐，如果</p>
 <p>是否要用偏向锁，取决于：</p>
 <ol>
 <li>偏向锁在 JDK 6及以后的 JVM 里是默认启用的。可以通过 JVM 参数关闭偏向锁：<code>-XX:-UseBiasedLocking=false</code>；</li>
@@ -458,13 +457,13 @@
 </ul>
 <p>【图】 Monitor 模型:</p>
 <ol>
-<li>抢锁的线程先进入 Entry Set</li>
-<li>EntrySet 队列中的线程尝试 acquire() 锁，成功后改写 Owner 为线程自己，</li>
-<li>持有锁的线程调用了 wait()，会释放锁并进入 Wait Set</li>
-<li>Wait Set 中的线程，被其他线程 notify()唤醒后，会尝试 acquire()锁</li>
+<li>抢锁的线程先进入 EntrySet</li>
+<li>EntrySet 队列中的线程尝试 <code>acquire()</code> 锁，成功后改写 Owner 为线程自己，</li>
+<li>持有锁的线程调用了 <code>wait()</code>，会释放锁并进入 WaitSet</li>
+<li>WaitSet 中的线程，被其他线程 <code>notify()</code>唤醒后，会尝试 <code>acquire()</code>锁</li>
 <li>持有锁的线程释放锁<br><img src="/images/java/java_monitor.gif" alt="Monitor模型"></li>
 </ol>
-<p>↑ 只有 acquire 成功的线程是活动的（深色表示），其他的现场都是等待状态（浅色）</p>
+<p>↑ 只有 acquire 成功的线程是活动的（深色表示），其他的线程都是等待状态（浅色）</p>
 <p>ObjectMonitor 的 C++代码实现参考 @ref: <a href="https://xiaomi-info.github.io/2020/03/24/synchronized/" target="_blank" rel="noopener">synchronized 实现原理 | 小米信息部技术团队</a></p>
 <p>➤ 回到开头的例子：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">transfer</span><span class="params">()</span> </span>&#123; <span class="comment">// (1)</span></span><br><span class="line">    <span class="keyword">while</span>(!resource_is_available)&#123;</span><br><span class="line">      wait();  <span class="comment">// (2)</span></span><br><span class="line">    &#125;</span><br><span class="line">    notifyAll();  <span class="comment">// (3)</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -622,7 +621,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -633,7 +632,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -644,7 +643,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="volatile关键字特性 多CPU环境的可见性: 多CPU的环境下, CPU有可能从寄存器或Cache里直接取值, 这种情况下运行在不同CPU上的线程获取的值可能不同, volitile变量可以保证每次更新都改变到主存, 每次读取都从主存中读取. volatile 可以作为一种开销较低的免锁机制(某些情况下). volatile 的 long, double 的读写不保证有原子性. volati">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-06-18T14:37:20.562Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.136Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java-并发.04.Volatile">
 <meta name="twitter:description" content="volatile关键字特性 多CPU环境的可见性: 多CPU的环境下, CPU有可能从寄存器或Cache里直接取值, 这种情况下运行在不同CPU上的线程获取的值可能不同, volitile变量可以保证每次更新都改变到主存, 每次读取都从主存中读取. volatile 可以作为一种开销较低的免锁机制(某些情况下). volatile 的 long, double 的读写不保证有原子性. volati">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  815
+                  829
                 </span>
               
 
@@ -391,7 +391,7 @@
 </ol>
 <p>➤ 不适用的情况：</p>
 <ol>
-<li>用于计数器(请使用<code>AomicInteger</code>)， 虽然增量操作（x++）看上去类似一个单独操作，实际上它是一个由读取－修改－写入操作序列组成的组合操作，必须以原子方式执行，而 volatile 不能提供必须的原子特性。</li>
+<li>用于计数器(请使用<code>AomicInteger</code>)， 虽然增量操作（x++）看上去类似一个单独操作，实际上它是一个由 “读取－修改－写入” 操作序列组成的组合操作，必须以原子方式执行，而 volatile 不能提供必须的原子特性。</li>
 <li>“依赖当前值”的写操作, 比如<code>i=i+1</code></li>
 <li>非原子操作, <code>i++</code>, <code>i=!i</code>都不是原子操作</li>
 </ol>
@@ -399,10 +399,10 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="function">protect <span class="keyword">void</span> <span class="title">filp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  i = !i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="Volatile-的特性是如何实现的？"><a href="#Volatile-的特性是如何实现的？" class="headerlink" title="Volatile 的特性是如何实现的？"></a>Volatile 的特性是如何实现的？</h2><ul>
 <li>第一：使用 volatile 关键字会强制将修改的值立即写入主存；</li>
-<li>第二：使用 volatile 关键字的话，当线程 2 进行修改时，会导致线程1的工作内存中缓存变量的缓存行无效；</li>
-<li>第三：由于线程1的工作内存中缓存变量的缓存行无效，所以线程 1 再次读取变量的值时会去主存读取。</li>
+<li>第二：使用 volatile 关键字的话，当线程 2 进行修改时，会导致线程1的工作内存中缓存变量的 <strong>缓存行</strong> 无效（缓存行，CPU 高速缓存中的 cache line）</li>
+<li>第三：由于线程1的工作内存中缓存变量的 <strong>缓存行</strong> 无效，所以线程 1 再次读取变量的值时会去主存读取。</li>
 </ul>
-<p>1 和 2 是通过<strong>内存屏障</strong> 实现的，详见 <a href="/12.Java/Java-并发.09.深入理解JMM/" title="Java-并发.09.深入理解JMM">Java-并发.09.深入理解JMM</a></p>
+<p>上面的特性，是通过 <strong>内存屏障</strong> 实现的，详见 <a href="/12.Java/Java-并发.09.深入理解JMM/" title="Java-并发.09.深入理解JMM">Java-并发.09.深入理解JMM</a></p>
 <h2 id="Volatile-Double-是原子的吗？"><a href="#Volatile-Double-是原子的吗？" class="headerlink" title="Volatile Double 是原子的吗？"></a>Volatile Double 是原子的吗？</h2><p>先看硬件的支持，如果要保证 double 写的原子性，那么要满足 64bit + 内存对齐 + 它没跨 cache line</p>
 <ul>
 <li>如果是 64bit，且这个 double 是内存对齐的，那么对它的读写是原子的，但是很多情况下（C++ 和 Java 中）无法保证对齐，也就无法保证原子性</li>
@@ -559,7 +559,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -570,7 +570,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -581,7 +581,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

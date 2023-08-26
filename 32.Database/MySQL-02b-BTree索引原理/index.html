@@ -117,13 +117,13 @@
 
 
 
-<meta name="description" content="B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B 树的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点 数据  B 树的特点：">
+<meta name="description" content="B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B-Tree的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点 数据  B-Tree的特点：">
 <meta name="keywords" content="后端架构,数据库,MySQL,索引">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL-03b-索引-BTree">
 <meta property="og:url" content="https://beefyheisenberg.github.io/32.Database/MySQL-02b-BTree索引原理/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B 树的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点 数据  B 树的特点：">
+<meta property="og:description" content="B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B-Tree的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点 数据  B-Tree的特点：">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/b-tree.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-1.png">
@@ -139,10 +139,10 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-3.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-4.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-5.png">
-<meta property="og:updated_time" content="2023-06-18T14:37:21.353Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.772Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL-03b-索引-BTree">
-<meta name="twitter:description" content="B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B 树的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点 数据  B 树的特点：">
+<meta name="twitter:description" content="B-TreeB-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 M 阶的 B-Tree  满足以下条件： B-Tree的节点包含两部分：  关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点 数据  B-Tree的特点：">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/b-tree.png">
 
 
@@ -394,54 +394,54 @@
 
       
         <h2 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B-Tree"></a>B-Tree</h2><p>B-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 <strong>M 阶的 B-Tree </strong> 满足以下条件：</p>
-<p>B 树的节点包含两部分：</p>
+<p>B-Tree的节点包含两部分：</p>
 <ol>
 <li>关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点</li>
 <li>数据</li>
 </ol>
-<p>B 树的特点：</p>
+<p>B-Tree的特点：</p>
 <ul>
 <li>树的 <strong>根节点</strong> 拥有的子节点数量子在 2- M 之间；</li>
 <li>除根外，每个 <strong>非叶子节点</strong> 拥有的子节点数量在 M/2 - M 之间；</li>
 <li>一个 <strong>非叶子节点</strong> 如果包含 k 个关键字，那么它有 k+1 个子节点；</li>
 <li>所有叶子节点都在相同的深度，且叶子节点不包含<strong>关键字</strong>信息；</li>
 </ul>
-<p>一个 4 阶 B 树：</p>
+<p>一个 4 阶 B-Tree：</p>
 <p><img src="/images/b-tree.png" alt="../_images/b-tree.png"></p>
-<h3 id="插入过程"><a href="#插入过程" class="headerlink" title="插入过程"></a>插入过程</h3><p>针对 m 阶高度 h 的 B 树，插入一个元素时，首先在 B 树中是否存在，如果不存在，即在叶子结点处结束，然后在叶子结点中插入该新的元素。</p>
+<h3 id="插入过程"><a href="#插入过程" class="headerlink" title="插入过程"></a>插入过程</h3><p>针对 m 阶高度 h 的 B-Tree，插入一个元素时，首先在 B-Tree中是否存在，如果不存在，即在叶子结点处结束，然后在叶子结点中插入该新的元素。</p>
 <ul>
 <li>若该节点元素个数小于m-1，直接插入；</li>
 <li>若该节点元素个数等于m-1，引起节点分裂；以该节点中间元素为分界，取中间元素（偶数个数，中间两个随机选取）插入到父节点中；</li>
-<li>重复上面动作，直到所有节点符合B树的规则；最坏的情况一直分裂到根节点，生成新的根节点，高度增加1；</li>
+<li>重复上面动作，直到所有节点符合B-Tree的规则；最坏的情况一直分裂到根节点，生成新的根节点，高度增加1；</li>
 </ul>
 <p>插入的例子（为了直观而先插入元素，然后判断是否要分裂）：</p>
-<p>（1）5 阶 B 树，插入前：<br><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-1.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-1.png"></p>
+<p>（1）5 阶 B-Tree，插入前：<br><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-1.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-1.png"></p>
 <p>（2）插入 19，引起 14、16、17、18 的节点分裂，把中间元素【17】上移到父节点中，但是情况来了，父节点中空间已经满了，所以也要进行分裂，将父节点中的中间元素【13】上移到新形成的根结点中，这样具体插入操作的完成。</p>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-2.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-2.png"></p>
-<h3 id="删除过程"><a href="#删除过程" class="headerlink" title="删除过程"></a>删除过程</h3><p>首先，查找 B 树中需删除的元素，如果该元素在 B 树中存在，则将该元素在其节点中进行删除；删除该元素后，首先判断该元素是否有左右孩子节点， 如果有，则上移孩子节点中的某相近元素（「左孩子最右边的节点」或「右孩子最左边的节点」）到父节点中，然后是移动之后的情况；如果没有，直接删除。</p>
+<h3 id="删除过程"><a href="#删除过程" class="headerlink" title="删除过程"></a>删除过程</h3><p>首先，查找 B-Tree中需删除的元素，如果该元素在 B-Tree中存在，则将该元素在其节点中进行删除；删除该元素后，首先判断该元素是否有左右孩子节点， 如果有，则上移孩子节点中的某相近元素（「左孩子最右边的节点」或「右孩子最左边的节点」）到父节点中，然后是移动之后的情况；如果没有，直接删除。</p>
 <ol>
 <li>某节点中元素数目小于 m/2-1、m/2 向上取整，则需要看其相邻兄弟节点是否丰满。</li>
 <li>如果其相邻兄弟都不丰满，即其节点数目刚好等于 m/2-1，则该节点与其相邻的某一兄弟节点进行「合并」成一个节点。</li>
 <li>如果其相邻兄弟丰满（节点中元素个数大于 m/2-1），则向父节点借一个元素来满足条件。</li>
 </ol>
-<p>接下来用一个 5 阶 B 树为例，详细讲解删除的操作。</p>
-<p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-6.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-6.png"><br>如图所示，接下来要依次删除 8，20，18，5。 首先要删除元素 8。先查找到元素 8 在叶子节点中，删除 8 后叶子节点的元素个数为 2，符合 B 树的规则。然后需要把元素 11 和 12 都向前移动一位。完成后如图所示。</p>
+<p>接下来用一个 5 阶 B-Tree为例，详细讲解删除的操作。</p>
+<p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-6.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-6.png"><br>如图所示，接下来要依次删除 8，20，18，5。 首先要删除元素 8。先查找到元素 8 在叶子节点中，删除 8 后叶子节点的元素个数为 2，符合 B-Tree的规则。然后需要把元素 11 和 12 都向前移动一位。完成后如图所示。</p>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-7.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-7.png"></p>
 <p>下一步，删除 20，因为 20 没有在叶子节点中，而是在中间节点中找到，可以发现 20 的继承者是 23（字母升序的下个元素），然后需要将 23 上移到 20 的位置，之后将孩子节点中的 23 进行删除。 删除后检查一下，该孩子节点中元素个数大于 2，无需进行合并操作。</p>
-<p>所以这一步之后，B 树如下图所示。</p>
+<p>所以这一步之后，B-Tree如下图所示。</p>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-9.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-9.png"></p>
 <p>下一步删除 18，18 在叶子节点中，但是该节点中元素数目为 2，删除导致只有 1 个元素，已经小于最小元素数目 2。而由前面已经知道：如果其某个相邻兄弟节点中比较丰满（元素个数大于 5/2），则可以向父节点借一个元素，然后将最丰满的相邻兄弟节点中上移最后或最前一个元素到父节点中。在这个实例中，右相邻兄弟节点中比较丰满（3 个元素大于 2），所以先向父节点借一个元素 23 下移到该叶子节点中，代替原来 19 的位置。19 前移。然后 24 在相邻右兄弟节点中，需要上移到父节点中。最后在相邻右兄弟节点中删除 24，后面的元素前移。</p>
-<p>这一步之后，B 树如下图所示。</p>
+<p>这一步之后，B-Tree如下图所示。</p>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-10.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-10.png"></p>
 <p>最后一步需要删除元素 5，但是删除后会导致很多问题。因为 5 所在的节点数目刚好达标也就是刚好满足最小元素个数 2。 而相邻的兄弟节点也是同样的情况，删除一个元素都不能满足条件，所以需要该节点与某相邻兄弟节点进行合并操作；首先移动父节点中的元素（该元素在两个需要合并的两个节点元素之间）下移到其子节点中。 然后将这两个节点进行合并成一个节点。所以在该实例中，首先将父节点中的元素 4 下移到已经删除 5 而只有 6 的节点中，然后将含有 4 和 6 的节点和含有 1，3 的相邻兄弟节点进行合并成一个节点。</p>
-<p>这一步之后，B 树如下图所示。</p>
+<p>这一步之后，B-Tree如下图所示。</p>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-11.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-11.png"></p>
 <p>但是这里观察到父节点只包含了一个元素 7，这就没有达标（因为非根节点包括叶子节点的元素数量 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" title="K"> 必须满足于[2, 4] <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" title="K=1">）。如果这个问题节点的相邻兄弟比较丰满，则可以向父节点借一个元素。而此时兄弟节点元素刚好为 2，刚刚满足，只能进行合并，而根节点中的唯一元素 13 下移到子节点。这样，树的高度减少一层。</p>
 <p>所以最终的效果如下图。</p>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-12.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-12.png"></p>
-<h3 id="B-Tree-的复杂度分析"><a href="#B-Tree-的复杂度分析" class="headerlink" title="B-Tree 的复杂度分析"></a>B-Tree 的复杂度分析</h3><p>B 树高度的证明过程：</p>
+<h3 id="B-Tree-的复杂度分析"><a href="#B-Tree-的复杂度分析" class="headerlink" title="B-Tree 的复杂度分析"></a>B-Tree 的复杂度分析</h3><p>B-Tree高度的证明过程：</p>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-3.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-3.png"></p>
-<p><strong>结论</strong> 对于一颗数阶=M, 高度=h, 索引了 N 个元素的 B 树:</p>
+<p><strong>结论</strong> 对于一颗数阶=M, 高度=h, 索引了 N 个元素的 B-Tree:</p>
 <ul>
 <li><p>树高 h 的上限:  $\log_M ((N+1)/2)$</p>
 </li>
@@ -472,28 +472,28 @@
 </blockquote>
 <h2 id="B-Tree-1"><a href="#B-Tree-1" class="headerlink" title="B+Tree"></a>B+Tree</h2><p>与B-Tree相比，B+Tree有以下不同点：</p>
 <ul>
-<li>有 k 个子树的中间节点包含有 k 个关键字（B 树中是 k-1个）@doubt</li>
+<li>有 k 个子树的中间节点包含有 k 个关键字（B-Tree中是 k-1个）@doubt</li>
 <li>非叶子节点没有 data, 只存储关键字和关键字对应的指针（非叶子节点仅存索引）;</li>
 <li>叶子节点存储了所有的关键字和关键字对应的 data（叶子节点包含所有的关键字和数据）；</li>
 <li>相邻的叶子节点按顺序形成单链表（叶子节点在一条链表中）; // @duobt: 单向链表 还是 双向链表？</li>
 </ul>
 <p><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-4.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-4.png"></p>
-<p>各种资料上 B+树的定义各有不同，上面的定义方式是关键字个数和孩子结点个数相同，这里我们采取维基百科上所定义的方式，即关键字个数比孩子结点个数小1，这种方式是和B树基本等价的（<a href="https://en.wikipedia.org/wiki/B%2B_tree" target="_blank" rel="noopener">B+ tree - Wikipedia</a>）：<br><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-5.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-5.png"></p>
-<p>➤ <strong>为什么说 B+树比 B 树更适合数据库索引？</strong></p>
+<p>各种资料上 B+树的定义各有不同，上面的定义方式是关键字个数和孩子结点个数相同，这里我们采取维基百科上所定义的方式，即关键字个数比孩子结点个数小1，这种方式是和B-Tree基本等价的（<a href="https://en.wikipedia.org/wiki/B%2B_tree" target="_blank" rel="noopener">B+ tree - Wikipedia</a>）：<br><img src="/images/MySQL-02b-BTree%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-2023-05-08-5.png" alt="../_images/MySQL-02b-BTree索引原理-2023-05-08-5.png"></p>
+<p>➤ <strong>为什么说 B+树比 B-Tree更适合数据库索引？</strong></p>
 <p>1）B+树的磁盘读写代价更低</p>
-<p>B+树的内部结点并没有指向关键字具体信息的指针。因此其内部结点相对B 树更小。如果把所有同一内部结点的关键字存放在同一盘块中，那么盘块所能容纳的关键字数量也越多。一次性读入内存中的需要查找的关键字也就越多。相对来说IO读写次数也就降低了；</p>
+<p>B+树的内部结点并没有指向关键字具体信息的指针。因此其内部结点相对B-Tree更小。如果把所有同一内部结点的关键字存放在同一盘块中，那么盘块所能容纳的关键字数量也越多。一次性读入内存中的需要查找的关键字也就越多。相对来说IO读写次数也就降低了；</p>
 <p>2）B+树查询效率更加稳定</p>
 <p>由于非终结点并不是最终指向文件内容的结点，而只是叶子结点中关键字的索引。所以任何关键字的查找必须走一条从根结点到叶子结点的路。所有关键字查询的路径长度相同，导致每一个数据的查询效率相当；</p>
 <p>3）B+树便于范围查询（最重要的原因，范围查找是数据库的常态）</p>
-<p>B树在提高了IO性能的同时并没有解决元素遍历的我效率低下的问题，正是为了解决这个问题，B+树应用而生。B+树只需要去遍历叶子节点就可以实现整棵树的遍历。</p>
+<p>B-Tree在提高了IO性能的同时并没有解决元素遍历的我效率低下的问题，正是为了解决这个问题，B+树应用而生。B+树只需要去遍历叶子节点就可以实现整棵树的遍历。</p>
 <blockquote>
-<p>补充：B树的范围查找用的是中序遍历，而B+树用的是在链表上遍历</p>
+<p>补充：B-Tree的范围查找用的是中序遍历，而B+树用的是在链表上遍历</p>
 </blockquote>
 <h2 id="MySQL如何使用索引"><a href="#MySQL如何使用索引" class="headerlink" title="MySQL如何使用索引"></a>MySQL如何使用索引</h2><p>MySQL 使用 B+Tree 作为索引，数据库表中每个索引都可以认为是一个 B+Tree 结构</p>
 <ul>
 <li><p>聚集索引，B+Tree 的叶子节点存储的内容是每一行的数据，所以表在磁盘上的存储顺序与索引的顺序一致</p>
 </li>
-<li><p>非聚集索引，叶子节点存储的内容不是真实行数据，而是主键的值表，所以数据存储顺序与索引顺序无关。通过非聚簇索引查询要再回主键的 B 树查询才能得到数据（<strong>回表</strong>）, 所以也叫<strong>二级索引</strong></p>
+<li><p>非聚集索引，叶子节点存储的内容不是真实行数据，而是主键的值表，所以数据存储顺序与索引顺序无关。通过非聚簇索引查询要再回主键的 B-Tree查询才能得到数据（<strong>回表</strong>）, 所以也叫<strong>二级索引</strong></p>
 </li>
 </ul>
 <p>查询非聚集索引也有不需回表的情况：</p>
@@ -513,7 +513,7 @@
 <hr>
 <p>@ref:</p>
 <ul>
-<li><a href="https://github.com/wardseptember/notes/blob/master/docs/B%E6%A0%91%E5%92%8CB%2B%E6%A0%91%E8%AF%A6%E8%A7%A3.md" target="_blank" rel="noopener">notes/B树和B+树详解.md at master · wardseptember/notes</a></li>
+<li><a href="https://github.com/wardseptember/notes/blob/master/docs/B%E6%A0%91%E5%92%8CB%2B%E6%A0%91%E8%AF%A6%E8%A7%A3.md" target="_blank" rel="noopener">notes/B-Tree和B+树详解.md at master · wardseptember/notes</a></li>
 <li><a href="https://oi-wiki.org/ds/bplus-tree/" target="_blank" rel="noopener">B+ 树 - OI Wiki</a></li>
 <li><a href="https://ivanzz1001.github.io/records/post/data-structure/2018/06/16/ds-bplustree" target="_blank" rel="noopener">B+树详解 | Ivanzz</a></li>
 </ul>
@@ -656,7 +656,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -667,7 +667,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -678,7 +678,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

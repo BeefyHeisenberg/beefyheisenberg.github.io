@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="键值对数据库  每个 redisServer 实例包含多个 DB，每个 DB 在内存中使用 redisDb 结构体表示； 每个 redisDb 包含2个 dictht（dict hashtable）字典，字典中包含了所有的键值对，我们也称该字典为键空间(key space)。其中第二个字典 ht[1] 指向 null，只在rehash 过程中才会被分配内存； 每个键值对 对应的数据结构是 dict">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis-01b数据结构-内部实现">
+<meta property="og:url" content="https://beefyheisenberg.github.io/31.Backend/Redis-01b数据结构的实现/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="键值对数据库  每个 redisServer 实例包含多个 DB，每个 DB 在内存中使用 redisDb 结构体表示； 每个 redisDb 包含2个 dictht（dict hashtable）字典，字典中包含了所有的键值对，我们也称该字典为键空间(key space)。其中第二个字典 ht[1] 指向 null，只在rehash 过程中才会被分配内存； 每个键值对 对应的数据结构是 dict">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Redis-01b-RedisServer.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Redis-01b-Struct-list.png">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.491Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis-01b数据结构-内部实现">
+<meta name="twitter:description" content="键值对数据库  每个 redisServer 实例包含多个 DB，每个 DB 在内存中使用 redisDb 结构体表示； 每个 redisDb 包含2个 dictht（dict hashtable）字典，字典中包含了所有的键值对，我们也称该字典为键空间(key space)。其中第二个字典 ht[1] 指向 null，只在rehash 过程中才会被分配内存； 每个键值对 对应的数据结构是 dict">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Redis-01b-RedisServer.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/31.Backend/Redis-01b数据结构的实现/"/>
+
+
+
+
+
+  <title>Redis-01b数据结构-内部实现 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-01b数据结构的实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis-01b数据结构-内部实现</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,683
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="键值对数据库"><a href="#键值对数据库" class="headerlink" title="键值对数据库"></a>键值对数据库</h2><p><img src="/images/Redis-01b-RedisServer.png" alt="../_images/Redis-01b-RedisServer.png"></p>
+<ul>
+<li>每个 <strong>redisServer</strong> 实例包含多个 DB，每个 DB 在内存中使用 redisDb 结构体表示；</li>
+<li>每个 <strong>redisDb</strong> 包含2个 <strong>dictht</strong>（dict hashtable）字典，字典中包含了所有的<strong>键值对</strong>，我们也称该字典为<strong>键空间</strong>(key space)。其中第二个字典 ht[1] 指向 null，只在<strong>rehash</strong> 过程中才会被分配内存；</li>
+<li>每个<strong>键值对</strong> 对应的数据结构是 <code>dictEntry</code>，其主要包含三个成员：key、value、next，其中 key 和 value 的类型都是 <code>void*</code>，该指针指向类型是 <code>redisObject</code>；</li>
+<li><code>redisObject</code> 是 Redis 中各种数据类型的抽象，主要包含三个成员：type、encoding、ptr，根据不同的 type 和 encoding，ptr 可以指向 String，List，Hash，Set，SortedSet 等… </li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> type;</span><br><span class="line">    <span class="keyword">unsigned</span> encoding;</span><br><span class="line">    <span class="keyword">unsigned</span> lru;</span><br><span class="line">    <span class="keyword">int</span> refcount;</span><br><span class="line">    <span class="keyword">void</span> *ptr;</span><br><span class="line">&#125;robj;</span><br></pre></td></tr></table></figure>
+<h2 id="redisObject"><a href="#redisObject" class="headerlink" title="redisObject"></a>redisObject</h2><p><strong>redisObject</strong> 主要成员：</p>
+<ul>
+<li><code>unsigned type</code>：存储对象的类型，也即 ptr 指针指向的数据类型（String、List、Hash、Set、ZSet 中的一种）</li>
+<li><code>unsigned encoding</code>：存储对象使用的编码方式，也即 ptr 指针指向的数据块用何种编码，不同的编码方式使用不同的数据结构进行存储。例如 String 类型的对象，可能的编码方式有 REDIS_ENCODING_INT、REDIS_ENCODING_EMBSTR、REDIS_ENCODING_RAW 三种；</li>
+<li><code>unsigned lru</code>：存储 redisObject 上次被访问的时间戳，详见「Key过期」</li>
+<li><code>void *ptr</code>：根据 type+encodng，可能指向不同的数据结构</li>
+</ul>
+<p>type 和 encoding 的组合：</p>
+<table>
+<thead>
+<tr>
+<th>数据类型（type）</th>
+<th>编码格式（encoding）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>REDIS_STRING</td>
+<td>REDIS_ENCODING_INT</td>
+</tr>
+<tr>
+<td></td>
+<td>REDIS_ENCODING_EMBSTR</td>
+</tr>
+<tr>
+<td></td>
+<td>REDIS_ENCODING_RAW</td>
+</tr>
+<tr>
+<td>REDIS_LIST</td>
+<td>REDIS_ENCODING_LINKEDLIST</td>
+</tr>
+<tr>
+<td></td>
+<td>REDIS_ENCODING_ZIPLIST（压缩列表）</td>
+</tr>
+<tr>
+<td></td>
+<td>REDIS_ENCODING_QUICKLIST（3.2新增）</td>
+</tr>
+<tr>
+<td>REDIS_SET</td>
+<td>REDIS_ENCODING_INTSET</td>
+</tr>
+<tr>
+<td></td>
+<td>REDIS_ENCODING_HT（哈希表）</td>
+</tr>
+<tr>
+<td>REDIS_ZSET</td>
+<td>REDIS_ENCODING_ZIPLIST</td>
+</tr>
+<tr>
+<td></td>
+<td>REDIS_ENCODING_SKIPLIST（跳表）</td>
+</tr>
+<tr>
+<td>REDIS_HASH</td>
+<td>REDIS_ENCODING_ZIPLIST</td>
+</tr>
+<tr>
+<td></td>
+<td>REDIS_ENCODING_HT</td>
+</tr>
+</tbody>
+</table>
+<p>Redis 数据类型的底层数据结构随着版本的更新也有所不同，比如：</p>
+<ul>
+<li>在 Redis 3.0 版本中 List 对象的底层数据结构由「双向链表」或「压缩表列表」实现，但是在 3.2 版本之后，List 数据类型底层数据结构是由 quicklist 实现的；</li>
+<li>在最新的 Redis 代码（还未发布正式版本）中，压缩列表数据结构已经废弃了，交由 listpack 数据结构来实现了。</li>
+</ul>
+<p><img src="/images/Redis-01b-Struct-list.png" alt="../_images/Redis-01b-Struct-list.png"></p>
+<h2 id="数据结构的实现"><a href="#数据结构的实现" class="headerlink" title="数据结构的实现"></a>数据结构的实现</h2><h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><p>➤ redisObject type = REDIS_STRING, 支持 INT、EMBSTR、RAW 三种编码，</p>
+<ul>
+<li><p>如果字符串的值是整数，同时可以使用 long 来进行表示，那么 Redis 将会使用 INT 编码方式，INT编码方式会将RedisObject中的<code>*ptr</code>指针直接改写成long ptr，ptr属性直接存储字面量：<br>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-1.png]]</p>
+</li>
+<li><p>如果字符串的值是字符，同时字符串的大小 ＜ 32个字节，那么 Redis 将会使用 EMBSTR 编码方式，RedisObject 和 SDS 共同使用同一块内存单元，Redis 内存分配器只需要分配一次内存：<br>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-2.png]]</p>
+</li>
+<li><p>如果字符串的值是字符，同时字符串的大小＞32个字节，那么 Redis 将会使用 RAW 编码方式。RedisObject 和 SDS 是分开的<br>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-3.png]]</p>
+</li>
+</ul>
+<p>➤ 编码转换 &amp; 升级：</p>
+<ul>
+<li><p>如果字符串的值不再是整数或者用 long 无法进行表示，那么 INT 编码方式将会转换成 RAW 编码方式。</p>
+</li>
+<li><p>如果字符串的值其大小大于32个字节，那么 EMBSTR 编码方式将会转换成 RAW 编码方式。</p>
+</li>
+<li><p>INT 编码方式不能转换成 EMBSTR 编码方式。</p>
+</li>
+</ul>
+<p>➤ 字符串类型的 redisObject，其 ptr 指向的是 SDS 类型（simple dynamic string，简单动态字符串）的实现（Redis 5.0）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">struct __attribute__ ((__packed__)) sdshdr5 &#123;</span><br><span class="line">    unsigned char flags; /* 3 lsb of type, and 5 msb of string length */</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr8 &#123;</span><br><span class="line">    uint8_t len; /* used */</span><br><span class="line">    uint8_t alloc; /* excluding the header and null terminator */</span><br><span class="line">    unsigned char flags; /* 3 lsb of type, 5 unused bits */</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>len，记录了字符串长度</strong>。这样获取字符串长度的时候时间复杂度只需要 O（1）；</li>
+<li><strong>alloc，分配给字符数组的空间长度</strong>。这样在修改字符串的时候，可以通过 <code>alloc - len</code> 计算出剩余的空间大小，可以用来判断空间是否满足修改需求，如果不满足的话，就会自动将 SDS 的空间扩展至执行修改所需的大小，然后才执行实际的修改操作；</li>
+<li><strong>flags，用来表示不同类型的 SDS</strong>。一共设计了 5 种类型，分别是 sdshdr5、sdshdr8、sdshdr16、sdshdr32 和 sdshdr64，区别是 len 和 alloc 成员变量的类型不同；</li>
+<li><strong>buf，字符数组，用来保存实际数据</strong>。不仅可以保存字符串，也可以保存二进制数据；</li>
+</ul>
+<p>➤ SDS 设计解析：</p>
+<ul>
+<li>字符串结尾判断使用 len，而不是 <code>&#39;\0&#39;</code>，这样可以让 sds 也可以存储二进制数据；</li>
+<li>sds 的 buf 数组有冗余的空间，减少了内存分配频率；</li>
+<li>之所以 SDS 设计不同类型的结构体，是为了能灵活保存不同大小的字符串，从而有效节省内存空间。比如，在保存小字符串时，结构头占用空间也比较少；</li>
+<li>指定了对齐方式 <code>__attribute__ ((packed))</code> ，它的作用是：<strong>告诉编译器取消结构体在编译过程中的优化对齐，按照实际占用字节数进行对齐</strong>。默认情况下编译器按照“字段相对于结构体首地址的偏移，能够被该字段的 size 整除”，</li>
+</ul>
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><p>redisObject type = REDIS_LIST，支持 ZIPLIST、LINKEDLIST 两种编码方式：</p>
+<ul>
+<li>如果列表对象保存的元素的数量少于512个，同时每个元素的大小都小于64个字节，那么 Redis 将会使用 ZIPLIST 编码方式：</li>
+</ul>
+<p>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-4.png]]</p>
+<ul>
+<li>如果列表对象保存的元素的数量多于512个，或者元素的大小大于64个字节，那么 Redis 将会使用 LINKEDLIST 编码方式：<br>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-5.png]]</li>
+</ul>
+<p>➤ 编码转换和升级：<br>如果列表对象保存的元素的数量多于512个，或者元素的大小大于64个字节，那么 Redis 将会使用 LINKEDLIST 编码方式。</p>
+<p>➤ zlist 的实现：连续的内存块</p>
+<p>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-12.png]]</p>
+<p>zlist 节点包含三部分内容：</p>
+<ul>
+<li><em><strong>prevlen</strong></em>，记录了「前一个节点」的长度，目的是为了实现从后向前遍历；</li>
+<li><em><strong>encoding</strong></em>，记录了当前节点实际数据的 <strong>类型和长度</strong>，类型主要有两种：字符串和整数。</li>
+<li><em><strong>data</strong></em>，记录了当前节点的实际数据，类型和长度都由 <code>encoding</code> 决定；</li>
+</ul>
+<p>相比较链表型，zlist 节点没有 next 指针，并且根据 encoding 灵活决定 data 的大小，但是缺点也很明显：</p>
+<ul>
+<li>连锁更新：一个 entry 被更新，假如长度发生变化，后续 entry 也都受影响，需要对 zlist 进行重新内存分配；</li>
+<li>zlist 除了用在 LIST，还可能用在 HashMap、Set 中，查找效率较差</li>
+</ul>
+<p>➤ list 的实现：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">typedef struct list &#123;</span><br><span class="line">    //链表头节点</span><br><span class="line">    listNode *head;</span><br><span class="line">    //链表尾节点</span><br><span class="line">    listNode *tail;</span><br><span class="line">    //节点值复制函数</span><br><span class="line">    void *(*dup)(void *ptr);</span><br><span class="line">    //节点值释放函数</span><br><span class="line">    void (*free)(void *ptr);</span><br><span class="line">    //节点值比较函数</span><br><span class="line">    int (*match)(void *ptr, void *key);</span><br><span class="line">    //链表节点数量</span><br><span class="line">    unsigned long len;</span><br><span class="line">&#125; list;</span><br><span class="line"></span><br><span class="line">typedef struct listNode &#123;</span><br><span class="line">    //前置节点</span><br><span class="line">    struct listNode *prev;</span><br><span class="line">    //后置节点</span><br><span class="line">    struct listNode *next;</span><br><span class="line">    //节点的值</span><br><span class="line">    void *value;</span><br><span class="line">&#125; listNode;</span><br></pre></td></tr></table></figure>
+<p>➤ 设计解析：</p>
+<ul>
+<li>list 结构为链表提供了链表头指针 head、链表尾节点 tail、链表节点数量 len、以及可以自定义实现的 dup、free、match 函数。</li>
+<li>list 结构因为提供了链表节点数量 len，所以<strong>获取链表中的节点数量的时间复杂度只需 O(1)</strong>；</li>
+</ul>
+<p>Redis 3.0 的 List 对象在数据量比较少的情况下，会采用 Zlist「压缩列表」作为底层数据结构的实现，它的优势是节省内存空间，并且是内存紧凑型的数据结构。</p>
+<h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><p>redisObject type = REDIS_HASH，支持 ZIPLIST 和 HASHTABLE 两种编码方式：</p>
+<ul>
+<li>如果哈希对象保存的键值对的数量少于512个，同时每个键值对中的键和值的大小都小于64个字节，那么 Redis 将会使用 ZIPLIST 编码方式：</li>
+</ul>
+<p>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-6.png]]</p>
+<ul>
+<li>如果哈希对象保存的键值对的数量多于512个，或者键值对中的键或值的大小大于64个字节，那么 Redis 将会使用 HASHTABLE 编码方式：</li>
+</ul>
+<p>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-7.png]]</p>
+<p>➤ 编码转换：<br>如果哈希对象保存的键值对的数量多于512个，或者键或值中的键和值的字符串的大小大于64个字节，那么 Redis 将会使用 HASHTABLE 编码方式。</p>
+<p>➤哈希表的桶数组中的元素类型是 <code>dictEntry</code>：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">typedef struct dictEntry &#123;</span><br><span class="line">    //键值对中的键</span><br><span class="line">    void *key;</span><br><span class="line">  </span><br><span class="line">    //键值对中的值</span><br><span class="line">    union &#123;</span><br><span class="line">        void *val;</span><br><span class="line">        uint64_t u64;</span><br><span class="line">        int64_t s64;</span><br><span class="line">        double d;</span><br><span class="line">    &#125; v;</span><br><span class="line">    //指向下一个哈希表节点，形成链表</span><br><span class="line">    struct dictEntry *next;</span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>dictEntry 结构里不仅包含指向键和值的指针，还包含了指向下一个哈希表节点的指针，这个指针可以将多个哈希值相同的键值对链接起来，以此来解决哈希冲突的问题，这就是链式哈希。</li>
+<li>dictEntry 结构里键值对中的值是一个「联合体 v」定义的，因此，键值对中的值可以是一个指向实际值的指针，或者是一个无符号的 64 位整数或有符号的 64 位整数或 double 类的值。这么做的好处是可以节省内存空间，因为当「值」是整数或浮点数时，就可以将值的数据内嵌在 dictEntry 结构里，无需再用一个指针指向实际的值，从而节省了内存空间。</li>
+</ul>
+<p>➤ 哈希冲突：</p>
+<ul>
+<li>HashMap 使用链表法解决 hash 冲突</li>
+</ul>
+<p>➤ Rehash：</p>
+<ul>
+<li>触发条件：<ul>
+<li><strong>当负载因子大于等于 1</strong> ，并且 Redis 没有在执行 bgsave 命令或者 bgrewiteaof 命令，也就是没有执行 RDB 快照或没有进行 AOF 重写的时候，就会进行 rehash 操作。负载因子 = <code>ht[0].used / ht[0].size</code></li>
+<li><strong>当负载因子大于等于 5 时</strong>，此时说明哈希冲突非常严重了，不管有没有有在执行 RDB 快照或 AOF 重写，都会强制进行 rehash 操作。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>渐进式</strong> Rehash 过程：<ul>
+<li>给 <code>ht[1]</code> 分配空间，一般比 <code>ht[0]</code>  大 2 倍；</li>
+<li>在字典中维持一个索引计数器变量 <code>rehashidx</code> ，并将它的值设置为 <code>0</code> ，表示 rehash 工作正式开始</li>
+<li>在 rehash 进行期间， 每次对字典执行添加、删除、查找或者更新操作时， 程序除了执行指定的操作以外， 还会顺带将 <code>ht[0]</code> 哈希表在 <code>rehashidx</code> 索引上的所有键值对 rehash 到 <code>ht[1]</code> ， 当 rehash 工作完成之后， 程序将 <code>rehashidx</code> 属性的值增一</li>
+<li><ol>
+<li>随着字典操作的不断执行， 最终在某个时间点上， <code>ht[0]</code> 的所有键值对都会被 rehash 至 <code>ht[1]</code> ， 这时程序将 <code>rehashidx</code> 属性的值设为 <code>-1</code> ， 表示 rehash 操作已完成。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><p>redisObject type = REDIS_SET，支持INTSET和HASHTABLE两种编码方式。</p>
+<ul>
+<li><p>如果集合对象保存的元素的数量少于512个，同时每个元素都是整数，那么 Redis 将会使用 INTSET 编码方式：<br>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-8.png]]</p>
+</li>
+<li><p>如果集合对象保存的元素的数量多于512个，或者元素不是整数，那么 Redis 将会使用 HASHTABLE 编码方式：</p>
+</li>
+</ul>
+<p>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-9.png]]<br>➤ 编码转换：<br>如果集合对象保存的元素的数量多于512个，或者元素不是整数，那么Redis将会使用HASHTABLE编码方式。</p>
+<h3 id="Sorted-Set"><a href="#Sorted-Set" class="headerlink" title="Sorted Set"></a>Sorted Set</h3><p>redisObject type = REDIS_ZSET，支持 ZIPLIST 和 SKIPLIST 两种编码方式：</p>
+<ul>
+<li><p>如果有序集合对象保存的元素的数量少于128个，同时每个元素的大小都小于64个字节，那么 Redis 将会使用 ZIPLIST 编码方式：<br>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-10.png]]</p>
+</li>
+<li><p>如果有序集合对象保存的元素的数量多于128个，或者元素的大小大于64个字节，那么 Redis 将会使用 SKIPLIST 编码方式：<br>![[../_images/Redis-01b数据结构-内部实现-2023-07-05-11.png]]</p>
+</li>
+</ul>
+<p>注意 ZSET 的实现中，除了 skiplist，还有一个哈希表，当向 ZSET 插入数据的时候，会向 skiplist 和哈希表依次插入，哈希表是为了让 ZSCORE 等命令可以实现常数级复杂度；</p>
+<p>➤ 编码转换：<br>如果有序集合对象保存的元素的数量多于128个，或者元素的大小大于64个字节，那么Redis将会使用SKIPLIST编码方式。</p>
+<p>➤ 跳表的实现：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">typedef struct zset &#123;</span><br><span class="line">        dict *dict;</span><br><span class="line">        zskiplist *zsl;</span><br><span class="line">    &#125; zset;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">typedef struct zskiplist &#123;</span><br><span class="line">    struct zskiplistNode *header, *tail;</span><br><span class="line">    unsigned long length;</span><br><span class="line">    int level;</span><br><span class="line">&#125; zskiplist;</span><br><span class="line"></span><br><span class="line">typedef struct zskiplistNode &#123;</span><br><span class="line">        //Zset 对象的元素值</span><br><span class="line">        sds ele;</span><br><span class="line">        //元素权重值</span><br><span class="line">        double score;</span><br><span class="line">        //后向指针</span><br><span class="line">        struct zskiplistNode *backward;</span><br><span class="line">      </span><br><span class="line">        //节点的level数组，保存每层上的前向指针和跨度</span><br><span class="line">        struct zskiplistLevel &#123;</span><br><span class="line">            struct zskiplistNode *forward; // 同一层的后续节点</span><br><span class="line">            unsigned long span; // 跨度，用来记录两个节点之间的距离</span><br><span class="line">        &#125; level[];</span><br><span class="line">    &#125; zskiplistNode;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>zset 包含一个 dict 和一个 skiplist；</li>
+<li>zskiplist 包含 header 和 tail，指向头尾节点，level 记录当前跳表的最大层数；</li>
+<li>node 的 backward 指针，指向前面一个节点，方便倒序遍历；</li>
+<li>level 的 span （跨度），是为了快速计算该节点的 rank，forward 指向下个节点，正向遍历时使用；</li>
+</ul>
+<p>![[../_images/Redis-01b数据结构-内部实现-2023-07-06-1.png]]</p>
+<p>查询过程：</p>
+<ul>
+<li>从最高层的头结点开始；</li>
+<li>如果当前节点的权重「小于」要查找的权重时，跳表就会访问该层的下一个节点；</li>
+<li>如果当前节点的权重「等于」要查找的权重时，并且当前节点的 SDS 类型数据「小于」要查找的数据时，跳表就会访问该层上的下一个节点；</li>
+<li>如果上面两个条件都不满足，或者下一个节点为空时，跳表就会使用目前遍历到的节点的 level 数组里的下一层指针，然后沿着下一层指针继续查找；</li>
+</ul>
+<p>复杂度分析：</p>
+<ul>
+<li>查找的平均复杂度：O(logN) </li>
+</ul>
+<p>构建过程：</p>
+<ul>
+<li>插入一个 （ele，score） 对，首先计算在哪一层插入, 层数的计算代码，层数越高的概率越小，该层也就越稀疏：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ZSKIPLIST_MAXLEVEL 32 <span class="comment">//最大层数</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ZSKIPLIST_P 0.25 <span class="comment">//P</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">zslRandomLevel</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> level = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((random()&amp;<span class="number">0xFFFF</span>) &lt; (ZSKIPLIST_P * <span class="number">0xFFFF</span>))</span><br><span class="line">        level += <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> (level&lt;ZSKIPLIST_MAXLEVEL) ? level : ZSKIPLIST_MAXLEVEL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>随机生成的值（介于1到32之间）也即层数K，同时也是 level 数组的大小</li>
+<li>确定了层数 K，则需要更新 K-1层上的索引；</li>
+</ul>
+<p>@ref:</p>
+<ul>
+<li>跳表复杂度分析：<a href="https://juejin.cn/post/6844903446475177998" target="_blank" rel="noopener">Redis 为什么用跳表而不用平衡树？ - 掘金</a></li>
+<li>HBase 的 MemStore 使用了 JDK 中的跳表 <code>ConcurrentSkipListMap</code> @ref: <a href="https://juejin.cn/post/7084811033549733902" target="_blank" rel="noopener">https://juejin.cn/post/7084811033549733902</a></li>
+</ul>
+<h3 id="BitMap"><a href="#BitMap" class="headerlink" title="BitMap"></a>BitMap</h3><p>@todo</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/31.Backend/Redis-01a数据结构/" rel="next" title="Redis-01a数据结构">
+                <i class="fa fa-chevron-left"></i> Redis-01a数据结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/31.Backend/Redis-02部署和运维/" rel="prev" title="Redis-02部署和运维">
+                Redis-02部署和运维 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">476</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">410</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#键值对数据库"><span class="nav-text">键值对数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redisObject"><span class="nav-text">redisObject</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构的实现"><span class="nav-text">数据结构的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#String"><span class="nav-text">String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List"><span class="nav-text">List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap"><span class="nav-text">HashMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set"><span class="nav-text">Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sorted-Set"><span class="nav-text">Sorted Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BitMap"><span class="nav-text">BitMap</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/31.Backend/Redis-01b数据结构的实现/';
+          this.page.identifier = '31.Backend/Redis-01b数据结构的实现/';
+          this.page.title = 'Redis-01b数据结构-内部实现';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

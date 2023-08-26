@@ -129,9 +129,14 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/HBase-RS-Storage-Machinery.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/HBase-Region-WAL.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase-memstore-skiplist-chunck.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase-hfile-v1-1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase-hfile-v1-2.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase_hfile_tree.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/hbase/hbase-hfile-data-index.png">
-<meta property="og:updated_time" content="2023-06-18T14:37:21.298Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/HBase-DataBlock-KeyValue.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/HBase-BloomFilter-Hash.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/HFile-Compact.png">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.720Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HBase-03架构和原理">
 <meta name="twitter:description" content="HBase 架构简介 HBase包含3个重要组件：Zookeeper、HMaster和 HRegionServer。  （1）Zookeeper： 为整个 HBase集群提供协助服务，包括： a. 存放整个 HBase集群的元数据以及集群的状态信息。 b. 实现 HMaster主从节点的 failover。     ZooKeeper为 HBase集群提供协调服务，它管理着 HMaster和 HR">
@@ -360,7 +365,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  7,916
+                  9,721
                 </span>
               
 
@@ -533,36 +538,45 @@
 <p>下图是中三个 Region（A、B、C）共享一个 HLog，日志最小单元是 HlogKey + WALEdit：<br><img src="/images/HBase-Region-WAL.png" alt="../_images/HBase-Region-WAL.png"></p>
 <p>@ref: <a href="http://hbasefly.com/2017/07/02/hbase-sequenceid/" target="_blank" rel="noopener">HBase原理－要弄懂的sequenceId – 有态度的HBase/Spark/BigData</a></p>
 <h2 id="MemStore"><a href="#MemStore" class="headerlink" title="MemStore"></a>MemStore</h2><ul>
-<li>一个子表可能包括多个列族，一个 Region 可能包括多个 <strong>MemStore</strong>；</li>
+<li>一个子表可能包括多个列族，即一个 Region 可能包括多个 <strong>MemStore</strong>；</li>
 <li><strong>MemStore</strong> 和列族是一一对应的；</li>
-<li>当 <strong>MemStore</strong>（默认 64MB）写满之后，会 flush 到 HDFS 上生成 StoreFile，<strong>MemStore</strong> 相当于 LSM-Tree 结构中的 C0层；</li>
+<li>MemStore 基于跳表实现，元素通过 KeyValue 对象的 key 进行排序，而不简单的通过 Rowkey 排序；</li>
+<li>当 <strong>MemStore</strong>（默认 64MB）写满之后，会 flush 到 HDFS 上生成 StoreFile，<strong>MemStore</strong> 相当于 LSM-Tree 结构中的 C0层，这一步叫做 <strong>Region flush</strong> ；</li>
 </ul>
+<p>➤ KV 在 MemStore 中的排序：</p>
+<p>构成 HBase 的 KV 在同一个文件中都是有序的，但规则并不是仅仅按照 rowkey 排序，而是按照 KV 中的 key 进行排序——先比较 rowkey，rowkey 小的排在前面；如果 rowkey 相同，再比较 column，即 column family:qualifier，column 小的排在前面；如果 column 还相同，再比较时间戳 timestamp，即版本信息，timestamp 大的排在前面。KV 结构参考 「HFile」 一节</p>
+<p>➤ 为什么不建议使用过多的列族：</p>
+<p>Flush 操作时 Region 级别的（也就是为什么叫 Region Flush 而不是 “MemStore Flush”），Region 中某个 Memstore 被 Flush，同一个 Region 的其他 Memstore 也会进行 Flush 操作。<br>当表有很多列族，且列族之间数据不均匀，例如一个列族有100W 行，一个列族只有10行，列族1很容易触发 Flush，列族2虽然数据不多但也需要进行 Flush，而且每次 Flush 操作都涉及到一定的磁盘 IO。<br>例如基于 HBase 的 OpenTSDB，存放数据的表只有一个列族。</p>
+<p>过多的列族也即意味着更多的 MemStore，占用更多的 JVM 内存。</p>
+<p>➤ MemStore 的内部实现：</p>
 <p>HBase 的 MemStore 基于 <code>ConcurrentSkipListMap</code> 跳表实现，由于 KeyValue 是存储于内存中的，对于很多写入吞吐量几万每秒的业务来说，每秒就会有几万个内存对象产生，这些对象会在内存中存在很长一段时间，对应的会晋升到老生代，一旦执行了 flush 操作，老生代的这些对象会被 GC 回收掉，导致 JVM 的 GC 压力非常大。</p>
 <p>GC 压力主要来源于：这些内存对象一旦晋升到老生代，执行完 OldGen GC 后会存在大量的非常小的内存碎片（例如老年代的回收器 CMS，是不带内存压缩的），这些内存碎片会引起频繁的 Full GC，而且每次 Full GC 的时间会异常的长。</p>
-<p>一个 KV 在 MemStore 中的写入过程：</p>
+<p>➤ 一个 KV 在 MemStore 中的写入过程：</p>
 <ol>
 <li>在 ChunkPool 中申请一个 Chunk（2M），在 Chunk 中分配一段与 KV 相同大小的内存空间将 KV 拷贝进去。一旦 Chunk 写满，再申请下一个 Chunk;</li>
-<li>生成一个 Cell 对象，该对象包含指向 Chunk 中对应数据块的指针、offsize 以及 length;</li>
+<li>待插入的 KV 生成一个 Cell 对象，该对象包含指向 Chunk 中对应数据块的指针、offsize 以及 length;</li>
 <li>将这个 Cell 对象分别作为 Key 和 Value 插入到 <code>ConcurrentSkipListMap</code> 跳表中；</li>
 </ol>
 <p><img src="/images/hbase/hbase-memstore-skiplist-chunck.png" alt="hbase_memstore_skiplist_chunck"></p>
 <p>HBase 在 MemStore 设计中的改进 @ref : <a href="http://hbasefly.com/2019/10/18/hbase-memstore-evolution/" target="_blank" rel="noopener">HBase内存管理之MemStore进化论 – 有态度的HBase/Spark/BigData</a></p>
-<h2 id="HFile"><a href="#HFile" class="headerlink" title="HFile"></a>HFile</h2><p>HFile 是 HBase 存储数据的文件组织形式，参考 BigTable 的 SSTable 和 Hadoop 的 TFile 实现。</p>
+<h2 id="HFile"><a href="#HFile" class="headerlink" title="HFile"></a>HFile</h2><h3 id="V1-V2的改进"><a href="#V1-V2的改进" class="headerlink" title="V1-V2的改进"></a>V1-V2的改进</h3><p>HFile 是 HBase 存储数据的文件组织形式，参考 BigTable 的 SSTable 和 Hadoop 的 TFile 实现。</p>
 <p>从 HBase 开始到现在，HFile 经历了<strong>三个版本</strong>，其中 V2在0.92引入，V3在0.98引入。<br>HFileV1版本的在实际使用过程中发现它占用内存多，HFile V2版本针对此进行了优化，HFile V3版本基本和 V2版本相同，只是在 cell 层面添加了 Tag 数组的支持。</p>
 <p>➤ V1的 HFile，参考了 Bigtable 的 SSTable 以及 Hadoop 的 TFile(HADOOP-3315)：</p>
-<p>![[../_images/hbase-hfile-v1-1.png]]</p>
+<p><img src="/images/hbase-hfile-v1-1.png" alt="../_images/hbase-hfile-v1-1.png"></p>
 <ul>
 <li>Data Block：每个 Data 块默认为<strong>64KB</strong>，存储 KV 数据，由于 KV 数据在 MemStore 已经进行排序，所以 Data Block 中的 KV 也是有序的</li>
 <li>Data Block Index：这部分存储了每一个 Data Block 的索引信息 {Offset，Size，FirstKey}</li>
 <li>Meta Block：主要是 <strong>Bloom Filter</strong>，用来快速定位 Key 是否在 HFile</li>
 <li>Meta Block Index： 每个 Meta Block 的索引</li>
-<li>Tailer：存储了上面几个段的索引，例如 Data Block Index 的索引信息，{Data Index Offset, Data Block Count}</li>
+<li><p>Tailer：存储了上面几个段的索引，例如 Data Block Index 的索引信息，{Data Index Offset, Data Block Count}</p>
+<p>Bloom filter 主要用来快速定位 Key 是否在 HFile。Bloom Block 的数据是在启动的时候就已经加载到内存里，除了 Block Cache 和 MemStore 以外，这个也对 HBase 随机读性能的优化起着至关重要的作用。<br>生成 HFile 的时候，会将 key 经过三次 hash 最终落到 Bloom Block 位数组的某三位上，并将其由0更改成1，以此标记该 key 的确存在这个 HFile 文件之中，查询的时候不需要将文件打开并检索，避免了一次 I/O 操作。然而随着 HFile 的膨胀，Bloom Block 会越来越大。</p>
+</li>
 </ul>
 <blockquote>
 <p>HDFS 中定义的 Block size 是 <strong>64~128MB</strong>，HFile 中的 Block 大小 = <strong>64KB</strong>，区别 Linux 文件系统（Ext4等）定义的块大小 = <strong>4KB</strong> ；</p>
 </blockquote>
 <p>下图更直观的表达出了 HFile V1中的数据组织结构：</p>
-<p>![[../_images/hbase-hfile-v1-2.png]]</p>
+<p><img src="/images/hbase-hfile-v1-2.png" alt="../_images/hbase-hfile-v1-2.png"></p>
 <p>V1 的设计简单、直观。但缺点也很明显，HFile 中的 Bloom Filter 包括了该 HFile 中所有的 KV，加载一个 HFile 需要占用很大的内存来存储  Bloom Filter、Data Block Index。<br>Region Open 的时候，需要加载所有的 Data Block Index 数据，另外，第一次读取时需要加载所有的 Bloom Filter 数据到内存中。一个 HFile 中的 Bloom Filter 的数据大小可达百 MB 级别，一个 RegionServer 启动时可能需要加载数 GB 的 Data Block Index 数据。这在一个大数据量的集群中，几乎无法忍受。</p>
 <p>➤ <strong>HFile V2 的改进</strong>：</p>
 <p>在 V2中，无论是 Data Block Index 还是 Bloom Filter，都采用了<strong>分层索引</strong>的设计。</p>
@@ -573,7 +587,7 @@
 <p><strong>总结</strong>：V2通过分层索引，无论是 Data Block 的索引数据，还是 Bloom Filter 数据，都被拆成了多个 Block 当中，可以<strong>按需读取</strong>，避免在 Region Open 阶段或读取阶段一次读入大量的数据，降低了阶段耗时，也解决了 V1内存占用高的问题。</p>
 <p>图-HFile V2的 Block 组织，右边是 Data Index 的<strong>三层索引</strong>结构：</p>
 <p><img src="/images/hbase/hbase_hfile_tree.png" alt="HFile结构-图2"></p>
-<p>➤ <strong>Data Block Index 的三层索引</strong>：<br><img src="/images/hbase/hbase-hfile-data-index.png" alt="hbase_hfile_data_index"></p>
+<h3 id="Data-Block-的三层索引"><a href="#Data-Block-的三层索引" class="headerlink" title="Data Block 的三层索引"></a>Data Block 的三层索引</h3><p>➤ <strong>Data Block Index 的三层索引</strong>：<br><img src="/images/hbase/hbase-hfile-data-index.png" alt="hbase_hfile_data_index"></p>
 <p>图中上面三层为索引层，在数据量不大的时候只有最上面一层，数据量大了之后开始分裂为多层，最多三层，如图所示。最下面一层为数据层，存储用户的实际 keyvalue数据。这个索引树结构类似于 InnoSQL的聚集索引，只是 HBase并没有辅助索引的概念。</p>
 <p>图中红线表示一次查询的索引过程（HBase中相关类为 HFileBlockIndex和 HFileReaderV2），基本流程可以表示为：</p>
 <ol>
@@ -583,6 +597,19 @@
 <li>将索引’f’指向的数据块加载到内存，通过遍历的方式找到对应的keyvalue。</li>
 </ol>
 <p>上述流程中因为 <strong>中间节点</strong>、 <strong>叶子节点</strong> 和 <strong>数据块</strong> 都需要加载到内存，所以 IO 次数最大为3次。但是实际上 HBase 为 block 提供了缓存机制，可以将频繁使用的 block 缓存在内存中，可以进一步加快实际读取过程。所以，在 HBase 中，通常一次随机读请求最多会产生3次 io，如果数据量小（只有一层索引），数据已经缓存到了内存，就不会产生 io。</p>
+<h3 id="Data-Block-的-KV-结构"><a href="#Data-Block-的-KV-结构" class="headerlink" title="Data Block 的 KV 结构"></a>Data Block 的 KV 结构</h3><p>➤ <strong>Data Block 的结构</strong>：</p>
+<p>DataBlock 是 HBase 中数据存储的最小单元。DataBlock 中主要存储用户的 KeyValue 数据，KeyValue 结构在内存和磁盘中可以表示为：</p>
+<p><img src="/images/HBase-DataBlock-KeyValue.png" alt="../_images/HBase-DataBlock-KeyValue.png"></p>
+<p>可以看到，在 KeyValue 结构中，</p>
+<ul>
+<li>key 是一个复杂的结构，首先是 rowkey 的长度，接着是 rowkey，然后是 ColumnFamily 的长度，再是 ColumnFamily，之后是 ColumnQualifier，最后是时间戳和 KeyType（keytype 有四种类型，分别是 Put、Delete、 DeleteColumn 和 DeleteFamily）</li>
+<li>value 就没有那么复杂，就是一串纯粹的二进制数据</li>
+</ul>
+<h3 id="BloomFilter"><a href="#BloomFilter" class="headerlink" title="BloomFilter"></a>BloomFilter</h3><p>#BloomFilter 对于 HBase 的随机读性能至关重要，对于 get 操作以及部分 scan 操作可以剔除掉不会用到的 HFile 文件，减少实际 IO 次数，提高随机读性能。</p>
+<p>BloomFilter 使用 bit 数组实现，KeyValue 在写入 HFile 时，会经过3个 Hash 函数，生成3个不同的 hash 值，映射到 bit 数组上3个不同的位置，接下来将对应的 bit 置为1；</p>
+<p>下图中，两个元素 x 和 y，分别被3个 hash 函数进行映射，映射到的位置分别为（0，3，6）和（4，7，10），对应的位会被置为1:</p>
+<p><img src="/images/HBase-BloomFilter-Hash.png" alt="../_images/HBase-BloomFilter-Hash.png"></p>
+<p>查找时，元素要进行3次 hash 映射，如果3个位置上都是1，那么元素可能存在于这个 DataBlock；<br>如果有一个位置是0，那么元素肯定不存在于这个 DataBlock；</p>
 <hr>
 <p>@ref:</p>
 <ul>
@@ -590,22 +617,61 @@
 <li><a href="http://hbasefly.com/2016/03/25/hbase-hfile/" target="_blank" rel="noopener">HBase – 存储文件HFile结构解析 – 有态度的HBase/Spark/BigData</a></li>
 <li><a href="http://hbasefly.com/2016/04/03/hbase_hfile_index/" target="_blank" rel="noopener">HBase – 探索HFile索引机制 – 有态度的HBase/Spark/BigData</a></li>
 </ul>
-<h2 id="Minor-Major-Compaction"><a href="#Minor-Major-Compaction" class="headerlink" title="Minor/Major Compaction"></a>Minor/Major Compaction</h2><p>HBase 会自动合并一些小的 HFile，重写成少量更大的 HFiles。这个过程被称为 <strong>Minor Compaction</strong>。它使用归并排序算法，将小文件合并成大文件，有效减少 HFile 的数量。</p>
-<p><strong>Major Compaction</strong> 合并每个 Column Family 下的<strong>所有的</strong> HFiles，生成<strong>一个大的 HFile</strong>，在这个过程中，被删除的和过期的 cell 会被真正删除。因为 major compaction 会重写所有的 HFile，会产生大量的硬盘 I/O 和网络开销。这被称为<strong>写放大</strong>（<strong>Write Amplification</strong>）。</p>
-<p>Major 是 Minor 升级而来的。如果本次 Minor Compaction 包含所有文件，且达到了足够的时间间隔，则会被升级为 Major Compaction。判断时间间隔根据以下两个配置项：</p>
-<ul>
-<li>hbase.hregion.majorcompaction：major Compaction 发生的周期，单位是毫秒，默认值是7天。</li>
-<li>hbase.hregion.majorcompaction.jitter majorCompaction：周期抖动参数，0~1.0的一个指数。调整这个参数可以让 Major Compaction 的发生时间更灵活，默认值是0.5。</li>
+<h2 id="Minor-Major-Compaction"><a href="#Minor-Major-Compaction" class="headerlink" title="Minor/Major Compaction"></a>Minor/Major Compaction</h2><ul>
+<li><p><strong>Minor Compaction</strong>： HBase 会自动合并一些小的 HFile，重写成少量且更大的 HFiles。这个过程被称为 <strong>Minor Compaction</strong>。它使用归并排序算法，将小文件合并成大文件，有效减少 HFile 的数量。</p>
+</li>
+<li><p><strong>Major Compaction</strong> ：合并每个 Column Family 下的<strong>所有的</strong> HFiles，生成<strong>一个大的 HFile</strong>，在这个过程中，被删除的和过期的 cell 会被真正删除。因为 major compaction 会重写所有的 HFile，会产生大量的硬盘 I/O 和网络开销。这被称为<strong>写放大</strong>（<strong>Write Amplification</strong>）。</p>
+</li>
 </ul>
-<p>因为 Major Compaction 存在 write amplification 的问题，所以major compaction 一般都安排在周末和半夜。Major compaction 还能将因为 RegionServer crash 或者 Balance 导致的数据迁移重新移回到与 RegionServer 相同的节点，这样就能恢复 <strong>data locality</strong>。</p>
-<p>下图直观描述了 Flush 与 Compaction 流程：</p>
-<p>![[../_images/HFile-Compact.png]]</p>
-<p>HBase Compaction 的触发条件有三种：MemStore Flush、后台线程周期性检查、手动触发；</p>
+<blockquote>
+<p>默认情况下 Minor Compaction 也会删除数据，但只是删除合并 HFile 中的 TTL 过期数据。Major Compaction 是完全删除无效数据，包括被删除的数据、TTL 过期数据以及版本号过大的数据。</p>
+</blockquote>
+<p>下图直观描述了 Flush 与 Minor &amp; Major Compaction 流程：Region 级别的 Memstore flush 触发会触发 Minor Compaction 条件检查，符合条件则进行小合并，Minor Compaction 还可能触发 Major Compaction</p>
+<p><img src="/images/HFile-Compact.png" alt="../_images/HFile-Compact.png"></p>
+<p>Minor Compaction 的检查条件有三种：MemStore Flush、后台线程周期性检查、手动触发；</p>
 <ul>
 <li>MemStore flush：MemStore 的 size 达到一定阈值或其他条件时就会触发 flush 刷写到磁盘生成 HFile 文件， HFile 文件越来越多则触发 compact。HBase 每次 flush 之后，都会判断是否要进行 compaction，一旦满足 minor compaction 或 major compaction 的条件便会触发执行。</li>
 <li>后台线程周期性检查： 后台线程 CompactionChecker 会定期检查是否需要执行 compaction，检查周期为 <code>hbase.server.thread.wakefrequency*hbase.server.compactchecker.interval.multiplier</code>，这里主要考虑的是一段时间内没有写入请求仍然需要做 compact 检查。其中参数 <code>hbase.server.thread.wakefrequency</code> 默认值 10000 即 10s，是 HBase 服务端线程唤醒时间间隔，用于 log roller、memstore flusher 等操作周期性检查；参数 <code>hbase.server.compactchecker.interval.multiplier</code> 默认值1000，是 compaction 操作周期性检查乘数因子。<code>10 * 1000 s</code> 时间上约等于2小时46分钟。</li>
 <li>手动触发：是指通过 HBase Shell、Master Web UI 或者 HBase API 等任一种方式执行 compact、major_compact 等命令。</li>
 </ul>
+<p>触发 Minor Compaction 检查后，会根据下列参数决定哪些文件进入候选队列：</p>
+<ol>
+<li><p><code>hbase.hstore.compaction.min</code>：一次 minor compaction 最少合并的 HFile 数量，默认值 3。表示至少有3个符合条件的 HFile，minor compaction 才会启动。一般情况下不建议调整该参数。</p>
+</li>
+<li><p><code>hbase.hstore.compaction.max</code>：一次 minor compaction 最多合并的 HFile 数量，默认值 10。这个参数也是控制着一次压缩的时间。一般情况下不建议调整该参数。调大该值意味着一次 compaction 将会合并更多的 HFile，压缩时间将会延长。</p>
+</li>
+<li><p><code>hbase.hstore.compaction.min.size</code>：文件大小 ＜ 该参数值的 HFile 一定是适合进行 minor compaction 文件，默认值 128M（memstore flush size）。意味着小于该大小的 HFile 将会自动加入（automatic include）压缩队列。一般情况下不建议调整该参数。</p>
+</li>
+<li><p><code>hbase.hstore.compaction.max.size</code>：文件大小 ＞ 该参数值的 HFile 将会被排除，不会加入 minor compaction，默认值 Long.MAX_VALUE，表示没有限制。一般情况下也不建议调整该参数。</p>
+</li>
+<li><p><code>hbase.hstore.compaction.ratio</code>：这个 ratio 参数的作用是判断文件大小 ＞ hbase.hstore.compaction.min.size 的 HFile 是否也是适合进行 minor compaction 的，默认值1.2。</p>
+</li>
+</ol>
+<p><strong>Major Compaction</strong> 是 Minor Compaction 升级而来的，检查周期同 Minor，Minor 首先对 HFile 进行筛选，是否进入候选队列，接下来会再判断是否满足 major compaction 条件，满足一条即进行 Major Compact：</p>
+<ol>
+<li>用户强制执行 major compaction</li>
+<li>长时间没有进行 compact（见下面 <code>hbase.hregion.majorcompaction</code> 解析）且候选文件数小于 <code>hbase.hstore.compaction.max</code>（默认10）</li>
+<li>Store 中含有 Reference 文件，Reference 文件是 split region 产生的临时文件，只是简单的引用文件，一般必须在 compact 过程中删除</li>
+</ol>
+<p>如何判断“长时间没有进行 compact” ？ 两次 major compactions 间隔 ＞ majorcompaction x majorcompaction.jitter：</p>
+<ul>
+<li><p><code>hbase.hregion.majorcompaction</code>：major Compaction 发生的周期，单位是毫秒，默认值是7天。</p>
+</li>
+<li><p><code>hbase.hregion.majorcompaction.jitter</code> ：0~1.0的一个指数。调整这个参数可以让 Major Compaction 的发生时间更灵活，默认值是0.5。</p>
+</li>
+</ul>
+<blockquote>
+<p>这个参数是为了避免 major compaction 同时在各个 regionserver 上同时发生，避免此操作给集群带来很大压力。这样节点 major compaction 就会在 + 或 - 两者乘积的时间范围内<strong>随机</strong>发生。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">@TLDR：Minor &amp; Major Compaction、Region split 检查周期、触发条件</span><br><span class="line"></span><br><span class="line">- Minor 检查的触发：Memstore flush（默认64M）会触发 minor compact 检查，此外 CompactionChecker 线程也会定期检查（≈ 2小时）</span><br><span class="line"></span><br><span class="line">- Minor 条件：根据 HFile 的大小决定是否进入 compact 队列，候选文件数过多则触发 minor compact；</span><br><span class="line"></span><br><span class="line">- Major 一般由 Minor 触发：如果此次 minor compact 进入候选文件数 ＜ `hbase.hstore.compaction.max` ，且距上次 major compact 足够的时间间隔（≈7day），则触发 major compact；</span><br><span class="line"></span><br><span class="line">- Region split：Region 中的 store 大小，超过阈值 `hbase.hregion.max.filesize`，切分对象是整个 region；</span><br></pre></td></tr></table></figure>
+<p>因为 Major Compaction 存在 write amplification 的问题，所以 major compaction 一般都<strong>手动执行</strong>，安排在写入量的低峰期（例如周末和半夜）。Major compaction 还能将因为 RegionServer crash 或者 Balance 导致的数据迁移重新移回到与 RegionServer 相同的节点，这样就能恢复 <strong>data locality</strong>。</p>
+<blockquote>
+<p><a href="https://xie.infoq.cn/article/cca8d99fb8ba046e892bc93a0" target="_blank" rel="noopener">LSM树读写放大问题及KV分离技术解析_InfoQ写作社区</a></p>
+<ul>
+<li>LSM 树的读放大主要来源于读操作需要从 C0~Ck（自顶向下）一层一层查找，直到找到目标数据。这个过程可能需要不止一次 I/O，特别是对于范围查询，读放大非常明显。</li>
+<li>采用 LSM 树思想的 KV 数据库的实现中，通常需要启用后台线程周期检查或者手动 flush 等方式触发 Compaction 来减少读放大（减少 SSTable 文件数量）和空间放大（清理过期数据），但也因此带来了严重的<strong>写放大</strong>问题。</li>
+</ul>
+</blockquote>
 <h2 id="查询流程"><a href="#查询流程" class="headerlink" title="查询流程"></a>查询流程</h2><ul>
 <li><p>（1）<strong>查询 meta 表</strong>：Client 发送请求给 Zk, 获取 hbase:meta 表在哪个 RegionServer，hbase:meta 存储了每个表在每个 Region 上的 start/end Key， Client 向该 RegionServer 发送请求, 查询 meta 表, 获取 Key 在哪个 Region 上, 同时也确定了 RegionServer</p>
 <ul>
@@ -616,7 +682,8 @@
 <ul>
 <li>尝试从 BlockCache 查询（最近读取的 KeyValue 都被缓存在这里，这是 一个 LRU 缓存）</li>
 <li>尝试从 MemStore 查询（即写缓存，包含了最近更新的数据）</li>
-<li>从 StoreFile（HFile） 查询： 尝试从内存中已加载的 Data Block 索引和布隆过滤器中查询</li>
+<li>从 StoreFile（HFile） 查询： 尝试从内存中已加载的 Data Block <strong>索引</strong> 和 <strong>布隆过滤器</strong> 中查询</li>
+<li>找到 Rowkey 对应的 Cell</li>
 </ul>
 </li>
 </ul>
@@ -633,7 +700,7 @@
 <li>（1）Region Server 定位过程与度读流程类似；</li>
 <li>（2）put 请求到 Region Server ，数据被写入 WAL 后，会被加入到 MemStore 即写缓存。然后服务端就可以向客户端返回 ack 表示写数据完成。<ul>
 <li>每个 RegionServer 一般只有一个 WAL，不同子表、不同列族的数据都被写入这一个 WAL, 同时 WAL 中每个最小单元都有唯一递增的seqId @ref: [[#HLog (WAL)]]</li>
-<li>每个 Column Family 都有一个 MemStore，不同的列族被写入其对应的 MemStore，在 MemStore 中按 Rowkey 进行排序；</li>
+<li>每个 Column Family 都有一个 MemStore，不同的列族被写入其对应的 MemStore，在 MemStore 中按 KeyValue 进行排序（见MemStore）；</li>
 <li>当某个 Column Family 的 MemStore 中，累积了足够多的的数据后，整个有序数据集就会被写入一个新的 HFile 文件到 HDFS；</li>
 <li>当 HFile 越来越多，会触发 Compact 合并操作，把过多的 HFile 合并成一个大的 HFile;</li>
 <li>当 Region 越来越大，达到阈值后，还会触发 Split；</li>
@@ -695,21 +762,26 @@
 <p>Region 的 <strong>自动拆分</strong>主要根据拆分策略进行，Region 的拆分逻辑是通过 CompactSplitThread 线程的 requestSplit 方法来触发的，每当执行 Memstore Flush 操作时都会调用该方法进行判断，看是否有必要对目标 Region 进行拆分。</p>
 <p>➤ 自动拆分的触发有三种策略：</p>
 <ul>
-<li><strong>ConstantSizeRegionSplitPolicy</strong>：在0.94之前只有这个策略。当 region 中的一个 store（对应一个 columnfamily 的一个 storefile）超过了配置参数 <code>hbase.hregion.max.filesize</code> 时拆分成两个，该配置参数默认为10GB。region 拆分线是最大 storefile 的中间 rowkey。从字面意思来看，当 region 大小大于某个阈值（hbase.hregion.max.filesize）之后就会触发切分，实际上并不是这样，真正实现中这个阈值是对于某个 store 来说的，即一个 region 中最大 store 的大小大于设置阈值之后才会触发切分。</li>
+<li><strong>ConstantSizeRegionSplitPolicy</strong>：在0.94之前只有这个策略。当 region 中的一个 store（对应一个 columnfamily 的一个 storefile）超过了配置参数 <code>hbase.hregion.max.filesize</code> 时拆分成两个，该配置参数默认为10GB。region 拆分线是最大 storefile 的中间 rowkey。从字面意思来看，当 region 大小大于某个阈值（hbase.hregion.max.filesize）之后就会触发切分，实际上并不是这样，真正实现中这个阈值是对于某个 store （列族）来说的，即<strong>一个 region 最大的 store 的大小</strong> 大于设置阈值之后才会触发切分。</li>
+</ul>
+<blockquote>
+<p>该策略不是很灵活，如果参数设置的过大，对于写入量大的表可能会触发拆分，但小表在极端情形下，可能永远都无法达到这个阈值</p>
+</blockquote>
+<ul>
+<li><strong>IncreasingToUpperBoundRegionSplitPolicy</strong> 0.94版本~2.0版本默认切分策略。总体来看和 ConstantSizeRegionSplitPolicy 思路相同，一个 region 中最大 store 大小大于设置阈值就会触发切分。但是这个阈值并不是固定值，而是会在一定条件下不断调整，调整规则和 region 所属表在当前 regionserver 上的 region 个数有关系. 当然阈值并不会无限增大，最大值为用户设置的 MaxRegionFileSize。</li>
 </ul>
 <ul>
-<li><strong>IncreasingToUpperBoundRegionSplitPolicy</strong> 0.94版本~2.0版本默认切分策略。总体来看和ConstantSizeRegionSplitPolicy思路相同，一个region中最大store大小大于设置阈值就会触发切分。但是这个阈值并不是固定值，而是会在一定条件下不断调整，调整规则和region所属表在当前regionserver上的region个数有关系.</li>
+<li><strong>SteppingSplitPolicy</strong>: 2.0版本默认切分策略。这种切分策略的切分阈值又发生了变化，相比 IncreasingToUpperBoundRegionSplitPolicy 简单了一些，依然和待分裂 region 所属表在当前 regionserver 上的 region 个数有关系，如果 region 个数等于1，切分阈值为 flush size x 2，否则为 MaxRegionFileSize。</li>
 </ul>
-<ul>
-<li><strong>SteppingSplitPolicy</strong>: 2.0版本默认切分策略。这种切分策略的切分阈值又发生了变化，相比 IncreasingToUpperBoundRegionSplitPolicy 简单了一些，依然和待分裂 region 所属表在当前 regionserver 上的 region 个数有关系，如果 region 个数等于1，切分阈值为 flush size x 2，否则为 MaxRegionFileSize。这种切分策略对于大集群中的大表、小表会比 IncreasingToUpperBoundRegionSplitPolicy 更加友好，小表不会再产生大量的小 region，而是适可而止。</li>
-</ul>
+<blockquote>
+<p>这种切分策略对于大集群中的大表、小表会比 IncreasingToUpperBoundRegionSplitPolicy 更加友好，小表不会再产生大量的小 region，而是适可而止。</p>
+</blockquote>
 <p>➤ 手动拆分：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">split &apos;regionName&apos; # format: &apos;tableName,startKey,id&apos;</span><br></pre></td></tr></table></figure>
 <hr>
 <p>@ref:</p>
 <ul>
 <li><a href="http://hbasefly.com/2017/08/27/hbase-split/" target="_blank" rel="noopener">HBase原理 – 所有Region切分的细节都在这里了 – 有态度的HBase/Spark/BigData</a></li>
-<li><a href="https://cloud.tencent.com/developer/article/2005289" target="_blank" rel="noopener">【万字长文】Hbase最全知识点整理（建议收藏）-腾讯云开发者社区-腾讯云</a></li>
 </ul>
 <h2 id="Region-合并"><a href="#Region-合并" class="headerlink" title="Region 合并"></a>Region 合并</h2><p>目前只有手动合并，当删除大量数据后，HBase 中会存在数量很多的小 Region，MemStore 的数量也会变多，数据频繁从内存 Flush 到 HFile，影响用户请求，可能阻塞该 Region 服务器上的更新操作。</p>
 <p><strong>合并过程</strong></p>
@@ -881,7 +953,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -892,7 +964,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -903,7 +975,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -971,7 +1043,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase-架构简介"><span class="nav-text">HBase 架构简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS"><span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper"><span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#META-表"><span class="nav-text">META 表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HMaster"><span class="nav-text">HMaster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HRegion-Server"><span class="nav-text">HRegion Server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HLog-WAL"><span class="nav-text">HLog (WAL)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MemStore"><span class="nav-text">MemStore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HFile"><span class="nav-text">HFile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Minor-Major-Compaction"><span class="nav-text">Minor/Major Compaction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询流程"><span class="nav-text">查询流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写入流程"><span class="nav-text">写入流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高可用-amp-宕机恢复"><span class="nav-text">高可用 &amp; 宕机恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region-拆分"><span class="nav-text">Region 拆分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region-合并"><span class="nav-text">Region 合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region-负载均衡"><span class="nav-text">Region 负载均衡</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase-架构简介"><span class="nav-text">HBase 架构简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS"><span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper"><span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#META-表"><span class="nav-text">META 表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HMaster"><span class="nav-text">HMaster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HRegion-Server"><span class="nav-text">HRegion Server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HLog-WAL"><span class="nav-text">HLog (WAL)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MemStore"><span class="nav-text">MemStore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HFile"><span class="nav-text">HFile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#V1-V2的改进"><span class="nav-text">V1-V2的改进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Block-的三层索引"><span class="nav-text">Data Block 的三层索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Block-的-KV-结构"><span class="nav-text">Data Block 的 KV 结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BloomFilter"><span class="nav-text">BloomFilter</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Minor-Major-Compaction"><span class="nav-text">Minor/Major Compaction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询流程"><span class="nav-text">查询流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写入流程"><span class="nav-text">写入流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高可用-amp-宕机恢复"><span class="nav-text">高可用 &amp; 宕机恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region-拆分"><span class="nav-text">Region 拆分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region-合并"><span class="nav-text">Region 合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region-负载均衡"><span class="nav-text">Region 负载均衡</span></a></li></ol></div>
             
 
           </div>

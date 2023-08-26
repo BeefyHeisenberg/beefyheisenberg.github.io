@@ -117,17 +117,17 @@
 
 
 
-<meta name="description" content="安装 &amp;amp; 部署 Hadoop &amp;amp; HBase Hadoop集群: 1x NameNode, 2x DataNode, 共7T HBase集群: 1x Master, 2x RegionServer   服务分布情况: ip6 : hbase master, hadoop name_node, Zookeeper ip7 : hbase region ip8 : hbase regi">
+<meta name="description" content="安装 &amp;amp; 部署为了保证 Region Server 读写性能，需要和 HDFS 的 NameNode 部署在同一台机器上，实现数据的本地性   Hadoop &amp;amp; HBase Hadoop集群: 1x NameNode, 2x DataNode, 共7T HBase集群: 1x Master, 2x RegionServer   服务分布情况: ip6 : hbase master,">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HBase-02运维和部署">
 <meta property="og:url" content="https://beefyheisenberg.github.io/32.Database/HBase-02运维和部署/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="安装 &amp;amp; 部署 Hadoop &amp;amp; HBase Hadoop集群: 1x NameNode, 2x DataNode, 共7T HBase集群: 1x Master, 2x RegionServer   服务分布情况: ip6 : hbase master, hadoop name_node, Zookeeper ip7 : hbase region ip8 : hbase regi">
+<meta property="og:description" content="安装 &amp;amp; 部署为了保证 Region Server 读写性能，需要和 HDFS 的 NameNode 部署在同一台机器上，实现数据的本地性   Hadoop &amp;amp; HBase Hadoop集群: 1x NameNode, 2x DataNode, 共7T HBase集群: 1x Master, 2x RegionServer   服务分布情况: ip6 : hbase master,">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-06-18T14:37:21.289Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.712Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HBase-02运维和部署">
-<meta name="twitter:description" content="安装 &amp;amp; 部署 Hadoop &amp;amp; HBase Hadoop集群: 1x NameNode, 2x DataNode, 共7T HBase集群: 1x Master, 2x RegionServer   服务分布情况: ip6 : hbase master, hadoop name_node, Zookeeper ip7 : hbase region ip8 : hbase regi">
+<meta name="twitter:description" content="安装 &amp;amp; 部署为了保证 Region Server 读写性能，需要和 HDFS 的 NameNode 部署在同一台机器上，实现数据的本地性   Hadoop &amp;amp; HBase Hadoop集群: 1x NameNode, 2x DataNode, 共7T HBase集群: 1x Master, 2x RegionServer   服务分布情况: ip6 : hbase master,">
 
 
 
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  527
+                  1,500
                 </span>
               
 
@@ -377,7 +377,8 @@
       
 
       
-        <h2 id="安装-amp-部署"><a href="#安装-amp-部署" class="headerlink" title="安装 &amp; 部署"></a>安装 &amp; 部署</h2><ul>
+        <h2 id="安装-amp-部署"><a href="#安装-amp-部署" class="headerlink" title="安装 &amp; 部署"></a>安装 &amp; 部署</h2><p>为了保证 Region Server 读写性能，需要和 HDFS 的 NameNode 部署在同一台机器上，实现数据的本地性 </p>
+<ul>
 <li>Hadoop &amp; HBase<ul>
 <li>Hadoop集群: 1x NameNode, 2x DataNode, 共7T</li>
 <li>HBase集群: 1x Master, 2x RegionServer</li>
@@ -421,6 +422,34 @@
 <ul>
 <li>禁用自动刷写 <code>Table.setAutoFlush(false)</code></li>
 </ul>
+<h2 id="最佳实践-集群规划"><a href="#最佳实践-集群规划" class="headerlink" title="最佳实践-集群规划"></a>最佳实践-集群规划</h2><ul>
+<li>一个 HBase 集群上，如果给多个业务方使用，如何做业务之间的隔离？</li>
+<li>共享情况下如何使得系统资源利用率最高，理想情况下当然希望集群中所有软硬件资源都得到最大程度利用。</li>
+</ul>
+<p>使得集群系统资源最大化利用，那首先要看业务对系统资源的需求情况。经过对线上业务的梳理，通常可将这些业务分为如下几类：</p>
+<ol>
+<li><p>硬盘容量敏感型业务：这类业务对读写延迟以及吞吐量都没有很大的要求，唯一的需要就是硬盘容量。比如大多数离线读写分析业务，上层应用一般每隔一段时间批量写入大量数据，然后读取也是定期批量读取大量数据。特点：离线写、离线读，需求硬盘容量</p>
+</li>
+<li><p>带宽敏感型业务：这类业务大多数写入吞吐量很大，但对读取吞吐量没有什么要求。比如日志实时存储业务，上层应用通过kafka将海量日志实时传输过来，要求能够实时写入，而读取场景一般是离线分析或者在上次业务遇到异常的时候对日志进行检索。特点：在线写、离线读，需求带宽</p>
+</li>
+<li><p>IO 敏感型业务：相比前面两类业务来说，IO 敏感型业务一般都是较为核心的业务。这类业务对读写延迟要求较高，尤其对于读取延迟通常在100ms 以内，部分业务可能要求更高。比如在线消息存储系统、历史订单系统、实时推荐系统等。特点：在（离）线写、在线读，需求内存、高 IOPS 介质</p>
+</li>
+</ol>
+<p>每个季度公司都会要求采购新机器，一般情况下机器的规格（硬盘总容量、内存大小、CPU规格）都是固定的。假如现在一台RegionServer的硬盘规格是3.6T x 12，总内存大小为128G，从理论上来说这样的配置是否会有资源浪费？如果有的话是硬盘浪费还是内存浪费？那合理的硬盘/内存搭配应该是什么样？</p>
+<p>这里需要提出一个 <code>Disk / Java Heap</code> Ratio 的概念，即一台 RegionServer “磁盘容量 / JVM 内存” 的比值，这个比值多少最合理？ 在给出合理的解释在前，先把结果给出来：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Disk Size / Java Heap = RegionSize / (MemstoreSize * ReplicationFactor * HeapFractionForMemstore * 2)</span><br></pre></td></tr></table></figure>
+<p>按照默认配置:<br>RegionSize = 10G，对应参数为 <code>hbase.hregion.max.filesize</code>；<br>MemstoreSize = 128M，对应参数为 <code>hbase.hregion.memstore.flush.size</code>；<br>ReplicationFactor = 3，对应参数为 <code>dfs.replication</code>；<br>HeapFractionForMemstore = 0.4，对应参数为 <code>hbase.regionserver.global.memstore.lowerLimit</code>；</p>
+<p>计算为：<code>10G / 128M * 3 * 0.4 * 2 = 192</code>，意思是说一台 RegionServer 上1bytes 的 Java 内存大小需要搭配192bytes 的硬盘大小最合理，再回到之前给出的问题，128G 的内存总大小，拿出96G 作为 Java 内存用于 RegionServer，那对应需要搭配 96G ＊ 192 = 18T 硬盘容量，而实际采购机器配置的是36T，说明在默认配置条件下会有几乎一半硬盘被浪费。</p>
+<p>@ref: <a href="http://hbasefly.com/2016/08/22/hbase-practise-cluster-planning/" target="_blank" rel="noopener">HBase最佳实践－集群规划 – 有态度的HBase/Spark/BigData</a></p>
+<h2 id="最佳实践-内存规划"><a href="#最佳实践-内存规划" class="headerlink" title="最佳实践-内存规划"></a>最佳实践-内存规划</h2><p>@ref： <a href="http://hbasefly.com/2016/06/18/hbase-practise-ram/" target="_blank" rel="noopener">HBase最佳实践－内存规划 – 有态度的HBase/Spark/BigData</a></p>
+<h2 id="最佳实践-读性能优化"><a href="#最佳实践-读性能优化" class="headerlink" title="最佳实践-读性能优化"></a>最佳实践-读性能优化</h2><p><a href="http://hbasefly.com/2016/11/11/hbase%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5%ef%bc%8d%e8%af%bb%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96%e7%ad%96%e7%95%a5/" target="_blank" rel="noopener">HBase最佳实践－读性能优化策略 – 有态度的HBase/Spark/BigData</a></p>
+<h2 id="最佳实践-写性能优化"><a href="#最佳实践-写性能优化" class="headerlink" title="最佳实践-写性能优化"></a>最佳实践-写性能优化</h2><ul>
+<li>是否需要 WAL？ WAL 是否需要同步写入？</li>
+<li>Put 批量提交</li>
+<li>Region 写入负载是否均衡</li>
+<li>Key 大小</li>
+</ul>
+<p><a href="http://hbasefly.com/2016/12/10/hbase-parctice-write/" target="_blank" rel="noopener">HBase最佳实践－写性能优化策略 – 有态度的HBase/Spark/BigData</a></p>
 
       
     </div>
@@ -548,7 +577,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -559,7 +588,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -570,7 +599,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -638,7 +667,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-amp-部署"><span class="nav-text">安装 &amp; 部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hadoop"><span class="nav-text">hadoop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zk"><span class="nav-text">zk</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能优化"><span class="nav-text">性能优化</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-amp-部署"><span class="nav-text">安装 &amp; 部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hadoop"><span class="nav-text">hadoop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zk"><span class="nav-text">zk</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能优化"><span class="nav-text">性能优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最佳实践-集群规划"><span class="nav-text">最佳实践-集群规划</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最佳实践-内存规划"><span class="nav-text">最佳实践-内存规划</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最佳实践-读性能优化"><span class="nav-text">最佳实践-读性能优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最佳实践-写性能优化"><span class="nav-text">最佳实践-写性能优化</span></a></li></ol></div>
             
 
           </div>

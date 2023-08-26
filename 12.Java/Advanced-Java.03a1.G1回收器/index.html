@@ -117,22 +117,22 @@
 
 
 
-<meta name="description" content="G1概述G1（compacting）垃圾回收器是在 Java7 update 4之后引入的一个新的垃圾回收器，Java9成为默认回收器。G1依旧是一个分代的 GC、但与 CMS 不同的是，G1是带 compacting（压缩）的、同时可以进行新生代和老年代的 GC（CMS 只能用于老年代）。 它的设计目标是为了适应现在不断扩大的内存和不断增加的处理器数量，进一步降低暂停时间（pause time）">
+<meta name="description" content="G1概述G1（garbage first）垃圾回收器是在 Java7 update 4之后引入的一个新的垃圾回收器，Java9成为默认回收器。G1依旧是一个分代的 GC、但与 CMS 不同的是，G1是带 compacting（压缩）的、同时可以进行新生代和老年代的 GC（CMS 只能用于老年代）。 它的设计目标是为了适应现在不断扩大的内存和不断增加的处理器数量，进一步降低暂停时间（pause ti">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Advanced-Java.03a1.G1回收器详解">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.03a1.G1回收器/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="G1概述G1（compacting）垃圾回收器是在 Java7 update 4之后引入的一个新的垃圾回收器，Java9成为默认回收器。G1依旧是一个分代的 GC、但与 CMS 不同的是，G1是带 compacting（压缩）的、同时可以进行新生代和老年代的 GC（CMS 只能用于老年代）。 它的设计目标是为了适应现在不断扩大的内存和不断增加的处理器数量，进一步降低暂停时间（pause time）">
+<meta property="og:description" content="G1概述G1（garbage first）垃圾回收器是在 Java7 update 4之后引入的一个新的垃圾回收器，Java9成为默认回收器。G1依旧是一个分代的 GC、但与 CMS 不同的是，G1是带 compacting（压缩）的、同时可以进行新生代和老年代的 GC（CMS 只能用于老年代）。 它的设计目标是为了适应现在不断扩大的内存和不断增加的处理器数量，进一步降低暂停时间（pause ti">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.G1%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-1.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.G1%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-3.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.G1%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-4.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.G1%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-7.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/java-jvm-gc-g1-5-1.gif">
-<meta property="og:updated_time" content="2023-06-18T14:37:20.439Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:57.985Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced-Java.03a1.G1回收器详解">
-<meta name="twitter:description" content="G1概述G1（compacting）垃圾回收器是在 Java7 update 4之后引入的一个新的垃圾回收器，Java9成为默认回收器。G1依旧是一个分代的 GC、但与 CMS 不同的是，G1是带 compacting（压缩）的、同时可以进行新生代和老年代的 GC（CMS 只能用于老年代）。 它的设计目标是为了适应现在不断扩大的内存和不断增加的处理器数量，进一步降低暂停时间（pause time）">
+<meta name="twitter:description" content="G1概述G1（garbage first）垃圾回收器是在 Java7 update 4之后引入的一个新的垃圾回收器，Java9成为默认回收器。G1依旧是一个分代的 GC、但与 CMS 不同的是，G1是带 compacting（压缩）的、同时可以进行新生代和老年代的 GC（CMS 只能用于老年代）。 它的设计目标是为了适应现在不断扩大的内存和不断增加的处理器数量，进一步降低暂停时间（pause ti">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.G1%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-1.png">
 
 
@@ -358,7 +358,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,295
+                  4,043
                 </span>
               
 
@@ -383,7 +383,7 @@
       
 
       
-        <h2 id="G1概述"><a href="#G1概述" class="headerlink" title="G1概述"></a>G1概述</h2><p>G1（compacting）垃圾回收器是在 Java7 update 4之后引入的一个新的垃圾回收器，Java9成为默认回收器。<br>G1依旧是一个分代的 GC、但与 CMS 不同的是，G1是带 compacting（压缩）的、同时可以进行新生代和老年代的 GC（CMS 只能用于老年代）。</p>
+        <h2 id="G1概述"><a href="#G1概述" class="headerlink" title="G1概述"></a>G1概述</h2><p>G1（garbage first）垃圾回收器是在 Java7 update 4之后引入的一个新的垃圾回收器，Java9成为默认回收器。<br>G1依旧是一个分代的 GC、但与 CMS 不同的是，G1是带 compacting（压缩）的、同时可以进行新生代和老年代的 GC（CMS 只能用于老年代）。</p>
 <p>它的设计目标是为了适应现在不断扩大的内存和不断增加的处理器数量，进一步降低暂停时间（pause time），同时兼顾良好的吞吐量。</p>
 <h2 id="G1的内存划分"><a href="#G1的内存划分" class="headerlink" title="G1的内存划分"></a>G1的内存划分</h2><p>CMS 时期，JVM 内存分代将连续的内存空间划分为新生代、老年代和永久代（JDK 8去除了永久代，引入了元空间 Metaspace），这种划分的特点是各代的存储地址（逻辑地址，下同）是连续的。如下图所示：<br><img src="/images/Advanced-Java.03a1.G1%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-1.png" alt="../_images/Advanced-Java.03a1.G1回收器-2023-06-06-1.png"></p>
 <p>G1对 JVM 内存的划分：</p>
@@ -399,20 +399,20 @@
 </ul>
 </li>
 </ul>
-<h2 id="RSet：解决跨代引用"><a href="#RSet：解决跨代引用" class="headerlink" title="RSet：解决跨代引用"></a>RSet：解决跨代引用</h2><p>全称是 Remembered Set，作用类似 CMS 中的卡表，用来处理跨代引用的问题：</p>
+<h2 id="RSet：解决跨代引用"><a href="#RSet：解决跨代引用" class="headerlink" title="RSet：解决跨代引用"></a>RSet：解决跨代引用</h2><p>全称是 Remembered Set（记忆集），作用类似 CMS 中的卡表，用来处理跨代引用的问题：</p>
 <ul>
-<li>每个 Region 都有一个 RSet，记录了“谁引用了本 Region 中的对象”，这个 RSet 其实是一个 Hash Table，Key 是别的 Region 的起始地址，Value 是一个集合，里面的元素是“引用了它的对象”所在的 Card Table 的 Index。</li>
 <li>G1中依然使用卡页（Card，大小512B），作为管理对象分配的最小单元；</li>
+<li>每个 Region 都有一个 RSet，记录了“谁引用了本 Region 中的对象”，这个 RSet 其实是一个 Hash Table，Key 是别的 Region 的起始地址，Value 是一个集合，里面的元素是“引用了它的对象”所在的 <strong>Card Table</strong> 的 Index。</li>
 <li>比较 RSet 与 “卡表”： RSet 记录了其他 Region 中的对象引用本 Region 中对象的关系，属于 points-into 结构（谁引用了我的对象）。而 Card Table 则是一种 points-out（我引用了谁的对象）的结构；</li>
 </ul>
 <p>下图表示了 RSet、Card 和 Region 的关系（<a href="http://www.infoq.com/articles/tuning-tips-G1-GC" target="_blank" rel="noopener">出处</a>）：</p>
 <p><img src="/images/Advanced-Java.03a1.G1%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-4.png" alt="../_images/Advanced-Java.03a1.G1回收器-2023-06-06-4.png"></p>
-<p>上图中有三个 Region，每个 Region 被分成了多个 Card，在不同 Region 中的 Card 会相互引用，Region1中的 Card 中的对象引用了 Region2中的 Card 中的对象，蓝色实线表示的就是 points-out 的关系，而在 Region2的 RSet 中，记录了 Region1的 Card，即红色虚线表示的关系，这就是 points-into。而维系 RSet 中的引用关系靠 write barrier 和 Concurrent refinement threads 来维护：</p>
+<p>上图中有三个 Region，每个 Region 被分成了多个 Card，在不同 Region 中的 Card 会相互引用，<br>Region1中的 Card 中的对象引用了 Region2中的 Card 中的对象，蓝色实线表示的就是 points-out 的关系，<br>而在 Region2的 RSet 中，记录了 Region1的 Card，即红色虚线表示的关系，这就是 points-into。而维系 RSet 中的引用关系靠 write barrier 和 Concurrent refinement threads 来维护：</p>
 <ul>
 <li>这里的 write barrier 和 CMS 中的卡表标记置脏类似，通过在“更新引用”的字节码后加一个记录，这些记录被写入缓冲区 /<em>注意区分这个 write barrier 和 Volatile 屏障是完全不同的概念</em>/；</li>
 <li>当缓冲区满了，write barrier 就停止服务了，会由 Concurrent refinement threads 处理这些缓冲区日志</li>
 </ul>
-<p>在做YGC的时候，只需要选定 young generation region 的 RSet作为根集，这些RSet记录了old-&gt;young的跨代引用，避免了扫描整个old generation。 而mixed gc的时候，old generation中记录了old-&gt;old的RSet，young-&gt;old的引用由扫描全部young generation region得到，这样也不用扫描全部Old Region。所以RSet的引入大大减少了GC的工作量。</p>
+<p>在做YGC的时候，只需要选定 young generation region 的 RSet作为根集，这些RSet记录了old-&gt;young的跨代引用，避免了扫描整个old generation。<br>而mixed gc的时候（清理全部的 young generation + 部分选定的 old generation），old generation中记录了old-&gt;old的RSet，young-&gt;old的引用由扫描全部 young generation region得到，这样也不用扫描全部 Old Region。所以RSet的引入大大减少了GC的工作量。</p>
 <h2 id="CSet：收集集合"><a href="#CSet：收集集合" class="headerlink" title="CSet：收集集合"></a>CSet：收集集合</h2><p>Collection Set（CSet），它记录了下次 GC 要收集哪些 Region，被选入 CSet 的 Region 将会被 GC 回收，<br>Region 能否进入 CSet的条件，见「Mixed GC」一节。</p>
 <p>G1的日志中也有关于 CSet 的记录：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2014-11-14T17:57:23.654+0800: 27.884: [GC pause (G1 Evacuation Pause) (young)</span><br><span class="line">Desired survivor size 11534336 bytes, new threshold 15 (max 15)</span><br><span class="line">- age   1:    5011600 bytes,    5011600 total</span><br><span class="line"></span><br><span class="line"># _pending_cards是关于RSet的Card Table。predicted base time是预测的扫描card table时间</span><br><span class="line">  27.884: [G1Ergonomics (CSet Construction) start choosing CSet, _pending_cards: 1461, predicted base time: 35.25 ms, remaining time: 64.75 ms, target pause time: 100.00 ms]</span><br><span class="line"></span><br><span class="line"># 添加Region到CSet，新生代一共159个Region，13个幸存区Region</span><br><span class="line">  27.884: [G1Ergonomics (CSet Construction) add young regions to CSet, eden: 159 regions, survivors: 13 regions, predicted young region time: 44.09 ms]</span><br><span class="line"></span><br><span class="line"># 完成CSet的选择，统计数据</span><br><span class="line">  27.884: [G1Ergonomics (CSet Construction) finish choosing CSet, eden: 159 regions, survivors: 13 regions, old: 0 regions, predicted pause time: 79.34 ms, target pause time: 100.00 ms]</span><br></pre></td></tr></table></figure></p>
 <h2 id="GC-流程"><a href="#GC-流程" class="headerlink" title="GC 流程"></a>GC 流程</h2><p>G1提供了两种 GC 模式，Minor GC 和 Mixed GC，两种都是有 Stop The World 的。</p>
@@ -426,23 +426,23 @@
 <p><strong>触发条件</strong>：和过去的 Minor GC 一样，“当所有的 Eden Region 都无法再分配对象时”。</p>
 <p>包括下面的<strong>回收阶段</strong>：</p>
 <ul>
-<li><p>（1）扫描 GC Roots，加上 RSet 记录的其他 Region 的外部引用。</p>
+<li><p>（1）从 GC Roots 开始扫描，加上 RSet 记录的其他 Region 的外部引用；</p>
 </li>
-<li><p>（2）更新 RSet：处理 dirty card queue 中的卡页，更新 RSet。此阶段完成后，RSet 可以准确的反映老年代对所在的内存分段中对象的引用。可以看作是第一步的补充。</p>
+<li><p>（2）更新 RSet：处理 dirty card queue 中的卡页，加入到 Region的 RSet；</p>
 </li>
-<li><p>（3）处理 RSet：识别被老年代对象指向的 Eden 中的对象，这些被指向的 Eden 中的对象被认为是存活的对象。</p>
+<li><p>（3）从 RSet 开始扫描：对于从 Old Region → Eden 的跨代引用，作为存活的对象；</p>
 </li>
-<li><p>（4）复制对象：收集算法依然使用的是 Copy 算法。Eden 区内存段中存活的对象会被复制到 Survivor Region，如果需要晋升，则复制到 Old Region。</p>
+<li><p>（4）复制对象：收集算法依然使用的是 <strong>Copy 算法</strong>。Eden 区内存段中存活的对象会被复制到 Survivor Region，如果需要晋升，则复制到 Old Region。</p>
 </li>
 <li><p>（5）处理引用，处理 Soft、Weak、Phantom、Final、JNI Weak 等引用队列。</p>
 </li>
 </ul>
-<h3 id="②-Concurrent-Marking"><a href="#②-Concurrent-Marking" class="headerlink" title="② Concurrent Marking"></a>② Concurrent Marking</h3><p>即并发标记（Concurrent Marking）阶段：触发条件当整个堆内存使用达到一定比例（默认是 45%），并发标记阶段就会被启动。这个比例也是可以调整的，通过参数 <code>-XX:InitiatingHeapOccupancyPercent</code> 进行配置。</p>
+<h3 id="②-Concurrent-Marking-Cycle"><a href="#②-Concurrent-Marking-Cycle" class="headerlink" title="② Concurrent Marking Cycle"></a>② Concurrent Marking Cycle</h3><p><strong>并发标记周期（Concurrent Marking Cycle）</strong>触发条件： 当整个堆内存使用达到一定比例（默认是 45%），并发标记阶段就会被启动。这个比例也是可以调整的，通过参数 <code>-XX:InitiatingHeapOccupancyPercent</code> 进行配置。</p>
 <p>Concurrent Marking 是为 Mixed GC 提供标记服务的，并不是一次 GC 过程的一个必须环节。这个过程和 CMS 垃圾回收器的回收过程非常类似，你可以类比 CMS 的回收过程看一下。具体标记过程如下：</p>
 <p>（1）初始标记（Initial Mark）：这个过程共用了 Minor GC 的暂停，这是因为它们可以复用 root scan 操作。虽然是 STW 的，但是时间通常非常短。</p>
 <p>（2）并发标记（ Concurrent Mark）：这个阶段从 GC Roots 开始对 heap 中的对象标记，标记线程与应用程序线程并行执行，并且收集各个 Region 的存活对象信息。</p>
 <p>（3）重新标记（Remaking）：和 CMS 类似也是 STW 的，标记那些在并发标记阶段发生变化的对象。</p>
-<p>（5）清理阶段（Cleanup）：这个过程不需要 STW，这一阶段只会清理全都是垃圾的Region，不全是垃圾的 Region，并不会被立马处理，它会在 Mixed GC 阶段进行收集。</p>
+<p>（5）清理阶段（Cleanup）：这个过程不需要 STW，这一阶段只会清理全都是垃圾的Region，不全是垃圾的 Region并不会被立马处理，它会在 Mixed GC 阶段进行收集。</p>
 <h4 id="保证并发标记的正确性"><a href="#保证并发标记的正确性" class="headerlink" title="保证并发标记的正确性"></a>保证并发标记的正确性</h4><p>无论 CMS 还是 G1都存在并发标记阶段，这一阶段 <strong>Mutator 线程</strong> 和 <strong>Garbage Collector 线程</strong> 同时对对象进行修改，那么并发阶段是如何保证标记的正确性呢？ 主要需要解决2个问题：</p>
 <ol>
 <li><strong>漏标</strong>（存活的对象没有被标记，导致被回收）</li>
@@ -464,7 +464,9 @@
 </ol>
 <p><img src="/images/java/java-jvm-gc-g1-5-1.gif" alt=""></p>
 <h5 id="SATB"><a href="#SATB" class="headerlink" title="SATB"></a>SATB</h5><p>了解了三色标记法，然后继续看 G1如何解决并发标记的问题：</p>
-<p>➤ G1使用了“原始快照”（Snapshot-At-The-Beginning，SATB）来处理漏标，由字面理解，是GC开始时活着的对象的一个快照。它是通过Root Tracing得到的，作用是维持并发GC的正确性。<br>漏标可以理解为并发标记过程中，一个白对象被重新引用了，变成了存活对象，这时要防止该白对象被漏标导致错误的回收。</p>
+<p>➤ G1使用了 <strong>“原始快照”（Snapshot-At-The-Beginning，SATB）</strong> 来处理漏标，由字面理解，是GC开始时活着的对象的一个快照。它是通过 Root Tracing得到的，作用是维持并发GC的正确性。</p>
+<p>当赋值语句发生时，快照发生改变，JVM 会将这次改变记录到 <strong>SATB日志</strong> 中，每个线程都会独占一个SATB缓冲区，初始有256条记录空间。当空间用尽时，线程会分配新的SATB缓冲区继续使用，而原有的缓冲去则加入全局列表中。最终在并发标记阶段，并发标记线程(Concurrent Marking Threads)在标记的同时，还会定期检查和处理全局缓冲区列表的记录，然后根据标记位图分片的标记位，扫描引用字段来 <strong>更新RSet</strong>。</p>
+<p>下面看 SATB机制如何解决漏标的问题：<br>漏标可以理解为并发标记过程中，一个白对象被重新引用了，变成了存活对象，这时要防止该白对象被漏标导致错误的回收。</p>
 <ul>
 <li>对于并发标记期间 new 出来的白对象：Region 中有两个 top-at-mark-start（TAMS）指针，分别为 prevTAMS 和 nextTAMS。在 TAMS 以上的对象是新分配的，这是一种隐式的标记，这样就解决了此类对象被漏标的情况；</li>
 <li>对于标记期已经存在的白对象，假如出现了漏标，只能是下面2个条件同时发生时：<ul>
@@ -475,13 +477,11 @@
 </ul>
 <p>只有这2条同时发生，此白对象才是“漏标”对象，如果破坏上面任一条件，都可以防止漏标</p>
 <ul>
-<li>G1的做法是，在（1）发生时，增加 <strong>write barrier</strong>，记录下这次改动，并发标记完成后，对该记录进行重新扫描，也即 SATB；</li>
-<li>CMS 的做法是在（2）发生时，即新增了黑 -&gt; 白的引用，记录这次改动（incremental update）</li>
+<li>G1的做法是，在（1）发生时，即 灰→白的引用消失，通过写屏障记录下这次改动（<strong>SATB</strong>），并发标记完成后，对该记录进行重新扫描；</li>
+<li>CMS 的做法是在（2）发生时，即新增了黑 -&gt; 白的引用，记录这次改动（<strong>incremental update</strong>），把黑色重新标记为灰色，下次会重新扫描灰色对象；</li>
 </ul>
-<p> <strong>Write Barrier</strong> （写屏障）有很多应用场景：除了上面的 STAB，还有记录跨代引用的 RSet，CMS 时期的卡表（Card_Table）。</p>
-<blockquote>
-<p><strong>为什么 G1采用 SATB 而不用 incremental update</strong>？<br>因为采用incremental update把黑色重新标记为灰色后，之前扫描过的还要再扫描一遍，效率太低。G1有RSet与SATB相配合。Card Table里记录了RSet，RSet里记录了其他对象指向自己的引用，这样就不需要再扫描其他区域，只要扫描RSet就可以了。</p>
-</blockquote>
+<p>通过写屏障，将引用的变化记录下来，并发优化线程(Concurrence Refinement Threads)将这些记录更新到 <strong>RSet</strong> 中；</p>
+<p>此外， <strong>Write Barrier</strong> （写屏障）有很多应用场景：除了上面的 STAB，还有 CMS 时期的卡表（Card_Table）。</p>
 <p>➤ 对于多标（浮动垃圾），产生的条件是：</p>
 <ol>
 <li>并发标记期间， new 出来的对象</li>
@@ -489,14 +489,23 @@
 </ol>
 <p>对于情况1，并发期间新建对象，通常的做法是直接全部当成黑色，本轮不会进行清除。这部分对象期间可能会变为垃圾，这也算是浮动垃圾的一部分。</p>
 <p>对于情况2，G1似乎没有特殊处理，</p>
-<h3 id="③-Mixed-GC"><a href="#③-Mixed-GC" class="headerlink" title="③ Mixed GC"></a>③ Mixed GC</h3><p>Young GC 发生的时机大家都知道，那什么时候发生 Mixed GC 呢？</p>
-<p>通过 Concurrent Marking 阶段，我们已经统计了老年代的垃圾占比。在 Minor GC 之后，如果判断这个占比达到了某个阈值，下次就会触发 Mixed GC。这个阈值，由 <code>-XX:G1HeapWastePercent</code> 参数进行设置（默认是堆大小的 5%）。</p>
+<h3 id="③-Mixed-GC"><a href="#③-Mixed-GC" class="headerlink" title="③ Mixed GC"></a>③ Mixed GC</h3><p>Mixed GC 触发条件：<br>通过 Concurrent Marking 阶段，我们已经统计了<strong>老年代的垃圾占比</strong>。在 Minor GC 之后，如果判断这个占比达到了某个阈值，下次就会触发 Mixed GC。这个阈值，由 <code>-XX:G1HeapWastePercent</code> 参数进行设置（默认是堆大小的 5%）。</p>
+<p>虽然触发条件是老年代的垃圾占比，但 Mixed GC 同名字一样，会回收全部的 Young Region 外加一部分 Old Region，通过上一阶段 concurrent marking 的统计结果，选出收益高的 Old Region 进入 CSet，从而实现对 GC 暂停时间的控制；</p>
+<p>Mixed GC 不是full GC，它只能回收部分老年代的Region，如果mixed GC实在无法跟上程序分配内存的速度，导致老年代填满无法继续进行Mixed GC，就会使用serial old GC（full GC）来收集整个GC heap；</p>
 <p>其他 Mixed GC 相关的参数：</p>
 <ul>
-<li>G1MixedGCLiveThresholdPercent：Old Region 中的存活对象的占比，低于这个值的 Region，才会被选入 CSet。</li>
-<li>G1MixedGCCountTarget：一次 global concurrent marking 之后，最多执行 Mixed GC 的次数。</li>
-<li>G1OldCSetRegionThresholdPercent：一次Mixed GC中能被选入CSet的最多Old Region数量。</li>
+<li><code>-xx:G1MixedGCLiveThresholdPercent</code>：Old Region 中的存活对象的占比，低于这个值的 Region，才会被选入 CSet。</li>
+<li><code>-xx:G1MixedGCCountTarget</code>：一次 global concurrent marking 之后，最多执行 Mixed GC 的次数。</li>
+<li><code>-xx:G1OldCSetRegionThresholdPercent</code>：一次Mixed GC中能被选入CSet的最多Old Region数量。</li>
 </ul>
+<h2 id="停顿预测"><a href="#停顿预测" class="headerlink" title="停顿预测"></a>停顿预测</h2><p>Pause Prediction Model 即停顿预测模型。它在G1中的作用是： G1 uses a pause prediction model to meet a user-defined pause time target and selects the number of regions to collect based on the specified pause time target.</p>
+<p>G1 GC是一个响应时间优先的GC算法，它与CMS最大的不同是，用户可以设定整个GC过程的期望停顿时间，参数-XX:MaxGCPauseMillis指定一个G1收集过程目标停顿时间，默认值200ms，不过它不是硬性条件，只是期望值。那么G1怎么满足用户的期望呢？就需要这个停顿预测模型了。<strong>G1根据这个模型统计计算出来的历史数据来预测本次收集需要选择的Region数量</strong>，从而尽量满足用户设定的目标停顿时间。 停顿预测模型是以衰减标准偏差为理论基础实现的：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//  share/vm/gc_implementation/g1/g1CollectorPolicy.hpp</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">get_new_prediction</span><span class="params">(TruncatedSeq* seq)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> MAX2(seq-&gt;davg() + sigma() * seq-&gt;dsd(),</span><br><span class="line">                seq-&gt;davg() * confidence_factor(seq-&gt;num()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个预测计算公式中：davg表示衰减均值，sigma()返回一个系数，表示信赖度，dsd表示衰减标准偏差，confidence_factor表示可信度相关系数。而方法的参数TruncateSeq，顾名思义，是一个截断的序列，它只跟踪了序列中的最新的n个元素。</p>
+<p>在G1 GC过程中，每个可测量的步骤花费的时间都会记录到 TruncateSeq（继承了AbsSeq）中，用来计算衰减均值、衰减变量，衰减标准偏差等：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/share/vm/utilities/numberSeq.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> AbsSeq::add(<span class="keyword">double</span> val) &#123;</span><br><span class="line">  <span class="keyword">if</span> (_num == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// if the sequence is empty, the davg is the same as the value</span></span><br><span class="line">    _davg = val;</span><br><span class="line">    <span class="comment">// and the variance is 0</span></span><br><span class="line">    _dvariance = <span class="number">0.0</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// otherwise, calculate both</span></span><br><span class="line">    _davg = (<span class="number">1.0</span> - _alpha) * val + _alpha * _davg;</span><br><span class="line">    <span class="keyword">double</span> diff = val - _davg;</span><br><span class="line">    _dvariance = (<span class="number">1.0</span> - _alpha) * diff * diff + _alpha * _dvariance;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>比如要预测一次GC过程中，RSet的更新时间，这个操作主要是将Dirty Card加入到RSet中，具体原理参考前面的RSet。每个Dirty Card的时间花费通过_cost_per_card_ms_seq来记录，具体预测代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//  share/vm/gc_implementation/g1/g1CollectorPolicy.hpp</span></span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">double</span> <span class="title">predict_rs_update_time_ms</span><span class="params">(<span class="keyword">size_t</span> pending_cards)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">double</span>) pending_cards * predict_cost_per_card_ms();</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="function"><span class="keyword">double</span> <span class="title">predict_cost_per_card_ms</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> get_new_prediction(_cost_per_card_ms_seq);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <h2 id="参数汇总"><a href="#参数汇总" class="headerlink" title="参数汇总"></a>参数汇总</h2><p>@ref: <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/g1_gc_tuning.html" target="_blank" rel="noopener">Garbage-First Garbage Collector Tuning</a></p>
 <table>
 <thead>
@@ -670,7 +679,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -681,7 +690,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -692,7 +701,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -760,7 +769,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#G1概述"><span class="nav-text">G1概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#G1的内存划分"><span class="nav-text">G1的内存划分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSet：解决跨代引用"><span class="nav-text">RSet：解决跨代引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSet：收集集合"><span class="nav-text">CSet：收集集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-流程"><span class="nav-text">GC 流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#①-Minor-GC"><span class="nav-text">① Minor GC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#②-Concurrent-Marking"><span class="nav-text">② Concurrent Marking</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#保证并发标记的正确性"><span class="nav-text">保证并发标记的正确性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#三色标记法"><span class="nav-text">三色标记法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SATB"><span class="nav-text">SATB</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#③-Mixed-GC"><span class="nav-text">③ Mixed GC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数汇总"><span class="nav-text">参数汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志解析"><span class="nav-text">日志解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#G1概述"><span class="nav-text">G1概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#G1的内存划分"><span class="nav-text">G1的内存划分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSet：解决跨代引用"><span class="nav-text">RSet：解决跨代引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSet：收集集合"><span class="nav-text">CSet：收集集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-流程"><span class="nav-text">GC 流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#①-Minor-GC"><span class="nav-text">① Minor GC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#②-Concurrent-Marking-Cycle"><span class="nav-text">② Concurrent Marking Cycle</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#保证并发标记的正确性"><span class="nav-text">保证并发标记的正确性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#三色标记法"><span class="nav-text">三色标记法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SATB"><span class="nav-text">SATB</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#③-Mixed-GC"><span class="nav-text">③ Mixed GC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#停顿预测"><span class="nav-text">停顿预测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数汇总"><span class="nav-text">参数汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志解析"><span class="nav-text">日志解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>

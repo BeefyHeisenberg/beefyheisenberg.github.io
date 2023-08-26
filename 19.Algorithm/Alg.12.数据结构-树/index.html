@@ -129,9 +129,10 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/bwwf75vdyg.gif">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/25stotndte.gif">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/Tree_Rebalancing.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.12.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-Tree-AVL-Delete.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/rbtree.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%842-%E6%A0%91-2023-05-08-2.png">
-<meta property="og:updated_time" content="2023-06-18T14:37:20.705Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.272Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Alg.12.数据结构-树">
 <meta name="twitter:description" content="简单二叉树二叉树遍历 先序(preOrder): 中-左-右 中序(inOrder): 左-中-右 后序(postOrder): 左-右-中  图来自 http://www.crystaltenn.com/2020/04/binary-trees-traversal-recursive-vs.html ➤ 先序遍历(递归):">
@@ -360,7 +361,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,959
+                  5,096
                 </span>
               
 
@@ -406,8 +407,8 @@
 <li>重复过程 2 和 3 直到栈 s 为空。</li>
 <li>完成后，所有结点已经 Push 到栈 output 中，且按照后序遍历的顺序存放，直接全部 Pop 出来即是二叉树后序遍历结果。</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postOrder</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack s1 = <span class="keyword">new</span> Stack();</span><br><span class="line">    Stack s2 = <span class="keyword">new</span> Stack();</span><br><span class="line"></span><br><span class="line">    s1.push(root);</span><br><span class="line">        <span class="keyword">while</span>(!s1.isEmpty) &#123;</span><br><span class="line">        Node curr = s1.pop();</span><br><span class="line"></span><br><span class="line">        s2.push(curr);</span><br><span class="line">        <span class="keyword">if</span>(curr.left !=<span class="keyword">null</span>) &#123;</span><br><span class="line">            s1.push(curr.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(curr.right !=<span class="keyword">null</span>) &#123;</span><br><span class="line">            s1.push(curr.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(!s2.isEmpty()) &#123;</span><br><span class="line">        Node curr = s2.pop();</span><br><span class="line">        System.out.println(cur.data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>➤ 层序遍历（非递归算法）:<br>第一个队列 currentLevel 用于存储当前层的结点，第二个队列 nextLevel 用于存储下一层的结点。当前层 currentLevel 为空时，表示这一层已经遍历完成，可以打印换行符了。<br>然后将第一个空的队列 currentLevel 与队列 nextLevel 交换，然后重复该过程直到结束。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postOrder</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack s1 = <span class="keyword">new</span> Stack();</span><br><span class="line">    Stack s2 = <span class="keyword">new</span> Stack();</span><br><span class="line"></span><br><span class="line">    s1.push(root);</span><br><span class="line">    <span class="keyword">while</span>(!s1.isEmpty) &#123;</span><br><span class="line">        Node curr = s1.pop();</span><br><span class="line">    </span><br><span class="line">        s2.push(curr);</span><br><span class="line">        <span class="keyword">if</span>(curr.left !=<span class="keyword">null</span>) &#123;</span><br><span class="line">            s1.push(curr.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(curr.right !=<span class="keyword">null</span>) &#123;</span><br><span class="line">            s1.push(curr.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(!s2.isEmpty()) &#123;</span><br><span class="line">        Node curr = s2.pop();</span><br><span class="line">        System.out.println(cur.data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>➤ 层序遍历（非递归算法）:<br>第一个队列 currentLevel 用于存储当前层的结点，第二个队列 nextLevel 用于存储下一层的结点。当前层 currentLevel 为空时，表示这一层已经遍历完成，可以打印换行符了。<br>然后将第一个空的队列 currentLevel 与队列 nextLevel 交换，然后重复该过程直到结束。<br>如果不需要打印<code>\n</code>区分层，那么只用一个队列即可实现</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">levelOrder</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Queue&lt;Node&gt; currentLevel = <span class="keyword">new</span> Queue();</span><br><span class="line">    Queue&lt;Node&gt; nextLevel = <span class="keyword">new</span> Queue();</span><br><span class="line"></span><br><span class="line">    currentLevel.offer(root);</span><br><span class="line">    <span class="keyword">while</span>(!currentLevel.isEmpty()) &#123;</span><br><span class="line">        currNode = currentLevel.poll();</span><br><span class="line">        <span class="keyword">if</span>(currNode) &#123;</span><br><span class="line">            print(currNode);</span><br><span class="line">            nextLevel.offer(currNode.left);</span><br><span class="line">            nextLevel.offer(currNode.right);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(currentLevel.isEmpty()) &#123;</span><br><span class="line">            print(<span class="string">"/n"</span>);</span><br><span class="line">            swap(currentLevel, nextLevel);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p><a href="https://blog.csdn.net/sgbfblog/article/details/7773103" target="_blank" rel="noopener">https://blog.csdn.net/sgbfblog/article/details/7773103</a></p>
@@ -439,6 +440,10 @@
 <li>右左（RL）:</li>
 </ul>
 <p>图: 四种情况的旋转(Root 是失去平衡树的根节点，Pivot 是旋转后重新平衡树的根节点),<br>可以看到需要<strong>1~2 次</strong>旋转即可使不平衡节点重新平衡:<br><img src="/images/alg/Tree_Rebalancing.png" alt="Rotate"></p>
+<h3 id="删除的情况"><a href="#删除的情况" class="headerlink" title="删除的情况"></a>删除的情况</h3><p>AVL 树删除一个节点，<strong>最坏情况下需要 logN 次旋转</strong> 才能恢复平衡性质（需要回溯到根节点）。<br>插入节点是子树高度加1，旋转会将子树高度减1，因此一次旋转即可恢复平衡；<br>删除节点是子树高度减1，旋转可能会将高度再次减1，这可能会触发再次旋转。</p>
+<p><img src="/images/Alg.12.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-Tree-AVL-Delete.png" alt="../_images/Alg.12.数据结构-Tree-AVL-Delete.png"></p>
+<p>删除节点 X 之后，R4的平衡因子变为 -2，R4 左旋；<br>R3 的平衡因子变为 2，R3 右旋；<br>R2 的平衡因子变为 -2， R2左旋；<br>R1的平衡因子变为2，R1 右旋……<br>当从根节点至待删除节点的父节点平衡因子交替为 -1 和 +1，删除该节点一旦触发旋转就需要 logn 次旋转 （回溯至根节点）。 </p>
+<p>@ref: <a href="https://my.oschina.net/xcafe/blog/5392904" target="_blank" rel="noopener">二叉树04.深度分析AVL树的实现与优化 - 极客志 - OSCHINA - 中文开源技术交流社区</a></p>
 <h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><ul>
 <li><p>查找: 可以像普通二叉查找树一样的进行，所以耗费 <code>O(log n)</code>时间，因为 AVL 树总是保持平衡的</p>
 </li>
@@ -468,7 +473,7 @@
 <h3 id="插入和删除"><a href="#插入和删除" class="headerlink" title="插入和删除"></a>插入和删除</h3><p>@ref: <a href="https://github.com/julycoding/The-Art-Of-Programming-By-July-2nd/blob/master/ebook/zh/03.01.md" target="_blank" rel="noopener">https://github.com/julycoding/The-Art-Of-Programming-By-July-2nd/blob/master/ebook/zh/03.01.md</a></p>
 <h3 id="复杂度分析-1"><a href="#复杂度分析-1" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><p>正是红黑树的这5条性质，使得一棵 n 个结点是红黑树始终保持了logn 的高度，从而也就解释了上面我们所说的“红黑树的查找、插入、删除的时间复杂度最坏为 <code>O(log n)</code>”这一结论的原因</p>
 <h2 id="B-树-amp-B-树"><a href="#B-树-amp-B-树" class="headerlink" title="B 树 &amp; B+树"></a>B 树 &amp; B+树</h2><p>[[../32.Database/MySQL-02b-BTree索引原理]]</p>
-<h2 id="•BST、AVL、RB-树、B-树复杂度比较"><a href="#•BST、AVL、RB-树、B-树复杂度比较" class="headerlink" title="•BST、AVL、RB 树、B 树复杂度比较"></a>•BST、AVL、RB 树、B 树复杂度比较</h2><p>➤ 二叉查找树 (Binary Search Tree) 的操作代价分析：</p>
+<h2 id="比较几种二叉树的复杂度"><a href="#比较几种二叉树的复杂度" class="headerlink" title="比较几种二叉树的复杂度"></a>比较几种二叉树的复杂度</h2><p>➤ <strong>二叉查找树 (Binary Search Tree)</strong> 的操作代价分析：</p>
 <ul>
 <li><p>(1) 查找代价： 任何一个数据的查找过程都需要从根结点出发，沿某一个路径朝叶子结点前进。因此查找中数据比较次数与树的形态密切相关。</p>
 <p>当树中每个结点左右子树高度大致相同时，树高为 logN。则平均查找长度与 logN 成正比，查找的平均时间复杂度在 O(logN)数量级上。</p>
@@ -476,7 +481,7 @@
 </li>
 <li><p>(2) 插入代价： 新结点插入到树的叶子上，完全不需要改变树中原有结点的组织结构。插入一个结点的代价与查找一个不存在的数据的代价完全相同。</p>
 </li>
-<li><p>(3) 删除代价： 当删除一个结点 P，首先需要定位到这个结点 P，这个过程需要一个查找的代价。然后稍微改变一下树的形态。如果被删除结点的左、右子树只有一个存在，则改变形态的代价仅为 O(1)。如果被删除结点的左、右子树均存在，只需要将当 P 的左孩子的右孩子的右孩子的…的右叶子结点与 P 互换，在改变一些左右子树即可。因此删除操作的时间复杂度最大不会超过 O(logN)。</p>
+<li><p>(3) 删除代价： 当删除一个结点 P，首先需要定位到这个结点 P，这个过程需要一个查找的代价。然后稍微改变一下树的形态：如果被删除结点的左、右子树只有一个存在，则改变形态的代价仅为 O(1)。如果被删除结点的左、右子树均存在，只需要将当 P 的左孩子的右孩子的右孩子的…的右叶子结点与 P 互换，在改变一些左右子树即可。因此删除操作的时间复杂度最大不会超过 O(logN)。</p>
 </li>
 </ul>
 <p>BST 效率总结 : </p>
@@ -484,11 +489,7 @@
 <li>查找最好时间复杂度 O(logN)，最坏时间复杂度 O(N)。</li>
 <li>插入删除操作算法简单，时间复杂度与查找差不多</li>
 </ul>
-<p>➤ 平衡二叉查找树 ( Balanced Binary Search Tree ) ：</p>
-<blockquote>
-<p>二叉查找树在最差情况下竟然和顺序查找效率相当，这是无法仍受的。事实也证明，当存储数据足够大的时候，树的结构对某些关键字的查找效率影响很大。当然，造成这种情况的主要原因就是 BST 不够平衡(左右子树高度差太大)。<br>既然如此，那么我们就需要通过一定的算法，将不平衡树改变成平衡树。因此，AVL 树就诞生了。</p>
-</blockquote>
-<p>AVL 的操作代价分析：</p>
+<p>➤ <strong>AVL（带平衡条件的 BST）</strong> 的操作代价分析：</p>
 <ul>
 <li><p>(1) 查找代价： AVL 是严格平衡的 BST（平衡因子不超过 1）。那么查找过程与 BST 一样，只是 AVL 不会出现最差情况的 BST(单支树)。因此查找效率最好、最坏情况都是 O(logN)数量级的。</p>
 </li>
@@ -503,7 +504,7 @@
 <li>AVL 树在执行每个插入操作时最多需要 1 次旋转，其时间复杂度在 O(logN)左右。</li>
 <li>AVL 树<strong>在执行删除时代价稍大</strong>，执行每个删除操作的时间复杂度需要 O(2logN)。</li>
 </ul>
-<p>➤ 红黑树 (Red-Black Tree)：</p>
+<p>➤ <strong>红黑树 (Red-Black Tree)</strong>：</p>
 <blockquote>
 <p>二叉平衡树的严格平衡策略，以牺牲插入、删除操作的代价，换来了稳定的 O(logN) 的查找时间复杂度。但是这样做是否值得呢？ 能不能找一种折中策略，即不牺牲太大的建立查找结构的代价，也能保证稳定高效的查找效率呢？ 答案就是：红黑树。</p>
 </blockquote>
@@ -521,13 +522,14 @@
 <li>查找效率最好情况下时间复杂度为 O(logN)，但在最坏情况下比 AVL 要差一些，但也远远好于 BST。</li>
 <li>插入和删除操作改变树的平衡性的概率要远远小于 AVL（RBT 不是严格高度平衡的）。因此需要的旋转操作的可能性要小，而且一旦需要旋转，插入一个结点最多只需要旋转 2 次，删除最多只需要旋转 3 次(小于 AVL 的删除操作所需要的旋转次数)。虽然变色操作的时间复杂度在 O(logN)，但是实际上这种操作由于简单所需要的代价很小。</li>
 </ul>
-<p>➤ B 树/B+树 (B-Tree ) ：</p>
+<p>➤ <strong>B 树/B+树 (B-Tree)</strong> ：</p>
 <blockquote>
-<p>对于在内存中的查找结构而言，红黑树的效率已经非常好了(实际上很多实际应用还对 RBT 进行了优化)。但是如果是数据量非常大的查找呢？将这些数据全部放入内存组织成 RBT 结构显然是不实际的。<br>在磁盘中组织查找结构，从任何一个结点指向其他结点都有可能读取一次磁盘数据，再将数据写入内存进行比较。显而易见，所有的二叉树的查找结构在磁盘中都是低效的。因此，B 树很好的解决了这一个问题。</p>
+<p>对于在内存中的查找结构而言，红黑树的效率已经非常好了(实际上很多实际应用还对 RBT 进行了优化)。但是如果是数据量非常大的查找呢？将这些数据全部放入内存组织成 RBT 结构显然是不实际的。<br>在磁盘中组织查找结构，从任何一个结点指向其他结点都有可能读取一次磁盘数据，再将数据写入内存进行比较。显而易见，所有的二叉树的查找结构在磁盘中都是低效的。因此， B-Tree 很好的解决了这一个问题。</p>
 </blockquote>
 <p>B-Tree 的操作代价分析：</p>
+<p>B-Tree 查找代价 = $O\log_M N$，M是度数 @link [[../32.Database/MySQL-02b-BTree索引原理.md]]</p>
 <ul>
-<li><p>(1) 查找代价： B-Tree 作为一个平衡多路查找树(m叉)。B 树的查找分成两种：一种是从一个结点查找另一结点的地址的时候，需要定位磁盘地址(查找地址)，查找代价极高。另一种是将结点中的有序关键字序列放入内存，进行优化查找(可以用折半)，相比查找代价极低。而 B 树的高度很小，因此在这一背景下，B 树比任何二叉结构查找树的效率都要高很多。而且 B+树作为 B 树的变种，其查找效率更高。</p>
+<li><p>(1) 查找代价： B-Tree 作为一个平衡多路查找树(m叉)。B 树的查找分成两种：一种是从一个结点查找另一结点的地址的时候，需要定位磁盘地址(查找地址)，查找代价极高。另一种是将结点中的有序关键字序列放入内存，进行优化查找(可以用折半)，相比查找代价极低。而 B 树的高度很小，因此在这一背景下，B 树比任何二叉结构查找树的效率都要高很多。</p>
 </li>
 <li><p>(2)插入代价： B-Tree 的插入会发生结点的分裂操作。当插入操作引起了 s 个节点的分裂时，磁盘访问的次数为 h(读取搜索路径上的节点)＋2s(回写两个分裂出的新节点)＋1（回写新的根节点或插入后没有导致分裂的节点）。因此，所需要的磁盘访问次数是 h+2s+1，最多可达到 3h+1。因此插入的代价是很大的。</p>
 </li>
@@ -548,26 +550,26 @@
 <li>空间：O(n) </li>
 <li>增/删/查：O(n)</li>
 </ul>
-<p><strong>如何使用</strong>：</p>
+<p>使用场景：</p>
 <ul>
-<li>一堆字符串构建为一棵 Tire Tree，公共的前缀被合并</li>
-<li>查找：<ul>
-<li>查找 string1 是否在一堆给定的字符串里：查找次数=字符串长度</li>
-<li>查找 str1 前缀开头是否存在于（startWith）… </li>
+<li>一堆字符串的最长公共前缀（节点指向下层的指针=1，此节点即为公共前缀中的一个字母）；</li>
+<li>统计词频：需要对 Node 的定义做一下修改，增加 freq 属性；</li>
 </ul>
-</li>
-</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">typedef struct node</span><br><span class="line">&#123;</span><br><span class="line">    int value;// ASCII码</span><br><span class="line">    int frequecy;//c出现的频率</span><br><span class="line">    struct node* child[R]; //有R个孩子，初始为NULL</span><br><span class="line">&#125;Node;</span><br></pre></td></tr></table></figure>
 <p><strong>问题实例</strong>：</p>
-<p><strong>1、一个文本文件，大约有一万行，每行一个词，要求统计出其中最频繁出现的前10个词，请给出思想，给出时间复杂度分析</strong></p>
-<p><strong>提示</strong>：用trie树统计每个词出现的次数，时间复杂度是O(n<em>le)（le表示单词的平均长度），然后是找出出现最频繁的前10个词。当然，也可以用堆来实现，时间复杂度是O(n</em>lg10)。所以总的时间复杂度，是O(n<em>le)与O(n</em>lg10)中较大的哪一个。</p>
-<p><strong>2、寻找热门查询</strong></p>
-<p><strong>原题</strong>：搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。假设目前有一千万个记录，这些查询串的重复读比较高，虽然总数是1千万，但是如果去除重复和，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就越热门。请你统计最热门的10个查询串，要求使用的内存不能超过1G。</p>
-<p><strong>提示</strong>：利用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。</p>
-<hr>
-<p>@ref: <a href="https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/06.09.html" target="_blank" rel="noopener">https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/06.09.html</a></p>
-<h2 id="线段树"><a href="#线段树" class="headerlink" title="线段树"></a>线段树</h2><ul>
-<li><a href="https://zhuanlan.zhihu.com/p/30248914" target="_blank" rel="noopener">数据结构：线段树</a></li>
+<p><strong>1、一个文本文件，大约有一万行，每行一个词，要求统计出其中最频繁出现的前10个词，给出时间复杂度分析</strong></p>
+<ul>
+<li>构建 Trie tree</li>
+<li>用 Trie tree 统计每个词出现的次数，时间复杂度是 <code>O(n*le)</code>（le 表示单词的平均长度），然后是找出出现最频繁的前10个词。</li>
 </ul>
+<p><strong>2、寻找热门查询关键词</strong>： 搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。假设目前有一千万个记录，这些查询串的重复读比较高，虽然总数是1千万，但是如果去除重复和，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就越热门。请你统计最热门的10个查询串，要求使用的内存不能超过1G。</p>
+<p><strong>提示</strong>：利用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。</p>
+<p>@ref: </p>
+<ul>
+<li><a href="https://segmentfault.com/a/1190000002891074" target="_blank" rel="noopener">算法 - 用Trie树统计词频。 - hack - SegmentFault 思否</a></li>
+<li><a href="https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/06.09.html" target="_blank" rel="noopener">6.9 Trie树| 编程之法：面试和算法心得</a></li>
+</ul>
+<h2 id="线段树"><a href="#线段树" class="headerlink" title="线段树"></a>线段树</h2><p>@todo： <a href="https://zhuanlan.zhihu.com/p/30248914" target="_blank" rel="noopener">数据结构：线段树</a></p>
 <h1 id="优先队列-堆"><a href="#优先队列-堆" class="headerlink" title="优先队列(堆)"></a>优先队列(堆)</h1><p>二叉堆就结构性质上来说就是一个完全填满的二叉树，满足树的结构性和堆序性。堆序性指的是：父节点的键值总是大于或等于（小于或等于）任何一个子节点的键值，且每个节点的左子树和右子树都是一个二叉堆（都是最大堆或最小堆）。</p>
 <ul>
 <li><a href="https://zhuanlan.zhihu.com/p/25820535" target="_blank" rel="noopener">数据结构：堆</a></li>
@@ -714,7 +716,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -725,7 +727,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -736,7 +738,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -804,7 +806,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单二叉树"><span class="nav-text">简单二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二叉树遍历"><span class="nav-text">二叉树遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点删除-插入"><span class="nav-text">节点删除/插入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AVL-树"><span class="nav-text">AVL 树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#旋转"><span class="nav-text">旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑树"><span class="nav-text">红黑树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入和删除"><span class="nav-text">插入和删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析-1"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-树-amp-B-树"><span class="nav-text">B 树 &amp; B+树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#•BST、AVL、RB-树、B-树复杂度比较"><span class="nav-text">•BST、AVL、RB 树、B 树复杂度比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字典树（Trie）"><span class="nav-text">字典树（Trie）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线段树"><span class="nav-text">线段树</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优先队列-堆"><span class="nav-text">优先队列(堆)</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单二叉树"><span class="nav-text">简单二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二叉树遍历"><span class="nav-text">二叉树遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点删除-插入"><span class="nav-text">节点删除/插入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AVL-树"><span class="nav-text">AVL 树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#旋转"><span class="nav-text">旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除的情况"><span class="nav-text">删除的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑树"><span class="nav-text">红黑树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入和删除"><span class="nav-text">插入和删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析-1"><span class="nav-text">复杂度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-树-amp-B-树"><span class="nav-text">B 树 &amp; B+树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比较几种二叉树的复杂度"><span class="nav-text">比较几种二叉树的复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字典树（Trie）"><span class="nav-text">字典树（Trie）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线段树"><span class="nav-text">线段树</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优先队列-堆"><span class="nav-text">优先队列(堆)</span></a></div>
             
 
           </div>

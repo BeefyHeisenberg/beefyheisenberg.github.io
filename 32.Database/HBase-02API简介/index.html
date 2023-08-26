@@ -117,17 +117,17 @@
 
 
 
-<meta name="description" content="客户端API: 基础包括hbase shell命令行 和Java API 命令行 hbase shell: 进入hbase shell, 然后可以用以下的hbase命令行 list : list all table help &amp;#39;list&amp;#39; : 查看帮助 status : 查看状态 create &amp;#39;table1&amp;#39;,&amp;#39;col_family1&amp;#39;,&amp;#39;">
+<meta name="description" content="客户端API: 基础包括hbase shell命令行 和Java API 命令行 hbase shell: 进入 hbase shell, 然后可以用以下的 hbase 命令行 help &amp;#39;list&amp;#39; : 查看帮助 status : 查看状态 表级命令： list : list all table create &amp;#39;table1&amp;#39;,&amp;#39;col_family1&amp;#">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HBase-02API简介">
 <meta property="og:url" content="https://beefyheisenberg.github.io/32.Database/HBase-02API简介/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="客户端API: 基础包括hbase shell命令行 和Java API 命令行 hbase shell: 进入hbase shell, 然后可以用以下的hbase命令行 list : list all table help &amp;#39;list&amp;#39; : 查看帮助 status : 查看状态 create &amp;#39;table1&amp;#39;,&amp;#39;col_family1&amp;#39;,&amp;#39;">
+<meta property="og:description" content="客户端API: 基础包括hbase shell命令行 和Java API 命令行 hbase shell: 进入 hbase shell, 然后可以用以下的 hbase 命令行 help &amp;#39;list&amp;#39; : 查看帮助 status : 查看状态 表级命令： list : list all table create &amp;#39;table1&amp;#39;,&amp;#39;col_family1&amp;#">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-06-18T14:37:21.285Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.708Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HBase-02API简介">
-<meta name="twitter:description" content="客户端API: 基础包括hbase shell命令行 和Java API 命令行 hbase shell: 进入hbase shell, 然后可以用以下的hbase命令行 list : list all table help &amp;#39;list&amp;#39; : 查看帮助 status : 查看状态 create &amp;#39;table1&amp;#39;,&amp;#39;col_family1&amp;#39;,&amp;#39;">
+<meta name="twitter:description" content="客户端API: 基础包括hbase shell命令行 和Java API 命令行 hbase shell: 进入 hbase shell, 然后可以用以下的 hbase 命令行 help &amp;#39;list&amp;#39; : 查看帮助 status : 查看状态 表级命令： list : list all table create &amp;#39;table1&amp;#39;,&amp;#39;col_family1&amp;#">
 
 
 
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,739
+                  2,814
                 </span>
               
 
@@ -379,29 +379,39 @@
       
         <h1 id="客户端API-基础"><a href="#客户端API-基础" class="headerlink" title="客户端API: 基础"></a>客户端API: 基础</h1><p>包括hbase shell命令行 和Java API</p>
 <h2 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h2><ul>
-<li><code>hbase shell</code>: 进入hbase shell, 然后可以用以下的hbase命令行</li>
-<li><code>list</code> : list all table</li>
+<li><code>hbase shell</code>: 进入 hbase shell, 然后可以用以下的 hbase 命令行</li>
 <li><code>help &#39;list&#39;</code> : 查看帮助</li>
 <li><code>status</code> : 查看状态</li>
+<li>表级命令：<ul>
+<li><code>list</code> : list all table</li>
 <li><code>create &#39;table1&#39;,&#39;col_family1&#39;,&#39;col_family2&#39;</code> : 创建表, 并包含两个列族</li>
 <li><code>alter &#39;table1&#39;, NAME =&gt; &#39;col_family1&#39;, TTL =&gt; &#39;604800&#39;</code> : 修改列族的TTL(秒)</li>
 <li><code>describe &#39;table1&#39;</code> : 查看表描述</li>
+<li><code>deleteall &#39;table1&#39;, &#39;rowkey1&#39;, &#39;column&#39;</code> : 删除该行键下”column”列的数据</li>
+<li><code>deleteall &#39;table1&#39;, &#39;rowkey1&#39;</code> : 删除所有该行键下的数据</li>
+<li><code>truncate &#39;table1&#39;</code> 清空表</li>
+<li><code>disable &#39;table1&#39;</code> 然后 <code>drop &#39;table1&#39;</code> : 删除表</li>
+<li><code>count &#39;table1&#39;</code> : 统计表的行数</li>
+</ul>
+</li>
+<li>基本查询 &amp; 删除：<ul>
 <li><code>put &#39;table1&#39;, &#39;rowkey1&#39;, &#39;col_family1:col111&#39;, &#39;value&#39;</code> : 插入一条数据, 格式为<code>put 表名, 行键, 列族:列, 值</code></li>
 <li><code>get &#39;table1&#39;, &#39;rowkey1&#39;</code> : 查询记录, 格式为<code>get 表名, 行键</code></li>
 <li><code>get &#39;table1&#39;, &#39;rowkey1&#39;, &#39;col_family1:col111&#39;</code> : 查询记录, 格式为<code>get 表名, 行键, 列族:列</code></li>
 <li><code>get &#39;table1&#39;, &#39;rowkey1&#39;, { COLUMN =&gt; &#39;col_family1:col111&#39;, VERSIONS=&gt;1}</code>: 查询记录, 格式为<code>get 表名, 行键, {条件}</code>, 其中<code>COLUMN</code>和<code>VERSIONS</code>是预定义的, 分别表示列和版本号</li>
-<li><code>count &#39;table1&#39;</code> : 统计表的行数</li>
+</ul>
+</li>
+<li>扫描：<ul>
 <li><code>scan &#39;table1&#39; , {&#39;LIMIT&#39; =&gt; 5}</code> : 扫描一个表, <code>{&#39;LIMIT&#39; =&gt; 5}</code>是可选的</li>
 <li><code>scan &#39;table1&#39;, {COLUMNS =&gt; &#39;fam:col&#39;, STARTROW =&gt; &#39;executed|1530226272&#39;, STOPROW =&gt; &#39;executed|1530233472&#39;}</code> : 带条件的扫描</li>
 <li><code>scan &#39;hbase:meta&#39;</code> 扫描 hbase:meta 表, 旧的HBase版本里该表叫: <code>.META.</code></li>
 <li><code>scan &#39;hbase:meta&#39;, {COLUMNS =&gt; &#39;info:regioninfo&#39;}</code> 参考 # META表</li>
-<li><code>deleteall &#39;table1&#39;, &#39;rowkey1&#39;, &#39;column&#39;</code> : 删除该行键下”column”列的数据</li>
-<li><code>deleteall &#39;table1&#39;, &#39;rowkey1&#39;</code> : 删除所有该行键下的数据</li>
-<li><code>truncate &#39;table1&#39;</code> 清空表</li>
-<li><code>disable &#39;table1&#39;</code> 然后<code>drop &#39;table1&#39;</code> : 删除表</li>
 </ul>
-<h2 id="Java-API"><a href="#Java-API" class="headerlink" title="Java API"></a>Java API</h2><h3 id="get-amp-put"><a href="#get-amp-put" class="headerlink" title="get &amp; put"></a>get &amp; put</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Configuration conf = HBaseConfiguration.create();</span><br><span class="line">HTable table = <span class="keyword">new</span> HTable(conf,<span class="string">"test_table"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Instantiating Put by rowkey</span></span><br><span class="line">Put p = <span class="keyword">new</span> Put(Bytes.toBytes(<span class="string">"row1"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// family name, qualifier ,value</span></span><br><span class="line">p.add(Bytes.toBytes(<span class="string">"personal"</span>),</span><br><span class="line">      Bytes.toBytes(<span class="string">"name"</span>),Bytes.toBytes(<span class="string">"raju"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Write the data</span></span><br><span class="line">table.put(p);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Instantiating Get by rowkey</span></span><br><span class="line">Get g = <span class="keyword">new</span> Get(Bytes.toBytes(<span class="string">"row1"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Reading the data</span></span><br><span class="line">Result result = table.get(g);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Reading values from Result</span></span><br><span class="line"><span class="keyword">byte</span> [] value = result.getValue(Bytes.toBytes(<span class="string">"personal"</span>),Bytes.toBytes(<span class="string">"name"</span>));</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"personal.name="</span> + Bytes.toString(value))</span><br><span class="line"></span><br><span class="line">table.close();</span><br></pre></td></tr></table></figure>
-<h3 id="scan"><a href="#scan" class="headerlink" title="scan"></a>scan</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line"></span><br><span class="line"><span class="comment">// Set Start &amp; stop row If Needed </span></span><br><span class="line"><span class="comment">//scan.setStartRow(startRow); </span></span><br><span class="line"><span class="comment">//scan.setStopRow(stopRow);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Scanning the required columns</span></span><br><span class="line">scan.addColumn(Bytes.toBytes(<span class="string">"personal"</span>), Bytes.toBytes(<span class="string">"name"</span>));</span><br><span class="line">scan.addColumn(Bytes.toBytes(<span class="string">"personal"</span>), Bytes.toBytes(<span class="string">"city"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Getting the scan result</span></span><br><span class="line">ResultScanner scanner = table.getScanner(scan);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Reading values from scan result</span></span><br><span class="line"><span class="keyword">for</span> (Result result = scanner.next(); result != <span class="keyword">null</span>; result = scanner.next())</span><br><span class="line">    System.out.println(<span class="string">"Found row : "</span> + result);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Closing the scanner</span></span><br><span class="line">scanner.close();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Java-API"><a href="#Java-API" class="headerlink" title="Java API"></a>Java API</h2><h3 id="增删：get-amp-put"><a href="#增删：get-amp-put" class="headerlink" title="增删：get &amp; put"></a>增删：get &amp; put</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Configuration conf = HBaseConfiguration.create();</span><br><span class="line">HTable table = <span class="keyword">new</span> HTable(conf,<span class="string">"test_table"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Instantiating Put by rowkey</span></span><br><span class="line">Put p = <span class="keyword">new</span> Put(Bytes.toBytes(<span class="string">"row1"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// family name, qualifier ,value</span></span><br><span class="line">p.add(Bytes.toBytes(<span class="string">"personal"</span>),</span><br><span class="line">      Bytes.toBytes(<span class="string">"name"</span>),Bytes.toBytes(<span class="string">"raju"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Write the data</span></span><br><span class="line">table.put(p);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Instantiating Get by rowkey</span></span><br><span class="line">Get g = <span class="keyword">new</span> Get(Bytes.toBytes(<span class="string">"row1"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Reading the data</span></span><br><span class="line">Result result = table.get(g);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Reading values from Result</span></span><br><span class="line"><span class="keyword">byte</span> [] value = result.getValue(Bytes.toBytes(<span class="string">"personal"</span>),Bytes.toBytes(<span class="string">"name"</span>));</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"personal.name="</span> + Bytes.toString(value))</span><br><span class="line"></span><br><span class="line">table.close();</span><br></pre></td></tr></table></figure>
+<h3 id="扫描：scan"><a href="#扫描：scan" class="headerlink" title="扫描：scan"></a>扫描：scan</h3><p>Scan 属于不稳定接口，如扫描范围过大或设置不准会导致性能下降，使用时强烈建议设置 startKey 与 endKey，同时 start 与 end 之间不要超过100条数据。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line"></span><br><span class="line">scan.setLimit(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Set start &amp; stop Rowkey If Need</span></span><br><span class="line"><span class="comment">//scan.setStartRow(startRow); </span></span><br><span class="line"><span class="comment">//scan.setStopRow(stopRow);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Scanning the required columns</span></span><br><span class="line">scan.addColumn(Bytes.toBytes(<span class="string">"personal"</span>), Bytes.toBytes(<span class="string">"name"</span>));</span><br><span class="line">scan.addColumn(Bytes.toBytes(<span class="string">"personal"</span>), Bytes.toBytes(<span class="string">"city"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Getting the scan result</span></span><br><span class="line">ResultScanner scanner = table.getScanner(scan);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Reading values from scan result</span></span><br><span class="line"><span class="keyword">for</span> (Result result = scanner.next(); result != <span class="keyword">null</span>; result = scanner.next())</span><br><span class="line">    System.out.println(<span class="string">"Found row : "</span> + result);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Closing the scanner</span></span><br><span class="line">scanner.close();</span><br></pre></td></tr></table></figure>
 <p>➤ <strong>scan 的 setCaching 与 setBatch 方法的区别</strong>:</p>
 <ul>
 <li>setCaching 设置的值为每次 rpc 的请求记录数，默认是1，设置更大的 cache 可以减少 RPC 次数来优化性能，但是一次传输的耗时也增加；</li>
@@ -414,14 +424,14 @@
 <ol>
 <li>next请求首先会检查客户端缓存中是否存在还没有读取的数据行，如果有就直接返回，否则需要将next请求给HBase服务器端（RegionServer）。</li>
 <li>如果客户端缓存已经没有扫描结果，就会将next请求发送给HBase服务器端。默认情况下，一次next请求仅可以请求100行数据（或者返回结果集总大小不超过2M）</li>
-<li>服务器端接收到next请求之后就开始从BlockCache、HFile以及memcache中一行一行进行扫描，扫描的行数达到100行之后就返回给客户端，客户端将这100条数据缓存到内存并返回一条给上层业务。</li>
+<li>服务器端接收到 next 请求之后就开始从 BlockCache、HFile 以及 MemStore 中一行一行进行扫描，扫描的行数达到100行之后就返回给客户端，客户端将这100条数据缓存到内存并返回一条给上层业务。</li>
 </ol>
 <p>上层业务不断一条一条获取扫描数据，在数据量大的情况下实际上 HBase 客户端会不断发送 next 请求到 HBase 服务器。</p>
 <p>@ref: <a href="http://hbasefly.com/2017/10/29/hbase-scan-3/" target="_blank" rel="noopener">HBase最佳实践 – Scan用法大观园 – 有态度的HBase/Spark/BigData</a></p>
-<h3 id="批处理-bacth"><a href="#批处理-bacth" class="headerlink" title="批处理(bacth)"></a>批处理(bacth)</h3><p>批量处理操作：可以批量处理跨多行的不同操作,<br>许多基于列表的操作，如delete、get的列表操作都是基于batch 方法实现的.</p>
+<h3 id="批处理：bacth"><a href="#批处理：bacth" class="headerlink" title="批处理：bacth"></a>批处理：bacth</h3><p>批量处理操作：可以批量处理跨多行的不同操作,<br>许多基于列表的操作，如delete、get的列表操作都是基于batch 方法实现的.</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Configuration conf = HBaseConfiguration.create();</span><br><span class="line">HTable table = <span class="keyword">new</span> HTable(conf,<span class="string">"test_table"</span>);</span><br><span class="line"></span><br><span class="line">List&lt;Row&gt; batch = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">Put put = <span class="keyword">new</span> Put(Bytes.toBytes(<span class="string">"row_key1"</span>));</span><br><span class="line">put.addColumn(Bytes.toBytes(<span class="string">"col_fam1"</span>), Bytes.toBytes(<span class="string">"col_qual3"</span>), Bytes.toBytes(<span class="string">"test_data3"</span>));</span><br><span class="line">batch.add(put);</span><br><span class="line"><span class="comment">// 添加更多...</span></span><br><span class="line"></span><br><span class="line">Object[] results = <span class="keyword">new</span> Object[batch.size()];</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    table.batch(batch, results);</span><br><span class="line">&#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">    System.err.println(e);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;results.length;i++)&#123;</span><br><span class="line">    System.out.println(<span class="string">"result"</span>+<span class="string">"["</span>+i+<span class="string">"]:"</span>+results[i]);</span><br><span class="line">&#125;</span><br><span class="line">table.close();</span><br></pre></td></tr></table></figure>
 <h3 id="Table-vs-BufferedMutator"><a href="#Table-vs-BufferedMutator" class="headerlink" title="Table vs BufferedMutator"></a>Table vs BufferedMutator</h3><p>In the new API, <code>BufferedMutator</code> is used.<br>You could change <code>Table t = connection.getTable(TableName.valueOf(&quot;foo&quot;))</code> to <code>BufferedMutator t = connection.getBufferedMutator(TableName.valueOf(&quot;foo&quot;))</code>. And then change <code>t.put(p)</code> to <code>t.mutate(p)</code></p>
-<h2 id="行锁-RowLock"><a href="#行锁-RowLock" class="headerlink" title="行锁(RowLock)"></a>行锁(RowLock)</h2><p>行锁 在客户端 API中仍然存在，但是不鼓励使用，因为管理不好会锁定整个RegionServer.</p>
+<h2 id="行锁-RowLock"><a href="#行锁-RowLock" class="headerlink" title="行锁(RowLock)"></a>行锁(RowLock)</h2><p>行锁在客户端 API 中仍然存在，但是不鼓励使用，因为管理不好会锁定整个 RegionServer.</p>
 <h1 id="客户端API-高级特性"><a href="#客户端API-高级特性" class="headerlink" title="客户端API: 高级特性"></a>客户端API: 高级特性</h1><h2 id="过滤器-Filter"><a href="#过滤器-Filter" class="headerlink" title="过滤器(Filter)"></a>过滤器(Filter)</h2><p>Get 和 Scan 实例可以用 filters 配置，以应用于 RegionServer.<br>所有的过滤器都在服务端生效, 叫做”谓词下推”（ predicate push down）。这样可以保证过滤掉的数据不会被传送到客户端.<br>过滤器在客户端被创建, 通过RPC传送到服务器端, 然后在服务器端执行.</p>
 <p>Hbase客户端api提供了几种过滤器:</p>
 <ul>
@@ -621,7 +631,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -632,7 +642,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -643,7 +653,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -711,7 +721,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端API-基础"><span class="nav-text">客户端API: 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#命令行"><span class="nav-text">命令行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-API"><span class="nav-text">Java API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#get-amp-put"><span class="nav-text">get &amp; put</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scan"><span class="nav-text">scan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#批处理-bacth"><span class="nav-text">批处理(bacth)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Table-vs-BufferedMutator"><span class="nav-text">Table vs BufferedMutator</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行锁-RowLock"><span class="nav-text">行锁(RowLock)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端API-高级特性"><span class="nav-text">客户端API: 高级特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤器-Filter"><span class="nav-text">过滤器(Filter)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计数器-Increment"><span class="nav-text">计数器(Increment)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#协处理器-Coprocessor"><span class="nav-text">协处理器(Coprocessor)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用协处理器"><span class="nav-text">使用协处理器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#批处理客户端"><span class="nav-text">批处理客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hive"><span class="nav-text">Hive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Apache-Pig"><span class="nav-text">Apache Pig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MapReduce"><span class="nav-text">MapReduce</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端API-基础"><span class="nav-text">客户端API: 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#命令行"><span class="nav-text">命令行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-API"><span class="nav-text">Java API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#增删：get-amp-put"><span class="nav-text">增删：get &amp; put</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扫描：scan"><span class="nav-text">扫描：scan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#批处理：bacth"><span class="nav-text">批处理：bacth</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Table-vs-BufferedMutator"><span class="nav-text">Table vs BufferedMutator</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行锁-RowLock"><span class="nav-text">行锁(RowLock)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端API-高级特性"><span class="nav-text">客户端API: 高级特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤器-Filter"><span class="nav-text">过滤器(Filter)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计数器-Increment"><span class="nav-text">计数器(Increment)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#协处理器-Coprocessor"><span class="nav-text">协处理器(Coprocessor)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用协处理器"><span class="nav-text">使用协处理器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#批处理客户端"><span class="nav-text">批处理客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hive"><span class="nav-text">Hive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Apache-Pig"><span class="nav-text">Apache Pig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MapReduce"><span class="nav-text">MapReduce</span></a></li></ol></li></ol></div>
             
 
           </div>

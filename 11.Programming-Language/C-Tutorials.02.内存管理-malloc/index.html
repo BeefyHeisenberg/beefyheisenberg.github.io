@@ -117,17 +117,17 @@
 
 
 
-<meta name="description" content="深入理解mallocvoid *ptr = malloc(N) 之后发生了什么? 从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。 1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。  内核中使用 start_">
+<meta name="description" content="@tldr：  如果申请空间&amp;lt; 128K，则尝试上推 brk 指针，（这种管理空闲内存的方式是典型的“bump-point 和 free-list” 结合的方式，JVM管理 TLAB 的方式类似）当然也不一定每次都需要上推 brk 指针，还会在 free-list 里做 first-fit 查找空闲块 如果&amp;gt; 128K, 则直接在 mmap区（内存映射区）分配  深入理解mallocv">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C Tutorials-02-内存管理（深入理解 malloc）">
 <meta property="og:url" content="https://beefyheisenberg.github.io/11.Programming-Language/C-Tutorials.02.内存管理-malloc/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="深入理解mallocvoid *ptr = malloc(N) 之后发生了什么? 从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。 1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。  内核中使用 start_">
+<meta property="og:description" content="@tldr：  如果申请空间&amp;lt; 128K，则尝试上推 brk 指针，（这种管理空闲内存的方式是典型的“bump-point 和 free-list” 结合的方式，JVM管理 TLAB 的方式类似）当然也不一定每次都需要上推 brk 指针，还会在 free-list 里做 first-fit 查找空闲块 如果&amp;gt; 128K, 则直接在 mmap区（内存映射区）分配  深入理解mallocv">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-06-18T14:37:20.357Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:57.852Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C Tutorials-02-内存管理（深入理解 malloc）">
-<meta name="twitter:description" content="深入理解mallocvoid *ptr = malloc(N) 之后发生了什么? 从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。 1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。  内核中使用 start_">
+<meta name="twitter:description" content="@tldr：  如果申请空间&amp;lt; 128K，则尝试上推 brk 指针，（这种管理空闲内存的方式是典型的“bump-point 和 free-list” 结合的方式，JVM管理 TLAB 的方式类似）当然也不一定每次都需要上推 brk 指针，还会在 free-list 里做 first-fit 查找空闲块 如果&amp;gt; 128K, 则直接在 mmap区（内存映射区）分配  深入理解mallocv">
 
 
 
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,287
+                  1,393
                 </span>
               
 
@@ -377,11 +377,16 @@
       
 
       
-        <h2 id="深入理解malloc"><a href="#深入理解malloc" class="headerlink" title="深入理解malloc"></a>深入理解malloc</h2><p><code>void *ptr = malloc(N)</code> 之后发生了什么?</p>
+        <p>@tldr：</p>
+<ul>
+<li>如果申请空间&lt; 128K，则尝试上推 brk 指针，（这种管理空闲内存的方式是典型的“bump-point 和 free-list” 结合的方式，JVM管理 TLAB 的方式类似）当然也不一定每次都需要上推 brk 指针，还会在 free-list 里做 first-fit 查找空闲块</li>
+<li>如果&gt; 128K, 则直接在 mmap区（内存映射区）分配</li>
+</ul>
+<h2 id="深入理解malloc"><a href="#深入理解malloc" class="headerlink" title="深入理解malloc"></a>深入理解malloc</h2><p><code>void *ptr = malloc(N)</code> 之后发生了什么?</p>
 <p>从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：brk 和 mmap（不考虑共享内存）。</p>
 <p>1、do_brk() 系统调用通过调整堆中的 brk 指针大小来增加或者回收堆内存<br>2、mmap 是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。</p>
 <blockquote>
-<p>内核中使用 start_brk 标识<strong>堆</strong>的起始位置，brk 标识堆当前的结束位置。当堆申请新的内存空间时，只需要将 brk 指针增加对应的大小，回收地址时减少对应的大小即可。</p>
+<p>内核中使用 start_brk 标识<strong>堆</strong>的起始位置，brk 标识堆当前的结束位置。当堆申请新的内存空间时，只需要将 brk 指针增加对应的大小，回收地址时减少对应的大小即可。 // 参考 <code>struct mm_struct</code> 结构体的解析</p>
 </blockquote>
 <p>这两种方式分配的都是虚拟内存，没有分配物理内存。在第一次访问已分配的虚拟地址空间的时候，发生缺页中断，操作系统负责分配物理内存，然后建立虚拟内存和物理内存之间的映射关系。</p>
 <p>▷ 情况 1：malloc 小于128k 的内存，会调用 <code>do_brk()</code> 进行分配内存，将 brk 指针往高地址推，给进程分配了 N bytes 的线性地址区域(VM)  ，此时系统并没有随即分配物理内存, 进程也没有占用 N bytes 的物理内存. // 这也表明了, 你时常在使用 top 的时候 VIRT 值增大, 而 RES 值却不变的原因.</p>
@@ -536,7 +541,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -547,7 +552,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -558,7 +563,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

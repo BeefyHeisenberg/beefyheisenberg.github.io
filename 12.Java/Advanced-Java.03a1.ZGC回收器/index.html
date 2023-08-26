@@ -126,9 +126,10 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-3.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.ZGC-Regions.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.ZGC-Staged.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-1.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-2.png">
-<meta property="og:updated_time" content="2023-06-18T14:37:20.444Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:57.994Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced-Java.03a1.ZGC回收器详解">
 <meta name="twitter:description" content="ZGC（The Z Garbage Collector）是 JDK 11中推出的一款低延迟垃圾回收器，它的设计目标包括：  停顿时间不超过10ms（低延迟，最大特点）； 停顿时间不会随着堆的大小，或者活跃对象的大小而增加； 支持8MB~4TB 级别的堆（未来支持16TB）  STW 对吞吐量的影响 部分上游业务要求风控服务65ms 内返回结果，并且可用性要达到99.99%。但因为 GC 停顿，我们">
@@ -357,7 +358,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,815
+                  3,286
                 </span>
               
 
@@ -414,7 +415,7 @@
 </ul>
 <p>四个 STW 过程中，初始标记因为只标记 GC Roots，耗时较短。再标记因为对象数少，耗时也较短。清理阶段因为内存分区数量少，耗时也较短。转移阶段要处理所有存活的对象，耗时会较长。因此，G1停顿时间的瓶颈主要是标记-复制中的转移阶段 STW。为什么转移阶段不能和标记阶段一样并发执行呢？主要是 G1未能解决转移过程中准确定位对象地址的问题。</p>
 <p>G1的 Young GC 和 CMS 的 Young GC，其标记-复制全过程 STW，这里不再详细阐述。</p>
-<h2 id="ZGC-细节"><a href="#ZGC-细节" class="headerlink" title="ZGC 细节"></a>ZGC 细节</h2><p>ZCG 不再有 CMS、G1的分代概念，同时采用基于 Region 的堆内存布局（与 Shenandoah 和 G1一样），但与它们不同的是， ZGC 的 Region 具有动态性 ：</p>
+<h2 id="ZGC-细节"><a href="#ZGC-细节" class="headerlink" title="ZGC 细节"></a>ZGC 细节</h2><h4 id="动态-Region"><a href="#动态-Region" class="headerlink" title="动态 Region"></a>动态 Region</h4><p>ZCG 不再有 CMS、G1的分代概念，同时采用基于 Region 的堆内存布局（与 Shenandoah 和 G1一样），但与它们不同的是， ZGC 的 Region 具有动态性 ：</p>
 <ul>
 <li>动态创建</li>
 <li>动态销毁</li>
@@ -427,13 +428,36 @@
 <li>Large Region：N * 2MB,这个类型的 Region 是可以动态变化的，不过必须是 2MB 的整数倍，最小支持 4 MB。每个 Large Region 只放置一个大对象，并且是不会被重分配的。</li>
 </ul>
 <p><img src="/images/Advanced-Java.03a1.ZGC-Regions.png" alt="../_images/Advanced-Java.03a1.ZGC-Regions.png"></p>
-<p>ZGC 采用 <strong>「标记-压缩」</strong> 策略来回收 Java 堆：ZGC 首先会并发标记( concurrent mark )堆中的活跃对象，然后并发转移( concurrent relocate )将部分区域的活跃对象整理到一起。</p>
-<p>ZGC 是如何做到并发标记和转移呢？这就要提到 ZGC 背后的核心技术——<strong>读屏障</strong>（ load barrier ）和<strong>染色指针</strong>（ colored pointer ）</p>
+<h3 id="ZGC阶段"><a href="#ZGC阶段" class="headerlink" title="ZGC阶段"></a>ZGC阶段</h3><p>ZGC 的垃圾回收周期分为如下几个阶段：</p>
+<p><img src="/images/Advanced-Java.03a1.ZGC-Staged.png" alt="../_images/Advanced-Java.03a1.ZGC-Staged.png"></p>
+<ul>
+<li>初始标记：初始标记阶段是指从 GC Roots 出发标记全部直接子节点的过程，GC Roots 数量不多，通常该阶段耗时非常短，<strong>需要STW</strong>；</li>
+<li>并发标记/对象重定位：从 GC Roots 开始对堆中对象进行可达性分析，并发标记耗时相对长很多，但该阶段是并发的，<strong>无需 STW</strong>；</li>
+<li>再标记：重新标记那些在并发标记阶段发生变化的对象。再标记因为对象数少，耗时较短，<strong>需要 STW</strong>；</li>
+<li>并发转移准备：</li>
+<li>初始转移：只处理  GC Roots，耗时较短，<strong>需要 STW</strong>；</li>
+<li>并发转移：GC 线程和应用线程一起工作；</li>
+</ul>
+<p>ZGC 只有三个 STW 阶段：<strong>初始标记</strong>，<strong>再标记</strong>，<strong>初始转移</strong>。</p>
+<p>初始标记和初始转移分别都只需要扫描所有 GC Roots，其处理时间和 GC Roots 的数量成正比，一般情况耗时非常短；再标记阶段 STW 时间很短，最多1ms，超过1ms 则再次进入并发标记阶段。即 <strong>ZGC 几乎所有暂停都只依赖于 GC Roots 集合大小</strong>，停顿时间不会随着堆的大小或者活跃对象的大小而增加。</p>
+<p>ZGC <strong>转移阶段</strong>的优化：</p>
+<ul>
+<li>G1 和 ZCG 都基于 <strong>标记-复制算法</strong>，所以都会有转移阶段，即把存活对象转移到新的 Region 中；</li>
+<li>G1的 <strong>转移阶段</strong>完全 STW 的，且停顿时间随存活对象的大小增加而增加；</li>
+<li>ZGC 把转移阶段分为了初始/并发两个阶段，并发转移虽然耗时较长但不需要 STW；</li>
+</ul>
 <h3 id="ZGC-低延迟的实现"><a href="#ZGC-低延迟的实现" class="headerlink" title="ZGC 低延迟的实现"></a>ZGC 低延迟的实现</h3><p>ZGC 在标记、转移和重定位阶段几乎都是并发的，这是 ZGC 实现停顿时间小于10ms 目标的最关键原因。</p>
-<p>ZGC 只有三个 STW 阶段：<strong>初始标记</strong>，<strong>再标记</strong>，<strong>初始转移</strong>。其中，初始标记和初始转移分别都只需要扫描所有 GC Roots，其处理时间和 GC Roots 的数量成正比，一般情况耗时非常短；再标记阶段 STW 时间很短，最多1ms，超过1ms 则再次进入并发标记阶段。即，ZGC 几乎所有暂停都只依赖于 GC Roots 集合大小，停顿时间不会随着堆的大小或者活跃对象的大小而增加。<br>与 ZGC 对比，G1的<strong>转移阶段</strong>完全 STW 的（ZGC 只有初始转移的短暂STW），且停顿时间随存活对象的大小增加而增加。</p>
-<p>➤ ZGC 通过<strong>指针着色</strong> 和 <strong>读屏障</strong> 来实现的并发标记和并发转移：</p>
+<p>ZGC 是如何做到并发标记和转移呢？这就要提到 ZGC 背后的核心技术 —— <strong>读屏障</strong>（ load barrier ）和<strong>染色指针</strong>（ colored pointer ）</p>
+<p><strong>并发转移</strong> 中“并发”意味着GC线程在转移对象的过程中，应用线程也在不停地访问对象。假设对象发生转移，但对象地址未及时更新，那么应用线程可能访问到旧地址，从而造成错误。而在ZGC中，应用线程访问对象将触发“读屏障”，如果发现对象被移动了，那么“读屏障”会把读出来的指针更新到对象的新地址上，这样应用线程始终访问的都是对象的新地址。那么，JVM是如何判断对象被移动过呢？就是利用对象引用的地址，即着色指针。下面介绍着色指针和读屏障技术细节。</p>
+<p>➤ ZGC 通过 <strong>指针着色</strong> 和 <strong>读屏障</strong> 来实现的并发标记和并发转移：</p>
 <p>（1）<strong>指针着色：</strong><br>ZGC 仅支持64位系统，对象指针占用空间=64bit，其中真正作为地址的是0-41位，42-45存储指针着色，高18位不使用（42+4+18）；</p>
 <p><img src="/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-1.png" alt="../_images/Advanced-Java.03a1.ZGC回收器-2023-06-06-1.png"></p>
+<p>其中表示染色状态的4位：</p>
+<ul>
+<li>finalizable 位：该对象只能通过终结器（finalizer）访问</li>
+<li>remap 位：引用是最新的，并指向对象的当前位置</li>
+<li>marked0 和 marked1 位：标记可达对象  </li>
+</ul>
 <p>对比过去的 GC，对象的存活信息是放在对象头的 Mark Word 中，而 ZGC 将对象存活信息存储在对象指针的4bits 中，少了一次读内存的操作。</p>
 <blockquote>
 <p>传统的垃圾回收器需要进行一次内存访问，并将对象存活信息放在对象头中；而在 ZGC 中，只需要设置对象指针的第42~45位即可，并且因为是寄存器访问，所以速度比访问内存更快。</p>
@@ -441,13 +465,15 @@
 <p>（2）<strong>读屏障：</strong></p>
 <p>即在“读操作”之后加入一小段代码，这段代码会修改指针的着色，这里的读操作指仅“从堆中读取对象引用”，无论<strong>GC 标记线程</strong> 和 <strong>应用线程</strong> 对这些引用的读取，都会被加入读屏障。</p>
 <p>读屏障示例：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Object o = obj.FieldA // 从堆中读取引用，需要加入屏障</span><br><span class="line">&lt;Load barrier&gt;</span><br><span class="line"></span><br><span class="line">Object p = o    // 无需加入屏障，因为不是从堆中读取引用</span><br><span class="line">o.dosomething() // 无需加入屏障，因为不是从堆中读取引用</span><br><span class="line">int i = obj.FieldB //无需加入屏障，因为不是对象引用</span><br></pre></td></tr></table></figure></p>
+<hr>
 <p>接下来详细介绍 ZGC 一次垃圾回收周期中地址视图的切换过程（这里的几种视图可以理解为几种不同的指针着色标记）：</p>
 <ul>
-<li><strong>初始化</strong>：ZGC初始化之后，整个内存空间的地址视图被设置为Remapped。程序正常运行，在内存中分配对象，满足一定条件后垃圾回收启动，此时进入标记阶段。</li>
-<li><strong>并发标记阶段</strong>：第一次进入标记阶段时视图为M0，如果对象被GC标记线程或者应用线程访问过，那么就将对象的地址视图从Remapped调整为M0。所以，在标记阶段结束之后，对象的地址要么是M0视图，要么是Remapped。如果对象的地址是M0视图，那么说明对象是活跃的；如果对象的地址是Remapped视图，说明对象是不活跃的。</li>
-<li><strong>并发转移阶段</strong>：标记结束后就进入转移阶段，此时地址视图再次被设置为Remapped。如果对象被GC转移线程或者应用线程访问过，那么就将对象的地址视图从M0调整为Remapped。</li>
+<li><strong>初始化</strong>：ZGC 初始化之后，整个内存空间的地址视图被设置为<em>Remapped</em>。程序正常运行，在内存中分配对象，满足一定条件后垃圾回收启动，此时进入标记阶段。</li>
+<li><strong>并发标记阶段</strong>：第一次进入标记阶段时视图为 M0，如果对象被 GC 标记线程或者应用线程访问过，那么就将对象的地址视图从 Remapped 调整为 M0。所以，在标记阶段结束之后，对象的地址要么是 M0视图，要么是 Remapped。*如果对象的地址是 M0视图，那么说明对象是活跃的；如果对象的地址是 Remapped 视图，说明对象是不活跃的。</li>
+<li><strong>并发转移阶段</strong>：标记结束后就进入转移阶段，此时地址视图再次被设置为 Remapped。<em>如果对象被 GC 转移线程或者应用线程访问过，那么就将对象的地址视图从 M0调整为 Remapped</em>。</li>
 </ul>
-<p>其实，在标记阶段存在两个地址视图 M0和 M1，上面的过程显示只用了一个地址视图。之所以设计成两个，是为了区别前一次标记和当前标记。也即，第二次进入并发标记阶段后，地址视图调整为 M1，而非 M0。</p>
+<p>在标记阶段存在两个地址视图 M0和 M1，上面的过程显示只用了一个地址视图。<br>之所以设计成两个，是为了区别前一次标记和当前标记。第一次进入并发标记，视图调整为 M0，第二次进入并发标记阶段后，地址视图调整为 M1；</p>
+<p>如下图所示，有3个对象1、2、3，初始阶段都是 “Remapped”..</p>
 <p><img src="/images/Advanced-Java.03a1.ZGC%E5%9B%9E%E6%94%B6%E5%99%A8-2023-06-06-2.png" alt="../_images/Advanced-Java.03a1.ZGC回收器-2023-06-06-2.png"></p>
 <h3 id="ZGC-线上效果"><a href="#ZGC-线上效果" class="headerlink" title="ZGC 线上效果"></a>ZGC 线上效果</h3><p>美团的案例：</p>
 <p>（1）可显著降低 TP999 和 TP99耗时，ZGC 在低延迟（TP999 &lt; 200ms）场景中收益较大：</p>
@@ -620,7 +646,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -631,7 +657,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -642,7 +668,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -710,7 +736,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#STW-对吞吐量的影响"><span class="nav-text">STW 对吞吐量的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#G1停顿时间瓶颈"><span class="nav-text">G1停顿时间瓶颈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZGC-细节"><span class="nav-text">ZGC 细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ZGC-低延迟的实现"><span class="nav-text">ZGC 低延迟的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZGC-线上效果"><span class="nav-text">ZGC 线上效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZGC-调优实践"><span class="nav-text">ZGC 调优实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZGC-日志分析"><span class="nav-text">ZGC 日志分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#STW-对吞吐量的影响"><span class="nav-text">STW 对吞吐量的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#G1停顿时间瓶颈"><span class="nav-text">G1停顿时间瓶颈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZGC-细节"><span class="nav-text">ZGC 细节</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#动态-Region"><span class="nav-text">动态 Region</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZGC阶段"><span class="nav-text">ZGC阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZGC-低延迟的实现"><span class="nav-text">ZGC 低延迟的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZGC-线上效果"><span class="nav-text">ZGC 线上效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZGC-调优实践"><span class="nav-text">ZGC 调优实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZGC-日志分析"><span class="nav-text">ZGC 日志分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>

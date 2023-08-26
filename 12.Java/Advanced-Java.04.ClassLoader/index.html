@@ -117,20 +117,20 @@
 
 
 
-<meta name="description" content="类的加载过程一个 Java Obj 被创建的完整过程：加载 – 链接 – 初始化,   在加载阶段, 创建的 class 对象存储在堆(Heap)、以及 Metaspace 的 Klass、Non-Klass 对象; 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
+<meta name="description" content="类的加载过程本节参考了  Oracle 的 jvms: Chapter 5. Loading, Linking, and Initializing：  Java虚拟机动态加载、链接和初始化类和接口。加载是查找具有特定名称的类或接口类型的二进制表示并从该二进制表示创建类或接口的过程。链接是获取类或接口并将其组合到Java虚拟机的运行时状态以使其能够执行的过程。类或接口的初始化包括执行类或接口初始化方">
 <meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Advanced Java-04-ClassLoader">
 <meta property="og:url" content="https://beefyheisenberg.github.io/12.Java/Advanced-Java.04.ClassLoader/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="类的加载过程一个 Java Obj 被创建的完整过程：加载 – 链接 – 初始化,   在加载阶段, 创建的 class 对象存储在堆(Heap)、以及 Metaspace 的 Klass、Non-Klass 对象; 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
+<meta property="og:description" content="类的加载过程本节参考了  Oracle 的 jvms: Chapter 5. Loading, Linking, and Initializing：  Java虚拟机动态加载、链接和初始化类和接口。加载是查找具有特定名称的类或接口类型的二进制表示并从该二进制表示创建类或接口的过程。链接是获取类或接口并将其组合到Java虚拟机的运行时状态以使其能够执行的过程。类或接口的初始化包括执行类或接口初始化方">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.04.ClassLoader-2023-05-10-2.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/JVM-ClassLoader-Tree.png">
-<meta property="og:updated_time" content="2023-06-18T14:37:20.454Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.014Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-04-ClassLoader">
-<meta name="twitter:description" content="类的加载过程一个 Java Obj 被创建的完整过程：加载 – 链接 – 初始化,   在加载阶段, 创建的 class 对象存储在堆(Heap)、以及 Metaspace 的 Klass、Non-Klass 对象; 在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间); 在初始化阶段, 初始化 static 成员, 也在堆;    ①加载(Loading)">
+<meta name="twitter:description" content="类的加载过程本节参考了  Oracle 的 jvms: Chapter 5. Loading, Linking, and Initializing：  Java虚拟机动态加载、链接和初始化类和接口。加载是查找具有特定名称的类或接口类型的二进制表示并从该二进制表示创建类或接口的过程。链接是获取类或接口并将其组合到Java虚拟机的运行时状态以使其能够执行的过程。类或接口的初始化包括执行类或接口初始化方">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.04.ClassLoader-2023-05-10-2.png">
 
 
@@ -356,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6,367
+                  6,549
                 </span>
               
 
@@ -381,7 +381,11 @@
       
 
       
-        <h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><p>一个 Java Obj 被创建的完整过程：加载 – 链接 – 初始化,</p>
+        <h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><p>本节参考了  Oracle 的 <strong>jvms</strong>: <a href="https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-5.html#jvms-5.5" target="_blank" rel="noopener">Chapter 5. Loading, Linking, and Initializing</a>：</p>
+<blockquote>
+<p>Java虚拟机动态加载、链接和初始化类和接口。加载是查找具有特定名称的类或接口类型的二进制表示并从该二进制表示创建类或接口的过程。链接是获取类或接口并将其组合到Java虚拟机的运行时状态以使其能够执行的过程。类或接口的初始化包括执行类或接口初始化方法<code>&lt;clinit&gt;</code>(§2.9)。<br>在本章中，§5.1描述了Java虚拟机如何从类或接口的二进制表示中派生符号引用。§5.2说明Java虚拟机如何首先启动加载、链接和初始化过程。§5.3规定类加载器如何加载类和接口的二进制表示，以及类和接口是如何创建的。链接在§5.4中进行了描述。§5.5详细说明类和接口是如何初始化的。§5.6引入了绑定本机方法的概念。最后，§5.7描述了Java虚拟机何时退出。</p>
+</blockquote>
+<p>一个 Java Class 对象被创建的完整过程：加载 – 链接 – 初始化,</p>
 <blockquote>
 <ol>
 <li>在加载阶段, 创建的 class 对象存储在堆(Heap)、以及 Metaspace 的 Klass、Non-Klass 对象;</li>
@@ -407,7 +411,7 @@
 <li>运行时堆栈没有溢出</li>
 </ul>
 </li>
-<li><p>2 准备(Preparation): </p>
+<li><p>2 准备(Preparation):</p>
 <ul>
 <li>为静态字段分配内存，这一步仅是分配内存但并未对其初始化；</li>
 <li><p>除了分配内存外，部分 Java 虚拟机还会在此阶段构造其他跟类层次相关的数据结构，比如说用来实现虚方法的动态绑定的 <strong>方法表</strong> /<em>方法表分为 vtable 和 itable，前者是非私的“实例方法”，后者是接口方法</em>/;</p>
@@ -417,17 +421,21 @@
 </li>
 </ul>
 </li>
-<li><p>3 解析(Resolution): 把类中的 <strong>符号引用</strong> 转换为 <strong>直接引用</strong>: </p>
+<li><p>3 解析(Resolution): 把类中的 <strong>符号引用</strong> 转换为 <strong>直接引用</strong>:</p>
 <ul>
 <li>对于一个方法调用，编译器会生成一个包含目标方法所在类的名字、目标方法的名字、接收参数类型以及返回值类型的符号引用，来指代所要调用的方法。解析阶段的目的，正是将这些符号引用解析成为实际引用。对于 Java 来说，大部分方法调用都是通过 invokevirtual 字节码调用的实例方法，这类方法调用被解析为在 vtable 位置的索引；</li>
 <li>如果符号引用指向一个未被加载的类，或者未被加载类的字段或方法，那么解析将触发这个类的加载（但未必触发这个类的链接以及初始化）</li>
 </ul>
 </li>
 </ul>
-<h3 id="③初始化-Initialization"><a href="#③初始化-Initialization" class="headerlink" title="③初始化(Initialization)"></a>③初始化(Initialization)</h3><p>类加载的最后一步是初始化，为标记为常量值的字段赋值，以及执行 &lt; clinit &gt; 方法的过程。</p>
-<p>在 Java 代码中，如果要初始化一个静态字段，我们可以在声明时直接赋值，也可以在静态代码块中对其赋值。如果直接赋值的静态字段被 final 所修饰，并且它的类型是基本类型或字符串时，那么该字段便会被 Java 编译器标记成常量值（ConstantValue），其初始化直接由 Java 虚拟机完成。<br>除此之外的直接赋值操作，以及所有静态代码块中的代码，则会被 Java 编译器置于同一方法中，并把它命名为 <code>clinit</code>。</p>
-<p>初始化阶段, 主要对类变量(非 final 非 static)进行初始化, 对于 static 的 Object 类型(非基本类型)的成员也是在这个时候进行初始化, 这一阶段会执行 <code>&lt; clinit &gt;</code> 方法, <code>&lt; clinit &gt;</code> 是编译期生成的, <strong>static 代码块</strong> / 类变量直接赋值等….代码都会被放入 <code>&lt; clinit &gt;</code>, 顺序与在 java 代码里出现顺序一致.<br>Java 虚拟机会通过加锁来确保类的 <code>&lt; clinit &gt;</code> 方法仅被执行一次。</p>
-<p>JVM 规范枚举了下述多种<strong>触发初始化</strong>的情况(但不限于这几种):</p>
+<h3 id="③初始化-Initialization"><a href="#③初始化-Initialization" class="headerlink" title="③初始化(Initialization)"></a>③初始化(Initialization)</h3><p>类加载的最后一步是初始化，为标记为常量值的字段赋值，以及执行 <code>&lt;clinit&gt;</code> 方法的过程。</p>
+<p>如果 filed 是在声明时被直接赋值的：</p>
+<ul>
+<li>如果 field 是 static final 修饰，且是基本类型（例如<code>final static int m = 1</code>），那么此 filed 会被编译器标记成常量值（ConstantValue），其初始化直接由 Java 虚拟机完成；</li>
+<li>除了上面的情况之外的所有直接赋值操作，连同static 代码块，一并被放入<code>&lt;clint&gt;</code>方法，该方法是由JVM加锁执行，保证该方法的线程安全。这个特性常被用来保证单例模式的线程安全，如果是在“static的内部类”中定义的static field，还可以利用内部类实现延后单例。</li>
+</ul>
+<p>@ref: <a href="https://time.geekbang.org/column/article/11523" target="_blank" rel="noopener">03 | Java虚拟机是如何加载Java类的?</a></p>
+<p>JVM 规范枚举了下述多种 <strong>触发初始化</strong> 的情况(但不限于这几种):</p>
 <ol>
 <li>Java 虚拟机启动时, 被标明为启动类(有 main 方法)会被初始化</li>
 <li>初始化一个类的时候如果发现其父类还没用初始化, 则先初始化其父类, 这种属于 <strong>被动初始化</strong>;</li>
@@ -547,9 +555,8 @@
 <p>ConextClassLoader 由线程的创建者在加载资源和类时提供。如果未设置该值，则默认为父线程的类加载器上下文。「The ContextClassLoader is provided by the creator of the thread when loading resources and classes. If the value isn’t set, then it defaults to the class loader context of the parent thread.」</p>
 <p>@ref: <a href="https://www.baeldung.com/java-classloaders#context-classloaders" target="_blank" rel="noopener">https://www.baeldung.com/java-classloaders#context-classloaders</a></p>
 <hr>
-<p>ConextClassLoader 的实际应用：</p>
-<p>以 JDBC.DriverManager 创建连接为例</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String url = &quot;jdbc:mysql://xxxx:xxxx/xxxx&quot;;</span><br><span class="line">Connection conn = DriverManager.getConnection(url,username,password);</span><br></pre></td></tr></table></figure>
+<p>ConextClassLoader 在实际应用，以 JDBC.DriverManager 创建连接为例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String url = <span class="string">"jdbc:mysql://xxxx:xxxx/xxxx"</span>;</span><br><span class="line">Connection conn = DriverManager.getConnection(url,username,password);</span><br></pre></td></tr></table></figure>
 <p>JDBC 定义了接口 java.sql.Driver，具体的实现都是由数据库厂商来提供的。</p>
 <p>DriverManager 是由 PlatformClassLoader 加载，根据 Cl 的职责，它只能加载 JDK 扩展包，那数据库厂商提供的 Jar 是如何加载到的呢？</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Connection <span class="title">getConnection</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        String url, java.util.Properties info, Class&lt;?&gt; caller)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">    ensureDriversInitialized();</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ensureDriversInitialized</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    AccessController.doPrivileged(<span class="keyword">new</span> PrivilegedAction&lt;Void&gt;() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> Void <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            ServiceLoader&lt;Driver&gt; loadedDrivers = ServiceLoader.load(Driver.class);</span><br><span class="line">            Iterator&lt;Driver&gt; driversIterator = loadedDrivers.iterator();</span><br><span class="line"></span><br><span class="line">            <span class="comment">/* Load these drivers, so that they can be instantiated.</span></span><br><span class="line"><span class="comment">             * It may be the case that the driver class may not be there</span></span><br><span class="line"><span class="comment">             * i.e. there may be a packaged driver with the service class</span></span><br><span class="line"><span class="comment">             * as implementation of java.sql.Driver but the actual class</span></span><br><span class="line"><span class="comment">             * may be missing. In that case a java.util.ServiceConfigurationError</span></span><br><span class="line"><span class="comment">             * will be thrown at runtime by the VM trying to locate</span></span><br><span class="line"><span class="comment">             * and load the service.</span></span><br><span class="line"><span class="comment">             *</span></span><br><span class="line"><span class="comment">             * Adding a try catch block to catch those runtime errors</span></span><br><span class="line"><span class="comment">             * if driver not available in classpath but it's</span></span><br><span class="line"><span class="comment">             * packaged as service and that service is there in classpath.</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">while</span> (driversIterator.hasNext()) &#123;</span><br><span class="line">                    driversIterator.next();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">                <span class="comment">// Do nothing</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    println(<span class="string">"DriverManager.initialize: jdbc.drivers = "</span> + drivers);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -599,16 +606,17 @@
 <p>In a Java Virtual Machine (JVM), “Two classes are the same class (and consequently the same type) if they are loaded by the same class loader and they have the same fully qualified name” [JVMSpec 1999]. Two classes with the same name but different package names are distinct, as are two classes with the same fully qualified name loaded by different class loaders.</p>
 <p>在 Java 虚拟机(JVM)中，“如果两个类由相同的类加载器加载，并且它们具有相同的完全限定名，则它们是相同的类(因此是相同的类型)”[JVMSpec 1999]</p>
 <p>It could be necessary to check whether a given object has a specific class type or whether two objects have the same class type associated with them, for example, when implementing the equals() method. If the comparison is performed incorrectly, the code could assume that the two objects are of the same class when they are not. As a result, class names must not be compared.</p>
-<p>例如，在实现equals()方法时，可能需要检查给定对象是否具有特定的类类型，或者两个对象是否具有与其关联的相同类类型。如果比较执行得不正确，代码可能会假定这两个对象属于同一类，但实际上并不是。因此，不能比较类名</p>
+<p>例如，在实现<code>equals()</code>方法时，可能需要检查给定对象是否具有特定的类类型，或者两个对象是否具有与其关联的相同类类型。如果比较执行得不正确，代码可能会假定这两个对象属于同一类，但实际上并不是。因此，不能比较类名</p>
 <hr>
 <p>JVM 在判定两个 class 是否相同时，不仅要判断两个类名是否相同，而且要判断是否由同一个类加载器实例加载的。<br>只有两者同时满足的情况下，JVM 才认为这两个 class 是相同的。就算两个 class 是同一份 class 字节码，如果被两个不同的 ClassLoader 实例所加载，JVM 也会认为它们是两个不同 class。</p>
 <p>比如网络上的一个 Java 类 <code>org.classloader.simple.NetClassLoaderSimple</code>，javac 编译之后生成字节码文件 NetClassLoaderSimple.class，<br>ClassLoaderA 和 ClassLoaderB 这两个类加载器并读取了 NetClassLoaderSimple.class 文件，并分别定义出了 java.lang.Class 实例来表示这个类，对于 JVM 来说，虽然都来自一份.class，但它们是两个不同的实例对象，如果试图将这个 Class 实例生成具体的对象进行转换时，就会抛运行时异常 java.lang.ClassCaseException</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewworkClassLoaderTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 测试加载网络中的class文件</span></span><br><span class="line">            String rootUrl = <span class="string">"http://localhost:8080/httpweb/classes"</span>;</span><br><span class="line">            String className = <span class="string">"org.classloader.simple.NetClassLoaderSimple"</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 定义2个Loader，并分别创建两个 class对象</span></span><br><span class="line">            NetworkClassLoader ncl1 = <span class="keyword">new</span> NetworkClassLoader(rootUrl);</span><br><span class="line">            NetworkClassLoader ncl2 = <span class="keyword">new</span> NetworkClassLoader(rootUrl);</span><br><span class="line"></span><br><span class="line">            Class&lt;?&gt; clazz1 = ncl1.loadClass(className);</span><br><span class="line">            Class&lt;?&gt; clazz2 = ncl2.loadClass(className);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 测试两个class 对象是否指向一个内存</span></span><br><span class="line">            System.out.println(clazz1.equals(clazz2)); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 用2个class 分别创建2个 obj</span></span><br><span class="line">            Object obj1 = clazz1.newInstance();</span><br><span class="line">            Object obj2 = clazz2.newInstance();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 测试 2个 obj 在反射机制内是否被认为是同一个类型</span></span><br><span class="line">            clazz1.getMethod(<span class="string">"setNetClassLoaderSimple"</span>, Object.class).invoke(obj1, obj2);  </span><br><span class="line">            <span class="comment">// false，invoke 抛出 ClassCaseException</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>setNetClassLoaderSimple() 实现也很简单，只有一个强制转换+赋值：<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">this</span>.instance = (NetClassLoaderSimple)object;</span><br></pre></td></tr></table></figure></p>
+<p>setNetClassLoaderSimple() 实现也很简单，只有一个强制转换+赋值：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">this</span>.instance = (NetClassLoaderSimple)object;</span><br></pre></td></tr></table></figure>
 <p>PS:  加载类（NetClassLoaderSimple）不要放在 IDE 的工程目录内，因为 IDE 在 run 的时候会先将工程中的所有.class 都用 AppClassLoader 加载，输出结果是 true</p>
 <p>结论，ClassLoader 对判断类是否相同的影响：</p>
 <ul>
-<li>使用不同的ClassLoader， <code>loadClass()</code>创建出来的 class 对象不同（不 equals，说明不是一个 class对象）</li>
+<li>使用不同的 ClassLoader， <code>loadClass()</code>创建出来的 class 对象不同（不 equals，说明不是一个 class对象）</li>
 <li>使用不同的 class 对象， <code>newInstance()</code>创建出来的 obj 对象也不同，反射调用失败</li>
 </ul>
 <hr>
@@ -753,7 +761,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -764,7 +772,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -775,7 +783,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

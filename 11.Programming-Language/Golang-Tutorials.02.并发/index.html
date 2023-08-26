@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="chan &amp;amp; select chan是并发安全的通信对象: // 使用make 创建一个存储int 类型的chan:ch1 := make(chan int)// 向chan写入:ch1 &amp;lt;- 1// 从chan读出:i := &amp;lt;-ch1// 或者通过ok判断ch里是否有数据i, ok := &amp;lt;-ch1// 不接受返回值的读:fmt.Println(&amp;lt;-ch)  c">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-06-18T14:37:20.392Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:57.893Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang Tutorials-02并发">
 <meta name="twitter:description" content="chan &amp;amp; select chan是并发安全的通信对象: // 使用make 创建一个存储int 类型的chan:ch1 := make(chan int)// 向chan写入:ch1 &amp;lt;- 1// 从chan读出:i := &amp;lt;-ch1// 或者通过ok判断ch里是否有数据i, ok := &amp;lt;-ch1// 不接受返回值的读:fmt.Println(&amp;lt;-ch)  c">
@@ -380,7 +380,7 @@
       
         <h1 id="chan-amp-select"><a href="#chan-amp-select" class="headerlink" title="chan &amp; select"></a>chan &amp; select</h1><ul>
 <li><p>chan是并发安全的通信对象:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 使用make 创建一个存储int 类型的chan:</span><br><span class="line">ch1 := make(chan int)</span><br><span class="line"></span><br><span class="line">// 向chan写入:</span><br><span class="line">ch1 &lt;- 1</span><br><span class="line"></span><br><span class="line">// 从chan读出:</span><br><span class="line">i := &lt;-ch1</span><br><span class="line"></span><br><span class="line">// 或者通过ok判断ch里是否有数据</span><br><span class="line">i, ok := &lt;-ch1</span><br><span class="line"></span><br><span class="line">// 不接受返回值的读:</span><br><span class="line">fmt.Println(&lt;-ch)</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用make 创建一个存储int 类型的chan:</span></span><br><span class="line">ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 向chan写入:</span></span><br><span class="line">ch1 &lt;- <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 从chan读出:</span></span><br><span class="line">i := &lt;-ch1</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者通过ok判断ch里是否有数据</span></span><br><span class="line">i, ok := &lt;-ch1</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不接受返回值的读:</span></span><br><span class="line">fmt.Println(&lt;-ch)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>channel的关闭: <code>close(channel)</code>, 问题:</p>
 <ul>
@@ -389,7 +389,7 @@
 </ul>
 </li>
 <li><p>select 监视一组chan, 并从已经准备好的chan里随机选出一个, 用法类似switch, 每个case是读取chan:<br>下面的select</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select &#123;</span><br><span class="line">  case i := &lt;-ch1:</span><br><span class="line">    fmt.Println(i)</span><br><span class="line">  case j := &lt;-ch2:</span><br><span class="line">    fmt.Println(j)</span><br><span class="line">  default:</span><br><span class="line">    fmt.Println(&quot;?&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> i := &lt;-ch1:</span><br><span class="line">    fmt.Println(i)</span><br><span class="line">  <span class="keyword">case</span> j := &lt;-ch2:</span><br><span class="line">    fmt.Println(j)</span><br><span class="line">  <span class="keyword">default</span>:</span><br><span class="line">    fmt.Println(<span class="string">"?"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>带缓冲区的chan: <code>ch := make(chan int, 100)</code></p>
 <ul>
@@ -424,7 +424,7 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cmd := exec.Command(&quot;ls&quot;, &quot;-lah&quot;)</span><br><span class="line">var stdout, stderr bytes.Buffer</span><br><span class="line">cmd.Stdout = &amp;stdout // stdout关联Buffer</span><br><span class="line">cmd.Stderr = &amp;stderr</span><br><span class="line"></span><br><span class="line">err := cmd.Start() // 非阻塞</span><br><span class="line">if err != nil &#123;</span><br><span class="line">	log.Fatalf(&quot;failed to call cmd.Start(): %v&quot;, err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">log.Printf(&quot;pid: %d&quot;, cmd.Process.Pid)</span><br><span class="line">cmd.Process.Wait() // 阻塞直到退出</span><br><span class="line">log.Printf(&quot;exitcode: %d&quot;, cmd.ProcessState.ExitCode())</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">cmd := exec.Command(<span class="string">"ls"</span>, <span class="string">"-lah"</span>)</span><br><span class="line"><span class="keyword">var</span> stdout, stderr bytes.Buffer</span><br><span class="line">cmd.Stdout = &amp;stdout <span class="comment">// stdout关联Buffer</span></span><br><span class="line">cmd.Stderr = &amp;stderr</span><br><span class="line"></span><br><span class="line">err := cmd.Start() <span class="comment">// 非阻塞</span></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	log.Fatalf(<span class="string">"failed to call cmd.Start(): %v"</span>, err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">log.Printf(<span class="string">"pid: %d"</span>, cmd.Process.Pid)</span><br><span class="line">cmd.Process.Wait() <span class="comment">// 阻塞直到退出</span></span><br><span class="line">log.Printf(<span class="string">"exitcode: %d"</span>, cmd.ProcessState.ExitCode())</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -558,7 +558,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -569,7 +569,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -580,7 +580,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

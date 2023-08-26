@@ -104,7 +104,7 @@
 
 
 
-  <meta name="keywords" content="OLTP,OLAP," />
+  <meta name="keywords" content="OLTP,OLAP,TSDB," />
 
 
 
@@ -117,18 +117,20 @@
 
 
 
-<meta name="description" content="OLTP vs OLAPOLTP(online transcation processing)联机事务处理:  多用来解决业务中的事务(ACID: 原子性,一致性,…)问题, 随机读写, 频繁的更改/删除; 不适合数据分析场景: 场景特点(数据量大), 分析和计算能力(OLTP没有, 只能查询到业务层再处理) // 关系型数据库, count/max/group by的实现?  OLAP(onli">
-<meta name="keywords" content="OLTP,OLAP">
+<meta name="description" content="按存储模型分类按数据模型分类：关系型 &amp;amp; 非关系型，后者又包括 KV 型、面向文档型、图数据库…… 一般来说，用NoSQL 作为“非关系型数据库”的泛称。 关系型（relational）：关系型数据库模型是把复杂的数据结构归结为简单的二元关系（即二维表格形式）。一般使用 B-Tree 作为索引；典型产品：MySQL、PostgreSQL、SQLite、SqlServer 非关系型（non-">
+<meta name="keywords" content="OLTP,OLAP,TSDB">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DB.01-数据库分类 - OLTP、OLAP、TSDB">
 <meta property="og:url" content="https://beefyheisenberg.github.io/32.Database/DB.01-数据库分类/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="OLTP vs OLAPOLTP(online transcation processing)联机事务处理:  多用来解决业务中的事务(ACID: 原子性,一致性,…)问题, 随机读写, 频繁的更改/删除; 不适合数据分析场景: 场景特点(数据量大), 分析和计算能力(OLTP没有, 只能查询到业务层再处理) // 关系型数据库, count/max/group by的实现?  OLAP(onli">
+<meta property="og:description" content="按存储模型分类按数据模型分类：关系型 &amp;amp; 非关系型，后者又包括 KV 型、面向文档型、图数据库…… 一般来说，用NoSQL 作为“非关系型数据库”的泛称。 关系型（relational）：关系型数据库模型是把复杂的数据结构归结为简单的二元关系（即二维表格形式）。一般使用 B-Tree 作为索引；典型产品：MySQL、PostgreSQL、SQLite、SqlServer 非关系型（non-">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-06-18T14:37:21.273Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/DB.01-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%86%E7%B1%BB.png">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.698Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DB.01-数据库分类 - OLTP、OLAP、TSDB">
-<meta name="twitter:description" content="OLTP vs OLAPOLTP(online transcation processing)联机事务处理:  多用来解决业务中的事务(ACID: 原子性,一致性,…)问题, 随机读写, 频繁的更改/删除; 不适合数据分析场景: 场景特点(数据量大), 分析和计算能力(OLTP没有, 只能查询到业务层再处理) // 关系型数据库, count/max/group by的实现?  OLAP(onli">
+<meta name="twitter:description" content="按存储模型分类按数据模型分类：关系型 &amp;amp; 非关系型，后者又包括 KV 型、面向文档型、图数据库…… 一般来说，用NoSQL 作为“非关系型数据库”的泛称。 关系型（relational）：关系型数据库模型是把复杂的数据结构归结为简单的二元关系（即二维表格形式）。一般使用 B-Tree 作为索引；典型产品：MySQL、PostgreSQL、SQLite、SqlServer 非关系型（non-">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/DB.01-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%86%E7%B1%BB.png">
 
 
 
@@ -353,7 +355,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  605
+                  1,321
                 </span>
               
 
@@ -378,7 +380,21 @@
       
 
       
-        <h1 id="OLTP-vs-OLAP"><a href="#OLTP-vs-OLAP" class="headerlink" title="OLTP vs OLAP"></a>OLTP vs OLAP</h1><p>OLTP(online transcation processing)联机事务处理:</p>
+        <h1 id="按存储模型分类"><a href="#按存储模型分类" class="headerlink" title="按存储模型分类"></a>按存储模型分类</h1><p>按数据模型分类：关系型 &amp; 非关系型，后者又包括 KV 型、面向文档型、图数据库…… 一般来说，用<strong>NoSQL</strong> 作为“非关系型数据库”的泛称。</p>
+<p><strong>关系型</strong>（relational）：关系型数据库模型是把复杂的数据结构归结为简单的二元关系（即二维表格形式）。一般使用 B-Tree 作为索引；<br>典型产品：MySQL、PostgreSQL、SQLite、SqlServer</p>
+<p><strong>非关系型</strong>（non-relational）：</p>
+<ul>
+<li><p><strong>KV 存储</strong>：键值数据库将数据存储为键值对集合，其中键作为数据的唯一标识。可以使用哈希表、跳表等构建索引；<br>典型产品：Redis、HBase </p>
+</li>
+<li><p><strong>列存储数据库</strong>：列式存储(column-based)是相对于传统关系型数据库的行式存储(Row-basedstorage)来说的。我们知道，平时的查询大部分都是条件查询，通常是返回某些字段（列）的数据。对于行存储数据，数据读取时通常将一行数据完全读出，存在数据冗余，而列存储，每次读取的数据只是需要的部分，不存在冗余性问题。<br>典型产品：HBase</p>
+</li>
+<li><p><strong>面向文档数据库</strong>（document-based）：此类数据库存储的是文档（XML、JSON、BSON 等格式），这些文档具备可述性（self-describing），呈现分层的树状结构（hierarchical tree data structure）。一般使用倒排索引；<br>典型产品：MongDB、ElasticSearch</p>
+</li>
+<li><p><strong>图数据库</strong>（graph db）：存储图形关系的数据库。一般的图数据库至少包含图存储、图查询、图分析这三种功能，典型产品：Neo4J、InfoGrid等</p>
+</li>
+</ul>
+<p><img src="/images/DB.01-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%86%E7%B1%BB.png" alt="../_images/DB.01-数据库分类.png"></p>
+<h1 id="OLTP-vs-OLAP"><a href="#OLTP-vs-OLAP" class="headerlink" title="OLTP vs OLAP"></a>OLTP vs OLAP</h1><p>OLTP(online transcation processing)联机事务处理:</p>
 <ul>
 <li>多用来解决业务中的事务(ACID: 原子性,一致性,…)问题, 随机读写, 频繁的更改/删除;</li>
 <li>不适合数据分析场景: 场景特点(数据量大), 分析和计算能力(OLTP没有, 只能查询到业务层再处理) // 关系型数据库, count/max/group by的实现?</li>
@@ -392,7 +408,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="TSDB-时序数据库"><a href="#TSDB-时序数据库" class="headerlink" title="TSDB(时序数据库)"></a>TSDB(时序数据库)</h1><p>➤ TSDB适用哪些业务场景</p>
+<h1 id="TSDB-时序数据库"><a href="#TSDB-时序数据库" class="headerlink" title="TSDB(时序数据库)"></a>TSDB(时序数据库)</h1><p>➤ 时序业务的特点：</p>
 <ul>
 <li>持续产生海量数据的业务: 持续(每秒都产生,没有突增热点)和海量(每秒千万/亿条)<ul>
 <li>比如监控系统产生的日志</li>
@@ -403,16 +419,37 @@
 <li>近期数据价值更高, 久远的数据极少被访问, 所以数据以流式处理居多</li>
 <li>没有关系型数据库的列, 一条数据不同维度的数据用标签区别, 可以以标签聚合查询(例如查询监控系统中,统计某API几天内访问量)</li>
 </ul>
-<p>➤ TSDB核心技术</p>
+<p>➤ TSDB 核心技术：</p>
 <ul>
-<li>写入量大:<ul>
-<li>方便的集群扩容(水平扩展), 业务对存储层的扩容无感知</li>
-<li>存储结构使用LSM(HBase or Druid), LSM是用来保证单机体系的写入效率</li>
+<li>高吞吐写入能力:<ul>
+<li>系统具备水平扩展的能力；</li>
+<li>单机具备高吞吐量，一般使用 LSM 架构实现；</li>
 </ul>
 </li>
 <li>数据分级存储/数据TTL: x小时内的使用内存, x天内使用SSD, 更久远的使用HDD, 或者根据TTL删除</li>
 <li>多标签查询: 多使用位图索引 or 倒排索引</li>
 <li>聚合查询: 预聚合</li>
+</ul>
+<p>➤ 常见 TSDB 产品：</p>
+<ul>
+<li><p>Influxdb：Influxdb是业界比较流行的一个时间序列数据库，特别是在IOT和监控领域十分常见。其使用go语言开发，突出特点是性能。特性：</p>
+<ul>
+<li>自定义 TSM 引擎</li>
+<li>简单，高性能的 HTTP 查询和写入 API</li>
+<li>SQL-like查询语言，简化查询和聚合操作</li>
+</ul>
+</li>
+<li><p>Opentsdb：一个基于 Hbase 的时间序列数据库（新版也支持 Cassandra）@link </p>
+<ul>
+<li>在数据压缩上，时间戳采用 delta 编码进行压缩，数据值采用 XOR 进行压缩；</li>
+<li>存储与计算解耦，为 IoT 场景海量数据、动态热点的数据特征量身打造，方便按照并发度和存储量按需独立扩容。采用分布式架构，支持横向水平扩展；</li>
+<li>空间聚合，支持按照不同的 tag 进行空间聚合和分组计算。</li>
+</ul>
+</li>
+<li><p>Prometheus 是一个开源的服务监控系统和时间序列数据库。独立地开源监控系统和告警工具，广泛应用于 Kubernetes 生态</p>
+</li>
+<li><p>Elasticsearch 是一个分布式的开源搜索和分析引擎，适用于所有类型的数据，包括文本、数字、地理空间、结构化和非结构化数据。Elasticsearch 的时序优化可以参考文章: <a href="https://www.elastic.co/cn/blog/elasticsearch-as-a-time-series-data-store" target="_blank" rel="noopener">《elasticsearch-as-a-time-series-data-store》</a></p>
+</li>
 </ul>
 <p>@ref: <a href="http://hbasefly.com/2017/11/19/timeseries-database-1/?rulkna=n0cfu1" target="_blank" rel="noopener">http://hbasefly.com/2017/11/19/timeseries-database-1/?rulkna=n0cfu1</a></p>
 
@@ -435,6 +472,8 @@
             <a href="/tags/OLTP/" rel="tag"># OLTP</a>
           
             <a href="/tags/OLAP/" rel="tag"># OLAP</a>
+          
+            <a href="/tags/TSDB/" rel="tag"># TSDB</a>
           
         </div>
       
@@ -550,7 +589,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -561,7 +600,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -572,7 +611,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -640,7 +679,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#OLTP-vs-OLAP"><span class="nav-text">OLTP vs OLAP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TSDB-时序数据库"><span class="nav-text">TSDB(时序数据库)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#按存储模型分类"><span class="nav-text">按存储模型分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OLTP-vs-OLAP"><span class="nav-text">OLTP vs OLAP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TSDB-时序数据库"><span class="nav-text">TSDB(时序数据库)</span></a></li></ol></div>
             
 
           </div>

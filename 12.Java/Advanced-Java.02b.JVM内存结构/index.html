@@ -131,7 +131,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.02b.JVM-TLAB-Pointer.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.02b.JVM-Stack-model.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/jvm-gensize-experience-point.png">
-<meta property="og:updated_time" content="2023-06-18T14:37:20.411Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:57.920Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Advanced Java-02b-JVM运行时内存结构">
 <meta name="twitter:description" content="JDK6 时期 如上图, JDK6 时代的 JVM 内存分为下面几个部分:  堆区(Heap Space): 这部分被所有线程共享(除了 #TLAB ), 包括: 年轻代: eden:s0:s1 的默认比例是 8:1:1,  可见 eden 区大部分对象都是要被回收的; 老年代: 老年代:年轻代 的比例默认是 2:1 , 也就是说默认情况下堆区的 2/3 都属于老年代,   栈区(Stack Sp">
@@ -360,7 +360,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,863
+                  4,876
                 </span>
               
 
@@ -440,8 +440,8 @@
 <li>TLAB在 线程初始化时创建，在经历一次GC后会释放TLAB，在GC过程中TLAB中的<strong>可达对象</strong>被放入Survivor Space，TLAB的内存区域也被释放给Eden 管理；</li>
 <li>在GC完之后，线程尝试分配对象时，再次创建新的TLAB；</li>
 <li>如果一次 new 的内存块的大小，大于当前 TLAB 剩余空间，此时还需要判断剩余空间是否大于<strong>refill_waste</strong>（最大可浪费）：<ul>
-<li>如果大于 refill_waste：在堆内存分配</li>
-<li>如果小于 refill_waste：TLAB 被退回给 Eden，线程不再使用这块 TLAB 分配，而是申请新的 TLAB</li>
+<li>如果TLAB的剩余容量，大于 refill_waste：在堆内存分配</li>
+<li>如果TLAB的剩余容量，小于 refill_waste：TLAB 被退回给 Eden，线程不再使用这块 TLAB 分配，而是申请新的 TLAB</li>
 <li>通过 refill_waste，减少重新申请 TLAB 的频次</li>
 </ul>
 </li>
@@ -463,12 +463,11 @@
 <h2 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h2><p>当每个新线程出现时，都会获得自己的 PC Register、Java Stack、以及 Native Method Stack</p>
 <p><strong>（1）Program Counter Register</strong>:<br> 计数器, 记录当前线程执行 Java 字节码的行号;</p>
 <p> 这里是 JVM 中唯一没有规定任何 OutOfMemoryError 的区域;</p>
-<p><strong>（2）Java Stack</strong>:<br> 即每个线程执行时的 “Java 栈”，区别于 Native, 每个线程的栈由一个个栈帧（Frame）构成，线程中每次有方法调用时，会创建一个 Frame 并压入 Java Stack，方法调用结束时 Frame 被弹出；</p>
-<p> 这里存储线程的 Java 方法（再次强调不包括 Native method 的）调用的状态，包括其局部变量、调用它的参数、返回值和中间计算。</p>
-<p> Java 的方法结束有两种方式：</p>
+<p><strong>（2）Java Stack</strong>:<br> 即每个线程执行时的 “Java 栈”，区别于 Native, 每个线程的栈由一个个栈帧（Frame）构成，线程中每次有方法调用时，会创建一个 Frame 并压入 Java Stack，方法调用结束时 Frame 被弹出，Java 的方法结束有两种方式：</p>
 <ul>
 <li>return</li>
-<li><p>抛出异常 </p>
+<li><p>抛出异常</p>
+<p>该区域存储线程的 Java 方法（再次强调不包括 Native method 的）调用的状态，包括其局部变量、调用它的参数、返回值和中间计算。</p>
 <p>该区域会抛出 StackOverflowError 和 OutOfMemoryError</p>
 </li>
 </ul>
@@ -781,7 +780,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -792,7 +791,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -803,7 +802,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

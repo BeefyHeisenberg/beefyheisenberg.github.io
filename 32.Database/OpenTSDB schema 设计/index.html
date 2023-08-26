@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="TSDB 的一些特点：  一般使用 KV 存储模型，检索的要素都保存在 key 中； TSDB 常用于存储监控数据，其中监控的指标称为“metric”，以及多个 k=v 格式的标签（一般称为 label or tag ），例如 service=service1, ip=10.10.2.58，以及时间戳  例如 Prometheus 的 Key 设计为 http_request_total{stat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenTSDB schema 设计">
+<meta property="og:url" content="https://beefyheisenberg.github.io/32.Database/OpenTSDB schema 设计/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="TSDB 的一些特点：  一般使用 KV 存储模型，检索的要素都保存在 key 中； TSDB 常用于存储监控数据，其中监控的指标称为“metric”，以及多个 k=v 格式的标签（一般称为 label or tag ），例如 service=service1, ip=10.10.2.58，以及时间戳  例如 Prometheus 的 Key 设计为 http_request_total{stat">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/OpenTSDB-Overview.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/OpenTSDB-Rowkey.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/OpenTSDB-Column-1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/OpenTSDB-Column-2.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/OpenTSDB-Table-1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/OpenTSDB-Table-2.png">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.804Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenTSDB schema 设计">
+<meta name="twitter:description" content="TSDB 的一些特点：  一般使用 KV 存储模型，检索的要素都保存在 key 中； TSDB 常用于存储监控数据，其中监控的指标称为“metric”，以及多个 k=v 格式的标签（一般称为 label or tag ），例如 service=service1, ip=10.10.2.58，以及时间戳  例如 Prometheus 的 Key 设计为 http_request_total{stat">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/OpenTSDB-Overview.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/32.Database/OpenTSDB schema 设计/"/>
+
+
+
+
+
+  <title>OpenTSDB schema 设计 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/OpenTSDB schema 设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OpenTSDB schema 设计</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,247
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>TSDB 的一些特点：</p>
+<ul>
+<li>一般使用 KV 存储模型，检索的要素都保存在 key 中；</li>
+<li>TSDB 常用于存储监控数据，其中监控的指标称为“<strong>metric</strong>”，以及多个 k=v 格式的<strong>标签</strong>（一般称为 label or tag ），例如 service=service1, ip=10.10.2.58，以及<strong>时间戳</strong></li>
+</ul>
+<p>例如 Prometheus 的 Key 设计为 <code>http_request_total{status=200,method=&quot;GET&quot;}@timestamp</code> 的格式</p>
+<h2 id="OpenTSDB-schema-设计"><a href="#OpenTSDB-schema-设计" class="headerlink" title="OpenTSDB schema 设计"></a>OpenTSDB schema 设计</h2><h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p>OpenTSDB 是基于 HBase 设计的，架构设计如下：</p>
+<p><img src="/images/OpenTSDB-Overview.png" alt="../_images/OpenTSDB-Overview.png"></p>
+<ul>
+<li>图中 TSD 即为(对应实际进程名是 TSDMain) opentsdb 组件。每个实例 TSD 都是独立的。没有 master，没有共享状态(shared state)，因此实际生产部署可能会通过 nginx+Consul 运行多个 TSD 实例以实现负载均衡；</li>
+<li>Server 通过 TSD RPC 向 TSD 上报数据，TSD 则通过 HBase RPC 与 HBase 进行通讯；</li>
+</ul>
+<h3 id="行键的设计"><a href="#行键的设计" class="headerlink" title="行键的设计"></a>行键的设计</h3><p>OpenTSDB 的 Rowkey 格式为： <code>[salt]&lt;metric_uid&gt;&lt;timestamp&gt;&lt;tagk1&gt;&lt;tagv1&gt;[...&lt;tagkN&gt;&lt;tagvN&gt;]</code></p>
+<ul>
+<li>SALT： 为了充分利用 HBase 分布式 Region Server 的能力，SALT 可以有效避免 HBase 的写入热点问题，开启 SALT 后，会对创建的 HBase Scanner 数量有影响，HBase Scanner 数量等于 SALT 的数量；</li>
+<li>Metric：监控指标名，例如 “sys.cpu.user”</li>
+<li>timestamp：小时级时间戳</li>
+<li>TagK-TagV：由多个标签的 KV 对构成，例如 “ip=10.10.2.58 core=0”</li>
+</ul>
+<p>所以一个 Rowkey 的逻辑值看起来如下： <code>sys.cpu.user 1541946115 ip=10.10.2.58 core=0</code></p>
+<p>OpenTSDB 为了减少 Rowkey 的空间占用，Metric、Tag 等都使用 UID（Unique ID）来代替，UID 默认占用3字节，UID 占用字节数可以通过参数调整，<br>OpenTSDB 为每种 Metric、TagK、TagV 都生成一个 UID，Metric、TagK、TagV 各自拥有自己的 UID 空间，换句话说所有 Metric 的 UID 不会出现重复，但 Metric 和 TagK 之间可能有重复的 UID；</p>
+<p>我们可以通过分别修改 <code>tsd.storage.uid.width.metric</code>、<code>tsd.storage.uid.width.tagk</code> 以及 <code>tsd.storage.uid.width.tagv</code> 参数来设置对应编码占用的字节数。</p>
+<p>所以 Rowkey 实际占用空间如下所示：</p>
+<p><img src="/images/OpenTSDB-Rowkey.png" alt="../_images/OpenTSDB-Rowkey.png"></p>
+<h3 id="列的设计"><a href="#列的设计" class="headerlink" title="列的设计"></a>列的设计</h3><p>由于 Rowkey 中已经包含了小时级的时间戳，所以需要通过列名（Qualifier）存储相对秒数（或毫秒数）</p>
+<p>（1）当 OpenTSDB 接收到一个新的 DataPoint 的时候，如果请求中的时间戳是秒，那么列名（Qualifier）将占用 2字节：</p>
+<p><img src="/images/OpenTSDB-Column-1.png" alt="../_images/OpenTSDB-Column-1.png"></p>
+<ul>
+<li>低3位表示 Value 的长度，Value 的长度 = (qualifier &amp; 0x07) + 1</li>
+<li>中间1位表示 Value 的类型，如果值为1，表示 Value 的类型为 float；如果值为0，表示 Value 的类型为 long。</li>
+<li>高12位表示相对于 Rowkey 中小时级时间戳的秒数，最大为 3600</li>
+</ul>
+<blockquote>
+<p>判断请求中的时间戳为秒或毫秒的方法是基于时间戳数值的大小，如果时间戳的值的超过无符号整数的最大值（即4个字节的长度），那么该时间戳是毫秒，否则为秒</p>
+</blockquote>
+<p>（2）如果 OpenTSDB 收到的 DataPoint 时间戳是毫秒，那么列名（Qualifier）将占用 4字节：</p>
+<p><img src="/images/OpenTSDB-Column-2.png" alt="../_images/OpenTSDB-Column-2.png"></p>
+<ul>
+<li>Value 长度：与秒级时间戳相同；</li>
+<li>Value 类型：与秒级时间戳相同；</li>
+<li>用22位表示相对于 Rowkey 中小时级时间戳的毫秒数</li>
+<li>高4位是（标志位）固定全为1；</li>
+</ul>
+<h3 id="表的设计"><a href="#表的设计" class="headerlink" title="表的设计"></a>表的设计</h3><p>由于每种  Metric、TagK、TagV 都被映射为一个 UID，所以 OpenTSDB 还需要一张额外的表存储 UID：</p>
+<p>（1）表 <strong>tsdb</strong>：所有的时序数据都存于这张表，Rowkey = <code>[SALT] &lt;metric&gt; &lt;小时级时间戳&gt; &lt;TagK1&gt; &lt;TagV1&gt; ...</code>，列族只有一个 <code>t</code>，列名为数据的时间戳相对于 Rowkey 中小时级时间戳的秒数（or 毫秒数），一个 CF:Qualifier 例如 <code>t:3600</code></p>
+<p><img src="/images/OpenTSDB-Table-1.png" alt="../_images/OpenTSDB-Table-1.png"></p>
+<p>（2）表 <strong>tsdb-uid</strong>：opentsdb 会将每种 metric、tagk、tagv 都映射成 UID，映射是双向的，比如说既可以根据 tagk 找到对应的 UID，也可以根据 UID 直接找到相应的 tagk。而这些映射关系就记录在 tsdb-uid 表中。该表有两个 ColumnFamily，分别是 name 和 id，另外这两个 ColumnFamily 下都有三列，分别是 metric、tagk、tagv。如下图所示：</p>
+<p><img src="/images/OpenTSDB-Table-2.png" alt="../_images/OpenTSDB-Table-2.png"></p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><a href="https://bbs.huaweicloud.com/blogs/129428" target="_blank" rel="noopener">OpenTSDB原理系列-TSDB数据表设计-云社区-华为云</a></li>
+<li><a href="https://www.cnblogs.com/bytesfly/p/the-road-of-exploring-opentsdb.html" target="_blank" rel="noopener">opentsdb探索之路——部分设计与实现 - 行无际 - 博客园</a></li>
+<li><a href="https://www.iteblog.com/archives/2473.html" target="_blank" rel="noopener">OpenTSDB 之 HBase的数据模型 – 过往记忆</a></li>
+</ul>
+<h2 id="百度自研-TSDB"><a href="#百度自研-TSDB" class="headerlink" title="百度自研 TSDB"></a>百度自研 TSDB</h2><ul>
+<li>底层存储使用 H<strong>Base</strong>；</li>
+<li><strong>RowKey = entity_id + metric_id + timebase</strong><ul>
+<li><strong>entity_id</strong> 是由 tagK 和 tagV 经过 hash 得到的一个固定长度的值，hash 后原始字符串的自然顺序被打乱，使得 RowKey 能够相对均匀地分布在不同 HRegion 中；</li>
+<li><strong>metric_id</strong> 为 metric 的字符串 hash 值，同样是固定长度；</li>
+<li><strong>timebase</strong> 为 Unix 时间戳按照 1 小时（3600 秒）取整得到的数值，固定 4 个字节的长度</li>
+</ul>
+</li>
+<li>Column： 列名使用相对 Rowkey 小时级时间戳的秒数；</li>
+</ul>
+<p>参考：</p>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/_zIVr0k8nZJHDacOqZNpcQ" target="_blank" rel="noopener">百度大规模时序数据存储（一）| 监控场景的时序数据</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzUyMzA3MTY1NA==&amp;mid=2247484040&amp;idx=1&amp;sn=82012419d6d4a0f65054378c755f1b82&amp;chksm=f9c37b41ceb4f257e0b38e7f5a7672fd540502dfc1db5da3fa2c99de9e2961fe3bf8da92be31&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">百度大规模时序数据存储（二）| 存储选型及数据模型设计</a></li>
+<li><a href="https://developer.baidu.com/article/detail.html?id=290320" target="_blank" rel="noopener">百度大规模时序数据存储（三）| 核心功能设计-百度开发者中心</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/32.Database/MySQL-05架构-高性能和高可用/" rel="next" title="MySQL-05架构-高性能和高可用">
+                <i class="fa fa-chevron-left"></i> MySQL-05架构-高性能和高可用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/33.Bigdata/Hadoop/" rel="prev" title="Hadoop">
+                Hadoop <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">476</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">410</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenTSDB-schema-设计"><span class="nav-text">OpenTSDB schema 设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Overview"><span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行键的设计"><span class="nav-text">行键的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列的设计"><span class="nav-text">列的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表的设计"><span class="nav-text">表的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#百度自研-TSDB"><span class="nav-text">百度自研 TSDB</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/32.Database/OpenTSDB schema 设计/';
+          this.page.identifier = '32.Database/OpenTSDB schema 设计/';
+          this.page.title = 'OpenTSDB schema 设计';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

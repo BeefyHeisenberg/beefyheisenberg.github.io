@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="一些概念（乐观锁、CAS）▷ 原子操作:  对int变量赋值的操作是原子的吗？ - 知乎  ▷ CAS:  CAS(Compare And Swap)：比较并替换。CAS 需要有 3 个操作数：内存地址 V，旧的预期值 A，即将要更新的目标值 B。 CAS 指令执行时，当且仅当内存地址 V 的值与预期值 A 相等时，将内存地址 V 的值修改为 B 并返回 True，否则就什么都不做并返回 Fals">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-06-18T14:37:20.566Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.141Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java-并发.05a.JUC-Atomic（原子操作）&amp; CAS">
 <meta name="twitter:description" content="一些概念（乐观锁、CAS）▷ 原子操作:  对int变量赋值的操作是原子的吗？ - 知乎  ▷ CAS:  CAS(Compare And Swap)：比较并替换。CAS 需要有 3 个操作数：内存地址 V，旧的预期值 A，即将要更新的目标值 B。 CAS 指令执行时，当且仅当内存地址 V 的值与预期值 A 相等时，将内存地址 V 的值修改为 B 并返回 True，否则就什么都不做并返回 Fals">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,786
+                  2,905
                 </span>
               
 
@@ -416,7 +416,7 @@
 <p>CAS 的实现离不开处理器的支持。如上面源代码所示，程序会根据当前处理器的类型来决定是否为 cmpxchg 指令添加 lock 前缀。如果程序是在多处理器上运行，就为 cmpxchg 指令加上 lock 前缀（lock cmpxchg）。反之，如果程序是在单处理器上运行，就省略 lock 前缀（单处理器自身会维护单处理器内的顺序一致性，不需要 lock 前缀提供的内存屏障效果）。</p>
 <p>intel 的手册对 lock 前缀的说明如下：</p>
 <ul>
-<li><p>确保对内存的读/改/写操作原子执行。在 Pentium 及 Pentium 之前的处理器中，带有 lock 前缀的指令在执行期间会<strong>锁住总线</strong>，使得其他处理器暂时无法通过总线访问内存。很显然，这会带来昂贵的开销。从 Pentium 4，Intel Xeon 及 P6 处理器开始，intel 在原有总线锁的基础上做了一个很有意义的优化：如果要访问的内存区域（area of memory）在 lock 前缀指令执行期间已经在处理器内部的缓存中被锁定（即包含该内存区域的缓存行当前处于独占或以修改状态），并且该内存区域被完全包含在单个缓存行（cache line）中，那么处理器将直接执行该指令。由于在指令执行期间该缓存行会一直被锁定，其它处理器无法读 / 写该指令要访问的内存区域，因此能保证指令执行的原子性。这个操作过程叫做<strong>缓存锁定</strong>（cache locking），缓存锁定将大大降低 lock 前缀指令的执行开销，但是当多处理器之间的竞争程度很高或者指令访问的内存地址未对齐时，仍然会锁住总线。</p>
+<li><p>确保对内存的读/改/写操作原子执行。在 Pentium 及 Pentium 之前的处理器中，带有 lock 前缀的指令在执行期间会<strong>锁住总线</strong>，使得其他处理器暂时无法通过总线访问内存。很显然，这会带来昂贵的开销。从 Pentium 4，Intel Xeon 及 P6 处理器开始，intel 在原有总线锁的基础上做了一个很有意义的优化：如果要访问的内存区域（area of memory）在 lock 前缀指令执行期间已经在处理器内部的缓存中被锁定（即包含该内存区域的缓存行当前处于独占或以修改状态），并且该内存区域被完全包含在单个 <strong>缓存行（cache line）</strong> 中，那么处理器将直接执行该指令。由于在指令执行期间该缓存行会一直被锁定，其它处理器无法读 / 写该指令要访问的内存区域，因此能保证指令执行的原子性。这个操作过程叫做 <strong>缓存锁定</strong>（cache locking），缓存锁定将大大降低 lock 前缀指令的执行开销，但是当多处理器之间的竞争程度很高或者指令访问的内存地址未对齐时，仍然会锁住总线。</p>
 </li>
 <li><p>禁止该指令与之前和之后的读和写指令重排序。</p>
 </li>
@@ -436,10 +436,15 @@
 <li>compareAndSet 即对 value 进行CAS</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;  </span><br><span class="line">    <span class="keyword">try</span> &#123;  </span><br><span class="line">        valueOffset = unsafe.objectFieldOffset  </span><br><span class="line">            (AtomicReference.class.getDeclaredField(<span class="string">"value"</span>));  </span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception ex) &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Error(ex); &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span><span class="params">(V expect, V update)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">return</span> unsafe.compareAndSwapObject(<span class="keyword">this</span>, valueOffset, expect, update);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="AtomicReferenceFieldUpdater"><a href="#AtomicReferenceFieldUpdater" class="headerlink" title="AtomicReferenceFieldUpdater"></a>AtomicReferenceFieldUpdater</h3><p>AtomicReferenceFieldUpdater：原子性更新引用中的field</p>
+<h3 id="Atomic-FieldUpdater"><a href="#Atomic-FieldUpdater" class="headerlink" title="Atomic FieldUpdater"></a>Atomic FieldUpdater</h3><p><code>AtomicReferenceFieldUpdater</code>, <code>AtomicIntegerFieldUpdater</code>, and <code>AtomicLongFieldUpdater</code> 原子性更新引用中的 field</p>
+<p>使用 <code>AtomicIntegerFieldUpdater</code> 对类的 int 类型的 field 进行原子性更新：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建 FieldUpdater 对象， 并与Test.class 的filed 关联起来</span></span><br><span class="line">    AtomicIntegerFieldUpdater&lt;Test&gt; countFieldUpdater =</span><br><span class="line">            AtomicIntegerFieldUpdater.newUpdater(Test.class, <span class="string">"count"</span>);</span><br><span class="line">            </span><br><span class="line">    Test test = <span class="keyword">new</span> Test();</span><br><span class="line"></span><br><span class="line">    ExecutorService es = Executors.newFixedThreadPool(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">        es.execute(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> c = <span class="number">0</span>; c &lt; <span class="number">100</span>; c++) &#123;</span><br><span class="line">                countFieldUpdater.incrementAndGet(test);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    es.shutdown();</span><br><span class="line">    es.awaitTermination(<span class="number">10</span>, TimeUnit.MINUTES);</span><br><span class="line">    System.out.println(<span class="string">"count: "</span> + test.getCount());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用  <code>AtomicReferenceFieldUpdater&lt;T, V&gt;</code> 对类的引用类型 field 进行原子性更新： ：</p>
 <ul>
-<li><code>AtomicReferenceFieldUpdater&lt;T, V&gt;</code>：T 即持有 field 的类型，V 即 field 的类型</li>
+<li><code>T</code> - The type of the object holding the updatable field</li>
+<li><code>V</code> - The type of the field</li>
 </ul>
+<p>@ref: <a href="https://www.logicbig.com/tutorials/core-java-tutorial/java-multi-threading/atomic-field-updater.html" target="_blank" rel="noopener">Java - Atomic Field Updaters: AtomicReferenceFieldUpdater, AtomicIntegerFieldUpdater, and AtomicLongFieldUpdater</a></p>
 <h3 id="AtomicStampedReference-解决-ABA-问题"><a href="#AtomicStampedReference-解决-ABA-问题" class="headerlink" title="AtomicStampedReference 解决 ABA 问题"></a>AtomicStampedReference 解决 ABA 问题</h3><p>AtomicReference 的通用工作模式：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">AtomicReference&lt;Object&gt; ref = <span class="keyword">new</span> AtomicReference&lt;&gt;(<span class="keyword">new</span> Object());</span><br><span class="line">Object oldVal = ref.get();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对旧对象做一些更新，得到新对象</span></span><br><span class="line">Object newVal  =  someFunctionOfOld(oldVal); </span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果期间没有其它线程改变了缓存值，则更新</span></span><br><span class="line"><span class="keyword">boolean</span> success = ref.compareAndSet(oldVal , newVal);</span><br></pre></td></tr></table></figure>
 <p>但是上面的模式会有 ABA 问题：</p>
@@ -455,14 +460,13 @@
 <h3 id="LongAdder"><a href="#LongAdder" class="headerlink" title="LongAdder"></a>LongAdder</h3><p>已经有 <code>AtomicLong.addAndGet(l)</code> 的情况下, 为什么还要设计 <code>LongAdder</code>?  </p>
 <p>AtomicLong 是使用 “自旋+CAS”实现, 面对大量并发的情况下有性能瓶颈：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">getAndAddLong</span><span class="params">(Object o, <span class="keyword">long</span> offset, <span class="keyword">long</span> delta)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> v;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        v = getLongVolatile(o, offset);</span><br><span class="line">    &#125; <span class="keyword">while</span> (!compareAndSwapLong(o, offset, v, v + delta));</span><br><span class="line">    <span class="keyword">return</span> v;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>@doubt： AtomicLong 为什么使用自旋？</p>
 <p>LongAdder 的使用：</p>
 <ul>
 <li><strong>compareAndSet</strong>：</li>
 <li><strong>addAndGet</strong>：</li>
 <li><strong>decrementAndGet</strong>：</li>
 </ul>
-<p>除了 CAS，LongAdder 提供了大量 add 操作，这也是为什么叫 Adder，LongAdder 更适用于 add 并发多的场景。</p>
+<p>除了 CAS，LongAdder 还提供了很多 add 场景的操作，LongAdder 更适用于 add 并发多的场景。</p>
 <p>LongAdder 的实现：</p>
 <ul>
 <li>内部是 base + cell 数组，LongAdder 初始化时 cell = null</li>
@@ -620,7 +624,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -631,7 +635,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -642,7 +646,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -710,7 +714,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些概念（乐观锁、CAS）"><span class="nav-text">一些概念（乐观锁、CAS）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Atomic"><span class="nav-text">Atomic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicInteger-的-CAS-实现"><span class="nav-text">AtomicInteger 的 CAS 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicReference"><span class="nav-text">AtomicReference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicReferenceFieldUpdater"><span class="nav-text">AtomicReferenceFieldUpdater</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicStampedReference-解决-ABA-问题"><span class="nav-text">AtomicStampedReference 解决 ABA 问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LongAdder"><span class="nav-text">LongAdder</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些概念（乐观锁、CAS）"><span class="nav-text">一些概念（乐观锁、CAS）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Atomic"><span class="nav-text">Atomic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicInteger-的-CAS-实现"><span class="nav-text">AtomicInteger 的 CAS 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicReference"><span class="nav-text">AtomicReference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Atomic-FieldUpdater"><span class="nav-text">Atomic FieldUpdater</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicStampedReference-解决-ABA-问题"><span class="nav-text">AtomicStampedReference 解决 ABA 问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LongAdder"><span class="nav-text">LongAdder</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -117,19 +117,19 @@
 
 
 
-<meta name="description" content="LSM-Tree 概览➤ What’s LSM-Tree： Log Structured Merge Trees(LSM) ➤ Google BigTable → LSM-Tree @ref: 全面了解大数据“三驾马车”的开源实现大数据李智慧_InfoQ精选文章  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生">
+<meta name="description" content="LSM-Tree 概览➤ What’s LSM-Tree： Log Structured Merge Trees(LSM) ➤ Google BigTable → LSM-Tree @ref: 全面了解大数据“三驾马车”的开源实现_InfoQ精选文章  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生，用于解决">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LSM Tree">
 <meta property="og:url" content="https://beefyheisenberg.github.io/32.Database/LSM-Tree理论基础/index.html">
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
-<meta property="og:description" content="LSM-Tree 概览➤ What’s LSM-Tree： Log Structured Merge Trees(LSM) ➤ Google BigTable → LSM-Tree @ref: 全面了解大数据“三驾马车”的开源实现大数据李智慧_InfoQ精选文章  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生">
+<meta property="og:description" content="LSM-Tree 概览➤ What’s LSM-Tree： Log Structured Merge Trees(LSM) ➤ Google BigTable → LSM-Tree @ref: 全面了解大数据“三驾马车”的开源实现_InfoQ精选文章  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生，用于解决">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/database/LSM-Tree-Model.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/database/LevelDB-LSM-Tree.png">
-<meta property="og:updated_time" content="2023-06-18T14:37:21.323Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.745Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LSM Tree">
-<meta name="twitter:description" content="LSM-Tree 概览➤ What’s LSM-Tree： Log Structured Merge Trees(LSM) ➤ Google BigTable → LSM-Tree @ref: 全面了解大数据“三驾马车”的开源实现大数据李智慧_InfoQ精选文章  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生">
+<meta name="twitter:description" content="LSM-Tree 概览➤ What’s LSM-Tree： Log Structured Merge Trees(LSM) ➤ Google BigTable → LSM-Tree @ref: 全面了解大数据“三驾马车”的开源实现_InfoQ精选文章  作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生，用于解决">
 <meta name="twitter:image" content="https://beefyheisenberg.github.io/images/database/LSM-Tree-Model.png">
 
 
@@ -355,7 +355,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,357
+                  1,644
                 </span>
               
 
@@ -382,7 +382,7 @@
       
         <h2 id="LSM-Tree-概览"><a href="#LSM-Tree-概览" class="headerlink" title="LSM-Tree 概览"></a>LSM-Tree 概览</h2><p>➤ <strong>What’s LSM-Tree</strong>： Log Structured Merge Trees(LSM)</p>
 <p>➤ <strong>Google BigTable → LSM-Tree</strong></p>
-<p>@ref: <a href="https://www.infoq.cn/article/x8qufv7vtujnov*xqu4t" target="_blank" rel="noopener">全面了解大数据“三驾马车”的开源实现<em>大数据</em>李智慧_InfoQ精选文章</a></p>
+<p>@ref: <a href="https://www.infoq.cn/article/x8qufv7vtujnov*xqu4t" target="_blank" rel="noopener">全面了解大数据“三驾马车”的开源实现_InfoQ精选文章</a></p>
 <blockquote>
 <p>作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生，用于解决 Google 内部不同产品在对数据存储的容量和响应时延需求的差异化，力求在确保能够容纳大量数据的同时减少数据的查询耗时。<br>论文中很多很酷的方面之一就是它所使用的文件组织方式，这个方法更一般的名字叫 Log Structured-Merge Tree。<br>@ref: <a href="https://static.usenix.org/events/osdi06/tech/chang/chang_html/?em_x=22" target="_blank" rel="noopener">Bigtable: A Distributed Storage System for Structured Data - OSDI ‘06 Paper</a></p>
 </blockquote>
@@ -442,6 +442,10 @@
 <p><strong>Search</strong>:<br>![[../_images/LevelDB-LSM-Tree3.png]]</p>
 <p>图参考自：<a href="http://www.cse.cuhk.edu.hk/~mcyang/csci5550/2020S/Lec09%20Persistent%20Key-Value%20Stores.pdf" target="_blank" rel="noopener">http://www.cse.cuhk.edu.hk/~mcyang/csci5550/2020S/Lec09%20Persistent%20Key-Value%20Stores.pdf</a></p>
 <p><strong>Delete</strong>：<br>目前的 LSM-Tree 写入的时候，会写一条记录，删除的时候，标志一个 tombstone （类似 leveldb 的 type）</p>
+<h2 id="对比-B-Tree"><a href="#对比-B-Tree" class="headerlink" title="对比 B-Tree"></a>对比 B-Tree</h2><p>LSM-Tree 对比 B-Tree，某种程度也相当于对比 HBase 和 MySQL 两种不同的数据库。</p>
+<p>LSM-tree 正是能够借助内存缓冲将大量的随机写入转化成<strong>批量的顺序写入</strong>，使得最终磁盘承载的写入次数对数级减少，极大地<strong>提升了写入吞吐量</strong>。</p>
+<p>此外，当更新一条数据时，B+Tree 采用原地更新方式（in-place update），整个叶子节点对应的数据页都要读取和写回，带来了额外的读写放大。因此，磁盘随机读写成为 B+Tree 的瓶颈，使其适用于读多写少的场景。</p>
+<p>数据在 MySQL 和 HBase 中存储差异：<br>即使某列为空，MySQL 依然会为该字段保留空间，因为后续有可能会有 update 语句来更新该记录，填补这列的内容。<br>而 HBase 则是把每一列都看做是一条记录，row+列名作为 key，data 作为 value，依次存放。假如某一行的某一个列没有数据，则直接跳过该列。针对<strong>稀疏矩阵</strong>的大表，HBase 能大大节省存储空间。</p>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>@ref: </p>
 <ul>
 <li><a href="https://www.zhihu.com/question/19887265/answer/78839142" target="_blank" rel="noopener">LSM 算法的原理是什么？ - 知乎</a></li>
@@ -576,7 +580,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -587,7 +591,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -598,7 +602,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -666,7 +670,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LSM-Tree-概览"><span class="nav-text">LSM-Tree 概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSM-Tree-特性解析"><span class="nav-text">LSM-Tree 特性解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDB-如何实现-LSM-Tree"><span class="nav-text">LevelDB 如何实现 LSM-Tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LSM-Tree-概览"><span class="nav-text">LSM-Tree 概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSM-Tree-特性解析"><span class="nav-text">LSM-Tree 特性解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDB-如何实现-LSM-Tree"><span class="nav-text">LevelDB 如何实现 LSM-Tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对比-B-Tree"><span class="nav-text">对比 B-Tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>

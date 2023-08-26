@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Redis是一个K-V的数据库，“V” 的数据类型分为：String、Hash、List、Set、Sorted Set。  StringString 数据结构是简单的 key-value 类型，value 不仅可以是 String，也可以是数字（当数字类型用 Long 可以表示的时候encoding 就是整型，其他都存储在 sdshdr 当做字符串）。  sds是在Redis中被广泛使用的字符串结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis-01a数据结构">
+<meta property="og:url" content="https://beefyheisenberg.github.io/31.Backend/Redis-01a数据结构/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="Redis是一个K-V的数据库，“V” 的数据类型分为：String、Hash、List、Set、Sorted Set。  StringString 数据结构是简单的 key-value 类型，value 不仅可以是 String，也可以是数字（当数字类型用 Long 可以表示的时候encoding 就是整型，其他都存储在 sdshdr 当做字符串）。  sds是在Redis中被广泛使用的字符串结">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/redis/redis_all_type.png">
+<meta property="og:updated_time" content="2023-08-26T05:35:58.485Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis-01a数据结构">
+<meta name="twitter:description" content="Redis是一个K-V的数据库，“V” 的数据类型分为：String、Hash、List、Set、Sorted Set。  StringString 数据结构是简单的 key-value 类型，value 不仅可以是 String，也可以是数字（当数字类型用 Long 可以表示的时候encoding 就是整型，其他都存储在 sdshdr 当做字符串）。  sds是在Redis中被广泛使用的字符串结">
+<meta name="twitter:image" content="https://beefyheisenberg.github.io/images/redis/redis_all_type.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/31.Backend/Redis-01a数据结构/"/>
+
+
+
+
+
+  <title>Redis-01a数据结构 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Redis-01a数据结构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis-01a数据结构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,178
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Redis是一个K-V的数据库，“V” 的数据类型分为：String、Hash、List、Set、Sorted Set。</p>
+<p><img src="/images/redis/redis_all_type.png" alt=""></p>
+<h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><p>String 数据结构是简单的 key-value 类型，value 不仅可以是 String，也可以是数字（当数字类型用 Long 可以表示的时候encoding 就是整型，其他都存储在 sdshdr 当做字符串）。</p>
+<blockquote>
+<p>sds是在Redis中被广泛使用的字符串结构，它的全称是Simple Dynamic String。参考 <a href="http：//zhangtielei.com/posts/blog-redis-sds.html">Redis内部数据结构详解(2)——sds</a> @ref</p>
+</blockquote>
+<p>String相关命令包括 <code>SET</code>/<code>GET</code>类命令，对字符串的值<code>APPEND</code>/<code>SETRANGE</code>操作，还包括 同时设置值和过期时间的原子操作<code>SETEX</code>，但是其他数据类型没有类似<code>SETEX</code>的原子操作。</p>
+<ul>
+<li><code>SET key value</code>：设置key关联的字符串</li>
+<li><code>GET key</code>：返回key关联的字符串</li>
+<li><code>APPEND key value</code>：在字符串后追加value</li>
+<li><code>STRLEN key</code>： 返回字符串长度</li>
+<li><code>SETRANGE key 0 &quot;xxx&quot;</code>： 把key对应的字符串从0开始，用“xxx”覆盖。时间复杂度O(M)， M 为 value 参数的长度。</li>
+<li><code>INCR key</code>：将 key 中储存的数字值+1，数字范围是有符号long</li>
+<li><code>INCRBY key increment</code>：将 key 所储存的值加上增量 increment</li>
+<li><code>DECR key</code>：将 key 中储存的数字值减一。</li>
+<li><code>DECRBY by decrement</code>：将 key 所储存的值减去减量 decrement 。</li>
+</ul>
+<p>过期时间：</p>
+<ul>
+<li><code>SETEX key seconds value</code>：将值 value 关联到 key ，并将 key 的生存时间设为 seconds (以秒为单位)。 SETEX 是一个原子性(atomic)操作</li>
+</ul>
+<p>批量操作：</p>
+<ul>
+<li><code>MGET key1 key2</code>：返回所有(一个或多个)给定 key 的值。时间复杂度O(N) ，N 为给定 key1..key2 的数量。</li>
+<li><code>MSET key1 value2 key1 value2</code>： 设置key1…key2对应的字符串。时间复杂度：O(N)， N 为要设置的 key 数量。</li>
+</ul>
+<p>BIT操作：</p>
+<ul>
+<li><code>SETBIT key offset value</code>：对key所储存的字符串值，设置或清除指定偏移量上的位(bit)，value只能是0或1，offset小于2^32（512MB）</li>
+<li><code>GETBIT key offset</code>：返回offset位上的值（0/1）</li>
+<li><code>BITCOUNT key</code> ： 计算给定字符串中，被设置为 1 的比特位的数量。</li>
+</ul>
+<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><p>字典实现，key对应的内容是由field-value组成的键值对。</p>
+<ul>
+<li><code>HSET key field value</code>：将哈希表 key 中的域 field 的值设为 value，O(1)</li>
+<li><code>HGET key field</code>：返回哈希表 key 中给定域 field 的值。</li>
+<li><code>HKEYS key</code>：返回哈希表 key 中的所有域。时间复杂度：O(N)， N 为哈希表的大小。</li>
+<li><code>HGETALL key</code> ：返回哈希表 key 中所有的域和值。时间复杂度：O(N)， N 为哈希表的大小。</li>
+<li><code>HVALS key</code>：返回哈希表 key 中所有域的值。时间复杂度：O(N)， N 为哈希表的大小。</li>
+<li><code>HEXISTS key field</code>：查看哈希表 key 中，给定域 field 是否存在。</li>
+<li><code>HSCAN key cursor</code>：命令用于迭代哈希键中的键值对。具体信息请参考 SCAN 命令。</li>
+<li><code>HDEL key field [field ...]</code>：删除哈希表 key 中的一个或多个指定域，不存在的域将被忽略。时间复杂度：O(N)， N 为要删除的域的数量。</li>
+<li><code>HLEN key</code>： 返回键值对数量</li>
+<li><code>HINCRBY key field increment</code> ：为哈希表 key 中的域 field 的值加上增量 increment 。</li>
+</ul>
+<p>批量操作：</p>
+<ul>
+<li><code>HMSET key field1 value1 field2 value2</code>： 同时将多个 field-value (域-值)对设置到哈希表 key 中。O(N)， N 为 field-value 对的数量。</li>
+<li><code>HMGET field1 field2</code>： 返回哈希表 key 中，一个或多个给定域的值。O(N)， N 为 field-value 对的数量。</li>
+</ul>
+<h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><p>双向队列，队列的 L/R 端都可以进行 POP 和 PUSH 操作：</p>
+<ul>
+<li><code>LPOP key</code> ：移除并返回列表 key 的头元素。</li>
+<li><code>LPUSH key value [value ...]</code> ：将一个或多个值 value 插入到列表 key 的表头</li>
+<li><code>RPUSH key value [value ...]</code>：将一个或多个值 value 插入到列表 key 的表尾(最右边)。</li>
+<li><code>RPOP key</code>：移除并返回列表 key 的尾元素。</li>
+<li><code>LLEN key</code> ：返回列表 key 的长度。</li>
+</ul>
+<p>随机查询 &amp; 插入：</p>
+<ul>
+<li><code>LINDEX key index</code> ：返回列表 key 中，下标为 index 的元素。时间复杂度：O(N)， N 为到达下标 index 过程中经过的元素数量。</li>
+<li><code>LINSERT key BEFORE|AFTER pivot value</code> ：将值 value 插入到列表 key 当中，位于值 pivot 之前或之后。时间复杂度：O(N)， N 为寻找 pivot 过程中经过的元素数量。<ul>
+<li><code>LINSERT mylist BEFORE &quot;World&quot; &quot;There&quot;</code> ：会先在List寻找”World”，找到后在”World”之前插入”There”</li>
+</ul>
+</li>
+</ul>
+<p>阻塞L/R端弹出：</p>
+<ul>
+<li><code>BLPOP key [key ...] timeout</code> ：BLPOP 是列表的阻塞式(blocking)弹出原语。它是 LPOP 命令的阻塞版本，当给定列表内没有任何元素可供弹出的时候，连接将被 BLPOP 命令阻塞，直到等待超时或发现可弹出元素为止。</li>
+<li><code>BRPOP key [key ...] timeout</code> ：参考如上</li>
+</ul>
+<h2 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h2><p>不重复元素的集合</p>
+<ul>
+<li><code>SADD key v1 v2</code> ：添加多个值到集合key之中，时间复杂度：O(N)， N 是被添加的元素的数量。</li>
+<li><code>SPOP key</code> ：移除并返回集合中的一个随机元素。</li>
+<li><code>SMEMBERS key</code>：返回集合 key 中的所有成员。时间复杂度：O(N)， N 为集合的元素数量。</li>
+<li><code>SSREM key member [member ...]</code>：移除集合 key 中的一个或多个 member 元素，时间复杂度：O(N)， N 为给定 member 元素的数量。</li>
+<li><code>SISMEMBER key member</code>：判断 member 元素是否集合 key 的成员。时间复杂度：O(1)</li>
+<li><code>SCARD key</code>：返回集合中元素的数量。时间复杂度：O(1)</li>
+<li><code>SSCAN key cursor</code>：详细信息请参考 SCAN 命令。</li>
+</ul>
+<p>交/并/差集：</p>
+<ul>
+<li><code>SINTER key1 [key ...]</code>：返回 key.. 对应集合的交集，时间复杂度为 <code>O(N * M)</code>， N 为给定集合当中基数最小的集合， M 为给定集合的个数。</li>
+<li><code>SUNION key1 [key ...]</code>：返回 key.. 对应集合的并集。时间复杂度为 O(N)， N 是所有给定集合的成员数量之和。</li>
+<li><code>SDIFF key1 [key ...]</code>：用第一个集合与第二个集合做差集，所得结果再与第三个集合做差集，依次向后类推。</li>
+</ul>
+<p>➤ 交集的实现：</p>
+<ol>
+<li>对各个集合按照元素个数由少到多进行排序。这个排序有利于后面计算的时候从最小的集合开始，需要处理的元素个数较少。</li>
+<li>对排序后第一个集合（也就是最小集合）进行遍历，对于它的每一个元素，依次在后面的所有集合中进行查找。只有在所有集合中都能找到的元素，才加入到最后的结果集合中。</li>
+</ol>
+<p>➤ 差集的实现：两种可能的算法，在计算差集的开始部分，会先分别估算一下两种算法预期的时间复杂度，然后选择复杂度低的算法来进行运算。</p>
+<p>第一种算法：</p>
+<ul>
+<li>对第一个集合进行遍历，对于它的每一个元素，依次在后面的所有集合中进行查找。只有在所有集合中都找不到的元素，才加入到最后的结果集合中。</li>
+</ul>
+<p>这种算法的时间复杂度为 <code>O(N*M)</code>，其中N是第一个集合的元素个数，M是集合数目。</p>
+<p>第二种算法：</p>
+<ul>
+<li>将第一个集合的所有元素都加入到一个中间集合中。</li>
+<li>遍历后面所有的集合，对于碰到的每一个元素，从中间集合中删掉它。</li>
+<li>最后中间集合剩下的元素就构成了差集。</li>
+</ul>
+<p>这种算法的时间复杂度为 <code>O(N)</code>，其中 N 是所有集合的元素个数总和；</p>
+<h2 id="Sorted-Set"><a href="#Sorted-Set" class="headerlink" title="Sorted Set"></a>Sorted Set</h2><p>Sorted Sets是将 Set 中的元素增加了一个权重参数 score，使得集合中的元素能够按 score 进行有序排列</p>
+<ul>
+<li><code>ZADD key score member [[score member] [score member] ...]</code>：将一个或多个 member 元素及其 score 值加入到有序集 key 当中。时间复杂度：O(M*log(N))， N 是有序集的基数， M 为成功添加的新成员的数量。</li>
+<li><code>ZSCORE key member</code>：返回有序集 key中，成员 member的 score值。时间复杂度：O(1)</li>
+<li><code>ZRANGE key start stop</code>：返回有序集 key中指定区间内的成员。其中成员的位置按 score值递增(从小到大)来排序。复杂度：O(log(N)+M)， N 为有序集的基数，而 M 为结果集的基数。</li>
+<li><code>ZINCRBY key increment member</code>：为有序集 key的成员 member的 score值加上增量 increment。时间复杂度：O(log(N))</li>
+<li><code>ZREVRANK key member</code>：返回有序集 key中成员 member的排名，score 值最大的成员排名为 0 。复杂度O(log(N))</li>
+<li><code>ZCOUNT key min max</code>： 返回有序集 key 中， score值在 min和 max之间(默认包括)的成员的数量。时间复杂度：O(log(N))， N 为有序集的基数。</li>
+<li><code>ZCARD key</code>：返回key对应的集合的长度。</li>
+</ul>
+<h2 id="BitMap"><a href="#BitMap" class="headerlink" title="BitMap"></a>BitMap</h2><p>@ref: <a href="https://www.xiaolincoding.com/redis/data_struct/command.html#bitmap" target="_blank" rel="noopener">https://www.xiaolincoding.com/redis/data_struct/command.html#bitmap</a></p>
+<h2 id="HyperLog"><a href="#HyperLog" class="headerlink" title="HyperLog"></a>HyperLog</h2><p>@ref: <a href="https://www.xiaolincoding.com/redis/data_struct/command.html#hyperloglog" target="_blank" rel="noopener">https://www.xiaolincoding.com/redis/data_struct/command.html#hyperloglog</a></p>
+<h2 id="GEO"><a href="#GEO" class="headerlink" title="GEO"></a>GEO</h2><p>@ref: <a href="https://www.xiaolincoding.com/redis/data_struct/command.html#geo" target="_blank" rel="noopener">https://www.xiaolincoding.com/redis/data_struct/command.html#geo</a></p>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p>@ref: <a href="https://www.xiaolincoding.com/redis/data_struct/command.html#stream" target="_blank" rel="noopener">https://www.xiaolincoding.com/redis/data_struct/command.html#stream</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/31.Backend/RPC.06-序列化-ProtoBuf/" rel="next" title="RPC.06-序列化-ProtoBuf">
+                <i class="fa fa-chevron-left"></i> RPC.06-序列化-ProtoBuf
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/31.Backend/Redis-01b数据结构的实现/" rel="prev" title="Redis-01b数据结构-内部实现">
+                Redis-01b数据结构-内部实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">476</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">410</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#String"><span class="nav-text">String</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap"><span class="nav-text">HashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List"><span class="nav-text">List</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set"><span class="nav-text">Set</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sorted-Set"><span class="nav-text">Sorted Set</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BitMap"><span class="nav-text">BitMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HyperLog"><span class="nav-text">HyperLog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GEO"><span class="nav-text">GEO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream"><span class="nav-text">Stream</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/31.Backend/Redis-01a数据结构/';
+          this.page.identifier = '31.Backend/Redis-01a数据结构/';
+          this.page.title = 'Redis-01a数据结构';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

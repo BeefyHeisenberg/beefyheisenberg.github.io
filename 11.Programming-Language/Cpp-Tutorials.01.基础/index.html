@@ -124,7 +124,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="类型限定符 const volatile restrict mutable register static extern  @todo 类访问控制">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-06-18T14:37:20.363Z">
+<meta property="og:updated_time" content="2023-08-26T05:35:57.858Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cpp Tutorials-01-基础">
 <meta name="twitter:description" content="类型限定符 const volatile restrict mutable register static extern  @todo 类访问控制">
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,781
+                  4,955
                 </span>
               
 
@@ -430,7 +430,7 @@
 <p>这样一来就造成问题：C和C++中对函数的生成规则是不同的，C++程序不能直接调用 C 函数。<br>例如在C++中，调用foo的代码编译为汇编是<code>call _foo_int_int</code>，如果这个foo是在C库中的，那么foo的符号是<code>_foo</code>，在链接过程中就造成找不到这个符号报错</p>
 <h2 id="extern-“C”"><a href="#extern-“C”" class="headerlink" title="extern “C”"></a>extern “C”</h2><p>在C++项目中，调用C库函数，需要在头文件声明：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#ifdef __cplusplus</span><br><span class="line">extern &quot;C&quot; &#123;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">void foo(int x, int y);</span><br><span class="line"></span><br><span class="line">#ifdef __cplusplus</span><br><span class="line">&#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
-<p>这就告诉 C++编译译器,函数 foo 是个 C库的函数，那么C++编译器应该按照C编译器的编译和链接规则来进行链接，也就是说到库中找名字_foo 而不是找_foo_int_int（原因是C++支持函数的重载）</p>
+<p>这就告诉 C++编译译器,函数 foo 是个 C 库的函数，那么 C++编译器应该按照 C 编译器的编译和链接规则来进行链接，也就是说到库中找名字_foo 而不是找_foo_int_int（<em>原因是 C++支持函数的重载</em>）</p>
 <h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><h2 id="类的继承后方法属性变化"><a href="#类的继承后方法属性变化" class="headerlink" title="类的继承后方法属性变化"></a>类的继承后方法属性变化</h2><ul>
 <li>private 属性不能够被继承。</li>
 <li>使用private继承，父类的protected和public属性在子类中变为private，并且不能被这个派生类的子类所访问。</li>
@@ -484,7 +484,7 @@
 </li>
 <li><p><code>dynamic_cast</code>:  主要用来在继承体系中的安全向下转型。它能安全地将指向基类的指针转型为指向子类的指针或引用</p>
 <ul>
-<li>为什么需要<code>dynamic_cast</code>强制转换? 当无法使用virtual函数的时候</li>
+<li><del>为什么需要 <code>dynamic_cast</code> 强制转换? 当无法使用 virtual 函数的时候</del></li>
 <li>如果转型失败会返回null（转型对象为指针时）或抛出异常（转型对象为引用时）</li>
 <li><code>dynamic_cast</code> 会动用运行时信息（RTTI）来进行类型安全检查，因此<code>dynamic_cast</code>存在一定的效率损失。</li>
 <li>基类要有虚函数，否则会编译出错；<code>static_cast</code>则没有这个限制。</li>
@@ -492,7 +492,7 @@
 </li>
 </ul>
 <h2 id="充满风险的隐式类型转换"><a href="#充满风险的隐式类型转换" class="headerlink" title="充满风险的隐式类型转换"></a>充满风险的隐式类型转换</h2><p>什么是“隐式类型转换”：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 1.赋值</span><br><span class="line">int a = 0;</span><br><span class="line">long b = a + 1;</span><br><span class="line"></span><br><span class="line">// 2.比较（==,&gt;,&lt;）和switch</span><br><span class="line">if (a == b) &#123;</span><br><span class="line">    // 默认的operator==需要a的类型和b相同，因此也发生转换</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">std::shared_ptr&lt;int&gt; ptr = func();</span><br><span class="line">if (ptr) &#123; // 这里会从shared_ptr转换成bool</span><br><span class="line">    // 处理数据</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 3.函数传参</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1.赋值</span></span><br><span class="line"><span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">long</span> b = a + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.比较（==,&gt;,&lt;）和switch</span></span><br><span class="line"><span class="keyword">if</span> (a == b) &#123;</span><br><span class="line">    <span class="comment">// 默认的operator==需要a的类型和b相同，因此也发生转换</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; ptr = func();</span><br><span class="line"><span class="keyword">if</span> (ptr) &#123; <span class="comment">// 这里会从shared_ptr转换成bool</span></span><br><span class="line">    <span class="comment">// 处理数据</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3.函数传参</span></span><br></pre></td></tr></table></figure>
 <h1 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h1><p>与指针相似的是，引用将存储位于内存中其他位置的对象的地址。有两种引用：</p>
 <ul>
 <li>引用命名变量的 lvalue 引用：&amp; 运算符表示 lvalue 引用</li>
@@ -516,7 +516,9 @@
 <li>始终经由RAII类的实例使用资源，在栈上创建RAII类型的函数内变量，当函数退出时依靠”Stack winding”来保证一定调用RAII类的析构函数完成资源释放</li>
 </ul>
 <h3 id="例子1"><a href="#例子1" class="headerlink" title="例子1"></a>例子1</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;TYPENAME T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RAII</span> &#123;</span></span><br><span class="line">  T* p_;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  explicit RAII(T* p) : p_(p) &#123;&#125;</span><br><span class="line">  ~RAII() &#123;</span><br><span class="line">    <span class="keyword">delete</span> p_;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  T&amp; <span class="keyword">operator</span>*() <span class="keyword">const</span> &#123;</span><br><span class="line">     <span class="keyword">return</span> *p_;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  RAII(<span class="keyword">const</span> RAII&amp; other);</span><br><span class="line">  RAII&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> RAII&amp; other);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Example</span> &#123;</span></span><br><span class="line">  RAII&lt;SOMERESOURCE&gt; p_;</span><br><span class="line">  RAII&lt;SOMERESOURCE&gt; p2_;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  Example() :</span><br><span class="line">    p_(<span class="keyword">new</span> SomeResource()),</span><br><span class="line">    p2_(<span class="keyword">new</span> SomeResource()) &#123;&#125;</span><br><span class="line"></span><br><span class="line">  ~Example() &#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Deleting Example, freeing SomeResource!/n"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>问题: <code>new Example()</code>生成的<code>Example</code>实例, 如果没有调用<code>delete()</code>, <code>RAII</code>类的析构函数会被调用到吗?</p>
+<p>C++中的<code>explicit</code>关键字只能用于修饰只有一个参数的类构造函数，它的作用是表明该构造函数是显示的，而非隐式的， 跟它相对应的另一个关键字是implicit，意思是隐藏的，类构造函数默认情况下即声明为implicit(隐式)。</p>
+<p>问题: <code>new Example()</code>生成的<code>Example</code>实例, 如果没有调用<code>delete()</code>, <code>RAII</code>类的析构函数会被调用到吗?<br>会，C++ 编译器会在生成代码的合适位置，插入对构造和析构函数的调用，编译器会自动调用析构函数，包括在函数执行发生异常的情况。在发生异常时对析构函数的调用，还有一个专门的术语，叫栈展开（stack unwinding）。</p>
+<p><a href="https://morisa66.github.io/2021/03/01/MemoryManagement/" target="_blank" rel="noopener">CPP内存管理 | Little Web</a></p>
 <h3 id="例子2"><a href="#例子2" class="headerlink" title="例子2"></a>例子2</h3><p>错误的加锁:</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bad</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    mutex.lock();    <span class="comment">// 请求互斥</span></span><br><span class="line">    f();             <span class="comment">// 若 f() 抛异常，则互斥不被释放</span></span><br><span class="line">    mutex.unlock();  <span class="comment">// 抵达此语句，互斥才被释放</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>正确的方法, 使用<code>std::lock_guard</code>:</p>
@@ -698,7 +700,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">467</span>
+                  <span class="site-state-item-count">476</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -709,7 +711,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -720,7 +722,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">407</span>
+                  <span class="site-state-item-count">410</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
