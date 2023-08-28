@@ -278,6 +278,516 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/消息队列-Kafka-选举机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/消息队列-Kafka-选举机制/" itemprop="url">消息队列-Kafka-选举机制</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  604
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Kafka的”选举”包括: Kafka Controller的选举, Partition Leader的选举, Consumer Group Coordinator(消费组协调者)的选举;</p>
+<h2 id="➤-Controller的选举"><a href="#➤-Controller的选举" class="headerlink" title="➤ Controller的选举"></a>➤ Controller的选举</h2><ul>
+<li>Controller的作用: 运行 Partition的节点叫 Broker, 其中一个Broker将会被选为Controller, 它负责整个集群中所有分区和副本的管理工作, 其主要职责有: Partition leader的选举, ISR的维护等;</li>
+<li>选举触发: Controller(Leader角色)在zk上创建临时节点, 当Leader宕机, 这个临时节点因为心跳检测失败而被删除, 同时zk将消息发送给所有Broker;</li>
+<li>选举过程: 收到消息的Broker在zk上创建<code>/controller</code>临时节点, 利用zk的强一致性, 只有一个 Broker能创建成功, 这个节点成为新的Controller;</li>
+</ul>
+<h2 id="➤-Partition-leader的选举"><a href="#➤-Partition-leader的选举" class="headerlink" title="➤ Partition leader的选举"></a>➤ Partition leader的选举</h2><ul>
+<li>Partition leader的作用: 每个 Partition都有数个副本(replica), 但消息的读写都是在 Leader Partition上完成的, 然后批量同步到副本;</li>
+<li>选举触发: 当有Broker宕机, 这个Broker在zk上的临时节点(znode)也会被删除, zk会通知正在watch的 Controller进行处理;</li>
+<li>选举过程: Controller接到通知后, 先选出 set_p(该集合包括了宕机的Broker上包含的所有 Partition), 然后Controller从zk读取 set_p中每一个分区的 ISR, 然后从ISR中选出一个副本作为该Partition的新 Leader, 然后将{新Leader/leader_epoch/controller_epoch} 写入 <code>/brokers/topics/[topic]/partitions/[partition]/state</code> // epoch是需要记录进选举结果的, 任期(term)的概念;</li>
+<li>为什么不采用少数服从多数(majority)的选举? (少数服从多数, 类似 Redis Sentinel Leader的选举, 不少于quorum且选票高于一半). Kafka的分区选举, 使用的是 “从ISR中选举”, 而 ISR的可以最多容忍总数“f+1个节点有f个失败”,也即至少有1个在ISR即可. 可以看出, majority的方式(总数2f+1个, 最大容忍f个失败)需要更高的冗余度, 例如能容忍2台机器宕机, 那么majority方式至少需要5台机器. 另外, majority的方式也要求更多的replica “能跟上Partition Leader的写入进度”, 吞吐量也会下降(详见消息的commit机制).</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/消息队列-Kafka-选举机制/#espandi" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/消息队列-Kafka-特性实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/消息队列-Kafka-特性实现/" itemprop="url">消息队列-Kafka-特性实现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,104
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@toc:</p>
+<ul>
+<li>Kafka高吞吐量的实现?</li>
+<li>消息顺序性如何保证?</li>
+<li>Consumer Group如何防止重复消费?</li>
+<li>Partition多副本选举机制的实现?</li>
+</ul>
+<p>➤ Kafka特性解析:</p>
+<blockquote>
+<p>每个 partition 存于不同的 broker 机器上，一个partition可以有副本存在于多个 broker;<br>每个partition都有一个唯一的leader， 其他的 partition 作为folower, 所有的读写操作都在leader上完成， follower定期从 leader partition 同步数据;<br>每个partition的leader和follower都与zk建立长连接, 如果 leader partition 挂掉, 从 follower上选举出新的 leader;</p>
+</blockquote>
+<ul>
+<li><strong>吞吐量</strong>: 因为每条消息都被append到该partition中，是顺序写磁盘，因此效率非常高（经验证，顺序写磁盘效率比随机写内存还要高，这是Kafka高吞吐率的一个很重要的保证）。</li>
+<li><strong>水平扩展</strong>: 每一条消息被发送到broker时，会根据paritition规则选择被存储到哪一个 partition。如果 partition规则设置的合理，所有消息可以均匀分布到不同的partition里，这样就实现了水平扩展。</li>
+<li><strong>顺序性</strong>: 在发送一条消息时，还可以指定这条消息的key，producer根据这个key和partition机制来判断将这条消息发送到哪个parition。业务上, 多条相关的有顺序的消息, 可以指定同一个Key, 就可以保证都发送到同一个partition并有序;</li>
+<li><strong>删除策略</strong>: 对于传统的message queue而言，一般会删除已经被消费的消息，而Kafka集群会保留所有的消息，无论其被消费与否。当然，因为磁盘限制，不可能永久保留所有数据（实际上也没必要），因此Kafka提供两种策略去删除旧数据。一是基于时间(固定时间点清理)，二是基于partition文件大小</li>
+<li><strong>Consumer Group概念</strong>:<ul>
+<li>一个Consumer Group 可以订阅多个Topic</li>
+<li>一个Consumer Group 有唯一的 GroupID, 可以包含多个 Consumer 实例, Topic下某条消息只能给这个Consumer Group其中一个Consumer实例消费( 某 Topic下的一条消息,只能被某个 Consumer Group 消费一次, 但可以被多个 Consumer Group 消费)</li>
+</ul>
+</li>
+<li><strong>Consumer Group防重复消费</strong>:<ul>
+<li>Consumer Group 中一个实例只能消费某Topic下面的一个分区 (当然其他 Group也可以消费这个分区), 所以记录下这个Group对于某个Topic的某个Partition的消费offset即可, offset的存储是在Zk的节点下 <code>/consumers/&lt;group.id&gt;/offsets/&lt;topic&gt;/&lt;partitionId&gt;</code>;</li>
+<li>offset的提交: 在旧版本kfk中, 每个Consumer Group的 offset数据是提交到 Zookeeper的, 但是zk并不适合大量写入操作, 所以kafka提供了另一种方案: 额外创建一个叫<code>__consumer_offsets</code>的Topic, 将offset写入这个Topic, 摆脱对Zk的依赖. 由于这个Topic使用了 Compact策略, 该Topic保存的总是最新的offset, 存储格式是顺序的: <code>| GroupId1:Parttion1:offset | GroupId1:Parttion2:offset | ... |</code></li>
+</ul>
+</li>
+<li><strong>Rebalance</strong>:<ul>
+<li>什么是Rebalance? 例如 Consumer Group A下有 20个消费者, 它订阅了一个有 100个分区的 Topic, 每个消费者分配一部分分区, 当这个 Consumer Group中新增或删除了消费者, 就需要给现有的消费者重新分配分区, 这个过程叫做 Rebalance</li>
+<li>consumer rebalance算法  @link: [[../_attachments/Kafka- a Distributed Messaging System for Log Processing.pdf]]</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/消息队列-Kafka-特性实现/#espandi" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/容器编排-K8s/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/容器编排-K8s/" itemprop="url">容器编排-K8s</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,364
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ 什么是Kubernetes:</p>
+<p>Kubernetes（k8s）是自动化容器操作的开源平台，这些操作包括部署，调度和节点集群间扩展。如果你曾经用过Docker容器技术部署容器，那么可以将Docker看成Kubernetes内部使用的低级别组件。Kubernetes不仅仅支持Docker，还支持Rocket，这是另一种容器技术。<br>使用Kubernetes可以：</p>
+<ul>
+<li>自动化容器的部署和复制</li>
+<li>随时扩展或收缩容器规模</li>
+<li>将容器组织成组，并且提供容器间的负载均衡</li>
+<li>很容易地升级应用程序容器的新版本</li>
+<li>提供容器弹性，如果容器失效就替换它，等等..</li>
+</ul>
+<h1 id="K8s架构"><a href="#K8s架构" class="headerlink" title="K8s架构"></a>K8s架构</h1><p><img src="/images/k8s-cluster.png" alt="k8s-cluster"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/容器编排-K8s/#espandi" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/容器化-Docker-02容器隔离实现原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -388,7 +898,7 @@
 <p>Docker 如何实现进程隔离 (宿主机进程 &amp; 容器内进程的隔离) ?</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/容器化-Docker-02容器隔离实现原理/#more" rel="contents">
+            <a class="btn" href="/31.Backend/容器化-Docker-02容器隔离实现原理/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -553,7 +1063,7 @@
 <h1 id="Docker命令参考"><a href="#Docker命令参考" class="headerlink" title="Docker命令参考"></a>Docker命令参考</h1><h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/容器化-Docker-01基础/#more" rel="contents">
+            <a class="btn" href="/31.Backend/容器化-Docker-01基础/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -716,7 +1226,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/缓存-Memcache/#more" rel="contents">
+            <a class="btn" href="/31.Backend/缓存-Memcache/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -881,7 +1391,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Zookeeper-04应用-分布式锁/#more" rel="contents">
+            <a class="btn" href="/31.Backend/Zookeeper-04应用-分布式锁/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1047,7 +1557,7 @@
 <p>如果第一步, Client连接上的是Follower端, 则由Follower把写请求转发给Leader, Leader进行正常的写流程, 超半数节点写成功后, Leader把结果返回给Follower, Follower把写入成功的结果发送给Client</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Zookeeper-03一致性/#more" rel="contents">
+            <a class="btn" href="/31.Backend/Zookeeper-03一致性/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1215,7 +1725,7 @@
 <p>或者使用socket:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Zookeeper-02部署和运维/#more" rel="contents">
+            <a class="btn" href="/31.Backend/Zookeeper-02部署和运维/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1391,7 +1901,7 @@
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Zookeeper-01基础概念/#more" rel="contents">
+            <a class="btn" href="/31.Backend/Zookeeper-01基础概念/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1551,7 +2061,7 @@
 <p>➤ 一致性: 库存数据的一致性</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/SystemDesign-秒杀系统设计要点/#more" rel="contents">
+            <a class="btn" href="/31.Backend/SystemDesign-秒杀系统设计要点/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2149,7 +2659,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/SystemDesign-缓存设计/#more" rel="contents">
+            <a class="btn" href="/31.Backend/SystemDesign-缓存设计/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2449,7 +2959,7 @@
 <p>➤ 代码:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/SystemDesign-负载均衡-算法/#more" rel="contents">
+            <a class="btn" href="/31.Backend/SystemDesign-负载均衡-算法/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2601,7 +3111,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/SystemDesign-负载均衡-Nginx/#more" rel="contents">
+            <a class="btn" href="/31.Backend/SystemDesign-负载均衡-Nginx/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2745,7 +3255,7 @@
 <p>➤ LVS提供如下几种负载均衡调度算法:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/SystemDesign-负载均衡-LVS/#more" rel="contents">
+            <a class="btn" href="/31.Backend/SystemDesign-负载均衡-LVS/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2906,426 +3416,11 @@
 <p>@ref: <a href="https://martinfowler.com/bliki/CircuitBreaker.html" target="_blank" rel="noopener">https://martinfowler.com/bliki/CircuitBreaker.html</a></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/SystemDesign-熔断器-Polaris/#more" rel="contents">
+            <a class="btn" href="/31.Backend/SystemDesign-熔断器-Polaris/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
           <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-熔断器-Hystrix/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/SystemDesign-熔断器-Hystrix/" itemprop="url">SystemDesign | 熔断器 | Hystrix</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  733
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@toc:</p>
-<ul>
-<li>Hystrix [hɪst’rɪks] 提供了哪些功能?</li>
-<li>使用 Hystrix API创建隔离器的步骤;</li>
-<li>Hystrix 熔断的触发判定, 以及半开状态是怎样的?</li>
-<li>Hystrix 提供的信号量隔离与线程池隔离的比较?</li>
-</ul>
-<p>➤ Hystrix [hɪst’rɪks] 提供了哪些功能?</p>
-<ul>
-<li>提供线程池隔离 // 信号量隔离</li>
-<li>降级: 超时 or 资源不足(线程池,信号量), 降级后可返回降级接口的托底数据</li>
-<li>熔断: 错误率达到阈值进行熔断, 触发快速失败, 以及自动回恢复的功能</li>
-</ul>
-<blockquote>
-<p>@ref 《亿级流量》</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/SystemDesign-熔断器-Hystrix/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-限流-算法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/SystemDesign-限流-算法/" itemprop="url">SystemDesign | 限流 | 概述</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  115
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li>漏桶: 固定速率出桶, 桶满了再进入的流量被抛弃, 缺点: 队列使请求的处理变成单队列, 有大量突发流量时, 就算桶是空的, 仍需要排队</li>
-<li>令牌桶: 固定速率向桶中存放令牌, 如果桶满了令牌会被丢弃, 每个请求到来先从桶里请求令牌</li>
-<li>滑动窗口: 防止突发流量</li>
-</ul>
-<p>[[SystemDesign-限流-分布式限流]]<br>[[SystemDesign-限流-GuavaRateLimiter]]</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-RESTful/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/SystemDesign-RESTful/" itemprop="url">SystemDesign-RESTful</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  80
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>REST: 把对外提供的服务抽象为某种资源(User/Order), 通过HTTP的 GET/POST/DELETE/PUT方法对资源对象进行操作, 满足这几个条件的服务, 可以称为 #RESTful 的 (Representional State Transfer)</p>
-<p>@ref:</p>
-<ul>
-<li>RESTful API 设计指南 - 阮一峰的网络日志：<a href="https://www.ruanyifeng.com/blog/2014/05/restful_api.html" target="_blank" rel="noopener">https://www.ruanyifeng.com/blog/2014/05/restful_api.html</a></li>
-</ul>
-
-          
         
       
     </div>

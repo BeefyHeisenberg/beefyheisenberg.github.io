@@ -127,7 +127,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/golang-slice.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/golang-make-vs-new.png">
-<meta property="og:updated_time" content="2023-08-26T05:41:52.787Z">
+<meta property="og:updated_time" content="2023-08-28T12:41:28.191Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang Tutorials-01基础">
 <meta name="twitter:description" content="Golang中的约定大于配置Golang遵循”约定大于配置”(convention over configuratio)的理念:  小写开头的标识(变量/函数/结构体类型等等)是 package 内可见, 大写开头的标识包外可见(类似 public) 结构体中的”小写开头的成员”, 在用 json.Marshal 序列化时会被忽略  每个文件是一个 package，声明在源文件第一行，packag">
@@ -356,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,889
+                  4,929
                 </span>
               
 
@@ -408,47 +408,59 @@
 <li>同一个 go 文件下, 可以有多个 init 函数, 调用顺序同定义顺序</li>
 <li>同一个 package 下, 可以有多个 init 函数, 调用顺序似乎是 go 文件字典顺序, 但不要依赖此顺序做初始化</li>
 <li>对于 import 导入的包，这些导入的包的 init 的调用顺序同 import 的顺序</li>
-<li>用户无法自己调用 <code>init()</code>, 会报错 undefined</li>
+<li>用户代码无法调用 <code>init()</code>, 会报错 undefined</li>
 </ul>
-<p>使用场景:</p>
+<p>➤ init 使用场景:</p>
 <ul>
-<li>做初始化</li>
-<li>实现 sync.Once 功能</li>
-<li>无法用初始化表达式初始的变量</li>
+<li>做初始化；</li>
+<li>实现 sync.Once 功能；</li>
+<li>无法用初始化表达式初始的变量；</li>
 </ul>
 <h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><ul>
-<li><p>声明 + 初始化</p>
+<li><p>变量的声明 + 初始化：</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> i <span class="keyword">int</span> = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 更方便的写法</span></span><br><span class="line">j := <span class="number">1</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h1 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h1><p>Go 支持全局变量，首字母大写的变量名表示可被外界访问</p>
+<h1 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h1><p>Go 支持全局变量，首字母大写的变量名表示可被外界访问：</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> mypkg</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myVar = <span class="number">100</span> <span class="comment">// 未导出的本地变量</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> MyConst = <span class="string">"hello"</span> <span class="comment">// 导出的全局变量</span></span><br></pre></td></tr></table></figure>
-<h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><ul>
-<li>uint8/int8: 平台无关, 都是8位</li>
-<li>uint16/int16: ..</li>
-<li>uint32/int32: ..</li>
-<li>uint64/int64: ..</li>
-<li>float32</li>
-<li>float64</li>
-<li>uint/int: 与上面的不同, uint/int可能是32 or 64 bits(视机器平台而定)</li>
-<li>complex64: 复数, 由float32的实部 + float32的虚部构成</li>
+<h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><p><strong>整形</strong>：</p>
+<ul>
+<li><code>uint8</code>/<code>int8</code>: 平台无关, 8位</li>
+<li><code>uint16</code>/<code>int16</code>: ..</li>
+<li><code>uint32</code>/<code>int32</code>: ..</li>
+<li><code>uint64</code>/<code>int64</code>: ..</li>
+<li><code>uint</code>/<code>int</code>: 平台有关，可能是32 or 64 bits(视机器平台而定)</li>
+</ul>
+<p><strong>浮点数</strong>：</p>
+<ul>
+<li><code>float32</code>：平台无关，4位</li>
+<li><code>float64</code>：…</li>
+</ul>
+<p><strong>复数</strong>：</p>
+<ul>
+<li><code>complex64</code>: 复数, 由float32的实部 + float32的虚部构成</li>
 </ul>
 <p>@ref: <a href="https://golang.google.cn/ref/spec#Numeric_types" target="_blank" rel="noopener">The Go Programming Language Specification - The Go Programming Language</a></p>
 <h1 id="string"><a href="#string" class="headerlink" title="string"></a>string</h1><ul>
-<li>判断字符串empty: <code>len(str) == 0</code></li>
-<li>字符串是”只读的”, 意味着无法直接修改字符串的内存空间</li>
-<li><p>字符串的实现:</p>
+<li><p>双引号和反引号： </p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">str1 := <span class="string">"string example"</span></span><br><span class="line">str2 := <span class="string">`another string</span></span><br><span class="line"><span class="string">example`</span></span><br><span class="line">str3 := <span class="string">`&#123;"type": "json"&#125;`</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>字符串是”只读的”, 意味着无法直接修改字符串的内存空间</p>
+</li>
+<li><p>字符串的实现，运行时使用 <code>reflect.StringHeader</code> 结构体表示字符串，与切片的结构体（<code>SliceHeader</code>）相比，字符串只少了一个表示容量的 <code>Cap</code> 字段:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type StringHeader struct &#123;</span><br><span class="line">  Data uintptr</span><br><span class="line"> Len  int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>判断字符串 empty: <code>len(str) == 0</code></p>
 </li>
 </ul>
 <h1 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h1><ul>
 <li><p>Golang的类型转换: <code>T(var)</code></p>
 </li>
 <li><p>字符串 → any 都可以用<code>strconv</code>:</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">i, err := strconv.ParseInt(<span class="string">"1287089"</span>,<span class="number">10</span>,<span class="number">32</span>)</span><br><span class="line">result := <span class="keyword">int</span>(i)</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">i, err := strconv.ParseInt(<span class="string">"1287089"</span>, <span class="number">10</span>, <span class="number">32</span>)</span><br><span class="line">result := <span class="keyword">int</span>(i)</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><p>Go 函数声明的不同之处：形参列表后面才是返回值，返回值可以有多个，变量名在前类型在后</p>
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><p>Golang 函数声明的不同之处：形参列表后面才是返回值，返回值可以有多个，变量名在前类型在后</p>
 <ul>
 <li><p>多个返回值:</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 多个返回</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">foo1</span><span class="params">(x, y <span class="keyword">int</span>)</span> <span class="params">(sum, prod <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x+y, x*y</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -456,7 +468,7 @@
 <li><p>可变参数:</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 可变参数</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">foo1</span><span class="params">(params ...<span class="keyword">type</span>)</span></span> &#123;</span><br><span class="line">  <span class="keyword">for</span> _, param := <span class="keyword">range</span> params &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>Golang是值传递还是引用传递?</p>
+<li><p>Golang 是值传递还是引用传递?</p>
 <ul>
 <li>Golang 是值传递, 函数内得到一份形参的拷贝</li>
 <li>对于 slice, map, chan,  因为其结构内包含指针, 所以仍可以在函数内改变其存储的值</li>
@@ -464,22 +476,45 @@
 </ul>
 </li>
 </ul>
-<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><p>闭包 先看几个例子:</p>
-<p>例子1:<br>  <figure class="highlight go"><table><tr><td class="code"><pre><span class="line">x := <span class="number">1</span></span><br><span class="line">f := <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x &gt; <span class="number">100</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f()</span><br></pre></td></tr></table></figure></p>
-<p>例子2:<br>  <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">foo2</span><span class="params">(x <span class="keyword">int</span>)</span> <span class="title">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      x = x + <span class="number">1</span></span><br><span class="line">      fmt.Printf(<span class="string">"foo1 val = %d\n"</span>, x)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f = foo2(<span class="number">133</span>)</span><br><span class="line">f()</span><br></pre></td></tr></table></figure></p>
+<h1 id="闭包（closure）"><a href="#闭包（closure）" class="headerlink" title="闭包（closure）"></a>闭包（closure）</h1><p>例1:<br>  <figure class="highlight go"><table><tr><td class="code"><pre><span class="line">x := <span class="number">1</span></span><br><span class="line">f := <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x &gt; <span class="number">100</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f()</span><br></pre></td></tr></table></figure></p>
+<p>例2:<br>  <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">foo2</span><span class="params">(x <span class="keyword">int</span>)</span> <span class="title">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      x = x + <span class="number">1</span></span><br><span class="line">      fmt.Printf(<span class="string">"foo1 val = %d\n"</span>, x)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f = foo2(<span class="number">133</span>)</span><br><span class="line">f()</span><br></pre></td></tr></table></figure></p>
 <ul>
-<li>什么是闭包(closure)? 一个函数, 并且此函数依赖函数外声明的变量, 那么闭包的定义是: 此函数+依赖的外部变量</li>
-<li>实际上, Golang实现闭包, 实际是把 函数和它依赖的外部变量都放在了一个struct里, 用这个struct保存了函数和它依赖的外部变量</li>
-<li>另外, 闭包的实现依赖Golang的逃逸分析, 对于闭包的环境变量, 是在堆上分配的, 这是闭包实现的基础</li>
-<li>闭包另一个特性是延迟绑定, 意思是, 上面的闭包(也即struct)里保存的变量, 不是在编译期确定的, 而是在<strong>闭包的运行时才确定</strong>,  在闭包的外部寻找依赖变量的最新值, 并赋值进去</li>
+<li>什么是闭包(closure)? a <strong>closure</strong> is a record storing <strong>a function</strong> together with <strong>an environment</strong>., 那么闭包的简化定义是: 函数+依赖的外部变量（不以参数传入的变量）</li>
+<li>实际上, Golang 实现闭包, 实际是把 <em>函数</em> 和<em>它依赖的外部变量</em> 都放在了一个 struct 里, 用这个 struct 保存了函数地址，和它依赖的外部变量（的引用）</li>
+<li>闭包的实现依赖 Golang 的逃逸分析, 在逃逸分析时，闭包依赖的外部环境变量，被判定为逃逸，则在堆上分配；</li>
+<li>闭包另一个特性是延迟绑定, 意思是, 上面的闭包(也即 struct)里保存的环境变量的值, 不是在编译期确定的, 而是在<strong>闭包的运行时才确定</strong>, 在闭包的外部寻找依赖变量的最新值, 并赋值进去 // 闭包的运行时即 <code>闭包()</code> 时；</li>
 </ul>
-<p>下面输出什么?</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">foo7</span><span class="params">(x <span class="keyword">int</span>)</span> []<span class="title">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> fs []<span class="function"><span class="keyword">func</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    <span class="title">values</span> := []<span class="title">int</span></span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>&#125;</span><br><span class="line">    <span class="keyword">for</span> _, val := <span class="keyword">range</span> values &#123;</span><br><span class="line">        fs = <span class="built_in">append</span>(fs, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            fmt.Printf(<span class="string">"foo7 val = %d\n"</span>, x+val)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> fs</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f7s := foo7(<span class="number">11</span>)</span><br><span class="line"><span class="keyword">for</span> _, f7 := <span class="keyword">range</span> f7s &#123;</span><br><span class="line">    f7()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="https://zh.wikipedia.org/zh-cn/%E9%97%AD%E5%8C%85_ (%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6" target="_blank" rel="noopener">闭包 - 维基百科，自由的百科全书</a>)<br>在支持<a href="https://zh.wikipedia.org/wiki/%E5%A4%B4%E7%AD%89%E5%87%BD%E6%95%B0" title="头等函数" target="_blank" rel="noopener">头等函数</a>的语言中，如果函数f内定义了函数g，那么如果g存在<a href="https://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E5%8F%98%E9%87%8F" title="自由变量" target="_blank" rel="noopener">自由变量</a>，且这些自由变量没有在编译过程中被优化掉，那么将产生闭包。</p>
+</blockquote>
+<p>再使用一个例子说明闭包的<strong>延迟绑定</strong>，下面输出什么?</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">foo</span><span class="params">(x <span class="keyword">int</span>)</span> []<span class="title">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> fs []<span class="function"><span class="keyword">func</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	<span class="title">values</span> := []<span class="title">int</span></span>&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">	<span class="keyword">for</span> _, val := <span class="keyword">range</span> values &#123;</span><br><span class="line">		fs = <span class="built_in">append</span>(fs, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			fmt.Printf(<span class="string">"in closure, x + val = %d\n"</span>, x+val)</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> fs</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fs := foo(<span class="number">10</span>)</span><br><span class="line"><span class="keyword">for</span> _, f := <span class="keyword">range</span> fs &#123;</span><br><span class="line">    f() <span class="comment">// 闭包运行时</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这类问题的通解是：</p>
+<ul>
+<li>找出闭包，找出闭包依赖的外部变量</li>
+<li>在闭包运行时（调用 <code>func()</code> 时），找到外部变量当前值</li>
+</ul>
 <p>分析:</p>
 <ul>
-<li>foo7返回了一个数组, 数组内是x个闭包函数, 闭包函数依赖2个外部变量: x 和 val</li>
-<li>foo7返回 f7s的时候, 仅仅是返回了一个闭包的定义, 闭包内依赖的x 和 val并没有绑定值</li>
-<li>第一次执行<code>f7()</code>, 寻找 x 和 val的最新值并绑定到闭包, 也即11 和 5</li>
+<li>foo 返回了一个数组, 数组内是4个闭包函数, 闭包函数依赖2个外部变量: x 和 val</li>
+<li>foo 返回 fs 的时候, 仅仅是返回了一个闭包的定义, struct 定义中包含有“外部变量” x 和 val，但是 struct 中的 x 和 val 只是引用，并没有绑定值</li>
+<li>第一次执行 <code>f()</code> 时, 寻找 x 和 val 的最新值并绑定到闭包, 也即10 和 3</li>
+<li>所以输出的%d 是 13,13,13,13</li>
+</ul>
+<p><strong>Goroutine 的闭包</strong>：</p>
+<ul>
+<li><p>没有自由变量，没有形成真正的闭包：</p>
+  <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">show</span><span class="params">(v <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">    fmt.Printf(<span class="string">"foo4 val = %v\n"</span>, v)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">foo4</span><span class="params">()</span></span> &#123;</span><br><span class="line">    values := []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>&#125;</span><br><span class="line">    <span class="keyword">for</span> _, val := <span class="keyword">range</span> values &#123;</span><br><span class="line">        <span class="keyword">go</span> show(val) </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">​</span><br><span class="line">foo4() <span class="comment">// 打印 1,2,3,5 （不一定按顺序）</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>go 后面的匿名函数内，使用了自由变量，形成了闭包，所以外部变量会在“运行时”绑定：</p>
+  <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">foo5</span><span class="params">()</span></span> &#123;</span><br><span class="line">    values := []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>&#125;</span><br><span class="line">    <span class="keyword">for</span> _, val := <span class="keyword">range</span> values &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            fmt.Printf(<span class="string">"foo5 val = %v\n"</span>, val)</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">​</span><br><span class="line">foo5() <span class="comment">// 打印 5,5,5,5</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>解析：</p>
+<ul>
+<li><code>go func() {... } ()</code> 的写法，虽然最后带 <code>()</code>，但匿名函数并没有立刻执行，只是将它加入任务队列等待调度；</li>
+<li>匿名函数使用了外部变量，也即形成了闭包，Go 对闭包的实现是定义一个 struct，该 struct 的成员包括函数返回地址和引用的环境中的变量地址；</li>
+<li>匿名函数被 Goroution scheduler 调度到，以闭包的方式执行</li>
 </ul>
 <p>@ref:</p>
 <ul>
@@ -512,22 +547,29 @@
 </li>
 </ul>
 <h1 id="struct"><a href="#struct" class="headerlink" title="struct"></a>struct</h1><ul>
-<li><p>定义</p>
+<li><p>定义：</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> YourFirstStruct <span class="keyword">struct</span> &#123;</span><br><span class="line">  member1 <span class="keyword">string</span></span><br><span class="line">  member2 <span class="keyword">string</span></span><br><span class="line">  <span class="comment">// 每个成员没有分号</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>创建实例</p>
+<li><p>创建实例：</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line">s := YourFirstStruct &#123;</span><br><span class="line">  member1: <span class="string">"member1"</span>,</span><br><span class="line">  member2: <span class="string">"member2"</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>golang 只有值传递, struct 在函数内/外传递 or 直接 <code>=</code> 赋值给另一 struct 变量, 都会有一次拷贝；</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line">s1 := YourFirstStruct &#123;</span><br><span class="line">  member1: <span class="string">""</span></span><br><span class="line">  member2: <span class="string">""</span></span><br><span class="line">&#125;</span><br><span class="line">s2 := s1 <span class="comment">// 赋值导致一次拷贝</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 避免拷贝的做法:</span></span><br><span class="line">ptr1 := &amp;YourFirstStruct &#123;</span><br><span class="line">&#125;</span><br><span class="line">ptr2 := ptr1 <span class="comment">// 指针传递</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>因为函数传参是值传递，所以在函数内对 struct 类型的参数进行更改，所修改的只是副本，如果需要实现在函数内对 struct 的修改，应该使用 <code>*</code> 类型作为形参；</p>
+<li><p>因为函数传参是值传递，所以在函数内对 struct 类型的参数进行更改，所修改的只是副本，如果需要实现在函数内对 struct 的修改，应该使用 <code>*T</code> 类型作为形参；</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">type</span> T <span class="keyword">struct</span>&#123;</span><br><span class="line">	Value 		<span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	myT := T&#123;Value:<span class="number">666</span>&#125;</span><br><span class="line"></span><br><span class="line">	change(&amp;myT)</span><br><span class="line"></span><br><span class="line">	<span class="built_in">println</span>(myT.Value)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">change</span><span class="params">(t *T)</span></span>&#123;</span><br><span class="line">	t.Value = <span class="number">999</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <ul>
 <li><p>给Struct添加方法, 无需C++那样的头文件声明, 直接定义方法:</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// s被叫做“接收器”</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *YourFirstStruct)</span> <span class="title">foo</span><span class="params">(param <span class="keyword">int</span>)</span> <span class="params">(ret <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// s被叫做“接收器”，第一种是“指针接收器”</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *YourFirstStruct)</span> <span class="title">foo</span><span class="params">(param <span class="keyword">int</span>)</span> <span class="params">(ret <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// “值接收器”</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s YourFirstStruct)</span> <span class="title">foo2</span><span class="params">(param <span class="keyword">int</span>)</span> <span class="params">(ret <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>比较 struct 的“指针接收器” &amp; “值接收器”</p>
+<ul>
+<li>如果 func 内改变结构体的内容，需要“指针接收器”；</li>
+<li>从性能比较，“值接收器” 需要更多次拷贝；</li>
+<li>如果使用“值接收器”，因为函数内使用的是拷贝，所以func线程安全</li>
+</ul>
 </li>
 </ul>
 <h1 id="interface"><a href="#interface" class="headerlink" title="interface"></a>interface</h1><ul>
@@ -594,31 +636,20 @@
 <li><p>How to range map:</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> k,v = <span class="keyword">range</span> myMap &#123;</span><br><span class="line">    fmt.Printf(<span class="string">"%s %s"</span>, k, v)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>map 的底层实现：<a href="https://golang.design/go-questions/map/principal/" target="_blank" rel="noopener">map 的实现原理 | Go 程序员面试笔试宝典</a></p>
-</li>
 </ul>
 <h1 id="chan"><a href="#chan" class="headerlink" title="chan"></a>chan</h1><p>见第二部分</p>
-<h1 id="内置函数-len-append-copy-panic"><a href="#内置函数-len-append-copy-panic" class="headerlink" title="内置函数(len/append/copy/panic..)"></a>内置函数(len/append/copy/panic..)</h1><p>@ref: <a href="https://pkg.go.dev/builtin#pkg-functions" target="_blank" rel="noopener">https://pkg.go.dev/builtin#pkg-functions</a></p>
-<ul>
-<li><p>len/cap: 返回数组, slice, map, string, chan ..的长度&amp;容量</p>
-</li>
-<li><p>append/copy: 切片拼接&amp;复制</p>
-<ul>
-<li>原型: <code>func append(slice []Type, elems ...Type) []Type</code></li>
-<li>原型: <code>func copy(dst, src []Type) int</code></li>
+<h1 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h1><p>@ref: <a href="https://pkg.go.dev/builtin#pkg-functions" target="_blank" rel="noopener">https://pkg.go.dev/builtin#pkg-functions</a></p>
+<h2 id="len-cap"><a href="#len-cap" class="headerlink" title="len/cap"></a>len/cap</h2><ul>
+<li>len/cap: 返回数组, slice, map, string, chan ..的长度&amp;容量</li>
 </ul>
-</li>
-<li><p>print/println: 输出到std err // 区分<code>fmt.Print()</code></p>
-<ul>
-<li>原型: <code>func print(args ...Type)</code></li>
-<li>原型: <code>func println(args ...Type)</code></li>
+<h2 id="append-copy"><a href="#append-copy" class="headerlink" title="append/copy"></a>append/copy</h2><ul>
+<li>append: 切片拼接，原型: <code>func append(slice []Type, elems ...Type) []Type</code></li>
+<li>copy：切片复制，原型: <code>func copy(dst, src []Type) int</code></li>
 </ul>
-</li>
-<li><p>delete: 用于删除 map 里的 key, 原型: <code>func delete(m map[Type]Type1, key Type)</code></p>
-</li>
-<li><p>new:  → 本页 [[#new]]</p>
-</li>
-<li><p>make:  → 本页 [[#make]]</p>
+<h2 id="print-println"><a href="#print-println" class="headerlink" title="print/println"></a>print/println</h2><ul>
+<li>print：输出到 std err，原型: <code>func print(args ...Type)</code></li>
+<li><p>println：输出到 std err，arg 之间有空格，且有换行，原型: <code>func println(args ...Type)</code></p>
+<p>区分 <code>fmt.Print()</code>，输出到 <strong>standard output</strong></p>
 </li>
 </ul>
 <h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">make</span><span class="params">(t Type, size ...IntegerType)</span> <span class="title">Type</span></span></span><br></pre></td></tr></table></figure>
@@ -663,71 +694,62 @@
 <p><img src="/images/golang-make-vs-new.png" alt="../_images/golang-make-vs-new.png"></p>
 <p>比较： </p>
 <ul>
-<li><code>new([]int)</code> 只分配了一片内存（指向 <code>[]int</code> 类型，也就是 slice 的头）但是这块内存的 ptr 并未初始化</li>
-<li><code>make([]int)</code> 为 slice 的 prt 做了初始化</li>
+<li><code>new([]int)</code> 只分配了一片内存（指向 <code>[]int</code> 类型，也就是 slice 的头）但是这块内存的 ptr 并未初始化；</li>
+<li><code>make([]int)</code> 为 slice 的 prt 做了初始化；</li>
 </ul>
 <p>@ref:</p>
 <ul>
 <li><a href="https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-make-and-new/#551-make" target="_blank" rel="noopener">Go 语言中的 make 和 new | Go 语言设计与实现</a></li>
 </ul>
-<h2 id="panic-amp-recovery"><a href="#panic-amp-recovery" class="headerlink" title="panic &amp; recovery"></a>panic &amp; recovery</h2><p>panic：</p>
-<ul>
-<li>panic 是内建的停止控制流的函数。相当于其他编程语言的抛异常操作。当函数 F 调用了 panic，F 的执行会被停止，在 F 中 panic 前面定义的 defer 操作都会被执行，然后 F 函数返回。</li>
+<h2 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h2><ul>
+<li>delete: 用于删除 map 里的 key, 原型: <code>func delete(m map[Type]Type1, key Type)</code></li>
 </ul>
-<p>recovery：</p>
+<h2 id="close"><a href="#close" class="headerlink" title="close"></a>close</h2><ul>
+<li>关闭 chan，原型 <code>func close(c chan&lt;- Type)</code></li>
+</ul>
+<p>close() 只能由 sender 调用，不可以由 receiver 调用，一旦对 chan 使用了 close，在接收完最后一个值后，该 chan 将被关闭，任何从该 chan 的 receive 都会返回 <strong>success</strong> 而不会阻塞；</p>
+<h2 id="panic-amp-recovery"><a href="#panic-amp-recovery" class="headerlink" title="panic &amp; recovery"></a>panic &amp; recovery</h2><p><strong>panic</strong>： panic 会停止当前 Goroutine 的正常执行，相当于其他编程语言的抛异常</p>
 <ul>
-<li><p>defer：</p>
+<li>原型：<code>func panic(v any)</code></li>
+<li>行为：<ul>
+<li>当函数 F 调用了 panic，F 的执行会被停止，在 F 中 panic 前面定义的 defer 操作都会被执行，然后 F 函数返回给调用者 G。</li>
+<li>对于 G，调用 F 的行为类似于调用 panic，G 将调用 defer 函数，并返回给上一层调用者，直到程序非零值退出（除非调用了recover）</li>
+</ul>
 </li>
 </ul>
-<p>举例:</p>
+<p><strong>recovery</strong>：让程序从 panic 中恢复，阻止 panic 继续向上层调用者传播。返回类型是 any，返回的值是传入 <code>panic(v)</code> 的参数，recovery 必须在 defer 块中调用</p>
 <ul>
-<li>G调用了F;</li>
-<li>F调用panic</li>
+<li>原型：<code>func recover() any</code></li>
 </ul>
-<p>行为:</p>
-<ul>
-<li>调用<code>panic</code>的函数 F被立刻停止, 不再向下执行</li>
-<li>调用函数F中的defer, 然后F返回到它的Caller, G</li>
-<li>G后面的代码不再执行, 执行所有的defer</li>
-<li>程序以非0值退出</li>
-<li>以上 @ref: <a href="https://pkg.go.dev/builtin#panic" target="_blank" rel="noopener">https://pkg.go.dev/builtin#panic</a></li>
-</ul>
-<p>@ref：</p>
-<ul>
-<li>Go 语言 panic 和 recover 的原理 | Go 语言设计与实现：<a href="https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-panic-recover/" target="_blank" rel="noopener">https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-panic-recover/</a></li>
-<li><p><a href="https://www.cnblogs.com/makelu/p/11226974.html" target="_blank" rel="noopener">https://www.cnblogs.com/makelu/p/11226974.html</a></p>
-</li>
-<li><p>panic 函数调用后，会终止 “调用 panic” 的 Goroutine 的执行流程：直接去执行该 Goroutine 的 defer 链表中所有函数</p>
-</li>
-<li>defer 可以嵌套： <code>defer func() { defer xxx }</code></li>
-<li>panic 可以嵌套： 可以在defer中再调用panic</li>
-<li>recovery 只能在defer 函数中被调用， 用来终止程序的崩溃</li>
-<li>编译器负责对defer关键字进行转换，在调用 defer 的函数末尾调用 runtime.deferreturn 函数 // 函数退出时一定执行defer</li>
-<li>编译器把recovery关键字转换为<code>runtime.gorecover()</code>函数的调用，实现如下，当前Goroutine没有panic的时候，该函数直接返回，当有panic的时候</li>
-</ul>
-<p>问题：下面的输出顺序（嵌套崩溃）</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(<span class="string">"in main"</span>)</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			<span class="built_in">panic</span>(<span class="string">"panic again and again"</span>)</span><br><span class="line">		&#125;()</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">"panic again"</span>)</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="built_in">panic</span>(<span class="string">"panic once"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>➤ <strong>panic</strong> &amp; <strong>recovery</strong> 使用示例：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> r := <span class="built_in">recover</span>(); r != <span class="literal">nil</span> &#123;</span><br><span class="line">            fmt.Println(<span class="string">"Recovered in main"</span>, r)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    fmt.Println(<span class="string">"Returned normally from main."</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">"Calling f."</span>)</span><br><span class="line">    <span class="keyword">if</span> i &gt; <span class="number">0</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">"Panicking in f!"</span>)</span><br><span class="line">        <span class="built_in">panic</span>(fmt.Sprintf(<span class="string">"%v"</span>, i))</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">"Returned normally from f."</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@ref: <a href="https://pkg.go.dev/builtin#panic" target="_blank" rel="noopener">https://pkg.go.dev/builtin#panic</a></p>
+<p>➤ <strong>defer</strong> 关键字 → [[#defer]]</p>
 <h1 id="error"><a href="#error" class="headerlink" title="error"></a>error</h1><ul>
 <li><p><code>error</code>是一个Interface:</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="keyword">interface</span> &#123;</span><br><span class="line">  <span class="comment">// 接口只有一个函数,返回字符串</span></span><br><span class="line">  Error() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>使用<code>errors</code>创建一个错误: <code>err := errors.New(&quot;Error occured!&quot;)</code>, 返回的是一个<code>type errorString struct</code>类型的错误</p>
 </li>
-<li>定义自己的error类型: 定义自己的错误Struct类型, 然后实现<code>Error() string</code>方法即可</li>
+<li>定义自己的 error 类型: 定义错误的 Struct 类型, 然后实现 <code>Error() string</code> 方法即可</li>
 </ul>
 <h1 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h1><ul>
-<li>defer 后面的表达式在函数退出前执行</li>
-<li>一个func可以有多个 defer语句, 函数退出时执行顺序与定义顺序相反</li>
+<li>函数内定义的 defer 后的表达式，在函数退出前执行；</li>
+<li>一个 func 可以有多个 defer 语句, defer 语句被压入栈中，所以函数退出时执行顺序与 defer 定义顺序相反；</li>
+<li>如果 defer 之后是一个带参函数，例如 <code>defer f(i)</code>，运行至 defer 时会立刻保存 i 的值（类似于一次值拷贝）；</li>
+<li>如果 defer 之后形成了<strong>闭包</strong>（匿名函数内使用了外部变量），那么对外部变量的处理与闭包类似，在闭包实际运行时读取外部变量的最新值</li>
 </ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DeferEtudes3</span><span class="params">()</span></span> &#123;</span><br><span class="line">	i := <span class="number">1</span> <span class="comment">// 以形参传入，不是闭包的自由变量</span></span><br><span class="line">	j := <span class="number">9</span> <span class="comment">// 形成闭包的自由变量</span></span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">"in defer: i=%d, j=%d\n"</span>, i, j) <span class="comment">// 1， 10</span></span><br><span class="line">	&#125;(i)</span><br><span class="line">	i = i + <span class="number">1</span></span><br><span class="line">	j = j + <span class="number">1</span></span><br><span class="line">	fmt.Printf(<span class="string">"in func: i=%d, j=%d\n"</span>, i, j) <span class="comment">// 2， 10</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// j是闭包的自由变量，符合“运行时”绑定值，</span></span><br><span class="line">    <span class="comment">// i以参数传入，不是闭包的自由变量，会在运行到defer时就保存当时的值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@ref：</p>
 <ul>
-<li>每个Gorounite 都定义了一个defer struct链表，新增defer结构是在链表头，函数return之前会调用（从链表头到尾）链表里所有的</li>
-<li>在加入链表时，就需要先计算出传入defer 函数的参数，参数也存储在defer struct中（？不确定），所以…</li>
-<li>如果defer 中对（调用defer的函数的）返回值做了修改，也会影响到返回值（因为<code>return ret</code>不是原子操作，是先赋值再return）</li>
+<li><a href="https://go.dev/blog/defer-panic-and-recover" target="_blank" rel="noopener">Defer, Panic, and Recover - The Go Programming Language</a></li>
 </ul>
-<p>@ref</p>
+<p>➤ <strong>defer</strong> 的实现：</p>
 <ul>
-<li>理解 Go 语言 defer 关键字的原理 | Go 语言设计与实现：<a href="https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-defer/" target="_blank" rel="noopener">https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-defer/</a></li>
-<li>defer关键字 · 深入解析Go：<a href="https://tiancaiamao.gitbooks.io/go-internals/content/zh/03.4.html" target="_blank" rel="noopener">https://tiancaiamao.gitbooks.io/go-internals/content/zh/03.4.html</a></li>
+<li>编译器将 defer 关键字转换为调用 <code>runtime.deferproc()</code> 函数，这个函数接收了参数的大小和闭包所在的地址两个参数。</li>
+<li>在 <code>runtime.deferproc()</code> 中，创建一个 <code>runtime._defer</code> 结构体，并为它的成员赋值：函数指针 <code>fn</code>、程序计数器 <code>pc</code> 和栈指针 <code>sp</code> ，并将相关的参数拷贝到相邻的内存空间中，并将结构体加入 <code>_defer</code> 链表的开头；</li>
+<li>在调用 defer 的函数末尾，插入 <code>runtime.deferreturn()</code> 函数的调用，该函数会从 Goroutine 的 <code>_defer</code> 链表中取出最前面的 <code>runtime._defer</code> 结构体 … </li>
+<li>以上 @ref: <a href="https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-defer/#53-defer" target="_blank" rel="noopener">理解 Go 语言 defer 关键字的原理 | Go 语言设计与实现</a></li>
 </ul>
 <h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><ul>
 <li>小写开头的成员默认不被序列化</li>
@@ -748,7 +770,30 @@
 </li>
 </ul>
 <h1 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h1><p><a href="https://geektutu.com/post/quick-go-test.html" target="_blank" rel="noopener">https://geektutu.com/post/quick-go-test.html</a></p>
-<h1 id="go-命令行-amp-环境"><a href="#go-命令行-amp-环境" class="headerlink" title="go-命令行&amp;环境"></a>go-命令行&amp;环境</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Usage:</span><br><span class="line"></span><br><span class="line">	go &lt;command&gt; [arguments]</span><br><span class="line"></span><br><span class="line">The commands are:</span><br><span class="line"></span><br><span class="line">	bug         start a bug report</span><br><span class="line">	build       compile packages and dependencies</span><br><span class="line">	clean       remove object files and cached files</span><br><span class="line">	doc         show documentation for package or symbol</span><br><span class="line">	env         print Go environment information</span><br><span class="line">	fix         update packages to use new APIs</span><br><span class="line">	fmt         gofmt (reformat) package sources</span><br><span class="line">	generate    generate Go files by processing source</span><br><span class="line">	get         add dependencies to current module and install them</span><br><span class="line">	install     compile and install packages and dependencies</span><br><span class="line">	list        list packages or modules</span><br><span class="line">	mod         module maintenance</span><br><span class="line">	run         compile and run Go program</span><br><span class="line">	test        test packages</span><br><span class="line">	tool        run specified go tool</span><br><span class="line">	version     print Go version</span><br><span class="line">	vet         report likely mistakes in packages</span><br></pre></td></tr></table></figure>
+<h1 id="命令行-amp-环境"><a href="#命令行-amp-环境" class="headerlink" title="命令行 &amp; 环境"></a>命令行 &amp; 环境</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Usage:</span><br><span class="line"></span><br><span class="line">	go &lt;command&gt; [arguments]</span><br><span class="line"></span><br><span class="line">The commands are:</span><br><span class="line"></span><br><span class="line">	bug         start a bug report</span><br><span class="line">	build       compile packages and dependencies</span><br><span class="line">	clean       remove object files and cached files</span><br><span class="line">	doc         show documentation for package or symbol</span><br><span class="line">	env         print Go environment information</span><br><span class="line">	fix         update packages to use new APIs</span><br><span class="line">	fmt         gofmt (reformat) package sources</span><br><span class="line">	generate    generate Go files by processing source</span><br><span class="line">	get         add dependencies to current module and install them</span><br><span class="line">	install     compile and install packages and dependencies</span><br><span class="line">	list        list packages or modules</span><br><span class="line">	mod         module maintenance</span><br><span class="line">	run         compile and run Go program</span><br><span class="line">	test        test packages</span><br><span class="line">	tool        run specified go tool</span><br><span class="line">	version     print Go version</span><br><span class="line">	vet         report likely mistakes in packages</span><br></pre></td></tr></table></figure>
+<p>➤ 常用：</p>
+<ul>
+<li>获取包并安装：<code>go get golang.org/x/tools/gopls@latest</code> （源码默认下载到 $GOPATH/src）</li>
+<li>开启 Go module：<code>go env -w GO111MODULE=on</code>，从 v1.13 版本开始这个选项默认开启</li>
+</ul>
+<blockquote>
+<p>Go 1.11 引入了 Go Modules，不再使用 GOPATH 存储每个依赖包的 git checkout，而是通过项目目录下的 go.mod 记录依赖包</p>
+</blockquote>
+<p>➤ Golang 的环境变量可以使用 <code>go env</code> 查看：</p>
+<ul>
+<li><code>$GOROOT</code> 表示 Go SDK 的安装位置，它的值一般都是 $HOME/go</li>
+<li><code>$GOPATH</code> 表示工作空间的路径，用来保存 Go 项目代码和第三方依赖包</li>
+<li><code>$GOARCH</code> 表示目标机器的处理器架构，它的值可以是 386、amd64 或 arm。</li>
+<li><code>$GOOS</code> 表示目标机器的操作系统，它的值可以是 darwin、freebsd、linux 或 windows。</li>
+<li><code>$GOARM</code> 专门针对基于 arm 架构的处理器，它的值可以是 5~7，默认为 6。</li>
+</ul>
+<blockquote>
+<ul>
+<li>GOARM=5: 使用软件浮点（software floating point）；当 CPU 没有 VFP 协同处理器时</li>
+<li>GOARM=6: 仅使用 VFPv1; 使用交叉编译时的默认使用此选项，通常在 ARM11 或更高版本的内核中使用（也支持 VFPv2 或更高版本）</li>
+<li>GOARM=7: 使用 VFPv3；通常在 Cortex-A 内核中使用</li>
+</ul>
+</blockquote>
 
       
     </div>
@@ -779,8 +824,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/11.Programming-Language/C和CPP标准/" rel="next" title="C语言 & C++ 标准">
-                <i class="fa fa-chevron-left"></i> C语言 & C++ 标准
+              <a href="/About/About-Scriptorium/" rel="next" title="About-Scriptorium">
+                <i class="fa fa-chevron-left"></i> About-Scriptorium
               </a>
             
           </div>
@@ -972,7 +1017,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Golang中的约定大于配置"><span class="nav-text">Golang中的约定大于配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Package-amp-Import"><span class="nav-text">Package &amp; Import</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#init"><span class="nav-text">init</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量"><span class="nav-text">变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#全局变量"><span class="nav-text">全局变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本数据类型"><span class="nav-text">基本数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#string"><span class="nav-text">string</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型转换"><span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数"><span class="nav-text">函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#闭包"><span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#控制语句"><span class="nav-text">控制语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#type"><span class="nav-text">type</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#struct"><span class="nav-text">struct</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#interface"><span class="nav-text">interface</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#array"><span class="nav-text">array</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#slice"><span class="nav-text">slice</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map"><span class="nav-text">map</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#chan"><span class="nav-text">chan</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内置函数-len-append-copy-panic"><span class="nav-text">内置函数(len/append/copy/panic..)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#make"><span class="nav-text">make</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new"><span class="nav-text">new</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#make-vs-new"><span class="nav-text">make vs new</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#panic-amp-recovery"><span class="nav-text">panic &amp; recovery</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#error"><span class="nav-text">error</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#defer"><span class="nav-text">defer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列化"><span class="nav-text">序列化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#时间-API"><span class="nav-text">时间 API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单元测试"><span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#go-命令行-amp-环境"><span class="nav-text">go-命令行&amp;环境</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Golang中的约定大于配置"><span class="nav-text">Golang中的约定大于配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Package-amp-Import"><span class="nav-text">Package &amp; Import</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#init"><span class="nav-text">init</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量"><span class="nav-text">变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#全局变量"><span class="nav-text">全局变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本数据类型"><span class="nav-text">基本数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#string"><span class="nav-text">string</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型转换"><span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数"><span class="nav-text">函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#闭包（closure）"><span class="nav-text">闭包（closure）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#控制语句"><span class="nav-text">控制语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#type"><span class="nav-text">type</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#struct"><span class="nav-text">struct</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#interface"><span class="nav-text">interface</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#array"><span class="nav-text">array</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#slice"><span class="nav-text">slice</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map"><span class="nav-text">map</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#chan"><span class="nav-text">chan</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内置函数"><span class="nav-text">内置函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#len-cap"><span class="nav-text">len/cap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#append-copy"><span class="nav-text">append/copy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#print-println"><span class="nav-text">print/println</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#make"><span class="nav-text">make</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new"><span class="nav-text">new</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#make-vs-new"><span class="nav-text">make vs new</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#delete"><span class="nav-text">delete</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#close"><span class="nav-text">close</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#panic-amp-recovery"><span class="nav-text">panic &amp; recovery</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#error"><span class="nav-text">error</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#defer"><span class="nav-text">defer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列化"><span class="nav-text">序列化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#时间-API"><span class="nav-text">时间 API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单元测试"><span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令行-amp-环境"><span class="nav-text">命令行 &amp; 环境</span></a></li></ol></div>
             
 
           </div>
