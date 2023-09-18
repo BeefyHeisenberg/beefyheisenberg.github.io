@@ -278,6 +278,463 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-负载均衡-Nginx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/SystemDesign-负载均衡-Nginx/" itemprop="url">SystemDesign | 负载均衡 | Nginx</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  372
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ Nginx(7层反向代理)提供的几种负载均衡算法实现:</p>
+<ul>
+<li>随机 :</li>
+<li>轮询 :</li>
+<li>加权轮询 :</li>
+<li>源ip哈希 <code>ip_hash</code> : 使用Client端的IP进行Hash</li>
+<li>通用哈希 <code>hash $key</code> : 使用自定义的key进行Hash, 也支持一致性哈希<code>hash $key consistent</code>, 一致性哈希一般用于后端服务器是缓存时, 例如使用请求URL进行一致性Hash: <code>hash $request_uri consistent</code>,</li>
+<li>最小连接 <code>least_conn</code> : 请求将被发送给 活动连接数最小的后端服务器</li>
+<li>最小耗时 <code>least_time</code> : 请求将被发送给 平均耗时最小的后端服务器, 平均耗时有两种计算方式: 从后端服务器收到第一个字节<code>least_time header</code>, 或从后端服务器收到完整请求<code>least_time last_byte</code></li>
+</ul>
+<blockquote>
+<p>@ref <a href="https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/#" target="_blank" rel="noopener">NGINX Docs | HTTP Load Balancing</a></p>
+</blockquote>
+<p>➤ Nginx 平滑基于权重的轮询算法实现</p>
+<ul>
+<li>初始化: 每个节点当前权重 = 初始权重;</li>
+<li>第一轮选择节点, 选择当前权重最大的, 被选择的节点的”当前权重”发生变化 = 当前权重-权重总和, 未选中节点的”当前权重”不变;</li>
+<li>第二轮选择节点, 每个节点的权重 = 每个节点初始权重+ 上一轮的最终权重;</li>
+<li>综上, 每次节点被选中, 它的当前权重会减少(-总权重), 进入下一轮后, 每个节点都把上轮权重+自己的初始权重, 然后开始选择;</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/SystemDesign-负载均衡-Nginx/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-负载均衡-LVS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/SystemDesign-负载均衡-LVS/" itemprop="url">SystemDesign | 负载均衡 | LVS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  581
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ LVS, Linux Virtual Server, 即Linux虚拟服务器:</p>
+<ul>
+<li>LVS是工作于 ISO网络模型第四层的反向代理, 核心功能「IPVS」是 Linux Kernel的一个模块;</li>
+<li>LVS由 「IPVS」和「IPVSADM」组成, 前者工作在内核态负责数据路由, 后者工作在用户态负责选项的设置;</li>
+<li>LVS工作在 「Director Server」, Director Server对外提供虚拟IP(Virtual IP, 简称VIP), 客户端的请求发往VIP, 请求数据经过 Director Server的内核态, 通过IPVSADM设置的路由规则, 最终被发送给真实服务器IP(Real IP, 简称RIP);</li>
+<li>附图: LVS工作原理 &amp; LVS内核模型如下</li>
+</ul>
+<p><img src="/images/LVS-Kernel-Processor.png" alt="LVS-Kernel-Processor"></p>
+<blockquote>
+<p>1.当客户端的请求到达负载均衡器的内核空间时，首先会到达PREROUTING链。<br>2.当内核发现请求数据包的目的地址是本机时，将数据包送往INPUT链。<br>3.LVS由用户空间的ipvsadm和内核空间的IPVS组成，ipvsadm用来定义规则，IPVS利用ipvsadm定义的规则工作，IPVS工作在INPUT链上,当数据包到达INPUT链时，首先会被IPVS检查，如果数据包里面的目的地址及端口没有在规则里面，那么这条数据包将被放行至用户空间。<br>4.如果数据包里面的目的地址及端口在规则里面，那么这条数据报文将被修改目的地址为事先定义好的后端服务器，并送往POSTROUTING链。<br>5.最后经由POSTROUTING链发往后端服务器。</p>
+</blockquote>
+<p>➤ LVS提供如下几种负载均衡调度算法:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/SystemDesign-负载均衡-LVS/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-熔断器-Polaris/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/SystemDesign-熔断器-Polaris/" itemprop="url">SystemDesign-熔断器-Polaris</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  641
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>tldr:</p>
+<ul>
+<li>客户端上报调用服务端的结果(成功,失败,超时..)</li>
+<li>服务端(北极星)为每个提供服务的节点, 维护一个熔断器</li>
+<li>熔断器的状态(关闭, 打开)是根据滑动窗口内的成功率计算的</li>
+</ul>
+<p>很多时候，服务端（provider）本身并不能检测到自身的异常。如主调方（consumer）调用时不断收到错误返回，但服务端仍旧保持工作状态中。这种情况下应该暂时屏蔽掉此实例，以减少错误返回。由此引入了故障熔断功能。</p>
+<p>故障熔断功能主要是为了屏蔽错误实例，防止错误扩散影响整体服务质量。北极星提供的是故障数目的统计与处理，因此强依赖于主调方对调用结果的数据上报。熔断器状态设计参考Martin Fowler提出的熔断器模型，将每一个节点实例与一个熔断器绑定，熔断器状态如下图所示。</p>
+<p>@ref: <a href="https://martinfowler.com/bliki/CircuitBreaker.html" target="_blank" rel="noopener">https://martinfowler.com/bliki/CircuitBreaker.html</a></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/SystemDesign-熔断器-Polaris/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-熔断器-Hystrix/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -375,7 +832,7 @@
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/SystemDesign-熔断器-Hystrix/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/SystemDesign-熔断器-Hystrix/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -766,7 +1223,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,055
+                  3,154
                 </span>
               
 
@@ -798,7 +1255,162 @@
 <h1 id="有关-Linux-系统的限制"><a href="#有关-Linux-系统的限制" class="headerlink" title="有关 Linux 系统的限制"></a>有关 Linux 系统的限制</h1><p>服务器能支持建立连接数由几个决定：</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/SystemDesign-01-C100K/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/SystemDesign-01-C100K/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-00-亿级流量网站架构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/SystemDesign-00-亿级流量网站架构/" itemprop="url">后端架构：System Design</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  7,076
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="一些概念和测试基准"><a href="#一些概念和测试基准" class="headerlink" title="一些概念和测试基准"></a>一些概念和测试基准</h1><p>本章内容包括: 系统可用性的概念和指标, 系统性能的概念和指标, 如何严谨地做性能测试.</p>
+<h2 id="系统可用性的概念和指标"><a href="#系统可用性的概念和指标" class="headerlink" title="系统可用性的概念和指标"></a>系统可用性的概念和指标</h2><p><strong>高可用性</strong>（high availability，缩写为 HA），IT术语，指系统无中断地执行其功能的能力，代表系统的可用性程度。是进行系统设计时的准则之一。高可用性系统与构成该系统的各个组件相比可以更长时间运行<br>其度量方式，是根据系统损害、无法使用的时间，以及由无法运作恢复到可运作状况的时间，与系统总运作时间的比较。计算公式为:<br><img src="/images/system_design/Arch-HA-Exp.png" alt></p>
+<p>A（可用性），MTBF(平均故障间隔)，MDT(平均修复时间)<br>在线系统和执行关键任务的系统通常要求其可用性要达到5个9标准(99.999%)。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/SystemDesign-00-亿级流量网站架构/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1136,7 +1748,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-04消息队列/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-04消息队列/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1297,7 +1909,7 @@
 <p>➤ 设计要点:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-04分布式锁/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-04分布式锁/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1452,7 +2064,7 @@
 <h3 id="如何设置过期时间？"><a href="#如何设置过期时间？" class="headerlink" title="如何设置过期时间？"></a>如何设置过期时间？</h3><p>先说一下对 key 设置过期时间的命令。 设置 key 过期时间的命令一共有 4 个：</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-04a过期删除和内存淘汰/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-04a过期删除和内存淘汰/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1614,7 +2226,7 @@
 <h2 id="集群安装"><a href="#集群安装" class="headerlink" title="集群安装"></a>集群安装</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-03c集群-Cluster方案/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-03c集群-Cluster方案/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1786,7 +2398,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-03b集群-Sharding方案/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-03b集群-Sharding方案/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1944,7 +2556,7 @@
 <p>运行sentinel有两种方式:<br></p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">redis-sentinel /path/to/sentinel.conf</span><br><span class="line">redis-server /path/to/sentinel.conf --sentinel</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-03a2哨兵-Sentinel/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-03a2哨兵-Sentinel/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2099,7 +2711,7 @@
 <h2 id="主从间的数据同步"><a href="#主从间的数据同步" class="headerlink" title="主从间的数据同步"></a>主从间的数据同步</h2><p>➤ 2.8版本之前, Redis 的主从同步分为”全量同步”和”命令传播”两个阶段</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-03a1主从/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-03a1主从/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2263,7 +2875,7 @@
 <p>➤ Redis实现Raft协议:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-03Raft实现/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-03Raft实现/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2424,7 +3036,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-02部署和运维/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-02部署和运维/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2548,7 +3160,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,683
+                  3,843
                 </span>
               
 
@@ -2585,7 +3197,7 @@
 <h2 id="redisObject"><a href="#redisObject" class="headerlink" title="redisObject"></a>redisObject</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-01b数据结构的实现/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-01b数据结构的实现/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2743,633 +3355,7 @@
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/Redis-01a数据结构/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.06-序列化-ProtoBuf/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/RPC.06-序列化-ProtoBuf/" itemprop="url">RPC.06-序列化-ProtoBuf</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
-                    <span itemprop="name">31.Backend</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  657
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>ProtoBuf（Protocol Buffers ）是Google的开源的序列化 &amp; 反序列化工具 <a href="https://developers.google.com/protocol-buffers/" target="_blank" rel="noopener">https://developers.google.com/protocol-buffers/</a></p>
-<h2 id="ProtoBuf-C-使用"><a href="#ProtoBuf-C-使用" class="headerlink" title="ProtoBuf C++使用"></a>ProtoBuf C++使用</h2><p>使用步骤: </p>
-<ul>
-<li>定义proto文件，文件的内容就是定义我们需要存储或者传输的数据结构，也就是定义我们自己的数据存储或者传输的协议。</li>
-<li>安装protocol buffer编译器来编译自定义的.proto文件，用于生成.pb.h文件（proto文件中自定义类的头文件）和 .pb.cc（proto文件中自定义类的实现文件）。</li>
-<li>使用protocol buffer的C++ API来读写消息</li>
-</ul>
-<p>protocol buffer 生成的函数, 除了getter和setter之外, 还有: </p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/RPC.06-序列化-ProtoBuf/#espandi" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.05-腾讯云TSF微服务平台简介/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/RPC.05-腾讯云TSF微服务平台简介/" itemprop="url">RPC.05-腾讯云TSF微服务平台简介</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
-                    <span itemprop="name">31.Backend</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  205
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>微服务平台（Tencent Service Framework，TSF）是一个围绕着应用和微服务的 PaaS 平台，提供应用全生命周期管理、数据化运营、立体化监控和服务治理等功能。<br>TSF 拥抱 Spring Cloud 、Service Mesh 微服务框架，帮助企业客户解决传统集中式架构转型的困难，打造大规模高可用的分布式系统架构，实现业务、产品的快速落地。针对原生 Spring Cloud 应用与 Mesh 方式零成本接入。</p>
-<p>@ref: <a href="https://cloud.tencent.com/document/product/649" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/649</a></p>
-<ul>
-<li>Spring Cloud 应用接入TSF: <a href="https://cloud.tencent.com/document/product/649/36285" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/649/36285</a></li>
-<li>Dubbo 应用接入TSF: <a href="https://cloud.tencent.com/document/product/649/13947" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/649/13947</a></li>
-<li>TSF Mesh 应用接入TSF: <a href="https://cloud.tencent.com/document/product/649/17928" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/649/17928</a></li>
-</ul>
-<blockquote>
-<p> Dubbo &amp; Spring Cloud 微服务介绍, 参考👉🏻 <a href="/31.Backend/RPC.01-浅谈服务治理-and-微服务(zz)/" title="RPC.01-浅谈服务治理-and-微服务(zz)">RPC.01-浅谈服务治理-and-微服务(zz)</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.04-Service-Mesh/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/RPC.04-Service-Mesh/" itemprop="url">RPC.04-Service Mesh</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
-                    <span itemprop="name">31.Backend</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  37
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li><a href="https://juejin.im/entry/5b4c0be66fb9a04fb900c3a4" target="_blank" rel="noopener">什么是Service Mesh？ </a></li>
-<li><a href="https://time.geekbang.org/article/2360" target="_blank" rel="noopener">Service Mesh深度解析</a></li>
-<li>腾讯云微服务平台提供的 TSF Mesh: <a href="/31.Backend/RPC.05-腾讯云TSF微服务平台简介/" title="RPC.05-腾讯云TSF微服务平台简介">RPC.05-腾讯云TSF微服务平台简介</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/RPC.03-框架设计概要/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/31.Backend/RPC.03-框架设计概要/" itemprop="url">RPC.03-框架设计概要</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
-                    <span itemprop="name">31.Backend</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,201
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="RMI"><a href="#RMI" class="headerlink" title="RMI"></a>RMI</h2><p>早期JDK1.2引入的RMI框架图: （👉🏻[[../@project/Java-RMI]]）</p>
-<h2 id="RPC通用框架"><a href="#RPC通用框架" class="headerlink" title="RPC通用框架"></a>RPC通用框架</h2><p>通用RPC框架图:</p>
-<p><img src="/images/2022/20220315092643.png" alt="../_images/2022/20220315092643.png"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/31.Backend/RPC.03-框架设计概要/#espandi" rel="contents">
+            <a class="btn" href="/31.Backend/Redis-01a数据结构/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3411,7 +3397,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -3461,7 +3447,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">476</span>
+                  <span class="site-state-item-count">482</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3483,7 +3469,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">410</span>
+                  <span class="site-state-item-count">414</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
