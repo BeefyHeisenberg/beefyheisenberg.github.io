@@ -278,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/76.Games/游戏《Rise-of-Kingdoms》中的历史人物/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【C语言】C语言里面的一些陷阱/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -297,7 +297,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/76.Games/游戏《Rise-of-Kingdoms》中的历史人物/" itemprop="url">游戏《Rise-of-Kingdoms》中的历史人物</a></h1>
+                <a class="post-title-link" href="/50.Farbox-Blog/【C语言】C语言里面的一些陷阱/" itemprop="url">C语言里面的一些陷阱</a></h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/76-Games/" itemprop="url" rel="index">
-                    <span itemprop="name">76.Games</span>
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
                   </a>
                 </span>
 
@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,352
+                  2,519
                 </span>
               
 
@@ -377,12 +377,13 @@
 
       
         
-          <p>Rise of Kingdoms （万国觉醒） 是一款 P2W（pay to win）游戏。</p>
-<h2 id="大西庇阿"><a href="#大西庇阿" class="headerlink" title="大西庇阿"></a>大西庇阿</h2><p><img src="/images/2022/IMG20220922-1.png" alt><br>大西庇阿（前235年—前183年），全名为普布利乌斯·科尔内利乌斯·西庇阿。古罗马统帅和政治家。他是第二次布匿战争中罗马方面的主要将领之一，以在扎马战役中打败迦太基统帅汉尼拔而著称于世。由于西庇阿的胜利，罗马人以绝对有利的条件结束了第二次布匿战争。西庇阿因此得到他那著名的绰号：“阿非利加征服者”。</p>
-<h2 id="贝利萨留（Belisarius）"><a href="#贝利萨留（Belisarius）" class="headerlink" title="贝利萨留（Belisarius）"></a>贝利萨留（Belisarius）</h2><p><img src="/images/2022/IMG20220922.png" alt><br>贝利萨留（约505年～565年），又名贝利萨留斯，拜占庭帝国统帅、军事家。他一生当中的大多数战役是以少胜多。<br>贝利萨留出生于色雷斯。早年任皇帝查士丁尼一世的侍卫。527年率军参加对波斯的战争。529年，升任禁卫军长官。530年，任德拉总督，击败4万波斯-阿拉伯联军，名声大振。532年，镇压君士坦丁堡的尼卡起义，解救被围困的皇帝。533～534年，仅率1万步兵和6000骑兵入侵北非，灭汪达尔-阿兰王国并俘其国王。回国后被授予执政官称号。535年，出征意大利的东哥特王国，登陆西西里岛。536年攻入意大利南部，随后北上占领罗马。540年，攻陷东哥特都城拉韦纳，俘东哥特王。曾经用“自己将政变”为计谋欺骗敌方获胜，结果因此受到查士丁尼一世的怀疑。562年，被指控参与谋反，被捕入狱。563年，获释。565年，去世，享年61岁。</p>
+          <p>C语言里面的陷阱非常多, 多到写了几年C之后还是会不断的踩, 首先, 本文没多少原创内容, 大部分都来自笔记整理.<br>我们先看几个有关Printf函数的坑：</p>
+<h1 id="坑-Printf（一）"><a href="#坑-Printf（一）" class="headerlink" title="坑: Printf（一）"></a>坑: Printf（一）</h1><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 下面一段代码的打印是什么？</span></span><br><span class="line">   <span class="keyword">int64_t</span> a = <span class="number">1</span>;</span><br><span class="line">   <span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">"%d %d"</span>,a,b);</span><br></pre></td></tr></table></figure>
+<p>运行一下这段代码, 发现打印出来的结果并不是期望的“1 2”, 而是“1 0”, why？<br>这就涉及到 printf 的设计了, printf的第一个参数是字符串, 上面代码中第一个参数是“%d %d”, printf会解析每一个%d这样的结构, 然后将指针做偏移, 偏移的字节数与%后面的类型有关, 例如%d是4字节, %lld是8字节, %c是偏移1字节.<br>所以, 在上面代码中printf(“%d, %d\n”, a, b)实际两个%d分别取得是 a 的低4字节和高4字节, 从而分别是1和0（测试环境是小端, 所以低地址的是LSB）.</p>
+<h2 id="参考-ref"><a href="#参考-ref" class="headerlink" title="参考 @ref"></a>参考 @ref</h2>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/76.Games/游戏《Rise-of-Kingdoms》中的历史人物/#more" rel="contents">
+            <a class="btn" href="/50.Farbox-Blog/【C语言】C语言里面的一些陷阱/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -433,7 +434,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/About/About-Scriptorium/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】Vim入门指北/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -452,7 +453,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/About/About-Scriptorium/" itemprop="url">About-Scriptorium</a></h1>
+                <a class="post-title-link" href="/50.Farbox-Blog/【Vim】Vim入门指北/" itemprop="url">Vim入门指北</a></h1>
         
 
         <div class="post-meta">
@@ -475,8 +476,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/About/" itemprop="url" rel="index">
-                    <span itemprop="name">About</span>
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
                   </a>
                 </span>
 
@@ -506,7 +507,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  12
+                  1,888
                 </span>
               
 
@@ -532,12 +533,657 @@
 
       
         
-          <h2 id="缮写室"><a href="#缮写室" class="headerlink" title="缮写室"></a>缮写室</h2><p><img src="/images/About-Scriptorium.png" alt></p>
-<h2 id="黄金诗篇"><a href="#黄金诗篇" class="headerlink" title="黄金诗篇"></a>黄金诗篇</h2><p><img src="/images/About-Golden-Verses.png" alt></p>
-<h2 id="卡尔达诺书"><a href="#卡尔达诺书" class="headerlink" title="卡尔达诺书"></a>卡尔达诺书</h2>
+          <p><img src="/images/vi-vim-cheat-sheet-sch1.gif" alt="vim cheat sheet"></p>
+<h1 id="plugin-2020"><a href="#plugin-2020" class="headerlink" title="plugin @2020"></a>plugin @2020</h1><ul>
+<li>C++补全: 仍然是YCM</li>
+<li>自动生成tag: vim-gutentags 或  gen_tags.vim</li>
+<li>动态检查: ale(替代syntastic)</li>
+<li>函数列表: LeaderF(替代 tagbar)</li>
+<li>快速打开文件: LeaderF</li>
+</ul>
+<h1 id="一些基本概念"><a href="#一些基本概念" class="headerlink" title="一些基本概念"></a>一些基本概念</h1><ul>
+<li>operator（操作符）: 例如命令<code>d</code>, <code>y</code>, <code>c</code>等;</li>
+<li>motion（移动）: 例如移动光标的命令<code>h j k l</code>, <code>w</code>, <code>e</code>, <code>b</code>等;</li>
+<li>text-objects（文本对象）: 例如<code>s</code>(表示句子sentence)， <code>w</code>表示单词，<code>p</code>表示段落（Paragraphs）等等。</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/About/About-Scriptorium/#more" rel="contents">
+            <a class="btn" href="/50.Farbox-Blog/【Vim】Vim入门指北/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】我的Vim配置文件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/50.Farbox-Blog/【Vim】我的Vim配置文件/" itemprop="url">我的 Vim 配置文件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  359
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="插件"><a href="#插件" class="headerlink" title="插件:"></a>插件:</h1><h2 id="UI"><a href="#UI" class="headerlink" title="UI"></a>UI</h2><ul>
+<li>color: solarized/molokai/phd</li>
+<li>vim-airline : 状态栏</li>
+<li>Nerd_tree : 文件浏览</li>
+<li>vim-startify : vim的起始页</li>
+</ul>
+<h2 id="编辑"><a href="#编辑" class="headerlink" title="编辑"></a>编辑</h2><ul>
+<li>EasyMotion : 快速在代码中移动光标</li>
+<li>The-NERD-Commenter : 注释</li>
+<li>vim-markdown</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/50.Farbox-Blog/【Vim】我的Vim配置文件/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【Vim】使用vundle管理vim插件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/50.Farbox-Blog/【Vim】使用vundle管理vim插件/" itemprop="url">使用 Vundle 管理 Vim 插件（Windowns 7）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  277
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="1-安装win版本的gvim"><a href="#1-安装win版本的gvim" class="headerlink" title="(1)安装win版本的gvim:"></a>(1)安装win版本的gvim:</h3><p>下载地址 <a href="http://www.vim.org/download.php" target="_blank" rel="noopener">http://www.vim.org/download.php</a><br>比如安装目录是F:\Program Files (x86)\Vim,  并在此目录下新建”bundle\vundle”目录.</p>
+<h3 id="2-安装git"><a href="#2-安装git" class="headerlink" title="(2)安装git"></a>(2)安装git</h3><p>安装git命令行: <a href="http://git-scm.com/" target="_blank" rel="noopener">http://git-scm.com/</a> (已被长城)<br>或者github带GUI的版本: <a href="http://windows.github.com/" target="_blank" rel="noopener">http://windows.github.com/</a><br>并且把git所在的目录加进环境变量PATH中.</p>
+<h3 id="3-安装vundle"><a href="#3-安装vundle" class="headerlink" title="(3) 安装vundle"></a>(3) 安装vundle</h3>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/50.Farbox-Blog/【Vim】使用vundle管理vim插件/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【C语言】GNU的obj分析工具的使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/50.Farbox-Blog/【C语言】GNU的obj分析工具的使用/" itemprop="url">GNU的obj分析工具的使用 - nm/objdump</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,760
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>linux GUN工具链中二进制文件分析工具：</p>
+<ul>
+<li><code>nm</code>/<code>objdump</code>用来列出目标文件（object files）的符号表（symbols）；</li>
+<li><code>readelf</code>用来分析elf文件；</li>
+<li><code>ldd</code>用来分析程序运行时需要依赖的动态库。</li>
+</ul>
+<p>先来回顾一下Linux进程内存布局：<br></p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">----高地址----</span><br><span class="line">&lt;栈stack&gt;</span><br><span class="line">  |</span><br><span class="line">&lt;堆heap&gt;</span><br><span class="line">&lt;.bss&gt;  未初始化的全局变量</span><br><span class="line">&lt;.data&gt; 已初始化的全局变量,static变量</span><br><span class="line">  &lt;.rodata&gt; 属于.data, 存放const, char*字符串</span><br><span class="line">&lt;.txt&gt;  代码段</span><br><span class="line">----低地址----</span><br></pre></td></tr></table></figure><p></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/50.Farbox-Blog/【C语言】GNU的obj分析工具的使用/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【开发环境】Linux下安装tpacpi-bat控制thinkpad充电阈值/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/50.Farbox-Blog/【开发环境】Linux下安装tpacpi-bat控制thinkpad充电阈值/" itemprop="url">Linux下安装 tpacpi-bat 控制 thinkpad 充电阈值</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  488
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><a href="http://www.thinkwiki.org/wiki/Tp_smapi" target="_blank" rel="noopener">tp_smapi</a> 是一套适用于ThinkPad的驱动程序集, 包括了电池阈值设置, 风扇转速控制, 以及HDAPS(类似APS硬盘保护)几个功能.  但是 2013新出的几款Ivy Bridge 平台的thinkpad(X230,T430,T530)上已经无法使用tp_smapi了. 在github上可以看到tp_smapi 项目也有两年多没有更新: <a href="https://github.com/evgeni/tp_smapi" target="_blank" rel="noopener">tp_smapi地址</a></p>
+<p>所以对于T430等Ivy平台的Thinkpad, 推荐使用<a href="https://github.com/teleshoes/tpacpi-bat" target="_blank" rel="noopener">tpacpi-bat</a>调整电池充电阈值.</p>
+<p>安装过程:</p>
+<h3 id="1-安装acpidump-iasl工具"><a href="#1-安装acpidump-iasl工具" class="headerlink" title="(1) 安装acpidump , iasl工具"></a>(1) 安装acpidump , iasl工具</h3><blockquote>
+<p>sudo yum install pmtools iasl</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/50.Farbox-Blog/【开发环境】Linux下安装tpacpi-bat控制thinkpad充电阈值/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -629,7 +1275,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">482</span>
+                  <span class="site-state-item-count">486</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -640,7 +1286,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -651,7 +1297,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">414</span>
+                  <span class="site-state-item-count">422</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -723,7 +1369,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

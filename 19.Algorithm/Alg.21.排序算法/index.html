@@ -134,7 +134,13 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/Sorting_heapsort_2.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/Merge_sort_animation.gif">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/alg/Merge-sort-example-300px.gif">
-<meta property="og:updated_time" content="2023-05-09T08:57:23.660Z">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.21.%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-2023-05-11-1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.21.%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-2023-05-10-1.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.21.%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-Bucket2.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Two-Way-Merge.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Five-Way-Merge.png">
+<meta property="og:image" content="https://beefyheisenberg.github.io/images/Alg.21.%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-2023-05-10-2.png">
+<meta property="og:updated_time" content="2024-01-12T21:45:11.988Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Alg.21.常用排序算法">
 <meta name="twitter:description" content="索引 交换排序: 冒泡, 快排 插入排序: 简单插入排序, 希尔排序 选择排序: 简单选择排序, 堆排序 归并排序: 归并排序 基数排序:  选择排序、快速排序、希尔排序、堆排序不是稳定的排序算法，泡排序、插入排序、归并排序和基数排序是稳定的排序算法。 交换排序冒泡排序(Bubble Sort)">
@@ -332,8 +338,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">19.Algorithm</span>
+                  <a href="/categories/Drafts/" itemprop="url" rel="index">
+                    <span itemprop="name">Drafts</span>
                   </a>
                 </span>
 
@@ -363,7 +369,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5,456
+                  7,162
                 </span>
               
 
@@ -405,25 +411,15 @@
 <li>优化2：记录某次遍历时最后发生数据交换的位置，这个位置之后的数据显然已经有序，不用再排序了。因此通过记录最后发生数据交换的位置就可以确定下次循环的范围了。</li>
 </ul>
 <h2 id="快排-Quick-Sort"><a href="#快排-Quick-Sort" class="headerlink" title="快排(Quick Sort)"></a>快排(Quick Sort)</h2><p><img src="/images/alg/Sorting_quicksort_anim.gif" alt="快速排序"></p>
-<p>快速排序（QuickSort），又称划分交换排序（partition-exchange sort），简称快排，一种排序算法，最早由东尼·霍尔提出。在平均状况下，排序n个项目要 <code>(nlog n)</code>次比较。在最坏状况下则需要 <code>n^2</code>次比较。</p>
-<ol>
-<li>从数列中挑出一个元素，称为”基准”（pivot），</li>
-<li>重新排序数列，所有比基准值小的元素摆放在基准前面，所有比基准值大的元素摆在基准后面（相同的数可以到任何一边）。在这个分区结束之后，该基准就处于数列的中间位置。这个称为分区（partition）操作。</li>
-<li>递归地（recursively）把小于基准值元素的子数列和大于基准值元素的子数列排序。</li>
-<li>递归到最底部时，数列的大小是零或一，也就是已经排序好了。这个算法一定会结束，因为在每次的迭代（iteration）中，它至少会把一个元素摆到它最后的位置去。</li>
-</ol>
-<p>举例：对5，3，8，6，4这个无序序列进行快速排序(小→大)，右指针找比基准数小的，左指针找比基准数大的，然后交换位置。</p>
-<ul>
-<li>用数组第一个元素最为基准值(pivotKey)</li>
-<li>5，3，8，6，4 用5作为比较的基准，最终会把5小的移动到5的左边，比5大的移动到5的右边。</li>
-<li>5，3，8，6，4 首先设置i，j两个指针分别指向左右两端，j指针先扫描（思考一下为什么？）4比5小停止。然后i扫描，8比5大停止。交换i，j位置。</li>
-<li>5，3，4，6，8 然后j指针再扫描，这时j扫描4时两指针相遇。停止。然后交换4和基准数。</li>
-<li>4，3，5，6，8 一次划分后达到了左边比5小，右边比5大的目的。</li>
-<li>以5 为分界点, 左序列 4, 3 和 右序列 6, 8 递归的进行排序</li>
-</ul>
-<p><del>上面留下来了一个问题为什么一定要j指针先动呢？首先这也不是绝对的，这取决于基准数的位置，因为在最后两个指针相遇的时候，要交换基准数到相遇的位置。一般选取第一个数作为基准数，那么就是在左边，所以最后相遇的数要和基准数交换，那么相遇的数一定要比基准数小。所以j指针先移动才能先找到比基准数小的数。</del></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 快速排序, 从小到大</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(left &gt;= right)</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    <span class="keyword">int</span> pivotPos = partition(arr, left, right);</span><br><span class="line">    quickSort(arr, left, pivotPos-<span class="number">1</span>);</span><br><span class="line">    quickSort(arr, pivotPos+<span class="number">1</span>, right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> pivotKey = arr[left];</span><br><span class="line">    <span class="keyword">int</span> pivotPointer = left;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(left &lt; right) &#123;</span><br><span class="line">        <span class="keyword">while</span>(left &lt; right &amp;&amp; arr[right] &gt;= pivotKey)</span><br><span class="line">            right --;</span><br><span class="line">        <span class="keyword">while</span>(left &lt; right &amp;&amp; arr[left] &lt;= pivotKey)</span><br><span class="line">            left ++;</span><br><span class="line">        swap(arr, left, right); <span class="comment">//把大的交换到右边，把小的交换到左边。</span></span><br><span class="line">    &#125;</span><br><span class="line">    swap(arr, pivotPointer, left); <span class="comment">//最后把pivot交换到中间</span></span><br><span class="line">    <span class="keyword">return</span> left;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>时间复杂度平均<code>O(n log n)</code>，最坏<code>O(n^2)</code>。因为快排的实现是递归调用的， 而且每次函数调用中只使用了常数的空间，因此空间复杂度等于递归深度<code>O(log n)</code>。<br>分析过程参考<a href="https://zh.wikipedia.org/wiki/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F" target="_blank" rel="noopener">快速排序 </a> “正规分析”。</p>
+<hr>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] sortArray (<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line"></span><br><span class="line">        quickSort(nums,<span class="number">0</span>,nums.length-<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> nums;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quickSort</span> <span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> low, <span class="keyword">int</span> high)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (low &lt; high) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = partition(nums,low,high);</span><br><span class="line">            quickSort(nums,low,index-<span class="number">1</span>);</span><br><span class="line">            quickSort(nums,index+<span class="number">1</span>,high);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">partition</span> <span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> low, <span class="keyword">int</span> high)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> pivot = nums[low];</span><br><span class="line">            <span class="keyword">int</span> start = low;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (low &lt; high) &#123;</span><br><span class="line">                <span class="keyword">while</span> (low &lt; high &amp;&amp; nums[high] &gt;= pivot) high--;</span><br><span class="line">                <span class="keyword">while</span> (low &lt; high &amp;&amp; nums[low] &lt;= pivot) low++;</span><br><span class="line">                <span class="keyword">if</span> (low &gt;= high) <span class="keyword">break</span>;</span><br><span class="line">                swap(nums, low, high);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//基准值归位</span></span><br><span class="line">            swap(nums,start,low);</span><br><span class="line">            <span class="keyword">return</span> low;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">swap</span> <span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> temp = nums[i];</span><br><span class="line">        nums[i] = nums[j];</span><br><span class="line">        nums[j] = temp;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>快速排序的时间复杂度分析</strong></p>
+<p>快排也是用递归来实现的。所以快速排序的时间性能取决于快速排序的递归树的深度。如果每次分区操作，都能正好把数组分成大小接近相等的两个小区间，那么此时的递归树是平衡的，性能也较好，递归树的深度也就和之前归并排序求解方法一致，然后我们每一次分区需要对数组扫描一遍，做 n 次比较，所以最优情况下，快排的时间复杂度是 O(nlogn)。</p>
+<p>但是大多数情况下我们不能划分的很均匀，比如数组为正序或者逆序时，即 [1,2,3,4] 或 [4,3,2,1] 时，此时为最坏情况，那么此时我们则需要递归调用 n-1 次，此时的时间复杂度则退化到了 O(n^2)。</p>
+<p><strong>快速排序的空间复杂度分析</strong></p>
+<p>快速排序主要时递归造成的栈空间的使用，最好情况时其空间复杂度为 O (logn),对应递归树的深度。最坏情况时则需要 n-1 次递归调用，此时空间复杂度为 O(n).</p>
+<p><strong>快速排序的稳定性分析</strong></p>
+<p>快速排序是一种不稳定的排序算法</p>
 <h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><h2 id="插入排序-Insertion-Sort"><a href="#插入排序-Insertion-Sort" class="headerlink" title="插入排序(Insertion Sort)"></a>插入排序(Insertion Sort)</h2><p><img src="/images/alg/insertion-sort.png" alt="insertion_sort"></p>
 <ol>
 <li>从第一个元素开始，该元素可以认为已经被排序</li>
@@ -471,37 +467,67 @@
 </ul>
 <p>归并排序就是用递归的方式，把待排序数组递归分解为left和right，如果这两个数组内部数据是有序的，那么就可以用上面合并数组的方法将这两个数组合并排序。如何让这两个数组内部是有序的？可以再二分，直至分解出的小组只含有一个元素时为止，此时认为该小组内部已有序。然后合并排序相邻二个小组即可。</p>
 <p><img src="/images/alg/Merge-sort-example-300px.gif" alt="归并示意图"></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mergeSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">    mSort(arr, <span class="number">0</span>, arr.length<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 递归分治</span></span><br><span class="line"><span class="comment"> * @param arr 待排数组</span></span><br><span class="line"><span class="comment"> * @param left 左指针</span></span><br><span class="line"><span class="comment"> * @param right 右指针</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mSort</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(left &gt;= right)</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    <span class="keyword">int</span> mid = (left + right) / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    mSort(arr, left, mid); <span class="comment">//递归排序左边</span></span><br><span class="line">    mSort(arr, mid+<span class="number">1</span>, right); <span class="comment">//递归排序右边</span></span><br><span class="line">    merge(arr, left, mid, right); <span class="comment">//合并</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 合并两个有序数组</span></span><br><span class="line"><span class="comment"> * @param arr 待合并数组</span></span><br><span class="line"><span class="comment"> * @param left 左指针</span></span><br><span class="line"><span class="comment"> * @param mid 中间指针</span></span><br><span class="line"><span class="comment"> * @param right 右指针</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> left, <span class="keyword">int</span> mid, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//[left, mid] [mid+1, right]</span></span><br><span class="line">    <span class="keyword">int</span>[] temp = <span class="keyword">new</span> <span class="keyword">int</span>[right - left + <span class="number">1</span>]; <span class="comment">//中间数组</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i = left;</span><br><span class="line">    <span class="keyword">int</span> j = mid + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i &lt;= mid &amp;&amp; j &lt;= right) &#123;</span><br><span class="line">        <span class="keyword">if</span>(arr[i] &lt;= arr[j]) &#123;</span><br><span class="line">            temp[k++] = arr[i++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            temp[k++] = arr[j++];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(i &lt;= mid) &#123;</span><br><span class="line">        temp[k++] = arr[i++];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(j &lt;= right) &#123;</span><br><span class="line">        temp[k++] = arr[j++];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> p=<span class="number">0</span>; p&lt;temp.length; p++) &#123;</span><br><span class="line">        arr[left + p] = temp[p];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>平均时间复杂度<code>O(nlogn)</code>，最好时间复杂度<code>O(n)</code>，同一时刻需要一个大小为n的额外空间, 空间复杂度<code>O(n)</code></p>
-<p><a href="http://blog.csdn.net/u013074465/article/details/42043967" target="_blank" rel="noopener">归并排序及其空间复杂度的思考 - CSDN博客</a></p>
-<h1 id="计数排序-Counting-Sort"><a href="#计数排序-Counting-Sort" class="headerlink" title="计数排序(Counting Sort)"></a>计数排序(Counting Sort)</h1><p>用待排序的数作为计数数组的下标，统计每个数字的个数。然后依次输出即可得到有序序列。复杂度<code>O(n)</code></p>
-<h1 id="桶排序-Bucket-Sort"><a href="#桶排序-Bucket-Sort" class="headerlink" title="桶排序(Bucket Sort)"></a>桶排序(Bucket Sort)</h1><p>先了解”桶”(Bucket)的概念, 有一个数组, 数组的每个元素都是一个线性链表, 那么这个数组被称为桶数组，数组里每个元素被称为”桶”。</p>
-<p>假设有一组长度为N的待排关键字序列<code>K[N]</code>。申请一个M大小的数组<code>B[M]</code>作为“桶数组”。然后基于某种映射函数 ，将待排序列<code>K[k]</code>映射到桶<code>B[i]</code>中 ，<br><code>K[N]</code>的规模是大于<code>B[M]</code>的，所以多个K中的元素可能放入B的一个桶位，放入时K的元素需要排序。<br>接着对每个桶<code>B[i]</code>中的所有元素进行比较排序(可以使用快排)。<br>元素<code>K[k]</code>需要映射到桶数组<code>B[i]</code>的位置上，其中<code>i=f(K[k])</code>，并且如果有<code>K[i] &lt; K[j]</code>，那么<code>f(K[i]) &lt; f[K[j]]</code>，也就是说B[i]中的最小数据都要大于B[i-1]中最大数据。很显然，映射函数的选择非常重要。</p>
-<p>桶排序利用函数的映射关系，减少了几乎所有的比较工作。实际上，桶排序的f(k)值的计算，其作用就相当于快排中划分，希尔排序中的子序列，归并排序中的子问题，已经把大量数据分割成了基本有序的数据块(桶)。然后只需要对桶中的少量数据做先进的比较排序即可。　</p>
-<p>复杂度分析:</p>
-<ol>
-<li>循环计算每个关键字的桶映射函数，这个时间复杂度是O(N)。</li>
-<li>利用先进的比较排序算法对每个桶内的所有数据进行排序，其时间复杂度为 <code>∑ O(Ni*logNi)</code> 。其中<code>Ni</code>为第i个桶的数据量。</li>
-</ol>
-<p>很显然，第(2)部分是桶排序性能好坏的决定因素。尽量减少桶内数据的数量是提高效率的唯一办法(因为基于比较排序的最好平均时间复杂度只能达到O(N*logN)了)。因此，我们需要尽量做到下面两点：</p>
-<ul>
-<li>映射函数f(k)能够将N个数据平均的分配到M个桶中，这样每个桶就有[N/M]个数据量。</li>
-<li>尽量的增大桶的数量。极限情况下每个桶只能得到一个数据，这样就完全避开了桶内数据的“比较”排序操作。当然，做到这一点很不容易，数据量巨大的情况下，f(k)函数会使得桶集合的数量巨大，空间浪费严重。这就是一个时间代价和空间代价的权衡问题了。</li>
-</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mergeSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">    mSort(arr, <span class="number">0</span>, arr.length<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 递归分治</span></span><br><span class="line"><span class="comment"> * @param arr 待排数组</span></span><br><span class="line"><span class="comment"> * @param left 左指针</span></span><br><span class="line"><span class="comment"> * @param right 右指针</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mSort</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(left &gt;= right)</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    <span class="keyword">int</span> mid = (left + right) / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    mSort(arr, left, mid); <span class="comment">//递归排序左边</span></span><br><span class="line">    mSort(arr, mid+<span class="number">1</span>, right); <span class="comment">//递归排序右边</span></span><br><span class="line">    merge(arr, left, mid, right); <span class="comment">//合并</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 合并两个有序数组</span></span><br><span class="line"><span class="comment"> * @param arr 待合并数组</span></span><br><span class="line"><span class="comment"> * @param left 左指针</span></span><br><span class="line"><span class="comment"> * @param mid 中间指针</span></span><br><span class="line"><span class="comment"> * @param right 右指针</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> left, <span class="keyword">int</span> mid, <span class="keyword">int</span> right)</span> </span>&#123;    </span><br><span class="line">    <span class="keyword">int</span>[] temp = <span class="keyword">new</span> <span class="keyword">int</span>[right - left + <span class="number">1</span>]; <span class="comment">//临时数组</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i = left;</span><br><span class="line">    <span class="keyword">int</span> j = mid + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 双指针归并</span></span><br><span class="line">    <span class="keyword">while</span>(i &lt;= mid &amp;&amp; j &lt;= right) &#123;</span><br><span class="line">        <span class="keyword">if</span>(arr[i] &lt;= arr[j]) &#123;</span><br><span class="line">            temp[k++] = arr[i++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            temp[k++] = arr[j++];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将左或右数组中剩余元素 存入临时数组</span></span><br><span class="line">    <span class="keyword">while</span>(i &lt;= mid) &#123;</span><br><span class="line">        temp[k++] = arr[i++];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(j &lt;= right) &#123;</span><br><span class="line">        temp[k++] = arr[j++];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 临时数组 =》 原数组</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> p=<span class="number">0</span>; p&lt;temp.length; p++) &#123;</span><br><span class="line">        arr[left + p] = temp[p];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>归并排序时间复杂度分析</strong></p>
+<p>我们一趟归并，需要将两个小集合的长度放到大集合中，则需要将待排序序列中的所有记录扫描一遍所以时间复杂度为 O(n)。<br>归并排序把集合一层一层的折半分组，则由完全二叉树的深度可知，整个排序过程需要进行 logn（向上取整）次,则总的时间复杂度为 O(nlogn)。</p>
+<p>另外归并排序的执行效率与要排序的原始数组的有序程度无关，所以在最好、最坏、平均情况下时间复杂度均为 O(nlogn) 。虽然归并排序时间复杂度很稳定，但是他的应用范围却不如快速排序广泛，这是因为归并排序不是原地排序算法，那么他的空间复杂度为多少呢？</p>
+<p><strong>归并排序的空间复杂度分析</strong></p>
+<p>归并排序所创建的临时结合都会在方法结束时释放，单次归并排序的最大空间是 n ,所以归并排序的空间复杂度为 O(n).</p>
+<p><strong>归并排序的稳定性分析</strong></p>
+<p>归并排序的稳定性，要看我们的 merge 函数，我们代码中设置了 <code>arr[temp1] &lt;= arr[temp2]</code> ，当两个元素相同时，先放入 <code>arr[temp1]</code> 的值到大集合中，所以两个相同元素的相对位置没有发生改变，所以归并排序是稳定的排序算法。</p>
+<h2 id="快排-vs-归并排序"><a href="#快排-vs-归并排序" class="headerlink" title="快排 vs 归并排序"></a>快排 vs 归并排序</h2><p>左：归并，右：快排<br><img src="/images/Alg.21.%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-2023-05-11-1.png" alt="../_images/Alg.21.排序算法-2023-05-11-1.png"></p>
+<p>虽然归并排序和快速排序都用到了分治思想，但是归并排序是自下而上的，先处理子问题，然后再合并，将小集合合成大集合，最后实现排序。</p>
+<p>而<strong>快速排序</strong>是由上到下的，先分区，然后再处理子问题。</p>
+<p><strong>归并排序</strong>虽然是稳定的、时间复杂度为 O(nlogn) 的排序算法，但是它是非原地排序算法。我们前面讲过，归并之所以是非原地排序算法，主要原因是合并函数无法在原地执行。快速排序通过设计巧妙的原地分区函数，可以实现原地排序，解决了归并排序占用太多内存的问题</p>
+<h1 id="计数排序-Counting-Sort"><a href="#计数排序-Counting-Sort" class="headerlink" title="计数排序(Counting Sort)"></a>计数排序(Counting Sort)</h1><p>用待排序的数作为计数数组的下标，统计每个数字的次数（数组值）。然后依次输出此数组即可得到有序序列。复杂度 <code>Ο(n+k)</code> ，k 则代表整数的范围（首先 n 个元素映射入数组 On，然后对 k 大小的数组进行遍历输出结果）</p>
+<p>空间复杂度 <code>O(k)</code>，需要一个 size = k 的数组，k = 待排序元素的最大值</p>
+<h1 id="桶排序-Bucket-Sort"><a href="#桶排序-Bucket-Sort" class="headerlink" title="桶排序(Bucket Sort)"></a>桶排序(Bucket Sort)</h1><p>假如待排序列 K= {49、 38 、 35、 97 、 76、 73 、 27、 49 }。这些数据全部在1—100之间。因此我们定制10个桶，然后确定映射函数 f(k)=k/10。则第一个关键字49将定位到第4个桶中(49/10=4)。依次将所有关键字全部堆入桶中，并在每个非空的桶中进行快速排序后得到如图所示。只要顺序输出每个 B[i]中的数据就可以得到有序序列了。</p>
+<p><img src="/images/Alg.21.%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-2023-05-10-1.png" alt="../_images/Alg.21.排序算法-2023-05-10-1.png"></p>
+<p>桶排序分析：</p>
+<p>　　桶排序利用函数的映射关系，减少了几乎所有的比较工作。实际上，桶排序的f(k)值的计算，其作用就相当于快排中划分，希尔排序中的子序列，归并排序中的子问题，已经把大量数据分割成了基本有序的数据块(桶)。然后只需要对桶中的少量数据做先进的比较排序即可。　</p>
+<p>对N个关键字进行桶排序的时间复杂度分为两个部分：</p>
+<p>　　(1) 循环计算每个关键字的桶映射函数，这个时间复杂度是O(N)。</p>
+<p>　　(2) 利用先进的比较排序算法对每个桶内的所有数据进行排序，其时间复杂度为  ∑ O(Ni*logNi) 。其中Ni 为第i个桶的数据量。</p>
+<p>很显然，第(2)部分是桶排序性能好坏的决定因素。尽量减少桶内数据的数量是提高效率的唯一办法(因为基于比较排序的最好平均时间复杂度只能达到<code>O(N*logN)</code> 了)。因此，我们需要尽量做到下面两点：</p>
+<p>　　(1) 映射函数f(k)能够将N个数据平均的分配到M个桶中，这样每个桶就有[N/M]个数据量。</p>
+<p>　　(2) 尽量的增大桶的数量。极限情况下每个桶只能得到一个数据，这样就完全避开了桶内数据的“比较”排序操作。当然，做到这一点很不容易，数据量巨大的情况下，f(k)函数会使得桶集合的数量巨大，空间浪费严重。这就是一个时间代价和空间代价的权衡问题了。</p>
 <p>对于N个待排数据，M个桶，平均每个桶[N/M]个数据的桶排序平均时间复杂度为：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">O(N) + O(M*(N/M)*log(N/M)) = O(N + N*(logN-logM)) = O(N + N*logN - N*logM)</span><br></pre></td></tr></table></figure>
-<p>当N=M时，即极限情况下每个桶只有一个数据时。桶排序的最好效率能够达到<code>O(N)</code>。</p>
-<h1 id="基数排序-Radix-Sort"><a href="#基数排序-Radix-Sort" class="headerlink" title="基数排序(Radix Sort)"></a>基数排序(Radix Sort)</h1><p>基数排序是非比较排序算法,算法的时间复杂度是O(n)。<br>基数排序是一种借助多关键字排序思想对单逻辑关键字进行排序的方法。主要思路是，将所有待比较数值(注意,必须是正整数)统一为同样的数位长度，数位较短的数前面补零。然后，从最低位开始, 依次进行一次稳定排序，这样从最低位排序一直到最高位排序完成以后，数列就变成一个有序序列。</p>
-<p>比如这样一个数列排序: <code>342 ，58， 576， 356</code>, 以下描述演示了具体的排序过程</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">             O(N) + O(M*(N/M)*log(N/M)) = O(N+N*(logN-logM)) = O(N+N*logN-N*logM)</span><br></pre></td></tr></table></figure>
+<p>当N=M时，即极限情况下每个桶只有一个数据时。桶排序的最好效率能够达到O(N)。</p>
+<p><strong>总结：</strong> 桶排序的平均时间复杂度为线性的 <code>O(N+C)</code>，其中 <code>C=N*(logN-logM)</code>。如果相对于同样的N，桶数量M越大，其效率越高，最好的时间复杂度达到O(N)。 当然桶排序的空间复杂度 为O(N+M)，如果输入数据非常庞大，而桶的数量也非常多，则空间代价无疑是昂贵的。此外，桶排序是稳定的。</p>
+<hr>
+<p>除了用函数 f(k) 映射，还有一种范围分桶的方式：</p>
+<p><img src="/images/Alg.21.%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-Bucket2.png" alt="../_images/Alg.21.排序算法-Bucket2.png"></p>
+<h2 id="计数排序-vs-桶排序"><a href="#计数排序-vs-桶排序" class="headerlink" title="计数排序 vs 桶排序"></a>计数排序 vs 桶排序</h2><p>二者都是<strong>非比较排序</strong>，时间复杂度几乎能达到 O(n)，计数排序可以看做一种特殊的桶排序，其映射函数 <code>f(i) = i</code></p>
+<p>如果是<strong>基于比较的排序</strong>，最好时间复杂度 = O(nlogn)</p>
+<h1 id="基数排序-Radix-Sort"><a href="#基数排序-Radix-Sort" class="headerlink" title="基数排序(Radix Sort)"></a>基数排序(Radix Sort)</h1><p>比如这样一个数列排序: <code>342 ，58， 576， 356</code>, 以下描述演示了具体的排序过程</p>
 <p>第一次排序(个位):</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3 4 2</span><br><span class="line">5 7 6</span><br><span class="line">3 5 6</span><br><span class="line">0 5 8</span><br></pre></td></tr></table></figure>
 <p>第二次排序(十位):</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3 4 2</span><br><span class="line">3 5 6</span><br><span class="line">0 5 8</span><br><span class="line">5 7 6</span><br></pre></td></tr></table></figure>
 <p>第三次排序(百位):<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0 5 8</span><br><span class="line">3 4 2</span><br><span class="line">3 5 6</span><br><span class="line">5 7 6</span><br></pre></td></tr></table></figure></p>
 <p>结果: <code>58 342 356 576</code></p>
-<h1 id="外部排序"><a href="#外部排序" class="headerlink" title="外部排序"></a>外部排序</h1><blockquote>
-<p><a href="http://data.biancheng.net/view/76.html" target="_blank" rel="noopener">一眨眼的功夫了解什么是外部排序算法</a></p>
+<p>基数排序的时间复杂度是 O(k<em>n)，其中 n 是待排序元素个数，k 是数字的位数，它的复杂度理论上要低于 O(n</em>logn)，但是如果考虑到实际上 k 也和 n 存在关系，那就不是这样了。就以排序 n 个不同的整数为例，每一位都有 0-9 这 10 个不同的数字，所以 10 的 k 次方必须大于等于 n，所以 k≥log10n。所以按照这个角度来说，它的时间复杂度还是在 O(n*logn)。</p>
+<h1 id="外部排序-External-Sort"><a href="#外部排序-External-Sort" class="headerlink" title="外部排序(External Sort)"></a>外部排序(External Sort)</h1><p>上面介绍了很多排序算法，插入排序、归并排序等等，这些算法都属于内部排序算法，即排序的整个过程只是在内存中完成。而当待排序的文件比内存的可使用容量还大时，文件无法一次性放到内存中进行排序，需要借助于外部存储器（硬盘），这时就需要用到本章介绍的外部排序算法来解决。  </p>
+<p>外部排序算法由两个阶段构成：  </p>
+<ol>
+<li>按照内存大小，将大文件分成若干长度为 L的子文件（L应小于内存的可使用容量），然后将各个子文件依次读入内存，使用适当的内部排序算法对其进行排序（排好序的子文件统称为“归并段”或者“顺段”），将排好序的归并段重新写入外存，为下一个子文件排序腾出内存空间；</li>
+<li>对得到的顺段进行合并，直至得到整个有序的文件为止。</li>
+</ol>
+<p>例如，有一个含有 10000 个记录的文件，但是内存的可使用容量仅为 1000 个记录，毫无疑问需要使用外部排序算法，具体分为两步：  </p>
+<ul>
+<li>将整个文件其等分为 10 个临时文件（每个文件中含有 1000 个记录），然后将这 10 个文件依次进入内存，采取适当的内存排序算法对其中的记录进行排序，将得到的有序文件（初始归并段）移至外存。</li>
+<li>对得到的 10 个初始归并段进行如图的两两归并，直至得到一个完整的有序文件。</li>
+</ul>
+<p><img src="/images/Two-Way-Merge.png" alt="../_images/Two-Way-Merge.png"></p>
+<p>上面两两归并的方式成为 2 路归并，即每次都由 m 个归并段得到 ⌈m/2⌉ 个归并段</p>
+<blockquote>
+<p>[!notice]<br>注意：在实际归并的过程中，由于内存容量的限制不能满足同时将 2 个归并段全部完整的读入内存进行归并，只能不断地取 2 个归并段中的每一小部分进行归并，通过不断地读数据和向外存写数据，直至 2 个归并段完成归并变为 1 个大的有序文件。</p>
 </blockquote>
+<p>对于外部排序算法来说，影响整体排序效率的因素主要取决于<strong>读写外存的次数</strong>，即访问外存的次数越多，算法花费的时间就越多，效率就越低。而访问外存的次数同<strong>归并的次数</strong>成正比：</p>
+<p><img src="/images/Five-Way-Merge.png" alt="../_images/Five-Way-Merge.png"></p>
+<p>对比图 1 和图 2可以看出，增加归并路数 k 可以减少归并的次数，从而减少外存读写的次数。</p>
+<p>一般情况下对于具有 m 个初始归并段进行 k-路平衡归并时，归并的次数为 = $\log_k m$</p>
 <h1 id="排序算法的比较"><a href="#排序算法的比较" class="headerlink" title="排序算法的比较"></a>排序算法的比较</h1><table>
 <thead>
 <tr>
@@ -555,7 +581,15 @@
 <li>上面说的简单排序包括除希尔排序之外的所有冒泡排序、插入排序、简单选择排序。其中直接插入排序最简单，但序列基本有序或者n较小时，直接插入排序是好的方法，因此常将它和其他的排序方法，如快速排序、归并排序等结合在一起使用。</li>
 <li>从方法的稳定性来比较，基数排序是稳定的内排方法，所有时间复杂度为O(n^2)的简单排序也是稳定的。但是快速排序、堆排序、希尔排序等时间性能较好的排序方法都是不稳定的。稳定性需要根据具体需求选择</li>
 </ol>
-<h2 id="排序算法的稳定性"><a href="#排序算法的稳定性" class="headerlink" title="排序算法的稳定性"></a>排序算法的稳定性</h2><p><code>稳定排序</code>能保证排序前两个相等的数据其在序列中的先后位置顺序与排序后它们两个先后位置顺序相同。<br>基数排序就是这样，先按低位排序，逐次按高位排序，那么，低位相同的数据元素其先后位置顺序即使在高位也相同时是不会改变的</p>
+<hr>
+<p>在前面的介绍和分析中我们提到了冒泡排序、选择排序、插入排序三种简单的排序及其变种快速排序、堆排序、希尔排序三种比较高效的排序。后面我们又分析了<strong>基于分治递归思想</strong>的归并排序还有计数排序、桶排序、基数排序三种线性排序。<br>我们可以知道排序算法要么简单有效，要么是利用简单排序的特点加以改进，要么是以空间换取时间在特定情况下的高效排序。但是这些排序方法都不是固定不变的，需要结合具体的需求和场景来选择甚至组合使用。才能达到高效稳定的目的。没有最好的排序，只有最适合的排序。</p>
+<p>排序算法的各自的使用场景和适用场合：<br><img src="/images/Alg.21.%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-2023-05-10-2.png" alt="../_images/Alg.21.排序算法-2023-05-10-2.png"></p>
+<p>　　1. 从平均时间来看，快速排序是效率最高的，但快速排序在最坏情况下的时间性能不如堆排序和归并排序。而后者相比较的结果是，在 n 较大时归并排序使用时间较少，但使用辅助空间较多。</p>
+<p>　　2. 上面说的简单排序包括除希尔排序之外的所有冒泡排序、插入排序、简单选择排序。其中直接插入排序最简单，但序列基本有序或者n较小时，直接插入排序是好的方法，因此常将它和其他的排序方法，如快速排序、归并排序等结合在一起使用。</p>
+<p>　　3. 基数排序的时间复杂度也可以写成O(d*n)。因此它最使用于n值很大而关键字较小的的序列。若关键字也很大，而序列中大多数记录的最高关键字均不同，则亦可先按最高关键字不同，将序列分成若干小的子序列，而后进行直接插入排序。</p>
+<p>　　4. 从方法的稳定性来比较，基数排序是稳定的内排方法，所有时间复杂度为O(n^2)的简单排序也是稳定的。但是快速排序、堆排序、希尔排序等时间性能较好的排序方法都是不稳定的。稳定性需要根据具体需求选择。</p>
+<p>　　5. 上面的算法实现大多数是使用线性存储结构，像插入排序这种算法用链表实现更好，省去了移动元素的时间。具体的存储结构在具体的实现版本中也是不同的。</p>
+<p>➤ <strong>排序算法的稳定性：</strong><br><code>稳定排序</code>能保证排序前两个相等的数据其在序列中的先后位置顺序与排序后它们两个先后位置顺序相同。<br>基数排序就是这样，先按低位排序，逐次按高位排序，那么，低位相同的数据元素其先后位置顺序即使在高位也相同时是不会改变的</p>
 <hr>
 <ul>
 <li><a href="http://www.raychase.net/1814" target="_blank" rel="noopener">排序算法一览（上）：交换类、选择类和插入类排序</a></li>
@@ -600,8 +634,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/19.Algorithm/Alg.20a.IntroductionToAlgorithm/" rel="next" title="影响程序员发展的十类算法（zz）">
-                <i class="fa fa-chevron-left"></i> 影响程序员发展的十类算法（zz）
+              <a href="/About/About-Scriptorium/" rel="next" title="About-Scriptorium">
+                <i class="fa fa-chevron-left"></i> About-Scriptorium
               </a>
             
           </div>
@@ -610,8 +644,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/21.Operating-System/01.CPU_Cache/" rel="prev" title="01.CPU_Cache">
-                01.CPU_Cache <i class="fa fa-chevron-right"></i>
+              <a href="/19.Algorithm/Alg.LeetcodeEtudes/" rel="prev" title="Alg.LeetcodeEtudes">
+                Alg.LeetcodeEtudes <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -703,7 +737,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">457</span>
+                  <span class="site-state-item-count">503</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -714,7 +748,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -725,7 +759,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">403</span>
+                  <span class="site-state-item-count">422</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -793,7 +827,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#交换排序"><span class="nav-text">交换排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#冒泡排序-Bubble-Sort"><span class="nav-text">冒泡排序(Bubble Sort)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快排-Quick-Sort"><span class="nav-text">快排(Quick Sort)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#插入排序"><span class="nav-text">插入排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序-Insertion-Sort"><span class="nav-text">插入排序(Insertion Sort)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#希尔排序-Shell-Sort"><span class="nav-text">希尔排序(Shell Sort)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#选择排序"><span class="nav-text">选择排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#选择排序-Selection-Sort"><span class="nav-text">选择排序(Selection Sort)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆排序-Heap-Sort"><span class="nav-text">堆排序(Heap Sort)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归并排序-Merge-Sort"><span class="nav-text">归并排序(Merge Sort)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计数排序-Counting-Sort"><span class="nav-text">计数排序(Counting Sort)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#桶排序-Bucket-Sort"><span class="nav-text">桶排序(Bucket Sort)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基数排序-Radix-Sort"><span class="nav-text">基数排序(Radix Sort)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#外部排序"><span class="nav-text">外部排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排序算法的比较"><span class="nav-text">排序算法的比较</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#排序算法的稳定性"><span class="nav-text">排序算法的稳定性</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#交换排序"><span class="nav-text">交换排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#冒泡排序-Bubble-Sort"><span class="nav-text">冒泡排序(Bubble Sort)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快排-Quick-Sort"><span class="nav-text">快排(Quick Sort)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#插入排序"><span class="nav-text">插入排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序-Insertion-Sort"><span class="nav-text">插入排序(Insertion Sort)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#希尔排序-Shell-Sort"><span class="nav-text">希尔排序(Shell Sort)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#选择排序"><span class="nav-text">选择排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#选择排序-Selection-Sort"><span class="nav-text">选择排序(Selection Sort)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆排序-Heap-Sort"><span class="nav-text">堆排序(Heap Sort)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归并排序-Merge-Sort"><span class="nav-text">归并排序(Merge Sort)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#快排-vs-归并排序"><span class="nav-text">快排 vs 归并排序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计数排序-Counting-Sort"><span class="nav-text">计数排序(Counting Sort)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#桶排序-Bucket-Sort"><span class="nav-text">桶排序(Bucket Sort)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#计数排序-vs-桶排序"><span class="nav-text">计数排序 vs 桶排序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基数排序-Radix-Sort"><span class="nav-text">基数排序(Radix Sort)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#外部排序-External-Sort"><span class="nav-text">外部排序(External Sort)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排序算法的比较"><span class="nav-text">排序算法的比较</span></a></li></ol></div>
             
 
           </div>
@@ -813,7 +847,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2023</span>
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
