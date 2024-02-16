@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Hello, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="profile相关  bashrc是在系统启动后就会自动运行。 profile是在用户登录后才会运行。 进行设置后，可运用source bashrc命令更新bashrc，也可运用source profile命令更新profile。    /etc/profile: 中设定的变量(全局)的可以作用于任何用户 ~/.bashrc: 等中设定的变量(局部)只能继承/etc/profile中的变量 ~/.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux.05::系统配置">
+<meta property="og:url" content="https://beefyheisenberg.github.io/21.Operating-System/Linux.04.系统配置/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="profile相关  bashrc是在系统启动后就会自动运行。 profile是在用户登录后才会运行。 进行设置后，可运用source bashrc命令更新bashrc，也可运用source profile命令更新profile。    /etc/profile: 中设定的变量(全局)的可以作用于任何用户 ~/.bashrc: 等中设定的变量(局部)只能继承/etc/profile中的变量 ~/.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-02-16T19:05:48.792Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux.05::系统配置">
+<meta name="twitter:description" content="profile相关  bashrc是在系统启动后就会自动运行。 profile是在用户登录后才会运行。 进行设置后，可运用source bashrc命令更新bashrc，也可运用source profile命令更新profile。    /etc/profile: 中设定的变量(全局)的可以作用于任何用户 ~/.bashrc: 等中设定的变量(局部)只能继承/etc/profile中的变量 ~/.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.04.系统配置/"/>
+
+
+
+
+
+  <title>Linux.05::系统配置 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.04.系统配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux.05::系统配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,429
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="profile相关"><a href="#profile相关" class="headerlink" title="profile相关"></a>profile相关</h2><blockquote>
+<ol>
+<li>bashrc是在系统启动后就会自动运行。</li>
+<li>profile是在用户登录后才会运行。</li>
+<li>进行设置后，可运用source bashrc命令更新bashrc，也可运用source profile命令更新profile。</li>
+</ol>
+</blockquote>
+<ul>
+<li>/etc/profile: 中设定的变量(全局)的可以作用于任何用户</li>
+<li>~/.bashrc: 等中设定的变量(局部)只能继承/etc/profile中的变量</li>
+<li>~/.bash_profile: 每个用户都可使用该文件输入专用于自己使用的shell信息，当用户登录时，该文件仅仅执行一次!默认情况下,他设置一些环境变量,执行用户的.bashrc文件。</li>
+</ul>
+<h2 id="init系统"><a href="#init系统" class="headerlink" title="init系统"></a>init系统</h2><p>init进程是 Linux系统内核初始化最后一步启动的进程，也是系统的第一个进程，pid=1。</p>
+<p>运行级别（Runlevel）指的是Unix或者Linux等类Unix操作系统下不同的运行模式。运行级别通常分为7等，分别是从0到6，但如果必要的话也可以更多。<br>例如在大多数Linux操作系统下一共有如下7个典型的运行级别：</p>
+<blockquote>
+</blockquote>
+<p>0 停机，关机<br>1 单用户，无网络连接，不运行守护进程，不允许非超级用户登录<br>2 多用户，无网络连接，不运行守护进程<br>3 多用户，正常启动系统<br>4 用户自定义<br>5 多用户，带图形界面<br>6 重启</p>
+<p>除了模式 0,1,6外, 每种 Unix 和 Unix-like 系统对运行模式的定义不太一样。通常在 /etc/inittab 文件中定义了各种运行模式的工作范围。<br>当前绝大多数Linux发行版已经基于新的systemd，systemd一般不再使用/etc/inittab文件。</p>
+<h3 id="init-sysvinit-和-systemd"><a href="#init-sysvinit-和-systemd" class="headerlink" title="init,sysvinit 和 systemd"></a>init,sysvinit 和 systemd</h3><p>大多数 Linux 发行版的 init 系统是和 System V 相兼容的，被称为 sysvinit。这是人们最熟悉的 init 系统。<br>Ubuntu 采用 upstart 替代了传统的 sysvinit，<br>RHEL 采用 systemd替代 sysvinit。</p>
+<p>关于 System V，参考 [[APUE.00.从Unix到Linux]]</p>
+<h3 id="sysvinit"><a href="#sysvinit" class="headerlink" title="sysvinit"></a>sysvinit</h3><blockquote>
+<p>本节参考:</p>
+<ul>
+<li><a href="https://www.ibm.com/developerworks/cn/linux/1407_liuming_init1/" target="_blank" rel="noopener">浅析Linux初始化init系统, 第1部分: sysvinit</a> @ref</li>
+</ul>
+</blockquote>
+<h4 id="sysvinit-运行顺序"><a href="#sysvinit-运行顺序" class="headerlink" title="sysvinit 运行顺序"></a>sysvinit 运行顺序</h4><ol>
+<li>读取 /etc/inittab, 获取配置(系统的 runlevel 等)</li>
+<li>/etc/rc.d/rc.sysinit</li>
+<li>/etc/rc.d/rc 和 /etc/rc.d/rcX.d/ (X 代表运行级别 0-6)</li>
+<li>/etc/rc.d/rc.local</li>
+</ol>
+<h4 id="sysvinit-管理功能"><a href="#sysvinit-管理功能" class="headerlink" title="sysvinit 管理功能"></a>sysvinit 管理功能</h4><p>sysvinit 软件包包含了一系列的控制启动、运行和关闭所有其他程序的工具：</p>
+<ul>
+<li>init: 这个就是 sysvinit 本身的 init 进程实体，以 pid1 身份运行，是所有用户进程的父进程。最主要的作用是在启动过程中使用/etc/inittab 文件创建进程。</li>
+<li>halt: 停止系统</li>
+<li>poweroff: 等于 shutdown -h –p</li>
+<li>reboot: 等于 shutdown –r</li>
+<li>killall: 向除自己的会话(session)进程之外的其它进程发出信号，所以不能杀死当前使用的 shell。</li>
+<li>last: 回溯/var/log/wtmp 文件(或者-f 选项指定的文件)，显示自从这个文件建立以来，所有用户的登录情况。</li>
+<li>chkconfig:  RHEL 在 sysvinit 的基础上开发的命令行工具</li>
+<li>service: 同上</li>
+</ul>
+<p>使用 sysvinit 启动一个服务:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> /etc/init.d/apache2 start</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> service apache2 start</span></span><br></pre></td></tr></table></figure>
+<p>这种方法有两个缺点。</p>
+<ul>
+<li>一是启动时间长。init进程是串行启动，只有前一个进程启动完，才会启动下一个进程。</li>
+<li>二是启动脚本复杂。init进程只是执行启动脚本，不管其他事情。脚本需要自己处理各种情况，这往往使得脚本变得很长。</li>
+</ul>
+<p>Systemd 就是为了解决这些问题而诞生的。它的设计目标是为系统的启动和管理提供一套完整的解决方案。</p>
+<h3 id="systemd"><a href="#systemd" class="headerlink" title="systemd"></a>systemd</h3><p>Systemd 并不是一个命令，而是一组命令，涉及到系统管理的方方面面。</p>
+<ul>
+<li>systemctl是 Systemd 的主命令，用于管理系统。</li>
+<li>systemd-analyze命令用于查看启动耗时。</li>
+<li>…</li>
+</ul>
+<p>@ref:</p>
+<ul>
+<li><a href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html" target="_blank" rel="noopener">Systemd 入门教程：命令篇 - 阮一峰的网络日志</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/" target="_blank" rel="noopener">浅析Linux初始化init系统, 第3部分: Systemd</a></li>
+</ul>
+<h4 id="systemctl-命令"><a href="#systemctl-命令" class="headerlink" title="systemctl 命令"></a>systemctl 命令</h4><p><code>systemctl</code>是 Systemd 的主命令，用于管理系统。//区别 <code>sysctl</code> 命令，用于修改 Kernel参数</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 重启系统</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl reboot</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭系统，切断电源</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl poweroff</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> CPU停止工作</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl halt</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 暂停系统</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl <span class="built_in">suspend</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 让系统进入冬眠状态</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl hibernate</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 让系统进入交互式休眠状态</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl hybrid-sleep</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动进入救援状态（单用户状态）</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl rescue</span></span><br></pre></td></tr></table></figure>
+<p>Systemd 可以管理所有系统资源。不同的资源统称为 Unit（单位）。相关命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 列出正在运行的 Unit</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> systemctl list-units</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出所有Unit，包括没有找到配置文件的或者启动失败的</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> systemctl list-units --all</span></span><br></pre></td></tr></table></figure>
+<p>启动、重启、停止Unit：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 立即启动一个服务</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl start example.service</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 立即停止一个服务</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl stop example.service</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 重启一个服务</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl restart example.service</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 杀死一个服务的所有子进程</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl <span class="built_in">kill</span> example.service</span></span><br></pre></td></tr></table></figure>
+<p>Example: How to 新加一个 Service（Systemd Unit）:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/systemd/system/ngx-example.service</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Systemd 默认从目录/etc/systemd/system/读取配置文件。但是，里面存放的大部分文件都是符号链接，指向目录/usr/lib/systemd/system/，真正的配置文件存放在那个目录。<br><code>systemctl enable</code> 命令用于在上面两个目录之间，建立符号链接关系。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Description=proxy-nginx</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/data0/www/logs/nginx.pid</span><br><span class="line"></span><br><span class="line"># 启动进程时执行的命令</span><br><span class="line">ExecStart=/usr/local/sbin/proxy-nginx -c /usr/local/etc/proxy-nginx.conf</span><br><span class="line"></span><br><span class="line"># 重启服务时执行的命令</span><br><span class="line">ExecReload=/usr/local/sbin/proxy-nginx -c /usr/local/etc/proxy-nginx.conf -s reload</span><br><span class="line"></span><br><span class="line"># 停止服务时执行的命令</span><br><span class="line">ExecStop=/usr/local/sbin/proxy-nginx -c /usr/local/etc/proxy-nginx.conf -s stop</span><br><span class="line">PrivateTmp=True</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<h4 id="journald-日志系统"><a href="#journald-日志系统" class="headerlink" title="journald 日志系统"></a>journald 日志系统</h4><blockquote>
+<p>本节参考:</p>
+<ul>
+<li><a href="https://ieevee.com/tech/2017/08/24/journald.html" target="_blank" rel="noopener">centos7的日志系统：journald, rsyslog, logrotate</a></li>
+<li><a href="https://www.cnblogs.com/itxdm/p/Systemd_log_system_journalctl.html" target="_blank" rel="noopener">systemd 之 journalctl</a></li>
+</ul>
+</blockquote>
+<p>Systemd 使用 journald 做日志服务，使用 rsyslog 来持久化日志，使用 logrotate 来轮转日志文件。<br>Systemd日志收集流程: <code>systemd --&gt; systemd-journald --&gt; ram DB(/run/log/journal) --&gt; rsyslog -&gt; /var/log/messages</code>;<br>对比 init日志收集: <code>service daemon ---&gt; rsyslog ---&gt; /var/log</code></p>
+<h5 id="journalctl"><a href="#journalctl" class="headerlink" title="journalctl"></a>journalctl</h5><p>journald用二进制格式保存所有日志信息，用户使用 <code>journalctl</code> 命令来查看日志信息。<br>配置文件位置: <code>cat /etc/systemd/journald.conf</code></p>
+<p>使用<code>journalctl</code>命令查看日志:</p>
+<ul>
+<li>journalctl: 显示所有的日志信息，notice或warning以粗体显示，红色显示error级别以上的信息</li>
+<li>journalctl –dmesg: 查看 dmesg 信息。</li>
+<li>journalctl -k: 查看 kernel 日志。</li>
+<li>journalctl -f: 很像tailf命令</li>
+<li>journalctl –since=yesterday: 指定时间段</li>
+<li>journalctl -u docker.service:  指定服务，查看docker服务的 journal 日志。查看所有service列表使用命令 <code>systemctl list-units</code></li>
+<li>journalctl _PID=8088: 查看指定pid的</li>
+<li>journalctl _UID=33: 查看指定用户的</li>
+<li>journalctl /usr/bin/bash: 查看某个路径的脚本的日志</li>
+<li>journalctl –verify: 检查日志文件的一致性</li>
+</ul>
+<p>例如，docker daemon会配置为将所有容器的日志为存储到 journald。<br><code>/usr/bin/docker-current daemon --exec-opt native.cgroupdriver=systemd --selinux-enabled --log-driver=journald</code><br>所以，运行中 docker的日志，例如 k8s的 apiserver都会打到 journald日志里去（最终输出到 /var/log/messages）</p>
+<h5 id="rsyslog"><a href="#rsyslog" class="headerlink" title="rsyslog"></a>rsyslog</h5><p>rsyslog用来固化journald日志。rsyslog读取 ram DB(/run/log/journal)的数据，并根据优先级排列日志信息，将它们写入到 /var/log目录中永久保存。</p>
+<blockquote>
+<p>默认 journald配置<code>#ForwardToSyslog=no</code>，所以并未将日志转发给syslog。syslog自己去读取的 journald的日志文件(类似journalctl)。</p>
+</blockquote>
+<h5 id="logrotate"><a href="#logrotate" class="headerlink" title="logrotate"></a>logrotate</h5><p>rsyslog的日志存储于/var/log下，显然日志文件不能无限变大，否则磁盘空间会被耗尽。RHEL7使用logrotate来做日志文件轮转。<br>配置文件位置: <code>cat /etc/cron.daily/logrotate</code></p>
+<h2 id="用户组"><a href="#用户组" class="headerlink" title="用户组"></a>用户组</h2><p>几个常见的用户组: <a href="https://www.debian.org/doc/manuals/securing-debian-howto/ch12.en.html" target="_blank" rel="noopener">adm/daemon/bin</a> :</p>
+<ul>
+<li>root:超级用户, 就是管理员, 拥有所有权限</li>
+<li>bin:历史遗留用户</li>
+<li>daemon:守护进程, 非特权的, 需要对一些以磁盘文件有写权限的daemon以daemon.daemon(portmap,atd,etc)运行；不需要占有任何文件的daemon 以nobody.nogroup运行；比较复杂的, 涉及安全问题的daemon以特定的用户运行. daemon用户也方便本地安装的daemon运行.</li>
+<li>adm:adm组执行系统监控任务, 组成员可以读取/var/log下的多数文件, 可以使用xconsole. 历史上/var/log来自于/usr/adm, 后来叫/var/adm, 这也是组名称的由来.</li>
+<li>apache/_www: 用root启动httpd服务, apache的子进程还是用apache(或者_www用户)运行的, 可以通过修改<code>/etc/httpd/conf/httpd.conf</code>指定apache运行的用户组.</li>
+</ul>
+<h3 id="用户组常用命令"><a href="#用户组常用命令" class="headerlink" title="用户组常用命令"></a>用户组常用命令</h3><ul>
+<li><code>usermod -a -G daemon XYZ</code> 将用户XYZ加入一个组</li>
+<li><code>id</code> , <code>whoami</code> :</li>
+<li><code>who</code> :</li>
+<li><code>useradd</code>, <code>userdel</code></li>
+</ul>
+<h2 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h2><ul>
+<li>/etc/sudoers</li>
+<li>/etc/hosts.allow: 限制SSH的客户端IP, /etc/hosts.allow 的设定优先于 /etc/hosts.deny</li>
+<li>/etc/hosts.deny: 限制SSH的客户端IP</li>
+</ul>
+<h2 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h2><ul>
+<li><code>chmod 400 ~/.ssh/authorized_keys</code></li>
+</ul>
+<h2 id="网络相关"><a href="#网络相关" class="headerlink" title="网络相关"></a>网络相关</h2><ul>
+<li><p>/etc/resolv.conf: 这个文件是用于配置DNS服务器的, 扩展阅读: <a href="http://mydf.github.io/blog/ubuntu-dnsmasq/" target="_blank" rel="noopener">Ubuntu使用dnsmasq作本地DNS缓存</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nameserver 8.8.8.8</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>/etc/hosts: 设置主机名和IP地址绑定</p>
+</li>
+<li>/etc/hostname: 主机名配置</li>
+<li>/etc/sysconfig/network: 主机名和网关<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">NETWORK=yes    #网络是否被配置</span><br><span class="line">RORWARD_IPV4=yes    #是否开启IP转发功能</span><br><span class="line">HOSTNAME= localhost.localdomain   #表示服务器的主机名</span><br><span class="line">GAREWAY=192.168.0.1    #表示网络网关的IP地址</span><br><span class="line">GATEWAYDEV=eth0    #网关的设备名，即选择使用哪个网卡</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h2><p><code>* * * * * * cmd</code>, 分别表示每<code>分/时/每月第几日/月/周几(0~6)</code></p>
+<ul>
+<li>每5分钟: <code>*/5 * * * *</code></li>
+<li>每小时: <code>0 * * * *</code></li>
+<li>每天早上6点10分 <code>10 6 * * *</code></li>
+<li>晚上11点到早上8点之间每两个小时, 和早上8点: <code>0 23-7/2, 8 * * *</code></li>
+</ul>
+<blockquote>
+<p>每个用户的crontab文件在 /var/spool/cron/</p>
+</blockquote>
+<h1 id="终端Terminal"><a href="#终端Terminal" class="headerlink" title="终端Terminal"></a>终端Terminal</h1><ul>
+<li>Ctrl+r搜索, 输入, 按Ctrl+r继续搜索</li>
+<li>Ctrl+a / Ctrl+e : 移动光标开头/末尾m</li>
+</ul>
+<h2 id="tty-pst-pty"><a href="#tty-pst-pty" class="headerlink" title="tty/pst/pty"></a>tty/pst/pty</h2><ul>
+<li>参考 <a href="https://unix.stackexchange.com/questions/21280/difference-between-pts-and-tty" target="_blank" rel="noopener">linux - Difference between pts and tty - Unix &amp; Linux Stack Exchange</a></li>
+</ul>
+<h1 id="性能-amp-并发相关"><a href="#性能-amp-并发相关" class="headerlink" title="性能 &amp; 并发相关"></a>性能 &amp; 并发相关</h1><p>@link:: [[../31.Backend/SystemDesign-01-C100K]]</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/21.Operating-System/Linux.03.命令行-Performance/" rel="next" title="Linux.03::性能分析命令行 | Performance">
+                <i class="fa fa-chevron-left"></i> Linux.03::性能分析命令行 | Performance
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/21.Operating-System/Linux.04a.Sysctl/" rel="prev" title="Linux.04::Sysctl命令速查">
+                Linux.04::Sysctl命令速查 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">487</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">416</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#profile相关"><span class="nav-text">profile相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#init系统"><span class="nav-text">init系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#init-sysvinit-和-systemd"><span class="nav-text">init,sysvinit 和 systemd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sysvinit"><span class="nav-text">sysvinit</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sysvinit-运行顺序"><span class="nav-text">sysvinit 运行顺序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sysvinit-管理功能"><span class="nav-text">sysvinit 管理功能</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#systemd"><span class="nav-text">systemd</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#systemctl-命令"><span class="nav-text">systemctl 命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#journald-日志系统"><span class="nav-text">journald 日志系统</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#journalctl"><span class="nav-text">journalctl</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rsyslog"><span class="nav-text">rsyslog</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#logrotate"><span class="nav-text">logrotate</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户组"><span class="nav-text">用户组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户组常用命令"><span class="nav-text">用户组常用命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#权限相关"><span class="nav-text">权限相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件权限"><span class="nav-text">文件权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络相关"><span class="nav-text">网络相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#crontab"><span class="nav-text">crontab</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#终端Terminal"><span class="nav-text">终端Terminal</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tty-pst-pty"><span class="nav-text">tty/pst/pty</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#性能-amp-并发相关"><span class="nav-text">性能 &amp; 并发相关</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/21.Operating-System/Linux.04.系统配置/';
+          this.page.identifier = '21.Operating-System/Linux.04.系统配置/';
+          this.page.title = 'Linux.05::系统配置';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

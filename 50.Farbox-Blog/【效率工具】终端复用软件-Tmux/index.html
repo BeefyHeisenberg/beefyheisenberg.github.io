@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Linux,tmux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="（一）What‘s tmux？”tmux是一个优秀的终端复用软件，类似GNU Screen，但来自于OpenBSD，采用BSD授权。使用它最直观的好处就是，通过一个终端登录远程主机并运行tmux后，在其中可以开启多个控制台而无需再”浪费”多余的终端来连接这台远程主机；当然其功能远不止于此。” （二）一些概念tmux使用C/S模型构建，主要包括以下单元模块：server服务：输入tmux命令时就开启">
+<meta name="keywords" content="Linux,tmux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="终端复用软件 - tmux">
+<meta property="og:url" content="https://beefyheisenberg.github.io/50.Farbox-Blog/【效率工具】终端复用软件-Tmux/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="（一）What‘s tmux？”tmux是一个优秀的终端复用软件，类似GNU Screen，但来自于OpenBSD，采用BSD授权。使用它最直观的好处就是，通过一个终端登录远程主机并运行tmux后，在其中可以开启多个控制台而无需再”浪费”多余的终端来连接这台远程主机；当然其功能远不止于此。” （二）一些概念tmux使用C/S模型构建，主要包括以下单元模块：server服务：输入tmux命令时就开启">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-02-16T19:05:49.443Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="终端复用软件 - tmux">
+<meta name="twitter:description" content="（一）What‘s tmux？”tmux是一个优秀的终端复用软件，类似GNU Screen，但来自于OpenBSD，采用BSD授权。使用它最直观的好处就是，通过一个终端登录远程主机并运行tmux后，在其中可以开启多个控制台而无需再”浪费”多余的终端来连接这台远程主机；当然其功能远不止于此。” （二）一些概念tmux使用C/S模型构建，主要包括以下单元模块：server服务：输入tmux命令时就开启">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【效率工具】终端复用软件-Tmux/"/>
+
+
+
+
+
+  <title>终端复用软件 - tmux | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【效率工具】终端复用软件-Tmux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">终端复用软件 - tmux</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,522
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="（一）What‘s-tmux？"><a href="#（一）What‘s-tmux？" class="headerlink" title="（一）What‘s tmux？"></a>（一）What‘s tmux？</h2><p>”tmux是一个优秀的终端复用软件，类似GNU Screen，但来自于OpenBSD，采用BSD授权。使用它最直观的好处就是，通过一个终端登录远程主机并运行tmux后，在其中可以开启多个控制台而无需再”浪费”多余的终端来连接这台远程主机；当然其功能远不止于此。”</p>
+<h2 id="（二）一些概念"><a href="#（二）一些概念" class="headerlink" title="（二）一些概念"></a>（二）一些概念</h2><p>tmux使用C/S模型构建，主要包括以下单元模块：<br>server服务：输入tmux命令时就开启了一个服务器。<br>session会话： 一个服务器可以包含多个会话。<br>window窗口：一个会话可以包含多个窗口。<br>pane面板：一个窗口可以包含多个面板。</p>
+<h2 id="（三）命令-amp-快捷键"><a href="#（三）命令-amp-快捷键" class="headerlink" title="（三）命令&amp;快捷键"></a>（三）命令&amp;快捷键</h2><h3 id="3-1命令参数："><a href="#3-1命令参数：" class="headerlink" title="3.1命令参数："></a>3.1命令参数：</h3><p><code>tmux</code> ： 打开tmux，退出是<code>Ctrl+D</code> ；<br><code>tmux new-session -s &quot;sessionX&quot; -d</code>  ： 开启一个名字为”sessionX”会话，-d参数是将此会话放入后台不显示；<br><code>tmux new-window -n &quot;Win1&quot; -t sessionX &#39;top&#39;</code>   ： -t是指定名为”sessionX”的会话，在这个会话上开启一个窗口并将此窗口命名为”Win1”，并在此窗口执行top命令；<br><code>tmux split-window -h</code>  ： 开启一个竖屏<br><code>tmux split-window -v &quot;top&quot;</code> ： 开启一个横屏,并执行top命令<br><code>tmux attach -t sessionX</code>    ： 重新attach上会话”sessionX”</p>
+<h3 id="3-2快捷键："><a href="#3-2快捷键：" class="headerlink" title="3.2快捷键："></a>3.2快捷键：</h3><p>以下列出的所有命令都需要先按下<code>Ctrl+b</code>，如果你不习惯这个绑定，可以在~/.tmux.conf文件中修改，下面会提及。<br>Now， 打开终端输入<code>tmux</code> ：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">基本快捷键：</span><br><span class="line">---------</span><br><span class="line">?	列出所有快捷键；按q返回</span><br><span class="line">d	脱离当前会话,可暂时返回Shell界面，输入tmux attach能够重新进入之前会话</span><br><span class="line">s	选择并切换会话；在同时开启了多个会话时使用</span><br><span class="line">D	选择要脱离的会话；在同时开启了多个会话时使用</span><br><span class="line">:	进入tmux命令行模式；此时可输入支持的命令，例如kill-server所有tmux会话</span><br><span class="line">[	复制模式，光标移动到复制内容位置，空格键开始，方向键选择复制，回车确认，q/Esc退出</span><br><span class="line">]	进入粘贴模式，粘贴之前复制的内容，按q/Esc退出</span><br><span class="line">~	列出提示信息缓存；其中包含了之前tmux返回的各种提示信息</span><br><span class="line">t	显示当前的时间</span><br><span class="line">Ctrl+z	挂起当前会话</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">窗口操作:</span><br><span class="line">--------</span><br><span class="line">c	创建新窗口</span><br><span class="line">&amp;	关闭当前窗口</span><br><span class="line">数字键	切换到指定窗口</span><br><span class="line">p	切换至上一窗口</span><br><span class="line">n	切换至下一窗口</span><br><span class="line">l	前后窗口间互相切换</span><br><span class="line">w	通过窗口列表切换窗口</span><br><span class="line">,	重命名当前窗口，便于识别</span><br><span class="line">.	修改当前窗口编号，相当于重新排序</span><br><span class="line">f	在所有窗口中查找关键词，便于窗口多了切换</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">面板操作:</span><br><span class="line">-------</span><br><span class="line">”	将当前面板上下分屏</span><br><span class="line">%	将当前面板左右分屏</span><br><span class="line">x	关闭当前分屏</span><br><span class="line">方向键	移动光标选择对应面板</span><br><span class="line">空格键	可以在默认面板布局中切换，试试就知道了</span><br><span class="line">!	将当前面板置于新窗口,即新建一个窗口,其中仅包含当前面板</span><br><span class="line">Ctrl+方向键	以1个单元格为单位移动边缘以调整当前面板大小</span><br><span class="line">Alt+方向键	以5个单元格为单位移动边缘以调整当前面板大小</span><br><span class="line">q	显示面板编号</span><br><span class="line">o	选择当前窗口中下一个面板</span><br><span class="line">&#123;	向前置换当前面板</span><br><span class="line">&#125;	向后置换当前面板</span><br><span class="line">Alt+o	逆时针旋转当前窗口的面板</span><br><span class="line">Ctrl+o	顺时针旋转当前窗口的面板</span><br><span class="line">z	tmux 1.8新特性，最大化当前所在面板</span><br></pre></td></tr></table></figure></p>
+<h3 id="粘贴-amp-复制："><a href="#粘贴-amp-复制：" class="headerlink" title="粘贴&amp;复制："></a>粘贴&amp;复制：</h3><p>请参考：<a href="http://jasonwryan.com/blog/2011/06/07/copy-and-paste-in-tmux/" target="_blank" rel="noopener">Copy &amp; Paste in tmux</a></p>
+<h3 id="滚屏："><a href="#滚屏：" class="headerlink" title="滚屏："></a>滚屏：</h3><p><code>Ctrl+b，pageUp/pageDown</code>进入翻页模式，此模式下可以用”上下翻页键”or”上下方向键”翻页，<code>q</code>是退出翻页模式。</p>
+<h2 id="（四）配置文件"><a href="#（四）配置文件" class="headerlink" title="（四）配置文件"></a>（四）配置文件</h2><p>用户配置文件在~/.tmux.conf ，下面是一个示例：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#此类配置可以在命令行模式中输入show-options -g查询</span><br><span class="line">set-option -g base-index 1                        #窗口的初始序号；默认为0，这里设置为1</span><br><span class="line">set-option -g display-time 5000                   #提示信息的持续时间；设置足够的时间以避免看不清提示，单位为毫秒</span><br><span class="line">set-option -g repeat-time 1000                    #控制台激活后的持续时间；设置合适的时间以避免每次操作都要先激活控制台，单位为毫秒</span><br><span class="line">set-option -g status-keys vi                      #操作状态栏时的默认键盘布局；可以设置为vi或emacs</span><br><span class="line">set-option -g status-right &quot;#(date +%H:%M&apos; &apos;)&quot;    #状态栏右方的内容；这里的设置将得到类似23:59的显示</span><br><span class="line">set-option -g status-right-length 10              #状态栏右方的内容长度；建议把更多的空间留给状态栏左方（用于列出当前窗口）</span><br><span class="line">set-option -g status-utf8 on                      开启状态栏的UTF-8支持</span><br><span class="line"></span><br><span class="line">#此类设置可以在命令行模式中输入show-window-options -g查询</span><br><span class="line">set-window-option -g mode-keys vi    #复制模式中的默认键盘布局；可以设置为vi或emacs</span><br><span class="line">set-window-option -g utf8 on         #开启窗口的UTF-8支持</span><br><span class="line"></span><br><span class="line">#将激活控制台的快捷键由Ctrl+b修改为Ctrl+a</span><br><span class="line">set-option -g prefix C-a</span><br><span class="line">unbind-key C-b</span><br><span class="line">bind-key C-a send-prefix</span><br><span class="line"></span><br><span class="line">#添加自定义快捷键</span><br><span class="line">bind-key z kill-session                     #按z结束当前会话；相当于进入命令行模式后输入kill-session</span><br><span class="line">bind-key h select-layout even-horizontal    #按h将当前面板布局切换为even-horizontal；相当于进入命令行模式后输入select-layout even-horizontal</span><br><span class="line">bind-key v select-layout even-vertical      #按v将当前面板布局切换为even-vertical；相当于进入命令行模式后输入select-layout even-vertical</span><br></pre></td></tr></table></figure></p>
+<h2 id="（五）远程使用tmux"><a href="#（五）远程使用tmux" class="headerlink" title="（五）远程使用tmux"></a>（五）远程使用tmux</h2><p>例如我已经在树莓派服务器上打开了一个tmux session，然后detach session；当再次SSH登录树莓派的时候可以用下面的命令重新attach上去，以便恢复上次的工作状态。：<br><code>ssh pi@192.168.1.107 -t &#39;tmux list-session; if [[ $? -eq  0 ]]; then tmux attach; else tmux;fi&#39;</code></p>
+<p>参考： <a href="https://wiki.freebsdchina.org/software/t/tmux" target="_blank" rel="noopener">FreeBSDChina Wiki</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/tmux/" rel="tag"># tmux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/50.Farbox-Blog/【版本控制】Git的SSH Key配置/" rel="next" title="Git 的 SSH KEY 配置">
+                <i class="fa fa-chevron-left"></i> Git 的 SSH KEY 配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/50.Farbox-Blog/【C语言】C语言的编译与链接/" rel="prev" title="C语言的编译与链接 - gcc/ld/ar等工具的介绍">
+                C语言的编译与链接 - gcc/ld/ar等工具的介绍 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">487</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">416</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#（一）What‘s-tmux？"><span class="nav-text">（一）What‘s tmux？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（二）一些概念"><span class="nav-text">（二）一些概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（三）命令-amp-快捷键"><span class="nav-text">（三）命令&amp;快捷键</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1命令参数："><span class="nav-text">3.1命令参数：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2快捷键："><span class="nav-text">3.2快捷键：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#粘贴-amp-复制："><span class="nav-text">粘贴&amp;复制：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#滚屏："><span class="nav-text">滚屏：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（四）配置文件"><span class="nav-text">（四）配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（五）远程使用tmux"><span class="nav-text">（五）远程使用tmux</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/50.Farbox-Blog/【效率工具】终端复用软件-Tmux/';
+          this.page.identifier = '50.Farbox-Blog/【效率工具】终端复用软件-Tmux/';
+          this.page.title = '终端复用软件 - tmux';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

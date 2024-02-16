@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next muse" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="xaHWbGrH27PtIRsHQwRbAzWeQmtdbVP8Sj8IoFGMFhA" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=5.1.4" color="#222">
+
+
+  <link rel="manifest" href="/site.webmanifest">
+
+
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="SSH,Git,Github," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="扔掉笔记 ᐛ" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="生成SSH Key 生成SSH KEY: ssh-keygen -t rsa -C &amp;quot;your_email@example.com&amp;quot; , 然后会提示输入公钥的名字，如果你需要多个SSH-KEY（比如有多个github帐号）就需要在命名的时候区分一下，这样在/用户HOME目录/.ssh/文件夹下生成两个文件：xxx_rsa.pub和 xxx_rsa，分别是你的公钥和私钥。 生成S">
+<meta name="keywords" content="SSH,Git,Github">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 的 SSH KEY 配置">
+<meta property="og:url" content="https://beefyheisenberg.github.io/50.Farbox-Blog/【版本控制】Git的SSH Key配置/index.html">
+<meta property="og:site_name" content="扔掉笔记 ᐛ">
+<meta property="og:description" content="生成SSH Key 生成SSH KEY: ssh-keygen -t rsa -C &amp;quot;your_email@example.com&amp;quot; , 然后会提示输入公钥的名字，如果你需要多个SSH-KEY（比如有多个github帐号）就需要在命名的时候区分一下，这样在/用户HOME目录/.ssh/文件夹下生成两个文件：xxx_rsa.pub和 xxx_rsa，分别是你的公钥和私钥。 生成S">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-02-16T19:05:49.360Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git 的 SSH KEY 配置">
+<meta name="twitter:description" content="生成SSH Key 生成SSH KEY: ssh-keygen -t rsa -C &amp;quot;your_email@example.com&amp;quot; , 然后会提示输入公钥的名字，如果你需要多个SSH-KEY（比如有多个github帐号）就需要在命名的时候区分一下，这样在/用户HOME目录/.ssh/文件夹下生成两个文件：xxx_rsa.pub和 xxx_rsa，分别是你的公钥和私钥。 生成S">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【版本控制】Git的SSH Key配置/"/>
+
+
+
+
+
+  <title>Git 的 SSH KEY 配置 | 扔掉笔记 ᐛ</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">扔掉笔记 ᐛ</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dropNotes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/50.Farbox-Blog/【版本控制】Git的SSH Key配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Git 的 SSH KEY 配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/50-FarBox博客备份/" itemprop="url" rel="index">
+                    <span itemprop="name">50.FarBox博客备份</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  799
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="生成SSH-Key"><a href="#生成SSH-Key" class="headerlink" title="生成SSH Key"></a>生成SSH Key</h3><ul>
+<li>生成SSH KEY: <code>ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</code> , 然后会提示输入公钥的名字，如果你需要多个SSH-KEY（比如有多个github帐号）就需要在命名的时候区分一下，这样在/用户HOME目录/.ssh/文件夹下生成两个文件：xxx_rsa.pub和 xxx_rsa，分别是你的公钥和私钥。</li>
+<li>生成SSH KEY的时候还要求输入私钥密码 “Enter passphrase (empty for no passphrase):”， 请记住私钥的密码，后面会用到。</li>
+<li>将SSH 私钥增加到ssh-agent: <code>ssh-add ~/.ssh/id_rsa</code>， 这里会提示输入一次私钥的密码;</li>
+<li>查看已经add的SSH KEY： <code>ssh-add -l</code>；</li>
+<li>如果提示 ssh agent没启动: eval <code>ssh-agent -s</code></li>
+<li>非必要步骤: <del>安装xclip(终端到剪切板的工具)</del>: <code>sudo yum install xclip</code> , <del>将公钥内容拷贝到剪切板</del>: <code>xclip -sel clip &lt; ~/.ssh/id_rsa.pub</code></li>
+<li>浏览器登录自己的github页面，进入”Account Settings”，再点击左边的”SSH Key”可以看到自己上传过的SSH公钥列表。再点击”Add SSH Key”新增一个公钥，把公钥(~/.ssh/id_rsa.pub) 文件内容粘贴过来。</li>
+</ul>
+<h3 id="测试SSH-Key登录"><a href="#测试SSH-Key登录" class="headerlink" title="测试SSH Key登录"></a>测试SSH Key登录</h3><ul>
+<li>打开终端, 测试: <code>ssh -T git@github.com</code>;<br>你可能会看到下面的错误信息:</li>
+</ul>
+<blockquote>
+<p>Agent admitted failure to sign using the key.<br>debug1: No more authentication methods to try.<br>Permission denied (publickey).</p>
+</blockquote>
+<p>上面的错误在某些Linux发行版（比如我的Fedora 17）是一个已知的错误， 可以忽略。<br>然后会看到打印出公钥的指纹，请确认此指纹和你公钥的一致，然后输入”yes”确认。</p>
+<blockquote>
+<p>“ Hi your_name! You’ve successfully authenticated, but GitHub does not provide shell access.”</p>
+</blockquote>
+<p>如果your_name正确显示你的ID，则说明成功设置了SSH公钥.</p>
+<h3 id="一台机器上管理多个SSH-Key"><a href="#一台机器上管理多个SSH-Key" class="headerlink" title="一台机器上管理多个SSH Key"></a>一台机器上管理多个SSH Key</h3><p>如果你在一台机器使用两个github账号（比如私人账号和工作账号）, 两个帐号用不同的SSH KEY，还需要编辑一下配置文件~/.ssh/config:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Host code.company.com</span><br><span class="line">    HostName code.company.com</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/key_for_company</span><br><span class="line"></span><br><span class="line">Host github.com</span><br><span class="line">    HostName github.com</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/key_for_github</span><br></pre></td></tr></table></figure>
+<p>解释此配置文件：</p>
+<ul>
+<li>HostName：比如我工作的git仓储地址是<a href="mailto:`git@code.company.com" target="_blank" rel="noopener">`git@code.company.com</a>:username/repo_name.git<code>, 那么我的HostName就要填</code>code.company.com`;</li>
+<li>IdentityFile： 所使用的公钥文件;</li>
+</ul>
+<p>配置完毕，用下面的命令测试一下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -vT git@github.com</span><br><span class="line">Hi xyz! You&apos;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+<p>注： @符号后面的”github.com”就是在~/.ssh/config文件中指定的<code>Host</code>项</p>
+<h4 id="1-为已经clone下来的repos指定ssh-key："><a href="#1-为已经clone下来的repos指定ssh-key：" class="headerlink" title="(1) 为已经clone下来的repos指定ssh-key："></a>(1) 为已经clone下来的repos指定ssh-key：</h4><p>在已经检出的repos目录下执行:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git config user.name your_name &amp;&amp; git config user.email your_email</span><br></pre></td></tr></table></figure>
+<p>上面<code>git config</code>只对该项目生效</p>
+<p>修改.git/config并找到<code>[remote &quot;origin&quot;]</code>,修改<code>url</code>的值为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">    url = git@github.com:&lt;user_name&gt;/&lt;repos_name&gt;.git</span><br></pre></td></tr></table></figure>
+<h4 id="2-使用指定ssh-key-重新clone一个reop"><a href="#2-使用指定ssh-key-重新clone一个reop" class="headerlink" title="(2) 使用指定ssh-key 重新clone一个reop:"></a>(2) 使用指定ssh-key 重新clone一个reop:</h4><ol>
+<li>使用指定账号clone:<br>执行<code>git clone git@github.com:user_name/repos_name.git</code></li>
+</ol>
+<blockquote>
+<p>git clone <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:user_name/repos_name.git<br>Cloning into ‘repos_name’…</p>
+</blockquote>
+<ol start="2">
+<li>然后还需要config一下user.name和user.email, 进入本地git仓库目录执行:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git config user.name your_name &amp;&amp; git config user.email your_email</span><br></pre></td></tr></table></figure>
+<p>以后在此repos下执行<code>git push origin master</code>就是使用指定的用户push.</p>
+<hr>
+<h3 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h3><p><a href="http://code.tutsplus.com/tutorials/quick-tip-how-to-work-with-github-and-multiple-accounts--net-22574" target="_blank" rel="noopener">《Quick Tip: How to Work with GitHub and Multiple Accounts》</a><br><a href="https://gist.github.com/jexchan/2351996" target="_blank" rel="noopener">《Multiple SSH Keys settings for different github account》</a><br><a href="http://www.cnblogs.com/mackxu/p/ssh-keygen.html" target="_blank" rel="noopener">《多个github帐号的SSH key切换》</a><br><a href="https://help.github.com/articles/generating-ssh-keys" target="_blank" rel="noopener">《GitHub: Generating SSH Keys》</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SSH/" rel="tag"># SSH</a>
+          
+            <a href="/tags/Git/" rel="tag"># Git</a>
+          
+            <a href="/tags/Github/" rel="tag"># Github</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/50.Farbox-Blog/【效率工具】SSH协议简介/" rel="next" title="SSH 协议简介">
+                <i class="fa fa-chevron-left"></i> SSH 协议简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/50.Farbox-Blog/【效率工具】终端复用软件-Tmux/" rel="prev" title="终端复用软件 - tmux">
+                终端复用软件 - tmux <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/hexo_avatar.png"
+                alt="beefyheisenberg" />
+            
+              <p class="site-author-name" itemprop="name">beefyheisenberg</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">487</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">416</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/yourname" target="_blank" title="Facebook">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/_kongyang/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成SSH-Key"><span class="nav-text">生成SSH Key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试SSH-Key登录"><span class="nav-text">测试SSH Key登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一台机器上管理多个SSH-Key"><span class="nav-text">一台机器上管理多个SSH Key</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-为已经clone下来的repos指定ssh-key："><span class="nav-text">(1) 为已经clone下来的repos指定ssh-key：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-使用指定ssh-key-重新clone一个reop"><span class="nav-text">(2) 使用指定ssh-key 重新clone一个reop:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考："><span class="nav-text">参考：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">beefyheisenberg</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://beefyheisenberg.github.io/50.Farbox-Blog/【版本控制】Git的SSH Key配置/';
+          this.page.identifier = '50.Farbox-Blog/【版本控制】Git的SSH Key配置/';
+          this.page.title = 'Git 的 SSH KEY 配置';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://dropnotes-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>

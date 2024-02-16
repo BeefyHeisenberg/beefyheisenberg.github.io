@@ -128,7 +128,7 @@
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Advanced-Java.Object.MarkWord64.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/Java-%E5%B9%B6%E5%8F%91.03.Synchronized-2023-05-28-1.png">
 <meta property="og:image" content="https://beefyheisenberg.github.io/images/java/java_monitor.gif">
-<meta property="og:updated_time" content="2024-02-09T13:57:11.836Z">
+<meta property="og:updated_time" content="2024-02-16T19:05:48.518Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java-并发.03.Synchronized">
 <meta name="twitter:description" content="Synchronized使用(1) synchronized 方法: public class Bank &amp;#123;  public synchronized void transfer() &amp;#123;    while(!resource_is_available) // 进入代码块,此时持有对象锁      wait(); // 放弃锁，并在对象上等待      // 重新获得锁, doS">
@@ -481,7 +481,7 @@
 <li>notifyAll：最后 wait 的线程，先被唤醒；</li>
 <li>wait 可以响应 InterruptedException 异常</li>
 </ul>
-<p>@ref： <a href="http://lovestblog.cn/blog/2016/03/27/object-wait-notify/" target="_blank" rel="noopener">http://lovestblog.cn/blog/2016/03/27/object-wait-notify/</a></p>
+<p>@ref::  <a href="http://lovestblog.cn/blog/2016/03/27/object-wait-notify/" target="_blank" rel="noopener">http://lovestblog.cn/blog/2016/03/27/object-wait-notify/</a></p>
 <h1 id="对象锁的优化-消除-amp-粗化"><a href="#对象锁的优化-消除-amp-粗化" class="headerlink" title="对象锁的优化-消除&amp;粗化"></a>对象锁的优化-消除&amp;粗化</h1><p><strong>锁粗化</strong>：如果在代码中，连续对同一个对象加锁，JIT（不确定）会把这块代码加入到一个同步块中；</p>
 <p><strong>锁消除</strong>：是虚拟机另外一种锁的优化，这种优化更彻底，Java 虚拟机在 JIT 编译时(可以简单理解为当某段代码即将第一次被执行时进行编译，又称即时编译)，通过对运行上下文的扫描，去除不可能存在共享资源竞争的锁，通过这种方式消除没有必要的锁，可以节省毫无意义的请求锁时间，如下 StringBuffer 的 append 是一个同步方法，但是在 add 方法中的 StringBuffer 属于一个局部变量，并且不会被其他线程所使用，因此 StringBuffer 不可能存在共享资源竞争的情景，JVM 会自动将其锁消除。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 参考自 https://blog.csdn.net/javazejian/article/details/72828483</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringBufferRemoveSync</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(String str1, String str2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//StringBuffer是线程安全,由于sb只会在append方法中使用,不可能被其他线程引用</span></span><br><span class="line">        <span class="comment">//因此sb属于不可能共享的资源,JVM会自动消除内部的锁</span></span><br><span class="line">        StringBuffer sb = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">        sb.append(str1).append(str2);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        StringBufferRemoveSync rmsync = <span class="keyword">new</span> StringBufferRemoveSync();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000000</span>; i++) &#123;</span><br><span class="line">            rmsync.add(<span class="string">"abc"</span>, <span class="string">"123"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -518,8 +518,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/12.Java/Java-并发.01.线程API/" rel="next" title="Java-并发.01.线程基础 & API">
-                <i class="fa fa-chevron-left"></i> Java-并发.01.线程基础 & API
+              <a href="/12.Java/Java-并发.02.ThreadLocal/" rel="next" title="Java-并发.02.ThreadLocal">
+                <i class="fa fa-chevron-left"></i> Java-并发.02.ThreadLocal
               </a>
             
           </div>
@@ -528,8 +528,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/12.Java/Java-并发.05b.JUC-AQS/" rel="prev" title="Java-并发.05b.JUC-AQS（）">
-                Java-并发.05b.JUC-AQS（） <i class="fa fa-chevron-right"></i>
+              <a href="/12.Java/Java-并发.04.Volatile/" rel="prev" title="Java-并发.04.Volatile">
+                Java-并发.04.Volatile <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -643,7 +643,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">427</span>
+                  <span class="site-state-item-count">416</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
