@@ -278,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/63.Culture-and-Arts/Arch.建筑（欧洲）/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-04a-锁概念/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -297,7 +297,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/63.Culture-and-Arts/Arch.建筑（欧洲）/" itemprop="url">Arch-建筑（欧洲）</a></h1>
+                <a class="post-title-link" href="/32.Database/MySQL-04a-锁概念/" itemprop="url">MySQL-04a-锁概念</a></h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/63-Culture-and-Arts/" itemprop="url" rel="index">
-                    <span itemprop="name">63.Culture-and-Arts</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,254
+                  1,009
                 </span>
               
 
@@ -377,13 +377,34 @@
 
       
         
-          <h2 id="古希腊与古罗马建筑"><a href="#古希腊与古罗马建筑" class="headerlink" title="古希腊与古罗马建筑"></a>古希腊与古罗马建筑</h2><p>第一个区别：古罗马神殿只有正面一个台阶入口，其他方向都是高出地面数米的基底。而古希腊则把神殿的基底都修成台阶，让人可以从四面八方进入。</p>
-<p>也许背后的原因在于古希腊人对神祇的看法并不像古罗马人那样具有完备的仪式感与疏离感。神祇对于古希腊人来说更加亲密，更容易敬拜。</p>
-<p>第二个区别：古罗马很注重神殿正面入口的建造，会花大量精力在正面的雕塑与造型上面。而且背面和部分侧面往往是用墙封闭起来的。</p>
-<p>前面三种柱式是古希腊用的，古罗马时期又创造了后面两种，但是他们仍然也使用前面三种。<br><img src="/images/2022/IMG20220923-6.png" alt></p>
+          <h2 id="锁的概念"><a href="#锁的概念" class="headerlink" title="锁的概念"></a>锁的概念</h2><p>@toc:</p>
+<ul>
+<li>全局锁/表级锁/行锁;</li>
+<li>共享锁/排他锁;</li>
+<li>意向锁;</li>
+<li>两段锁协议;</li>
+</ul>
+<p>➤ 按锁的范围分: 全局锁(数据库锁), 表级锁(表锁, meta锁), 行锁;</p>
+<ul>
+<li>全局锁: 锁住整个数据库实例, 例如<code>Flush tables with read lock</code> 整个数据库处于只读状态, 常用于全库备份;</li>
+<li>表级锁: 分为 <strong>表锁</strong> 和 <strong>元数据锁</strong><ul>
+<li>表锁需要显式加锁: 例如 <code>lock table t1 write</code> 即给表t1加写锁, 允许读不允许写;</li>
+<li>元数据锁(MDL) 不需要显式加,<ul>
+<li>当增删改查时, 数据库自动给表加MDL读锁, 可以增删改查数据, 但对修改表结构互斥;</li>
+<li>当修改表结构时, 数据库自动给表加MDL写锁;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>行锁: 行锁分为S锁/X锁 (类似读写锁), 根据数据库当前隔离级别的不同, 以及sql语句的不同, 加的锁也不同;<ul>
+<li>Serializable级别: 读加S锁, 写加X锁</li>
+<li>RR/RC级别: 读不加锁(MVCC), 写可能加 X锁 和 间隙锁</li>
+</ul>
+</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/63.Culture-and-Arts/Arch.建筑（欧洲）/#more" rel="contents">
+            <a class="btn" href="/32.Database/MySQL-04a-锁概念/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -434,7 +455,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/63.Culture-and-Arts/Arch.建筑风格/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-03b-事务的特性和实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -453,7 +474,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/63.Culture-and-Arts/Arch.建筑风格/" itemprop="url">Arch.建筑风格</a></h1>
+                <a class="post-title-link" href="/32.Database/MySQL-03b-事务的特性和实现/" itemprop="url">MySQL-04事务-特性和实现原理</a></h1>
         
 
         <div class="post-meta">
@@ -476,8 +497,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/63-Culture-and-Arts/" itemprop="url" rel="index">
-                    <span itemprop="name">63.Culture-and-Arts</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -507,7 +528,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  15
+                  2,377
                 </span>
               
 
@@ -533,16 +554,22 @@
 
       
         
-          
-            <ul>
-<li>解构主义建筑</li>
-<li>Brutalist style / 粗野主义<ul>
-<li><a href="https://en.wikipedia.org/wiki/Brutalist_architecture" target="_blank" rel="noopener">Brutalist architecture - Wikipedia</a></li>
+          <p>数据库事务(transaction)是访问并可能操作各种数据项的一个数据库操作序列，这些操作要么全部执行,要么全部不执行，是一个不可分割的工作单位。事务由事务开始与事务结束之间执行的全部数据库操作组成。</p>
+<h2 id="事务的-ACID-特性"><a href="#事务的-ACID-特性" class="headerlink" title="事务的 ACID 特性"></a>事务的 ACID 特性</h2><p>什么是 ACID: 如果一个数据库声称支持事务的操作，那么该数据库必须要具备以下四个特性（事务的特性）：</p>
+<ul>
+<li><strong>原子性 Atomicity</strong>：原子性是指一个事务是一个不可分割的工作单位，其中的操作要么都做，要么都不做；如果事务中一个 sql 语句执行失败，则已执行的语句也必须回滚，数据库退回到事务前的状态。</li>
+<li><strong>一致性 Consistency</strong>：事务执行结束后，数据库的完整性约束没有被破坏，事务执行的前后都是合法的数据状态。假设用户 A 和用户 B 两者的钱加起来一共是 5000，那么不管 A 和 B 之间如何转账，转几次账，事务结束后两个用户的钱相加起来应该还得是 5000，这就是事务的一致性。一致性是通过 AID 特性共同实现的</li>
+<li><strong>隔离性 Isolation</strong>：数据库允许多个并发事务同时对其数据进行读写和修改，规定并发事务之间的数据互不影响，隔离性用于控制多个事务并发执行结果的可见性。事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。</li>
+<li><strong>持久性 Durability</strong>：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</li>
 </ul>
-</li>
-</ul>
-
-          
+<h2 id="MySQL-事务如何实现-ACID"><a href="#MySQL-事务如何实现-ACID" class="headerlink" title="MySQL 事务如何实现 ACID"></a>MySQL 事务如何实现 ACID</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/32.Database/MySQL-03b-事务的特性和实现/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -589,7 +616,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/《存在主义心理治疗》读书笔记/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-02b-BTree索引原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -608,7 +635,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/62.Psychology/《存在主义心理治疗》读书笔记/" itemprop="url">《存在主义心理治疗》读书笔记</a></h1>
+                <a class="post-title-link" href="/32.Database/MySQL-02b-BTree索引原理/" itemprop="url">MySQL-03b-索引-BTree</a></h1>
         
 
         <div class="post-meta">
@@ -631,8 +658,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -662,7 +689,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6,971
+                  3,084
                 </span>
               
 
@@ -688,15 +715,505 @@
 
       
         
-          <p>![[../_images/《存在主义心理治疗》封1.png]]</p>
-<h1 id="《存在主义心理治疗》读书笔记"><a href="#《存在主义心理治疗》读书笔记" class="headerlink" title="《存在主义心理治疗》读书笔记"></a>《存在主义心理治疗》读书笔记</h1><p>本书围绕欧文·亚隆提出的四个“<strong>生命的终极关怀</strong>”展开：<a href="https://www.amazon.com/Existential-Psychotherapy-Irvin-D-Yalom/dp/0465021476" target="_blank" rel="noopener">Existential Psychotherapy - by Irvin D. Yalom</a></p>
+          <h2 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B-Tree"></a>B-Tree</h2><p>B-Tree 不是 Binary Tree（二叉树，每个节点最多有两个子树），B 的意思是 Balance, 一棵 <strong>M 阶的 B-Tree </strong> 满足以下条件：</p>
+<p>B-Tree的节点包含两部分：</p>
+<ol>
+<li>关键字，k 个关键字构成了 k+1 个开区间，指向 k+1 个孩子节点</li>
+<li>数据</li>
+</ol>
+<p>B-Tree的特点：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/32.Database/MySQL-02b-BTree索引原理/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-02a-高效使用索引/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/MySQL-02a-高效使用索引/" itemprop="url">MySQL-03a-索引-高效使用索引</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  914
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="创建索引原则"><a href="#创建索引原则" class="headerlink" title="创建索引原则"></a>创建索引原则</h1><ul>
+<li>尽量选择区分度高的列作为索引,区分度的公式是<code>count(distinct col)/count(*)</code>，表示字段不重复的比例，比例越大我们扫描的记录数越少，唯一键的区分度是1，而一些状态、性别字段可能在大数据面前区分度就是0，一般需要join的字段我们都要求是0.1以上，即平均1条扫描10条记录</li>
+<li>限制索引的长度, 尤其是 <code>FULLTEXT</code>索引, 比如只在<code>VARCHAR</code>字段的前20字节做索引;</li>
+<li>字符类型和数字类型作为索引的性能差别，肯定是用数字类型索引更好。</li>
+<li>用字符串做索引扫描是否会有性能损耗？两者的主要差别就在于，字符类型有字符集的概念，每次从存储端到展现端之间都有一个字符集编码的过程。而这一过程主要消耗的就是CPU资源；对于In-memory的操作来说，这是一个不可忽视的消耗。如果要固化到具体测试结果，我们这边的经验数据是20%，具体值还是和环境和数据有关系。此外，latin1 和 UTF8 之间也有10%左右的性能差别。</li>
+<li>时间加索引的话，性能上 TIMESTAMP &gt; DATETIME</li>
+</ul>
+<h1 id="高效使用索引"><a href="#高效使用索引" class="headerlink" title="高效使用索引"></a>高效使用索引</h1><ul>
+<li>使用覆盖索引(对于非主键的查询条件), 符合覆盖索引的情况:<ul>
+<li>如果用到了联合索引, 联合索引用到的列, 恰好也是要查询的列( select colA, 且已经在colA创建了联合索引)</li>
+<li>这种也是走覆盖索引: <code>select 主键 where 非主键列=X</code></li>
+</ul>
+</li>
+</ul>
+<p>① <strong>查询尽量使用到索引，避免使用全表扫描</strong></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/32.Database/MySQL-02a-高效使用索引/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-01b-SQL语句-JOIN原理及优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/MySQL-01b-SQL语句-JOIN原理及优化/" itemprop="url">MySQL-01b-SQL语句-JOIN原理及优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  541
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ Join中的驱动表概念:</p>
+<ul>
+<li>left join: 左表为驱动表</li>
+<li>right join: 右表为驱动表</li>
+</ul>
+<p>➤ InnoDB是如何实现Join的?</p>
+<p>Mysql的JOIN是通过 <code>Nested-Loop Join</code> 算法实现的(嵌套循环, 如同名字, 循环外层表也即驱动表, 外层表每一行数据再去内层表查找符合条件的数据 ), 有三种:</p>
+<ul>
+<li>Simple Nested-Loop Join 算法效率最低(Mysql并不使用这种Join算法), 可以认为是: 遍历外层所有符合条件的列, 每一行外层数据都再去遍历内层表, 依次比较, 如果外层表有N行(符合条件的)数据, 内层表有M行数据, 总共需要 <code>N*M</code> 次比较;</li>
+<li>Index Nested-Loop Join (索引嵌套循环): 需要内层表的条件列有索引, 依然循环外层表所有符合条件的行, 但是由于内层表的条件列有索引, 并不需要对内层表进行全表扫描. (当内层表建立了索引, Mysql优先使用这种方式)</li>
+<li>Block Nested-Loop Join (缓存块嵌套循环): 如果内层表没有索引会使用这种方式, 思路就是减少外层循环次数, 具体做法是: 外层表查出多条数据, 放入 join buffer, 然后以 join buff里的多条数据作为条件, 对内层表进行全表扫描. 能有效减少外层表的循环次数(也减少了内层表进行全表扫描的次数)</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/32.Database/MySQL-01b-SQL语句-JOIN原理及优化/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-01a-SQL语句-基础和优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/MySQL-01a-SQL语句-基础和优化/" itemprop="url">MySQL-01a-SQL语句-基础和优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,344
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="SQL基础"><a href="#SQL基础" class="headerlink" title="SQL基础"></a>SQL基础</h1><p>MySQL官方文档中提供了一套示例数据库 Employees, MySQL官方文档中说明详见 <a href="http://dev.mysql.com/doc/employee/en/employee.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/employee/en/employee.html</a>。里面详细介绍了此数据库，并提供了下载地址和导入方法。</p>
 <blockquote>
-<p>Organized around what Yalom identifies as the four <strong>“ultimate concerns of life”</strong> — death, freedom, isolation, and meaninglessness—the book takes up the meaning of each existential concern and the type of conflict that springs from our confrontation with each. He shows how these concerns are manifest in personality and psychopathology, and how treatment can be helped by our knowledge of them.</p>
+<p><a href="https://blog.csdn.net/wepe12/article/details/53024400" target="_blank" rel="noopener">mysql测试数据库employees一些sql语句_数据库_wepe12的博客-CSDN博客</a></p>
 </blockquote>
-<h2 id="《导论》"><a href="#《导论》" class="headerlink" title="《导论》"></a>《导论》</h2>
+<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><pre><code><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> table_name ( field1, field2,...fieldN )</span><br><span class="line">                    <span class="keyword">VALUES</span></span><br><span class="line">                    ( value1, value2,...valueN ), // 插入多行</span><br><span class="line">                    ( value1, value2,...valueN );</span><br></pre></td></tr></table></figure>
+</code></pre>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/《存在主义心理治疗》读书笔记/#more" rel="contents">
+            <a class="btn" href="/32.Database/MySQL-01a-SQL语句-基础和优化/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -747,7 +1264,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/神经递质（多巴胺-内啡肽-血清素）/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-00基础概念/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -766,7 +1283,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/62.Psychology/神经递质（多巴胺-内啡肽-血清素）/" itemprop="url">神经递质与情绪</a></h1>
+                <a class="post-title-link" href="/32.Database/MySQL-00基础概念/" itemprop="url">MySQL-00基础概念</a></h1>
         
 
         <div class="post-meta">
@@ -789,8 +1306,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -820,7 +1337,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,679
+                  2,425
                 </span>
               
 
@@ -846,13 +1363,12 @@
 
       
         
-          <h2 id="多巴胺"><a href="#多巴胺" class="headerlink" title="多巴胺"></a>多巴胺</h2><p>一直以来，各种媒体都把多巴胺描述成人类愉悦感的来源，多巴胺意味着快乐，是大脑感到幸福的根源。各种文章把多巴胺形容成生活值得一过的终极意义所在，也是我们享受每一个快乐时刻的本质，每一个人企图通过药物、运动、食物、性或者地位来追求的高潮体验。但是事实上，脑科学研究真正告诉我们的是，多巴胺并不是媒体所渲染的快乐分子，或者快乐的根源。</p>
-<p>多巴胺的作用其实非常简单。对于多巴胺的准确的本质描述，一个是多巴胺作用于我们的奖赏系统，让我们产生欲望；另外一个作用是，让大脑预期奖赏，从而指导相应的行为。简单的来说，多巴胺的作用，就是“让你想要”，和让你选择能得到更多奖励的行为。多巴胺和快乐，其实关系并不大。</p>
-<p>就像高晓松说的：很多人分不清理想和欲望。理想就是当你想它时，你是快乐的；欲望就是当你想它时，你是痛苦的。这个欲望，就是多巴胺的分泌。</p>
-<p>由此引出多巴胺的副作用——成瘾的痛苦：<br>以手机成瘾症为例，我们很多时候只是在不停的点开“下一条”，即使很累也舍不得放开。这就是多巴胺的奖励机制在告诉你，“下一条会很爽”，当你强迫自己放下手机，你会觉得很焦虑，多巴胺只是让我们对下一个充满期待而已。</p>
+          <p><img src="/images/database/Database-MySQL-Title.png" alt></p>
+<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><p>参考:《深入浅出MySQL》</p>
+<h2 id="SCHEMA"><a href="#SCHEMA" class="headerlink" title="SCHEMA"></a>SCHEMA</h2><p><strong>schema</strong> 为数据库对象的集合， schema里面包含了各种对象如tables, views, sequences, 可以视作”数据库”, <code>show database</code>可以看到schema.<br>不同数据库产品的schema概念是不同的:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/神经递质（多巴胺-内啡肽-血清素）/#more" rel="contents">
+            <a class="btn" href="/32.Database/MySQL-00基础概念/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -903,7 +1419,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/认知偏误/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MongoDB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -922,7 +1438,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/62.Psychology/认知偏误/" itemprop="url">认知偏误</a></h1>
+                <a class="post-title-link" href="/32.Database/MongoDB/" itemprop="url">MongoDB</a></h1>
         
 
         <div class="post-meta">
@@ -945,8 +1461,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -976,7 +1492,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,949
+                  815
                 </span>
               
 
@@ -1002,641 +1518,16 @@
 
       
         
-          <p>写给PM的认知偏差手册，产品设计常见误区：<a href="https://s75w5y7vut.feishu.cn/docs/doccn3BatnScBJe7wD7K3S5poFf" target="_blank" rel="noopener">认知偏差-产品经理知识手册_飞书</a> </p>
-<hr>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>认知偏误（Cognitive bias），或作认知偏差、认知偏见等，是一种在判断中偏离规范（norm，哲学术语）或理性的系统模式。个人根据他们对输入的感知创造他们自己的“主观现实”。个人对现实的建构，而不是客观输入，可能会决定他们在世界上的行为。因此，认知偏差有时可能会导致知觉扭曲、不准确的判断、不合逻辑的解释或广义上的非理性（英语：irrationality）。</p>
-<p>尽管这种误解看起来像是失常，但偏见可以帮助人类找到共同点和捷径，以帮助处理生活中的常见情况。一些认知偏差大概是适应性的。认知偏差可能会导致在特定情况下采取更有效的行动。<br>此外，允许认知偏差可以实现更快的决策，当及时性比准确性更有价值时，这可能是可取的，如<strong>启发法</strong>所示。<br>其他认知偏差是人类处理能力极限的“副产品”，是由于缺乏适当的心理机制（有限理性）、个人体质和生物状态的影响（参见体化认知），或仅仅是由于处理资讯能力的极限。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/认知偏误/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/弗洛伊德/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/62.Psychology/弗洛伊德/" itemprop="url">弗洛伊德</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3,988
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="人物简介"><a href="#人物简介" class="headerlink" title="人物简介"></a>人物简介</h2><p>西格蒙德·弗洛伊德（Sigmund Freud，1856—1939），奥地利心理学家、精神分析学家、哲学家，精神分析学的创始人。</p>
-<p>他著有《梦的解析》、《性学三论》、《图腾与禁忌》等，提出了“潜意识”、“自我”、“本我”、“超我”、“伊底帕斯情结”、“欲力”、“心理防卫机制”等概念，被世人誉为“精神分析之父”。</p>
-<p>科学哲学家卡尔·波普认为一切合理的科学理论，均具备证伪的可能，但弗洛伊德的心理学理论永远不可被证伪，因此不具备科学性。阿道夫·格伦鲍姆在《精神分析学基础》（The Foundations of Psychoanalysis，1984）中说波普的说法并不对，因为很多弗洛伊德的理论是可以从经验上证明的。罗杰·史克鲁顿在《性欲》（Sexual Desire，1986）一书中说弗洛伊德的抑制理论等确实是可以被证实的。但他仍然认为精神分析学太过于依赖隐喻，并非真正的科学。</p>
-<p>20世纪中期以后，至少在美国精神病学家们开始逐渐减弱对心理分析学的关注。它在人文领域仍然是非常常见的理论，但在精神病学研究领域有被边缘化的趋势。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/弗洛伊德/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/卡特尔16PF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/62.Psychology/卡特尔16PF/" itemprop="url">卡特尔16PF</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  31
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>卡特尔16PF（Cattell’s 16 Personality Factor，简称16PF），十六种人格因子</p>
-<p>十六种人格因素的含义如下：</p>
-<p><img src="/images/Cattell-16FP-1.png" alt="../_images/Cattell-16FP-1.png"></p>
-<p><img src="/images/Cattell-16FP-2.png" alt="../_images/Cattell-16FP-2.png"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/盖洛普-克里夫顿优势/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/62.Psychology/盖洛普-克里夫顿优势/" itemprop="url">盖洛普-克里夫顿优势</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  24
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h1><p><img src="/images/2022/20220207210604.png" alt></p>
-<h1 id="优势1-5"><a href="#优势1-5" class="headerlink" title="优势1-5"></a>优势1-5</h1><h2 id="搜集"><a href="#搜集" class="headerlink" title="搜集"></a>搜集</h2><p><img src="/images/2022/20220207210627.png" alt></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/盖洛普-克里夫顿优势/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/荣格/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/62.Psychology/荣格/" itemprop="url">荣格</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,738
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>卡尔·古斯塔夫·荣格（Carl Gustav Jung，1875—1961） @ref:<a href="https://zh.wikipedia.org/zh-hans/%E5%8D%A1%E5%B0%94%C2%B7%E8%8D%A3%E6%A0%BC" target="_blank" rel="noopener">卡尔·荣格 - 维基百科，自由的百科全书</a></p>
-<p>1895年－1900年，荣格在巴塞尔大学学习医学，随后在苏黎世伯格尔茨利精神病院谋得助理医师职位，在布鲁勒手下实习。<br>荣格1905年任苏黎世大学精神病学讲师，后来辞去职务自己开业。<br>荣格对弗洛伊德1900年出版的《梦的解析》很感兴趣，与之通讯，参加了弗洛伊德的精神分析运动，共同创立了一个国际精神分析学会，并任第一届主席，后因两人的学说产生分歧而决裂。由于此决裂弗洛伊德将荣格的名字一笔勾消。 @link <a href="/62.Psychology/弗洛伊德/" title="弗洛伊德">弗洛伊德</a></p>
-<h2 id="主要思想概述"><a href="#主要思想概述" class="headerlink" title="主要思想概述"></a>主要思想概述</h2><ul>
-<li><p><strong>情节（complex）</strong>：情结是个人无意识中的成份</p>
-<p>complex一语是由Theodor Ziehen于1898年所创，由荣格在与佛洛伊德合作的时期发扬光大。荣格将complex形容为“无意识之中的一个结”。可以将情结想成一群无意识感觉与信念形成的结。这个结可以间接侦测，而表现的行为则很难理解。荣格在职业生涯早期就找到证明情结存在的证据。1910年代他在词汇关联测验中注意到受试者的行为模式暗示著此人的无意识感觉与信念。</p>
-<p>情结有很多种，但是任何情结的核心都是一个共通的经验模式，称为原型（archetype）。<em>荣格理论与佛洛伊德理论的关键差异是：荣格认为人类心理由好几种情结构成，而且许多情结彼此形成二元对立。佛洛伊德认为恋母情结（伊底帕斯情结）是普遍共通的，也就是所有儿童都面对伊底帕斯情结带来的发展挑战</em>。而伊底帕斯情结也是绝大部分心理疾病的中心。随著荣格与佛洛伊德决裂，两方代表的理论也分歧了。</p>
-</li>
-</ul>
-<ul>
-<li><p><strong>集体潜意识（collective unconscious）</strong>，又译作“集体无意识”，指人类祖先进化过程中，集体经验心灵底层的精神沉积物，处于人类精神的最低层，为人类所普遍拥有。<br>荣格认为在潜意识中有个人潜意识及集体潜意识。他考察非洲及美洲等地原始人类的宗教、神话、传说、童话、与梦并比较西方人与东方人的宗教、神话、传说、童话、与梦，发现许多共同的原型而得到的结论。荣格认为集体潜意识是人格中最深刻、最有力的部分，它是几千年来人类祖先经验的积累所形成的一种遗传倾向。这些遗传倾向被称为原型。各种原型在梦、幻觉、幻想、神经症中无意识地表现出来。相对于弗洛伊德的无神论顷向，荣格认为集体潜意识中充满了神的形象。</p>
-</li>
-<li><p><strong>力比多（libido）</strong>：与弗洛伊德认为欲力是纯粹性的潜力不同，荣格认为力比多是普遍的生命力，除表现在生长及生殖方面外，也表现于其他活动（荣格和弗洛伊德的分歧依然基于力比多是性的或者是非性的）。</p>
-</li>
+          <p><img src="https://webassets.mongodb.com/_com_assets/cms/MongoDB-Logo-5c3a7405a85675366beb3a5ec4c032348c390b3f142f5e6dddf1d78e2df5cb5c.png" alt="MongoDB"></p>
+<p>MongoDB是高性能(得益于内存缓存)、无模式的文档型数据库，支持二级索引，类json格式存储(bson)，非常适合文档化格式的存储及查询。适合用来存放评论等半结构化数据;<br>MongoDB的官方定位是通用数据库，与MySQ类似，但跟传统关系型数据库比较，Mongo在事务、join、复杂查询应用下仍旧无法取代关系型数据库。</p>
+<h1 id="mongo-shell"><a href="#mongo-shell" class="headerlink" title="mongo shell"></a>mongo shell</h1><h2 id="query"><a href="#query" class="headerlink" title="query"></a>query</h2><ul>
+<li>ObjectId: <code>db.getCollection(&#39;activities&#39;).find(ObjectId(&#39;5a9f5e7137c65800015df8d0&#39;))</code></li>
+<li>AND: <code>db.collection.find({ &quot;key&quot; : &quot;value&quot;, &quot;key1&quot; : &quot;value1&quot;})</code> </li>
+<li>OR: </li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/荣格/#more" rel="contents">
+            <a class="btn" href="/32.Database/MongoDB/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1687,7 +1578,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/MBTI各种类型兼容关系/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/LSM-Tree理论基础/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -1706,7 +1597,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/62.Psychology/MBTI各种类型兼容关系/" itemprop="url">MBTI各种类型兼容关系</a></h1>
+                <a class="post-title-link" href="/32.Database/LSM-Tree理论基础/" itemprop="url">LSM Tree</a></h1>
         
 
         <div class="post-meta">
@@ -1729,8 +1620,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -1760,7 +1651,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  187
+                  1,644
                 </span>
               
 
@@ -1786,338 +1677,15 @@
 
       
         
-          <p>@ref: <a href="https://www.douban.com/group/topic/66137129/?_i=90819740ykPbNx" target="_blank" rel="noopener">16种性格兼容关系图</a></p>
-<hr>
-<p>下图为思想相容性，红色代表思想或价值观最不相容，蓝色代表最佳相容，不过不相容不代表不能相处。蓝色应该也指最佳拍档、最佳工作伙伴。(貌似是工作中的关系)</p>
-<p><img src="/images/2022/20220404222145.png" alt></p>
-<p>下图: 橘色为不喜欢，绿色为喜欢<br><img src="/images/2022/20220404222218.png" alt></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/MBTI各种类型兼容关系/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/MBTI人格类型之INFJ/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/62.Psychology/MBTI人格类型之INFJ/" itemprop="url">MBTI人格类型之INFJ</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  6,743
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="MBTI偏好"><a href="#MBTI偏好" class="headerlink" title="MBTI偏好"></a>MBTI偏好</h1><p>MBTI通过以下偏好将人们归类：</p>
-<ul>
-<li>如何集中注意力或他们的能量来源（外向性或内向性）</li>
-<li>如何接受讯息（感觉或直觉）</li>
-<li>主要靠什么作出决定（情感或思考）</li>
-<li>如何对待外在的世界（判断或理解）</li>
-</ul>
-<p>因为运用他们在这些领域的偏好，人们发展出了荣格和迈尔斯所说的人格类型。这根本的人格是来自四种偏好的动态交互作用，同时也有外在环境的影响以及个人的倾向。人们比较可能在他们的人格类型基础上发展习惯、举止和态度。</p>
-<ul>
-<li>I——内倾相对于外倾。INFJ倾向于宁静和有所保留。于社交中，他们消耗能量（同样的情况下，外倾者获得能量）。</li>
-<li>N——直觉相对于感觉。相比关心具体事物，INFJ更加关心于抽象事物。他们更倾向于关注整体而不是细节，关注未来的可能性而非最切近的现实。</li>
-<li>F——感情相对于理性。INFJ通常认为个人偏好高于客观标准。在做决定的时候，他们通常更侧重于人情世故而非逻辑。</li>
-<li>J——判断相对于理解。INFJ倾向于计划他们的活动，并早早地作出决定。他们从可预见性得到掌控之感，在同一方面理解型的人可能看起来被限制。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/MBTI人格类型之INFJ/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/MBTI笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/62.Psychology/MBTI笔记/" itemprop="url">MBTI</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  8,696
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>在人格类型学中，迈尔斯-布里格斯性格分类指标（英语：Myers-Briggs Type Indicator，简称MBTI）是一种内省的自我报告问卷，表明人们在如何看待世界和做出决定方面存在不同的心理偏好。该测试试图为四个类别中的每一个分配一个值：内向（I）或外向（E），感觉（S）或直觉（N），思考或感觉，以及判断或感知。从每个类别中抽取一个字母来产生四个字母的测试结果。</p>
+          <h2 id="LSM-Tree-概览"><a href="#LSM-Tree-概览" class="headerlink" title="LSM-Tree 概览"></a>LSM-Tree 概览</h2><p>➤ <strong>What’s LSM-Tree</strong>： Log Structured Merge Trees(LSM)</p>
+<p>➤ <strong>Google BigTable → LSM-Tree</strong></p>
+<p>@ref: <a href="https://www.infoq.cn/article/x8qufv7vtujnov*xqu4t" target="_blank" rel="noopener">全面了解大数据“三驾马车”的开源实现_InfoQ精选文章</a></p>
+<blockquote>
+<p>作为 Google 的大数据三架马车之一，Bigtable 依托于 Google 的 GFS、Chubby 及 SSTable 而诞生，用于解决 Google 内部不同产品在对数据存储的容量和响应时延需求的差异化，力求在确保能够容纳大量数据的同时减少数据的查询耗时。<br>论文中很多很酷的方面之一就是它所使用的文件组织方式，这个方法更一般的名字叫 Log Structured-Merge Tree。<br>@ref: <a href="https://static.usenix.org/events/osdi06/tech/chang/chang_html/?em_x=22" target="_blank" rel="noopener">Bigtable: A Distributed Storage System for Structured Data - OSDI ‘06 Paper</a></p>
 </blockquote>
-<h1 id="MBTI的起源和发展"><a href="#MBTI的起源和发展" class="headerlink" title="MBTI的起源和发展"></a>MBTI的起源和发展</h1><p>(1) 荣格: 《心理类型》, 《心理学》。荣格八维最初的概念来源于荣格的著作《心理类型》（Psychological Types）1921，被收录在《荣格文集》第六卷中。</p>
-<p>《心理类型》阐述了荣格的心理类型理论。在这本书里，荣格提出意识具有四种功能：两种非理性功能，即知觉（Sensation）和直觉；两种理性功能，即思维和情感。</p>
-<p>荣格认为意识具有理性和非理性两面，他在自传中曾说：”心灵的钟摆往返于理智与非理智之间，而不是正确与谬误之间”。意识的四种功能又受到两种态度，即外向性与内向性的影响。荣格提出，占主导地位的功能和占主导地位的态度共同构成了意识的特点，而占次要地位的功能或态度则处于被压抑的状态并构成了无意识的特点。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/MBTI笔记/#more" rel="contents">
+            <a class="btn" href="/32.Database/LSM-Tree理论基础/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2168,7 +1736,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/INFJ-T-vs-INFJ-A/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-vs-ES/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2187,7 +1755,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/62.Psychology/INFJ-T-vs-INFJ-A/" itemprop="url">INFJ-T-vs-INFJ-A</a></h1>
+                <a class="post-title-link" href="/32.Database/HBase-vs-ES/" itemprop="url">HBase-vs-ES</a></h1>
         
 
         <div class="post-meta">
@@ -2210,8 +1778,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -2241,7 +1809,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,587
+                  318
                 </span>
               
 
@@ -2267,19 +1835,167 @@
 
       
         
-          <p>-a 和 -t 的解释: <a href="/62.Psychology/MBTI笔记/" title="MBTI笔记">MBTI笔记</a></p>
-<p>infj-a 和 infj-t 的区别：</p>
-<p>1、<strong>面对压力的心态不同</strong></p>
+          
+            <h2 id="比较elasticsearch-和-hbase"><a href="#比较elasticsearch-和-hbase" class="headerlink" title="比较elasticsearch 和 hbase"></a>比较elasticsearch 和 hbase</h2><p><a href="https://www.zhihu.com/question/41109030" target="_blank" rel="noopener">海量日志数据存储用 elasticsearch 和 hbase 哪个好？ - 知乎</a></p>
 <ul>
-<li><p>infj-a 型的人在压力面前会更容易保持一种松弛的状态，他们相对比较自信，认为自己可以找到有效的方法，来管理生活中出现的压力。</p>
-</li>
-<li><p>infj-t 型的人面对挫折与压力的时候，会更容易质疑自己，对于压力的来源也会比较敏感。</p>
-</li>
+<li>1）两者都可以通过扩展集群来加大可存储的数据量。随着数据量的增加，es的读写性能会有所下降</li>
+<li>2）数据更新es数据更新是对文档进行更新，需要先将es中的数据取出，设置更新字段后再写入es。hbase是列存储的，可以方便地更新任意字段的值。</li>
+<li>3）查询复杂度hbase支持简单的行、列或范围查询，若没有对查询字段做二级索引的话会引发扫全表操作，性能较差。而ES提供了丰富的查询语法，支持对多种类型的精确匹配、模糊匹配、范围查询、聚合等操作，ES对字段做了反向索引，支持全文检索, 即使在亿级数据量下还可以达到秒级的查询响应速度。</li>
+<li>4）字段扩展性hbase和es都对非结构化数据存储提供了良好的支持。es可以通过动态字段方便地对字段进行扩展，而hbase本身就是基于列存储的，可以很方便地添加qualifier来实现字段的扩展</li>
 </ul>
-<p>2、<strong>面对他人的感受不同</strong></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-05源码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/HBase-05源码/" itemprop="url">HBase-05源码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  226
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="客户端API源码"><a href="#客户端API源码" class="headerlink" title="客户端API源码"></a>客户端API源码</h2><p>施工中</p>
+<h3 id="createConnection"><a href="#createConnection" class="headerlink" title="createConnection()"></a>createConnection()</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Configuration configuration = HBaseConfiguration.create();</span><br><span class="line">Connection connection = ConnectionFactory.createConnection(configuration);</span><br><span class="line">connection.getTable(TableName.valueOf(<span class="string">"tbl_xxx"</span>));</span><br></pre></td></tr></table></figure>
+<p>创建connection过程如下:<br><code>ConnectionFactory.createConnection(Configuration conf)</code>, 返回的是一个HConnectionImplementation的对象, 调用了HConnectionImplementation的构造函数:<br><code>HConnectionImplementation(Configuration conf, boolean managed, ExecutorService pool, User user)</code></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/INFJ-T-vs-INFJ-A/#more" rel="contents">
+            <a class="btn" href="/32.Database/HBase-05源码/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2330,7 +2046,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/Gallup-and-MBTI/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-04行键设计/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2349,7 +2065,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/62.Psychology/Gallup-and-MBTI/" itemprop="url">Gallup（盖洛普） and MBTI 评测的联系</a></h1>
+                <a class="post-title-link" href="/32.Database/HBase-04行键设计/" itemprop="url">HBase-04行键(Rowkey)设计</a></h1>
         
 
         <div class="post-meta">
@@ -2372,8 +2088,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -2403,7 +2119,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  523
+                  698
                 </span>
               
 
@@ -2429,14 +2145,14 @@
 
       
         
-          <p><a href="https://www.gallup.com/cliftonstrengths/en/250133/compare-mbti-myers-briggs-cliftonstrengths.aspx" target="_blank" rel="noopener">https://www.gallup.com/cliftonstrengths/en/250133/compare-mbti-myers-briggs-cliftonstrengths.aspx</a></p>
-<p>已故盖洛普资深科学家菲尔·斯通，哈佛大学前任心理学教授，研究了 MBTI 和 克利夫顿StrengthsFinder（<a href="/62.Psychology/盖洛普-克里夫顿优势/" title="盖洛普-克里夫顿优势">盖洛普-克里夫顿优势</a>）之间的关系。斯通过他的206个学生进行了这两项完整的评估。研究表明两者之间的评估某些预期的相关性。</p>
-<p>例如，如果克利夫顿StrengthsFinder显示，“分析”是你五大主题之一，MBTI第三维度你就可能属于内倾思考（Ti）或者外倾思考（Te）。如果体谅是你的五大主题之一，你MBTI第二维度很可能是感觉型（Fi 或 Fe）。同样，如果你有纪律，你就可能是MBTI第四维度是判断型（J）。</p>
-<p>斯通的学生反馈克利夫顿 StrengthsFinder既更适用，比 MBTI更准确。</p>
-<p>打个比方：想象一下，一个房子有好几个的房间。 MBTI表示，其中一个是最舒适的居住的房间。克利夫顿StrengthsFinder则代表的家具，设备，装饰，房间内的其他细节，从而帮助我们理解个人独特的天生的能力。无论是MBTI和克利夫顿StrengthsFinder都能揭示个性有价值的信息，都可以帮助个人与组织的战略发展。</p>
+          <h2 id="表的设计"><a href="#表的设计" class="headerlink" title="表的设计"></a>表的设计</h2><p>在HBase中表的概念并不是那么重要, 数据的物理存储是基于列族的.</p>
+<h2 id="Row-Key设计"><a href="#Row-Key设计" class="headerlink" title="Row Key设计"></a>Row Key设计</h2><p>设计合理的 Row Key设计可以加速scan操作, 还可以在大量写入数据时让多个RegionServer分担负载.</p>
+<blockquote>
+<p>Region是 HBase中扩展和负载均衡的基本单元, Region本质上是以 Row Key的字典顺序连续存储的, 这种设计优化了 scan的操作，<br>一个 Table最初只有一个 Region, 当一个 Region过大时, 系统会在中间键(middle key)将这个 Region拆分成两个大致相等的子 Region。<br>Row Key设计不好就会造成读写热点问题，造成大量客户端直接访问集群某一个或者极少数的节点，造成节点性能下降或者Region不可用</p>
+</blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/Gallup-and-MBTI/#more" rel="contents">
+            <a class="btn" href="/32.Database/HBase-04行键设计/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2487,7 +2203,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/BigFive/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-03架构和原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2506,7 +2222,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/62.Psychology/BigFive/" itemprop="url">Big Five 笔记</a></h1>
+                <a class="post-title-link" href="/32.Database/HBase-03架构和原理/" itemprop="url">HBase-03架构和原理</a></h1>
         
 
         <div class="post-meta">
@@ -2529,8 +2245,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -2560,7 +2276,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  333
+                  9,721
                 </span>
               
 
@@ -2586,328 +2302,21 @@
 
       
         
-          <h2 id="What’s-Big-Five"><a href="#What’s-Big-Five" class="headerlink" title="What’s Big Five"></a>What’s Big Five</h2><p>人格结构五因素模型（Big Five Structure，Five-Factor Model) 或译为大五人格模型</p>
-<p>OCEAN：人格结构中的五个因素后来被称为“大五”（big five），强调该人格模型中每一维度的广泛性。这五个维度因素是神经质（N）、外倾性（E）、经验开放性（O）、宜人性（A）和认真性（C）。</p>
-<h2 id="OCEAN量表"><a href="#OCEAN量表" class="headerlink" title="OCEAN量表"></a>OCEAN量表</h2><p>得出五因素模型的一个很重要的方法就是基于问卷研究。科斯塔（Costa<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>）等人根据对16PF<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>的因素分析和自己的理论构想编制了测验五因素的NEO—P1人格量表（NEO—PI Five-Factor Inventory）。该量表包括300个项目，被试在五点量表（从完全同意到完全不同意）上指出每个句子表示他们自身特点的程度。除了五个因素上的得分，被试还有为每个维度量表设置的六个测量特质水平的层面量表得分，这些层面量表提供了有关大五因素的每个因素内的行为的更大区分性。有关人格大五特质因素和相关特征见下表。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/BigFive/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/Alpha-Beta-Sigma/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/62.Psychology/Alpha-Beta-Sigma/" itemprop="url">Alpha-Beta-Sigma</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,241
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="Wikipedia：Alpha、Beta、Sigma"><a href="#Wikipedia：Alpha、Beta、Sigma" class="headerlink" title="Wikipedia：Alpha、Beta、Sigma"></a>Wikipedia：Alpha、Beta、Sigma</h2><p>阿尔法男性和贝塔男性，或简称阿尔法和贝塔，是男性的 <strong>伪科学术语</strong>，源自行为学中阿尔法和贝塔动物的名称。它们也可以与其他性别一起使用，例如女性，或者另外使用希腊字母表的其他字母（例如欧米茄）。<strong>这些术语来描述人类的普及受到了科学家的广泛批评</strong>。</p>
-<p>在 1990 年代之前，这些术语几乎只用于动物行为学，特别是关于与雌性的交配特权，保持领地的能力以及其牛群或羊群中食物消费的等级。在动物行为学中，贝塔是指从属于社会等级中更高等级成员的动物，因此不得不等待进食，交配的机会更少或可以忽略不计。</p>
-<p>在 1982 年出版的《黑猩猩政治：类人猿的权力与性》一书中，灵长类动物学家和动物行为学家弗兰斯·德瓦尔（Frans de Waal）表示，他对黑猩猩殖民地的观察可能适用于人类的互动。包括《芝加哥论坛报》在内的一些评论讨论了它与人类权力等级制度的相似之处。在 1990 年代初期，一些媒体开始使用阿尔法一词来指代人类，特别是那些在商业上表现出色的“男子气概”男人。记者杰西·辛格尔（Jesse Singal）在《纽约》杂志上撰文，将公众对这些术语的认识归因于 1999 年《时代》杂志的一篇文章，该文章描述了当时担任总统候选人阿尔·戈尔顾问的娜奥米·沃尔夫（Naomi Wolf）的观点：“沃尔夫在内部辩称，戈尔是一个’贝塔男性’，在公众将他视为顶级狗之前，他需要在椭圆形办公室接受’阿尔法男性’。辛格尔还称赞尼尔·施特劳斯（Neil Strauss）2005 年出版的关于皮卡艺术的畅销书《游戏》（The Game），将阿尔法男性作为一种理想来推广。</p>
-<hr>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/Alpha-Beta-Sigma/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/05.情绪管理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/62.Psychology/05.情绪管理/" itemprop="url">情绪管理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,651
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@ref <a href="https://www.zhihu.com/question/20789554/answer/46482883" target="_blank" rel="noopener">怎样进行良好的情绪管理？ - 知乎</a></p>
-<h2 id="情绪ABC理论"><a href="#情绪ABC理论" class="headerlink" title="情绪ABC理论"></a>情绪ABC理论</h2><p>心理学家阿尔伯特.艾利斯（A. Ellis）提出的情绪反应的ABC模式。</p>
+          <h2 id="HBase-架构简介"><a href="#HBase-架构简介" class="headerlink" title="HBase 架构简介"></a>HBase 架构简介</h2><p><img src="/images/hbase/hbase_arch.png" alt></p>
+<p>HBase包含3个重要组件：Zookeeper、HMaster和 HRegionServer。</p>
 <ul>
-<li>A（Activating Event）——事件或情境</li>
-<li>B（Beliefs）——你对这个事情或情境抱有的信念（即你的态度，想法，评价，解释）</li>
-<li>C（Consequences）——结果：情绪结果（比如焦虑），行为结果（比如攻击），生理结果（如心悸，手脚冰凉）</li>
+<li>（1）Zookeeper： 为整个 HBase集群提供协助服务，包括：<ul>
+<li>a. 存放整个 HBase集群的元数据以及集群的状态信息。</li>
+<li>b. 实现 HMaster主从节点的 failover。</li>
 </ul>
-<p>ABC理论认为，对情绪的不良反应(激怒/抱怨..) 出在你对事情的判断上，一些常见的思维习惯/思维模式会使你对情况出现误判，从而导致坏心情，并影响你解决问题的能力。</p>
+</li>
+</ul>
+<blockquote>
+<p>ZooKeeper为 HBase集群提供协调服务，它管理着 HMaster和 HRegionServer的状态(available/alive等)，并且会在它们宕机时通知给 HMaster，从而 HMaster可以实现 HMaster之间的 failover，或对宕机的 HRegionServer中的 HRegion集合的修复(将它们分配给其他的 HRegionServer)。</p>
+</blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/05.情绪管理/#more" rel="contents">
+            <a class="btn" href="/32.Database/HBase-03架构和原理/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2958,7 +2367,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/03c.黑暗三角特质/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-02运维和部署/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -2977,7 +2386,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/62.Psychology/03c.黑暗三角特质/" itemprop="url">黑暗三角特质</a></h1>
+                <a class="post-title-link" href="/32.Database/HBase-02运维和部署/" itemprop="url">HBase-02运维和部署</a></h1>
         
 
         <div class="post-meta">
@@ -3000,8 +2409,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -3031,7 +2440,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  604
+                  1,500
                 </span>
               
 
@@ -3057,18 +2466,24 @@
 
       
         
-          <p>@ref: <a href="https://mp.weixin.qq.com/s/50_EMVUSeHRlgqO8Kz3E8A" target="_blank" rel="noopener">渣男为什么总有人爱</a></p>
-<p>跟这有关的是一种叫做黑暗三角（Dark Triad）的特质，它有点类似于中文语境中的“腹黑”。如果用我们常用的语言捕捉一下，大概是一种“高冷、自恋、冲动、善于欺骗、情绪波动小、冷酷无情”的特质。</p>
+          <h2 id="安装-amp-部署"><a href="#安装-amp-部署" class="headerlink" title="安装 &amp; 部署"></a>安装 &amp; 部署</h2><p>为了保证 Region Server 读写性能，需要和 HDFS 的 NameNode 部署在同一台机器上，实现数据的本地性 </p>
 <ul>
-<li>自恋</li>
-<li>马基雅维利主义</li>
-<li>精神病态</li>
+<li>Hadoop &amp; HBase<ul>
+<li>Hadoop集群: 1x NameNode, 2x DataNode, 共7T</li>
+<li>HBase集群: 1x Master, 2x RegionServer</li>
 </ul>
-<p>➤ 自恋（Narcissism）: 精神分析学派较早关注自恋的人格心理学意义, 弗洛伊德将其视为一种人格障碍, 属于临床和变态心理学研究的领域, Kohut认为自恋是普通人人性的一部分, 从而将自恋引入人格和社会心理学。亚临床阶段的自恋(subclinicalnarcissism)一般具有以下特征: <strong>自我中心、爱慕虚荣、自我吹嘘、支配性、优越感、傲慢无礼和自以为是</strong>。</p>
-<p>➤ 马基雅维利主义（Machiavellianism）: 在心理和行为上一般表现为: <strong>冷酷无情、擅长操纵、阴谋算计、实用主义、注重结果和忽视道德</strong>。<br>=&gt; [[../61.Philosophy/11.马基雅维利主义]]</p>
+</li>
+<li>服务分布情况:<ul>
+<li>ip6 : hbase master, hadoop name_node, Zookeeper</li>
+<li>ip7 : hbase region</li>
+<li>ip8 : hbase region</li>
+</ul>
+</li>
+</ul>
+<h3 id="hadoop"><a href="#hadoop" class="headerlink" title="hadoop"></a>hadoop</h3><p>ssh ip6, 执行:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/03c.黑暗三角特质/#more" rel="contents">
+            <a class="btn" href="/32.Database/HBase-02运维和部署/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3119,7 +2534,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/03b.人格障碍/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-02API简介/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -3138,7 +2553,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/62.Psychology/03b.人格障碍/" itemprop="url">人格障碍</a></h1>
+                <a class="post-title-link" href="/32.Database/HBase-02API简介/" itemprop="url">HBase-02API简介</a></h1>
         
 
         <div class="post-meta">
@@ -3161,8 +2576,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -3192,7 +2607,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  894
+                  2,814
                 </span>
               
 
@@ -3218,32 +2633,215 @@
 
       
         
-          <h1 id="人格障碍"><a href="#人格障碍" class="headerlink" title="人格障碍"></a>人格障碍</h1><p>人格障碍，或人格（性格）疾患／异常／违常（Personality disorders）。是精神疾病中，对于一群特定拥有长期而僵化思想及行为病患的分类。这类疾患常可因其人格和行为的问题而导致社会功能的障碍。<br>人格违常是据美国精神医学学会所定，这类疾患的表现是跨文化和国界的。它们被定义成发病期至少要能追溯到成长期早期或更早。要能符合人格违常诊断的最低标准是疾患本身必须已干扰到个人、社会、或职业功能。</p>
+          <h1 id="客户端API-基础"><a href="#客户端API-基础" class="headerlink" title="客户端API: 基础"></a>客户端API: 基础</h1><p>包括hbase shell命令行 和Java API</p>
+<h2 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h2><ul>
+<li><code>hbase shell</code>: 进入 hbase shell, 然后可以用以下的 hbase 命令行</li>
+<li><code>help &#39;list&#39;</code> : 查看帮助</li>
+<li><code>status</code> : 查看状态</li>
+<li>表级命令：<ul>
+<li><code>list</code> : list all table</li>
+<li><code>create &#39;table1&#39;,&#39;col_family1&#39;,&#39;col_family2&#39;</code> : 创建表, 并包含两个列族</li>
+<li><code>alter &#39;table1&#39;, NAME =&gt; &#39;col_family1&#39;, TTL =&gt; &#39;604800&#39;</code> : 修改列族的TTL(秒)</li>
+<li><code>describe &#39;table1&#39;</code> : 查看表描述</li>
+<li><code>deleteall &#39;table1&#39;, &#39;rowkey1&#39;, &#39;column&#39;</code> : 删除该行键下”column”列的数据</li>
+<li><code>deleteall &#39;table1&#39;, &#39;rowkey1&#39;</code> : 删除所有该行键下的数据</li>
+<li><code>truncate &#39;table1&#39;</code> 清空表</li>
+<li><code>disable &#39;table1&#39;</code> 然后 <code>drop &#39;table1&#39;</code> : 删除表</li>
+<li><code>count &#39;table1&#39;</code> : 统计表的行数</li>
+</ul>
+</li>
+<li>基本查询 &amp; 删除：<ul>
+<li><code>put &#39;table1&#39;, &#39;rowkey1&#39;, &#39;col_family1:col111&#39;, &#39;value&#39;</code> : 插入一条数据, 格式为<code>put 表名, 行键, 列族:列, 值</code></li>
+<li><code>get &#39;table1&#39;, &#39;rowkey1&#39;</code> : 查询记录, 格式为<code>get 表名, 行键</code></li>
+<li><code>get &#39;table1&#39;, &#39;rowkey1&#39;, &#39;col_family1:col111&#39;</code> : 查询记录, 格式为<code>get 表名, 行键, 列族:列</code></li>
+<li><code>get &#39;table1&#39;, &#39;rowkey1&#39;, { COLUMN =&gt; &#39;col_family1:col111&#39;, VERSIONS=&gt;1}</code>: 查询记录, 格式为<code>get 表名, 行键, {条件}</code>, 其中<code>COLUMN</code>和<code>VERSIONS</code>是预定义的, 分别表示列和版本号</li>
+</ul>
+</li>
+<li>扫描：<ul>
+<li><code>scan &#39;table1&#39; , {&#39;LIMIT&#39; =&gt; 5}</code> : 扫描一个表, <code>{&#39;LIMIT&#39; =&gt; 5}</code>是可选的</li>
+<li><code>scan &#39;table1&#39;, {COLUMNS =&gt; &#39;fam:col&#39;, STARTROW =&gt; &#39;executed|1530226272&#39;, STOPROW =&gt; &#39;executed|1530233472&#39;}</code> : 带条件的扫描</li>
+<li><code>scan &#39;hbase:meta&#39;</code> 扫描 hbase:meta 表, 旧的HBase版本里该表叫: <code>.META.</code></li>
+<li><code>scan &#39;hbase:meta&#39;, {COLUMNS =&gt; &#39;info:regioninfo&#39;}</code> 参考 # META表</li>
+</ul>
+</li>
+</ul>
+<h2 id="Java-API"><a href="#Java-API" class="headerlink" title="Java API"></a>Java API</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/32.Database/HBase-02API简介/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/HBase-00基础概念/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/HBase-00基础概念/" itemprop="url">HBase-00基础概念</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,352
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="https://hbase.apache.org/images/hbase_logo_with_orca_large.png" alt="HBase"></p>
+<p>HBase是一个分布式的、面向列的开源数据库，该技术来源于 Fay Chang 所撰写的Google论文“Bigtable：一个结构化数据的分布式存储系统”。就像Bigtable利用了Google文件系统（File System）所提供的分布式数据存储一样，HBase在Hadoop之上提供了类似于Bigtable的能力。HBase是Apache的Hadoop项目的子项目。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。<br>与FUJITSU Cliq等商用大数据产品不同，HBase是Google Bigtable的开源实现，类似Google Bigtable利用GFS作为其文件存储系统，HBase利用Hadoop HDFS作为其文件存储系统；Google运行MapReduce来处理Bigtable中的海量数据，HBase同样利用Hadoop MapReduce来处理HBase中的海量数据；Google Bigtable利用 Chubby作为协同服务，HBase利用Zookeeper作为对应。</p>
 <ul>
-<li>A型 （奇怪型或异常型疾患）<ul>
-<li>妄想型人格违常</li>
-<li>孤僻型人格违常</li>
-<li>精神分裂型人格违常</li>
+<li>HBase适用于简单数据写入（如“消息类”应用）和海量、结构简单数据的查询（如“详单类”应用），适合稀疏表；</li>
+<li>作为大数据MapReduce的后台数据源，以支撑离线分析型应用；</li>
+<li>基于HDFS分布式文件系统, 可扩展性+；</li>
+<li>Facebook的消息类应用，包括Messages、Chats、Emails和SMS系统，用的都是HBase；</li>
 </ul>
+<p><strong>使用场景</strong>：</p>
+<ul>
+<li><p><strong>对象存储</strong>：不少的头条类、新闻类的新闻、网页、图片存储在 HBase 之中，一些病毒公司的病毒库也是存储在 HBase 之中。</p>
 </li>
-<li>B型 （戏剧型或情感型疾患）<ul>
-<li>反社会人格违常</li>
-<li>边缘型人格违常</li>
-<li>戏剧化人格违常</li>
-<li>自恋型人格违常</li>
-</ul>
+<li><p><strong>时序数据</strong>：HBase 之上有 OpenTSDB 模块，可以满足时序类场景的需求。</p>
 </li>
-<li>C型 （焦虑型或恐惧型疾患）<ul>
-<li>畏惧型人格违常</li>
-<li>依赖型人格违常</li>
-<li>强迫型人格违常</li>
-</ul>
+<li><p><strong>时空数据</strong>：不少车联网企业，数据都是存在 HBase 之中。</p>
+</li>
+<li><p><strong>消息/订单</strong>：Facebook 用 HBase 存储在线消息，每天数据量近百亿，每月数据量250 ~ 300T， HBase 读写比基本在1:1，吞吐量150w qps。</p>
+</li>
+<li><p><strong>Feeds 流</strong>：典型的应用如微信朋友圈。</p>
 </li>
 </ul>
-<h2 id="回避型人格障碍"><a href="#回避型人格障碍" class="headerlink" title="回避型人格障碍"></a>回避型人格障碍</h2><p>因为害怕在别人面前丢脸，此类患者经常选择可独立完成工作的职业，以降低与人社交的机会。有些患者会幻想与他人拥有完美、被爱和被别人接受的关系，不过因他们觉得自己不值得拥有这些关系，所以并不主动去追求。他们只有在确信不会被拒绝的情况下才愿意与人建立关系，并只关注自己的缺点，经常贬低自我。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/03b.人格障碍/#more" rel="contents">
+            <a class="btn" href="/32.Database/HBase-00基础概念/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3294,7 +2892,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/62.Psychology/03a.心理学效应/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/DB.01-数据库分类/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -3313,7 +2911,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/62.Psychology/03a.心理学效应/" itemprop="url">心理学效应</a></h1>
+                <a class="post-title-link" href="/32.Database/DB.01-数据库分类/" itemprop="url">DB.01-数据库分类 - OLTP、OLAP、TSDB</a></h1>
         
 
         <div class="post-meta">
@@ -3336,8 +2934,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/62-Psychology/" itemprop="url" rel="index">
-                    <span itemprop="name">62.Psychology</span>
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
                   </a>
                 </span>
 
@@ -3367,7 +2965,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  814
+                  1,321
                 </span>
               
 
@@ -3393,12 +2991,501 @@
 
       
         
-          <h1 id="心理学效应"><a href="#心理学效应" class="headerlink" title="心理学效应"></a>心理学效应</h1><h2 id="巴纳姆效应"><a href="#巴纳姆效应" class="headerlink" title="巴纳姆效应"></a>巴纳姆效应</h2><p>巴纳姆效应（Barnum effect，是 Paul Meehl 为表对费尼尔司·泰勒·巴纳姆的敬意而命名，又称巴南效应、弗拉效应（英语：Forer effect））是一种心理现象：人很容易相信一个笼统的一般性的人格描述，并认为它特别适合自己并准确地揭示了自己的人格特点，而这些描述往往十分模糊及普遍，以致能够放诸四海皆准适用于很多人身上。</p>
-<p>巴纳姆效应能够对于为何不少伪科学如占星学、占卜或心理测验等被普遍接受提供一个不十分完全的解释。</p>
-<h2 id="自我实现预言"><a href="#自我实现预言" class="headerlink" title="自我实现预言"></a>自我实现预言</h2>
+          <h1 id="按存储模型分类"><a href="#按存储模型分类" class="headerlink" title="按存储模型分类"></a>按存储模型分类</h1><p>按数据模型分类：关系型 &amp; 非关系型，后者又包括 KV 型、面向文档型、图数据库…… 一般来说，用<strong>NoSQL</strong> 作为“非关系型数据库”的泛称。</p>
+<p><strong>关系型</strong>（relational）：关系型数据库模型是把复杂的数据结构归结为简单的二元关系（即二维表格形式）。一般使用 B-Tree 作为索引；<br>典型产品：MySQL、PostgreSQL、SQLite、SqlServer</p>
+<p><strong>非关系型</strong>（non-relational）：</p>
+<ul>
+<li><p><strong>KV 存储</strong>：键值数据库将数据存储为键值对集合，其中键作为数据的唯一标识。可以使用哈希表、跳表等构建索引；<br>典型产品：Redis、HBase </p>
+</li>
+<li><p><strong>列存储数据库</strong>：列式存储(column-based)是相对于传统关系型数据库的行式存储(Row-basedstorage)来说的。我们知道，平时的查询大部分都是条件查询，通常是返回某些字段（列）的数据。对于行存储数据，数据读取时通常将一行数据完全读出，存在数据冗余，而列存储，每次读取的数据只是需要的部分，不存在冗余性问题。<br>典型产品：HBase</p>
+</li>
+<li><p><strong>面向文档数据库</strong>（document-based）：此类数据库存储的是文档（XML、JSON、BSON 等格式），这些文档具备可述性（self-describing），呈现分层的树状结构（hierarchical tree data structure）。一般使用倒排索引；<br>典型产品：MongDB、ElasticSearch</p>
+</li>
+<li><p><strong>图数据库</strong>（graph db）：存储图形关系的数据库。一般的图数据库至少包含图存储、图查询、图分析这三种功能，典型产品：Neo4J、InfoGrid等</p>
+</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/62.Psychology/03a.心理学效应/#more" rel="contents">
+            <a class="btn" href="/32.Database/DB.01-数据库分类/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-02-C100K/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/SystemDesign-02-C100K/" itemprop="url">C100K系统设计</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,154
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>本篇只讨论<strong>OS 级别的并发优化</strong>，不包括<strong>语言层面对并发的支持特性</strong>，C10 K / C100 K / C1000 K（百万） 都是指单服务器下，能够支持的空闲长连接的数量。</p>
+<p>一般情况下服务端达到 C10K 连接时，大多数连接都是空闲连接，少数的活跃连接有数据读写，<strong>这种情况下讨论 C10K 的瓶颈在于“如何管理 10K-100K 级别的连接数”</strong>。</p>
+<p>如果 C10K 的连接情况下，每个链接还有大量的读写数据，瓶颈就不仅仅是上面的“单机管理 10k-100k 数量级的 Connection”了，这种情况下，网卡、带宽都可能成为瓶颈，所以本文只考虑上面的情况“连接大多空闲、少数活跃”。</p>
+<h1 id="有关-Linux-系统的限制"><a href="#有关-Linux-系统的限制" class="headerlink" title="有关 Linux 系统的限制"></a>有关 Linux 系统的限制</h1><p>服务器能支持建立连接数由几个决定：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/SystemDesign-02-C100K/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/SystemDesign-01-亿级流量网站架构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/SystemDesign-01-亿级流量网站架构/" itemprop="url">后端架构：System Design</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  7,076
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="一些概念和测试基准"><a href="#一些概念和测试基准" class="headerlink" title="一些概念和测试基准"></a>一些概念和测试基准</h1><p>本章内容包括: 系统可用性的概念和指标, 系统性能的概念和指标, 如何严谨地做性能测试.</p>
+<h2 id="系统可用性的概念和指标"><a href="#系统可用性的概念和指标" class="headerlink" title="系统可用性的概念和指标"></a>系统可用性的概念和指标</h2><p><strong>高可用性</strong>（high availability，缩写为 HA），IT术语，指系统无中断地执行其功能的能力，代表系统的可用性程度。是进行系统设计时的准则之一。高可用性系统与构成该系统的各个组件相比可以更长时间运行<br>其度量方式，是根据系统损害、无法使用的时间，以及由无法运作恢复到可运作状况的时间，与系统总运作时间的比较。计算公式为:<br><img src="/images/system_design/Arch-HA-Exp.png" alt></p>
+<p>A（可用性），MTBF(平均故障间隔)，MDT(平均修复时间)<br>在线系统和执行关键任务的系统通常要求其可用性要达到5个9标准(99.999%)。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/SystemDesign-01-亿级流量网站架构/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.06.Sed-Awk-Grep/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/Linux.06.Sed-Awk-Grep/" itemprop="url">Linux.06::Sed & Awk & Grep 命令速查</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,185
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h1><h2 id="参数解析"><a href="#参数解析" class="headerlink" title="参数解析"></a>参数解析</h2><ul>
+<li>-i : 表示将改变直接写入原文件, sed默认只修改输出到终端上的内容</li>
+<li>-f : -f file1 表示将sed 的操作都输出到file1</li>
+<li>-n : slient模式, 默认情况下sed所有来自STDIN的数据都会输出到终端,-n只会将”来自sed的操作”输出到终端, 一般和p一起用;</li>
+<li>-e : 表示使用正则匹配</li>
+</ul>
+<h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><ul>
+<li>替换全部: <code>sed &quot;s/aaa/bbb/g&quot; -i file</code></li>
+<li>每行开头插入#号: <code>sed &quot;s/^/#/g&quot; -i file</code></li>
+<li>只在3-6行替换: <code>sed &quot;3,6s/aaa/bbb/g&quot; -i file</code></li>
+<li>只替换每行的第1处aaa: <code>sed &quot;s/aaa/bbb/1&quot; -i file</code></li>
+<li>只替换每行的第2处aaa: <code>sed &quot;s/aaa/bbb/2&quot; -i file</code></li>
+<li>替换每行第3-最后一处aaa: <code>sed &quot;s/aaa/bbb/3,g&quot; -i file</code></li>
+<li>正则替换: <code>sed -e &#39;s/^#\s*\(.*[0-9].*\)$/\1/g&#39; filename</code></li>
+<li>与find联用: <code>find ./ -type f -exec sed -i -e &#39;s/aaa/bbb/g&#39; {} \;</code></li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/Linux.06.Sed-Awk-Grep/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3490,7 +3577,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">487</span>
+                  <span class="site-state-item-count">485</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3501,7 +3588,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -3512,7 +3599,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">416</span>
+                  <span class="site-state-item-count">501</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

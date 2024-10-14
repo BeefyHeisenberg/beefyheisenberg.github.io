@@ -278,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.04.系统配置/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/33.Bigdata/Hadoop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -297,7 +297,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/21.Operating-System/Linux.04.系统配置/" itemprop="url">Linux.05::系统配置</a></h1>
+                <a class="post-title-link" href="/33.Bigdata/Hadoop/" itemprop="url">Hadoop</a></h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
+                  <a href="/categories/33-Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">33.Bigdata</span>
                   </a>
                 </span>
 
@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,429
+                  1,807
                 </span>
               
 
@@ -377,22 +377,2182 @@
 
       
         
-          <h2 id="profile相关"><a href="#profile相关" class="headerlink" title="profile相关"></a>profile相关</h2><blockquote>
+          <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Hadoop_logo.svg/2000px-Hadoop_logo.svg.png" alt="Hadoop"></p>
+<h1 id="Hadoop-安装-amp-配置"><a href="#Hadoop-安装-amp-配置" class="headerlink" title="Hadoop 安装 &amp; 配置"></a>Hadoop 安装 &amp; 配置</h1><h2 id="Hadoop-amp-Yarn安装步骤"><a href="#Hadoop-amp-Yarn安装步骤" class="headerlink" title="Hadoop &amp; Yarn安装步骤"></a>Hadoop &amp; Yarn安装步骤</h2><p>参考: <a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="noopener">Apache Hadoop 2.9.2 – Hadoop Cluster Setup</a></p>
 <ol>
-<li>bashrc是在系统启动后就会自动运行。</li>
-<li>profile是在用户登录后才会运行。</li>
-<li>进行设置后，可运用source bashrc命令更新bashrc，也可运用source profile命令更新profile。</li>
+<li>/etc/hosts, ssh登录 // 使slave可以ssh到master<ul>
+<li>/etc/hosts: 所有slave可互相ping hostname</li>
+<li>authorized_keys : master可以ssh任意slave</li>
+</ul>
+</li>
+<li>hadoop配置文件<ul>
+<li>hadoop-env.sh : <code>HADOOP_CONF_DIR</code> 指定加载哪个目录下的配置文件</li>
+<li>slaves: 只有namenode需配置</li>
+<li>core-site.xml:(<a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-common/core-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-common/core-default.xml</a>)<ul>
+<li>fs.defaultFS : hdfs://namenode:9000 ## hdfs文件端口</li>
+<li>hadoop.tmp.dir : /opt/data/hadoop/tmp 其它目录会基于此路径</li>
+</ul>
+</li>
+<li>hdfs-site.xml:(<a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.7.3/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml</a>)<ul>
+<li>dfs.namenode.secondary.http-address :  第二NameNode web管理端口</li>
+<li>dfs.replication : 3 ## 数据需要备份的数量, 默认是3, 如果此数大于集群的机器数会出错</li>
+<li>dfs.namenode.name.dir : /opt/data/hadoop/namenode ## NameNode持久存储名字空间及事务日志的本地文件系统路径</li>
+<li>dfs.datanode.data.dir : /opt/data/hadoop/datenode ## DataNode存放块数据的本地文件系统路径</li>
+<li>dfs.namenode.http-address : namenode:50070  ## 浏览器可访问管理页面</li>
+<li>dfs.webhdfs.enabled : 开启WebHDFS (REST API)功能</li>
+</ul>
+</li>
+<li>mapred-site.xml:<ul>
+<li>mapreduce.framework.name: yarn</li>
+<li>mapreduce.jobhistory.address: 10020</li>
+<li>mapreduce.jobhistory.webapp.address: 19888</li>
+</ul>
+</li>
+<li>yarn-site.xml<ul>
+<li>yarn.resourcemanager.webapp.address: 8088 ## yarn框架中各个 task 的资源调度及运行状况通过通过该web界面访问</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>格式化namenode: <code>hdfs namenode -format</code></li>
+<li>启动HDFS NameNode: <code>sbin/hadoop-daemon.sh start namenode</code></li>
+<li>启动HDFS DateNode: <code>sbin/hadoop-daemons.sh start datanode</code><ul>
+<li><strong>或者在namenode上直接一个脚本启动: <code>sbin/start-dfs.sh</code> namenode和datanode的所有hdfs</strong></li>
+</ul>
+</li>
+<li>启动yarn: <code>sbin/start-yarn.sh</code>脚本一次启动ResourceManager和NodeManager, 如果要分别启动:<ul>
+<li><code>yarn-daemon.sh --config /opt/conf/hadoop start nodemanager</code></li>
+<li><code>yarn-daemon.sh --config /opt/conf/hadoop start resourcemanager</code></li>
+</ul>
+</li>
+<li>查看集群状态: <code>bin/hdfs dfsadmin -report</code></li>
+<li>测试hdfs写: <code>echo &quot;hello world&quot; | hadoop fs -put - /dir/hadoop/hello_world.txt &amp;&amp; hadoop fs -cat  /dir/hadoop/hello_world.txt</code></li>
+<li>一些web ui:<ul>
+<li>查看nameNode: <a href="http://namenode:50070/" target="_blank" rel="noopener">http://namenode:50070/</a></li>
+<li>查看yarn resourcemanager: <a href="http://namenode:8088/" target="_blank" rel="noopener">http://namenode:8088/</a></li>
+<li>MapReduce JobHistory: <a href="http://namenode:19888" target="_blank" rel="noopener">http://namenode:19888</a></li>
+</ul>
+</li>
 </ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/33.Bigdata/Hadoop/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/OpenTSDB schema 设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/OpenTSDB schema 设计/" itemprop="url">OpenTSDB schema 设计</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,247
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>TSDB 的一些特点：</p>
+<ul>
+<li>一般使用 KV 存储模型，检索的要素都保存在 key 中；</li>
+<li>TSDB 常用于存储监控数据，其中监控的指标称为“<strong>metric</strong>”，以及多个 k=v 格式的<strong>标签</strong>（一般称为 label or tag ），例如 service=service1, ip=10.10.2.58，以及<strong>时间戳</strong></li>
+</ul>
+<p>例如 Prometheus 的 Key 设计为 <code>http_request_total{status=200,method=&quot;GET&quot;}@timestamp</code> 的格式</p>
+<h2 id="OpenTSDB-schema-设计"><a href="#OpenTSDB-schema-设计" class="headerlink" title="OpenTSDB schema 设计"></a>OpenTSDB schema 设计</h2><h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/32.Database/OpenTSDB schema 设计/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/32.Database/MySQL-05架构-高性能和高可用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/32.Database/MySQL-05架构-高性能和高可用/" itemprop="url">MySQL-05架构-高性能和高可用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/32-Database/" itemprop="url" rel="index">
+                    <span itemprop="name">32.Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  15
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>@toc</p>
+<ul>
+<li>主从同步</li>
+<li>分库分表</li>
+</ul>
+<a href="/32.Database/MySQL-05架构-日志/" title="MySQL-05架构-日志">MySQL-05架构-日志</a>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/如何画架构图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/如何画架构图/" itemprop="url">如何画架构图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  202
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <ol>
+<li>图是给什么角色看的(客户 运维/实施 &amp; 开发), 即决定了用途, 要表达什么? 对方关注什么, 应该给对方看什么</li>
+<li>组件(实体)是什么: 物理硬件、实际集群、中间件（服务）、业务服务 （考虑架构是基于SaaS or PasS平台？ 来决定图中的每个实体是什么）</li>
+<li>..</li>
+</ol>
+<h1 id="➤-逻辑视图1-业务向"><a href="#➤-逻辑视图1-业务向" class="headerlink" title="➤ 逻辑视图1(业务向)"></a>➤ 逻辑视图1(业务向)</h1><p><img src="/images/diagram-逻辑视图-业务向.png" alt="diagram-逻辑视图-业务向"></p>
+<h1 id="➤-逻辑视图2-技术向"><a href="#➤-逻辑视图2-技术向" class="headerlink" title="➤ 逻辑视图2(技术向)"></a>➤ 逻辑视图2(技术向)</h1><p><img src="/images/diagram-逻辑视图1.png" alt="diagram-逻辑视图1"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/如何画架构图/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/分布式系统-Consistency/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/分布式系统-Consistency/" itemprop="url">分布式系统-Consistency</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  627
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ 分布式系统的一致性(概念)：</p>
+<ul>
+<li>分布式系统中, 每个节点(或者副本)的数据保持一致;</li>
+<li>「数据一致性其实是数据库系统中的概念。我们可以简单的把一致性理解为正确性或者完整性，那么数据一致性通常指关联数据之间的逻辑关系是否正确和完整」</li>
+</ul>
+<p>➤ 强一致性、弱一致性、最终一致性：</p>
+<ul>
+<li>强一致性: 当更新操作完成之后，任何多个后续进程或者线程的访问都会返回最新的更新过的值。但是这种实现对性能影响较大，因为这意味着，只要上次的操作没有处理完，就不能让用户读取数据。</li>
+<li>弱一致性: 系统并不保证进程或者线程的访问都会返回最新的更新过的值。系统在数据写入成功之后，不承诺立即可以读到最新写入的值，也不会具体的承诺多久之后可以读到。但会尽可能保证在某个时间级别（比如秒级别）之后，可以让数据达到一致性状态。</li>
+<li>最终一致性: 弱一致性的特定形式。系统保证在没有后续更新的前提下，系统最终返回上一次更新操作的值。在没有故障发生的前提下，不一致窗口的时间主要受通信延迟，系统负载和复制副本的个数影响。DNS是一个典型的最终一致性系统。</li>
+<li>最终一致性模型的变种:<ul>
+<li>因果一致性：如果A进程在更新之后向B进程通知更新的完成，那么B的访问操作将会返回更新的值。如果没有因果关系的C进程将会遵循最终一致性的规则。</li>
+<li>读己所写一致性：因果一致性的特定形式。一个进程总可以读到自己更新的数据。</li>
+<li>会话一致性：读己所写一致性的特定形式。进程在访问存储系统同一个会话内，系统保证该进程读己之所写。</li>
+<li>单调读一致性：如果一个进程已经读取到一个特定值，那么该进程不会读取到该值以前的任何值。</li>
+<li>单调写一致性：系统保证对同一个进程的写操作串行化。</li>
+</ul>
+</li>
+</ul>
+<p>@ref:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/分布式系统-Consistency/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/分布式系统-CAP理论/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/分布式系统-CAP理论/" itemprop="url">分布式系统-CAP理论</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  459
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>分布式系统的指标: CAP</p>
+<ul>
+<li>C(Consistency): 一致性 // 分布式系统中多个节点(或多个副本)的数据保持一致, 一致性又分强一致性/弱一致性/最终一致性, CAP里的一致性指强一致性 <a href="/31.Backend/分布式系统-Consistency/" title="分布式系统-Consistency">分布式系统-Consistency</a></li>
+<li>A(Availability): 可用性 // 当用户请求节点A, 节点A一定会回应 </li>
+<li>P(Partition tolerance): 分区容错, 在分布式节点之间网络断开时, 仍旧提供一致性和可用性。// 一般来说，分区容错无法避免，因此可以假定 CAP 的 P 总是成立, 剩下的是选择 AP 还是 CP的问题 (三个指标无法同时做到)</li>
+</ul>
+<p>Eric Brewer 说，这三个指标不可能同时做到。这个结论就叫做 CAP 定理。</p>
+<p>分布式系统只能满足CAP中的两个, 为什么?<br>假设P总是成立, 当写入新数据到node1, 为了实现一致性, 不得不锁定node2 直到数据同步完成, 那么此时node2就不满足可用性 … </p>
+<p>CAP如何取舍: </p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/分布式系统-CAP理论/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/分布式事务-2PC-and-3PC协议解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/分布式事务-2PC-and-3PC协议解析/" itemprop="url">分布式事务-2PC-and-3PC协议解析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,462
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@toc:</p>
+<ul>
+<li>分布式事务 → 2PC、3PC协议</li>
+<li>2PC协议实现;</li>
+<li>3PC协议实现;</li>
+<li>2PC &amp; 3PC比较</li>
+</ul>
+<h2 id="分布式事务→-2PC、3PC协议"><a href="#分布式事务→-2PC、3PC协议" class="headerlink" title="分布式事务→ 2PC、3PC协议"></a>分布式事务→ 2PC、3PC协议</h2><ul>
+<li>事务的特性: ACID （👉🏻[[../32.Database/MySQL-03b-事务的特性和实现#ACID特性]]）</li>
+<li>分布式事务解决分布式数据的一致性(Consistency)问题  </li>
+<li>数据库系统保证一致性是「提供正确的增/删/改/查等语义」的基础, 分布式系统一致性问题来自于:<ul>
+<li>数据多副本存储(每个副本在不同物理机) 需要保证多副本数据一致性;</li>
+<li>一个完整事务涉及多个数据库的多表(例如银行转账问题, a和b账户不在一个数据库)</li>
+</ul>
+</li>
+<li>解决分布式一致性的协议和算法:  2PC、3PC、Paxos</li>
+<li>分布式事务对比分布式锁: 分布式锁是「多client抢占一个公共资源」, 分布式事务是「一个client操作多个资源, 并保证一致性」</li>
+</ul>
+<p>相关阅读:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/分布式事务-2PC-and-3PC协议解析/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/架构案例-混沌工程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/架构案例-混沌工程/" itemprop="url">架构案例-混沌工程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  100
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>@ref: <a href="https://www.sohu.com/a/376252845_185201" target="_blank" rel="noopener">混沌工程：苏宁系统稳定性之道_实验</a></p>
+<ul>
+<li>混沌工程是Netflix在 《chaos engineing》提出的，目的是在分布式系统中..</li>
+<li>混沌工程vs故障注入测试:</li>
+<li>故障注入测试:<ul>
+<li>单机: CPU/内存/网卡资源被抢占, 单机进程挂掉</li>
+<li>数据库(DB/Redis等): 分库挂掉, 整库挂掉</li>
+<li>整个IDC机房故障, 核心网故障</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/消息队列-选型比较(Kafka-vs-RabbitMQ)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/消息队列-选型比较(Kafka-vs-RabbitMQ)/" itemprop="url">消息队列 | Kafka vs RabbitMQ</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  605
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="➤-Kafka"><a href="#➤-Kafka" class="headerlink" title="➤ Kafka"></a>➤ Kafka</h2><ul>
+<li>模型: 订阅/发布, 生产者和消费者是多对多</li>
+<li>存储: 磁盘</li>
+<li>吞吐量/延迟: 10W, 毫秒级</li>
+<li>架构: 参考 <a href="/31.Backend/消息队列-Kafka/" title="消息队列-Kafka">消息队列-Kafka</a></li>
+<li>高可用机制: 参考 <a href="/31.Backend/消息队列-Kafka-特性实现/" title="消息队列-Kafka-特性实现">消息队列-Kafka-特性实现</a></li>
+<li>如何保证顺序性: 顺序性指 生产者的(带有顺序性的)消息, 如何保证消费者也按照该顺序消费<ul>
+<li>生产者: 因为kafka 的topic 存储于多个分区, 为了防止一组顺序消息被投放到不同分区, 可以指定消息的key, 相同k的消息一定被发送到相同分区;</li>
+<li>消费者: @todo</li>
+</ul>
+</li>
+<li>防重复消费: 消费者在消费掉某条数据后, 把该条数据的offset提交给zk, 下次消费者请求数据, kafka 从 offset处开始</li>
+<li>防消息丢失机制: 因为kafka partition 的多副本机制, 要考虑 如果发生leader-follower切换的情况下, 如何不丢数据<ul>
+<li>生产者丢数据: 设置<code>acks=all</code>, 生产者投递消息, leader 保证所有 partition 都同步了数据才发送 ack 给生产者, 否则生产者会一直重试投递;</li>
+<li>消费者丢数据: 关闭消费者的自动提交offet, 需要消费者业务代码手动的提交offset</li>
+</ul>
+</li>
+</ul>
+<h2 id="➤-RabbitMQ"><a href="#➤-RabbitMQ" class="headerlink" title="➤ RabbitMQ"></a>➤ RabbitMQ</h2><ul>
+<li>模型: PTP, 生产者消费者1对1</li>
+<li>存储: 非持久化的消息一般只存在于内存中，在内存紧张的时候会被换入到磁盘中，以节省内存。</li>
+<li>吞吐量/延迟*: 1W, 微秒级</li>
+<li>架构: 基于队列实现, 可以”不同业务使用不同MQ实例”来做MQ的垂直切分, 同时RabbitMQ还提供了镜像模式, 即一个队列有多个镜像, 写入队列的数据会被同步到其他镜像队列上去( RbMQ如何实现主队列失效, 切换镜像队列的? )</li>
+<li>高可用机制: 镜像模式, 每个RabbitMQ节点上都一个queue的镜像</li>
+<li>如何保证顺序性机制: 队列的FIFO, 消费者多线程的情况下如何保证顺序?</li>
+<li>防重复消费:</li>
+<li>防消息丢失机制:<ul>
+<li>生产者防丢: confirm 模式, MQ Server 收到生产者发送的消息, 会返一个ack</li>
+<li>MQ Server防丢: 持久化</li>
+<li>消费者防丢: 关闭自动ack, 消费者取到消息, 业务代码处理完后, 再调用 ack api通知 MQ Server</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>@ref <a href="https://juejin.im/post/5db6ad39f265da4cfd2957d7#heading-8" target="_blank" rel="noopener">Java高频面试集-消息队列MQ - 掘金</a></p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/消息队列-选型比较(Kafka-vs-RabbitMQ)/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/资源调度-Yarn-Mesos-k8s/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/资源调度-Yarn-Mesos-k8s/" itemprop="url">资源调度 | YARN vs Mesos vs k8s</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  750
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Mesos"><a href="#Mesos" class="headerlink" title="Mesos"></a>Mesos</h1><p>![[../_images/mesos-arch.png]]</p>
+<p>➤ Mesos + Docker:<br>![[../_images/mesos-docker.png]]</p>
+<h1 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h1><p>Apache Hadoop YARN （Yet Another Resource Negotiator，另一种资源协调者）是一种新的 Hadoop 资源管理器，<br>它是一个通用资源管理系统，可为上层应用提供统一的资源管理和调度，它的引入为集群在利用率、资源统一管理和数据共享等方面带来了巨大好处。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/资源调度-Yarn-Mesos-k8s/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/反向代理-Nginx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/反向代理-Nginx/" itemprop="url">反向代理-Nginx</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,602
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="https://cdn-1.wp.nginx.com/wp-content/uploads/2015/04/NGINX_logo_rgb-01.png" alt></p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Nginx是异步框架的网页服务器，也可以用作反向代理、负载平衡器和HTTP缓存。</p>
+<h2 id="与Apache相比"><a href="#与Apache相比" class="headerlink" title="与Apache相比"></a>与Apache相比</h2><p>Nginx 的编写有一个明确目标就是超越 Apache Web 服务器的性能。Nginx 提供开箱即用的静态文件，使用的内存比 Apache 少得多，每秒可以处理大约四倍于 Apache 的请求。低并发下性能与 Apache 相当，有时候还低于，但是在高并发下 Nginx 能保持低资源低消耗高性能。还有高度模块化的设计，模块编写简单。配置文件简洁。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/反向代理-Nginx/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/消息队列-Kafka/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/消息队列-Kafka/" itemprop="url">消息队列-Kafka</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  346
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="https://kafka.apache.org/images/logo.png" alt></p>
+<h2 id="Kafka架构"><a href="#Kafka架构" class="headerlink" title="Kafka架构"></a>Kafka架构</h2><p><img src="/images/kafka/kafka_cluster.png" alt></p>
+<p>Kafka存储的消息来自任意多被称为“生产者”（Producer）的进程。数据从而可以被分配到不同的“分区”（Partition）、不同的“Topic”下。在一个分区内，这些消息被索引并连同时间戳存储在一起。其它被称为“消费者”（Consumer）的进程可以从分区查询消息。Kafka运行在一个由一台或多台服务器组成的集群上，并且分区可以跨集群结点分布。</p>
+<p>Kafka高效地处理实时流式数据，可以实现与Storm、HBase和Spark的集成。作为群集部署到多台服务器上，Kafka处理它所有的发布和订阅消息系统使用了四个API，即生产者API、消费者API、Stream API和Connector API。它能够传递大规模流式消息，自带容错功能，已经取代了一些传统消息系统，如JMS、AMQP等。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/消息队列-Kafka/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/消息队列-Kafka-选举机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/消息队列-Kafka-选举机制/" itemprop="url">消息队列-Kafka-选举机制</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  604
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Kafka的”选举”包括: Kafka Controller的选举, Partition Leader的选举, Consumer Group Coordinator(消费组协调者)的选举;</p>
+<h2 id="➤-Controller的选举"><a href="#➤-Controller的选举" class="headerlink" title="➤ Controller的选举"></a>➤ Controller的选举</h2><ul>
+<li>Controller的作用: 运行 Partition的节点叫 Broker, 其中一个Broker将会被选为Controller, 它负责整个集群中所有分区和副本的管理工作, 其主要职责有: Partition leader的选举, ISR的维护等;</li>
+<li>选举触发: Controller(Leader角色)在zk上创建临时节点, 当Leader宕机, 这个临时节点因为心跳检测失败而被删除, 同时zk将消息发送给所有Broker;</li>
+<li>选举过程: 收到消息的Broker在zk上创建<code>/controller</code>临时节点, 利用zk的强一致性, 只有一个 Broker能创建成功, 这个节点成为新的Controller;</li>
+</ul>
+<h2 id="➤-Partition-leader的选举"><a href="#➤-Partition-leader的选举" class="headerlink" title="➤ Partition leader的选举"></a>➤ Partition leader的选举</h2><ul>
+<li>Partition leader的作用: 每个 Partition都有数个副本(replica), 但消息的读写都是在 Leader Partition上完成的, 然后批量同步到副本;</li>
+<li>选举触发: 当有Broker宕机, 这个Broker在zk上的临时节点(znode)也会被删除, zk会通知正在watch的 Controller进行处理;</li>
+<li>选举过程: Controller接到通知后, 先选出 set_p(该集合包括了宕机的Broker上包含的所有 Partition), 然后Controller从zk读取 set_p中每一个分区的 ISR, 然后从ISR中选出一个副本作为该Partition的新 Leader, 然后将{新Leader/leader_epoch/controller_epoch} 写入 <code>/brokers/topics/[topic]/partitions/[partition]/state</code> // epoch是需要记录进选举结果的, 任期(term)的概念;</li>
+<li>为什么不采用少数服从多数(majority)的选举? (少数服从多数, 类似 Redis Sentinel Leader的选举, 不少于quorum且选票高于一半). Kafka的分区选举, 使用的是 “从ISR中选举”, 而 ISR的可以最多容忍总数“f+1个节点有f个失败”,也即至少有1个在ISR即可. 可以看出, majority的方式(总数2f+1个, 最大容忍f个失败)需要更高的冗余度, 例如能容忍2台机器宕机, 那么majority方式至少需要5台机器. 另外, majority的方式也要求更多的replica “能跟上Partition Leader的写入进度”, 吞吐量也会下降(详见消息的commit机制).</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/消息队列-Kafka-选举机制/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/消息队列-Kafka-特性实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/消息队列-Kafka-特性实现/" itemprop="url">消息队列-Kafka-特性实现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,104
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@toc:</p>
+<ul>
+<li>Kafka高吞吐量的实现?</li>
+<li>消息顺序性如何保证?</li>
+<li>Consumer Group如何防止重复消费?</li>
+<li>Partition多副本选举机制的实现?</li>
+</ul>
+<p>➤ Kafka特性解析:</p>
+<blockquote>
+<p>每个 partition 存于不同的 broker 机器上，一个partition可以有副本存在于多个 broker;<br>每个partition都有一个唯一的leader， 其他的 partition 作为folower, 所有的读写操作都在leader上完成， follower定期从 leader partition 同步数据;<br>每个partition的leader和follower都与zk建立长连接, 如果 leader partition 挂掉, 从 follower上选举出新的 leader;</p>
 </blockquote>
 <ul>
-<li>/etc/profile: 中设定的变量(全局)的可以作用于任何用户</li>
-<li>~/.bashrc: 等中设定的变量(局部)只能继承/etc/profile中的变量</li>
-<li>~/.bash_profile: 每个用户都可使用该文件输入专用于自己使用的shell信息，当用户登录时，该文件仅仅执行一次!默认情况下,他设置一些环境变量,执行用户的.bashrc文件。</li>
+<li><strong>吞吐量</strong>: 因为每条消息都被append到该partition中，是顺序写磁盘，因此效率非常高（经验证，顺序写磁盘效率比随机写内存还要高，这是Kafka高吞吐率的一个很重要的保证）。</li>
+<li><strong>水平扩展</strong>: 每一条消息被发送到broker时，会根据paritition规则选择被存储到哪一个 partition。如果 partition规则设置的合理，所有消息可以均匀分布到不同的partition里，这样就实现了水平扩展。</li>
+<li><strong>顺序性</strong>: 在发送一条消息时，还可以指定这条消息的key，producer根据这个key和partition机制来判断将这条消息发送到哪个parition。业务上, 多条相关的有顺序的消息, 可以指定同一个Key, 就可以保证都发送到同一个partition并有序;</li>
+<li><strong>删除策略</strong>: 对于传统的message queue而言，一般会删除已经被消费的消息，而Kafka集群会保留所有的消息，无论其被消费与否。当然，因为磁盘限制，不可能永久保留所有数据（实际上也没必要），因此Kafka提供两种策略去删除旧数据。一是基于时间(固定时间点清理)，二是基于partition文件大小</li>
+<li><strong>Consumer Group概念</strong>:<ul>
+<li>一个Consumer Group 可以订阅多个Topic</li>
+<li>一个Consumer Group 有唯一的 GroupID, 可以包含多个 Consumer 实例, Topic下某条消息只能给这个Consumer Group其中一个Consumer实例消费( 某 Topic下的一条消息,只能被某个 Consumer Group 消费一次, 但可以被多个 Consumer Group 消费)</li>
 </ul>
-<h2 id="init系统"><a href="#init系统" class="headerlink" title="init系统"></a>init系统</h2><p>init进程是 Linux系统内核初始化最后一步启动的进程，也是系统的第一个进程，pid=1。</p>
+</li>
+<li><strong>Consumer Group防重复消费</strong>:<ul>
+<li>Consumer Group 中一个实例只能消费某Topic下面的一个分区 (当然其他 Group也可以消费这个分区), 所以记录下这个Group对于某个Topic的某个Partition的消费offset即可, offset的存储是在Zk的节点下 <code>/consumers/&lt;group.id&gt;/offsets/&lt;topic&gt;/&lt;partitionId&gt;</code>;</li>
+<li>offset的提交: 在旧版本kfk中, 每个Consumer Group的 offset数据是提交到 Zookeeper的, 但是zk并不适合大量写入操作, 所以kafka提供了另一种方案: 额外创建一个叫<code>__consumer_offsets</code>的Topic, 将offset写入这个Topic, 摆脱对Zk的依赖. 由于这个Topic使用了 Compact策略, 该Topic保存的总是最新的offset, 存储格式是顺序的: <code>| GroupId1:Parttion1:offset | GroupId1:Parttion2:offset | ... |</code></li>
+</ul>
+</li>
+<li><strong>Rebalance</strong>:<ul>
+<li>什么是Rebalance? 例如 Consumer Group A下有 20个消费者, 它订阅了一个有 100个分区的 Topic, 每个消费者分配一部分分区, 当这个 Consumer Group中新增或删除了消费者, 就需要给现有的消费者重新分配分区, 这个过程叫做 Rebalance</li>
+<li>consumer rebalance算法  @link:: [[../_attachments/Kafka- a Distributed Messaging System for Log Processing.pdf]]</li>
+</ul>
+</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.04.系统配置/#more" rel="contents">
+            <a class="btn" href="/31.Backend/消息队列-Kafka-特性实现/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -443,7 +2603,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.03.命令行-Performance/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/容器编排-K8s/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -462,7 +2622,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/21.Operating-System/Linux.03.命令行-Performance/" itemprop="url">Linux.03::性能分析命令行 | Performance</a></h1>
+                <a class="post-title-link" href="/31.Backend/容器编排-K8s/" itemprop="url">容器编排-K8s</a></h1>
         
 
         <div class="post-meta">
@@ -485,8 +2645,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
                   </a>
                 </span>
 
@@ -516,7 +2676,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,961
+                  1,364
                 </span>
               
 
@@ -542,703 +2702,23 @@
 
       
         
-          <p><img src="/images/operating_system/Linux-Series-Title.png" alt></p>
-<h1 id="tldr"><a href="#tldr" class="headerlink" title="@tldr"></a>@tldr</h1><ul>
-<li><strong>cpu</strong>:<ul>
-<li>uptime 查看load值, 不高于core数, <code>sar -q</code>也可以查看load值</li>
-<li>vmstat: 关注r(同load), 和b(等待资源的进程数), 以及cpu占用(用户进程和内核进程)时间百分比: us%不超过50%, us% + sy%不超过80%</li>
-<li>sar也可以查看us% sy%占用CPU时间百分比</li>
-</ul>
-</li>
-<li><strong>内存</strong>:<ul>
-<li>free: 可用内存小于20%需要关注, <code>sar -r</code>类似</li>
-<li>vmstat的si和so: 一般不应该大于0, <code>sar -W</code>也可以查看交换区</li>
-</ul>
-</li>
-<li><strong>I/O</strong>:<ul>
-<li>vmstat: 需关注wa(IO等待占用CPU百分比): 大于30%时需关注, bi/bo也需要关注(阈值?)</li>
-<li>iowait: sar也可以查看iowait%</li>
-</ul>
-</li>
-<li><strong>网络</strong>:<ul>
-<li>netstat -antp : 查看所有tcp连接</li>
-<li>iperf: 吞吐量(Throughput) , 大约为网卡最大速率的一半</li>
-</ul>
-</li>
-</ul>
-<h1 id="基础性能参数"><a href="#基础性能参数" class="headerlink" title="基础性能参数"></a>基础性能参数</h1><h2 id="load"><a href="#load" class="headerlink" title="load"></a>load</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.03.命令行-Performance/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.02.网络命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/Linux.02.网络命令/" itemprop="url">Linux.02::网络命令行</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,633
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h2><p>ping是通过发送ICMP报文(回显请求), 并等待回显请求的应答, 目标主机的防火墙可能对ICMP报文做了限制, 所以ping不通不代表无法ssh.</p>
-<h2 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h2><ul>
-<li><p>启动关闭指定网卡</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ifconfig eth0 up</span><br><span class="line">ifconfig eth0 down</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置IP地址 <code>ifconfig eth0 192.168.2.10 netmask 255.255.255.0 broadcast 192.168.2.255</code></p>
-</li>
-</ul>
-<h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.02.网络命令/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.01a.常用命令行全称速记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/Linux.01a.常用命令行全称速记/" itemprop="url">Linux.01a::常用命令行全称速记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  699
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>@ref <a href="https://zhuanlan.zhihu.com/p/405637789" target="_blank" rel="noopener">linux命令英文全称 - 知乎</a></p>
-<hr>
+          <p>➤ 什么是Kubernetes:</p>
+<p>Kubernetes（k8s）是自动化容器操作的开源平台，这些操作包括部署，调度和节点集群间扩展。如果你曾经用过Docker容器技术部署容器，那么可以将Docker看成Kubernetes内部使用的低级别组件。Kubernetes不仅仅支持Docker，还支持Rocket，这是另一种容器技术。<br>使用Kubernetes可以：</p>
 <ul>
-<li><p>su：Swith user 切换用户，切换到root用户</p>
-</li>
-<li><p>cat: Concatenate 串联</p>
-</li>
-<li><p>uname: Unix name 系统名称</p>
-</li>
-<li><p>df: Disk free 空余硬盘</p>
-</li>
-<li><p>du: Disk usage 硬盘使用率</p>
-</li>
-<li><p>chown: Change owner 改变所有者</p>
-</li>
-<li><p>chgrp: Change group 改变用户组</p>
-</li>
-<li><p>ps：Process Status 进程状态</p>
-</li>
-<li><p>tar：Tape archive 解压文件</p>
-</li>
-<li><p>chmod: Change mode 改变模式</p>
-</li>
-<li><p>umount: Unmount 卸载</p>
-</li>
-<li><p>ldd：List dynamic dependencies 列出动态相依</p>
-</li>
-<li><p>insmod：Install module 安装模块</p>
-</li>
-<li><p>rmmod：Remove module 删除模块</p>
-</li>
-<li><p>lsmod：List module 列表模块</p>
-</li>
-<li><p>alias :Create your own name for a command</p>
-</li>
-<li><p>bash :GNU Bourne-Again Shell linux内核</p>
-</li>
-<li><p>grep:global regular expression print</p>
-</li>
-<li><p>httpd :Start Apache</p>
-</li>
-<li><p>ipcalc :Calculate IP information for a host</p>
-</li>
-<li><p>ping :Send ICMP ECHO_Request to network hosts</p>
-</li>
-<li><p>reboot: Restart your computer</p>
-</li>
-<li><p>sudo:Superuser do</p>
-</li>
-<li><p>/bin = BINaries</p>
-</li>
-<li><p>/dev = DEVices</p>
-</li>
-<li><p>/etc = ETCetera</p>
-</li>
-<li><p>/lib = LIBrary</p>
-</li>
-<li><p>/proc = PROCesses</p>
-</li>
-<li><p>/sbin = Superuser BINaries</p>
-</li>
-<li><p>/tmp = TeMPorary</p>
-</li>
-<li><p>/usr = Unix Shared Resources</p>
-</li>
-<li><p>/var = VARiable ?</p>
-</li>
-<li><p>FIFO = First In, First Out</p>
-</li>
-<li><p>GRUB = GRand Unified Bootloader</p>
-</li>
-<li><p>IFS = Internal Field Seperators</p>
-</li>
-<li><p>LILO = LInux LOader</p>
-</li>
-<li><p>MySQL = My最初作者的名字SQL = Structured Query Language</p>
-</li>
-<li><p>PHP = Personal Home Page Tools = PHP Hypertext Preprocessor</p>
-</li>
-<li><p>PS = Prompt String</p>
-</li>
-<li><p>Perl = “Pratical Extraction and Report Language” = “Pathologically Eclectic Rubbish Lister”</p>
-</li>
-<li><p>Python Monty Python’s Flying Circus</p>
-</li>
-<li><p>Tcl = Tool Command Language</p>
-</li>
-<li><p>Tk = ToolKit</p>
-</li>
-<li><p>VT = Video Terminal</p>
-</li>
-<li><p>YaST = Yet Another Setup Tool</p>
-</li>
-<li><p>apache = “a patchy” server</p>
-</li>
-<li><p>apt = Advanced Packaging Tool</p>
-</li>
-<li><p>ar = archiver</p>
-</li>
-<li><p>as = assembler</p>
-</li>
-<li><p>bash = Bourne Again SHell</p>
-</li>
-<li><p>bc = Basic (Better) Calculator</p>
-</li>
-<li><p>bg = BackGround</p>
-</li>
-<li><p>cal = CALendar</p>
-</li>
-<li><p>cat = CATenate</p>
-</li>
-<li><p>cd = Change Directory</p>
-</li>
-<li><p>chgrp = CHange GRouP</p>
-</li>
-<li><p>chmod = CHange MODe</p>
-</li>
-<li><p>chown = CHange OWNer</p>
-</li>
-<li><p>chsh = CHange SHell</p>
-</li>
-<li><p>cmp = compare</p>
-</li>
-<li><p>cobra = Common Object Request Broker Architecture</p>
-</li>
-<li><p>comm = common</p>
-</li>
-<li><p>cp = CoPy</p>
-</li>
-<li><p>cpio = CoPy In and Out</p>
-</li>
-<li><p>cpp = C Pre Processor</p>
-</li>
-<li><p>cups = Common Unix Printing System</p>
-</li>
-<li><p>cvs = Current Version System</p>
-</li>
-<li><p>daemon = Disk And Execution MONitor</p>
-</li>
-<li><p>dc = Desk Calculator</p>
-</li>
-<li><p>dd = Disk Dump</p>
-</li>
-<li><p>df = Disk Free</p>
-</li>
-<li><p>diff = DIFFerence</p>
-</li>
-<li><p>dmesg = diagnostic message</p>
-</li>
-<li><p>du = Disk Usage</p>
-</li>
-<li><p>ed = editor</p>
-</li>
-<li><p>egrep = Extended GREP</p>
-</li>
-<li><p>elf = Extensible Linking Format</p>
-</li>
-<li><p>elm = ELectronic Mail</p>
-</li>
-<li><p>emacs = Editor MACroS</p>
-</li>
-<li><p>eval = EVALuate</p>
-</li>
-<li><p>ex = EXtended</p>
-</li>
-<li><p>exec = EXECute</p>
-</li>
-<li><p>fd = file descriptors</p>
-</li>
-<li><p>fg = ForeGround</p>
-</li>
-<li><p>fgrep = Fixed GREP</p>
-</li>
-<li><p>fmt = format</p>
-</li>
-<li><p>fsck = File System ChecK</p>
-</li>
-<li><p>fstab = FileSystem TABle</p>
-</li>
-<li><p>fvwm = F*** Virtual Window Manager</p>
-</li>
-<li><p>gawk = GNU AWK</p>
-</li>
-<li><p>gpg = GNU Privacy Guard</p>
-</li>
-<li><p>groff = GNU troff</p>
-</li>
-<li><p>hal = Hardware Abstraction Layer</p>
-</li>
-<li><p>joe = Joe’s Own Editor</p>
-</li>
-<li><p>ksh = Korn SHell</p>
-</li>
-<li><p>lame = Lame Ain’t an MP3 Encoder</p>
-</li>
-<li><p>lex = LEXical analyser</p>
-</li>
-<li><p>lisp = LISt Processing = Lots of Irritating Superfluous Parentheses</p>
-</li>
-<li><p>ln = LiNk</p>
-</li>
-<li><p>lpr = Line PRint</p>
-</li>
-<li><p>ls = list</p>
-</li>
-<li><p>lsof = LiSt Open Files</p>
-</li>
-<li><p>m4 = Macro processor Version 4</p>
-</li>
-<li><p>man = MANual pages</p>
-</li>
-<li><p>mawk = Mike Brennan’s AWK</p>
-</li>
-<li><p>mc = Midnight Commander</p>
-</li>
-<li><p>mkfs = MaKe FileSystem</p>
-</li>
-<li><p>mknod = MaKe NODe</p>
-</li>
-<li><p>motd = Message of The Day</p>
-</li>
-<li><p>mozilla = MOsaic GodZILLa</p>
-</li>
-<li><p>mtab = Mount TABle</p>
-</li>
-<li><p>mv = MoVe</p>
-</li>
-<li><p>nano = Nano’s ANOther editor</p>
-</li>
-<li><p>nawk = New AWK</p>
-</li>
-<li><p>nl = Number of Lines</p>
-</li>
-<li><p>nm = names</p>
-</li>
-<li><p>nohup = No HangUP</p>
-</li>
-<li><p>nroff = New ROFF</p>
-</li>
-<li><p>od = Octal Dump</p>
-</li>
-<li><p>passwd = PASSWorD</p>
-</li>
-<li><p>pg = pager</p>
-</li>
-<li><p>pico = PIne’s message COmposition editor</p>
-</li>
-<li><p>pine = “Program for Internet News &amp; Email” = “Pine is not Elm”</p>
-</li>
-<li><p>ping = Packet InterNet Grouper</p>
-</li>
-<li><p>pirntcap = PRINTer CAPability</p>
-</li>
-<li><p>popd = POP Directory</p>
-</li>
-<li><p>pr = pre</p>
-</li>
-<li><p>printf = PRINT Formatted</p>
-</li>
-<li><p>ps = Processes Status</p>
-</li>
-<li><p>pty = pseudo tty</p>
-</li>
-<li><p>pushd = PUSH Directory</p>
-</li>
-<li><p>pwd = Print Working Directory</p>
-</li>
-<li><p>rc = runcom = run command, shell</p>
-</li>
-<li><p>rev = REVerse</p>
-</li>
-<li><p>rm = ReMove</p>
-</li>
-<li><p>rn = Read News</p>
-</li>
-<li><p>roff = RunOFF</p>
-</li>
-<li><p>rpm = RPM Package Manager = RedHat Package Manager</p>
-</li>
-<li><p>rsh, rlogin, = Remote</p>
-</li>
-<li><p>rxvt = ouR XVT</p>
-</li>
-<li><p>sed = Stream EDitor</p>
-</li>
-<li><p>seq = SEQuence</p>
-</li>
-<li><p>shar = SHell ARchive</p>
-</li>
-<li><p>slrn = S-Lang rn</p>
-</li>
-<li><p>ssh = Secure SHell</p>
-</li>
-<li><p>ssl = Secure Sockets Layer</p>
-</li>
-<li><p>stty = Set TTY</p>
-</li>
-<li><p>su = Substitute User</p>
-</li>
-<li><p>svn = SubVersioN</p>
-</li>
-<li><p>tar = Tape ARchive</p>
-</li>
-<li><p>tcsh = TENEX C shell</p>
-</li>
-<li><p>telnet = TEminaL over Network</p>
-</li>
-<li><p>termcap = terminal capability</p>
-</li>
-<li><p>terminfo = terminal information</p>
-</li>
-<li><p>tr = traslate</p>
-</li>
-<li><p>troff = Typesetter new ROFF</p>
-</li>
-<li><p>tsort = Topological SORT</p>
-</li>
-<li><p>tty = TeleTypewriter</p>
-</li>
-<li><p>twm = Tom’s Window Manager</p>
-</li>
-<li><p>tz = TimeZone</p>
-</li>
-<li><p>udev = Userspace DEV</p>
-</li>
-<li><p>ulimit = User’s LIMIT</p>
-</li>
-<li><p>umask = User’s MASK</p>
-</li>
-<li><p>uniq = UNIQue</p>
-</li>
-<li><p>vi = VIsual = Very Inconvenient</p>
-</li>
-<li><p>vim = Vi IMproved</p>
-</li>
-<li><p>wall = write all</p>
-</li>
-<li><p>wc = Word Count</p>
-</li>
-<li><p>wine = WINE Is Not an Emulator</p>
-</li>
-<li><p>xargs = eXtended ARGuments</p>
-</li>
-<li><p>xdm = X Display Manager</p>
-</li>
-<li><p>xlfd = X Logical Font Description</p>
-</li>
-<li><p>xmms = X Multimedia System</p>
-</li>
-<li><p>xrdb = X Resources DataBase</p>
-</li>
-<li><p>xwd = X Window Dump</p>
-</li>
-<li><p>yacc = yet another compiler compiler</p>
-</li>
+<li>自动化容器的部署和复制</li>
+<li>随时扩展或收缩容器规模</li>
+<li>将容器组织成组，并且提供容器间的负载均衡</li>
+<li>很容易地升级应用程序容器的新版本</li>
+<li>提供容器弹性，如果容器失效就替换它，等等..</li>
 </ul>
-
-          
+<h1 id="K8s架构"><a href="#K8s架构" class="headerlink" title="K8s架构"></a>K8s架构</h1><p><img src="/images/k8s-cluster.png" alt="k8s-cluster"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/容器编排-K8s/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1285,7 +2765,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/Linux.01.常用命令行/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/容器化-Docker-02容器隔离实现原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -1304,7 +2784,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/21.Operating-System/Linux.01.常用命令行/" itemprop="url">Linux.01::常用命令行</a></h1>
+                <a class="post-title-link" href="/31.Backend/容器化-Docker-02容器隔离实现原理/" itemprop="url">容器化-Docker-02容器隔离实现原理</a></h1>
         
 
         <div class="post-meta">
@@ -1327,8 +2807,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
                   </a>
                 </span>
 
@@ -1358,7 +2838,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,901
+                  1,256
                 </span>
               
 
@@ -1384,2591 +2864,677 @@
 
       
         
-          <h2 id="命令全称"><a href="#命令全称" class="headerlink" title="命令全称"></a>命令全称</h2><p>=&gt; <a href="/21.Operating-System/Linux.01a.常用命令行全称速记/" title="Linux.01a.常用命令行全称速记">Linux.01a.常用命令行全称速记</a></p>
-<h2 id="使用-man"><a href="#使用-man" class="headerlink" title="使用 man"></a>使用 man</h2><p>man 可以查看”系统命令/系统调用函数/glibc库函数” 等等共9类内容, 例如 <code>man lsof</code> 第一行是 “LSOF(8)”, 表示是第8类, <code>man man</code> 第一行是”man(8)” 表示man 是第8类, 也可以看到所有9类 “manual”, 如下:</p>
-<blockquote>
+          <h1 id="Docker容器隔离的实现原理"><a href="#Docker容器隔离的实现原理" class="headerlink" title="Docker容器隔离的实现原理"></a>Docker容器隔离的实现原理</h1><h2 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h2><p>先认识Linux 提供的Namespace机制: Linux的 Namespace 提供了7种不同的命名空间:</p>
+<ul>
+<li>PID namespace: 隔离进程ID,每个容器有自己的pid命名空间</li>
+<li>UTS namespace: 隔离主机名 &amp; 域名, ….有自己的主机名和NIS域名</li>
+<li>IPC namespace: 隔离进程间通信, 相同IPC Ns的进程之间才可以使用(共享内存/信号量/消息队列)通讯</li>
+<li>MNT namespace: 隔离文件系统挂载点</li>
+<li>…</li>
+</ul>
+<p>Docker 如何实现进程隔离 (宿主机进程 &amp; 容器内进程的隔离) ?</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/容器化-Docker-02容器隔离实现原理/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/容器化-Docker-01基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/容器化-Docker-01基础/" itemprop="url">Docker</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,290
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Docker_%28container_engine%29_logo.svg/2000px-Docker_%28container_engine%29_logo.svg.png" alt="Docker"></p>
+<h1 id="安装-amp-启动"><a href="#安装-amp-启动" class="headerlink" title="安装 &amp; 启动"></a>安装 &amp; 启动</h1><ol>
+<li><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install -y docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>装完之后需要在 /etc/docker/daemon.json 修改image注册地址 &amp; 存储目录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;insecure-registries&quot; : [&quot;registry.xxx.com&quot;]</span><br><span class="line">  &quot;graph&quot;: &quot;/data0/docker&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后启动 dockerd:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable docker</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="Docker命令参考"><a href="#Docker命令参考" class="headerlink" title="Docker命令参考"></a>Docker命令参考</h1><h2 id="命令概览"><a href="#命令概览" class="headerlink" title="命令概览"></a>命令概览</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/容器化-Docker-01基础/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/缓存-Memcache/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/缓存-Memcache/" itemprop="url">缓存-Memcache</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  138
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h1><p>Memcached默认情况下采用了名为 Slab Allocator的机制分配来避免内存碎片</p>
+<ul>
+<li>chunks: 每个chunk中都保存了一个item结构体、一对key和value</li>
+<li>slab: 一个slab由若干个大小相等的chunk组成</li>
+<li>page:</li>
+</ul>
+<h1 id="缓存淘汰算法"><a href="#缓存淘汰算法" class="headerlink" title="缓存淘汰算法:"></a>缓存淘汰算法:</h1><ul>
+<li>LRU: Least Recently Used, 最近最不常访问的被淘汰, 访问时间距离现在最久远的被淘汰(较常用)</li>
+<li>LFU: Least Frequently Used, 在一段时间内访问次数最少( 访问频率最少)的被淘汰</li>
+<li>FIFO:</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/缓存-Memcache/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Zookeeper-04应用-分布式锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/Zookeeper-04应用-分布式锁/" itemprop="url">Zookeeper-04应用-分布式锁</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  233
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@toc:</p>
+<ul>
+<li>分布式锁需要具备哪些特性?</li>
+<li>如何使用Zookeeper实现分布式锁?</li>
+<li>比较Redis分布式锁方案;</li>
+</ul>
+<p>➤ 分布式锁特性: 互斥性, 超时放锁</p>
+<p>➤ 使用Zk实现分布式锁: Zk实现分布式锁利用了Zk的诸多特性: 节点有序性, 临时节点, Watch ..</p>
+<ul>
+<li>加锁: client 在/lock节点下创建”有序”Znode , 节点id递增由父节点维护, 例如 /lock/node00000 , 如果client的节点是最小的, 则获得锁;<br>获得锁失败的client, 监听 /lock 节点, 当/lock下面节点结构发生变化, zk会通知/lock下全部的node的Client (此处可以改进性能, node00001 只监听 node00000, node00002只监听 node0001 …);</li>
+<li>解锁: Client删除自己的节点, zk Watch进行通知</li>
+<li>超时: 似乎只能等临时Znode被删除(Client的回话结束, Znode被删除)</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/31.Backend/Zookeeper-04应用-分布式锁/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/31.Backend/Zookeeper-03一致性/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/31.Backend/Zookeeper-03一致性/" itemprop="url">Zookeeper-03一致性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/31-Backend/" itemprop="url" rel="index">
+                    <span itemprop="name">31.Backend</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  386
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ Zk实现的一致性:</p>
+<ul>
+<li>Zk实现的是顺序一致性: A/B事务依次被提交, 如果客户端看到了B版本的数据, 一定不会再看到A版本的数据;</li>
+<li>Zk并不保证强一致性, 如果一个Zk集群有10个节点, 向Leader更新一项数据, 如果有6个节点写入成功则Zk认为此次写入成功, 但如果客户端刚好从另外4个节点读取数据, 读到的还是旧版本数据.</li>
+<li>考虑两个客户端A和B的场景。如果客户端A将znode /a的值从0设置为1，此时客户端B读取/a，有可能读取旧值0，读到新值or旧值取决于连接到的服务器。如果客户端A和客户端B读取相同的值很重要，则客户端B应该在执行读取之前调用 ZooKeeper API的 <code>sync()</code> 方法。</li>
+</ul>
+<p>➤ Zk的写入过程:</p>
 <ol>
-<li>系统命令</li>
-<li>系统调用，一般是对应的C封装函数；所有系统调用的函数在调用发生时都会进入内核空间执行</li>
-<li>各种库函数手册，例如glibc，pthread库API等，如果是非C库，则会标注出对于的链接选项</li>
-<li>特殊设备文件，例如zero, mem等</li>
-<li>文件格式手册，描述Linux支持的各种文件系统以及对于的C接口结构，如vfat/iso</li>
-<li>游戏程序文档</li>
-<li>其它的各种各样不在前边分类的文档（8/9除外）</li>
-<li>系统管理员命令，一般仅供root用户使用，如cron/useradd等</li>
-<li>Linux内核相关部分的手册，一般情况很少用到，这一节就没有intro介绍页</li>
+<li>Client向Leader发出写请求。</li>
+<li>Leader将数据写入到本节点，并将数据发送到所有的Follower节点；</li>
+<li>等待Follower节点返回；</li>
+<li>当Leader接收到一半以上节点(包含自己)返回写成功的信息之后，返回写入成功消息给client;</li>
 </ol>
-</blockquote>
+<p>如果第一步, Client连接上的是Follower端, 则由Follower把写请求转发给Leader, Leader进行正常的写流程, 超半数节点写成功后, Leader把结果返回给Follower, Follower把写入成功的结果发送给Client</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/Linux.01.常用命令行/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.07d.服务端常用IO模型/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/APUE.07d.服务端常用IO模型/" itemprop="url">APUE.07d::服务端常用IO模型</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  515
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Nginx:</p>
-<ul>
-<li>基于 epoll 监听多个连接(50000 个并发连接数的响应), 当某个连接有数据准备好的时候再通知, 这样一个进程能处理多个连接</li>
-<li>大于 5 k 并发的时候, Nginx 才明显比 apache 有更好的表现</li>
-</ul>
-<p>Redis</p>
-<ul>
-<li>Redis 使用单线程的 I/O 复用模型, 自己封装了一个简单的 AeEvent 事件处理框架, 主要实现了 epoll、kqueue 和 select.</li>
-<li>优势: 对于单纯只有 I/O 操作来说, 单线程可以将速度优势发挥到最大. 且无需考虑同步问题</li>
-<li>缺陷：Redis 排序、聚合、大 Key 操作、Flush 等, 对于这些耗时较高操作, 单线程模型实际会严重影响整体吞吐量, CPU 计算过程中, 整个 I/O 调度都是被阻塞住的</li>
-</ul>
-<p>Apache: 默认是每个请求启动一个线程处理, 并不适合高并发</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/APUE.07d.服务端常用IO模型/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.07c.网络编程-Reactor&Proactor模型/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/APUE.07c.网络编程-Reactor&Proactor模型/" itemprop="url">APUE.07c::网络编程-Reactor vs Proactor</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,191
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="I-O-多路复用模式：Reactor-amp-Proactor"><a href="#I-O-多路复用模式：Reactor-amp-Proactor" class="headerlink" title="I/O 多路复用模式：Reactor &amp; Proactor"></a>I/O 多路复用模式：Reactor &amp; Proactor</h2><p>一般地,I/O 多路复用机制（I/O multiplexing mechanisms）都依赖于一个事件多路分离器(Event Demultiplexer)。<br>我们常见的事件多路分用器包括：Linux 的 epoll 和 Windows 的 IOCP。</p>
-<p><strong>事件多路分离器</strong>（Event Demultiplexer）可将来自事件源的 I/O 事件分离出来，并分发到对应的 <strong>事件处理器</strong> (Event Handler)进行 read/write。</p>
-<p>两个与事件分离器有关的模式是 Reactor 和 Proactor，Reactor 模式采用同步 IO，而 Proactor 采用异步 IO。</p>
-<h2 id="Reactor-模式"><a href="#Reactor-模式" class="headerlink" title="Reactor 模式"></a>Reactor 模式</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/APUE.07c.网络编程-Reactor&Proactor模型/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.07b.网络编程-多路复用epoll/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/APUE.07b.网络编程-多路复用epoll/" itemprop="url">APUE.07b::网络编程-多路复用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  4,808
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="五种-I-O-模型"><a href="#五种-I-O-模型" class="headerlink" title="五种 I/O 模型"></a>五种 I/O 模型</h2><ol>
-<li><strong>阻塞 IO</strong>: 调用 read, 如果内核数据未就绪, 调用 read 的进程进入阻塞状态。应用程序调用一个 IO 函数，导致应用程序阻塞并等待数据准备就绪。如果数据没有准备好，一直等待。如果数据准备好了，则从内核拷贝到用户空间拷贝数据，IO 函数返回成功指示。<br><img src="/images/operating_system/Linux-IO-Blocked.png" alt></li>
-<li><strong>非阻塞 IO</strong>: nonblocking IO 的特点是用户进程需要不断的主动询问 kernel 数据是否准备好. 当所请求的 I/O 操作无法完成时，不要将进程睡眠，而是返回一个错误。这样我们的 I/O 操作函数将不断的测试数据是否已经准备好，如果没有准备好，继续测试，直到数据准备好为止。在这个不断测试的过程中，会大量的占用 CPU 的时间。<br><img src="/images/operating_system/Linux-IO-NonBlocking.png" alt></li>
-<li><strong>多路复用 IO</strong>: 复用模型会用到 select 或者 poll 函数，这两个函数也会使进程阻塞，但是和阻塞 I/O 所不同的的，这两个函数可以同时阻塞多个 I/O 操作。而且可以同时对多个读操作，多个写操作的 I/O 函数进行检测，直到有数据可读或可写时，才真正调用 I/O 操作函数。从而使得系统在单线程的情况下可以同时处理多个客户端请求. 与传统的多线程/多进程模型比, I/O 多路复用的最大优势是系统开销小。<br>和阻塞 IO 模型相比，selectI/O 复用模型相当于提前阻塞了。等到有数据到来时，再调用 recv 就不会因为要等数据就绪而发生阻塞。<ul>
-<li>select: 一般采用 select + no-block, select 返回后要遍历所有阻塞在 select 上的 IO 句柄，找到数据就绪的那一个 IO 句柄后, 应用程序调用 recvfrom 将数据从内核区拷贝至用户区；</li>
-<li>epoll : 比 select 更高效，无需轮询全部句柄，epoll 只返回数据 ready 的 IO 句柄<br><img src="/images/operating_system/Linux-IO-Multiplexing.png" alt></li>
-</ul>
-</li>
-<li><strong>信号驱动 IO</strong>：让内核在数据就绪时用信号 SIGIO 通知我们，将此方法称为信号驱动 I/O。首先，我们允许套接字进行信号驱动 I/O，并通过系统调用 sigaction 安装一个信号处理程序。此系统调用立即返回，进程继续工作，它是非阻塞的。当数据报准备好被读时，就为该进程生成一个 SIGIO 信号。我们随即可以在信号处理程序中调用 recvfrom 来取读数据报。</li>
-<li><strong>异步 IO</strong>: 我们让内核启动操作，并在整个操作完成后（包括将数据从内核拷贝到我们自己的缓冲区）通知我们。<br>调用 aio_read 函数，告诉内核描述字，缓冲区指针，缓冲区大小，文件偏移以及通知的方式，然后立即返回。当内核将数据拷贝到缓冲区后，再通知应用程序。<br>上面其它四种模型，至少都会在由 kernel copy data to appliction 时阻塞。而该模型是当 copy 完成后才通知 application，可见是纯异步的。<br>很少有 <code>*nix</code> 系统支持，windows 的 IOCP（完成端口）则是此模型<br><img src="/images/operating_system/Linux-IO-Async.png" alt></li>
-</ol>
-<p>Linux I/O 模型的发展技术是： select -&gt; poll -&gt; epoll -&gt; aio -&gt; libevent -&gt; libuv。另外还有 Windows 的 Completion Port。</p>
-<blockquote>
-<p>提供一致的接口，IO Design Patterns<br>实际上，不管是哪种模型，都可以抽象一层出来，提供一致的接口，广为人知的有 ACE,Libevent 这些，他们都是跨平台的，而且他们自动选择最优的 I/O 复用机制，用户只需调用接口即可。说到这里又得说说2个设计模式，Reactor and Proactor。有一篇经典文章<a href="http://www.artima.com/articles/io_design_patterns.html" target="_blank" rel="noopener">http://www.artima.com/articles/io_design_patterns.html</a>值得阅读，Libevent 是 Reactor 模型，ACE 提供 Proactor 模型。实际都是对各种 I/O 复用机制的封装。</p>
-</blockquote>
-<h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/APUE.07b.网络编程-多路复用epoll/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.07a.网络编程API/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/APUE.07a.网络编程API/" itemprop="url">APUE.07a::网络编程API</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,616
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int  socket(int protofamily, int type, int protocol);//返回sockfd</span><br></pre></td></tr></table></figure>
-<p>socket 函数的三个参数分别为：</p>
-<ul>
-<li>protofamily：即协议域，又称为协议族（family）。常用的协议族有，AF_INET(IPV4)、AF_INET6(IPV6)、AF_LOCAL（或称AF_UNIX，Unix域socket）、AF_ROUTE等等。协议族决定了socket的地址类型，在通信中必须采用对应的地址，如AF_INET决定了要用ipv4地址（32位的）与端口号（16位的）的组合、AF_UNIX决定了要用一个绝对路径名作为地址。</li>
-<li>type：指定socket类型。常用的socket类型有，SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_PACKET、SOCK_SEQPACKET等等。</li>
-<li>protocol：就是指定协议。常用的协议有，IPPROTO_TCP、IPPTOTO_UDP、IPPROTO_SCTP、IPPROTO_TIPC等，它们分别对应TCP传输协议、UDP传输协议、STCP传输协议、TIPC传输协议（这个协议我将会单独开篇讨论！）。</li>
-</ul>
-<p><strong>注意</strong>：并不是上面的type和protocol可以随意组合的，如SOCK_STREAM不可以跟IPPROTO_UDP组合。当protocol为0时，会自动选择type类型对应的默认协议。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/APUE.07a.网络编程API/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.06a.线程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/APUE.06a.线程/" itemprop="url">APUE.06a::线程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  0
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.05a.信号/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/APUE.05a.信号/" itemprop="url">APUE.05a::信号</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,216
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="Linux-支持的全部信号"><a href="#Linux-支持的全部信号" class="headerlink" title="Linux 支持的全部信号"></a>Linux 支持的全部信号</h2><p> <code>kill -l</code> 可以查看所有支持的信号和其对应值：<br><img src="/images/21.Operating-System-List-all-Signal.png" alt="../_images/21.Operating-System-List-all-Signal.png"></p>
-<p>Linux 共有 64 种信号，前 32 种为不可靠信号，后 32 种为可靠信号。</p>
-<table>
-<thead>
-<tr>
-<th>信号</th>
-<th>值</th>
-<th>类型</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>SIGHUP</td>
-<td>1</td>
-<td>Term</td>
-<td>终端控制进程结束(终端连接断开)</td>
-</tr>
-<tr>
-<td>SIGINT</td>
-<td>2</td>
-<td>Term</td>
-<td>用户发送 INTR 字符(Ctrl+C)触发</td>
-</tr>
-<tr>
-<td>SIGQUIT</td>
-<td>3</td>
-<td>Core</td>
-<td>用户发送 QUIT 字符(Ctrl+/)触发</td>
-</tr>
-<tr>
-<td>SIGILL</td>
-<td>4</td>
-<td>Core</td>
-<td>非法指令(程序错误、试图执行数据段、栈溢出等)</td>
-</tr>
-<tr>
-<td>SIGABRT</td>
-<td>6</td>
-<td>Core</td>
-<td>调用 abort 函数触发</td>
-</tr>
-<tr>
-<td>SIGFPE</td>
-<td>8</td>
-<td>Core</td>
-<td>算术运行错误(浮点运算错误、除数为零等)</td>
-</tr>
-<tr>
-<td>SIGKILL</td>
-<td>9</td>
-<td>Term</td>
-<td>无条件结束程序(不能被捕获、阻塞或忽略)</td>
-</tr>
-<tr>
-<td>SIGSEGV</td>
-<td>11</td>
-<td>Core</td>
-<td>无效内存引用(试图访问不属于自己的内存空间、对只读内存空间进行写操作)</td>
-</tr>
-<tr>
-<td>SIGPIPE</td>
-<td>13</td>
-<td>Term</td>
-<td>消息管道损坏(FIFO/Socket 通信时，管道未打开而进行写操作)</td>
-</tr>
-<tr>
-<td>SIGALRM</td>
-<td>14</td>
-<td>Term</td>
-<td>时钟定时信号</td>
-</tr>
-<tr>
-<td>SIGTERM</td>
-<td>15</td>
-<td>Term</td>
-<td>结束程序(可以被捕获、阻塞或忽略)</td>
-</tr>
-<tr>
-<td>SIGUSR1</td>
-<td>30,10,16</td>
-<td>Term</td>
-<td>用户保留</td>
-</tr>
-<tr>
-<td>SIGUSR2</td>
-<td>31,12,17</td>
-<td>Term</td>
-<td>用户保留</td>
-</tr>
-<tr>
-<td>SIGCHLD</td>
-<td>20,17,18</td>
-<td>Ign</td>
-<td>子进程结束(由父进程接收)</td>
-</tr>
-<tr>
-<td>SIGCONT</td>
-<td>19,18,25</td>
-<td>Cont</td>
-<td>继续执行已经停止的进程(不能被阻塞)</td>
-</tr>
-<tr>
-<td>SIGSTOP</td>
-<td>17,19,23</td>
-<td>Stop</td>
-<td>停止进程(不能被捕获、阻塞或忽略)</td>
-</tr>
-<tr>
-<td>SIGTSTP</td>
-<td>18,20,24</td>
-<td>Stop</td>
-<td>停止进程(可以被捕获、阻塞或忽略)</td>
-</tr>
-<tr>
-<td>SIGTTIN</td>
-<td>21,21,26</td>
-<td>Stop</td>
-<td>后台程序从终端中读取数据时触发</td>
-</tr>
-<tr>
-<td>SIGTTOU</td>
-<td>22,22,27</td>
-<td>Stop</td>
-<td>后台程序向终端中写数据时触发</td>
-</tr>
-<tr>
-<td>SIGTRAP</td>
-<td>5</td>
-<td>Core</td>
-<td>Trap 指令触发(如断点，在调试器中使用)</td>
-</tr>
-<tr>
-<td>SIGBUS</td>
-<td>0,7,10</td>
-<td>Core</td>
-<td>非法地址(内存地址对齐错误)</td>
-</tr>
-<tr>
-<td>SIGPOLL</td>
-<td></td>
-<td>Term</td>
-<td>Pollable event (Sys V). Synonym for SIGIO</td>
-</tr>
-<tr>
-<td>SIGPROF</td>
-<td>27,27,29</td>
-<td>Term</td>
-<td>性能时钟信号(包含系统调用时间和进程占用 CPU 的时间)</td>
-</tr>
-<tr>
-<td>SIGSYS</td>
-<td>12,31,12</td>
-<td>Core</td>
-<td>无效的系统调用(SVr4)</td>
-</tr>
-<tr>
-<td>SIGURG</td>
-<td>16,23,21</td>
-<td>Ign</td>
-<td>有紧急数据到达 Socket(4.2BSD)</td>
-</tr>
-<tr>
-<td>SIGVTALRM</td>
-<td>26,26,28</td>
-<td>Term</td>
-<td>虚拟时钟信号(进程占用 CPU 的时间)(4.2BSD)</td>
-</tr>
-<tr>
-<td>SIGXCPU</td>
-<td>24,24,30</td>
-<td>Core</td>
-<td>超过 CPU 时间资源限制(4.2BSD)</td>
-</tr>
-<tr>
-<td>SIGXFSZ</td>
-<td>25,25,31</td>
-<td>Core</td>
-<td>超过文件大小资源限制(4.2BSD)</td>
-</tr>
-</tbody>
-</table>
-<p>信号的分类：</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/APUE.05a.信号/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.04a.进程通信(IPC)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/APUE.04a.进程通信(IPC)/" itemprop="url">APUE.04a::进程通信(IPC)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  924
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@ref</p>
-<ul>
-<li><a href="https://www.ibm.com/developerworks/cn/linux/l-ipc/index.html" target="_blank" rel="noopener">深刻理解Linux进程间通信（IPC）</a> </li>
-</ul>
-<p>进程间通信（IPC，InterProcess Communication）:<br>Linux 下的进程通信手段基本上是从 Unix 平台上的进程通信手段继承而来的。而对 Unix 发展做出重大贡献的两大主力 AT&amp;T 的贝尔实验室及 BSD（加州大学伯克利分校的伯克利软件发布中心）在进程间通信方面的侧重点有所不同。前者对 Unix 早期的进程间通信手段进行了系统的改进和扩充，形成了“system V IPC”，通信进程局限在单个计算机内；后者则跳过了该限制，形成了基于套接口（socket）的进程间通信机制。Linux 则把两者继承了下来，如图示：</p>
-<p><img src="/images/2022/20220314225200.png" alt><br>最初 Unix IPC 包括：管道、FIFO、信号；<br>System V IPC 包括：System V 消息队列、System V 信号灯、System V 共享内存区；<br>Posix IPC 包括： Posix 消息队列、Posix 信号灯、Posix 共享内存区。</p>
-<p>这里主要介绍 POSIX 标准的 IPC: </p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/APUE.04a.进程通信(IPC)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.03b.进程的虚拟内存管理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/APUE.03b.进程的虚拟内存管理/" itemprop="url">APUE.03b::进程的虚拟内存管理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  696
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@todo： OneNote 笔记 copy 过来（内核如何使用 task_struct -&gt; mm_struct 管理进程内存布局）</p>
-<h2 id="进程的内存布局（32位）"><a href="#进程的内存布局（32位）" class="headerlink" title="进程的内存布局（32位）"></a>进程的内存布局（32位）</h2><p>在32位 Linux 系统中，每个进程都有4GB 的虚拟地址空间，其中0-3GB 是用户空间，3-4GB 是内核空间。每个进程都以为自己独占整个4GB 的地址空间，但实际上1GB 的内核空间是所有进程共享的，独占的3GB 用户空间也只是虚拟的。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  </span><br><span class="line"> +---+--------------------+---------------------- 0xFFFF FFFF 高地址</span><br><span class="line">1 GB |   Kernel           |                  内核空间</span><br><span class="line"> +------------------------+---------------------- 0xC000 0000</span><br><span class="line"> |   | Random stack offset|                  用户空间 ↓</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |   Stack↓           | 进程中的所有的线程共享相同的地址空间</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   |                    |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Mem Mapping ↓      | 文件映射,动态链接库（.so文件）</span><br><span class="line"> |   |                    | mmap()</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> +   |                    |</span><br><span class="line">3 GB |                    |</span><br><span class="line"> +   +--------------------+</span><br><span class="line"> |   |    Heap↑           | 用户通过 malloc()分配的内存</span><br><span class="line"> |   |                    | </span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Random stack offset|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | BSS Seg.           |</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Data Seg. (+rodata)|</span><br><span class="line"> |   +--------------------+</span><br><span class="line"> |   | Text Seg.          |                  用户空间 ↑</span><br><span class="line"> +---+--------------------+---------------------- 0x00000000 低地址</span><br></pre></td></tr></table></figure>
-<p>内存布局从高地址到低地址:</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/APUE.03b.进程的虚拟内存管理/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.03a.进程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/APUE.03a.进程/" itemprop="url">APUE.03a::进程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,089
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="创建进程"><a href="#创建进程" class="headerlink" title="创建进程"></a>创建进程</h2><h3 id="fork"><a href="#fork" class="headerlink" title="fork"></a>fork</h3><ul>
-<li>返回0: 子进程</li>
-<li>返回&gt;0: 父进程, 返回值是子进程pid</li>
-<li>子进程会得到父进程的堆(IO缓存, malloc的内存)、栈(局部变量)、数据空间(Data Segment)的拷贝, 在子进程里修改这些变量并不会影响父进程中的值, 注意这种拷贝是“写时复制”（Copy On Write，COW）;</li>
-<li>fork前打开的文件句柄, 其偏移量会在父子进程间共享, 原因是进程内存中仅保存了文件句柄的fd指针, 指针指向的结构体(也就是文件表,保存了文件标准和位移)是共享的. @doubt 那么”文件表”是存储在哪里的?</li>
-<li>另外需要注意的是, 因为堆内存也将被拷贝(IO缓存在堆里), 所以如果在创建子进程之前这个IO缓存中就有数据, 那么也会带入子进程, 导致子进程的IO缓存里”多”出一些数据.</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// child process because return value zero</span></span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Hello from Child!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// parent process because return value non-zero.</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Hello from Parent!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="vfork"><a href="#vfork" class="headerlink" title="vfork"></a>vfork</h3>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/APUE.03a.进程/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.01a.文件和IO/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/APUE.01a.文件和IO/" itemprop="url">APUE.01a::文件和IO</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3,584
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="文件系统分层"><a href="#文件系统分层" class="headerlink" title="文件系统分层"></a>文件系统分层</h2><p><img src="/images/THE-LINUX-STORAGE-STACK-DIAGRAM.png" alt="../_images/THE-LINUX-STORAGE-STACK-DIAGRAM.png"></p>
-<p>另一张图，侧重点是编程实体（库、函数）在 Linux 存储中的位置：</p>
-<p><img src="/images/LINUX-STORAGE-IO-STACK.png" alt="../_images/LINUX-STORAGE-IO-STACK.png"></p>
-<h2 id="page-cache（页缓冲）"><a href="#page-cache（页缓冲）" class="headerlink" title="page cache（页缓冲）"></a>page cache（页缓冲）</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/APUE.01a.文件和IO/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.00.从Unix到Linux（Gnu、Posix是什么）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/APUE.00.从Unix到Linux（Gnu、Posix是什么）/" itemprop="url">APUE.00::从Unix到Linux（Gnu、Posix是什么）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,434
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="Unix的诞生：从SystemV-到-Unix-like"><a href="#Unix的诞生：从SystemV-到-Unix-like" class="headerlink" title="Unix的诞生：从SystemV 到 Unix-like"></a>Unix的诞生：从SystemV 到 Unix-like</h2><ul>
-<li>UNIX：1969，贝尔实验室的工程师，肯·汤普逊（Ken Thompson）和丹尼斯·里奇，在此时自行开发了Unix。</li>
-<li>当时的UNIX拥有者AT&amp;T公司以低廉甚至免费的许可将Unix源码授权给学术机构做研究或教学之用，最著名的变种之一是由加州大学柏克莱分校开发的伯克利软件套件(BSD)产品</li>
-<li>1983年，AT&amp;T发布了Unix最新版System V，这是一个商业化版本，付费才能使用，并且不得传播源码。</li>
-<li>AT&amp;T同BSD的官司…这场著作权官司一直打到AT&amp;T将自己的Unix系统实验室卖掉，新接手的Novell采取了一种比较开明的做法，允许柏克莱分校自由发布自己的Unix变种</li>
-<li>System V 和 BSD的分化：其他一些公司也开始为其自己的小型机或工作站提供商业版本的UNIX系统，有些选择System V作为基础版本，有些则选择了BSD。4.4 BSD又是所有自由版本Unix的基础。</li>
-<li>Unix除了<strong>System V 和 BSD两大分支</strong>，还有后来的的 Unix-like系统（GNU /Linux）</li>
-</ul>
-<blockquote>
-<p>System V 第四版的发布，其特性成为一些UNIX共同特性的源头，例如 “SysV 初始化脚本” （/etc/init.d），用来控制系统启动和关闭，System V Interface Definition (SVID) 是一个System V 如何工作的标准定义。</p>
-</blockquote>
-<h2 id="GNU"><a href="#GNU" class="headerlink" title="GNU"></a>GNU</h2><p>GNU是一个自由的操作系统，其内容软件完全以GPL方式发布。这个操作系统是GNU计划的主要目标，名称来自<strong>GNU is Not Unix</strong>的递归缩写，因为GNU的设计类似Unix，但它不包含具著作权的Unix代码。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/APUE.00.从Unix到Linux（Gnu、Posix是什么）/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.RAM.2.内存对齐/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/01.RAM.2.内存对齐/" itemprop="url">01.RAM.2.内存对齐</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,753
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>➤ 从硬件角度说明为什么需要内存对齐</p>
-<p><img src="/images/01.RAM.2.%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90-2023-05-05-1.png" alt="../_images/01.RAM.2.内存对齐-2023-05-05-1.png"></p>
-<p>内存条上的黑色颗粒，被称为 Chip，每个 Chip 内部又是由 8 个 Bank 组成；</p>
-<p><img src="/images/01.RAM.2.%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90-2023-05-05-2.png" alt="../_images/01.RAM.2.内存对齐-2023-05-05-2.png"></p>
-<p>每个 Bank 可以看做是一个矩阵，矩阵上每个元素可以存储1字节（8bit，也就是说包含了8个小电容）</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/01.RAM.2.内存对齐/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.RAM.1.内存寻址/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/01.RAM.1.内存寻址/" itemprop="url">01.RAM.1.内存寻址</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3,651
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>内存寻址(Memory Addressing): 分段机制把 <code>逻辑地址</code> 转换为 <code>线性地址</code>, 分页机制进一步把该 <code>线性地址</code> 再转换为 <code>物理地址</code>.</p>
-<h2 id="段式内存管理"><a href="#段式内存管理" class="headerlink" title="段式内存管理"></a>段式内存管理</h2><blockquote>
-<p>内存可寻址范围总是跟”地址总线宽度”和”寄存器宽度”相关</p>
-</blockquote>
-<h3 id="实模式的诞生（16位处理器及寻址）"><a href="#实模式的诞生（16位处理器及寻址）" class="headerlink" title="实模式的诞生（16位处理器及寻址）"></a>实模式的诞生（16位处理器及寻址）</h3><ul>
-<li>在8086处理器诞生之前, 内存寻址方式就是直接访问物理地址. 8086处理器为了寻址1M的内存空间, 把地址总线扩展到了20位. 但是, 一个尴尬的问题出现了, ALU的宽度只有16位, 也就是说, ALU不能计算20位的地址. 为了解决这个问题, 分段机制被引入</li>
-<li>为了支持分段, 8086处理器设置了四个段寄存器：CS, DS, SS, ES每个段寄存器都是16位的, 同时访问内存的指令中的地址也是16位的.<ul>
-<li>在送入地址总线之前(20位), 要将端寄存器(16位)的值与内存地址(16位, 即段内偏移值)相加</li>
-<li>端寄存器的值左移4位, 低位补0, 然后加上内存地址</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/01.RAM.1.内存寻址/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.CPU是怎么制造出来的/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/01.CPU是怎么制造出来的/" itemprop="url">01.CPU是怎么制造出来的</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  159
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@ref: <a href="https://www.youtube.com/watch?v=7MFly82e46Q" target="_blank" rel="noopener">中兴禁令之芯片为什么这么难做？芯片的基本原理是什么？</a></p>
-<p><img src="/images/2022/20220423225853.png" alt></p>
-<p>PN结：p型和n型半导体之间的接触面即称为PN结<br>    • N型：掺入磷元素(5电子)<br>    • P型：掺入硼元素(3电子)</p>
-<p>PN结特点：只有P加正极，N加负极，电流才能通过</p>
-<p>二极管：二极管就是由一个PN结加上相应的电极引线及管壳封装而成的。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/01.CPU是怎么制造出来的/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.CPU_Context_Switch/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/21.Operating-System/01.CPU_Context_Switch/" itemprop="url">01.上下文切换（Context_Switch）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">21.Operating-System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,707
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="内核态和用户态"><a href="#内核态和用户态" class="headerlink" title="内核态和用户态"></a>内核态和用户态</h2><p>现代的计算机体系结构中存储管理通常都包含保护机制。提供保护的目的，是要避免系统中的一个任务访问属于另外的或属于操作系统的存储区域。如在 IntelX86体系中，就提供了特权级这种保护机制：<br>CPU 的指令分为特权级指令和非特权级指令, 特权级指令通常是一些比较危险的指令（for example？）, Intel X86架构的 CPU 将特权等级分为4个级别：<code>RING0</code>, <code>RING1</code>, <code>RING2</code>, <code>RING3</code>. </p>
-<p>Linux 仅仅使用了 RING0和 RING3，来分别运行内核态（0）和用户态（3），来保证特权级指令不被错误的使用。</p>
-<ul>
-<li>内核态（Ring 0）的进程具有最高权限，可以直接访问所有资源（@doubt 调用内核代码、访问硬件寄存器… ）</li>
-<li>用户态（Ring 3）的进程只能访问受限资源，不能直接访问内存等硬件设备，必须通过<strong>系统调用（System Call）</strong>陷入到内核中，才能访问这些特权资源。</li>
-<li>通过系统调用，用户空间的应用程序就会进入内核空间，由内核代表该进程运行于内核空间，这就涉及到上下文的切换</li>
-<li>在”32 位 Linux 进程内存布局”一章，有些资料会把内存地址高位的 1G 称为“内核空间”</li>
-<li>关于 X 86 系统的细节，请查阅参考资料1 一般的硬件体系机构都提供一种“门”机制。“门”的含义是指在发生了特定事件的时候低特权的应用程序可以通过这些“门”进入高特权的内核空间。</li>
-</ul>
-<p>![[../_images/2023-04-13.png]]</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/21.Operating-System/01.CPU_Context_Switch/#more" rel="contents">
+            <a class="btn" href="/31.Backend/Zookeeper-03一致性/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -4060,7 +3626,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">487</span>
+                  <span class="site-state-item-count">485</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -4071,7 +3637,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -4082,7 +3648,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">416</span>
+                  <span class="site-state-item-count">501</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

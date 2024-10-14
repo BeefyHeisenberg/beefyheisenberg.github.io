@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="Structure of a Query&amp;lt;QUERY-TYPE&amp;gt; &amp;lt;fields&amp;gt; FROM &amp;lt;source&amp;gt; &amp;lt;DATA-COMMAND&amp;gt; &amp;lt;expression&amp;gt; &amp;lt;DATA-COMMAND&amp;gt; &amp;lt;expression&amp;gt; ... Query-Type fieldsQuery-Type 包括：  LIST 单个列（">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2024-02-16T19:05:49.452Z">
+<meta property="og:updated_time" content="2024-10-14T01:45:28.181Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Obsidian插件：DataView">
 <meta name="twitter:description" content="Structure of a Query&amp;lt;QUERY-TYPE&amp;gt; &amp;lt;fields&amp;gt; FROM &amp;lt;source&amp;gt; &amp;lt;DATA-COMMAND&amp;gt; &amp;lt;expression&amp;gt; &amp;lt;DATA-COMMAND&amp;gt; &amp;lt;expression&amp;gt; ... Query-Type fieldsQuery-Type 包括：  LIST 单个列（">
@@ -353,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  419
+                  725
                 </span>
               
 
@@ -403,14 +403,23 @@
 <p>所以查询的 <strong>fields</strong>也支持 ：</p>
 <ul>
 <li>file.lists.text</li>
-<li>file.task.text</li>
+<li>file.tasks.text</li>
 <li>但是似乎没有 file.line 这种… </li>
 </ul>
 <p> 举例：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 原文 * this&apos;s list1 [status:: todo]</span><br><span class="line">// 查询全部的list中包含&apos;status:: todo&apos;的行</span><br><span class="line"></span><br><span class="line">TABLE L.text AS &quot;My lists&quot;</span><br><span class="line">FLATTEN file.lists AS L</span><br><span class="line">WHERE contains(L.status, &quot;todo&quot;)</span><br></pre></td></tr></table></figure></p>
-<p>file.list 和 task 还支持更多的查询属性 : <a href="https://blacksmithgu.github.io/obsidian-dataview/annotation/metadata-tasks/" target="_blank" rel="noopener">Metadata on Tasks and Lists - Dataview</a> </p>
-<h1 id="FROM-source"><a href="#FROM-source" class="headerlink" title="FROM source"></a>FROM source</h1><p>FROM后可以是 文件夹 or Tag，<br>例子：Combining sources</p>
+<p>file.list 和 task 还支持更多的查询属性 : 如 status、checked、text..  <a href="https://blacksmithgu.github.io/obsidian-dataview/annotation/metadata-tasks/" target="_blank" rel="noopener">Metadata on Tasks and Lists - Dataview</a> </p>
+<h1 id="FROM-source"><a href="#FROM-source" class="headerlink" title="FROM source"></a>FROM source</h1><p>FROM后可以是 文件夹 or Tag，<br>例子-Combining sources：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LIST</span><br><span class="line">FROM &quot;Projects&quot; AND (#project/active OR #project/soon)</span><br></pre></td></tr></table></figure>
 <h1 id="DATA-COMMAND"><a href="#DATA-COMMAND" class="headerlink" title="DATA-COMMAND"></a>DATA-COMMAND</h1><p><a href="https://blacksmithgu.github.io/obsidian-dataview/queries/data-commands/" target="_blank" rel="noopener">Data Commands - Dataview</a><br>包括 FROM、WHERE、SORT、GROUP BY、FLATTEN</p>
+<h2 id="FROM"><a href="#FROM" class="headerlink" title="FROM"></a>FROM</h2><ul>
+<li>Tags: To select from a tag (and all its subtags), use <code>FROM #tag</code>.</li>
+<li>Folders: To select from a folder (and all its subfolders), use <code>FROM &quot;folder&quot;</code>.</li>
+<li>Single Files: To select from a single file, use <code>FROM &quot;path/to/file&quot;</code>.</li>
+<li>Also “negate” sources: <code>FROME -#tag AND -&quot;folder&quot;</code></li>
+</ul>
+<h2 id="WHERE"><a href="#WHERE" class="headerlink" title="WHERE"></a>WHERE</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LIST WHERE file.mtime &gt;= date(today) - dur(1 day)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LIST FROM #projects</span><br><span class="line">WHERE !completed AND file.ctime &lt;= date(today) - dur(1 month)</span><br></pre></td></tr></table></figure>
+<h2 id="FLATTEN"><a href="#FLATTEN" class="headerlink" title="FLATTEN"></a>FLATTEN</h2><p>Flatten an array in every row, yielding one result row per entry in the array.</p>
 <h1 id="自定义metadata"><a href="#自定义metadata" class="headerlink" title="自定义metadata"></a>自定义metadata</h1><p><a href="https://blacksmithgu.github.io/obsidian-dataview/annotation/add-metadata/" target="_blank" rel="noopener">https://blacksmithgu.github.io/obsidian-dataview/annotation/add-metadata/</a></p>
 <p>自定义mate支持两种方式：</p>
 <ul>
@@ -418,13 +427,27 @@
 <li>Inline 的方式定义kv对</li>
 </ul>
 <p>举例1：原文 <code>TODO:: 买机票</code> 定义了kv对，key即‘TODO’，val即‘买机票’，如果要查询出全部的TODO，语句如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TABLE TODO</span><br><span class="line">where TODO</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TABLE TODO</span><br><span class="line">where TODO</span><br><span class="line">SORT file.mtime desc</span><br></pre></td></tr></table></figure>
 <p>举例2：原文如下<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">I would rate this a [rating:: 9]! It was [mood:: acceptable].</span><br><span class="line"></span><br><span class="line">- [ ] Send an mail to David about the deadline [due:: 2022-04-05].</span><br></pre></td></tr></table></figure></p>
 <p>查询：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">task from #projects/active</span><br><span class="line">sort rating desc</span><br><span class="line">where mood = &quot;acceptable&quot;</span><br></pre></td></tr></table></figure></p>
-<h1 id="笔记中使用-Dataview-Friendly-的标识"><a href="#笔记中使用-Dataview-Friendly-的标识" class="headerlink" title="笔记中使用 Dataview Friendly 的标识"></a>笔记中使用 Dataview Friendly 的标识</h1><p>方案1，使用自定义meta kv：</p>
+<h1 id="对task的支持"><a href="#对task的支持" class="headerlink" title="对task的支持"></a>对task的支持</h1><p>参考： <a href="https://blacksmithgu.github.io/obsidian-dataview/annotation/metadata-tasks/" target="_blank" rel="noopener">Metadata on Tasks and Lists - Dataview</a></p>
+<p>dataview 支持一些预定的 metadata，例如 start、due、completion</p>
+<p>例子1，@ref:: <a href="https://forum.obsidian.md/t/create-dataview-table-of-multiple-tasks-within-notes/31054" target="_blank" rel="noopener">https://forum.obsidian.md/t/create-dataview-table-of-multiple-tasks-within-notes/31054</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TABLE WITHOUT ID </span><br><span class="line">  regexreplace(Tasks.text, &quot;\[.*$&quot;, &quot;&quot;)  AS Task,</span><br><span class="line">  choice(Tasks.completed, &quot;✅completed&quot;, &quot;➡️incompleted&quot;) AS Status, </span><br><span class="line">  Tasks.due AS &quot;Due Date&quot;, </span><br><span class="line">  regexreplace(Tasks.subtasks.text, &quot;\[.*$&quot;, &quot;&quot;) AS Subtasks, </span><br><span class="line">  file.link AS &quot;File&quot;</span><br><span class="line">FROM &quot;@Project/active&quot; FLATTEN file.tasks AS Tasks</span><br><span class="line">WHERE file.tasks</span><br></pre></td></tr></table></figure>
+<p>例子2<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TABLE WITHOUT ID </span><br><span class="line">  regexreplace(Tasks.text, &quot;\[.*$&quot;, &quot;&quot;)  AS Task,</span><br><span class="line">  Tasks.due AS &quot;Due Date&quot;, </span><br><span class="line">  Tasks.link AS &quot;File&quot;</span><br><span class="line">FROM &quot;@Project/active&quot; FLATTEN file.tasks AS Tasks</span><br><span class="line">WHERE !Tasks.completed</span><br></pre></td></tr></table></figure></p>
+<h1 id="API-amp-高级用法（dataviewjs）"><a href="#API-amp-高级用法（dataviewjs）" class="headerlink" title="API &amp; 高级用法（dataviewjs）"></a>API &amp; 高级用法（dataviewjs）</h1><p>例1：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dv.taskList(dv.pages(&quot;#idea&quot;).file.tasks</span><br><span class="line">  .where( t=&gt; t.text.includes(&quot;#idea&quot;))</span><br><span class="line">  .where( t=&gt; !t.completed))</span><br></pre></td></tr></table></figure></p>
+<p>例2：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">let pages = dv.pages(&quot;#标签1 and -#标签2&quot;)</span><br><span class="line">dv.table(</span><br><span class="line">  [name, genre],</span><br><span class="line">  pages.sort(b =&gt; file.mtime, &quot;desc&quot;).map(b =&gt; [b.file.link, b.genre])</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>注：需要代码块标注 <code>dataviewjs</code></p>
+<p>dataviewjs 语法参考：</p>
+<ul>
+<li>Dataview API: <a href="https://blacksmithgu.github.io/obsidian-dataview/api/intro/" target="_blank" rel="noopener">Overview - Dataview</a></li>
+<li><a href="https://sspai.com/post/73958" target="_blank" rel="noopener">玩转 Obsidian 08：利用 Dataview 打造自动化 HomePage - 少数派</a></li>
+</ul>
+<h1 id="最佳实践：笔记中使用-Dataview-Friendly-的标识"><a href="#最佳实践：笔记中使用-Dataview-Friendly-的标识" class="headerlink" title="最佳实践：笔记中使用 Dataview Friendly 的标识"></a>最佳实践：笔记中使用 Dataview Friendly 的标识</h1><p>方案1，使用自定义meta kv：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@todo1:: 这是一个todo</span><br><span class="line">@doubt1:: 这是一个疑问</span><br></pre></td></tr></table></figure>
-<p>方案2，使用标签：</p>
+<p>方案2，使用2级标签：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#inbox/todo </span><br><span class="line">#inbox/done </span><br><span class="line">#project/active</span><br><span class="line">#project/closed</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -462,8 +485,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/41.Uncategorized/开源项目源代码阅读指北/" rel="next" title="开源项目源代码阅读指北">
-                <i class="fa fa-chevron-left"></i> 开源项目源代码阅读指北
+              <a href="/32.Database/MySQL-03a-使用事务/" rel="next" title="MySQL-04事务-使用事务">
+                <i class="fa fa-chevron-left"></i> MySQL-04事务-使用事务
               </a>
             
           </div>
@@ -472,8 +495,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/51.Productivity/PKM.00.Index/" rel="prev" title="PKM.00|个人知识管理-索引">
-                PKM.00|个人知识管理-索引 <i class="fa fa-chevron-right"></i>
+              <a href="/51.Productivity/PKM.02.笔记分类法.PARA/" rel="prev" title="PKM.02|笔记分类法.PARA">
+                PKM.02|笔记分类法.PARA <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -565,7 +588,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">487</span>
+                  <span class="site-state-item-count">485</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -576,7 +599,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -587,7 +610,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">416</span>
+                  <span class="site-state-item-count">501</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -655,7 +678,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure-of-a-Query"><span class="nav-text">Structure of a Query</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Query-Type-fields"><span class="nav-text">Query-Type fields</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FROM-source"><span class="nav-text">FROM source</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DATA-COMMAND"><span class="nav-text">DATA-COMMAND</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义metadata"><span class="nav-text">自定义metadata</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#笔记中使用-Dataview-Friendly-的标识"><span class="nav-text">笔记中使用 Dataview Friendly 的标识</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure-of-a-Query"><span class="nav-text">Structure of a Query</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Query-Type-fields"><span class="nav-text">Query-Type fields</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FROM-source"><span class="nav-text">FROM source</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DATA-COMMAND"><span class="nav-text">DATA-COMMAND</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FROM"><span class="nav-text">FROM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WHERE"><span class="nav-text">WHERE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FLATTEN"><span class="nav-text">FLATTEN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义metadata"><span class="nav-text">自定义metadata</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对task的支持"><span class="nav-text">对task的支持</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#API-amp-高级用法（dataviewjs）"><span class="nav-text">API &amp; 高级用法（dataviewjs）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最佳实践：笔记中使用-Dataview-Friendly-的标识"><span class="nav-text">最佳实践：笔记中使用 Dataview Friendly 的标识</span></a></li></ol></div>
             
 
           </div>

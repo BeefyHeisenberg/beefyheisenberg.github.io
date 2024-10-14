@@ -278,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-并发.01.线程API/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/22.Network-Protocol/Tcpdump/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -297,7 +297,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/12.Java/Java-并发.01.线程API/" itemprop="url">Java-并发.01.线程基础 & API</a></h1>
+                <a class="post-title-link" href="/22.Network-Protocol/Tcpdump/" itemprop="url">Tcpdump</a></h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
+                  <a href="/categories/22-Network-Protocol/" itemprop="url" rel="index">
+                    <span itemprop="name">22.Network-Protocol</span>
                   </a>
                 </span>
 
@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,441
+                  423
                 </span>
               
 
@@ -377,26 +377,25 @@
 
       
         
-          <h1 id="线程6种状态"><a href="#线程6种状态" class="headerlink" title="线程6种状态"></a>线程6种状态</h1><ol>
-<li>New, 创建 Thread 实例之后;</li>
-<li>Runnable, 执行 <code>thread.start()</code> 之后;</li>
-<li>Blocked, 线程试图获取 ReentrantLock 失败, 或进入 synchronize 代码块, 或调用 Block IO;</li>
-<li>Waiting, 调用 <code>object.wait()</code> 或 <code>thread.join()</code> 之后;<ul>
-<li>调用 <code>object.wait()</code>, <code>condition.await()</code> 方法都会产生 WAITING 状态;</li>
-<li>调用 <code>thread.join(long millis)</code> 后, 调用者会 Waiting 一直到 thread 线程退出;</li>
-</ul>
+          <h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">tcpdump -i any port 9542 -w file_name.pcap</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcpdump -s0 -i any 'udp and (src port 1719 or 18000) and (src host 9.143.243.8 or 9.143.243.18) and udp[0x10:4]=4444' -w file_name.pcap</span><br></pre></td></tr></table></figure>
+<h2 id="Tcpdump支持的滚动参数"><a href="#Tcpdump支持的滚动参数" class="headerlink" title="Tcpdump支持的滚动参数"></a>Tcpdump支持的滚动参数</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tcpdump [ -AdDefIKlLnNOpqRStuUvxX ] [ -B buffer_size ] [ -c count ]</span><br><span class="line">[ -C file_size ] [ -G rotate_seconds ] [ -F file ] [ -I interface ] [ -m module ] [ -M secret ] [ -r file ] [ -s snaplen ] [ -T type ] [ -w file ] [ -W filecount ] [ -E spi@ipaddr algo:secret,... ] [ -y datalinktype ] [ -z postrotate-command ] [ -Z user ] [ expression ]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>-G rotate_seconds:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">If specified, rotates the dump file specified with the -w option every rotate_seconds seconds.  Savefiles will have the name specified by -w which should include a time format as defined by strftime(3).  If no time format is specified, each new file will overwrite the previous.</span><br><span class="line"></span><br><span class="line">If used in conjunction with the -C option, filenames will take the form of &apos;file&lt;count&gt;&apos;.</span><br></pre></td></tr></table></figure>
 </li>
-<li>Time-Waitting, 调用 <code>thread.join(long millis)</code>、<code>thread.sleep(long millis)</code>、或者 <code>Object.wait(long)</code>、<code>lock.tryLock(long)</code> 时;</li>
-<li>Terminated: 线程的 <code>run()</code> 方法正常退出或者 <code>run()</code> 方法抛出未捕获异常时;</li>
-</ol>
-<blockquote>
-<p>上面的状态来自 Oracle JDK 8 <code>java.lang.Thread.State</code>, 并不等同于 unix 下的原生线程状态,<br><a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/Thread.State.html" target="_blank" rel="noopener">Thread.State (Java Platform SE 8 )</a></p>
-</blockquote>
-<p>图-线程6种状态的转换:<br><img src="/images/java/java_thread_states_all.png" alt="Thread States"></p>
-<h1 id="线程控制-API"><a href="#线程控制-API" class="headerlink" title="线程控制 API"></a>线程控制 API</h1>
+<li><p>-C file_size:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Before writing a raw packet to a savefile, check whether the file is currently larger than file_size and, if so, close the current savefile and open a new one.  Savefiles after the first savefile will have the name specified with the -w flag, with a number after it, starting at 1 and continuing upward.  The units of file_size are millions of bytes (1,000,000 bytes, not 1,048,576 bytes).</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>-W filecount:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Used in conjunction with the -C option, this will limit the number of files created to the specified number, and begin overwriting files from the beginning, thus creating a &apos;rotating&apos; buffer. In addition, it will name the files with enough leading 0s to support the maximum number of files, allowing them to sort correctly.</span><br><span class="line"></span><br><span class="line">Used in conjunction with the -G option, this will limit the number of rotated dump files that get created, exiting with status 0 when reaching the limit. If used with -C as well, the behavior will result in cyclical files per timeslice.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>-w file</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-w /var/tmp/trace-%m-%d-%H-%M-%S-%s will give you %m=month, %d=day of month, %H=hour of day, %M=minute of day, %S=second of day, %s=millisecond of day</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Java-并发.01.线程API/#more" rel="contents">
+            <a class="btn" href="/22.Network-Protocol/Tcpdump/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -447,7 +446,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-并发.00.Concurrent-Index/">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.07d.服务端常用IO模型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="beefyheisenberg">
@@ -466,7 +465,1943 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/12.Java/Java-并发.00.Concurrent-Index/" itemprop="url">Java-并发.00.索引</a></h1>
+                <a class="post-title-link" href="/21.Operating-System/APUE.07d.服务端常用IO模型/" itemprop="url">APUE.07d::服务端常用IO模型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  515
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Nginx:</p>
+<ul>
+<li>基于 epoll 监听多个连接(50000 个并发连接数的响应), 当某个连接有数据准备好的时候再通知, 这样一个进程能处理多个连接</li>
+<li>大于 5 k 并发的时候, Nginx 才明显比 apache 有更好的表现</li>
+</ul>
+<p>Redis</p>
+<ul>
+<li>Redis 使用单线程的 I/O 复用模型, 自己封装了一个简单的 AeEvent 事件处理框架, 主要实现了 epoll、kqueue 和 select.</li>
+<li>优势: 对于单纯只有 I/O 操作来说, 单线程可以将速度优势发挥到最大. 且无需考虑同步问题</li>
+<li>缺陷：Redis 排序、聚合、大 Key 操作、Flush 等, 对于这些耗时较高操作, 单线程模型实际会严重影响整体吞吐量, CPU 计算过程中, 整个 I/O 调度都是被阻塞住的</li>
+</ul>
+<p>Apache: 默认是每个请求启动一个线程处理, 并不适合高并发</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/APUE.07d.服务端常用IO模型/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.07c.网络编程-Reactor&Proactor模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/APUE.07c.网络编程-Reactor&Proactor模型/" itemprop="url">APUE.07c::网络编程-Reactor vs Proactor</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,191
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="I-O-多路复用模式：Reactor-amp-Proactor"><a href="#I-O-多路复用模式：Reactor-amp-Proactor" class="headerlink" title="I/O 多路复用模式：Reactor &amp; Proactor"></a>I/O 多路复用模式：Reactor &amp; Proactor</h2><p>一般地,I/O 多路复用机制（I/O multiplexing mechanisms）都依赖于一个事件多路分离器(Event Demultiplexer)。<br>我们常见的事件多路分用器包括：Linux 的 epoll 和 Windows 的 IOCP。</p>
+<p><strong>事件多路分离器</strong>（Event Demultiplexer）可将来自事件源的 I/O 事件分离出来，并分发到对应的 <strong>事件处理器</strong> (Event Handler)进行 read/write。</p>
+<p>两个与事件分离器有关的模式是 Reactor 和 Proactor，Reactor 模式采用同步 IO，而 Proactor 采用异步 IO。</p>
+<h2 id="Reactor-模式"><a href="#Reactor-模式" class="headerlink" title="Reactor 模式"></a>Reactor 模式</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/APUE.07c.网络编程-Reactor&Proactor模型/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/APUE.07b.网络编程-多路复用epoll/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/APUE.07b.网络编程-多路复用epoll/" itemprop="url">APUE.07b::网络编程-多路复用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,808
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="五种-I-O-模型"><a href="#五种-I-O-模型" class="headerlink" title="五种 I/O 模型"></a>五种 I/O 模型</h2><ol>
+<li><strong>阻塞 IO</strong>: 调用 read, 如果内核数据未就绪, 调用 read 的进程进入阻塞状态。应用程序调用一个 IO 函数，导致应用程序阻塞并等待数据准备就绪。如果数据没有准备好，一直等待。如果数据准备好了，则从内核拷贝到用户空间拷贝数据，IO 函数返回成功指示。<br><img src="/images/operating_system/Linux-IO-Blocked.png" alt></li>
+<li><strong>非阻塞 IO</strong>: nonblocking IO 的特点是用户进程需要不断的主动询问 kernel 数据是否准备好. 当所请求的 I/O 操作无法完成时，不要将进程睡眠，而是返回一个错误。这样我们的 I/O 操作函数将不断的测试数据是否已经准备好，如果没有准备好，继续测试，直到数据准备好为止。在这个不断测试的过程中，会大量的占用 CPU 的时间。<br><img src="/images/operating_system/Linux-IO-NonBlocking.png" alt></li>
+<li><strong>多路复用 IO</strong>: 复用模型会用到 select 或者 poll 函数，这两个函数也会使进程阻塞，但是和阻塞 I/O 所不同的的，这两个函数可以同时阻塞多个 I/O 操作。而且可以同时对多个读操作，多个写操作的 I/O 函数进行检测，直到有数据可读或可写时，才真正调用 I/O 操作函数。从而使得系统在单线程的情况下可以同时处理多个客户端请求. 与传统的多线程/多进程模型比, I/O 多路复用的最大优势是系统开销小。<br>和阻塞 IO 模型相比，selectI/O 复用模型相当于提前阻塞了。等到有数据到来时，再调用 recv 就不会因为要等数据就绪而发生阻塞。<ul>
+<li>select: 一般采用 select + no-block, select 返回后要遍历所有阻塞在 select 上的 IO 句柄，找到数据就绪的那一个 IO 句柄后, 应用程序调用 recvfrom 将数据从内核区拷贝至用户区；</li>
+<li>epoll : 比 select 更高效，无需轮询全部句柄，epoll 只返回数据 ready 的 IO 句柄<br><img src="/images/operating_system/Linux-IO-Multiplexing.png" alt></li>
+</ul>
+</li>
+<li><strong>信号驱动 IO</strong>：让内核在数据就绪时用信号 SIGIO 通知我们，将此方法称为信号驱动 I/O。首先，我们允许套接字进行信号驱动 I/O，并通过系统调用 sigaction 安装一个信号处理程序。此系统调用立即返回，进程继续工作，它是非阻塞的。当数据报准备好被读时，就为该进程生成一个 SIGIO 信号。我们随即可以在信号处理程序中调用 recvfrom 来取读数据报。</li>
+<li><strong>异步 IO</strong>: 我们让内核启动操作，并在整个操作完成后（包括将数据从内核拷贝到我们自己的缓冲区）通知我们。<br>调用 aio_read 函数，告诉内核描述字，缓冲区指针，缓冲区大小，文件偏移以及通知的方式，然后立即返回。当内核将数据拷贝到缓冲区后，再通知应用程序。<br>上面其它四种模型，至少都会在由 kernel copy data to appliction 时阻塞。而该模型是当 copy 完成后才通知 application，可见是纯异步的。<br>很少有 <code>*nix</code> 系统支持，windows 的 IOCP（完成端口）则是此模型<br><img src="/images/operating_system/Linux-IO-Async.png" alt></li>
+</ol>
+<p>Linux I/O 模型的发展技术是： select -&gt; poll -&gt; epoll -&gt; aio -&gt; libevent -&gt; libuv。另外还有 Windows 的 Completion Port。</p>
+<blockquote>
+<p>提供一致的接口，IO Design Patterns<br>实际上，不管是哪种模型，都可以抽象一层出来，提供一致的接口，广为人知的有 ACE,Libevent 这些，他们都是跨平台的，而且他们自动选择最优的 I/O 复用机制，用户只需调用接口即可。说到这里又得说说2个设计模式，Reactor and Proactor。有一篇经典文章<a href="http://www.artima.com/articles/io_design_patterns.html" target="_blank" rel="noopener">http://www.artima.com/articles/io_design_patterns.html</a>值得阅读，Libevent 是 Reactor 模型，ACE 提供 Proactor 模型。实际都是对各种 I/O 复用机制的封装。</p>
+</blockquote>
+<h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/APUE.07b.网络编程-多路复用epoll/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.RAM.1.内存寻址/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/01.RAM.1.内存寻址/" itemprop="url">01.RAM.1.内存寻址</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,651
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>内存寻址(Memory Addressing): 分段机制把 <code>逻辑地址</code> 转换为 <code>线性地址</code>, 分页机制进一步把该 <code>线性地址</code> 再转换为 <code>物理地址</code>.</p>
+<h2 id="段式内存管理"><a href="#段式内存管理" class="headerlink" title="段式内存管理"></a>段式内存管理</h2><blockquote>
+<p>内存可寻址范围总是跟”地址总线宽度”和”寄存器宽度”相关</p>
+</blockquote>
+<h3 id="实模式的诞生（16位处理器及寻址）"><a href="#实模式的诞生（16位处理器及寻址）" class="headerlink" title="实模式的诞生（16位处理器及寻址）"></a>实模式的诞生（16位处理器及寻址）</h3><ul>
+<li>在8086处理器诞生之前, 内存寻址方式就是直接访问物理地址. 8086处理器为了寻址1M的内存空间, 把地址总线扩展到了20位. 但是, 一个尴尬的问题出现了, ALU的宽度只有16位, 也就是说, ALU不能计算20位的地址. 为了解决这个问题, 分段机制被引入</li>
+<li>为了支持分段, 8086处理器设置了四个段寄存器：CS, DS, SS, ES每个段寄存器都是16位的, 同时访问内存的指令中的地址也是16位的.<ul>
+<li>在送入地址总线之前(20位), 要将端寄存器(16位)的值与内存地址(16位, 即段内偏移值)相加</li>
+<li>端寄存器的值左移4位, 低位补0, 然后加上内存地址</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/01.RAM.1.内存寻址/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.CPU_Cache/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/01.CPU_Cache/" itemprop="url">01.CPU缓存相关知识</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  608
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>@ref: <a href="https://coolshell.cn/articles/20793.html" target="_blank" rel="noopener">与程序员相关的CPU缓存知识 | 酷 壳 - CoolShell</a></p>
+<h1 id="CPU-Cache基础"><a href="#CPU-Cache基础" class="headerlink" title="CPU Cache基础"></a>CPU Cache基础</h1><ul>
+<li>一般来说, CPU Cache分三级: L1/L2/L3</li>
+<li>CPU Cache大小: L1 &lt; L2 &lt; L3<ul>
+<li>例如：Intel Core i7-8700K ，是一个6核的CPU，每核上的L1是64KB（数据和指令各32KB），L2 是 256K，L3有2MB</li>
+</ul>
+</li>
+<li>读取速度: L1&gt; L2&gt; L3<ul>
+<li>L1 = 4个时钟</li>
+<li>L2 = 11个时钟</li>
+<li>L3 = 39个时钟</li>
+<li>内存= 107个时钟</li>
+</ul>
+</li>
+<li>L1 分指令和数据Cache, 每个Core各一个指令和数据Cache, 每个Core一个L2, 所有Core 共享L3(见下图)</li>
+</ul>
+<p><img src="/images/CPU_CACHE.png" alt="../_images/CPU_CACHE.png"></p>
+<h1 id="CPU-Cache命中"><a href="#CPU-Cache命中" class="headerlink" title="CPU Cache命中"></a>CPU Cache命中</h1>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/01.CPU_Cache/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/21.Operating-System/01.CPU_Basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/21.Operating-System/01.CPU_Basics/" itemprop="url">01.与程序员相关的CPU基础知识</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/21-Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">21.Operating-System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  913
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ <strong>超线程</strong>(有时又叫对称多线程，SMT)是一种比较特殊的情况，每个线程并不能真正并发地运行。<strong>它们共享着除寄存器外的绝大多数处理资源</strong>。过到目前为止，Intel 的 CPU 最多只有两个线程。CPU 负责对各线程进行时分复用，CPU 可以在当前运行的超线程发生延迟时，调度另一个线程。这种延迟一般由内存访问引起。</p>
+<p>随着 CPU 的核心频率大幅上升，缓存与核心的速度差越拉越大，CPU 的处理开始管线化。也就是说，指令的执行分成若干阶段。首先，对指令进行解码，随后，准备参数，最后，执行它。这样的管线可以很长(例如，Intel 的 Netburst 架构超过了20个阶段)。在管线很长的情况下，一旦发生延误(即指令流中断)，需要很长时间才能恢复速度。管线延误发生在这样的情况下: 下一条指令未能正确预测，或者装载下一条指令耗时过长(例如，需要从内存读取时)</p>
+<p>内存以比 cache line 还小的块从主存储器向缓存传送。如今64位可一次性传送，cache line 的大小为64或128比特。这意味着每个 cache line 需要8或16次传送。内存控制器可以按不同顺序去请求 cache line 中的字。当处理器告诉它，程序需要缓存中具体某个字，即「关键字(critical word)」时，内存控制器就会先请求这个字。一旦请求的字抵达，虽然 cache line 的剩余部分还在传输中，缓存的状态还没有达成一致，但程序已经可以继续运行。这种技术叫做关键字优先及较早重启(Critical Word First &amp; Early Restart)</p>
+<hr>
+<p>➤  <strong>指令缓存</strong><br>随着 CPU 的核心频率大幅上升，缓存与核心的速度差越拉越大，CPU 的处理开始<strong>管线化</strong>。也就是说，指令的执行分成若干阶段。首先，对指令进行解码，随后准备参数，最后执行它。这样的管线可以很长(例如，Intel 的 Netburst 架构超过了20个阶段)。在管线很长的情况下，一旦发生延误(即指令流中断)，需要很长时间才能恢复速度。<br>管线延误发生在这样的情况下: 下一条指令未能正确预测，或者装载下一条指令耗时过长(例如，需要从内存读取时)。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/21.Operating-System/01.CPU_Basics/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/19.Algorithm/Alg.00.数据结构-Quick View/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/19.Algorithm/Alg.00.数据结构-Quick View/" itemprop="url">Alg.00.常用数据结构 Quick View</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/19-Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">19.Algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,526
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="1-线性结构-Linear-structures"><a href="#1-线性结构-Linear-structures" class="headerlink" title="1.线性结构(Linear structures)"></a>1.线性结构(Linear structures)</h2><blockquote>
+ <a href="/19.Algorithm/Alg.11.数据结构-线性结构/" title="Alg.11.数据结构-线性结构">Alg.11.数据结构-线性结构</a>
+</blockquote>
+<p><strong>「逻辑结构」揭示了数据元素之间的逻辑关系</strong>。在数组和链表中，数据按照顺序依次排列，体现了数据之间的线性关系；而在树中，数据从顶部向下按层次排列，表现出祖先与后代之间的派生关系；图则由节点和边构成，反映了复杂的网络关系。</p>
+<p>逻辑结构通常分为「线性」和「非线性」两类。线性结构比较直观，指数据在逻辑关系上呈线性排列；非线性结构则相反，呈非线性排列，例如网状或树状结构。</p>
+<ul>
+<li><strong>线性数据结构</strong>：数组、链表、栈、队列；</li>
+<li><strong>非线性数据结构</strong>：树、图、堆、哈希表；</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/19.Algorithm/Alg.00.数据结构-Quick View/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/14.Coding-Pattern/软件架构模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/14.Coding-Pattern/软件架构模式/" itemprop="url">软件架构模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/14-Coding-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">14.Coding-Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  195
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>➤ 软件设计的”方法论”</p>
+<ul>
+<li>design patterns: 代码层面</li>
+<li>architecture patterns: 架构层面</li>
+</ul>
+<p>architecture patterns:</p>
+<ul>
+<li>分层架构</li>
+<li>管道..</li>
+<li>CS..</li>
+<li>MVC..</li>
+<li>事件驱动..</li>
+<li>微服务..</li>
+</ul>
+<p>➤ 分层架构: 表现层→业务层→数据层</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/14.Coding-Pattern/软件架构模式/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/14.Coding-Pattern/设计模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/14.Coding-Pattern/设计模式/" itemprop="url">设计模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/14-Coding-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">14.Coding-Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,723
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>索引: <a href="https://zh.wikipedia.org/wiki/设计模式：可复用面向对象软件的基础" target="_blank" rel="noopener">设计模式：可复用面向对象软件的基础</a></p>
+<blockquote>
+<p>《设计模式：可复用面向对象软件的基础》（Design Patterns: Elements of Reusable Object-Oriented Software）是软件工程领域有关设计模式的一本书，提出和总结了对于一些常见软件设计问题的标准解决方案，称为软件设计模式。该书作者是埃里希·伽玛（Erich Gamma）、Richard Helm、Ralph Johnson和John Vlissides，后以“四人帮”（Gang of Four，GoF）[1]著称，书中的设计模式也被成为“四人帮设计模式”（Gang of Four design patterns）</p>
+</blockquote>
+<p><img src="/images/wikipedia-design-patterns.png" alt="wikipedia-design-patterns"></p>
+<h1 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h1><h2 id="简单工厂"><a href="#简单工厂" class="headerlink" title="简单工厂"></a>简单工厂</h2>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/14.Coding-Pattern/设计模式/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/14.Coding-Pattern/设计模式-UML类图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/14.Coding-Pattern/设计模式-UML类图/" itemprop="url">设计模式-UML类图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/14-Coding-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">14.Coding-Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  377
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="类和接口"><a href="#类和接口" class="headerlink" title="类和接口"></a>类和接口</h1><p>➤ 具体类:</p>
+<ul>
+<li>第一层类名, 第二层成员变量, 第三层方法</li>
+<li>访问控制: <code>+</code>表示public, <code>-</code>表示private …</li>
+</ul>
+<p><img src="/images/uml-class.png" alt="../_images/uml-class.png"></p>
+<p>➤ 抽象类:  </p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/14.Coding-Pattern/设计模式-UML类图/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/14.Coding-Pattern/Pattern-in-Spring/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/14.Coding-Pattern/Pattern-in-Spring/" itemprop="url">Spring 中都用到了那些设计模式?</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/14-Coding-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">14.Coding-Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,765
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h2><p>Spring 使用工厂模式可以通过 <code>BeanFactory</code> 或 <code>ApplicationContext</code> 创建 bean 对象。</p>
+<p><strong>两者对比：</strong></p>
+<ul>
+<li><code>BeanFactory</code> ：延迟注入(使用到某个 bean 的时候才会注入),相比于 <code>BeanFactory</code> 来说会占用更少的内存，程序启动速度更快。</li>
+<li><code>ApplicationContext</code> ：容器启动的时候，不管你用没用到，一次性创建所有 bean 。<code>BeanFactory</code> 仅提供了最基本的依赖注入支持，<code>ApplicationContext</code> 扩展了 <code>BeanFactory</code> ,除了有 <code>BeanFactory</code> 的功能还有额外更多功能，所以一般开发人员使用 <code>ApplicationContext</code> 会更多。</li>
+</ul>
+<p>ApplicationContext 的三个实现类：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/14.Coding-Pattern/Pattern-in-Spring/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/14.Coding-Pattern/Java代码规范/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/14.Coding-Pattern/Java代码规范/" itemprop="url">Java代码规范</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/14-Coding-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">14.Coding-Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  103
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="变量命名"><a href="#变量命名" class="headerlink" title="变量命名"></a>变量命名</h1><ul>
+<li>【强制】POJO类中的任何布尔类型的变量，都不要加is前缀，否则部分框架解析会引起序列 化错误。</li>
+<li>BigDecimal 的等值比较应使用 compareTo()方法，而不是 equals()方法。 说明:equals()方法会比较值和精度(1.0 与 1.00 返回结果为 false)，而 compareTo()则会忽略精度。</li>
+</ul>
+<p>@ref: [[../_attachments/阿里巴巴Java开发手册.pdf]]</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-并发.05b.JUC-AQS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="beefyheisenberg">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/hexo_avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="扔掉笔记 ᐛ">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/12.Java/Java-并发.05b.JUC-AQS/" itemprop="url">Java-并发.05b.JUC-AQS（）</a></h1>
         
 
         <div class="post-meta">
@@ -520,7 +2455,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  198
+                  1,212
                 </span>
               
 
@@ -546,24 +2481,13 @@
 
       
         
-          <h2 id="Index-of-「Java-并发-」"><a href="#Index-of-「Java-并发-」" class="headerlink" title="Index of 「Java 并发 」"></a>Index of 「Java 并发 」</h2><ul>
-<li>线程基础 API</li>
-<li>ThreadLocal</li>
-<li>Synchronized</li>
-<li>Volatile</li>
-<li>JUC</li>
-</ul>
-<h3 id="What’s-J-U-C"><a href="#What’s-J-U-C" class="headerlink" title="What’s J.U.C ?"></a>What’s J.U.C ?</h3><p>Java 1.5. 提供了<code>java.util.concurrent</code>包, 该包参考自EDU.oswego.cs.dl.util.concurrent, 是JSR 166标准规范的一个实现.<br>J.U.C 提供了 Java 并发编程的大部分功能，如下：</p>
-<ol>
-<li>juc-Atomic: 基于 CAS 的无锁原子操作, 包括基本类型/数组/引用/对象 field 四类原子操作 <a href="/12.Java/Java-并发.05a.JUC-Atomic&CAS/" title="Java-并发.05a.JUC-Atomic&CAS">Java-并发.05a.JUC-Atomic&CAS</a></li>
-<li>juc-Locks: 可重入锁 ReentrantLock、读写锁 ReadWriteLock、条件对象 Condition 等.. <a href="/12.Java/Java-并发.05b.JUC-Lock/" title="Java-并发.05b.JUC-Lock">Java-并发.05b.JUC-Lock</a></li>
-<li>juc-Collection: 并发容器（集合），包括 ArrayBlockingQueue、ConcurrentHashMap 等.. <a href="/12.Java/Java-并发.05d.JUC-Collections/" title="Java-并发.05d.JUC-Collections">Java-并发.05d.JUC-Collections</a></li>
-<li>juc-Sync：同步器，基于 AQS 模式的 CountDownLatch、Semaphore、CyclicBarrier 等.. <a href="/12.Java/Java-并发.05c.JUC-Sync/" title="Java-并发.05c.JUC-Sync">Java-并发.05c.JUC-Sync</a> </li>
-<li>juc-执行器：线程池（ExecutorService）、Fork/Join 框架、Future <a href="/12.Java/Java-并发.06a.JUC-线程池/" title="Java-并发.06a.JUC-线程池">Java-并发.06a.JUC-线程池</a></li>
-</ol>
+          <h2 id="AQS-简介"><a href="#AQS-简介" class="headerlink" title="AQS 简介"></a>AQS 简介</h2><p><code>ReentrantLock</code> 中有一个 Sync 类型的成员, 根据调用不同的构造方法, sync 被初始化为 <code>NonFairSync</code> (非公平锁, 默认) 或者 <code>FairSync</code> (公平锁), 这两种 Sync 都继承自 <code>AbstractQueuedSynchronizer</code>, 简称 <strong>AQS</strong>.</p>
+<p>AQS 是 java.util.concurrent 的核心, <code>CountDownLatch</code>, <code>Semaphore</code>, <code>ReentrantLock</code> 等都有一个内部类是 AQS 类的子类.</p>
+<p>图-ReentrantLock-AQS UML:<br><img src="/images/java/java_reentrantLock_uml.png" alt="ReentrantLock AQS"></p>
+<p><code>AbstractQueuedSynchronizer</code> 有几个重要的成员变量:</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Java-并发.00.Concurrent-Index/#more" rel="contents">
+            <a class="btn" href="/12.Java/Java-并发.05b.JUC-AQS/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1572,2023 +3496,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.08.网络编程API/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Java-Tutorials.08.网络编程API/" itemprop="url">Java Tutorials-08-网络编程API</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  301
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Server/Client的Socket API介绍.</p>
-<h2 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ServerSocket server = <span class="keyword">new</span> ServerSocket(<span class="number">9090</span>);</span><br><span class="line">Socket client = server.accept(); <span class="comment">// 阻塞</span></span><br><span class="line">InputStream  input  = client.getInputStream();</span><br><span class="line">OutputStream output = client.getOutputStream();</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> value = input.readDouble();</span><br><span class="line">output.writeDouble(value);</span><br><span class="line"></span><br><span class="line">inpput.close();</span><br><span class="line">output.close();</span><br><span class="line">server.close();</span><br></pre></td></tr></table></figure>
-<h2 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 方式1 */</span></span><br><span class="line">Socket socket = <span class="keyword">new</span> Socket(host, port); <span class="comment">// 阻塞</span></span><br><span class="line">OutputStream out = socket.getOutputStream();</span><br><span class="line">...</span><br><span class="line">out.close();</span><br><span class="line">socket.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 方式2 */</span></span><br><span class="line">Socket socket = <span class="keyword">new</span> Socket();</span><br><span class="line">socket.connect(<span class="keyword">new</span> InetSocketAddress(host, port), timeout); <span class="comment">// 阻塞</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Java-Tutorials.08.网络编程API/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.06.序列化(Serialize)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Java-Tutorials.06.序列化(Serialize)/" itemprop="url">Java Tutorials-06-序列化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  637
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>@toc:</p>
-<ul>
-<li>序列化 Example</li>
-<li>Serializable 接口和 serialVersionUID</li>
-<li>类的哪些字段不会被序列化</li>
-<li>如何自定义序列化的策略？ArrayList 是如何序列化数组的？</li>
-<li>JDK 序列化的实现</li>
-</ul>
-<h2 id="序列化-Example"><a href="#序列化-Example" class="headerlink" title="序列化 Example"></a>序列化 Example</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">  <span class="keyword">transient</span> Logger logger = LoggerFactory.getLogger(Config.class);</span><br><span class="line">  <span class="keyword">long</span> uid;</span><br><span class="line">  String nick;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写入</span></span><br><span class="line">ObjectOutputStream os = <span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(filePath));</span><br><span class="line">os.writeObject(user);</span><br><span class="line">os.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取</span></span><br><span class="line">ObjectInputStream is = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(filePath));</span><br><span class="line">User newUser = (User)is.readObject();</span><br><span class="line">is.close();</span><br></pre></td></tr></table></figure>
-<h2 id="Serializable-接口和-serialVersionUID"><a href="#Serializable-接口和-serialVersionUID" class="headerlink" title="Serializable 接口和 serialVersionUID"></a>Serializable 接口和 serialVersionUID</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Java-Tutorials.06.序列化(Serialize)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.05.IO/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Java-Tutorials.05.IO/" itemprop="url">Java Tutorials-05-IO</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,868
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Java 的 I/O 操作类在包 java.io 下，大概有将近 80 个类，但是这些类大概可以分成四组，分别是：</p>
-<ul>
-<li>基于字节操作的 I/O 流接口：<code>InputStream</code> 和 <code>OutputStream</code></li>
-<li>基于字符操作的 I/O 流接口： <code>Writer</code> 和 <code>Reader</code></li>
-<li>基于磁盘操作的 I/O 文件接口： <code>File</code></li>
-</ul>
-<p>参考: <a href="https://www.ibm.com/developerworks/cn/java/j-lo-javaio/index.html" target="_blank" rel="noopener">深入分析 Java I/O 的工作机制</a> @ref</p>
-<h2 id="流"><a href="#流" class="headerlink" title="流"></a>流</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Java-Tutorials.05.IO/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.04.泛型(Generic)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Java-Tutorials.04.泛型(Generic)/" itemprop="url">Java Tutorials-04-泛型</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  985
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="泛型类和泛型方法"><a href="#泛型类和泛型方法" class="headerlink" title="泛型类和泛型方法"></a>泛型类和泛型方法</h2><h3 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Pair</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> T first;</span><br><span class="line">  <span class="keyword">private</span> T second;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">getFirst</span><span class="params">()</span> </span>&#123;...&#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">getSecond</span><span class="params">()</span> </span>&#123;...&#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">setFirst</span><span class="params">(T)</span> </span>&#123;...&#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">setSecond</span><span class="params">(T)</span> </span>&#123;...&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Class ArrayAlg &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">T <span class="title">getMiddle</span> <span class="params">(T t)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> t[t.length / <span class="number">2</span>];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用泛型方法</span></span><br><span class="line">ArrayAlg.&lt;String&gt;getMiddle(<span class="string">"Hello"</span>);</span><br><span class="line"><span class="comment">// 或者不用指定泛型方法的T, 编译期自行推断也是可以的:</span></span><br><span class="line">ArrayAlg.getMiddle(<span class="string">"Hello"</span>);</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Java-Tutorials.04.泛型(Generic)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.03.反射(Reflection)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Java-Tutorials.03.反射(Reflection)/" itemprop="url">Java Tutorials-03-反射</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  954
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="反射和RTTI"><a href="#反射和RTTI" class="headerlink" title="反射和RTTI"></a>反射和RTTI</h2><ul>
-<li>RTTI: Run-Time Type Indentification, 运行时类型识别. 并非Java体系中的概念, 来自Thinking in C++</li>
-<li>Reflection(反射): 允许在程序运行期间探知并分析类对象的结构.</li>
-</ul>
-<blockquote>
-<p>RTTI（Run-Time Type Identification）运行时类型识别。在《Thinking in Java》一书第十四章中有提到，其作用是在运行时识别一个对象的类型和类的信息。主要有两种方式：一种是“传统的”RTTI，它假定我们在编译时已经知道了所有的类型；另一种是“反射”机制，它允许我们在运行时发现和使用类的信息。</p>
-</blockquote>
-<h2 id="Class-类-amp-Class-对象"><a href="#Class-类-amp-Class-对象" class="headerlink" title="Class 类 &amp; Class 对象"></a>Class 类 &amp; Class 对象</h2><p>每个类实例都有一个相对应的”Class 对象”, 所以类实例在进行向上转型时不会丢失原有的类型信息, 这个 Class 对象的类型就是”Class 类”, 位于 <code>java.lang.Class</code>;</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Java-Tutorials.03.反射(Reflection)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.02.集合(Collection)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Java-Tutorials.02.集合(Collection)/" itemprop="url">Java Tutorials-02-集合</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  5,856
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="集合类继承关系"><a href="#集合类继承关系" class="headerlink" title="集合类继承关系"></a>集合类继承关系</h1><p>Java 核心类库提供了两大类容器, Collection(集合)和 Map, 其中 Collection 接口又派生出 List, Queue, Set 三种接口:</p>
-<p><img src="/images/java/java-collection-hierarchy.gif" alt="Hierarchy of Collection"></p>
-<p>容器顶层接口 Collection/Map 以及主要实现类 &amp; 继承关系:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java.util.Collection [I]</span><br><span class="line">    java.util.List [I]</span><br><span class="line">        ArrayList</span><br><span class="line">        LinkedList*</span><br><span class="line">        Vector</span><br><span class="line">            Stack</span><br><span class="line">    java.util.Queue [I]</span><br><span class="line">        LinkedList*</span><br><span class="line">        PriorityQueue</span><br><span class="line">    java.util.Deque [I]</span><br><span class="line">        LinkedList</span><br><span class="line">    java.util.Set [I]</span><br><span class="line">        TreeSet*</span><br><span class="line">        HashSet*</span><br><span class="line">            LinkedHashSet</span><br><span class="line">java.util.Map [I]</span><br><span class="line">        TreeMap*</span><br><span class="line">        HashMap*</span><br><span class="line">            LinkedHashMap</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Java-Tutorials.02.集合(Collection)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Java-Tutorials.01.基础/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Java-Tutorials.01.基础/" itemprop="url">Java Tutorials-01-基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  9,836
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><h2 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h2><p>Java的基本类型有: char(2字节), byte(1字节), short(2字节), int(4字节), long(8字节), float(4字节), double(8字节), boolean(-),<br>Java没有bit类型, 但可以使用<code>BitSet</code>类代替.</p>
-<ul>
-<li>byte: 1字节, 范围-128~127</li>
-<li>short: 2字节, 范围-32768~32767, 为什么最小是-32768 ?</li>
-<li>int/long: <code>100L</code>表示long类型, 0x/0/0b前缀分别表示16/8/2进制<ul>
-<li>如果<code>long l = 3600 * 24 * 30 * 1000</code>，1000后面不加L，右边会按int计算并产生溢出</li>
-</ul>
-</li>
-<li>float/double: 3.14F表示float类型, 3.14和3.14D都表示double</li>
-<li>char: 单引号, ‘\u2122’或’A’</li>
-</ul>
-<h2 id="浮点数的比较"><a href="#浮点数的比较" class="headerlink" title="浮点数的比较"></a>浮点数的比较</h2>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Java-Tutorials.01.基础/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.08.编译/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Advanced-Java.08.编译/" itemprop="url">Advanced Java-08-编译</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  202
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="语法糖"><a href="#语法糖" class="headerlink" title="语法糖"></a>语法糖</h2><p>Java 中最常用的语法糖主要有泛型、变长参数、条件编译、自动拆装箱、内部类等。虚拟机并不支持这些语法，它们在编译阶段就被还原回了简单的基础语法结构，这个过程成为解语法糖。</p>
-<h2 id="编译器介绍"><a href="#编译器介绍" class="headerlink" title="编译器介绍"></a>编译器介绍</h2><h3 id="前端编译器"><a href="#前端编译器" class="headerlink" title="前端编译器"></a>前端编译器</h3><p>源码-&gt;字节码, javac</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Advanced-Java.08.编译/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.07.字节码/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Advanced-Java.07.字节码/" itemprop="url">Advanced Java-07-字节码</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  959
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>一些有关Java字节码的文章:</p>
-<ul>
-<li><a href="https://dzone.com/articles/introduction-to-java-bytecode" target="_blank" rel="noopener">Java Zone: Introduction to Java Bytecode </a> 这篇文章图文并茂地向你讲述了 Java 字节码的一些细节，是一篇很不错的入门文章。</li>
-<li><a href="https://www.ibm.com/developerworks/library/it-haggar_bytecode/index.html" target="_blank" rel="noopener">IBM DeveloperWorks: Java bytecode</a> 讲 Java 字节码。</li>
-</ul>
-<h2 id="字节码相关库"><a href="#字节码相关库" class="headerlink" title="字节码相关库"></a>字节码相关库</h2><p>可以操作字节码的库:</p>
-<ul>
-<li>JVM Tool Interface (JVMTI): <a href="https://github.com/jon-bell/bytecode-examples" target="_blank" rel="noopener">Java Bytecode and JVMTI Example</a>，这是一些使用 JVM Tool Interface 操作字节码的比较实用的例子。包括方法调用统计、静态字节码修改、Heap Taggin 和 Heap Walking。计、静态字节码修改、Heap Taggin 和 Heap Walking</li>
-<li>asm tools - 用于生产环境的 Java .class 文件开发工具。</li>
-<li>Byte Buddy - 代码生成库：运行时创建 Class 文件而不需要编译器帮助。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Advanced-Java.07.字节码/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.05.对象内存结构/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Advanced-Java.05.对象内存结构/" itemprop="url">Advanced Java-05-对象内存结构</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,072
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>HotSpot 虚拟机中，对象在 Heap 中存储的布局可以分为三块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。</p>
-<p><img src="/images/java/JVM-Object-Memory.png" alt></p>
-<h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h2><p>在HotSpot里对象头包括3部分(如果此对象不是数组，则只包括前2部分):</p>
-<ol>
-<li><strong>Mark Word</strong>: 用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等，这部分数据的长度在32位和64位VM中分别为32bit和64bit;</li>
-<li><strong>Class Metadata Address</strong>: klass类型指针, 用来指向对象对应的Class对象（其对应的元数据对象）的内存地址。这部分数据的长度在32位和64位VM中分别为32bit和64bit。64位开启指针压缩的情况下, 这部分占32bit;</li>
-<li><strong>Array Length</strong>: 如果是数组对象，还需要有一个<code>Array Length</code>保存数组长度的空间，32bit</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Advanced-Java.05.对象内存结构/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.05.class文件结构/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Advanced-Java.05.class文件结构/" itemprop="url">Advanced Java-05-class文件结构</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,273
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="class文件结构概述"><a href="#class文件结构概述" class="headerlink" title="class文件结构概述"></a>class文件结构概述</h2><p>class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间。 我们的Java源文件， 在被编译之后， 每个类（或者接口）都单独占据一个class文件， 并且类中的所有信息都会在class文件中有相应的描述。<br>class文件中的每个数据项都有它的固定长度， 数据项的不同长度分别用u1，u2，u4，u8表示，长度分别是byte、short、int、long。<br>class文件中存在以下数据项(该图表参考自《深入Java虚拟机》)：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">类型</th>
-<th style="text-align:center">名称</th>
-<th style="text-align:center">数量</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">u4</td>
-<td style="text-align:center">magic</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:left">u2</td>
-<td style="text-align:center">minor_version</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:left">u2</td>
-<td style="text-align:center">major_version</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:left">u2</td>
-<td style="text-align:center">constant_pool_count</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:left">cp_info</td>
-<td style="text-align:center">constant_pool</td>
-<td style="text-align:center">constant_pool_count - 1</td>
-</tr>
-<tr>
-<td style="text-align:left">u2</td>
-<td style="text-align:center">access_flags</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:left">u2</td>
-<td style="text-align:center">this_class</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:left">u2</td>
-<td style="text-align:center">super_class</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:left">u2</td>
-<td style="text-align:center">interfaces_count</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:left">u2</td>
-<td style="text-align:center">interfaces</td>
-<td style="text-align:center">interfaces_count</td>
-</tr>
-<tr>
-<td style="text-align:left">u2</td>
-<td style="text-align:center">fields_count</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:left">field_info</td>
-<td style="text-align:center">fields</td>
-<td style="text-align:center">fields_count</td>
-</tr>
-<tr>
-<td style="text-align:left">u2</td>
-<td style="text-align:center">methods_count</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:left">method_info</td>
-<td style="text-align:center">methods</td>
-<td style="text-align:center">methods_count</td>
-</tr>
-<tr>
-<td style="text-align:left">u2</td>
-<td style="text-align:center">attribute_count</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:left">attribute_info</td>
-<td style="text-align:center">attributes</td>
-<td style="text-align:center">attributes_count</td>
-</tr>
-</tbody>
-</table>
-<p><strong>class文件每个区域的说明：</strong></p>
-<ul>
-<li><p><code>magic</code> 和 <code>version</code>: magic 也即魔数(固定值0xCAFEBABE)占用4字节, class 文件版本号占用4字节, 不同版本的 javac 编译器编译的 class 文件, 版本号可能不同;</p>
-</li>
-<li><p><strong>常量池数量</strong> <code>constant_pool_count</code>, 等于实际常量池中项目的数量+1，因为常量池计数器是从1开始计数的，将第0项常量空出来是有特殊考虑的，索引值为0代表“不引用任何一个常量池项”。</p>
-</li>
-<li><p><strong>常量池</strong>(<code>constant_pool</code>)存储的内容主要包括 <strong>符号引用</strong> 和 <strong>字面量</strong>;</p>
-</li>
-<li><p><code>access_flag</code>, 在常量池之后的两个字节, 这个标志用于识别一些类或接口层次的访问信息</p>
-</li>
-<li><p><code>this_class</code>/<code>super_class</code>/<code>interfaces</code>: 类索引（<code>this_class</code>）和父类索引（<code>super_class</code>）都是一个 u2 类型的数据,而接口索引集合（<code>interfaces</code>）则是一组 u2 类型的数据集合, Class 文件中由这三项数据来确定这个类的继承关系;</p>
-</li>
-<li><p><code>field_info</code>字段表</p>
-</li>
-<li><p><code>method_info</code>方法表</p>
-</li>
-<li><p><code>attribute_info</code>属性表</p>
-</li>
-<li><p>方法字节码…</p>
-</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Advanced-Java.05.class文件结构/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://beefyheisenberg.github.io/12.Java/Advanced-Java.04.ClassLoader/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="beefyheisenberg">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/hexo_avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="扔掉笔记 ᐛ">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/12.Java/Advanced-Java.04.ClassLoader/" itemprop="url">Advanced Java-04-ClassLoader</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/12-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">12.Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  6,549
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><p>本节参考了  Oracle 的 <strong>jvms</strong>: <a href="https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-5.html#jvms-5.5" target="_blank" rel="noopener">Chapter 5. Loading, Linking, and Initializing</a>：</p>
-<blockquote>
-<p>Java虚拟机动态加载、链接和初始化类和接口。加载是查找具有特定名称的类或接口类型的二进制表示并从该二进制表示创建类或接口的过程。链接是获取类或接口并将其组合到Java虚拟机的运行时状态以使其能够执行的过程。类或接口的初始化包括执行类或接口初始化方法<code>&lt;clinit&gt;</code>(§2.9)。<br>在本章中，§5.1描述了Java虚拟机如何从类或接口的二进制表示中派生符号引用。§5.2说明Java虚拟机如何首先启动加载、链接和初始化过程。§5.3规定类加载器如何加载类和接口的二进制表示，以及类和接口是如何创建的。链接在§5.4中进行了描述。§5.5详细说明类和接口是如何初始化的。§5.6引入了绑定本机方法的概念。最后，§5.7描述了Java虚拟机何时退出。</p>
-</blockquote>
-<p>一个 Java Class 对象被创建的完整过程：加载 – 链接 – 初始化,</p>
-<blockquote>
-<ol>
-<li>在加载阶段, 创建的 class 对象存储在堆(Heap)、以及 Metaspace 的 Klass、Non-Klass 对象;</li>
-<li>在链接阶段, final 常量和字符串在方法区分配空间(jdk 8 变成了元空间);</li>
-<li>在初始化阶段, 初始化 static 成员, 也在堆;</li>
-</ol>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/12.Java/Advanced-Java.04.ClassLoader/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3643,7 +3550,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">487</span>
+                  <span class="site-state-item-count">485</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3654,7 +3561,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -3665,7 +3572,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">416</span>
+                  <span class="site-state-item-count">501</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

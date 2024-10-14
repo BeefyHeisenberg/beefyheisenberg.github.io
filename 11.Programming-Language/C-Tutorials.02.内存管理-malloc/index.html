@@ -124,7 +124,7 @@
 <meta property="og:site_name" content="扔掉笔记 ᐛ">
 <meta property="og:description" content="@tldr：  如果申请空间&amp;lt; 128K，则尝试上推 brk 指针，（这种管理空闲内存的方式是典型的“bump-point 和 free-list” 结合的方式，JVM管理 TLAB 的方式类似）当然也不一定每次都需要上推 brk 指针，还会在 free-list 里做 first-fit 查找空闲块 如果&amp;gt; 128K, 则直接在 mmap区（内存映射区）分配  深入理解mallocv">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2024-02-16T19:05:48.324Z">
+<meta property="og:updated_time" content="2024-03-19T06:19:11.463Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C Tutorials-02-内存管理（深入理解 malloc）">
 <meta name="twitter:description" content="@tldr：  如果申请空间&amp;lt; 128K，则尝试上推 brk 指针，（这种管理空闲内存的方式是典型的“bump-point 和 free-list” 结合的方式，JVM管理 TLAB 的方式类似）当然也不一定每次都需要上推 brk 指针，还会在 free-list 里做 first-fit 查找空闲块 如果&amp;gt; 128K, 则直接在 mmap区（内存映射区）分配  深入理解mallocv">
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,393
+                  1,395
                 </span>
               
 
@@ -393,7 +393,7 @@
 <p>但是  <code>do_brk()</code>  也不一定每次都上推 brk 指针，如果在 start_brk - brk 地址之间有未使用的内存块（这些内存块可能是被 free 过了，但是页框没有被回收，参考 free），会优先使用这部分内存块；</p>
 <p>当第一次通过指针使用此内存页, 在 RAM 中找不到与之相对应的 <strong>页框</strong>（page frame，也即物理内存）. 发生 <strong>缺页异常</strong>, 系统灵敏地捕获这一异常, 进入缺页异常处理阶段：接下来, 系统会分配一个<strong>页框</strong>映射给它, 我们把这种情况(被访问的页还没有被放在任何一个页框中, 内核分配一新的页框并适当初始化来满足调用请求) 称为 Demand Paging.</p>
 <blockquote>
-<p>页框：对应4K大小的物理页，详见 [[01.RAM.1.内存寻址.md]] 「页帧」</p>
+<p>页框：对应4K大小的物理页，详见 [[../21.Operating-System/01.RAM.1.内存寻址]] 「页帧」</p>
 </blockquote>
 <p>过了很长一段时间, 通过 <code>*ptr</code> 再次引用内存第一页. 若系统在 RAM 找不到它映射的页框(可能交换至磁盘了). 也会发生缺页异常, 进入缺页异常处理：系统会分配页框(page frame), 找到备份在磁盘的那“页”, 并将它换入内存(其实因为换入操作比较昂贵, 所以预换入多页. 这也表明某些文档说：”vmstat 某时出现不少 si 并不能意味着物理内存不足”).</p>
 <p>通过指针使用到了 N bytes 的第二页. 参见第一次访问 N bytes 第一页, “Demand Paging”</p>
@@ -448,8 +448,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/11.Programming-Language/Cpp-Tutorials.01.基础/" rel="prev" title="Cpp Tutorials-01-基础">
-                Cpp Tutorials-01-基础 <i class="fa fa-chevron-right"></i>
+              <a href="/12.Java/Advanced-Java.01.JDK/" rel="prev" title="Advanced Java-01-JDK">
+                Advanced Java-01-JDK <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -541,7 +541,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">487</span>
+                  <span class="site-state-item-count">485</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -552,7 +552,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -563,7 +563,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">416</span>
+                  <span class="site-state-item-count">501</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
